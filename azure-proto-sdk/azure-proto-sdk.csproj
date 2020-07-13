@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>azure_proto_sdk</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.2.0-preview.5" />
+    <PackageReference Include="Azure.ResourceManager.Compute" Version="1.0.0-preview.1" />
+    <PackageReference Include="Azure.ResourceManager.Network" Version="1.0.0-preview.1" />
+    <PackageReference Include="Microsoft.Azure.Management.ResourceManager" Version="3.7.3-preview" />
+    <PackageReference Include="Microsoft.Azure.Management.Subscription" Version="1.1.4-preview" />
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.8" />
+  </ItemGroup>
+
+</Project>
