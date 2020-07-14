@@ -1,8 +1,5 @@
 ﻿using Azure.ResourceManager.Compute.Models;
 using azure_proto_sdk.Management;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace azure_proto_sdk.Compute
 {
@@ -11,5 +8,17 @@ namespace azure_proto_sdk.Compute
         public string Id { get { return Model.Id; } }
 
         public AzureVm(AzureResourceGroup resourceGroup, VirtualMachine vm) : base(resourceGroup, vm) { }
+
+        internal void Stop()
+        {
+            var computeClient = Parent.Parent.Parent.ComputeClient;
+            var result = computeClient.VirtualMachines.StartPowerOff(Parent.Name, Model.Name).WaitForCompletionAsync().Result;
+        }
+
+        internal void Start()
+        {
+            var computeClient = Parent.Parent.Parent.ComputeClient;
+            var result = computeClient.VirtualMachines.StartStart(Parent.Name, Model.Name).WaitForCompletionAsync().Result;
+        }
     }
 }

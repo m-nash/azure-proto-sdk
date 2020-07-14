@@ -1,8 +1,4 @@
-﻿using Azure.ResourceManager.Compute.Models;
-using azure_proto_sdk.Management;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using azure_proto_sdk.Management;
 
 namespace azure_proto_sdk.Compute
 {
