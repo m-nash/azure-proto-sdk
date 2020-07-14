@@ -1,4 +1,6 @@
-﻿namespace azure_proto_sdk
+﻿using azure_proto_sdk.Management;
+
+namespace azure_proto_sdk
 {
     public class AzureClient
     {

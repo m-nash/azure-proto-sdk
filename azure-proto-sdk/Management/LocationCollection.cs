@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.Management.Subscription;
 using System.Collections.Generic;
 
-namespace azure_proto_sdk
+namespace azure_proto_sdk.Management
 {
     public class LocationCollection : Dictionary<string, AzureLocation>
     {
