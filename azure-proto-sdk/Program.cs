@@ -1,17 +1,32 @@
-﻿using Azure.ResourceManager.Network.Models;
-using azure_proto_sdk.Compute;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 
 namespace azure_proto_sdk
 {
     class Program
     {
+        private static string vmName = String.Format("{0}-quickstartvm", Environment.UserName);
+        private static string rgName = String.Format("{0}-test-rg", Environment.UserName);
+        private static string subscriptionId = Environment.GetEnvironmentVariable("AZURE_SUBSCRIPTION_ID");
+
         static void Main(string[] args)
         {
             CreateSingleVmExample();
             //CreateMultipleVmShutdownSome();
+            //StartStopVm();
+        }
+
+        private static void StartStopVm()
+        {
+            AzureClient client = new AzureClient();
+            var subscription = client.Subscriptions[subscriptionId];
+            var location = subscription.Locations["westus2"];
+            var resourceGroup = location.ResourceGroups[rgName];
+            var vm = resourceGroup.Vms[vmName];
+            Console.WriteLine("Found VM {0}", vmName);
+            Console.WriteLine("--------Stopping VM--------");
+            vm.Stop();
+            Console.WriteLine("--------Starting VM--------");
+            vm.Start();
         }
 
         private static void CreateMultipleVmShutdownSome()
@@ -22,16 +37,14 @@ namespace azure_proto_sdk
         private static void CreateSingleVmExample()
         {
             AzureClient client = new AzureClient();
-            var subscription = client.Subscriptions[Environment.GetEnvironmentVariable("AZURE_SUBSCRIPTION_ID")];
+            var subscription = client.Subscriptions[subscriptionId];
 
             // Set Location
             var location = subscription.Locations["westus2"];
 
             // Create Resource Group
             Console.WriteLine("--------Start create group--------");
-            var resourceGroup = location.ResourceGroups.CreateOrUpdate(String.Format("{0}-test-rg", Environment.UserName));
-
-            string vmName = String.Format("{0}-quickstartvm", Environment.UserName);
+            var resourceGroup = location.ResourceGroups.CreateOrUpdate(rgName);
 
             // Create AvailabilitySet
             Console.WriteLine("--------Start create AvailabilitySet--------");
