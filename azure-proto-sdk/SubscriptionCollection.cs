@@ -1,6 +1,6 @@
 ﻿using Microsoft.Azure.Management.Subscription;
 
-namespace azure
+namespace azure_proto_sdk
 {
     public class SubscriptionCollection : AzureCollection<AzureSubscription>
     {

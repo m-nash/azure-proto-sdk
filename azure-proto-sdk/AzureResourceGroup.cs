@@ -5,7 +5,7 @@ using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Network.Models;
 using Microsoft.Azure.Management.ResourceManager.Models;
 
-namespace azure
+namespace azure_proto_sdk
 {
     public class AzureResourceGroup
     {
@@ -15,7 +15,7 @@ namespace azure
         public PublicIPAddress IpAddress { get; private set; }
         public VirtualNetwork VNet { get; private set; }
         public NetworkInterface Nic { get; private set; }
-        public VirtualMachine Vm { get; private set; }
+        public VmCollection Vms { get; private set; }
         public AvailabilitySetCollection AvailabilitySets { get; private set; }
 
         public string Name { get { return resourceGroup.Name; } }
@@ -25,6 +25,7 @@ namespace azure
             this.resourceGroup = resourceGroup;
             Location = location;
             AvailabilitySets = new AvailabilitySetCollection(this);
+            Vms = new VmCollection(this);
         }
 
         internal void CreateOrUpdatePublicIpAddress(string name, PublicIPAddress ipAddress)
@@ -43,12 +44,6 @@ namespace azure
         {
             var networkClient = Location.Subscription.NetworkClient;
             Nic = networkClient.NetworkInterfaces.StartCreateOrUpdate(Name, name, nic).WaitForCompletionAsync().Result;
-        }
-
-        internal void CreateOrUpdateVm(string name, VirtualMachine vm)
-        {
-            var computeClient = Location.Subscription.ComputeClient;
-            Vm = computeClient.VirtualMachines.StartCreateOrUpdate(Name, name, vm).WaitForCompletionAsync().Result;
         }
     }
 }

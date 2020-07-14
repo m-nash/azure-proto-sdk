@@ -1,6 +1,6 @@
 ﻿using Microsoft.Azure.Management.Subscription.Models;
 
-namespace azure
+namespace azure_proto_sdk
 {
     public class AzureLocation
     {

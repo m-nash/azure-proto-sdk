@@ -1,4 +1,4 @@
-﻿namespace azure
+﻿namespace azure_proto_sdk
 {
     public class AzureClient
     {
