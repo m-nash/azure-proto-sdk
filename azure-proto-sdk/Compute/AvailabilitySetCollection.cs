@@ -1,6 +1,4 @@
-﻿using Azure.ResourceManager.Compute.Models;
-using azure_proto_sdk.Management;
-using System;
+﻿using azure_proto_sdk.Management;
 
 namespace azure_proto_sdk.Compute
 {
@@ -22,7 +20,7 @@ namespace azure_proto_sdk.Compute
             }
         }
 
-        internal AzureAvailabilitySet CreateOrUpdateAvailabilityset(string name, AzureAvailabilitySet availabilitySet)
+        public AzureAvailabilitySet CreateOrUpdateAvailabilityset(string name, AzureAvailabilitySet availabilitySet)
         {
             var computeClient = resourceGroup.Parent.Parent.ComputeClient;
             var aSet = computeClient.AvailabilitySets.CreateOrUpdate(resourceGroup.Name, name, availabilitySet.Model);

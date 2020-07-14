@@ -20,7 +20,7 @@ namespace azure_proto_sdk.Compute
             }
         }
 
-        internal AzureVm CreateOrUpdateVm(string name, AzureVm vm)
+        public AzureVm CreateOrUpdateVm(string name, AzureVm vm)
         {
             var computeClient = resourceGroup.Parent.Parent.ComputeClient;
             var vmResult = computeClient.VirtualMachines.StartCreateOrUpdate(resourceGroup.Name, name, vm.Model).WaitForCompletionAsync().Result;

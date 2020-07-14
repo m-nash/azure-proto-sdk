@@ -1,6 +1,7 @@
-﻿using System;
+﻿using azure_proto_sdk;
+using System;
 
-namespace azure_proto_sdk
+namespace client
 {
     class Program
     {

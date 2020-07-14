@@ -1,7 +1,5 @@
 ﻿using azure_proto_sdk.Management;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace azure_proto_sdk.Network
 {
@@ -19,7 +17,7 @@ namespace azure_proto_sdk.Network
             throw new NotImplementedException();
         }
 
-        internal AzurePublicIpAddress CreateOrUpdatePublicIpAddress(string name, AzurePublicIpAddress ipAddress)
+        public AzurePublicIpAddress CreateOrUpdatePublicIpAddress(string name, AzurePublicIpAddress ipAddress)
         {
             var networkClient = resourceGroup.Parent.Parent.NetworkClient;
             var ipResult = networkClient.PublicIPAddresses.StartCreateOrUpdate(resourceGroup.Name, name, ipAddress.Model).WaitForCompletionAsync().Result;
