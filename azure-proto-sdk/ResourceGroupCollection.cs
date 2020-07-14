@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.Management.ResourceManager;
 using Microsoft.Azure.Management.ResourceManager.Models;
 
-namespace azure
+namespace azure_proto_sdk
 {
     public class ResourceGroupCollection : AzureCollection<AzureResourceGroup>
     {

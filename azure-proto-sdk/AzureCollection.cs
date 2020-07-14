@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace azure
+namespace azure_proto_sdk
 {
     public abstract class AzureCollection<T> : Dictionary<string, T> where T: class
     {

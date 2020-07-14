@@ -1,6 +1,6 @@
 ﻿using Microsoft.Azure.Management.ResourceManager;
 
-namespace azure
+namespace azure_proto_sdk
 {
     internal sealed class AzureClientManager
     {

@@ -1,7 +1,7 @@
 ﻿using Azure.ResourceManager.Compute.Models;
 using System;
 
-namespace azure
+namespace azure_proto_sdk
 {
     public class AvailabilitySetCollection : AzureCollection<AzureAvailabilitySet>
     {

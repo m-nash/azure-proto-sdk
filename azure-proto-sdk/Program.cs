@@ -4,11 +4,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace azure
+namespace azure_proto_sdk
 {
     class Program
     {
         static void Main(string[] args)
+        {
+            CreateSingleVmExample();
+            //CreateMultipleVmShutdownSome();
+        }
+
+        private static void CreateMultipleVmShutdownSome()
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void CreateSingleVmExample()
         {
             AzureClient client = new AzureClient();
             var subscription = client.Subscriptions[Environment.GetEnvironmentVariable("AZURE_SUBSCRIPTION_ID")];
@@ -19,7 +30,6 @@ namespace azure
             // Create Resource Group
             Console.WriteLine("--------Start create group--------");
             var resourceGroup = location.ResourceGroups.CreateOrUpdate("mnash-test-rg");
-            //var resourceGroup = location.ResourceGroups["mnash-test-rg"];
             Console.WriteLine("--------Finish create group--------");
 
             string vmName = "mnash-quickstartvm";
@@ -106,9 +116,9 @@ namespace azure
                 HardwareProfile = new HardwareProfile() { VmSize = VirtualMachineSizeTypes.StandardB1Ms },
                 AvailabilitySet = new Azure.ResourceManager.Compute.Models.SubResource() { Id = aset.Id }
             };
-            resourceGroup.CreateOrUpdateVm(vmName, vm);
+            var avm = resourceGroup.Vms.CreateOrUpdateVm(vmName, vm);
 
-            Console.WriteLine("VM ID: " + resourceGroup.Vm.Id);
+            Console.WriteLine("VM ID: " + avm.Id);
             Console.WriteLine("--------Done create VM--------");
         }
     }
