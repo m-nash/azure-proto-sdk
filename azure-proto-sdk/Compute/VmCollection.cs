@@ -1,9 +1,10 @@
 ﻿using Azure.ResourceManager.Compute.Models;
+using azure_proto_sdk.Management;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace azure_proto_sdk
+namespace azure_proto_sdk.Compute
 {
     public class VmCollection : AzureCollection<AzureVm>
     {
@@ -16,17 +17,17 @@ namespace azure_proto_sdk
 
         protected override void LoadValues()
         {
-            var computeClient = resourceGroup.Location.Subscription.ComputeClient;
+            var computeClient = resourceGroup.Parent.Parent.ComputeClient;
             foreach(var vm in computeClient.VirtualMachines.List(resourceGroup.Name))
             {
                 this.Add(vm.Name, new AzureVm(resourceGroup, vm));
             }
         }
 
-        internal AzureVm CreateOrUpdateVm(string name, VirtualMachine vm)
+        internal AzureVm CreateOrUpdateVm(string name, AzureVm vm)
         {
-            var computeClient = resourceGroup.Location.Subscription.ComputeClient;
-            var vmResult = computeClient.VirtualMachines.StartCreateOrUpdate(resourceGroup.Name, name, vm).WaitForCompletionAsync().Result;
+            var computeClient = resourceGroup.Parent.Parent.ComputeClient;
+            var vmResult = computeClient.VirtualMachines.StartCreateOrUpdate(resourceGroup.Name, name, vm.Model).WaitForCompletionAsync().Result;
             AzureVm avm = new AzureVm(resourceGroup, vmResult.Value);
             Add(vmResult.Value.Name, avm);
             return avm;

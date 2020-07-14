@@ -3,14 +3,10 @@ using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Network;
 using Microsoft.Azure.Management.Subscription.Models;
 
-namespace azure_proto_sdk
+namespace azure_proto_sdk.Management
 {
-    public class AzureSubscription
+    public class AzureSubscription : AzureResource<AzureClient, SubscriptionModel>
     {
-        private SubscriptionModel subModel;
-
-        public AzureClient Client { get; private set; }
-
         public LocationCollection Locations { get; private set; }
 
         private ComputeManagementClient computeClient;
@@ -53,13 +49,11 @@ namespace azure_proto_sdk
             }
         }
 
-        public AzureSubscription(AzureClient client, SubscriptionModel subModel)
+        public AzureSubscription(AzureClient client, SubscriptionModel subModel) : base(client, subModel)
         {
-            this.subModel = subModel;
-            Client = client;
             Locations = new LocationCollection(this);
         }
 
-        public string Id { get { return subModel.SubscriptionId; } }
+        public string Id { get { return Model.SubscriptionId; } }
     }
 }

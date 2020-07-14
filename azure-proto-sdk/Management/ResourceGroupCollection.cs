@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.Management.ResourceManager;
 using Microsoft.Azure.Management.ResourceManager.Models;
 
-namespace azure_proto_sdk
+namespace azure_proto_sdk.Management
 {
     public class ResourceGroupCollection : AzureCollection<AzureResourceGroup>
     {
@@ -14,7 +14,7 @@ namespace azure_proto_sdk
 
         internal AzureResourceGroup CreateOrUpdate(string resourceGroupName)
         {
-            var rmClient = Location.Subscription.ResourceClient;
+            var rmClient = Location.Parent.ResourceClient;
             var resourceGroup = new ResourceGroup(Location.Name);
             resourceGroup = rmClient.ResourceGroups.CreateOrUpdateAsync(resourceGroupName, resourceGroup).Result;
             AzureResourceGroup result = new AzureResourceGroup(Location, resourceGroup);
@@ -24,7 +24,7 @@ namespace azure_proto_sdk
 
         protected override void LoadValues()
         {
-            var rmClient = Location.Subscription.ResourceClient;
+            var rmClient = Location.Parent.ResourceClient;
             foreach(var rsg in rmClient.ResourceGroups.List())
             {
                 this.Add(rsg.Name, new AzureResourceGroup(Location, rsg));
