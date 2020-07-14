@@ -12,7 +12,7 @@ namespace azure_proto_sdk.Management
             Location = location;
         }
 
-        internal AzureResourceGroup CreateOrUpdate(string resourceGroupName)
+        public AzureResourceGroup CreateOrUpdate(string resourceGroupName)
         {
             var rmClient = Location.Parent.ResourceClient;
             var resourceGroup = new ResourceGroup(Location.Name);

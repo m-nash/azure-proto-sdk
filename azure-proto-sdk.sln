@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "azure-proto-sdk", "azure-proto-sdk\azure-proto-sdk.csproj", "{F7F49AD9-143B-4F64-BC14-CB894D183197}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-sdk", "azure-proto-sdk\azure-proto-sdk.csproj", "{F7F49AD9-143B-4F64-BC14-CB894D183197}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "client", "client\client.csproj", "{F67BFD28-EDF7-450C-8204-0A43DD9E5754}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{F7F49AD9-143B-4F64-BC14-CB894D183197}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7F49AD9-143B-4F64-BC14-CB894D183197}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7F49AD9-143B-4F64-BC14-CB894D183197}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F67BFD28-EDF7-450C-8204-0A43DD9E5754}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F67BFD28-EDF7-450C-8204-0A43DD9E5754}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F67BFD28-EDF7-450C-8204-0A43DD9E5754}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F67BFD28-EDF7-450C-8204-0A43DD9E5754}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

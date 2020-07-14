@@ -1,8 +1,5 @@
-﻿using Azure.ResourceManager.Network.Models;
-using azure_proto_sdk.Management;
+﻿using azure_proto_sdk.Management;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace azure_proto_sdk.Network
 {
@@ -15,7 +12,7 @@ namespace azure_proto_sdk.Network
             this.resourceGroup = resourceGroup;
         }
 
-        internal AzureVnet CreateOrUpdateVNet(string name, AzureVnet vnet)
+        public AzureVnet CreateOrUpdateVNet(string name, AzureVnet vnet)
         {
             var networkClient = resourceGroup.Parent.Parent.NetworkClient;
             var vnetResult = networkClient.VirtualNetworks.StartCreateOrUpdate(resourceGroup.Name, name, vnet.Model).WaitForCompletionAsync().Result;

@@ -9,13 +9,13 @@ namespace azure_proto_sdk.Compute
 
         public AzureVm(AzureResourceGroup resourceGroup, VirtualMachine vm) : base(resourceGroup, vm) { }
 
-        internal void Stop()
+        public void Stop()
         {
             var computeClient = Parent.Parent.Parent.ComputeClient;
             var result = computeClient.VirtualMachines.StartPowerOff(Parent.Name, Model.Name).WaitForCompletionAsync().Result;
         }
 
-        internal void Start()
+        public void Start()
         {
             var computeClient = Parent.Parent.Parent.ComputeClient;
             var result = computeClient.VirtualMachines.StartStart(Parent.Name, Model.Name).WaitForCompletionAsync().Result;

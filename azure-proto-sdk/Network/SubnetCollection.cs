@@ -1,8 +1,4 @@
-﻿using Azure.ResourceManager.Network.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
+﻿using System;
 
 namespace azure_proto_sdk.Network
 {
@@ -20,7 +16,7 @@ namespace azure_proto_sdk.Network
             throw new NotImplementedException();
         }
 
-        internal AzureSubnet CreateOrUpdateSubnets(AzureSubnet subnet)
+        public AzureSubnet CreateOrUpdateSubnets(AzureSubnet subnet)
         {
             var networkClient = vnet.Parent.Parent.Parent.NetworkClient;
             var subnetResult = networkClient.Subnets.StartCreateOrUpdate(vnet.Parent.Name, vnet.Model.Name, subnet.Model.Name, subnet.Model).WaitForCompletionAsync().Result;

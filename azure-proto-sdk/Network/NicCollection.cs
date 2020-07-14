@@ -1,8 +1,5 @@
-﻿using Azure.ResourceManager.Network.Models;
-using azure_proto_sdk.Management;
+﻿using azure_proto_sdk.Management;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace azure_proto_sdk.Network
 {
@@ -20,7 +17,7 @@ namespace azure_proto_sdk.Network
             throw new NotImplementedException();
         }
 
-        internal AzureNic CreateOrUpdateNic(string name, AzureNic nic)
+        public AzureNic CreateOrUpdateNic(string name, AzureNic nic)
         {
             var networkClient = resourceGroup.Parent.Parent.NetworkClient;
             var nicResult = networkClient.NetworkInterfaces.StartCreateOrUpdate(resourceGroup.Name, name, nic.Model).WaitForCompletionAsync().Result;
