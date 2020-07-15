@@ -12,6 +12,8 @@ namespace azure_proto_management
 
         public ClientFactory Clients { get; set; }
 
+        public object Data => throw new System.NotImplementedException();
+
         public AzureClient()
         {
             Subscriptions = new SubscriptionCollection(this);

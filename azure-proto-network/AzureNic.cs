@@ -3,9 +3,9 @@ using azure_proto_core;
 
 namespace azure_proto_network
 {
-    public class AzureNic : AzureResource<NetworkInterface>
+    public class AzureNic : AzureResource
     {
-        public AzureNic(IResource resourceGroup, NetworkInterface nic) : base(resourceGroup, nic) { }
+        public AzureNic(IResource resourceGroup, PhNetworkInterface nic) : base(resourceGroup, nic) { }
 
         public override string Name => Model.Name;
 

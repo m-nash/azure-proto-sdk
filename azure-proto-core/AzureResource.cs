@@ -1,8 +1,8 @@
 ﻿namespace azure_proto_core
 {
-    public abstract class AzureResource<T> : IResource
+    public abstract class AzureResource : IResource
     {
-        public T Model { get; private set; }
+        public IModel Model { get; private set; }
 
         public IResource Parent { get; private set; }
 
@@ -12,7 +12,9 @@
 
         public ClientFactory Clients { get; private set; }
 
-        public AzureResource(IResource parent, T model)
+        public object Data => throw new System.NotImplementedException();
+
+        public AzureResource(IResource parent, IModel model)
         {
             Parent = parent;
             Model = model;

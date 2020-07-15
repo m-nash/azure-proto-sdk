@@ -1,9 +1,7 @@
 ﻿namespace azure_proto_core
 {
-    public interface IResource
+    public interface IResource : IModel
     {
-        string Name { get; }
-        string Id { get; }
         ClientFactory Clients { get; }
     }
 }

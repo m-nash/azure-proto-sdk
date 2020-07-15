@@ -3,7 +3,7 @@ using azure_proto_core;
 
 namespace azure_proto_network
 {
-    public class AzureVnet : AzureResource<VirtualNetwork>
+    public class AzureVnet : AzureResource
     {
         public SubnetCollection Subnets { get; private set; }
 
@@ -11,7 +11,7 @@ namespace azure_proto_network
 
         public override string Id => Model.Id;
 
-        public AzureVnet(IResource resourceGroup, VirtualNetwork vnet) : base(resourceGroup, vnet)
+        public AzureVnet(IResource resourceGroup, PhVirtualNetwork vnet) : base(resourceGroup, vnet)
         {
             Subnets = new SubnetCollection(this);
         }
@@ -23,7 +23,7 @@ namespace azure_proto_network
                 Name = name,
                 AddressPrefix = cidr,
             };
-            return new AzureSubnet(this, subnet);
+            return new AzureSubnet(this, new PhSubnet(subnet));
         }
     }
 }

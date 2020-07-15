@@ -1,4 +1,5 @@
-﻿using azure_proto_core;
+﻿using Azure.ResourceManager.Network.Models;
+using azure_proto_core;
 using System;
 
 namespace azure_proto_network
@@ -15,8 +16,8 @@ namespace azure_proto_network
         public AzureNic CreateOrUpdateNic(string name, AzureNic nic)
         {
             var networkClient = Parent.Clients.NetworkClient;
-            var nicResult = networkClient.NetworkInterfaces.StartCreateOrUpdate(Parent.Name, name, nic.Model).WaitForCompletionAsync().Result;
-            nic = new AzureNic(Parent, nicResult);
+            var nicResult = networkClient.NetworkInterfaces.StartCreateOrUpdate(Parent.Name, name, nic.Model.Data as NetworkInterface).WaitForCompletionAsync().Result;
+            nic = new AzureNic(Parent, new PhNetworkInterface(nicResult.Value));
             Add(nic.Model.Name, nic);
             return nic;
         }

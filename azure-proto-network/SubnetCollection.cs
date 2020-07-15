@@ -1,4 +1,5 @@
-﻿using azure_proto_core;
+﻿using Azure.ResourceManager.Network.Models;
+using azure_proto_core;
 using System;
 
 namespace azure_proto_network
@@ -9,15 +10,20 @@ namespace azure_proto_network
 
         protected override void LoadValues()
         {
-            throw new NotImplementedException();
+            var networkClient = Parent.Clients.NetworkClient;
+            AzureVnet vnet = Parent as AzureVnet;
+            foreach(var subnet in networkClient.Subnets.List(vnet.Parent.Name, vnet.Name))
+            {
+                Add(subnet.Name, new AzureSubnet(vnet, new PhSubnet(subnet)));
+            }
         }
 
         public AzureSubnet CreateOrUpdateSubnets(AzureSubnet subnet)
         {
             var networkClient = Parent.Clients.NetworkClient;
             AzureVnet vnet = Parent as AzureVnet;
-            var subnetResult = networkClient.Subnets.StartCreateOrUpdate(vnet.Parent.Name, vnet.Model.Name, subnet.Model.Name, subnet.Model).WaitForCompletionAsync().Result;
-            subnet = new AzureSubnet(vnet, subnetResult);
+            var subnetResult = networkClient.Subnets.StartCreateOrUpdate(vnet.Parent.Name, vnet.Model.Name, subnet.Model.Name, subnet.Model.Data as Subnet).WaitForCompletionAsync().Result;
+            subnet = new AzureSubnet(vnet, new PhSubnet(subnetResult.Value));
             Add(subnet.Model.Name, subnet);
             return subnet;
         }

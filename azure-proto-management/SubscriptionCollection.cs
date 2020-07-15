@@ -13,7 +13,7 @@ namespace azure_proto_management
             foreach (var s in ClientFactory.SubscriptionClient.Subscriptions.List())
             {
                 client.Clients = new ClientFactory(s.SubscriptionId);
-                this.Add(s.SubscriptionId, new AzureSubscription(client, s));
+                this.Add(s.SubscriptionId, new AzureSubscription(client, new PhSubscriptionModel(s)));
             }
         }
     }
