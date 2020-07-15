@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\azure-proto-sdk\azure-proto-sdk.csproj" />
+    <ProjectReference Include="..\azure-proto-sdk\azure-proto-management.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,17 +1,14 @@
-﻿using Azure.Identity;
-using Azure.ResourceManager.Compute;
-using Azure.ResourceManager.Compute.Models;
-using Azure.ResourceManager.Network;
+﻿using Azure.ResourceManager.Compute.Models;
 using Azure.ResourceManager.Network.Models;
-using azure_proto_sdk.Compute;
-using azure_proto_sdk.Network;
+using azure_proto_compute;
+using azure_proto_core;
+using azure_proto_network;
 using Microsoft.Azure.Management.ResourceManager.Models;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace azure_proto_sdk.Management
+namespace azure_proto_management
 {
-    public class AzureResourceGroup : AzureResource<AzureLocation, ResourceGroup>
+    public class AzureResourceGroup : AzureResource<ResourceGroup>
     {
         public PublicIpAddressCollection IpAddresses { get; private set; }
         public VnetCollection VNets { get; private set; }
@@ -19,7 +16,9 @@ namespace azure_proto_sdk.Management
         public VmCollection Vms { get; private set; }
         public AvailabilitySetCollection AvailabilitySets { get; private set; }
 
-        public string Name { get { return Model.Name; } }
+        public override string Name => Model.Name;
+
+        public override string Id => Model.Id;
 
         public AzureResourceGroup(AzureLocation location, ResourceGroup resourceGroup) : base(location, resourceGroup)
         {

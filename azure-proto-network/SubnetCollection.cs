@@ -1,15 +1,11 @@
-﻿using System;
+﻿using azure_proto_core;
+using System;
 
-namespace azure_proto_sdk.Network
+namespace azure_proto_network
 {
     public class SubnetCollection : AzureCollection<AzureSubnet>
     {
-        private AzureVnet vnet;
-
-        public SubnetCollection(AzureVnet vnet)
-        {
-            this.vnet = vnet;
-        }
+        public SubnetCollection(AzureVnet vnet) : base(vnet) { }
 
         protected override void LoadValues()
         {
@@ -18,7 +14,8 @@ namespace azure_proto_sdk.Network
 
         public AzureSubnet CreateOrUpdateSubnets(AzureSubnet subnet)
         {
-            var networkClient = vnet.Parent.Parent.Parent.NetworkClient;
+            var networkClient = Parent.Clients.NetworkClient;
+            AzureVnet vnet = Parent as AzureVnet;
             var subnetResult = networkClient.Subnets.StartCreateOrUpdate(vnet.Parent.Name, vnet.Model.Name, subnet.Model.Name, subnet.Model).WaitForCompletionAsync().Result;
             subnet = new AzureSubnet(vnet, subnetResult);
             Add(subnet.Model.Name, subnet);

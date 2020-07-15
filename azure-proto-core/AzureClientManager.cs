@@ -1,6 +1,4 @@
-﻿using Microsoft.Azure.Management.ResourceManager;
-
-namespace azure_proto_sdk
+﻿namespace azure_proto_core
 {
     internal sealed class AzureClientManager
     {
@@ -18,11 +16,11 @@ namespace azure_proto_sdk
         {
             get
             {
-                if(g_instance == null)
+                if (g_instance == null)
                 {
-                    lock(g_padlock)
+                    lock (g_padlock)
                     {
-                        if(g_instance == null)
+                        if (g_instance == null)
                         {
                             g_instance = new AzureClientManager();
                         }
@@ -37,7 +35,7 @@ namespace azure_proto_sdk
         {
             get
             {
-                if(subscriptionClient == null)
+                if (subscriptionClient == null)
                 {
                     subscriptionClient = new Microsoft.Azure.Management.Subscription.SubscriptionClient(Creds);
                 }

@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>azure_proto_sdk</RootNamespace>
+    <RootNamespace>azure_proto_core</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
