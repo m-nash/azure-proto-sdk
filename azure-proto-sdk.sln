@@ -3,9 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-sdk", "azure-proto-sdk\azure-proto-sdk.csproj", "{F7F49AD9-143B-4F64-BC14-CB894D183197}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-management", "azure-proto-sdk\azure-proto-management.csproj", "{F7F49AD9-143B-4F64-BC14-CB894D183197}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "client", "client\client.csproj", "{F67BFD28-EDF7-450C-8204-0A43DD9E5754}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "client", "client\client.csproj", "{F67BFD28-EDF7-450C-8204-0A43DD9E5754}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-compute", "azure-proto-compute\azure-proto-compute.csproj", "{FD280DA1-53BA-46BA-B705-890F42F704BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "azure-proto-core", "azure-proto-core\azure-proto-core.csproj", "{450371DE-C9CF-4FCE-B106-822839F68F00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "azure-proto-network", "azure-proto-network\azure-proto-network.csproj", "{23ECE624-2ECD-4C48-BFEA-7D613163394A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,18 @@ Global
 		{F67BFD28-EDF7-450C-8204-0A43DD9E5754}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F67BFD28-EDF7-450C-8204-0A43DD9E5754}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F67BFD28-EDF7-450C-8204-0A43DD9E5754}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD280DA1-53BA-46BA-B705-890F42F704BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD280DA1-53BA-46BA-B705-890F42F704BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD280DA1-53BA-46BA-B705-890F42F704BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD280DA1-53BA-46BA-B705-890F42F704BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{450371DE-C9CF-4FCE-B106-822839F68F00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{450371DE-C9CF-4FCE-B106-822839F68F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{450371DE-C9CF-4FCE-B106-822839F68F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{450371DE-C9CF-4FCE-B106-822839F68F00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23ECE624-2ECD-4C48-BFEA-7D613163394A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23ECE624-2ECD-4C48-BFEA-7D613163394A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23ECE624-2ECD-4C48-BFEA-7D613163394A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23ECE624-2ECD-4C48-BFEA-7D613163394A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

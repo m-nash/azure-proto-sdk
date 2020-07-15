@@ -1,4 +1,4 @@
-﻿using azure_proto_sdk;
+﻿using azure_proto_management;
 using System;
 
 namespace client
@@ -8,6 +8,7 @@ namespace client
         private static string vmName = String.Format("{0}-quickstartvm", Environment.UserName);
         private static string rgName = String.Format("{0}-test-rg", Environment.UserName);
         private static string subscriptionId = Environment.GetEnvironmentVariable("AZURE_SUBSCRIPTION_ID");
+        private static string loc = "westus2";
 
         static void Main(string[] args)
         {
@@ -20,7 +21,7 @@ namespace client
         {
             AzureClient client = new AzureClient();
             var subscription = client.Subscriptions[subscriptionId];
-            var location = subscription.Locations["westus2"];
+            var location = subscription.Locations[loc];
             var resourceGroup = location.ResourceGroups[rgName];
             var vm = resourceGroup.Vms[vmName];
             Console.WriteLine("Found VM {0}", vmName);
@@ -41,7 +42,7 @@ namespace client
             var subscription = client.Subscriptions[subscriptionId];
 
             // Set Location
-            var location = subscription.Locations["westus2"];
+            var location = subscription.Locations[loc];
 
             // Create Resource Group
             Console.WriteLine("--------Start create group--------");

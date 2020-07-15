@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace azure_proto_sdk
+namespace azure_proto_core
 {
-    public abstract class AzureCollection<T> : Dictionary<string, T> where T: class
+    public abstract class AzureCollection<T> : Dictionary<string, T>
+        where T: class
     {
         protected bool initialized;
+
+        protected IResource Parent { get; private set; }
 
         new public T this[string key]
         {
@@ -23,5 +26,10 @@ namespace azure_proto_sdk
         }
 
         protected abstract void LoadValues();
+
+        protected AzureCollection(IResource parent)
+        {
+            Parent = parent;
+        }
     }
 }

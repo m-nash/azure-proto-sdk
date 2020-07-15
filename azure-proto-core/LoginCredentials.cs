@@ -6,9 +6,9 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace azure_proto_sdk
+namespace azure_proto_core
 {
-    public class LoginCredentials : ServiceClientCredentials
+    internal class LoginCredentials : ServiceClientCredentials
     {
         private string AuthenticationToken { get; set; }
 
