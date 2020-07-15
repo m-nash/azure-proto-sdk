@@ -3,13 +3,13 @@ using azure_proto_core;
 
 namespace azure_proto_compute
 {
-    public class AzureVm : AzureResource<VirtualMachine>
+    public class AzureVm : AzureResource
     {
         public override string Name => Model.Name;
 
         public override string Id => Model.Id;
 
-        public AzureVm(IResource resourceGroup, VirtualMachine vm) : base(resourceGroup, vm) { }
+        public AzureVm(IResource resourceGroup, PhVirtualMachine vm) : base(resourceGroup, vm) { }
 
         public void Stop()
         {

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>azure_proto_sdk</RootNamespace>
+    <RootNamespace>azure_proto_management</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,9 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\azure-proto-compute\azure-proto-compute.csproj" />
     <ProjectReference Include="..\azure-proto-core\azure-proto-core.csproj" />
-    <ProjectReference Include="..\azure-proto-network\azure-proto-network.csproj" />
   </ItemGroup>
 
 </Project>

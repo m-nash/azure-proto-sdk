@@ -3,7 +3,7 @@ using Microsoft.Azure.Management.Subscription.Models;
 
 namespace azure_proto_management
 {
-    public class AzureLocation: AzureResource<Location>
+    public class AzureLocation: AzureResource
     {
         public ResourceGroupCollection ResourceGroups { get; private set; }
 
@@ -11,7 +11,7 @@ namespace azure_proto_management
 
         public override string Id => Model.Id;
 
-        public AzureLocation(AzureSubscription subscription, Location location) : base(subscription, location)
+        public AzureLocation(AzureSubscription subscription, PhLocation location) : base(subscription, location)
         {
             ResourceGroups = new ResourceGroupCollection(this);
         }

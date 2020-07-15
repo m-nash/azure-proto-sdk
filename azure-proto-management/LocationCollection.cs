@@ -13,7 +13,7 @@ namespace azure_proto_management
             var split = Parent.Id.Split('/');
             foreach (var location in subscriptionClient.Subscriptions.ListLocations(split[2]))
             {
-                this.Add(location.Name, new AzureLocation(Parent as AzureSubscription, location));
+                this.Add(location.Name, new AzureLocation(Parent as AzureSubscription, new PhLocation(location)));
             }
         }
     }

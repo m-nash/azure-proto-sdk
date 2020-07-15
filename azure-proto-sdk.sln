@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-management", "azure-proto-sdk\azure-proto-management.csproj", "{F7F49AD9-143B-4F64-BC14-CB894D183197}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "client", "client\client.csproj", "{F67BFD28-EDF7-450C-8204-0A43DD9E5754}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-compute", "azure-proto-compute\azure-proto-compute.csproj", "{FD280DA1-53BA-46BA-B705-890F42F704BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "azure-proto-core", "azure-proto-core\azure-proto-core.csproj", "{450371DE-C9CF-4FCE-B106-822839F68F00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-core", "azure-proto-core\azure-proto-core.csproj", "{450371DE-C9CF-4FCE-B106-822839F68F00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "azure-proto-network", "azure-proto-network\azure-proto-network.csproj", "{23ECE624-2ECD-4C48-BFEA-7D613163394A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-network", "azure-proto-network\azure-proto-network.csproj", "{23ECE624-2ECD-4C48-BFEA-7D613163394A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-management", "azure-proto-management\azure-proto-management.csproj", "{E4A42425-8E14-4150-83BF-A1E166E11874}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F7F49AD9-143B-4F64-BC14-CB894D183197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F7F49AD9-143B-4F64-BC14-CB894D183197}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F7F49AD9-143B-4F64-BC14-CB894D183197}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F7F49AD9-143B-4F64-BC14-CB894D183197}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F67BFD28-EDF7-450C-8204-0A43DD9E5754}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F67BFD28-EDF7-450C-8204-0A43DD9E5754}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F67BFD28-EDF7-450C-8204-0A43DD9E5754}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{23ECE624-2ECD-4C48-BFEA-7D613163394A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23ECE624-2ECD-4C48-BFEA-7D613163394A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23ECE624-2ECD-4C48-BFEA-7D613163394A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4A42425-8E14-4150-83BF-A1E166E11874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4A42425-8E14-4150-83BF-A1E166E11874}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4A42425-8E14-4150-83BF-A1E166E11874}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4A42425-8E14-4150-83BF-A1E166E11874}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
