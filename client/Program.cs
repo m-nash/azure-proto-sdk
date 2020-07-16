@@ -32,10 +32,9 @@ namespace client
             Console.WriteLine("Found VM {0}", vm.Id);
 
             //retrieve from lowest level inside management package gives ability to walk up and down
-            AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, loc, rgName, vmName);
+            AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, loc, rgName);
             AzureVm vm2 = rg.Vms()[vmName];
             Console.WriteLine("Found VM {0}", vm2.Id);
-
         }
 
         private static void StartStopVm()
