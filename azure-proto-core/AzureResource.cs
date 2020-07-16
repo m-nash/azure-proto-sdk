@@ -18,7 +18,7 @@
         {
             Parent = parent;
             Model = model;
-            Clients = parent.Clients;
+            Clients = parent?.Clients;
         }
     }
 }

@@ -24,6 +24,17 @@ namespace client
 
         private static void StartFromVm()
         {
+            //make sure vm exists
+            CreateSingleVmExample();
+
+            //retrieve from lowest level, doesn't give ability to walk up and down the container structure
+            AzureVm vm = VmCollection.GetVm(subscriptionId, rgName, vmName);
+            Console.WriteLine("Found VM {0}", vm.Id);
+
+            //retrieve from lowest level inside management package gives ability to walk up and down
+            AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, loc, rgName, vmName);
+            AzureVm vm2 = rg.Vms()[vmName];
+            Console.WriteLine("Found VM {0}", vm2.Id);
 
         }
 
@@ -33,7 +44,6 @@ namespace client
             var subscription = client.Subscriptions[subscriptionId];
             var location = subscription.Locations[loc]; //intended to be removed
             var resourceGroup = location.ResourceGroups[rgName];
-            //var vm = resourceGroup.Vms[vmName]; //create shortcut constructor
             var vm = resourceGroup.Vms()[vmName];
             Console.WriteLine("Found VM {0}", vmName);
             Console.WriteLine("--------Stopping VM--------");
@@ -46,11 +56,13 @@ namespace client
         {
             AzureResourceGroup resourceGroup;
             AzureAvailabilitySet aset;
-            AzureNic nic;
-            SetupVmHost(out resourceGroup, out aset, out nic);
+            AzureSubnet subnet;
+            SetupVmHost(out resourceGroup, out aset, out subnet);
 
             for (int i = 0; i < 10; i++)
             {
+                AzureNic nic = CreateNic(resourceGroup, subnet, i);
+
                 // Create VM
                 string name = String.Format("{0}-{1}-z", vmName, i);
                 Console.WriteLine("--------Start create VM {0}--------", i);
@@ -61,19 +73,26 @@ namespace client
             resourceGroup.Vms().Select(pair =>
             {
                 var parts = pair.Value.Name.Split('-');
-                return (pair, Convert.ToInt32(parts[parts.Length - 2]));
+                var n = Convert.ToInt32(parts[parts.Length - 2]);
+                return (pair, n);
             })
-                .Where(n => n.Item2 % 2 == 0)
+                .Where(tuple => tuple.n % 2 == 0)
                 .ToList()
-                .ForEach(pair => pair.pair.Value.Stop());
+                .ForEach(tuple =>
+                {
+                    Console.WriteLine("Stopping {0}", tuple.pair.Value.Name);
+                    tuple.pair.Value.Stop();
+                });
         }
 
         private static void CreateSingleVmExample()
         {
             AzureResourceGroup resourceGroup;
             AzureAvailabilitySet aset;
-            AzureNic nic;
-            SetupVmHost(out resourceGroup, out aset, out nic);
+            AzureSubnet subnet;
+            SetupVmHost(out resourceGroup, out aset, out subnet);
+
+            AzureNic nic = CreateNic(resourceGroup, subnet, 0);
 
             // Create VM
             Console.WriteLine("--------Start create VM--------");
@@ -84,7 +103,21 @@ namespace client
             Console.WriteLine("--------Done create VM--------");
         }
 
-        private static void SetupVmHost(out AzureResourceGroup resourceGroup, out AzureAvailabilitySet aset, out AzureNic nic)
+        private static AzureNic CreateNic(AzureResourceGroup resourceGroup, AzureSubnet subnet, int i)
+        {
+            // Create IP Address
+            Console.WriteLine("--------Start create IP Address--------");
+            var ipAddress = resourceGroup.ConstructIPAddress();
+            ipAddress = resourceGroup.IpAddresses().CreateOrUpdatePublicIpAddress(String.Format("{0}_{1}_ip", vmName, i), ipAddress);
+
+            // Create Network Interface
+            Console.WriteLine("--------Start create Network Interface--------");
+            var nic = resourceGroup.ConstructNic(ipAddress, subnet.Model.Id);
+            nic = resourceGroup.Nics().CreateOrUpdateNic(String.Format("{0}_{1}_nice", vmName, i), nic);
+            return nic;
+        }
+
+        private static void SetupVmHost(out AzureResourceGroup resourceGroup, out AzureAvailabilitySet aset, out AzureSubnet subnet)
         {
             AzureClient client = new AzureClient();
             var subscription = client.Subscriptions[subscriptionId];
@@ -101,11 +134,6 @@ namespace client
             aset = resourceGroup.ConstructAvailabilitySet("Aligned");
             aset = resourceGroup.AvailabilitySets().CreateOrUpdateAvailabilityset(vmName + "_aSet", aset);
 
-            // Create IP Address
-            Console.WriteLine("--------Start create IP Address--------");
-            var ipAddress = resourceGroup.ConstructIPAddress();
-            ipAddress = resourceGroup.IpAddresses().CreateOrUpdatePublicIpAddress(vmName + "_ip", ipAddress);
-
             // Create VNet
             Console.WriteLine("--------Start create VNet--------");
             string vnetName = vmName + "_vnet";
@@ -118,17 +146,12 @@ namespace client
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
-            var subnet = vnet.Subnets[subnetName];
+            subnet = vnet.Subnets[subnetName];
             if (subnet == null)
             {
                 subnet = vnet.ConstructSubnet(subnetName, "10.0.0.0/24");
                 subnet = vnet.Subnets.CreateOrUpdateSubnets(subnet);
             }
-
-            // Create Network Interface
-            Console.WriteLine("--------Start create Network Interface--------");
-            nic = resourceGroup.ConstructNic(ipAddress, subnet.Model.Id);
-            nic = resourceGroup.Nics().CreateOrUpdateNic(vmName + "_nic", nic);
         }
     }
 }

@@ -24,5 +24,12 @@ namespace azure_proto_compute
             Add(vmResult.Value.Name, avm);
             return avm;
         }
+
+        public static AzureVm GetVm(string subscriptionId, string rgName, string vmName)
+        {
+            ClientFactory clients = new ClientFactory(subscriptionId);
+            var vmResult = clients.ComputeClient.VirtualMachines.Get(rgName, vmName);
+            return new AzureVm(null, new PhVirtualMachine(vmResult.Value));
+        }
     }
 }
