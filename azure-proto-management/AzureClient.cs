@@ -1,4 +1,5 @@
 ﻿using azure_proto_core;
+using System;
 
 namespace azure_proto_management
 {
@@ -17,6 +18,14 @@ namespace azure_proto_management
         public AzureClient()
         {
             Subscriptions = new SubscriptionCollection(this);
+        }
+
+        public static AzureResourceGroup GetResourceGroup(string subscriptionId, string loc, string rgName, string vmName)
+        {
+            AzureClient client = new AzureClient();
+            var subscription = client.Subscriptions[subscriptionId];
+            var location = subscription.Locations[loc]; //intended to be removed
+            return location.ResourceGroups[rgName];
         }
     }
 }
