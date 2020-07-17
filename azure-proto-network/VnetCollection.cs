@@ -1,6 +1,5 @@
 ﻿using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
-using System;
 
 namespace azure_proto_network
 {
@@ -15,6 +14,13 @@ namespace azure_proto_network
             var avnet = new AzureVnet(Parent, new PhVirtualNetwork(vnetResult.Value));
             Add(avnet.Model.Name, avnet);
             return avnet;
+        }
+
+        protected override AzureVnet GetSingleValue(string key)
+        {
+            var networkClient = Parent.Clients.NetworkClient;
+            var vnetResult = networkClient.VirtualNetworks.Get(Parent.Name, key);
+            return new AzureVnet(Parent, new PhVirtualNetwork(vnetResult.Value));
         }
 
         protected override void LoadValues()

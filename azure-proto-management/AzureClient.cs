@@ -20,7 +20,7 @@ namespace azure_proto_management
             Subscriptions = new SubscriptionCollection(this);
         }
 
-        public static AzureResourceGroup GetResourceGroup(string subscriptionId, string loc, string rgName, string vmName)
+        public static AzureResourceGroup GetResourceGroup(string subscriptionId, string loc, string rgName)
         {
             AzureClient client = new AzureClient();
             var subscription = client.Subscriptions[subscriptionId];

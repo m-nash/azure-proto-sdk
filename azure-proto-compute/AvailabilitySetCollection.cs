@@ -25,5 +25,12 @@ namespace azure_proto_compute
             this.Add(aSet.Value.Id, azureAvailabilitySet);
             return azureAvailabilitySet;
         }
+
+        protected override AzureAvailabilitySet GetSingleValue(string key)
+        {
+            var computeClient = Parent.Clients.ComputeClient;
+            var asetResult = computeClient.AvailabilitySets.Get(Parent.Name, key);
+            return new AzureAvailabilitySet(Parent, new PhAvailabilitySet(asetResult.Value));
+        }
     }
 }

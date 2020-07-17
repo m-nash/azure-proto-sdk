@@ -1,5 +1,4 @@
 ﻿using azure_proto_core;
-using System.Collections.Generic;
 
 namespace azure_proto_management
 {
@@ -9,6 +8,6 @@ namespace azure_proto_management
 
         public override string Id => Model.Id;
 
-        public AzureResourceGroup(AzureLocation location, PhResourceGroup resourceGroup) : base(location, resourceGroup) { }
+        public AzureResourceGroup(IResource location, PhResourceGroup resourceGroup) : base(location, resourceGroup) { }
     }
 }

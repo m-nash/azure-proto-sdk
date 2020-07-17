@@ -16,5 +16,14 @@ namespace azure_proto_management
                 this.Add(s.SubscriptionId, new AzureSubscription(client, new PhSubscriptionModel(s)));
             }
         }
+
+        protected override AzureSubscription GetSingleValue(string key)
+        {
+            AzureClient client = Parent as AzureClient;
+            var subClient = ClientFactory.SubscriptionClient;
+            var subResult = subClient.Subscriptions.Get(key);
+            client.Clients = new ClientFactory(key);
+            return new AzureSubscription(client, new PhSubscriptionModel(subResult));
+        }
     }
 }

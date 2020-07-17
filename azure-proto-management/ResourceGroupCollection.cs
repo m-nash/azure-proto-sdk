@@ -13,9 +13,16 @@ namespace azure_proto_management
             var rmClient = Parent.Clients.ResourceClient;
             var resourceGroup = new ResourceGroup(Parent.Name);
             resourceGroup = rmClient.ResourceGroups.CreateOrUpdateAsync(resourceGroupName, resourceGroup).Result;
-            AzureResourceGroup result = new AzureResourceGroup(Parent as AzureLocation, new PhResourceGroup(resourceGroup));
+            AzureResourceGroup result = new AzureResourceGroup(Parent, new PhResourceGroup(resourceGroup));
             this.Add(resourceGroupName, result);
             return result;
+        }
+
+        protected override AzureResourceGroup GetSingleValue(string key)
+        {
+            var rmClient = Parent.Clients.ResourceClient;
+            var rgResult = rmClient.ResourceGroups.Get(key);
+            return new AzureResourceGroup(Parent, new PhResourceGroup(rgResult));
         }
 
         protected override void LoadValues()
@@ -23,7 +30,7 @@ namespace azure_proto_management
             var rmClient = Parent.Clients.ResourceClient;
             foreach(var rsg in rmClient.ResourceGroups.List())
             {
-                this.Add(rsg.Name, new AzureResourceGroup(Parent as AzureLocation, new PhResourceGroup(rsg)));
+                this.Add(rsg.Name, new AzureResourceGroup(Parent, new PhResourceGroup(rsg)));
             }
         }
     }

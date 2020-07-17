@@ -31,5 +31,12 @@ namespace azure_proto_compute
             var vmResult = clients.ComputeClient.VirtualMachines.Get(rgName, vmName);
             return new AzureVm(null, new PhVirtualMachine(vmResult.Value));
         }
+
+        protected override AzureVm GetSingleValue(string key)
+        {
+            var computeClient = Parent.Clients.ComputeClient;
+            var vmResult = computeClient.VirtualMachines.Get(Parent.Name, key);
+            return new AzureVm(Parent, new PhVirtualMachine(vmResult.Value));
+        }
     }
 }

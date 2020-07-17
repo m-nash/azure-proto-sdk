@@ -32,10 +32,9 @@ namespace client
             Console.WriteLine("Found VM {0}", vm.Id);
 
             //retrieve from lowest level inside management package gives ability to walk up and down
-            AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, loc, rgName, vmName);
+            AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, loc, rgName);
             AzureVm vm2 = rg.Vms()[vmName];
             Console.WriteLine("Found VM {0}", vm2.Id);
-
         }
 
         private static void StartStopVm()
@@ -137,17 +136,16 @@ namespace client
             // Create VNet
             Console.WriteLine("--------Start create VNet--------");
             string vnetName = vmName + "_vnet";
-            var vnet = resourceGroup.VNets()[vnetName];
-            if (vnet == null)
+            AzureVnet vnet;
+            if (!resourceGroup.VNets().TryGetValue(vnetName, out vnet))
             {
                 vnet = resourceGroup.ConstructVnet("10.0.0.0/16");
-                vnet = resourceGroup.VNets().CreateOrUpdateVNet(vmName + "_vnet", vnet);
+                vnet = resourceGroup.VNets().CreateOrUpdateVNet(vnetName, vnet);
             }
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
-            subnet = vnet.Subnets[subnetName];
-            if (subnet == null)
+            if (!vnet.Subnets.TryGetValue(subnetName, out subnet))
             {
                 subnet = vnet.ConstructSubnet(subnetName, "10.0.0.0/24");
                 subnet = vnet.Subnets.CreateOrUpdateSubnets(subnet);
