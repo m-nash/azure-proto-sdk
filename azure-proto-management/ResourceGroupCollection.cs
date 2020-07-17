@@ -1,6 +1,7 @@
 ﻿using azure_proto_core;
 using Microsoft.Azure.Management.ResourceManager;
 using Microsoft.Azure.Management.ResourceManager.Models;
+using System.Collections.Generic;
 
 namespace azure_proto_management
 {
@@ -14,24 +15,23 @@ namespace azure_proto_management
             var resourceGroup = new ResourceGroup(Parent.Name);
             resourceGroup = rmClient.ResourceGroups.CreateOrUpdateAsync(resourceGroupName, resourceGroup).Result;
             AzureResourceGroup result = new AzureResourceGroup(Parent, new PhResourceGroup(resourceGroup));
-            this.Add(resourceGroupName, result);
             return result;
         }
 
-        protected override AzureResourceGroup GetSingleValue(string key)
+        public override IEnumerable<AzureResourceGroup> GetItems()
         {
             var rmClient = Parent.Clients.ResourceClient;
-            var rgResult = rmClient.ResourceGroups.Get(key);
-            return new AzureResourceGroup(Parent, new PhResourceGroup(rgResult));
+            foreach (var rsg in rmClient.ResourceGroups.List())
+            {
+                yield return new AzureResourceGroup(Parent, new PhResourceGroup(rsg));
+            }
         }
 
-        protected override void LoadValues()
+        protected override AzureResourceGroup Get(string resourceGroupName)
         {
             var rmClient = Parent.Clients.ResourceClient;
-            foreach(var rsg in rmClient.ResourceGroups.List())
-            {
-                this.Add(rsg.Name, new AzureResourceGroup(Parent, new PhResourceGroup(rsg)));
-            }
+            var rgResult = rmClient.ResourceGroups.Get(resourceGroupName);
+            return new AzureResourceGroup(Parent, new PhResourceGroup(rgResult));
         }
     }
 }

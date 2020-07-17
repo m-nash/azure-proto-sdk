@@ -69,18 +69,18 @@ namespace client
                 vm = resourceGroup.Vms().CreateOrUpdateVm(name, vm);
             }
 
-            resourceGroup.Vms().Select(pair =>
+            resourceGroup.Vms().GetItems().Select(vm =>
             {
-                var parts = pair.Value.Name.Split('-');
+                var parts = vm.Name.Split('-');
                 var n = Convert.ToInt32(parts[parts.Length - 2]);
-                return (pair, n);
+                return (vm, n);
             })
                 .Where(tuple => tuple.n % 2 == 0)
                 .ToList()
                 .ForEach(tuple =>
                 {
-                    Console.WriteLine("Stopping {0}", tuple.pair.Value.Name);
-                    tuple.pair.Value.Stop();
+                    Console.WriteLine("Stopping {0}", tuple.vm.Name);
+                    tuple.vm.Stop();
                 });
         }
 
@@ -91,7 +91,7 @@ namespace client
             AzureSubnet subnet;
             SetupVmHost(out resourceGroup, out aset, out subnet);
 
-            AzureNic nic = CreateNic(resourceGroup, subnet, 0);
+            AzureNic nic = CreateNic(resourceGroup, subnet, 1000);
 
             // Create VM
             Console.WriteLine("--------Start create VM--------");
@@ -112,7 +112,7 @@ namespace client
             // Create Network Interface
             Console.WriteLine("--------Start create Network Interface--------");
             var nic = resourceGroup.ConstructNic(ipAddress, subnet.Model.Id);
-            nic = resourceGroup.Nics().CreateOrUpdateNic(String.Format("{0}_{1}_nice", vmName, i), nic);
+            nic = resourceGroup.Nics().CreateOrUpdateNic(String.Format("{0}_{1}_nic", vmName, i), nic);
             return nic;
         }
 
