@@ -21,5 +21,12 @@ namespace azure_proto_network
             Add(nic.Model.Name, nic);
             return nic;
         }
+
+        protected override AzureNic GetSingleValue(string key)
+        {
+            var networkClient = Parent.Clients.NetworkClient;
+            var nicResult = networkClient.NetworkInterfaces.Get(Parent.Name, key);
+            return new AzureNic(Parent, new PhNetworkInterface(nicResult.Value));
+        }
     }
 }

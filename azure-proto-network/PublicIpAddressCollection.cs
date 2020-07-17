@@ -21,5 +21,12 @@ namespace azure_proto_network
             Add(ipAddress.Model.Name, ipAddress);
             return ipAddress;
         }
+
+        protected override AzurePublicIpAddress GetSingleValue(string key)
+        {
+            var networkClient = Parent.Clients.NetworkClient;
+            var ipResult = networkClient.PublicIPAddresses.Get(Parent.Name, key);
+            return new AzurePublicIpAddress(Parent, new PhPublicIPAddress(ipResult.Value));
+        }
     }
 }

@@ -5,8 +5,6 @@ namespace azure_proto_core
     public abstract class AzureCollection<T> : Dictionary<string, T>
         where T: class
     {
-        protected bool initialized;
-
         protected IResource Parent { get; private set; }
 
         new public T this[string key]
@@ -14,18 +12,22 @@ namespace azure_proto_core
             get
             {
                 //lazy load on first access
-                if (!this.ContainsKey(key) && !initialized)
-                {
-                    LoadValues();
-                    initialized = true;
-                }
                 T value;
-                return this.TryGetValue(key, out value) ? value : null;
+                if (!this.TryGetValue(key, out value))
+                {
+                    value = GetSingleValue(key);
+                    if (value == null)
+                        throw new KeyNotFoundException();
+                    Add(key, value);
+                }
+                return value;
             }
             set { /*disable setting values*/ }
         }
 
         protected abstract void LoadValues();
+
+        protected abstract T GetSingleValue(string key);
 
         protected AzureCollection(IResource parent)
         {

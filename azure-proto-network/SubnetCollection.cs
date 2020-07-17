@@ -1,6 +1,5 @@
 ﻿using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
-using System;
 
 namespace azure_proto_network
 {
@@ -26,6 +25,14 @@ namespace azure_proto_network
             subnet = new AzureSubnet(vnet, new PhSubnet(subnetResult.Value));
             Add(subnet.Model.Name, subnet);
             return subnet;
+        }
+
+        protected override AzureSubnet GetSingleValue(string key)
+        {
+            var networkClient = Parent.Clients.NetworkClient;
+            AzureVnet vnet = Parent as AzureVnet;
+            var subnetResult = networkClient.Subnets.Get(vnet.Parent.Name, vnet.Name, key);
+            return new AzureSubnet(vnet, new PhSubnet(subnetResult.Value));
         }
     }
 }

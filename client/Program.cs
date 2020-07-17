@@ -136,17 +136,16 @@ namespace client
             // Create VNet
             Console.WriteLine("--------Start create VNet--------");
             string vnetName = vmName + "_vnet";
-            var vnet = resourceGroup.VNets()[vnetName];
-            if (vnet == null)
+            AzureVnet vnet;
+            if (!resourceGroup.VNets().TryGetValue(vnetName, out vnet))
             {
                 vnet = resourceGroup.ConstructVnet("10.0.0.0/16");
-                vnet = resourceGroup.VNets().CreateOrUpdateVNet(vmName + "_vnet", vnet);
+                vnet = resourceGroup.VNets().CreateOrUpdateVNet(vnetName, vnet);
             }
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
-            subnet = vnet.Subnets[subnetName];
-            if (subnet == null)
+            if (!vnet.Subnets.TryGetValue(subnetName, out subnet))
             {
                 subnet = vnet.ConstructSubnet(subnetName, "10.0.0.0/24");
                 subnet = vnet.Subnets.CreateOrUpdateSubnets(subnet);
