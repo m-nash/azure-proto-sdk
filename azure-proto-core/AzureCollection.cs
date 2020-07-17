@@ -1,37 +1,46 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace azure_proto_core
 {
-    public abstract class AzureCollection<T> : Dictionary<string, T>
-        where T: class
+    public abstract class AzureCollection<T>
+        where T: AzureResource
     {
         protected IResource Parent { get; private set; }
 
-        new public T this[string key]
+        public T this[string key]
         {
             get
             {
                 //lazy load on first access
-                T value;
-                if (!this.TryGetValue(key, out value))
-                {
-                    value = GetSingleValue(key);
-                    if (value == null)
-                        throw new KeyNotFoundException();
-                    Add(key, value);
-                }
+                T value = Get(key);
+                if (value == null)
+                    throw new KeyNotFoundException();
                 return value;
             }
-            set { /*disable setting values*/ }
         }
 
-        protected abstract void LoadValues();
+        public abstract IEnumerable<T> GetItems();
 
-        protected abstract T GetSingleValue(string key);
+        protected abstract T Get(string name);
 
         protected AzureCollection(IResource parent)
         {
             Parent = parent;
+        }
+
+        public bool TryGetValue(string name, out T value)
+        {
+            try
+            {
+                value = Get(name);
+                return true;
+            }
+            catch(Exception) //should only be catching 404 here
+            {
+                value = null;
+                return false;
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
+using System.Collections.Generic;
 
 namespace azure_proto_network
 {
@@ -12,24 +13,23 @@ namespace azure_proto_network
             var networkClient = Parent.Clients.NetworkClient;
             var vnetResult = networkClient.VirtualNetworks.StartCreateOrUpdate(Parent.Name, name, vnet.Model.Data as VirtualNetwork).WaitForCompletionAsync().Result;
             var avnet = new AzureVnet(Parent, new PhVirtualNetwork(vnetResult.Value));
-            Add(avnet.Model.Name, avnet);
             return avnet;
         }
 
-        protected override AzureVnet GetSingleValue(string key)
+        public override IEnumerable<AzureVnet> GetItems()
         {
             var networkClient = Parent.Clients.NetworkClient;
-            var vnetResult = networkClient.VirtualNetworks.Get(Parent.Name, key);
-            return new AzureVnet(Parent, new PhVirtualNetwork(vnetResult.Value));
+            foreach (var vnet in networkClient.VirtualNetworks.List(Parent.Name))
+            {
+                yield return new AzureVnet(Parent, new PhVirtualNetwork(vnet));
+            }
         }
 
-        protected override void LoadValues()
+        protected override AzureVnet Get(string vnetName)
         {
             var networkClient = Parent.Clients.NetworkClient;
-            foreach(var vnet in networkClient.VirtualNetworks.List(Parent.Name))
-            {
-                Add(vnet.Name, new AzureVnet(Parent, new PhVirtualNetwork(vnet)));
-            }
+            var vnetResult = networkClient.VirtualNetworks.Get(Parent.Name, vnetName);
+            return new AzureVnet(Parent, new PhVirtualNetwork(vnetResult.Value));
         }
     }
 }

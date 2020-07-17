@@ -1,5 +1,6 @@
 ﻿using Azure.ResourceManager.Compute.Models;
 using azure_proto_core;
+using System.Collections.Generic;
 
 namespace azure_proto_compute
 {
@@ -7,21 +8,11 @@ namespace azure_proto_compute
     {
         public VmCollection(IResource resourceGroup) : base(resourceGroup) { }
 
-        protected override void LoadValues()
-        {
-            var computeClient = Parent.Clients.ComputeClient;
-            foreach(var vm in computeClient.VirtualMachines.List(Parent.Name))
-            {
-                this.Add(vm.Name, new AzureVm(Parent, new PhVirtualMachine(vm)));
-            }
-        }
-
         public AzureVm CreateOrUpdateVm(string name, AzureVm vm)
         {
             var computeClient = Parent.Clients.ComputeClient;
             var vmResult = computeClient.VirtualMachines.StartCreateOrUpdate(Parent.Name, name, vm.Model.Data as VirtualMachine).WaitForCompletionAsync().Result;
             AzureVm avm = new AzureVm(Parent, new PhVirtualMachine(vmResult.Value));
-            Add(vmResult.Value.Name, avm);
             return avm;
         }
 
@@ -32,11 +23,20 @@ namespace azure_proto_compute
             return new AzureVm(null, new PhVirtualMachine(vmResult.Value));
         }
 
-        protected override AzureVm GetSingleValue(string key)
+        protected override AzureVm Get(string vmName)
         {
             var computeClient = Parent.Clients.ComputeClient;
-            var vmResult = computeClient.VirtualMachines.Get(Parent.Name, key);
+            var vmResult = computeClient.VirtualMachines.Get(Parent.Name, vmName);
             return new AzureVm(Parent, new PhVirtualMachine(vmResult.Value));
+        }
+
+        public override IEnumerable<AzureVm> GetItems()
+        {
+            var computeClient = Parent.Clients.ComputeClient;
+            foreach (var vm in computeClient.VirtualMachines.List(Parent.Name))
+            {
+                yield return new AzureVm(Parent, new PhVirtualMachine(vm));
+            }
         }
     }
 }
