@@ -7,12 +7,12 @@ namespace azure_proto_management
 {
     public class ResourceGroupCollection : AzureCollection<AzureResourceGroup>
     {
-        public ResourceGroupCollection(AzureLocation location) : base(location) { }
+        public ResourceGroupCollection(AzureSubscription location) : base(location) { }
 
-        public AzureResourceGroup CreateOrUpdate(string resourceGroupName)
+        public AzureResourceGroup CreateOrUpdate(string resourceGroupName, string location)
         {
             var rmClient = Parent.Clients.ResourceClient;
-            var resourceGroup = new ResourceGroup(Parent.Name);
+            var resourceGroup = new ResourceGroup(location);
             resourceGroup = rmClient.ResourceGroups.CreateOrUpdateAsync(resourceGroupName, resourceGroup).Result;
             AzureResourceGroup result = new AzureResourceGroup(Parent, new PhResourceGroup(resourceGroup));
             return result;

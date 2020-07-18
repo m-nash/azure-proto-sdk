@@ -32,7 +32,7 @@ namespace client
             Console.WriteLine("Found VM {0}", vm.Id);
 
             //retrieve from lowest level inside management package gives ability to walk up and down
-            AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, loc, rgName);
+            AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, rgName);
             AzureVm vm2 = rg.Vms()[vmName];
             Console.WriteLine("Found VM {0}", vm2.Id);
         }
@@ -41,8 +41,7 @@ namespace client
         {
             AzureClient client = new AzureClient();
             var subscription = client.Subscriptions[subscriptionId];
-            var location = subscription.Locations[loc]; //intended to be removed
-            var resourceGroup = location.ResourceGroups[rgName];
+            var resourceGroup = subscription.ResourceGroups[rgName];
             var vm = resourceGroup.Vms()[vmName];
             Console.WriteLine("Found VM {0}", vmName);
             Console.WriteLine("--------Stopping VM--------");
@@ -81,6 +80,8 @@ namespace client
                 {
                     Console.WriteLine("Stopping {0}", tuple.vm.Name);
                     tuple.vm.Stop();
+                    Console.WriteLine("Starting {0}", tuple.vm.Name);
+                    tuple.vm.Start();
                 });
         }
 
@@ -121,12 +122,9 @@ namespace client
             AzureClient client = new AzureClient();
             var subscription = client.Subscriptions[subscriptionId];
 
-            // Set Location
-            var location = subscription.Locations[loc];
-
             // Create Resource Group
             Console.WriteLine("--------Start create group--------");
-            resourceGroup = location.ResourceGroups.CreateOrUpdate(rgName);
+            resourceGroup = subscription.ResourceGroups.CreateOrUpdate(rgName, loc);
 
             // Create AvailabilitySet
             Console.WriteLine("--------Start create AvailabilitySet--------");

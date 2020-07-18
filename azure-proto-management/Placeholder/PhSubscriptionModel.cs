@@ -25,5 +25,7 @@ namespace azure_proto_management
         new public string AuthorizationSource => Data.AuthorizationSource;
 
         object IModel.Data => Data;
+
+        public string Location => throw new NotImplementedException();
     }
 }

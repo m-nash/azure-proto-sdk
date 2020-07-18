@@ -6,9 +6,11 @@
 
         public IResource Parent { get; private set; }
 
-        public abstract string Name { get; }
+        public virtual string Name => Model.Name;
 
-        public abstract string Id { get; }
+        public string Id => Model.Id;
+
+        public string Location => Model.Location;
 
         public ClientFactory Clients { get; private set; }
 
