@@ -38,5 +38,16 @@ namespace azure_proto_compute
                 yield return new AzureVm(Parent, new PhVirtualMachine(vm));
             }
         }
+
+        public IEnumerable<AzureVm> GetItemsByTag(string key, string value)
+        {
+            var computeClient = Parent.Clients.ComputeClient;
+            foreach(var vm in computeClient.VirtualMachines.List(Parent.Name))
+            {
+                string rValue;
+                if (vm.Tags != null && vm.Tags.TryGetValue(key, out rValue) && rValue == value)
+                    yield return new AzureVm(Parent, new PhVirtualMachine(vm));
+            }
+        }
     }
 }
