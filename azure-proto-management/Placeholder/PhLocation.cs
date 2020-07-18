@@ -23,5 +23,7 @@ namespace azure_proto_management
         new public string Longitude => Data.Longitude;
 
         object IModel.Data => Data;
+
+        public string Location => Data.Name;
     }
 }

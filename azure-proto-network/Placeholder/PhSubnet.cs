@@ -9,10 +9,12 @@ namespace azure_proto_network
     public class PhSubnet : Subnet, IModel
     {
         public Subnet Data { get; private set; }
+        public string Location { get; private set; }
 
-        public PhSubnet(Subnet sub)
+        public PhSubnet(Subnet sub, string location)
         {
             Data = sub;
+            Location = location;
         }
 
         new public string Name => Data.Name;

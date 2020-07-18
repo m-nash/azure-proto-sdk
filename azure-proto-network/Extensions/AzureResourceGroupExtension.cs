@@ -7,40 +7,61 @@ namespace azure_proto_network
     public static class AzureResourceGroupExtension
     {
         private static Dictionary<string, PublicIpAddressCollection> ipCollections = new Dictionary<string, PublicIpAddressCollection>();
+        private static readonly object ipLock = new object();
 
         public static PublicIpAddressCollection IpAddresses(this AzureResourceGroupBase resourceGroup)
         {
             PublicIpAddressCollection result;
             if (!ipCollections.TryGetValue(resourceGroup.Id, out result))
             {
-                result = new PublicIpAddressCollection(resourceGroup);
-                ipCollections.Add(resourceGroup.Id, result);
+                lock (ipLock)
+                {
+                    if (!ipCollections.TryGetValue(resourceGroup.Id, out result))
+                    {
+                        result = new PublicIpAddressCollection(resourceGroup);
+                        ipCollections.Add(resourceGroup.Id, result);
+                    }
+                }
             }
             return result;
         }
 
         private static Dictionary<string, VnetCollection> vnetCollections = new Dictionary<string, VnetCollection>();
+        private static readonly object vnetLock = new object();
 
         public static VnetCollection VNets(this AzureResourceGroupBase resourceGroup)
         {
             VnetCollection result;
             if (!vnetCollections.TryGetValue(resourceGroup.Id, out result))
             {
-                result = new VnetCollection(resourceGroup);
-                vnetCollections.Add(resourceGroup.Id, result);
+                lock (vnetLock)
+                {
+                    if (!vnetCollections.TryGetValue(resourceGroup.Id, out result))
+                    {
+                        result = new VnetCollection(resourceGroup);
+                        vnetCollections.Add(resourceGroup.Id, result);
+                    }
+                }
             }
             return result;
         }
 
         private static Dictionary<string, NicCollection> nicCollections = new Dictionary<string, NicCollection>();
+        private static readonly object nicLock = new object();
 
         public static NicCollection Nics(this AzureResourceGroupBase resourceGroup)
         {
             NicCollection result;
             if (!nicCollections.TryGetValue(resourceGroup.Id, out result))
             {
-                result = new NicCollection(resourceGroup);
-                nicCollections.Add(resourceGroup.Id, result);
+                lock (nicLock)
+                {
+                    if (!nicCollections.TryGetValue(resourceGroup.Id, out result))
+                    {
+                        result = new NicCollection(resourceGroup);
+                        nicCollections.Add(resourceGroup.Id, result);
+                    }
+                }
             }
             return result;
         }
@@ -51,7 +72,7 @@ namespace azure_proto_network
             {
                 PublicIPAddressVersion = Azure.ResourceManager.Network.Models.IPVersion.IPv4.ToString(),
                 PublicIPAllocationMethod = IPAllocationMethod.Dynamic,
-                Location = resourceGroup.Parent.Name,
+                Location = resourceGroup.Location,
             };
             return new AzurePublicIpAddress(resourceGroup, new PhPublicIPAddress(ipAddress));
         }
@@ -60,7 +81,7 @@ namespace azure_proto_network
         {
             var vnet = new VirtualNetwork()
             {
-                Location = resourceGroup.Parent.Name,
+                Location = resourceGroup.Location,
                 AddressSpace = new AddressSpace() { AddressPrefixes = new List<string>() { vnetCidr } },
             };
             return new AzureVnet(resourceGroup, new PhVirtualNetwork(vnet));
@@ -70,7 +91,7 @@ namespace azure_proto_network
         {
             var nic = new NetworkInterface()
             {
-                Location = resourceGroup.Parent.Name,
+                Location = resourceGroup.Location,
                 IpConfigurations = new List<NetworkInterfaceIPConfiguration>()
                 {
                     new NetworkInterfaceIPConfiguration()

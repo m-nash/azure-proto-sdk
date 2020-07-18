@@ -1,5 +1,4 @@
 ﻿using azure_proto_core;
-using System;
 
 namespace azure_proto_management
 {
@@ -11,6 +10,8 @@ namespace azure_proto_management
 
         public string Id => "1";
 
+        public string Location => "westus2";
+
         public ClientFactory Clients { get; set; }
 
         public object Data => throw new System.NotImplementedException();
@@ -20,12 +21,11 @@ namespace azure_proto_management
             Subscriptions = new SubscriptionCollection(this);
         }
 
-        public static AzureResourceGroup GetResourceGroup(string subscriptionId, string loc, string rgName)
+        public static AzureResourceGroup GetResourceGroup(string subscriptionId, string rgName)
         {
             AzureClient client = new AzureClient();
             var subscription = client.Subscriptions[subscriptionId];
-            var location = subscription.Locations[loc]; //intended to be removed
-            return location.ResourceGroups[rgName];
+            return subscription.ResourceGroups[rgName];
         }
     }
 }
