@@ -20,6 +20,43 @@ namespace client
             //CreateMultipleVmShutdownSome();
             //StartStopVm();
             //StartFromVm();
+            //SetTagsOnVm();
+            //CreateMultipleVmShutdownByTag();
+        }
+
+        private static void CreateMultipleVmShutdownByTag()
+        {
+            var rg = CreateMultipleVms();
+
+            //set tags on random vms
+            Random rand = new Random(Environment.TickCount);
+            foreach(var vm in rg.Vms().GetItems())
+            {
+                if (rand.NextDouble() > 0.5)
+                {
+                    Console.WriteLine("adding tag to {0}", vm.Name);
+                    vm.AddTag("tagkey", "tagvalue");
+                }
+            }
+
+            foreach(var vm in rg.Vms().GetItemsByTag("tagkey", "tagvalue"))
+            {
+                Console.WriteLine("--------Stopping VM {0}--------", vm.Name);
+                vm.Stop();
+                Console.WriteLine("--------Starting VM {0}--------", vm.Name);
+                vm.Start();
+            }
+        }
+
+        private static void SetTagsOnVm()
+        {
+            //make sure vm exists
+            CreateSingleVmExample();
+
+            AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, rgName);
+            AzureVm vm = rg.Vms()[vmName];
+
+            vm.AddTag("tagkey", "tagvalue");
         }
 
         private static void StartFromVm()
@@ -52,21 +89,7 @@ namespace client
 
         private static void CreateMultipleVmShutdownSome()
         {
-            AzureResourceGroup resourceGroup;
-            AzureAvailabilitySet aset;
-            AzureSubnet subnet;
-            SetupVmHost(out resourceGroup, out aset, out subnet);
-
-            for (int i = 0; i < 10; i++)
-            {
-                AzureNic nic = CreateNic(resourceGroup, subnet, i);
-
-                // Create VM
-                string name = String.Format("{0}-{1}-z", vmName, i);
-                Console.WriteLine("--------Start create VM {0}--------", i);
-                var vm = resourceGroup.ConstructVm(name, "admin-user", "!@#$%asdfA", nic, aset);
-                vm = resourceGroup.Vms().CreateOrUpdateVm(name, vm);
-            }
+            AzureResourceGroup resourceGroup = CreateMultipleVms();
 
             resourceGroup.Vms().GetItems().Select(vm =>
             {
@@ -83,6 +106,27 @@ namespace client
                     Console.WriteLine("Starting {0}", tuple.vm.Name);
                     tuple.vm.Start();
                 });
+        }
+
+        private static AzureResourceGroup CreateMultipleVms()
+        {
+            AzureResourceGroup resourceGroup;
+            AzureAvailabilitySet aset;
+            AzureSubnet subnet;
+            SetupVmHost(out resourceGroup, out aset, out subnet);
+
+            for (int i = 0; i < 10; i++)
+            {
+                AzureNic nic = CreateNic(resourceGroup, subnet, i);
+
+                // Create VM
+                string name = String.Format("{0}-{1}-z", vmName, i);
+                Console.WriteLine("--------Start create VM {0}--------", i);
+                var vm = resourceGroup.ConstructVm(name, "admin-user", "!@#$%asdfA", nic, aset);
+                vm = resourceGroup.Vms().CreateOrUpdateVm(name, vm);
+            }
+
+            return resourceGroup;
         }
 
         private static void CreateSingleVmExample()
