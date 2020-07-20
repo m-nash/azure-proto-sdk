@@ -17,7 +17,7 @@ namespace azure_proto_management
             return new AzureSubscription(client, new PhSubscriptionModel(subResult));
         }
 
-        public override IEnumerable<AzureSubscription> GetItems()
+        protected override IEnumerable<AzureSubscription> GetItems()
         {
             AzureClient client = Parent as AzureClient;
             foreach (var s in ClientFactory.SubscriptionClient.Subscriptions.List())

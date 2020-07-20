@@ -25,7 +25,7 @@ namespace azure_proto_network
             return new AzureSubnet(vnet, new PhSubnet(subnetResult.Value, vnet.Location));
         }
 
-        public override IEnumerable<AzureSubnet> GetItems()
+        protected override IEnumerable<AzureSubnet> GetItems()
         {
             var networkClient = Parent.Clients.NetworkClient;
             AzureVnet vnet = Parent as AzureVnet;

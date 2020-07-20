@@ -8,7 +8,7 @@ namespace azure_proto_management
     {
         public LocationCollection(AzureSubscription subscription) : base(subscription) { }
 
-        public override IEnumerable<AzureLocation> GetItems()
+        protected override IEnumerable<AzureLocation> GetItems()
         {
             SubscriptionClient subscriptionClient = ClientFactory.SubscriptionClient;
             var split = Parent.Id.Split('/');
