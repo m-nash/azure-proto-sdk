@@ -16,7 +16,7 @@ namespace azure_proto_network
             return avnet;
         }
 
-        public override IEnumerable<AzureVnet> GetItems()
+        protected override IEnumerable<AzureVnet> GetItems()
         {
             var networkClient = Parent.Clients.NetworkClient;
             foreach (var vnet in networkClient.VirtualNetworks.List(Parent.Name))

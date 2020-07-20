@@ -24,7 +24,7 @@ namespace azure_proto_compute
             return new AzureAvailabilitySet(Parent, new PhAvailabilitySet(asetResult.Value));
         }
 
-        public override IEnumerable<AzureAvailabilitySet> GetItems()
+        protected override IEnumerable<AzureAvailabilitySet> GetItems()
         {
             var computeClient = Parent.Clients.ComputeClient;
             foreach (var aset in computeClient.AvailabilitySets.List(Parent.Name))

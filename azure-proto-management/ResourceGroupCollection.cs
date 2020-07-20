@@ -18,7 +18,7 @@ namespace azure_proto_management
             return result;
         }
 
-        public override IEnumerable<AzureResourceGroup> GetItems()
+        protected override IEnumerable<AzureResourceGroup> GetItems()
         {
             var rmClient = Parent.Clients.ResourceClient;
             foreach (var rsg in rmClient.ResourceGroups.List())

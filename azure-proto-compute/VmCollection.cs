@@ -30,7 +30,7 @@ namespace azure_proto_compute
             return new AzureVm(Parent, new PhVirtualMachine(vmResult.Value));
         }
 
-        public override IEnumerable<AzureVm> GetItems()
+        protected override IEnumerable<AzureVm> GetItems()
         {
             var computeClient = Parent.Clients.ComputeClient;
             foreach (var vm in computeClient.VirtualMachines.List(Parent.Name))

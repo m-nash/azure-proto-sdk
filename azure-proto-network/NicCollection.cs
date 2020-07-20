@@ -17,7 +17,7 @@ namespace azure_proto_network
             return nic;
         }
 
-        public override IEnumerable<AzureNic> GetItems()
+        protected override IEnumerable<AzureNic> GetItems()
         {
             throw new NotImplementedException();
         }

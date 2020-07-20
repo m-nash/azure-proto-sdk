@@ -17,7 +17,7 @@ namespace azure_proto_network
             return ipAddress;
         }
 
-        public override IEnumerable<AzurePublicIpAddress> GetItems()
+        protected override IEnumerable<AzurePublicIpAddress> GetItems()
         {
             throw new NotImplementedException();
         }

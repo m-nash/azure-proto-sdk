@@ -22,6 +22,14 @@ namespace client
             //StartFromVm();
             //SetTagsOnVm();
             //CreateMultipleVmShutdownByTag();
+
+            //CleanUp();
+        }
+
+        private static void CleanUp()
+        {
+            AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, rgName);
+            rg.Delete();
         }
 
         private static void CreateMultipleVmShutdownByTag()
@@ -30,7 +38,7 @@ namespace client
 
             //set tags on random vms
             Random rand = new Random(Environment.TickCount);
-            foreach(var vm in rg.Vms().GetItems())
+            foreach(var vm in rg.Vms())
             {
                 if (rand.NextDouble() > 0.5)
                 {
@@ -91,7 +99,7 @@ namespace client
         {
             AzureResourceGroup resourceGroup = CreateMultipleVms();
 
-            resourceGroup.Vms().GetItems().Select(vm =>
+            resourceGroup.Vms().Select(vm =>
             {
                 var parts = vm.Name.Split('-');
                 var n = Convert.ToInt32(parts[parts.Length - 2]);

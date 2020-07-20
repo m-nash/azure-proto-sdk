@@ -28,8 +28,18 @@ namespace azure_proto_compute
             {
                 vmData.Tags = new Dictionary<string, string>();
             }
-            vmData.Tags.Add(key, value);
-            var result = computeClient.VirtualMachines.StartCreateOrUpdate(Parent.Name, Name, vmData);
+
+            string currentValue;
+            if(!vmData.Tags.TryGetValue(key, out currentValue))
+            {
+                vmData.Tags.Add(key, value);
+            }
+
+            if(value != currentValue)
+            {
+                vmData.Tags[key] = value;
+                var result = computeClient.VirtualMachines.StartCreateOrUpdate(Parent.Name, Name, vmData);
+            }
         }
     }
 }

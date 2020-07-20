@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Azure;
+using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 
 namespace azure_proto_core
 {
-    public abstract class AzureCollection<T>
+    public abstract class AzureCollection<T> : IEnumerable<T> //TODO look at collection interfaces to implement to get rid of wierdness of getitems(...) IDictionary maybe
         where T: AzureResource
     {
         protected IResource Parent { get; private set; }
@@ -12,15 +14,20 @@ namespace azure_proto_core
         {
             get
             {
-                //lazy load on first access
-                T value = Get(key);
-                if (value == null)
-                    throw new KeyNotFoundException();
+                T value;
+                try
+                {
+                    value = Get(key);
+                }
+                catch(RequestFailedException e) when (e.Status == (int)HttpStatusCode.NotFound)
+                {
+                    throw new KeyNotFoundException("The resource you were accessing was not found by the service"); //TODO decide if we want to have a new exception here and best way to preserve the stack
+                }
                 return value;
             }
         }
 
-        public abstract IEnumerable<T> GetItems();
+        protected abstract IEnumerable<T> GetItems();
 
         protected abstract T Get(string name);
 
@@ -36,11 +43,21 @@ namespace azure_proto_core
                 value = Get(name);
                 return true;
             }
-            catch(Exception) //should only be catching 404 here
+            catch (RequestFailedException e) when (e.Status == (int)HttpStatusCode.NotFound)
             {
                 value = null;
                 return false;
             }
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return GetItems().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetItems().GetEnumerator();
         }
     }
 }
