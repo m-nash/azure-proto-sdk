@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    internal class LoginCredentials : ServiceClientCredentials
+    public class LoginCredentials : ServiceClientCredentials
     {
         private string AuthenticationToken { get; set; }
 

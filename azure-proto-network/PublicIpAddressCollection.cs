@@ -1,4 +1,5 @@
-﻿using Azure.ResourceManager.Network.Models;
+﻿using Azure.ResourceManager.Network;
+using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
 using System;
 using System.Collections.Generic;
@@ -9,10 +10,11 @@ namespace azure_proto_network
     {
         public PublicIpAddressCollection(IResource resourceGroup) : base(resourceGroup) { }
 
+        private NetworkManagementClient Client => ClientFactory.Instance.GetNetworkClient((Parent as AzureResourceGroupBase).Parent.Id);
+
         public AzurePublicIpAddress CreateOrUpdatePublicIpAddress(string name, AzurePublicIpAddress ipAddress)
         {
-            var networkClient = Parent.Clients.NetworkClient;
-            var ipResult = networkClient.PublicIPAddresses.StartCreateOrUpdate(Parent.Name, name, ipAddress.Model.Data as PublicIPAddress).WaitForCompletionAsync().Result;
+            var ipResult = Client.PublicIPAddresses.StartCreateOrUpdate(Parent.Name, name, ipAddress.Model.Data as PublicIPAddress).WaitForCompletionAsync().Result;
             ipAddress = new AzurePublicIpAddress(Parent, new PhPublicIPAddress(ipResult.Value));
             return ipAddress;
         }
@@ -24,8 +26,7 @@ namespace azure_proto_network
 
         protected override AzurePublicIpAddress Get(string ipName)
         {
-            var networkClient = Parent.Clients.NetworkClient;
-            var ipResult = networkClient.PublicIPAddresses.Get(Parent.Name, ipName);
+            var ipResult = Client.PublicIPAddresses.Get(Parent.Name, ipName);
             return new AzurePublicIpAddress(Parent, new PhPublicIPAddress(ipResult.Value));
         }
     }

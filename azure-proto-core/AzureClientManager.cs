@@ -1,6 +1,6 @@
 ﻿namespace azure_proto_core
 {
-    internal sealed class AzureClientManager
+    public sealed class AzureClientManager
     {
         private static readonly object g_padlock = new object();
         private static AzureClientManager g_instance;
@@ -10,9 +10,9 @@
             Creds = new LoginCredentials();
         }
 
-        internal LoginCredentials Creds { get; private set; }
+        public LoginCredentials Creds { get; private set; }
 
-        internal static AzureClientManager Instance
+        public static AzureClientManager Instance
         {
             get
             {
@@ -27,19 +27,6 @@
                     }
                 }
                 return g_instance;
-            }
-        }
-
-        private Microsoft.Azure.Management.Subscription.SubscriptionClient subscriptionClient;
-        internal Microsoft.Azure.Management.Subscription.SubscriptionClient SubscriptionClient
-        {
-            get
-            {
-                if (subscriptionClient == null)
-                {
-                    subscriptionClient = new Microsoft.Azure.Management.Subscription.SubscriptionClient(Creds);
-                }
-                return subscriptionClient;
             }
         }
     }

@@ -2,6 +2,5 @@
 {
     public interface IResource : IModel
     {
-        ClientFactory Clients { get; }
     }
 }

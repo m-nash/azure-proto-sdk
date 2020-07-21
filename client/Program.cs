@@ -28,6 +28,7 @@ namespace client
 
         private static void CleanUp()
         {
+            Console.WriteLine("--------Deleting {0}--------");
             AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, rgName);
             rg.Delete();
         }
