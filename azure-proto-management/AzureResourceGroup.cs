@@ -7,10 +7,11 @@ namespace azure_proto_management
     {
         public AzureResourceGroup(IResource location, PhResourceGroup resourceGroup) : base(location, resourceGroup) { }
 
+        private ResourceManagementClient Client => ClientFactory.Instance.GetResourceClient(Parent.Id);
+
         public void Delete()
         {
-            var resourceClient = Clients.ResourceClient;
-            resourceClient.ResourceGroups.Delete(Name);
+            Client.ResourceGroups.Delete(Name);
         }
     }
 }

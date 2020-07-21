@@ -1,10 +1,4 @@
-﻿using Microsoft.Azure.Management.Subscription.Models;
-using Microsoft.Rest.Azure;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace azure_proto_core
+﻿namespace azure_proto_core
 {
     public class AzureResourceGroupBase : AzureResource
     {

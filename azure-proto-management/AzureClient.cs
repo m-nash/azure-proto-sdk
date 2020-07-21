@@ -12,8 +12,6 @@ namespace azure_proto_management
 
         public string Location => "westus2";
 
-        public ClientFactory Clients { get; set; }
-
         public object Data => throw new System.NotImplementedException();
 
         public AzureClient()

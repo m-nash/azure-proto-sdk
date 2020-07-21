@@ -12,15 +12,12 @@
 
         public string Location => Model.Location;
 
-        public ClientFactory Clients { get; private set; }
-
         public object Data => throw new System.NotImplementedException();
 
         public AzureResource(IResource parent, IModel model)
         {
             Parent = parent;
             Model = model;
-            Clients = parent?.Clients;
         }
     }
 }

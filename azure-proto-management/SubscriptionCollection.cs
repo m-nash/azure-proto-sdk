@@ -8,21 +8,20 @@ namespace azure_proto_management
     {
         public SubscriptionCollection(AzureClient client) : base(client) { }
 
+        private SubscriptionClient Client => ClientFactory.Instance.GetSubscriptionClient();
+
         protected override AzureSubscription Get(string subscriptionId)
         {
             AzureClient client = Parent as AzureClient;
-            var subClient = ClientFactory.SubscriptionClient;
-            var subResult = subClient.Subscriptions.Get(subscriptionId);
-            client.Clients = new ClientFactory(subscriptionId);
+            var subResult = Client.Subscriptions.Get(subscriptionId);
             return new AzureSubscription(client, new PhSubscriptionModel(subResult));
         }
 
         protected override IEnumerable<AzureSubscription> GetItems()
         {
             AzureClient client = Parent as AzureClient;
-            foreach (var s in ClientFactory.SubscriptionClient.Subscriptions.List())
+            foreach (var s in Client.Subscriptions.List())
             {
-                client.Clients = new ClientFactory(s.SubscriptionId);
                 yield return new AzureSubscription(client, new PhSubscriptionModel(s));
             }
         }

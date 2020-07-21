@@ -1,4 +1,5 @@
-﻿using Azure.ResourceManager.Compute.Models;
+﻿using Azure.ResourceManager.Compute;
+using Azure.ResourceManager.Compute.Models;
 using azure_proto_core;
 using System.Collections.Generic;
 
@@ -8,21 +9,20 @@ namespace azure_proto_compute
     {
         public AzureVm(IResource resourceGroup, PhVirtualMachine vm) : base(resourceGroup, vm) { }
 
+        private ComputeManagementClient Client => ClientFactory.Instance.GetComputeClient((Parent as AzureResourceGroupBase).Parent.Id);
+
         public void Stop()
         {
-            var computeClient = Clients.ComputeClient;
-            var result = computeClient.VirtualMachines.StartPowerOff(Parent.Name, Model.Name).WaitForCompletionAsync().Result;
+            var result = Client.VirtualMachines.StartPowerOff(Parent.Name, Model.Name).WaitForCompletionAsync().Result;
         }
 
         public void Start()
         {
-            var computeClient = Clients.ComputeClient;
-            var result = computeClient.VirtualMachines.StartStart(Parent.Name, Model.Name).WaitForCompletionAsync().Result;
+            var result = Client.VirtualMachines.StartStart(Parent.Name, Model.Name).WaitForCompletionAsync().Result;
         }
 
         public void AddTag(string key, string value)
         {
-            var computeClient = Clients.ComputeClient;
             VirtualMachine vmData = Model.Data as VirtualMachine;
             if(vmData.Tags == null)
             {
@@ -38,7 +38,7 @@ namespace azure_proto_compute
             if(value != currentValue)
             {
                 vmData.Tags[key] = value;
-                var result = computeClient.VirtualMachines.StartCreateOrUpdate(Parent.Name, Name, vmData);
+                var result = Client.VirtualMachines.StartCreateOrUpdate(Parent.Name, Name, vmData);
             }
         }
     }

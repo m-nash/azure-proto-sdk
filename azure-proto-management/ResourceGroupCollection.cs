@@ -9,19 +9,19 @@ namespace azure_proto_management
     {
         public ResourceGroupCollection(AzureSubscription location) : base(location) { }
 
+        private ResourceManagementClient Client => ClientFactory.Instance.GetResourceClient(Parent.Id);
+
         public AzureResourceGroup CreateOrUpdate(string resourceGroupName, string location)
         {
-            var rmClient = Parent.Clients.ResourceClient;
             var resourceGroup = new ResourceGroup(location);
-            resourceGroup = rmClient.ResourceGroups.CreateOrUpdateAsync(resourceGroupName, resourceGroup).Result;
+            resourceGroup = Client.ResourceGroups.CreateOrUpdateAsync(resourceGroupName, resourceGroup).Result;
             AzureResourceGroup result = new AzureResourceGroup(Parent, new PhResourceGroup(resourceGroup));
             return result;
         }
 
         protected override IEnumerable<AzureResourceGroup> GetItems()
         {
-            var rmClient = Parent.Clients.ResourceClient;
-            foreach (var rsg in rmClient.ResourceGroups.List())
+            foreach (var rsg in Client.ResourceGroups.List())
             {
                 yield return new AzureResourceGroup(Parent, new PhResourceGroup(rsg));
             }
@@ -29,8 +29,7 @@ namespace azure_proto_management
 
         protected override AzureResourceGroup Get(string resourceGroupName)
         {
-            var rmClient = Parent.Clients.ResourceClient;
-            var rgResult = rmClient.ResourceGroups.Get(resourceGroupName);
+            var rgResult = Client.ResourceGroups.Get(resourceGroupName);
             return new AzureResourceGroup(Parent, new PhResourceGroup(rgResult));
         }
     }
