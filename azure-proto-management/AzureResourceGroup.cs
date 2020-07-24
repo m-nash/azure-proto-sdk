@@ -1,17 +1,17 @@
 ﻿using azure_proto_core;
-using Microsoft.Azure.Management.ResourceManager;
+using Azure.ResourceManager.Resources;
 
 namespace azure_proto_management
 {
     public class AzureResourceGroup : AzureResourceGroupBase
     {
-        public AzureResourceGroup(IResource location, PhResourceGroup resourceGroup) : base(location, resourceGroup) { }
+        public AzureResourceGroup(TrackedResource location, PhResourceGroup resourceGroup) : base(resourceGroup.Id, resourceGroup.Location) { }
 
-        private ResourceManagementClient Client => ClientFactory.Instance.GetResourceClient(Parent.Id);
+        private ResourcesManagementClient Client => ClientFactory.Instance.GetResourceClient(Id.Subscription);
 
         public void Delete()
         {
-            Client.ResourceGroups.Delete(Name);
+            Client.ResourceGroups.StartDelete(Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         }
     }
 }

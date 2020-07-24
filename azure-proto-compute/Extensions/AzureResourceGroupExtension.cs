@@ -2,6 +2,7 @@
 using azure_proto_core;
 using azure_proto_network;
 using System.Collections.Generic;
+using Sku = azure_proto_core.Sku;
 
 namespace azure_proto_compute
 {
@@ -51,7 +52,7 @@ namespace azure_proto_compute
         {
             var vm = new VirtualMachine(resourceGroup.Location)
             {
-                NetworkProfile = new NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nic.Model.Id } } },
+                NetworkProfile = new NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nic.Id } } },
                 OsProfile = new OSProfile
                 {
                     ComputerName = vmName,
@@ -82,7 +83,7 @@ namespace azure_proto_compute
             {
                 PlatformUpdateDomainCount = 5,
                 PlatformFaultDomainCount = 2,
-                Sku = new Sku() { Name = skuName },
+                Sku = new Azure.ResourceManager.Compute.Models.Sku() { Name = skuName },
             };
             return new AzureAvailabilitySet(resourceGroup, new PhAvailabilitySet(availabilitySet));
         }

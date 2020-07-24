@@ -8,7 +8,7 @@ namespace azure_proto_core
     public abstract class AzureCollection<T> : IEnumerable<T> //TODO look at collection interfaces to implement to get rid of wierdness of getitems(...) IDictionary maybe
         where T: AzureResource
     {
-        protected IResource Parent { get; private set; }
+        protected TrackedResource Parent { get; private set; }
 
         public T this[string key]
         {
@@ -31,7 +31,7 @@ namespace azure_proto_core
 
         protected abstract T Get(string name);
 
-        protected AzureCollection(IResource parent)
+        protected AzureCollection(TrackedResource parent)
         {
             Parent = parent;
         }

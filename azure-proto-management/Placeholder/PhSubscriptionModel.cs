@@ -1,31 +1,25 @@
 ﻿using azure_proto_core;
-using Microsoft.Azure.Management.Subscription.Models;
+using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace azure_proto_management
 {
-    public class PhSubscriptionModel : SubscriptionModel, IModel
+    public class PhSubscriptionModel : AzureResource<Subscription>
     {
-        public SubscriptionModel Data { get; private set; }
+        public override Subscription Data { get; protected set; }
 
-        public PhSubscriptionModel(SubscriptionModel s)
+        public PhSubscriptionModel(Subscription s) : base(s.Id)
         {
             Data = s;
         }
 
-        public string Name => Data.DisplayName;
+        public string SubscriptionId => Data.SubscriptionId;
+        public string DisplayName => Data.DisplayName;
+        public SubscriptionState? State => Data.State;
+        public SubscriptionPolicies SubscriptionPolicies => Data.SubscriptionPolicies;
+        public string AuthorizationSource => Data.AuthorizationSource;
 
-        new public string Id => Data.Id;
-        new public string SubscriptionId => Data.SubscriptionId;
-        new public string DisplayName => Data.DisplayName;
-        new public SubscriptionState? State => Data.State;
-        new public SubscriptionPolicies SubscriptionPolicies => Data.SubscriptionPolicies;
-        new public string AuthorizationSource => Data.AuthorizationSource;
-
-        object IModel.Data => Data;
-
-        public string Location => throw new NotImplementedException();
     }
 }

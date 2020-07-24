@@ -1,23 +1,26 @@
 ﻿namespace azure_proto_core
 {
-    public abstract class AzureResource : IResource
+    public abstract class AzureResource : TrackedResource 
     {
-        public IModel Model { get; private set; }
+        public override ResourceIdentifier Id { get; protected set; }
 
-        public IResource Parent { get; private set; }
+    }
 
-        public virtual string Name => Model.Name;
-
-        public string Id => Model.Id;
-
-        public string Location => Model.Location;
-
-        public object Data => throw new System.NotImplementedException();
-
-        public AzureResource(IResource parent, IModel model)
+    public abstract class AzureResource<T> : AzureResource
+    {
+        public AzureResource(ResourceIdentifier id)
         {
-            Parent = parent;
-            Model = model;
+            Id = id;
+            Location = Location.Default;
         }
+
+        public AzureResource(ResourceIdentifier id, Location location)
+        {
+            Id = id;
+            Location = location;
+        }
+
+        public abstract T Data { get; protected set; }
+
     }
 }

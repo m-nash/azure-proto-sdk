@@ -6,6 +6,6 @@ namespace azure_proto_core
 {
     public abstract class ResourceGroupCollectionBase : AzureCollection<AzureResourceGroupBase>
     {
-        public ResourceGroupCollectionBase(IResource parent) : base(parent) { }
+        public ResourceGroupCollectionBase(TrackedResource parent) : base(parent) { }
     }
 }

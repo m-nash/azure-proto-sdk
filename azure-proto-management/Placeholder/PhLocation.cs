@@ -1,29 +1,24 @@
 ﻿using azure_proto_core;
-using Microsoft.Azure.Management.Subscription.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace azure_proto_management
 {
-    public class PhLocation : Location, IModel
+    public class PhLocation : AzureResource<Azure.ResourceManager.Resources.Models.Location>
     {
-        public Location Data { get; private set; }
-
-        public PhLocation(Location loc)
+        
+        public PhLocation(Azure.ResourceManager.Resources.Models.Location loc) : base(loc.Id, loc.Name)
         {
             Data = loc;
         }
 
-        new public string Id => Data.Id;
-        new public string SubscriptionId => Data.SubscriptionId;
-        new public string Name => Data.Name;
-        new public string DisplayName => Data.DisplayName;
-        new public string Latitude => Data.Latitude;
-        new public string Longitude => Data.Longitude;
+        public string SubscriptionId => Data.SubscriptionId;
+        public string DisplayName => Data.DisplayName;
+        public string Latitude => Data.Metadata.Latitude;
+        public string Longitude => Data.Metadata.Longitude;
 
-        object IModel.Data => Data;
 
-        public string Location => Data.Name;
+        public override Azure.ResourceManager.Resources.Models.Location Data { get; protected set; }
     }
 }

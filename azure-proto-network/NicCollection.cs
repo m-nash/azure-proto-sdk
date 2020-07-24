@@ -8,13 +8,13 @@ namespace azure_proto_network
 {
     public class NicCollection : AzureCollection<AzureNic>
     {
-        public NicCollection(IResource resourceGroup) : base(resourceGroup) { }
+        public NicCollection(TrackedResource resourceGroup) : base(resourceGroup) { }
 
-        private NetworkManagementClient Client => ClientFactory.Instance.GetNetworkClient((Parent as AzureResourceGroupBase).Parent.Id);
+        private NetworkManagementClient Client => ClientFactory.Instance.GetNetworkClient(Parent.Id.Subscription);
 
         public AzureNic CreateOrUpdateNic(string name, AzureNic nic)
         {
-            var nicResult = Client.NetworkInterfaces.StartCreateOrUpdate(Parent.Name, name, nic.Model.Data as NetworkInterface).WaitForCompletionAsync().Result;
+            var nicResult = Client.NetworkInterfaces.StartCreateOrUpdate(Parent.Name, name, nic.Data).WaitForCompletionAsync().Result;
             nic = new AzureNic(Parent, new PhNetworkInterface(nicResult.Value));
             return nic;
         }

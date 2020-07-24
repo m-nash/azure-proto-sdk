@@ -1,9 +1,15 @@
-﻿using azure_proto_core;
+﻿using Azure.ResourceManager.Compute.Models;
+using azure_proto_core;
 
 namespace azure_proto_compute
 {
-    public class AzureAvailabilitySet : AzureResource
+    public class AzureAvailabilitySet : AzureResource<AvailabilitySet>
     {
-        public AzureAvailabilitySet(IResource parent, PhAvailabilitySet model):base(parent, model) { }
+        public AzureAvailabilitySet(TrackedResource parent, PhAvailabilitySet model):base(model.Id, model.Location) 
+        {
+            Data = model.Data;
+        }
+
+        public override AvailabilitySet Data { get; protected set; }
     }
 }

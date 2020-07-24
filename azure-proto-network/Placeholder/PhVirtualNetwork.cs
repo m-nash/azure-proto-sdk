@@ -6,34 +6,28 @@ using System.Text;
 
 namespace azure_proto_network
 {
-    public class PhVirtualNetwork : VirtualNetwork, IModel
+    public class PhVirtualNetwork : AzureResource<VirtualNetwork>
     {
-        public VirtualNetwork Data { get; private set; }
+        public override VirtualNetwork Data { get; protected set; }
 
-        public PhVirtualNetwork(VirtualNetwork vnet)
+        public PhVirtualNetwork(VirtualNetwork vnet) : base(vnet.Id, vnet.Location)
         {
             Data = vnet;
         }
 
-        new public string Name => Data.Name;
-        new public string Id => Data.Id;
-        new public string Type => Data.Type;
-        new public string Location => Data.Location;
         new public IDictionary<string, string> Tags => Data.Tags;
 
-        new public string Etag => Data.Etag;
-        new public AddressSpace AddressSpace => Data.AddressSpace;
-        new public DhcpOptions DhcpOptions => Data.DhcpOptions;
-        new public IList<Subnet> Subnets => Data.Subnets;
-        new public IList<VirtualNetworkPeering> VirtualNetworkPeerings => Data.VirtualNetworkPeerings;
-        new public string ResourceGuid => Data.ResourceGuid;
-        new public ProvisioningState? ProvisioningState => Data.ProvisioningState;
-        new public bool? EnableDdosProtection => Data.EnableDdosProtection;
-        new public bool? EnableVmProtection => Data.EnableVmProtection;
-        new public SubResource DdosProtectionPlan => Data.DdosProtectionPlan;
-        new public VirtualNetworkBgpCommunities BgpCommunities => Data.BgpCommunities;
-        new public IList<SubResource> IpAllocations => Data.IpAllocations;
-
-        object IModel.Data => Data;
+        public string Etag => Data.Etag;
+        public AddressSpace AddressSpace => Data.AddressSpace;
+        public DhcpOptions DhcpOptions => Data.DhcpOptions;
+        public IList<Subnet> Subnets => Data.Subnets;
+        public IList<VirtualNetworkPeering> VirtualNetworkPeerings => Data.VirtualNetworkPeerings;
+        public string ResourceGuid => Data.ResourceGuid;
+        public ProvisioningState? ProvisioningState => Data.ProvisioningState;
+        public bool? EnableDdosProtection => Data.EnableDdosProtection;
+        public bool? EnableVmProtection => Data.EnableVmProtection;
+        public SubResource DdosProtectionPlan => Data.DdosProtectionPlan;
+        public VirtualNetworkBgpCommunities BgpCommunities => Data.BgpCommunities;
+        public IList<SubResource> IpAllocations => Data.IpAllocations;
     }
 }

@@ -6,36 +6,30 @@ using System.Text;
 
 namespace azure_proto_network
 {
-    public class PhNetworkInterface : NetworkInterface, IModel
+    public class PhNetworkInterface : AzureResource<NetworkInterface>, IEntityResource
     {
-        public NetworkInterface Data { get; private set; }
+        public override NetworkInterface Data { get; protected set; }
 
-        public PhNetworkInterface(NetworkInterface nic)
+        public PhNetworkInterface(NetworkInterface nic) : base(nic.Id, nic.Location)
         {
             Data = nic;
         }
 
-        new public string Name => Data.Name;
-        new public string Id => Data.Id;
-        new public string Type => Data.Type;
-        new public string Location => Data.Location;
         new public IDictionary<string, string> Tags => Data.Tags;
 
-        new public string Etag => Data.Etag;
-        new public SubResource VirtualMachine => Data.VirtualMachine;
-        new public NetworkSecurityGroup NetworkSecurityGroup => Data.NetworkSecurityGroup;
-        new public PrivateEndpoint PrivateEndpoint => Data.PrivateEndpoint;
-        new public IList<NetworkInterfaceIPConfiguration> IpConfigurations => Data.IpConfigurations;
-        new public IList<NetworkInterfaceTapConfiguration> TapConfigurations => Data.TapConfigurations;
-        new public NetworkInterfaceDnsSettings DnsSettings => Data.DnsSettings;
-        new public string MacAddress => Data.MacAddress;
-        new public bool? Primary => Data.Primary;
-        new public bool? EnableAcceleratedNetworking => Data.EnableAcceleratedNetworking;
-        new public bool? EnableIPForwarding => Data.EnableIPForwarding;
-        new public IList<string> HostedWorkloads => Data.HostedWorkloads;
-        new public string ResourceGuid => Data.ResourceGuid;
-        new public ProvisioningState? ProvisioningState => Data.ProvisioningState;
-
-        object IModel.Data => Data;
+        public string ETag => Data.Etag;
+        public SubResource VirtualMachine => Data.VirtualMachine;
+        public NetworkSecurityGroup NetworkSecurityGroup => Data.NetworkSecurityGroup;
+        public PrivateEndpoint PrivateEndpoint => Data.PrivateEndpoint;
+        public IList<NetworkInterfaceIPConfiguration> IpConfigurations => Data.IpConfigurations;
+        public IList<NetworkInterfaceTapConfiguration> TapConfigurations => Data.TapConfigurations;
+        public NetworkInterfaceDnsSettings DnsSettings => Data.DnsSettings;
+        public string MacAddress => Data.MacAddress;
+        public bool? Primary => Data.Primary;
+        public bool? EnableAcceleratedNetworking => Data.EnableAcceleratedNetworking;
+        public bool? EnableIPForwarding => Data.EnableIPForwarding;
+        public IList<string> HostedWorkloads => Data.HostedWorkloads;
+        public string ResourceGuid => Data.ResourceGuid;
+        public ProvisioningState? ProvisioningState => Data.ProvisioningState;
     }
 }

@@ -7,13 +7,13 @@ namespace azure_proto_compute
 {
     public class VmCollection : AzureCollection<AzureVm>
     {
-        public VmCollection(IResource resourceGroup) : base(resourceGroup) { }
+        public VmCollection(TrackedResource resourceGroup) : base(resourceGroup) { }
 
-        private ComputeManagementClient Client => ClientFactory.Instance.GetComputeClient((Parent as AzureResourceGroupBase).Parent.Id);
+        private ComputeManagementClient Client => ClientFactory.Instance.GetComputeClient(Parent.Id.Subscription);
 
         public AzureVm CreateOrUpdateVm(string name, AzureVm vm)
         {
-            var vmResult = Client.VirtualMachines.StartCreateOrUpdate(Parent.Name, name, vm.Model.Data as VirtualMachine).WaitForCompletionAsync().Result;
+            var vmResult = Client.VirtualMachines.StartCreateOrUpdate(Parent.Name, name, vm.Data).WaitForCompletionAsync().Result;
             AzureVm avm = new AzureVm(Parent, new PhVirtualMachine(vmResult.Value));
             return avm;
         }

@@ -8,13 +8,13 @@ namespace azure_proto_network
 {
     public class PublicIpAddressCollection : AzureCollection<AzurePublicIpAddress>
     {
-        public PublicIpAddressCollection(IResource resourceGroup) : base(resourceGroup) { }
+        public PublicIpAddressCollection(TrackedResource resourceGroup) : base(resourceGroup) { }
 
-        private NetworkManagementClient Client => ClientFactory.Instance.GetNetworkClient((Parent as AzureResourceGroupBase).Parent.Id);
+        private NetworkManagementClient Client => ClientFactory.Instance.GetNetworkClient(Parent.Id.Subscription);
 
         public AzurePublicIpAddress CreateOrUpdatePublicIpAddress(string name, AzurePublicIpAddress ipAddress)
         {
-            var ipResult = Client.PublicIPAddresses.StartCreateOrUpdate(Parent.Name, name, ipAddress.Model.Data as PublicIPAddress).WaitForCompletionAsync().Result;
+            var ipResult = Client.PublicIPAddresses.StartCreateOrUpdate(Parent.Name, name, ipAddress.Data).WaitForCompletionAsync().Result;
             ipAddress = new AzurePublicIpAddress(Parent, new PhPublicIPAddress(ipResult.Value));
             return ipAddress;
         }

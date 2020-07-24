@@ -6,36 +6,30 @@ using System.Text;
 
 namespace azure_proto_network
 {
-    public class PhPublicIPAddress : PublicIPAddress, IModel
+    public class PhPublicIPAddress : AzureResource<PublicIPAddress>
     {
-        public PublicIPAddress Data { get; private set; }
+        public override PublicIPAddress Data { get; protected set; }
 
-        public PhPublicIPAddress(PublicIPAddress ip)
+        public PhPublicIPAddress(PublicIPAddress ip) : base(ip.Id, ip.Location)
         {
             Data = ip;
         }
 
-        new public string Name => Data.Name;
-        new public string Id => Data.Id;
-        new public string Type => Data.Type;
-        new public string Location => Data.Location;
         new public IDictionary<string, string> Tags => Data.Tags;
 
-        new public PublicIPAddressSku Sku => Data.Sku;
-        new public string Etag => Data.Etag;
-        new public IList<string> Zones => Data.Zones;
-        new public IPAllocationMethod? PublicIPAllocationMethod => Data.PublicIPAllocationMethod;
-        new public IPVersion? PublicIPAddressVersion => Data.PublicIPAddressVersion;
-        new public IPConfiguration IpConfiguration => Data.IpConfiguration;
-        new public PublicIPAddressDnsSettings DnsSettings => Data.DnsSettings;
-        new public DdosSettings DdosSettings => Data.DdosSettings;
-        new public IList<IpTag> IpTags => Data.IpTags;
-        new public string IpAddress => Data.IpAddress;
-        new public SubResource PublicIPPrefix => Data.PublicIPPrefix;
-        new public int? IdleTimeoutInMinutes => Data.IdleTimeoutInMinutes;
-        new public string ResourceGuid => Data.ResourceGuid;
-        new public ProvisioningState? ProvisioningState => Data.ProvisioningState;
-
-        object IModel.Data => Data;
+        public PublicIPAddressSku Sku => Data.Sku;
+        public string Etag => Data.Etag;
+        public IList<string> Zones => Data.Zones;
+        public IPAllocationMethod? PublicIPAllocationMethod => Data.PublicIPAllocationMethod;
+        public IPVersion? PublicIPAddressVersion => Data.PublicIPAddressVersion;
+        public IPConfiguration IpConfiguration => Data.IpConfiguration;
+        public PublicIPAddressDnsSettings DnsSettings => Data.DnsSettings;
+        public DdosSettings DdosSettings => Data.DdosSettings;
+        public IList<IpTag> IpTags => Data.IpTags;
+        public string IpAddress => Data.IpAddress;
+        public SubResource PublicIPPrefix => Data.PublicIPPrefix;
+        public int? IdleTimeoutInMinutes => Data.IdleTimeoutInMinutes;
+        public string ResourceGuid => Data.ResourceGuid;
+        public ProvisioningState? ProvisioningState => Data.ProvisioningState;
     }
 }

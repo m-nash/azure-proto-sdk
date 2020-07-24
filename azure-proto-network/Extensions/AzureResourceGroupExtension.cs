@@ -100,7 +100,7 @@ namespace azure_proto_network
                         Primary = true,
                         Subnet = new Subnet() { Id = subnetId },
                         PrivateIPAllocationMethod = IPAllocationMethod.Dynamic,
-                        PublicIPAddress = new PublicIPAddress() { Id = ip.Model.Id }
+                        PublicIPAddress = new PublicIPAddress() { Id = ip.Id }
                     }
                 }
             };

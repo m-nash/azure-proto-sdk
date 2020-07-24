@@ -8,13 +8,13 @@ namespace azure_proto_compute
     public class AvailabilitySetCollection : AzureCollection<AzureAvailabilitySet>
     {
 
-        public AvailabilitySetCollection(IResource resourceGroup) : base(resourceGroup) { }
+        public AvailabilitySetCollection(TrackedResource resourceGroup) : base(resourceGroup) { }
 
-        private ComputeManagementClient Client => ClientFactory.Instance.GetComputeClient((Parent as AzureResourceGroupBase).Parent.Id);
+        private ComputeManagementClient Client => ClientFactory.Instance.GetComputeClient(Parent.Id.Subscription);
 
         public AzureAvailabilitySet CreateOrUpdateAvailabilityset(string name, AzureAvailabilitySet availabilitySet)
         {
-            var aSet = Client.AvailabilitySets.CreateOrUpdate(Parent.Name, name, availabilitySet.Model.Data as AvailabilitySet);
+            var aSet = Client.AvailabilitySets.CreateOrUpdate(Parent.Name, name, availabilitySet.Data);
             AzureAvailabilitySet azureAvailabilitySet = new AzureAvailabilitySet(Parent, new PhAvailabilitySet(aSet.Value));
             return azureAvailabilitySet;
         }

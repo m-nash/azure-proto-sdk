@@ -1,9 +1,15 @@
-﻿using azure_proto_core;
+﻿using Azure.ResourceManager.Network.Models;
+using azure_proto_core;
 
 namespace azure_proto_network
 {
-    public class AzureSubnet : AzureResource
+    public class AzureSubnet : AzureResource<Subnet>
     {
-        public AzureSubnet(AzureVnet vnet, PhSubnet model) : base(vnet, model) { }
+        public AzureSubnet(AzureVnet vnet, PhSubnet model) : base(model.Id, vnet.Location)
+        {
+            Data = model.Data;
+        }
+
+        public override Subnet Data { get; protected set; }
     }
 }

@@ -6,28 +6,22 @@ using System.Text;
 
 namespace azure_proto_compute
 {
-    public class PhAvailabilitySet : AvailabilitySet, IModel
+    public class PhAvailabilitySet : AzureResource<AvailabilitySet>
     {
-        public AvailabilitySet Data { get; private set; }
+        public override AvailabilitySet Data { get; protected set; }
 
-        public PhAvailabilitySet(AvailabilitySet aset) : base(aset.Location)
+        public PhAvailabilitySet(AvailabilitySet aset) : base(aset.Id, aset.Location)
         {
             Data = aset;
         }
 
-        new public string Name => Data.Name;
-        new public string Id => Data.Id;
-        new public string Type => Data.Type;
-        new public string Location => Data.Location;
         new public IDictionary<string, string> Tags => Data.Tags;
 
-        new public Sku Sku => Data.Sku;
-        new public int? PlatformUpdateDomainCount => Data.PlatformUpdateDomainCount;
-        new public int? PlatformFaultDomainCount => Data.PlatformFaultDomainCount;
-        new public IList<SubResource> VirtualMachines => Data.VirtualMachines;
-        new public SubResource ProximityPlacementGroup => Data.ProximityPlacementGroup;
-        new public IList<InstanceViewStatus> Statuses => Data.Statuses;
-
-        object IModel.Data => Data;
+        public Azure.ResourceManager.Compute.Models.Sku Sku => Data.Sku;
+        public int? PlatformUpdateDomainCount => Data.PlatformUpdateDomainCount;
+        public int? PlatformFaultDomainCount => Data.PlatformFaultDomainCount;
+        public IList<SubResource> VirtualMachines => Data.VirtualMachines;
+        public SubResource ProximityPlacementGroup => Data.ProximityPlacementGroup;
+        public IList<InstanceViewStatus> Statuses => Data.Statuses;
     }
 }

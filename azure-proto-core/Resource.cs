@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace NetSDKProto
+namespace azure_proto_core
 {
 
     /// <summary>
@@ -12,7 +12,7 @@ namespace NetSDKProto
     /// </summary>
     public interface IEntityResource
     {
-        string ETag { get; protected set; }
+        string ETag { get; }
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ namespace NetSDKProto
     /// <summary>
     /// Base resource type: All resources have these properties. Proxy and other untracked resources should extend this class
     /// TODO: Implement comparison, equality, and type coercion operator overloads
-    /// TODO: Do we need to reimplement generic comparison and operator overloads for extendind types?
+    /// TODO: Do we need to reimplement generic comparison and operator overloads for extending types?
     /// </summary>
     public abstract class Resource : IEquatable<Resource>, IEquatable<string>, IComparable<Resource>, IComparable<string>
     {
@@ -67,18 +67,18 @@ namespace NetSDKProto
 
         public virtual ResourceType Type => Id?.Type;
 
-        public int CompareTo([AllowNull] Resource other)
+        public virtual int CompareTo([AllowNull] Resource other)
         {
             return string.Compare(Id?.Id, other?.Id);
         }
 
-        public int CompareTo([AllowNull] string other)
+        public virtual int CompareTo([AllowNull] string other)
         {
             return string.Compare(Id?.Id, other);
         }
 
 
-        public bool Equals([AllowNull] Resource other)
+        public virtual bool Equals([AllowNull] Resource other)
         {
             if (Id == null)
             {
@@ -88,7 +88,7 @@ namespace NetSDKProto
             return (Id.Equals(other?.Id));
         }
 
-        public bool Equals([AllowNull] string other)
+        public virtual bool Equals([AllowNull] string other)
         {
             if (Id == null)
             {
@@ -144,7 +144,7 @@ namespace NetSDKProto
         public string Tier { get; set; }
         public string Family { get; set; }
         public string Size { get; set; }
-        public int? Capacity { get; set; }
+        public long? Capacity { get; set; }
 
         public int CompareTo([AllowNull] Sku other)
         {
@@ -366,12 +366,16 @@ namespace NetSDKProto
         public string Id { get; protected set; }
         public string Name { get; protected set; }
         public ResourceType Type { get; protected set; }
-        
+
+        public string Subscription => _partsDictionary.ContainsKey(KnownKeys.Subscription) ? _partsDictionary[KnownKeys.Subscription] : null;
+
+        public string ResourceGroup => _partsDictionary.ContainsKey(KnownKeys.ResourceGroup) ? _partsDictionary[KnownKeys.ResourceGroup] : null;
+
         /// <summary>
         /// Currently this will contain the identifier for either the parent resource, the resource group, the location, the subscription, 
         /// or the tenant that is the logical parent of this resource
         /// </summary>
-        public  ResourceIdentifier Parent { get; protected set; }
+        public ResourceIdentifier Parent { get; protected set; }
 
         public virtual int CompareTo(string other)
         {

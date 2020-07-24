@@ -2,8 +2,8 @@
 {
     public sealed class AzureClientManager
     {
-        private static readonly object g_padlock = new object();
-        private static AzureClientManager g_instance;
+        private static readonly object _padlock = new object();
+        private static AzureClientManager _instance;
 
         private AzureClientManager()
         {
@@ -16,17 +16,17 @@
         {
             get
             {
-                if (g_instance == null)
+                if (_instance == null)
                 {
-                    lock (g_padlock)
+                    lock (_padlock)
                     {
-                        if (g_instance == null)
+                        if (_instance == null)
                         {
-                            g_instance = new AzureClientManager();
+                            _instance = new AzureClientManager();
                         }
                     }
                 }
-                return g_instance;
+                return _instance;
             }
         }
     }

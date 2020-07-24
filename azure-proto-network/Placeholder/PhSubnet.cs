@@ -6,40 +6,35 @@ using System.Text;
 
 namespace azure_proto_network
 {
-    public class PhSubnet : Subnet, IModel
+    public class PhSubnet : AzureResource<Subnet>
     {
-        public Subnet Data { get; private set; }
-        public string Location { get; private set; }
+        public override Subnet Data { get; protected set; }
 
-        public PhSubnet(Subnet sub, string location)
+        public PhSubnet(Subnet sub, string location) : base(sub.Id, location)
         {
             Data = sub;
             Location = location;
         }
 
-        new public string Name => Data.Name;
-        new public string Id => Data.Id;
-        
-        new public ProvisioningState? ProvisioningState => Data.ProvisioningState;
-        new public string Purpose => Data.Purpose;
-        new public IList<Delegation> Delegations => Data.Delegations;
-        new public IList<ServiceAssociationLink> ServiceAssociationLinks => Data.ServiceAssociationLinks;
-        new public IList<ResourceNavigationLink> ResourceNavigationLinks => Data.ResourceNavigationLinks;
-        new public IList<SubResource> IpAllocations => Data.IpAllocations;
-        new public IList<IPConfigurationProfile> IpConfigurationProfiles => Data.IpConfigurationProfiles;
-        new public IList<IPConfiguration> IpConfigurations => Data.IpConfigurations;
-        new public string PrivateEndpointNetworkPolicies => Data.PrivateEndpointNetworkPolicies;
-        new public IList<PrivateEndpoint> PrivateEndpoints => Data.PrivateEndpoints;
-        new public IList<ServiceEndpointPropertiesFormat> ServiceEndpoints => Data.ServiceEndpoints;
-        new public SubResource NatGateway => Data.NatGateway;
-        new public RouteTable RouteTable => Data.RouteTable;
-        new public NetworkSecurityGroup NetworkSecurityGroup => Data.NetworkSecurityGroup;
-        new public IList<string> AddressPrefixes => Data.AddressPrefixes;
-        new public string AddressPrefix => Data.AddressPrefix;
-        new public string Etag => Data.Etag;
-        new public IList<ServiceEndpointPolicy> ServiceEndpointPolicies => Data.ServiceEndpointPolicies;
-        new public string PrivateLinkServiceNetworkPolicies => Data.PrivateLinkServiceNetworkPolicies;
 
-        object IModel.Data => Data;
+        public ProvisioningState? ProvisioningState => Data.ProvisioningState;
+        public string Purpose => Data.Purpose;
+        public IList<Delegation> Delegations => Data.Delegations;
+        public IList<ServiceAssociationLink> ServiceAssociationLinks => Data.ServiceAssociationLinks;
+        public IList<ResourceNavigationLink> ResourceNavigationLinks => Data.ResourceNavigationLinks;
+        public IList<SubResource> IpAllocations => Data.IpAllocations;
+        public IList<IPConfigurationProfile> IpConfigurationProfiles => Data.IpConfigurationProfiles;
+        public IList<IPConfiguration> IpConfigurations => Data.IpConfigurations;
+        public string PrivateEndpointNetworkPolicies => Data.PrivateEndpointNetworkPolicies;
+        public IList<PrivateEndpoint> PrivateEndpoints => Data.PrivateEndpoints;
+        public IList<ServiceEndpointPropertiesFormat> ServiceEndpoints => Data.ServiceEndpoints;
+        public SubResource NatGateway => Data.NatGateway;
+        public RouteTable RouteTable => Data.RouteTable;
+        public NetworkSecurityGroup NetworkSecurityGroup => Data.NetworkSecurityGroup;
+        public IList<string> AddressPrefixes => Data.AddressPrefixes;
+        public string AddressPrefix => Data.AddressPrefix;
+        public string Etag => Data.Etag;
+        public IList<ServiceEndpointPolicy> ServiceEndpointPolicies => Data.ServiceEndpointPolicies;
+        public string PrivateLinkServiceNetworkPolicies => Data.PrivateLinkServiceNetworkPolicies;
     }
 }

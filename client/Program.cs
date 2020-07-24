@@ -165,7 +165,7 @@ namespace client
 
             // Create Network Interface
             Console.WriteLine("--------Start create Network Interface--------");
-            var nic = resourceGroup.ConstructNic(ipAddress, subnet.Model.Id);
+            var nic = resourceGroup.ConstructNic(ipAddress, subnet.Id);
             nic = resourceGroup.Nics().CreateOrUpdateNic(String.Format("{0}_{1}_nic", vmName, i), nic);
             return nic;
         }
