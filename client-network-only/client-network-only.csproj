@@ -3,11 +3,12 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>client_network_only</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\azure-proto-compute\azure-proto-compute.csproj" />
     <ProjectReference Include="..\azure-proto-management\azure-proto-management.csproj" />
+    <ProjectReference Include="..\azure-proto-network\azure-proto-network.csproj" />
   </ItemGroup>
 
 </Project>
