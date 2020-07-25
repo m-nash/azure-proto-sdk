@@ -6,11 +6,9 @@ using System.Text;
 
 namespace azure_proto_compute
 {
-    public class PhAvailabilitySet : AzureResource<AvailabilitySet>
+    public class PhAvailabilitySet : TrackedResource<AvailabilitySet>
     {
-        public override AvailabilitySet Data { get; protected set; }
-
-        public PhAvailabilitySet(AvailabilitySet aset) : base(aset.Id, aset.Location)
+        public PhAvailabilitySet(AvailabilitySet aset) : base(aset.Id, aset.Location, aset)
         {
             Data = aset;
         }

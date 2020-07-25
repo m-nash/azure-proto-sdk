@@ -6,12 +6,10 @@ using System.Text;
 
 namespace azure_proto_management
 {
-    public class PhResourceGroup : AzureResource<ResourceGroup>, IManagedByResource
+    public class PhResourceGroup : TrackedResource<ResourceGroup>, IManagedByResource
     {
-        
-        public override ResourceGroup Data { get; protected set; }
 
-        public PhResourceGroup(ResourceGroup rg) : base(rg.Id, rg.Location)
+        public PhResourceGroup(ResourceGroup rg) : base(rg.Id, rg.Location, rg)
         {
             Data = rg;
         }

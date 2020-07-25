@@ -3,7 +3,7 @@ using azure_proto_core;
 
 namespace azure_proto_compute
 {
-    public class AzureAvailabilitySet : AzureResource<AvailabilitySet>
+    public class AzureAvailabilitySet : AzureEntity<AvailabilitySet>
     {
         public AzureAvailabilitySet(TrackedResource parent, PhAvailabilitySet model):base(model.Id, model.Location) 
         {

@@ -70,12 +70,14 @@ namespace client
 
         private static void StartFromVm()
         {
+            // TODO: Look at VM nic/nsg operations on VM
             //make sure vm exists
             CreateSingleVmExample();
 
             //retrieve from lowest level, doesn't give ability to walk up and down the container structure
             AzureVm vm = VmCollection.GetVm(subscriptionId, rgName, vmName);
             Console.WriteLine("Found VM {0}", vm.Id);
+
 
             //retrieve from lowest level inside management package gives ability to walk up and down
             AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, rgName);

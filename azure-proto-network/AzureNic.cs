@@ -3,7 +3,7 @@ using azure_proto_core;
 
 namespace azure_proto_network
 {
-    public class AzureNic : AzureResource<NetworkInterface>
+    public class AzureNic : AzureEntity<NetworkInterface>
     {
         public AzureNic(TrackedResource resourceGroup, PhNetworkInterface nic) : base(nic.Id, nic.Location) 
         { Data = nic.Data; }

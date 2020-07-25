@@ -6,11 +6,9 @@ using System.Text;
 
 namespace azure_proto_network
 {
-    public class PhPublicIPAddress : AzureResource<PublicIPAddress>
+    public class PhPublicIPAddress : TrackedResource<PublicIPAddress>
     {
-        public override PublicIPAddress Data { get; protected set; }
-
-        public PhPublicIPAddress(PublicIPAddress ip) : base(ip.Id, ip.Location)
+        public PhPublicIPAddress(PublicIPAddress ip) : base(ip.Id, ip.Location, ip)
         {
             Data = ip;
         }

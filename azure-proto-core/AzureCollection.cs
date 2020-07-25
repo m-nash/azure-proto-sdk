@@ -6,7 +6,7 @@ using System.Net;
 namespace azure_proto_core
 {
     public abstract class AzureCollection<T> : IEnumerable<T> //TODO look at collection interfaces to implement to get rid of wierdness of getitems(...) IDictionary maybe
-        where T: AzureResource
+        where T: AzureEntity
     {
         protected TrackedResource Parent { get; private set; }
 

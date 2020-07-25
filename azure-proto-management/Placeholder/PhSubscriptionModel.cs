@@ -6,11 +6,9 @@ using System.Text;
 
 namespace azure_proto_management
 {
-    public class PhSubscriptionModel : AzureResource<Subscription>
+    public class PhSubscriptionModel : TrackedResource<Subscription>
     {
-        public override Subscription Data { get; protected set; }
-
-        public PhSubscriptionModel(Subscription s) : base(s.Id)
+        public PhSubscriptionModel(Subscription s) : base(s.Id, null, s)
         {
             Data = s;
         }

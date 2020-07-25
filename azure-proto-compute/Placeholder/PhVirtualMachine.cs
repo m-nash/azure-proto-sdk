@@ -6,13 +6,10 @@ using System.Text;
 
 namespace azure_proto_compute
 {
-    public class PhVirtualMachine : AzureResource<VirtualMachine>
+    public class PhVirtualMachine : TrackedResource<VirtualMachine>
     {
-        public override VirtualMachine Data { get; protected set; }
-
-        public PhVirtualMachine(VirtualMachine vm) : base(vm.Id, vm.Location)
+        public PhVirtualMachine(VirtualMachine vm) : base(vm.Id, vm.Location, vm)
         {
-            Data = vm;
         }
 
         new public IDictionary<string, string> Tags => Data.Tags;

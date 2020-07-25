@@ -6,11 +6,9 @@ using System.Text;
 
 namespace azure_proto_network
 {
-    public class PhNetworkInterface : AzureResource<NetworkInterface>, IEntityResource
+    public class PhNetworkInterface : TrackedResource<NetworkInterface>, IEntityResource
     {
-        public override NetworkInterface Data { get; protected set; }
-
-        public PhNetworkInterface(NetworkInterface nic) : base(nic.Id, nic.Location)
+        public PhNetworkInterface(NetworkInterface nic) : base(nic.Id, nic.Location, nic)
         {
             Data = nic;
         }

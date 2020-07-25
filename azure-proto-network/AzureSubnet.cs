@@ -3,7 +3,7 @@ using azure_proto_core;
 
 namespace azure_proto_network
 {
-    public class AzureSubnet : AzureResource<Subnet>
+    public class AzureSubnet : AzureEntity<Subnet>
     {
         public AzureSubnet(AzureVnet vnet, PhSubnet model) : base(model.Id, vnet.Location)
         {

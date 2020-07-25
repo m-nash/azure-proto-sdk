@@ -109,6 +109,24 @@ namespace azure_proto_core
         public Location Location { get; protected set; }
     }
 
+    /// <summary>
+    /// TODO: Remove this class after generation updates
+    /// </summary>
+    /// <typeparam name="T">The type of the underlying model this class wraps</typeparam>
+    public abstract class TrackedResource<T> : TrackedResource where T : class
+    {
+        protected TrackedResource(ResourceIdentifier id, Location location, T data)
+        {
+            Id = id;
+            Location = location;
+            Data = data;
+        }
+
+        public override ResourceIdentifier Id { get; protected set; }
+
+        public T Data {get; set;}
+    }
+
 
     /// <summary>
     /// Generic representation of an ARM resource.  Resources in the ARM RP should extend this resource.

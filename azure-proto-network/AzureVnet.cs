@@ -3,7 +3,7 @@ using azure_proto_core;
 
 namespace azure_proto_network
 {
-    public class AzureVnet : AzureResource<VirtualNetwork>
+    public class AzureVnet : AzureEntity<VirtualNetwork>
     {
         public SubnetCollection Subnets { get; private set; }
         public override VirtualNetwork Data { get ; protected set; }

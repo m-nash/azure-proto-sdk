@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace azure_proto_compute
 {
-    public class AzureVm : AzureResource<VirtualMachine>
+    public class AzureVm : AzureEntity<VirtualMachine>
     {
         public AzureVm(TrackedResource resourceGroup, PhVirtualMachine vm) : base(vm.Id, vm.Location) 
         {

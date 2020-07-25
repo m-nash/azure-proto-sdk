@@ -5,13 +5,6 @@
         private static readonly object _padlock = new object();
         private static AzureClientManager _instance;
 
-        private AzureClientManager()
-        {
-            Creds = new LoginCredentials();
-        }
-
-        public LoginCredentials Creds { get; private set; }
-
         public static AzureClientManager Instance
         {
             get

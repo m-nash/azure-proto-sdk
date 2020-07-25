@@ -6,11 +6,9 @@ using System.Text;
 
 namespace azure_proto_network
 {
-    public class PhSubnet : AzureResource<Subnet>
+    public class PhSubnet : TrackedResource<Subnet>
     {
-        public override Subnet Data { get; protected set; }
-
-        public PhSubnet(Subnet sub, string location) : base(sub.Id, location)
+        public PhSubnet(Subnet sub, string location) : base(sub.Id, location, sub)
         {
             Data = sub;
             Location = location;

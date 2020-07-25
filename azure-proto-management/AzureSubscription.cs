@@ -3,7 +3,7 @@ using Azure.ResourceManager.Resources.Models;
 
 namespace azure_proto_management
 {
-    public class AzureSubscription : AzureResource
+    public class AzureSubscription : AzureEntity
     {
         string _name;
         public LocationCollection Locations { get; private set; }

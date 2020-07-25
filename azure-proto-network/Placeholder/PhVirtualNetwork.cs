@@ -6,11 +6,9 @@ using System.Text;
 
 namespace azure_proto_network
 {
-    public class PhVirtualNetwork : AzureResource<VirtualNetwork>
+    public class PhVirtualNetwork : TrackedResource<VirtualNetwork>
     {
-        public override VirtualNetwork Data { get; protected set; }
-
-        public PhVirtualNetwork(VirtualNetwork vnet) : base(vnet.Id, vnet.Location)
+        public PhVirtualNetwork(VirtualNetwork vnet) : base(vnet.Id, vnet.Location, vnet)
         {
             Data = vnet;
         }
