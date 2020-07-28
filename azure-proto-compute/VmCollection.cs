@@ -13,7 +13,7 @@ namespace azure_proto_compute
 
         public AzureVm CreateOrUpdateVm(string name, AzureVm vm)
         {
-            var vmResult = Client.VirtualMachines.StartCreateOrUpdate(Parent.Name, name, vm.Data).WaitForCompletionAsync().Result;
+            var vmResult = Client.VirtualMachines.StartCreateOrUpdate(Parent.Name, name, vm.Model).WaitForCompletionAsync().Result;
             AzureVm avm = new AzureVm(Parent, new PhVirtualMachine(vmResult.Value));
             return avm;
         }

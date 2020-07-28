@@ -10,22 +10,22 @@ namespace azure_proto_network
     {
         public PhVirtualNetwork(VirtualNetwork vnet) : base(vnet.Id, vnet.Location, vnet)
         {
-            Data = vnet;
+            Model = vnet;
         }
 
-        new public IDictionary<string, string> Tags => Data.Tags;
+        new public IDictionary<string, string> Tags => Model.Tags;
 
-        public string Etag => Data.Etag;
-        public AddressSpace AddressSpace => Data.AddressSpace;
-        public DhcpOptions DhcpOptions => Data.DhcpOptions;
-        public IList<Subnet> Subnets => Data.Subnets;
-        public IList<VirtualNetworkPeering> VirtualNetworkPeerings => Data.VirtualNetworkPeerings;
-        public string ResourceGuid => Data.ResourceGuid;
-        public ProvisioningState? ProvisioningState => Data.ProvisioningState;
-        public bool? EnableDdosProtection => Data.EnableDdosProtection;
-        public bool? EnableVmProtection => Data.EnableVmProtection;
-        public SubResource DdosProtectionPlan => Data.DdosProtectionPlan;
-        public VirtualNetworkBgpCommunities BgpCommunities => Data.BgpCommunities;
-        public IList<SubResource> IpAllocations => Data.IpAllocations;
+        public string Etag => Model.Etag;
+        public AddressSpace AddressSpace => Model.AddressSpace;
+        public DhcpOptions DhcpOptions => Model.DhcpOptions;
+        public IList<Subnet> Subnets => Model.Subnets;
+        public IList<VirtualNetworkPeering> VirtualNetworkPeerings => Model.VirtualNetworkPeerings;
+        public string ResourceGuid => Model.ResourceGuid;
+        public ProvisioningState? ProvisioningState => Model.ProvisioningState;
+        public bool? EnableDdosProtection => Model.EnableDdosProtection;
+        public bool? EnableVmProtection => Model.EnableVmProtection;
+        public SubResource DdosProtectionPlan => Model.DdosProtectionPlan;
+        public VirtualNetworkBgpCommunities BgpCommunities => Model.BgpCommunities;
+        public IList<SubResource> IpAllocations => Model.IpAllocations;
     }
 }

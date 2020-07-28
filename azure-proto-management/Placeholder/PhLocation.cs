@@ -13,9 +13,9 @@ namespace azure_proto_management
         {
         }
 
-        public string SubscriptionId => Data.SubscriptionId;
-        public string DisplayName => Data.DisplayName;
-        public string Latitude => Data.Metadata.Latitude;
-        public string Longitude => Data.Metadata.Longitude;
+        public string SubscriptionId => Model.SubscriptionId;
+        public string DisplayName => Model.DisplayName;
+        public string Latitude => Model.Metadata.Latitude;
+        public string Longitude => Model.Metadata.Longitude;
     }
 }

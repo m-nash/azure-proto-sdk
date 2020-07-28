@@ -10,24 +10,24 @@ namespace azure_proto_network
     {
         public PhPublicIPAddress(PublicIPAddress ip) : base(ip.Id, ip.Location, ip)
         {
-            Data = ip;
+            Model = ip;
         }
 
-        new public IDictionary<string, string> Tags => Data.Tags;
+        new public IDictionary<string, string> Tags => Model.Tags;
 
-        public PublicIPAddressSku Sku => Data.Sku;
-        public string Etag => Data.Etag;
-        public IList<string> Zones => Data.Zones;
-        public IPAllocationMethod? PublicIPAllocationMethod => Data.PublicIPAllocationMethod;
-        public IPVersion? PublicIPAddressVersion => Data.PublicIPAddressVersion;
-        public IPConfiguration IpConfiguration => Data.IpConfiguration;
-        public PublicIPAddressDnsSettings DnsSettings => Data.DnsSettings;
-        public DdosSettings DdosSettings => Data.DdosSettings;
-        public IList<IpTag> IpTags => Data.IpTags;
-        public string IpAddress => Data.IpAddress;
-        public SubResource PublicIPPrefix => Data.PublicIPPrefix;
-        public int? IdleTimeoutInMinutes => Data.IdleTimeoutInMinutes;
-        public string ResourceGuid => Data.ResourceGuid;
-        public ProvisioningState? ProvisioningState => Data.ProvisioningState;
+        public PublicIPAddressSku Sku => Model.Sku;
+        public string Etag => Model.Etag;
+        public IList<string> Zones => Model.Zones;
+        public IPAllocationMethod? PublicIPAllocationMethod => Model.PublicIPAllocationMethod;
+        public IPVersion? PublicIPAddressVersion => Model.PublicIPAddressVersion;
+        public IPConfiguration IpConfiguration => Model.IpConfiguration;
+        public PublicIPAddressDnsSettings DnsSettings => Model.DnsSettings;
+        public DdosSettings DdosSettings => Model.DdosSettings;
+        public IList<IpTag> IpTags => Model.IpTags;
+        public string IpAddress => Model.IpAddress;
+        public SubResource PublicIPPrefix => Model.PublicIPPrefix;
+        public int? IdleTimeoutInMinutes => Model.IdleTimeoutInMinutes;
+        public string ResourceGuid => Model.ResourceGuid;
+        public ProvisioningState? ProvisioningState => Model.ProvisioningState;
     }
 }

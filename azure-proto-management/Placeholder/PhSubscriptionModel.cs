@@ -10,14 +10,14 @@ namespace azure_proto_management
     {
         public PhSubscriptionModel(Subscription s) : base(s.Id, null, s)
         {
-            Data = s;
+            Model = s;
         }
 
-        public string SubscriptionId => Data.SubscriptionId;
-        public string DisplayName => Data.DisplayName;
-        public SubscriptionState? State => Data.State;
-        public SubscriptionPolicies SubscriptionPolicies => Data.SubscriptionPolicies;
-        public string AuthorizationSource => Data.AuthorizationSource;
+        public string SubscriptionId => Model.SubscriptionId;
+        public string DisplayName => Model.DisplayName;
+        public SubscriptionState? State => Model.State;
+        public SubscriptionPolicies SubscriptionPolicies => Model.SubscriptionPolicies;
+        public string AuthorizationSource => Model.AuthorizationSource;
 
     }
 }

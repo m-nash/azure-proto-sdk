@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.CompilerServices;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -12,7 +13,7 @@ namespace azure_proto_core
     /// </summary>
     public interface IEntityResource
     {
-        string ETag { get; }
+        string Etag { get; }
     }
 
     /// <summary>
@@ -104,9 +105,9 @@ namespace azure_proto_core
     /// </summary>
     public abstract class TrackedResource: Resource
     {
-        public IDictionary<string, string> Tags => new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+        public virtual IDictionary<string, string> Tags => new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
-        public Location Location { get; protected set; }
+        public virtual Location Location { get; protected set; }
     }
 
     /// <summary>
@@ -119,12 +120,17 @@ namespace azure_proto_core
         {
             Id = id;
             Location = location;
-            Data = data;
+            Model = data;
         }
 
         public override ResourceIdentifier Id { get; protected set; }
 
-        public T Data {get; set;}
+        public virtual T Model {get; set;}
+
+        public static implicit operator T(TrackedResource<T> other)
+        {
+            return other.Model;
+        }
     }
 
 

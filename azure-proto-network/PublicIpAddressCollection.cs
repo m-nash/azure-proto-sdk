@@ -14,7 +14,7 @@ namespace azure_proto_network
 
         public AzurePublicIpAddress CreateOrUpdatePublicIpAddress(string name, AzurePublicIpAddress ipAddress)
         {
-            var ipResult = Client.PublicIPAddresses.StartCreateOrUpdate(Parent.Name, name, ipAddress.Data).WaitForCompletionAsync().Result;
+            var ipResult = Client.PublicIPAddresses.StartCreateOrUpdate(Parent.Name, name, ipAddress.Model).WaitForCompletionAsync().Result;
             ipAddress = new AzurePublicIpAddress(Parent, new PhPublicIPAddress(ipResult.Value));
             return ipAddress;
         }

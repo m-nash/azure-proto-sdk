@@ -10,29 +10,29 @@ namespace azure_proto_network
     {
         public PhSubnet(Subnet sub, string location) : base(sub.Id, location, sub)
         {
-            Data = sub;
+            Model = sub;
             Location = location;
         }
 
 
-        public ProvisioningState? ProvisioningState => Data.ProvisioningState;
-        public string Purpose => Data.Purpose;
-        public IList<Delegation> Delegations => Data.Delegations;
-        public IList<ServiceAssociationLink> ServiceAssociationLinks => Data.ServiceAssociationLinks;
-        public IList<ResourceNavigationLink> ResourceNavigationLinks => Data.ResourceNavigationLinks;
-        public IList<SubResource> IpAllocations => Data.IpAllocations;
-        public IList<IPConfigurationProfile> IpConfigurationProfiles => Data.IpConfigurationProfiles;
-        public IList<IPConfiguration> IpConfigurations => Data.IpConfigurations;
-        public string PrivateEndpointNetworkPolicies => Data.PrivateEndpointNetworkPolicies;
-        public IList<PrivateEndpoint> PrivateEndpoints => Data.PrivateEndpoints;
-        public IList<ServiceEndpointPropertiesFormat> ServiceEndpoints => Data.ServiceEndpoints;
-        public SubResource NatGateway => Data.NatGateway;
-        public RouteTable RouteTable => Data.RouteTable;
-        public NetworkSecurityGroup NetworkSecurityGroup => Data.NetworkSecurityGroup;
-        public IList<string> AddressPrefixes => Data.AddressPrefixes;
-        public string AddressPrefix => Data.AddressPrefix;
-        public string Etag => Data.Etag;
-        public IList<ServiceEndpointPolicy> ServiceEndpointPolicies => Data.ServiceEndpointPolicies;
-        public string PrivateLinkServiceNetworkPolicies => Data.PrivateLinkServiceNetworkPolicies;
+        public ProvisioningState? ProvisioningState => Model.ProvisioningState;
+        public string Purpose => Model.Purpose;
+        public IList<Delegation> Delegations => Model.Delegations;
+        public IList<ServiceAssociationLink> ServiceAssociationLinks => Model.ServiceAssociationLinks;
+        public IList<ResourceNavigationLink> ResourceNavigationLinks => Model.ResourceNavigationLinks;
+        public IList<SubResource> IpAllocations => Model.IpAllocations;
+        public IList<IPConfigurationProfile> IpConfigurationProfiles => Model.IpConfigurationProfiles;
+        public IList<IPConfiguration> IpConfigurations => Model.IpConfigurations;
+        public string PrivateEndpointNetworkPolicies => Model.PrivateEndpointNetworkPolicies;
+        public IList<PrivateEndpoint> PrivateEndpoints => Model.PrivateEndpoints;
+        public IList<ServiceEndpointPropertiesFormat> ServiceEndpoints => Model.ServiceEndpoints;
+        public SubResource NatGateway => Model.NatGateway;
+        public RouteTable RouteTable => Model.RouteTable;
+        public NetworkSecurityGroup NetworkSecurityGroup => Model.NetworkSecurityGroup;
+        public IList<string> AddressPrefixes => Model.AddressPrefixes;
+        public string AddressPrefix => Model.AddressPrefix;
+        public string Etag => Model.Etag;
+        public IList<ServiceEndpointPolicy> ServiceEndpointPolicies => Model.ServiceEndpointPolicies;
+        public string PrivateLinkServiceNetworkPolicies => Model.PrivateLinkServiceNetworkPolicies;
     }
 }

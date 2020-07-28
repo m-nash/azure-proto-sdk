@@ -13,7 +13,7 @@ namespace azure_proto_network
 
         public AzureVnet CreateOrUpdateVNet(string name, AzureVnet vnet)
         {
-            var vnetResult = Client.VirtualNetworks.StartCreateOrUpdate(Parent.Name, name, vnet.Data).WaitForCompletionAsync().Result;
+            var vnetResult = Client.VirtualNetworks.StartCreateOrUpdate(Parent.Name, name, vnet.Model).WaitForCompletionAsync().Result;
             var avnet = new AzureVnet(Parent, new PhVirtualNetwork(vnetResult.Value));
             return avnet;
         }

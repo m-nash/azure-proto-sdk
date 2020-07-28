@@ -3,11 +3,11 @@ using azure_proto_core;
 
 namespace azure_proto_network
 {
-    public class AzureNic : AzureEntity<NetworkInterface>
+    public class AzureNic : AzureEntity<PhNetworkInterface>
     {
-        public AzureNic(TrackedResource resourceGroup, PhNetworkInterface nic) : base(nic.Id, nic.Location) 
-        { Data = nic.Data; }
+        public AzureNic(TrackedResource resourceGroup, PhNetworkInterface nic) : base(resourceGroup, nic) 
+        { 
+        }
 
-        public override NetworkInterface Data { get; protected set; }
     }
 }

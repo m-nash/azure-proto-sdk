@@ -11,10 +11,10 @@ namespace azure_proto_management
 
         public PhResourceGroup(ResourceGroup rg) : base(rg.Id, rg.Location, rg)
         {
-            Data = rg;
+            Model = rg;
         }
 
-        public ResourceGroupProperties Properties => Data.Properties;
-        public string ManagedBy { get { return Data.ManagedBy; } set { Data.ManagedBy = value; } }
+        public ResourceGroupProperties Properties => Model.Properties;
+        public string ManagedBy { get { return Model.ManagedBy; } set { Model.ManagedBy = value; } }
     }
 }

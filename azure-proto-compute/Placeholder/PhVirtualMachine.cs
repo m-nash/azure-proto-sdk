@@ -12,29 +12,29 @@ namespace azure_proto_compute
         {
         }
 
-        new public IDictionary<string, string> Tags => Data.Tags;
+        new public IDictionary<string, string> Tags => Model.Tags;
 
-        public VirtualMachineInstanceView InstanceView => Data.InstanceView;
-        public string ProvisioningState => Data.ProvisioningState;
-        public SubResource Host => Data.Host;
-        public BillingProfile BillingProfile => Data.BillingProfile;
-        public VirtualMachineEvictionPolicyTypes? EvictionPolicy => Data.EvictionPolicy;
-        public VirtualMachinePriorityTypes? Priority => Data.Priority;
-        public SubResource ProximityPlacementGroup => Data.ProximityPlacementGroup;
-        public SubResource VirtualMachineScaleSet => Data.VirtualMachineScaleSet;
-        public SubResource AvailabilitySet => Data.AvailabilitySet;
-        public DiagnosticsProfile DiagnosticsProfile => Data.DiagnosticsProfile;
-        public NetworkProfile NetworkProfile => Data.NetworkProfile;
-        public OSProfile OsProfile => Data.OsProfile;
-        public AdditionalCapabilities AdditionalCapabilities => Data.AdditionalCapabilities;
-        public StorageProfile StorageProfile => Data.StorageProfile;
-        public HardwareProfile HardwareProfile => Data.HardwareProfile;
-        public IList<string> Zones => Data.Zones;
-        public VirtualMachineIdentity Identity => Data.Identity;
-        public IList<VirtualMachineExtension> Resources => Data.Resources;
-        public Azure.ResourceManager.Compute.Models.Plan Plan => Data.Plan;
-        public string LicenseType => Data.LicenseType;
-        public string VmId => Data.VmId;
+        public VirtualMachineInstanceView InstanceView => Model.InstanceView;
+        public string ProvisioningState => Model.ProvisioningState;
+        public SubResource Host => Model.Host;
+        public BillingProfile BillingProfile => Model.BillingProfile;
+        public VirtualMachineEvictionPolicyTypes? EvictionPolicy => Model.EvictionPolicy;
+        public VirtualMachinePriorityTypes? Priority => Model.Priority;
+        public SubResource ProximityPlacementGroup => Model.ProximityPlacementGroup;
+        public SubResource VirtualMachineScaleSet => Model.VirtualMachineScaleSet;
+        public SubResource AvailabilitySet => Model.AvailabilitySet;
+        public DiagnosticsProfile DiagnosticsProfile => Model.DiagnosticsProfile;
+        public NetworkProfile NetworkProfile => Model.NetworkProfile;
+        public OSProfile OsProfile => Model.OsProfile;
+        public AdditionalCapabilities AdditionalCapabilities => Model.AdditionalCapabilities;
+        public StorageProfile StorageProfile => Model.StorageProfile;
+        public HardwareProfile HardwareProfile => Model.HardwareProfile;
+        public IList<string> Zones => Model.Zones;
+        public VirtualMachineIdentity Identity => Model.Identity;
+        public IList<VirtualMachineExtension> Resources => Model.Resources;
+        public Azure.ResourceManager.Compute.Models.Plan Plan => Model.Plan;
+        public string LicenseType => Model.LicenseType;
+        public string VmId => Model.VmId;
 
     }
 }

@@ -14,7 +14,7 @@ namespace azure_proto_compute
 
         public AzureAvailabilitySet CreateOrUpdateAvailabilityset(string name, AzureAvailabilitySet availabilitySet)
         {
-            var aSet = Client.AvailabilitySets.CreateOrUpdate(Parent.Name, name, availabilitySet.Data);
+            var aSet = Client.AvailabilitySets.CreateOrUpdate(Parent.Name, name, availabilitySet.Model);
             AzureAvailabilitySet azureAvailabilitySet = new AzureAvailabilitySet(Parent, new PhAvailabilitySet(aSet.Value));
             return azureAvailabilitySet;
         }

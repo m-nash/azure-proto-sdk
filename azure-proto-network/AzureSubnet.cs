@@ -3,13 +3,10 @@ using azure_proto_core;
 
 namespace azure_proto_network
 {
-    public class AzureSubnet : AzureEntity<Subnet>
+    public class AzureSubnet : AzureEntity<PhSubnet>
     {
-        public AzureSubnet(AzureVnet vnet, PhSubnet model) : base(model.Id, vnet.Location)
+        public AzureSubnet(AzureVnet vnet, PhSubnet model) : base(vnet, model)
         {
-            Data = model.Data;
         }
-
-        public override Subnet Data { get; protected set; }
     }
 }

@@ -10,16 +10,16 @@ namespace azure_proto_compute
     {
         public PhAvailabilitySet(AvailabilitySet aset) : base(aset.Id, aset.Location, aset)
         {
-            Data = aset;
+            Model = aset;
         }
 
-        new public IDictionary<string, string> Tags => Data.Tags;
+        new public IDictionary<string, string> Tags => Model.Tags;
 
-        public Azure.ResourceManager.Compute.Models.Sku Sku => Data.Sku;
-        public int? PlatformUpdateDomainCount => Data.PlatformUpdateDomainCount;
-        public int? PlatformFaultDomainCount => Data.PlatformFaultDomainCount;
-        public IList<SubResource> VirtualMachines => Data.VirtualMachines;
-        public SubResource ProximityPlacementGroup => Data.ProximityPlacementGroup;
-        public IList<InstanceViewStatus> Statuses => Data.Statuses;
+        public Azure.ResourceManager.Compute.Models.Sku Sku => Model.Sku;
+        public int? PlatformUpdateDomainCount => Model.PlatformUpdateDomainCount;
+        public int? PlatformFaultDomainCount => Model.PlatformFaultDomainCount;
+        public IList<SubResource> VirtualMachines => Model.VirtualMachines;
+        public SubResource ProximityPlacementGroup => Model.ProximityPlacementGroup;
+        public IList<InstanceViewStatus> Statuses => Model.Statuses;
     }
 }

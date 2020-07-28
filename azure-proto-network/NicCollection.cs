@@ -14,7 +14,7 @@ namespace azure_proto_network
 
         public AzureNic CreateOrUpdateNic(string name, AzureNic nic)
         {
-            var nicResult = Client.NetworkInterfaces.StartCreateOrUpdate(Parent.Name, name, nic.Data).WaitForCompletionAsync().Result;
+            var nicResult = Client.NetworkInterfaces.StartCreateOrUpdate(Parent.Name, name, nic.Model).WaitForCompletionAsync().Result;
             nic = new AzureNic(Parent, new PhNetworkInterface(nicResult.Value));
             return nic;
         }

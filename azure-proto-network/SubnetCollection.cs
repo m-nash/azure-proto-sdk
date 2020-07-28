@@ -14,7 +14,7 @@ namespace azure_proto_network
         public AzureSubnet CreateOrUpdateSubnets(AzureSubnet subnet)
         {
             AzureVnet vnet = Parent as AzureVnet;
-            var subnetResult = Client.Subnets.StartCreateOrUpdate(vnet.Id.Subscription, vnet.Name, subnet.Name, subnet.Data).WaitForCompletionAsync().Result;
+            var subnetResult = Client.Subnets.StartCreateOrUpdate(vnet.Id.Subscription, vnet.Name, subnet.Name, subnet.Model).WaitForCompletionAsync().Result;
             subnet = new AzureSubnet(vnet, new PhSubnet(subnetResult.Value, vnet.Location));
             return subnet;
         }

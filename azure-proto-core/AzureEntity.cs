@@ -1,4 +1,6 @@
-﻿namespace azure_proto_core
+﻿using System.Collections.Generic;
+
+namespace azure_proto_core
 {
     /// <summary>
     /// Reporesents a generic Azure Resource, with operations
@@ -10,23 +12,27 @@
     }
 
     /// <summary>
-    /// Represents a typed resource and operations
+    /// Represents a typed resource and operations.  This is a wrapper class that allows us to use models
+    /// to determine the standard properties
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class AzureEntity<T> : AzureEntity
+    public abstract class AzureEntity<T> : AzureEntity where T: TrackedResource
     {
-        public AzureEntity(ResourceIdentifier id)
+
+        protected AzureEntity(TrackedResource parent, T data)
         {
-            Id = id;
-            Location = Location.Default;
+            Parent = parent;
+            Model = data;
         }
 
-        public AzureEntity(ResourceIdentifier id, Location location)
-        {
-            Id = id;
-            Location = location;
-        }
+        public virtual TrackedResource Parent { get; protected set; }
+        public virtual T Model { get; protected set; }
 
-        public abstract T Data { get; protected set; }
+        public override ResourceIdentifier Id => Model.Id;
+
+        public override Location Location => Model.Location;
+
+        public override IDictionary<string, string> Tags => Model.Tags;
+
     }
 }

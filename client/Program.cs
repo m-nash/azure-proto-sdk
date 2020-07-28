@@ -200,6 +200,7 @@ namespace client
             Console.WriteLine("--------Start create Subnet--------");
             if (!vnet.Subnets.TryGetValue(subnetName, out subnet))
             {
+                var nsg = vnet.Nsgs.CreateOrUpdateNsgs(vnet.ConstructNsg(80));
                 subnet = vnet.ConstructSubnet(subnetName, "10.0.0.0/24");
                 subnet = vnet.Subnets.CreateOrUpdateSubnets(subnet);
             }

@@ -10,24 +10,24 @@ namespace azure_proto_network
     {
         public PhNetworkInterface(NetworkInterface nic) : base(nic.Id, nic.Location, nic)
         {
-            Data = nic;
+            Model = nic;
         }
 
-        new public IDictionary<string, string> Tags => Data.Tags;
+        new public IDictionary<string, string> Tags => Model.Tags;
 
-        public string ETag => Data.Etag;
-        public SubResource VirtualMachine => Data.VirtualMachine;
-        public NetworkSecurityGroup NetworkSecurityGroup => Data.NetworkSecurityGroup;
-        public PrivateEndpoint PrivateEndpoint => Data.PrivateEndpoint;
-        public IList<NetworkInterfaceIPConfiguration> IpConfigurations => Data.IpConfigurations;
-        public IList<NetworkInterfaceTapConfiguration> TapConfigurations => Data.TapConfigurations;
-        public NetworkInterfaceDnsSettings DnsSettings => Data.DnsSettings;
-        public string MacAddress => Data.MacAddress;
-        public bool? Primary => Data.Primary;
-        public bool? EnableAcceleratedNetworking => Data.EnableAcceleratedNetworking;
-        public bool? EnableIPForwarding => Data.EnableIPForwarding;
-        public IList<string> HostedWorkloads => Data.HostedWorkloads;
-        public string ResourceGuid => Data.ResourceGuid;
-        public ProvisioningState? ProvisioningState => Data.ProvisioningState;
+        public string Etag => Model.Etag;
+        public SubResource VirtualMachine => Model.VirtualMachine;
+        public NetworkSecurityGroup NetworkSecurityGroup => Model.NetworkSecurityGroup;
+        public PrivateEndpoint PrivateEndpoint => Model.PrivateEndpoint;
+        public IList<NetworkInterfaceIPConfiguration> IpConfigurations => Model.IpConfigurations;
+        public IList<NetworkInterfaceTapConfiguration> TapConfigurations => Model.TapConfigurations;
+        public NetworkInterfaceDnsSettings DnsSettings => Model.DnsSettings;
+        public string MacAddress => Model.MacAddress;
+        public bool? Primary => Model.Primary;
+        public bool? EnableAcceleratedNetworking => Model.EnableAcceleratedNetworking;
+        public bool? EnableIPForwarding => Model.EnableIPForwarding;
+        public IList<string> HostedWorkloads => Model.HostedWorkloads;
+        public string ResourceGuid => Model.ResourceGuid;
+        public ProvisioningState? ProvisioningState => Model.ProvisioningState;
     }
 }

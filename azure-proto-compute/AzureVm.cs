@@ -5,16 +5,13 @@ using System.Collections.Generic;
 
 namespace azure_proto_compute
 {
-    public class AzureVm : AzureEntity<VirtualMachine>
+    public class AzureVm : AzureEntity<PhVirtualMachine>
     {
-        public AzureVm(TrackedResource resourceGroup, PhVirtualMachine vm) : base(vm.Id, vm.Location) 
+        public AzureVm(TrackedResource resourceGroup, PhVirtualMachine vm) : base(resourceGroup, vm) 
         {
-            Data = vm.Data;
         }
 
         private ComputeManagementClient Client => ClientFactory.Instance.GetComputeClient(Id.Subscription);
-
-        public override VirtualMachine Data { get; protected set; }
 
         public void Stop()
         {
@@ -28,12 +25,7 @@ namespace azure_proto_compute
 
         public void AddTag(string key, string value)
         {
-            VirtualMachine vmData = Data;
-            if(vmData.Tags == null)
-            {
-                vmData.Tags = new Dictionary<string, string>();
-            }
-
+            var vmData = Model as PhVirtualMachine;
             string currentValue;
             if(!vmData.Tags.TryGetValue(key, out currentValue))
             {
@@ -43,7 +35,7 @@ namespace azure_proto_compute
             if(value != currentValue)
             {
                 vmData.Tags[key] = value;
-                var result = Client.VirtualMachines.StartCreateOrUpdate(Id.ResourceGroup, Name, vmData);
+                var result = Client.VirtualMachines.StartCreateOrUpdate(Id.ResourceGroup, Name, vmData.Model);
             }
         }
     }

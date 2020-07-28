@@ -3,13 +3,10 @@ using azure_proto_core;
 
 namespace azure_proto_network
 {
-    public class AzurePublicIpAddress : AzureEntity<PublicIPAddress>
+    public class AzurePublicIpAddress : AzureEntity<PhPublicIPAddress>
     {
-        public AzurePublicIpAddress(TrackedResource resourceGroup, PhPublicIPAddress ip) :base( ip.Id, ip.Location)
+        public AzurePublicIpAddress(TrackedResource resourceGroup, PhPublicIPAddress ip) :base( resourceGroup, ip)
         {
-            Data = ip.Data;
         }
-
-        public override PublicIPAddress Data { get ; protected set ; }
     }
 }
