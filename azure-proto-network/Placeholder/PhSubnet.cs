@@ -14,7 +14,7 @@ namespace azure_proto_network
             Location = location;
         }
 
-
+        public override string Name => Model.Name;
         public ProvisioningState? ProvisioningState => Model.ProvisioningState;
         public string Purpose => Model.Purpose;
         public IList<Delegation> Delegations => Model.Delegations;

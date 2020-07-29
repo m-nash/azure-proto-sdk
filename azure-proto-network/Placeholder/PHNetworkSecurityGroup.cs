@@ -15,6 +15,7 @@ namespace azure_proto_network
             Model = nsg;
         }
 
+        public override string Name => Model.Name;
         public string Etag => Model.Etag;
         public IList<SecurityRule> SecurityRules => Model.SecurityRules;
         public IList<SecurityRule> DefaultSecurityRules => Model.DefaultSecurityRules;

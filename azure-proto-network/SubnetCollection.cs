@@ -14,7 +14,7 @@ namespace azure_proto_network
         public AzureSubnet CreateOrUpdateSubnets(AzureSubnet subnet)
         {
             AzureVnet vnet = Parent as AzureVnet;
-            var subnetResult = Client.Subnets.StartCreateOrUpdate(vnet.Id.Subscription, vnet.Name, subnet.Name, subnet.Model).WaitForCompletionAsync().Result;
+            var subnetResult = Client.Subnets.StartCreateOrUpdate(vnet.Id.ResourceGroup, vnet.Name, subnet.Name, subnet.Model).WaitForCompletionAsync().Result;
             subnet = new AzureSubnet(vnet, new PhSubnet(subnetResult.Value, vnet.Location));
             return subnet;
         }
@@ -22,14 +22,14 @@ namespace azure_proto_network
         protected override AzureSubnet Get(string subnetName)
         {
             AzureVnet vnet = Parent as AzureVnet;
-            var subnetResult = Client.Subnets.Get(vnet.Id.Subscription, vnet.Name, subnetName);
+            var subnetResult = Client.Subnets.Get(vnet.Id.ResourceGroup, vnet.Name, subnetName);
             return new AzureSubnet(vnet, new PhSubnet(subnetResult.Value, vnet.Location));
         }
 
         protected override IEnumerable<AzureSubnet> GetItems()
         {
             AzureVnet vnet = Parent as AzureVnet;
-            foreach (var subnet in Client.Subnets.List(vnet.Id.Subscription, vnet.Name))
+            foreach (var subnet in Client.Subnets.List(vnet.Id.ResourceGroup, vnet.Name))
             {
                 yield return new AzureSubnet(vnet, new PhSubnet(subnet, vnet.Location));
             }

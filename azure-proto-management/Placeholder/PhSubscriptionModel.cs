@@ -13,6 +13,7 @@ namespace azure_proto_management
             Model = s;
         }
 
+        public override string Name => Model.SubscriptionId;
         public string SubscriptionId => Model.SubscriptionId;
         public string DisplayName => Model.DisplayName;
         public SubscriptionState? State => Model.State;

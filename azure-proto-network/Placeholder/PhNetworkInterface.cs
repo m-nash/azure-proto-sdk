@@ -15,6 +15,7 @@ namespace azure_proto_network
 
         new public IDictionary<string, string> Tags => Model.Tags;
 
+        public override string Name => Model.Name;
         public string Etag => Model.Etag;
         public SubResource VirtualMachine => Model.VirtualMachine;
         public NetworkSecurityGroup NetworkSecurityGroup => Model.NetworkSecurityGroup;

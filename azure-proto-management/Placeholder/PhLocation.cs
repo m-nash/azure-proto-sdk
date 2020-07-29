@@ -13,6 +13,7 @@ namespace azure_proto_management
         {
         }
 
+        public override string Name => Model.Name;
         public string SubscriptionId => Model.SubscriptionId;
         public string DisplayName => Model.DisplayName;
         public string Latitude => Model.Metadata.Latitude;

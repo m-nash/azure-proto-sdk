@@ -9,7 +9,7 @@ namespace azure_proto_management
     {
         public ResourceGroupCollection(AzureSubscription location) : base(location) { }
 
-        private ResourcesManagementClient Client => ClientFactory.Instance.GetResourceClient(Parent.Id);
+        private ResourcesManagementClient Client => ClientFactory.Instance.GetResourceClient(Parent.Id.Subscription);
 
         public AzureResourceGroup CreateOrUpdate(string resourceGroupName, string location)
         {

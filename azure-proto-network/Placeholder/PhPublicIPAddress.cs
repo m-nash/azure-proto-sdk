@@ -15,6 +15,7 @@ namespace azure_proto_network
 
         new public IDictionary<string, string> Tags => Model.Tags;
 
+        public override string Name => Model.Name;
         public PublicIPAddressSku Sku => Model.Sku;
         public string Etag => Model.Etag;
         public IList<string> Zones => Model.Zones;

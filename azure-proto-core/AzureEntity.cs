@@ -14,6 +14,7 @@ namespace azure_proto_core
     /// <summary>
     /// Represents a typed resource and operations.  This is a wrapper class that allows us to use models
     /// to determine the standard properties
+    /// TODO: Should Parent be a TrackedResource, or a Resource?
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class AzureEntity<T> : AzureEntity where T: TrackedResource
@@ -25,6 +26,7 @@ namespace azure_proto_core
             Model = data;
         }
 
+        public override string Name => Model.Name;
         public virtual TrackedResource Parent { get; protected set; }
         public virtual T Model { get; protected set; }
 

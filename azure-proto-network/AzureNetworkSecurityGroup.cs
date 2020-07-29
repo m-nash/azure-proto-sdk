@@ -9,9 +9,14 @@ using System.Text;
 
 namespace azure_proto_network
 {
+    /// <summary>
+    /// An operations + Model class for NSGs
+    /// TODO: How does the operation signature change for resources that support Etags?
+    /// </summary>
     public class AzureNetworkSecurityGroup : AzureEntity<PhNetworkSecurityGroup>
     {
-        public class RuleIdEqualityComparer : IEqualityComparer<SecurityRule>
+        string _name;
+        class RuleIdEqualityComparer : IEqualityComparer<SecurityRule>
         {
             public bool Equals([AllowNull] SecurityRule x, [AllowNull] SecurityRule y)
             {
@@ -24,22 +29,28 @@ namespace azure_proto_network
             }
         }
 
+        // TODO: Can we do a better job of client sharing with the parent?
         private NetworkManagementClient Client => ClientFactory.Instance.GetNetworkClient(Id.Subscription);
 
-        public AzureNetworkSecurityGroup(TrackedResource parent, PhNetworkSecurityGroup nsg) : base(parent, nsg)
+        public AzureNetworkSecurityGroup(TrackedResource parent, PhNetworkSecurityGroup nsg, string name) : base(parent, nsg)
         {
+            _name = name;
         }
 
+        public override string Name => Id?.Name ?? _name;
         /// <summary>
         /// TODO: Make use of the entity tags on the resource - we may need to add to the generated management client
+        /// TODO: Look for PATCH update methods in the swagger
+        /// TODO: How to represent PATCH where the patch model has properties that are collections (replace/merge)?
         /// </summary>
         /// <param name="rules">The new set of network security rules</param>
-        /// <returns></returns>
-        public AzureNetworkSecurityGroup Update(params SecurityRule[] rules )
+        /// <returns>A network security group with the given set of rules merged with thsi one</returns>
+        public AzureNetworkSecurityGroup UpdateRules(params SecurityRule[] rules )
         {
             foreach (var rule in rules)
             {
-                var matchingRule = Model.SecurityRules.FirstOrDefault(r => r.Id == rule.Id);
+                // Note that this makes use of the 
+                var matchingRule = Model.SecurityRules.FirstOrDefault(r => ResourceIdentifier.Equals(r.Id, rule.Id));
                 if (matchingRule != null)
                 {
                     matchingRule.Access = rule.Access;
@@ -62,7 +73,7 @@ namespace azure_proto_network
                 }
             }
 
-            Client.NetworkSecurityGroups.StartCreateOrUpdate(Id.ResourceGroup, Name, Model);
+            this.Model = Client.NetworkSecurityGroups.StartCreateOrUpdate(Id.ResourceGroup, Name, Model).WaitForCompletionAsync().Result.Value;
             return this;
         }
     }

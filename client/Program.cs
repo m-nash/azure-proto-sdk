@@ -10,25 +10,31 @@ namespace client
     {
         private static string vmName = String.Format("{0}-quickstartvm", Environment.UserName);
         private static string rgName = String.Format("{0}-test-rg", Environment.UserName);
+        private static string nsgName = String.Format("{0}-test-nsg", Environment.UserName);
         private static string subscriptionId = Environment.GetEnvironmentVariable("AZURE_SUBSCRIPTION_ID");
         private static string loc = "westus2";
         private static string subnetName = "mySubnet";
 
         static void Main(string[] args)
         {
-            CreateSingleVmExample();
-            //CreateMultipleVmShutdownSome();
-            //StartStopVm();
-            //StartFromVm();
-            //SetTagsOnVm();
-            //CreateMultipleVmShutdownByTag();
-
-            //CleanUp();
+            try
+            {
+                CreateSingleVmExample();
+                //CreateMultipleVmShutdownSome();
+                //StartStopVm();
+                //StartFromVm();
+                //SetTagsOnVm();
+                //CreateMultipleVmShutdownByTag();
+            }
+            finally
+            {
+                CleanUp();
+            }
         }
 
         private static void CleanUp()
         {
-            Console.WriteLine("--------Deleting {0}--------");
+            Console.WriteLine($"--------Deleting {rgName}--------");
             AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, rgName);
             rg.Delete();
         }
@@ -200,7 +206,8 @@ namespace client
             Console.WriteLine("--------Start create Subnet--------");
             if (!vnet.Subnets.TryGetValue(subnetName, out subnet))
             {
-                var nsg = vnet.Nsgs.CreateOrUpdateNsgs(vnet.ConstructNsg(80));
+                var nsg = resourceGroup.ConstructNsg(nsgName, 80);
+                nsg = resourceGroup.Nsgs().CreateOrUpdateNsgs(nsg);
                 subnet = vnet.ConstructSubnet(subnetName, "10.0.0.0/24");
                 subnet = vnet.Subnets.CreateOrUpdateSubnets(subnet);
             }

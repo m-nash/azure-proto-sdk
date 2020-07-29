@@ -15,6 +15,7 @@ namespace azure_proto_compute
 
         new public IDictionary<string, string> Tags => Model.Tags;
 
+        public override string Name => Model.Name;
         public Azure.ResourceManager.Compute.Models.Sku Sku => Model.Sku;
         public int? PlatformUpdateDomainCount => Model.PlatformUpdateDomainCount;
         public int? PlatformFaultDomainCount => Model.PlatformFaultDomainCount;

@@ -14,6 +14,7 @@ namespace azure_proto_management
             Model = rg;
         }
 
+        public override string Name => Model.Name;
         public ResourceGroupProperties Properties => Model.Properties;
         public string ManagedBy { get { return Model.ManagedBy; } set { Model.ManagedBy = value; } }
     }

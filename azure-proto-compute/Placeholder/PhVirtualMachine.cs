@@ -14,6 +14,7 @@ namespace azure_proto_compute
 
         new public IDictionary<string, string> Tags => Model.Tags;
 
+        public override string Name => Model.Name;
         public VirtualMachineInstanceView InstanceView => Model.InstanceView;
         public string ProvisioningState => Model.ProvisioningState;
         public SubResource Host => Model.Host;

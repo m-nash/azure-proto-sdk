@@ -12,17 +12,15 @@ namespace azure_proto_management
         private static readonly object resourceClientLock = new object();
         public static ResourcesManagementClient GetResourceClient(this ClientFactory factory, string subscriptionId)
         {
-            var split = subscriptionId.Split('/');
-            var subId = split[2];
             ResourcesManagementClient retValue;
-            if (!resourceClients.TryGetValue(subId, out retValue))
+            if (!resourceClients.TryGetValue(subscriptionId, out retValue))
             {
                 lock (resourceClientLock)
                 {
-                    if (!resourceClients.TryGetValue(subId, out retValue))
+                    if (!resourceClients.TryGetValue(subscriptionId, out retValue))
                     {
-                        retValue = new ResourcesManagementClient(subId, new DefaultAzureCredential());
-                        resourceClients.Add(subId, retValue);
+                        retValue = new ResourcesManagementClient(subscriptionId, new DefaultAzureCredential());
+                        resourceClients.Add(subscriptionId, retValue);
                     }
                 }
             }
@@ -31,7 +29,7 @@ namespace azure_proto_management
 
         private static SubscriptionsOperations subscriptionClient;
         private static readonly object subscriptionClientLock = new object();
-        public static SubscriptionsOperations GetSubscriptionClient(this ClientFactory factoryd)
+        public static SubscriptionsOperations GetSubscriptionClient(this ClientFactory factory)
         {
             if (subscriptionClient == null)
             {

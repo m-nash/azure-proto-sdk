@@ -1,12 +1,14 @@
 ﻿using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace azure_proto_network
 {
     public static class AzureResourceGroupExtension
     {
-        private static Dictionary<string, PublicIpAddressCollection> ipCollections = new Dictionary<string, PublicIpAddressCollection>();
+        private static Dictionary<string, PublicIpAddressCollection> ipCollections = new Dictionary<string, PublicIpAddressCollection>(StringComparer.InvariantCultureIgnoreCase);
         private static readonly object ipLock = new object();
 
         public static PublicIpAddressCollection IpAddresses(this AzureResourceGroupBase resourceGroup)
@@ -23,10 +25,11 @@ namespace azure_proto_network
                     }
                 }
             }
+
             return result;
         }
 
-        private static Dictionary<string, VnetCollection> vnetCollections = new Dictionary<string, VnetCollection>();
+        private static Dictionary<string, VnetCollection> vnetCollections = new Dictionary<string, VnetCollection>(StringComparer.InvariantCultureIgnoreCase);
         private static readonly object vnetLock = new object();
 
         public static VnetCollection VNets(this AzureResourceGroupBase resourceGroup)
@@ -43,10 +46,11 @@ namespace azure_proto_network
                     }
                 }
             }
+
             return result;
         }
 
-        private static Dictionary<string, NicCollection> nicCollections = new Dictionary<string, NicCollection>();
+        private static Dictionary<string, NicCollection> nicCollections = new Dictionary<string, NicCollection>(StringComparer.InvariantCultureIgnoreCase);
         private static readonly object nicLock = new object();
 
         public static NicCollection Nics(this AzureResourceGroupBase resourceGroup)
@@ -63,6 +67,25 @@ namespace azure_proto_network
                     }
                 }
             }
+
+            return result;
+        }
+
+        private static Dictionary<string, NetworkSecurityGroupCollection> nsgCollections = new Dictionary<string, NetworkSecurityGroupCollection>(StringComparer.InvariantCultureIgnoreCase);
+        private static readonly object nsgLock = new object();
+
+        public static NetworkSecurityGroupCollection Nsgs(this AzureResourceGroupBase resourceGroup)
+        {
+            NetworkSecurityGroupCollection result;
+            lock(nsgLock)
+            {
+                if (!nsgCollections.TryGetValue(resourceGroup.Id, out result))
+                {
+                    result = new NetworkSecurityGroupCollection(resourceGroup);
+                    nsgCollections.Add(resourceGroup.Id, result);
+                }
+            }
+
             return result;
         }
 
@@ -106,5 +129,33 @@ namespace azure_proto_network
             };
             return new AzureNic(resourceGroup, new PhNetworkInterface(nic));
         }
+
+        /// <summary>
+        /// Create an NSG with the given open TCP ports
+        /// </summary>
+        /// <param name="openPorts">The set of TCP ports to open</param>
+        /// <returns>An NSG, with the given TCP ports open</returns>
+        public static AzureNetworkSecurityGroup ConstructNsg(this AzureResourceGroupBase resourceGroup, string nsgName, params int[] openPorts)
+        {
+            var nsg = new NetworkSecurityGroup { Location = resourceGroup.Location};
+            var index = 0;
+            nsg.SecurityRules = openPorts.Select(openPort => new SecurityRule
+            {
+                Name = $"Port{openPort}",
+                Priority = 1000 + (++index),
+                Protocol = SecurityRuleProtocol.Tcp,
+                Access = SecurityRuleAccess.Allow,
+                Direction = SecurityRuleDirection.Inbound,
+                SourcePortRange = "*",
+                SourceAddressPrefix =  "*",
+                DestinationPortRange = $"{openPort}",
+                DestinationAddressPrefix = "*",
+                Description = $"Port_{openPort}"
+            }).ToList();
+            var result = new AzureNetworkSecurityGroup(resourceGroup, nsg, nsgName);
+
+            return result;
+        }
+
     }
 }

@@ -14,7 +14,7 @@ namespace azure_proto_network
         }
 
         new public IDictionary<string, string> Tags => Model.Tags;
-
+        public override string Name => Model.Name;
         public string Etag => Model.Etag;
         public AddressSpace AddressSpace => Model.AddressSpace;
         public DhcpOptions DhcpOptions => Model.DhcpOptions;
