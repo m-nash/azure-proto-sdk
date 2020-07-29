@@ -10,7 +10,6 @@ namespace azure_proto_management
     {
         public PhSubscriptionModel(Subscription s) : base(s.Id, null, s)
         {
-            Model = s;
         }
 
         public override string Name => Model.SubscriptionId;

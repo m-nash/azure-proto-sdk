@@ -10,23 +10,48 @@ namespace azure_proto_network
     {
         public PhNetworkInterface(NetworkInterface nic) : base(nic.Id, nic.Location, nic)
         {
-            Model = nic;
+            if (null == nic.Tags)
+            {
+                nic.Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            }
         }
 
-        new public IDictionary<string, string> Tags => Model.Tags;
+        public override IDictionary<string, string> Tags => Model.Tags;
 
         public override string Name => Model.Name;
         public string Etag => Model.Etag;
         public SubResource VirtualMachine => Model.VirtualMachine;
-        public NetworkSecurityGroup NetworkSecurityGroup => Model.NetworkSecurityGroup;
+        public NetworkSecurityGroup NetworkSecurityGroup
+        {
+            get => Model.NetworkSecurityGroup;
+            set => Model.NetworkSecurityGroup = value;
+        }
         public PrivateEndpoint PrivateEndpoint => Model.PrivateEndpoint;
-        public IList<NetworkInterfaceIPConfiguration> IpConfigurations => Model.IpConfigurations;
-        public IList<NetworkInterfaceTapConfiguration> TapConfigurations => Model.TapConfigurations;
-        public NetworkInterfaceDnsSettings DnsSettings => Model.DnsSettings;
+        public IList<NetworkInterfaceIPConfiguration> IpConfigurations
+        {
+            get => Model.IpConfigurations;
+            set => Model.IpConfigurations = value;
+        }
+        public IList<NetworkInterfaceTapConfiguration> TapConfigurations=> Model.TapConfigurations;
+          
+        public NetworkInterfaceDnsSettings DnsSettings
+        {
+            get => Model.DnsSettings;
+            set => Model.DnsSettings = value;
+        }
         public string MacAddress => Model.MacAddress;
         public bool? Primary => Model.Primary;
-        public bool? EnableAcceleratedNetworking => Model.EnableAcceleratedNetworking;
-        public bool? EnableIPForwarding => Model.EnableIPForwarding;
+        public bool? EnableAcceleratedNetworking
+        {
+            get => Model.EnableAcceleratedNetworking;
+            set => Model.EnableAcceleratedNetworking = value;
+        }
+        public bool? EnableIPForwarding
+        {
+            get => Model.EnableIPForwarding;
+            set => Model.EnableIPForwarding = value;
+        }
+
         public IList<string> HostedWorkloads => Model.HostedWorkloads;
         public string ResourceGuid => Model.ResourceGuid;
         public ProvisioningState? ProvisioningState => Model.ProvisioningState;

@@ -10,22 +10,62 @@ namespace azure_proto_network
     {
         public PhVirtualNetwork(VirtualNetwork vnet) : base(vnet.Id, vnet.Location, vnet)
         {
-            Model = vnet;
+            if (null == vnet.Tags)
+            {
+                vnet.Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            }
         }
 
-        new public IDictionary<string, string> Tags => Model.Tags;
+        public override IDictionary<string, string> Tags => Model.Tags;
         public override string Name => Model.Name;
         public string Etag => Model.Etag;
-        public AddressSpace AddressSpace => Model.AddressSpace;
-        public DhcpOptions DhcpOptions => Model.DhcpOptions;
-        public IList<Subnet> Subnets => Model.Subnets;
-        public IList<VirtualNetworkPeering> VirtualNetworkPeerings => Model.VirtualNetworkPeerings;
+        public AddressSpace AddressSpace
+        {
+            get => Model.AddressSpace;
+            set => Model.AddressSpace = value;
+        }
+        public DhcpOptions DhcpOptions
+        {
+            get => Model.DhcpOptions;
+            set => Model.DhcpOptions = value;
+        }
+        public IList<Subnet> Subnets
+        {
+            get => Model.Subnets;
+            set => Model.Subnets = value;
+        }
+        public IList<VirtualNetworkPeering> VirtualNetworkPeerings
+        {
+            get => Model.VirtualNetworkPeerings;
+            set => Model.VirtualNetworkPeerings = value;
+        }
         public string ResourceGuid => Model.ResourceGuid;
         public ProvisioningState? ProvisioningState => Model.ProvisioningState;
-        public bool? EnableDdosProtection => Model.EnableDdosProtection;
-        public bool? EnableVmProtection => Model.EnableVmProtection;
-        public SubResource DdosProtectionPlan => Model.DdosProtectionPlan;
-        public VirtualNetworkBgpCommunities BgpCommunities => Model.BgpCommunities;
-        public IList<SubResource> IpAllocations => Model.IpAllocations;
+        public bool? EnableDdosProtection
+        {
+            get => Model.EnableDdosProtection;
+            set => Model.EnableDdosProtection = value;
+        }
+        public bool? EnableVmProtection
+        {
+            get => Model.EnableVmProtection;
+            set => Model.EnableVmProtection = value;
+        }
+        public SubResource DdosProtectionPlan
+
+        {
+            get => Model.DdosProtectionPlan;
+            set => Model.DdosProtectionPlan = value;
+        }
+        public VirtualNetworkBgpCommunities BgpCommunities
+        {
+            get => Model.BgpCommunities;
+            set => Model.BgpCommunities = value;
+        }
+        public IList<SubResource> IpAllocations
+        {
+            get => Model.IpAllocations;
+            set => Model.IpAllocations = value;
+        }
     }
 }

@@ -11,11 +11,23 @@ namespace azure_proto_management
 
         public PhResourceGroup(ResourceGroup rg) : base(rg.Id, rg.Location, rg)
         {
-            Model = rg;
+            if (null == rg.Tags)
+            {
+                rg.Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            }
         }
 
+        public override IDictionary<string, string> Tags => Model.Tags;
         public override string Name => Model.Name;
-        public ResourceGroupProperties Properties => Model.Properties;
-        public string ManagedBy { get { return Model.ManagedBy; } set { Model.ManagedBy = value; } }
+        public ResourceGroupProperties Properties
+        {
+            get => Model.Properties;
+            set => Model.Properties = value;
+        }
+        public string ManagedBy
+        {
+            get => Model.ManagedBy;
+            set => Model.ManagedBy = value;
+        }
     }
 }

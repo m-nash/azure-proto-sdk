@@ -19,11 +19,11 @@ namespace client
         {
             try
             {
-                CreateSingleVmExample();
+                //CreateSingleVmExample();
                 //CreateMultipleVmShutdownSome();
                 //StartStopVm();
                 //StartFromVm();
-                //SetTagsOnVm();
+                SetTagsOnVm();
                 //CreateMultipleVmShutdownByTag();
             }
             finally

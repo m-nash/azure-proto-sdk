@@ -12,12 +12,20 @@ namespace azure_proto_network
     {
         public PhNetworkSecurityGroup(NetworkSecurityGroup nsg) : base(nsg.Id, nsg.Location, nsg) 
         {
-            Model = nsg;
+            if (null == nsg.Tags)
+            {
+                nsg.Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            }
         }
 
+        public override IDictionary<string, string> Tags => Model.Tags;
         public override string Name => Model.Name;
         public string Etag => Model.Etag;
-        public IList<SecurityRule> SecurityRules => Model.SecurityRules;
+        public IList<SecurityRule> SecurityRules
+        {
+            get => Model.SecurityRules;
+            set => Model.SecurityRules = value;
+        }
         public IList<SecurityRule> DefaultSecurityRules => Model.DefaultSecurityRules;
         public IList<NetworkInterface> NetworkInterfaces => Model.NetworkInterfaces;
         public IList<Subnet> Subnets => Model.Subnets;

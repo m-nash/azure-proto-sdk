@@ -25,7 +25,7 @@ namespace azure_proto_compute
 
         public void AddTag(string key, string value)
         {
-            var vmData = Model as PhVirtualMachine;
+            var vmData = Model;
             string currentValue;
             if(!vmData.Tags.TryGetValue(key, out currentValue))
             {

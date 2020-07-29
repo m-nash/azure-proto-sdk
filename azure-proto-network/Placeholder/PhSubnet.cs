@@ -6,33 +6,78 @@ using System.Text;
 
 namespace azure_proto_network
 {
+    /// <summary>
+    /// TODO: Subnet is a proxy resource, not a TrackedResource - need to adapt to using Resource as the base class
+    /// </summary>
     public class PhSubnet : TrackedResource<Subnet>
     {
         public PhSubnet(Subnet sub, string location) : base(sub.Id, location, sub)
         {
-            Model = sub;
-            Location = location;
         }
 
         public override string Name => Model.Name;
         public ProvisioningState? ProvisioningState => Model.ProvisioningState;
         public string Purpose => Model.Purpose;
-        public IList<Delegation> Delegations => Model.Delegations;
+        public IList<Delegation> Delegations
+        {
+            get => Model.Delegations;
+            set => Model.Delegations = value;
+        }
         public IList<ServiceAssociationLink> ServiceAssociationLinks => Model.ServiceAssociationLinks;
         public IList<ResourceNavigationLink> ResourceNavigationLinks => Model.ResourceNavigationLinks;
-        public IList<SubResource> IpAllocations => Model.IpAllocations;
+        public IList<SubResource> IpAllocations
+        {
+            get => Model.IpAllocations;
+            set => Model.IpAllocations = value;
+        }
         public IList<IPConfigurationProfile> IpConfigurationProfiles => Model.IpConfigurationProfiles;
         public IList<IPConfiguration> IpConfigurations => Model.IpConfigurations;
-        public string PrivateEndpointNetworkPolicies => Model.PrivateEndpointNetworkPolicies;
+        public string PrivateEndpointNetworkPolicies
+        {
+            get => Model.PrivateEndpointNetworkPolicies;
+            set => Model.PrivateEndpointNetworkPolicies = value;
+        }
         public IList<PrivateEndpoint> PrivateEndpoints => Model.PrivateEndpoints;
-        public IList<ServiceEndpointPropertiesFormat> ServiceEndpoints => Model.ServiceEndpoints;
-        public SubResource NatGateway => Model.NatGateway;
-        public RouteTable RouteTable => Model.RouteTable;
-        public NetworkSecurityGroup NetworkSecurityGroup => Model.NetworkSecurityGroup;
-        public IList<string> AddressPrefixes => Model.AddressPrefixes;
-        public string AddressPrefix => Model.AddressPrefix;
+        public IList<ServiceEndpointPropertiesFormat> ServiceEndpoints
+        {
+            get => Model.ServiceEndpoints;
+            set => Model.ServiceEndpoints = value;
+        }
+        public SubResource NatGateway
+        {
+            get => Model.NatGateway;
+            set => Model.NatGateway = value;
+        }
+        public RouteTable RouteTable
+        {
+            get => Model.RouteTable;
+            set => Model.RouteTable = value;
+        }
+        public NetworkSecurityGroup NetworkSecurityGroup
+        {
+            get => Model.NetworkSecurityGroup;
+            set => Model.NetworkSecurityGroup = value;
+        }
+        public IList<string> AddressPrefixes
+        {
+            get => Model.AddressPrefixes;
+            set => Model.AddressPrefixes = value;
+        }
+        public string AddressPrefix
+        {
+            get => Model.AddressPrefix;
+            set => Model.AddressPrefix = value;
+        }
         public string Etag => Model.Etag;
-        public IList<ServiceEndpointPolicy> ServiceEndpointPolicies => Model.ServiceEndpointPolicies;
-        public string PrivateLinkServiceNetworkPolicies => Model.PrivateLinkServiceNetworkPolicies;
+        public IList<ServiceEndpointPolicy> ServiceEndpointPolicies
+        {
+            get => Model.ServiceEndpointPolicies;
+            set => Model.ServiceEndpointPolicies = value;
+        }
+        public string PrivateLinkServiceNetworkPolicies
+        {
+            get => Model.PrivateLinkServiceNetworkPolicies;
+            set => Model.PrivateLinkServiceNetworkPolicies = value;
+        }
     }
 }
