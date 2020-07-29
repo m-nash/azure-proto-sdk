@@ -11,17 +11,15 @@ namespace azure_proto_compute
         private static readonly object computeClientLock = new object();
         public static ComputeManagementClient GetComputeClient(this ClientFactory factory, string subscriptionId)
         {
-            var split = subscriptionId.Split('/');
-            var subId = split[2];
             ComputeManagementClient retValue;
-            if (!computeClients.TryGetValue(subId, out retValue))
+            if (!computeClients.TryGetValue(subscriptionId, out retValue))
             {
                 lock (computeClientLock)
                 {
-                    if (!computeClients.TryGetValue(subId, out retValue))
+                    if (!computeClients.TryGetValue(subscriptionId, out retValue))
                     {
-                        retValue = new ComputeManagementClient(subId, new DefaultAzureCredential());
-                        computeClients.Add(subId, retValue);
+                        retValue = new ComputeManagementClient(subscriptionId, new DefaultAzureCredential());
+                        computeClients.Add(subscriptionId, retValue);
                     }
                 }
             }

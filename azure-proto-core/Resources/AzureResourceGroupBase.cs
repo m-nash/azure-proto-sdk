@@ -1,7 +1,11 @@
-﻿namespace azure_proto_core
+﻿
+namespace azure_proto_core
 {
-    public class AzureResourceGroupBase : AzureResource
+    // TODO: Think about other base classes for different resource 'containers'
+    public class AzureResourceGroupBase : AzureEntity
     {
-        public AzureResourceGroupBase(IResource parent, IModel model) : base(parent, model) { }
+        public AzureResourceGroupBase(ResourceIdentifier id) { Id = id; }
+
+        public AzureResourceGroupBase(ResourceIdentifier id, Location location) { Id = id; Location = location; }
     }
 }

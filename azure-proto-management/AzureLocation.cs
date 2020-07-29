@@ -2,8 +2,8 @@
 
 namespace azure_proto_management
 {
-    public class AzureLocation: AzureResource
+    public class AzureLocation: AzureEntity
     {
-        public AzureLocation(AzureSubscription subscription, PhLocation location) : base(subscription, location) { }
+        public AzureLocation(AzureSubscription subscription, PhLocation location) { Id = location.Id; Location = location.Name; }
     }
 }

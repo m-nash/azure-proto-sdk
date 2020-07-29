@@ -1,5 +1,5 @@
-﻿using azure_proto_core;
-using Microsoft.Azure.Management.Subscription;
+﻿using Azure.ResourceManager.Resources;
+using azure_proto_core;
 using System.Collections.Generic;
 
 namespace azure_proto_management
@@ -8,12 +8,11 @@ namespace azure_proto_management
     {
         public LocationCollection(AzureSubscription subscription) : base(subscription) { }
 
-        private SubscriptionClient Client => ClientFactory.Instance.GetSubscriptionClient();
+        private SubscriptionsOperations Client => ClientFactory.Instance.GetSubscriptionClient();
 
         protected override IEnumerable<AzureLocation> GetItems()
         {
-            var split = Parent.Id.Split('/');
-            foreach (var location in Client.Subscriptions.ListLocations(split[2]))
+            foreach (var location in Client.ListLocations(Parent.Id.Subscription))
             {
                 yield return new AzureLocation(Parent as AzureSubscription, new PhLocation(location));
             }
@@ -21,8 +20,7 @@ namespace azure_proto_management
 
         protected override AzureLocation Get(string locationName)
         {
-            var split = Parent.Id.Split('/');
-            foreach (var location in Client.Subscriptions.ListLocations(split[2]))
+            foreach (var location in Client.ListLocations(Parent.Id.Subscription))
             {
                 if (location.Name == locationName)
                     return new AzureLocation(Parent as AzureSubscription, new PhLocation(location));

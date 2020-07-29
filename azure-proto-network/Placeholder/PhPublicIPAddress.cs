@@ -6,36 +6,72 @@ using System.Text;
 
 namespace azure_proto_network
 {
-    public class PhPublicIPAddress : PublicIPAddress, IModel
+    public class PhPublicIPAddress : TrackedResource<PublicIPAddress>
     {
-        public PublicIPAddress Data { get; private set; }
-
-        public PhPublicIPAddress(PublicIPAddress ip)
+        public PhPublicIPAddress(PublicIPAddress ip) : base(ip.Id, ip.Location, ip)
         {
-            Data = ip;
+            if (null == ip.Tags)
+            {
+                ip.Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            }
         }
 
-        new public string Name => Data.Name;
-        new public string Id => Data.Id;
-        new public string Type => Data.Type;
-        new public string Location => Data.Location;
-        new public IDictionary<string, string> Tags => Data.Tags;
+        public override IDictionary<string, string> Tags => Model.Tags;
 
-        new public PublicIPAddressSku Sku => Data.Sku;
-        new public string Etag => Data.Etag;
-        new public IList<string> Zones => Data.Zones;
-        new public IPAllocationMethod? PublicIPAllocationMethod => Data.PublicIPAllocationMethod;
-        new public IPVersion? PublicIPAddressVersion => Data.PublicIPAddressVersion;
-        new public IPConfiguration IpConfiguration => Data.IpConfiguration;
-        new public PublicIPAddressDnsSettings DnsSettings => Data.DnsSettings;
-        new public DdosSettings DdosSettings => Data.DdosSettings;
-        new public IList<IpTag> IpTags => Data.IpTags;
-        new public string IpAddress => Data.IpAddress;
-        new public SubResource PublicIPPrefix => Data.PublicIPPrefix;
-        new public int? IdleTimeoutInMinutes => Data.IdleTimeoutInMinutes;
-        new public string ResourceGuid => Data.ResourceGuid;
-        new public ProvisioningState? ProvisioningState => Data.ProvisioningState;
-
-        object IModel.Data => Data;
+        public override string Name => Model.Name;
+        public PublicIPAddressSku Sku
+        {
+            get => Model.Sku;
+            set => Model.Sku = value;
+        }
+        public string Etag => Model.Etag;
+        public IList<string> Zones
+        {
+            get => Model.Zones;
+            set => Model.Zones = value;
+        }
+        public IPAllocationMethod? PublicIPAllocationMethod
+        {
+            get => Model.PublicIPAllocationMethod;
+            set => Model.PublicIPAllocationMethod = value;
+        }
+        public IPVersion? PublicIPAddressVersion
+        {
+            get => Model.PublicIPAddressVersion;
+            set => Model.PublicIPAddressVersion = value;
+        }
+        public IPConfiguration IpConfiguration => Model.IpConfiguration;
+        public PublicIPAddressDnsSettings DnsSettings
+        {
+            get => Model.DnsSettings;
+            set => Model.DnsSettings = value;
+        }
+        public DdosSettings DdosSettings
+        {
+            get => Model.DdosSettings;
+            set => Model.DdosSettings = value;
+        }
+        public IList<IpTag> IpTags
+        {
+            get => Model.IpTags;
+            set => Model.IpTags = value;
+        }
+        public string IpAddress
+        {
+            get => Model.IpAddress;
+            set => Model.IpAddress = value;
+        }
+        public SubResource PublicIPPrefix
+        {
+            get => Model.PublicIPPrefix;
+            set => Model.PublicIPPrefix = value;
+        }
+        public int? IdleTimeoutInMinutes
+        {
+            get => Model.IdleTimeoutInMinutes;
+            set => Model.IdleTimeoutInMinutes = value;
+        }
+        public string ResourceGuid => Model.ResourceGuid;
+        public ProvisioningState? ProvisioningState => Model.ProvisioningState;
     }
 }

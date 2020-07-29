@@ -1,29 +1,22 @@
 ﻿using azure_proto_core;
-using Microsoft.Azure.Management.Subscription.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace azure_proto_management
 {
-    public class PhLocation : Location, IModel
+    // Update the signature for new library
+    public class PhLocation : TrackedResource<Azure.ResourceManager.Resources.Models.Location>
     {
-        public Location Data { get; private set; }
-
-        public PhLocation(Location loc)
+        
+        public PhLocation(Azure.ResourceManager.Resources.Models.Location loc) : base(loc.Id, loc.Name, loc)
         {
-            Data = loc;
         }
 
-        new public string Id => Data.Id;
-        new public string SubscriptionId => Data.SubscriptionId;
-        new public string Name => Data.Name;
-        new public string DisplayName => Data.DisplayName;
-        new public string Latitude => Data.Latitude;
-        new public string Longitude => Data.Longitude;
-
-        object IModel.Data => Data;
-
-        public string Location => Data.Name;
+        public override string Name => Model.Name;
+        public string SubscriptionId => Model.SubscriptionId;
+        public string DisplayName => Model.DisplayName;
+        public string Latitude => Model.Metadata.Latitude;
+        public string Longitude => Model.Metadata.Longitude;
     }
 }

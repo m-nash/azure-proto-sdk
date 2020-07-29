@@ -1,36 +1,35 @@
 ﻿using azure_proto_core;
-using Microsoft.Azure.Management.ResourceManager;
+using Azure.ResourceManager.Resources;
 using System.Collections.Generic;
+using Azure.Identity;
+using System;
 
 namespace azure_proto_management
 {
     public static class ClientFactoryExtension
     {
-        private static Dictionary<string, ResourceManagementClient> resourceClients = new Dictionary<string, ResourceManagementClient>();
+        private static Dictionary<string, ResourcesManagementClient> resourceClients = new Dictionary<string, ResourcesManagementClient>();
         private static readonly object resourceClientLock = new object();
-        public static ResourceManagementClient GetResourceClient(this ClientFactory factory, string subscriptionId)
+        public static ResourcesManagementClient GetResourceClient(this ClientFactory factory, string subscriptionId)
         {
-            var split = subscriptionId.Split('/');
-            var subId = split[2];
-            ResourceManagementClient retValue;
-            if (!resourceClients.TryGetValue(subId, out retValue))
+            ResourcesManagementClient retValue;
+            if (!resourceClients.TryGetValue(subscriptionId, out retValue))
             {
                 lock (resourceClientLock)
                 {
-                    if (!resourceClients.TryGetValue(subId, out retValue))
+                    if (!resourceClients.TryGetValue(subscriptionId, out retValue))
                     {
-                        retValue = new ResourceManagementClient(AzureClientManager.Instance.Creds);
-                        retValue.SubscriptionId = subId;
-                        resourceClients.Add(subId, retValue);
+                        retValue = new ResourcesManagementClient(subscriptionId, new DefaultAzureCredential());
+                        resourceClients.Add(subscriptionId, retValue);
                     }
                 }
             }
             return retValue;
         }
 
-        private static Microsoft.Azure.Management.Subscription.SubscriptionClient subscriptionClient;
+        private static SubscriptionsOperations subscriptionClient;
         private static readonly object subscriptionClientLock = new object();
-        public static Microsoft.Azure.Management.Subscription.SubscriptionClient GetSubscriptionClient(this ClientFactory factoryd)
+        public static SubscriptionsOperations GetSubscriptionClient(this ClientFactory factory)
         {
             if (subscriptionClient == null)
             {
@@ -38,7 +37,7 @@ namespace azure_proto_management
                 {
                     if (subscriptionClient == null)
                     {
-                        subscriptionClient = new Microsoft.Azure.Management.Subscription.SubscriptionClient(AzureClientManager.Instance.Creds);
+                        subscriptionClient = new ResourcesManagementClient(Guid.NewGuid().ToString(), new DefaultAzureCredential()).Subscriptions;
                     }
                 }
             }

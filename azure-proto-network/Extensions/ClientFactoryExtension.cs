@@ -11,17 +11,15 @@ namespace azure_proto_network
         private static readonly object networkClientLock = new object();
         public static NetworkManagementClient GetNetworkClient(this ClientFactory factory, string subscriptionId)
         {
-            var split = subscriptionId.Split('/');
-            var subId = split[2];
             NetworkManagementClient retValue;
-            if (!networkClients.TryGetValue(subId, out retValue))
+            if (!networkClients.TryGetValue(subscriptionId, out retValue))
             {
                 lock (networkClientLock)
                 {
-                    if (!networkClients.TryGetValue(subId, out retValue))
+                    if (!networkClients.TryGetValue(subscriptionId, out retValue))
                     {
-                        retValue = new NetworkManagementClient(subId, new DefaultAzureCredential());
-                        networkClients.Add(subId, retValue);
+                        retValue = new NetworkManagementClient(subscriptionId, new DefaultAzureCredential());
+                        networkClients.Add(subscriptionId, retValue);
                     }
                 }
             }

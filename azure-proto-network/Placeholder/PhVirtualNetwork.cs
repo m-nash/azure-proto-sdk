@@ -6,34 +6,66 @@ using System.Text;
 
 namespace azure_proto_network
 {
-    public class PhVirtualNetwork : VirtualNetwork, IModel
+    public class PhVirtualNetwork : TrackedResource<VirtualNetwork>
     {
-        public VirtualNetwork Data { get; private set; }
-
-        public PhVirtualNetwork(VirtualNetwork vnet)
+        public PhVirtualNetwork(VirtualNetwork vnet) : base(vnet.Id, vnet.Location, vnet)
         {
-            Data = vnet;
+            if (null == vnet.Tags)
+            {
+                vnet.Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            }
         }
 
-        new public string Name => Data.Name;
-        new public string Id => Data.Id;
-        new public string Type => Data.Type;
-        new public string Location => Data.Location;
-        new public IDictionary<string, string> Tags => Data.Tags;
+        public override IDictionary<string, string> Tags => Model.Tags;
+        public override string Name => Model.Name;
+        public string Etag => Model.Etag;
+        public AddressSpace AddressSpace
+        {
+            get => Model.AddressSpace;
+            set => Model.AddressSpace = value;
+        }
+        public DhcpOptions DhcpOptions
+        {
+            get => Model.DhcpOptions;
+            set => Model.DhcpOptions = value;
+        }
+        public IList<Subnet> Subnets
+        {
+            get => Model.Subnets;
+            set => Model.Subnets = value;
+        }
+        public IList<VirtualNetworkPeering> VirtualNetworkPeerings
+        {
+            get => Model.VirtualNetworkPeerings;
+            set => Model.VirtualNetworkPeerings = value;
+        }
+        public string ResourceGuid => Model.ResourceGuid;
+        public ProvisioningState? ProvisioningState => Model.ProvisioningState;
+        public bool? EnableDdosProtection
+        {
+            get => Model.EnableDdosProtection;
+            set => Model.EnableDdosProtection = value;
+        }
+        public bool? EnableVmProtection
+        {
+            get => Model.EnableVmProtection;
+            set => Model.EnableVmProtection = value;
+        }
+        public SubResource DdosProtectionPlan
 
-        new public string Etag => Data.Etag;
-        new public AddressSpace AddressSpace => Data.AddressSpace;
-        new public DhcpOptions DhcpOptions => Data.DhcpOptions;
-        new public IList<Subnet> Subnets => Data.Subnets;
-        new public IList<VirtualNetworkPeering> VirtualNetworkPeerings => Data.VirtualNetworkPeerings;
-        new public string ResourceGuid => Data.ResourceGuid;
-        new public ProvisioningState? ProvisioningState => Data.ProvisioningState;
-        new public bool? EnableDdosProtection => Data.EnableDdosProtection;
-        new public bool? EnableVmProtection => Data.EnableVmProtection;
-        new public SubResource DdosProtectionPlan => Data.DdosProtectionPlan;
-        new public VirtualNetworkBgpCommunities BgpCommunities => Data.BgpCommunities;
-        new public IList<SubResource> IpAllocations => Data.IpAllocations;
-
-        object IModel.Data => Data;
+        {
+            get => Model.DdosProtectionPlan;
+            set => Model.DdosProtectionPlan = value;
+        }
+        public VirtualNetworkBgpCommunities BgpCommunities
+        {
+            get => Model.BgpCommunities;
+            set => Model.BgpCommunities = value;
+        }
+        public IList<SubResource> IpAllocations
+        {
+            get => Model.IpAllocations;
+            set => Model.IpAllocations = value;
+        }
     }
 }

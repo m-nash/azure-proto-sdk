@@ -2,8 +2,8 @@
 {
     public class ClientFactory
     {
-        private static ClientFactory g_instance;
-        private static readonly object g_padlock = new object();
+        private static ClientFactory _instance;
+        private static readonly object _padlock = new object();
 
         private ClientFactory()
         {
@@ -13,17 +13,17 @@
         {
             get
             {
-                if(g_instance == null)
+                if(_instance == null)
                 {
-                    lock(g_padlock)
+                    lock(_padlock)
                     {
-                        if(g_instance == null)
+                        if(_instance == null)
                         {
-                            g_instance = new ClientFactory();
+                            _instance = new ClientFactory();
                         }
                     }
                 }
-                return g_instance;
+                return _instance;
             }
         }
     }

@@ -1,9 +1,12 @@
-﻿using azure_proto_core;
+﻿using Azure.ResourceManager.Network.Models;
+using azure_proto_core;
 
 namespace azure_proto_network
 {
-    public class AzureSubnet : AzureResource
+    public class AzureSubnet : AzureEntity<PhSubnet>
     {
-        public AzureSubnet(AzureVnet vnet, PhSubnet model) : base(vnet, model) { }
+        public AzureSubnet(AzureVnet vnet, PhSubnet model) : base(vnet, model)
+        {
+        }
     }
 }

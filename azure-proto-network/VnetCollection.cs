@@ -7,13 +7,13 @@ namespace azure_proto_network
 {
     public class VnetCollection : AzureCollection<AzureVnet>
     {
-        public VnetCollection(IResource resourceGroup) : base(resourceGroup) { }
+        public VnetCollection(TrackedResource resourceGroup) : base(resourceGroup) { }
 
-        private NetworkManagementClient Client => ClientFactory.Instance.GetNetworkClient((Parent as AzureResourceGroupBase).Parent.Id);
+        private NetworkManagementClient Client => ClientFactory.Instance.GetNetworkClient(Parent.Id.Subscription);
 
         public AzureVnet CreateOrUpdateVNet(string name, AzureVnet vnet)
         {
-            var vnetResult = Client.VirtualNetworks.StartCreateOrUpdate(Parent.Name, name, vnet.Model.Data as VirtualNetwork).WaitForCompletionAsync().Result;
+            var vnetResult = Client.VirtualNetworks.StartCreateOrUpdate(Parent.Name, name, vnet.Model).WaitForCompletionAsync().Result;
             var avnet = new AzureVnet(Parent, new PhVirtualNetwork(vnetResult.Value));
             return avnet;
         }

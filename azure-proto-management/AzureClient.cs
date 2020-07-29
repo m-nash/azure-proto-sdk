@@ -2,17 +2,17 @@
 
 namespace azure_proto_management
 {
-    public class AzureClient : IResource
+    public class AzureClient : TrackedResource
     {
         public SubscriptionCollection Subscriptions { get; private set; }
 
-        public string Name => "MainClient";
+        new public string Name => "MainClient";
 
-        public string Id => "1";
-
-        public string Location => "westus2";
+        new public string Location => "westus2";
 
         public object Data => throw new System.NotImplementedException();
+
+        public override ResourceIdentifier Id { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
 
         public AzureClient()
         {

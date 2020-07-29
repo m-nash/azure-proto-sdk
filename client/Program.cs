@@ -10,25 +10,31 @@ namespace client
     {
         private static string vmName = String.Format("{0}-quickstartvm", Environment.UserName);
         private static string rgName = String.Format("{0}-test-rg", Environment.UserName);
+        private static string nsgName = String.Format("{0}-test-nsg", Environment.UserName);
         private static string subscriptionId = Environment.GetEnvironmentVariable("AZURE_SUBSCRIPTION_ID");
         private static string loc = "westus2";
         private static string subnetName = "mySubnet";
 
         static void Main(string[] args)
         {
-            CreateSingleVmExample();
-            //CreateMultipleVmShutdownSome();
-            //StartStopVm();
-            //StartFromVm();
-            //SetTagsOnVm();
-            //CreateMultipleVmShutdownByTag();
-
-            //CleanUp();
+            try
+            {
+                //CreateSingleVmExample();
+                //CreateMultipleVmShutdownSome();
+                //StartStopVm();
+                //StartFromVm();
+                SetTagsOnVm();
+                //CreateMultipleVmShutdownByTag();
+            }
+            finally
+            {
+                CleanUp();
+            }
         }
 
         private static void CleanUp()
         {
-            Console.WriteLine("--------Deleting {0}--------");
+            Console.WriteLine($"--------Deleting {rgName}--------");
             AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, rgName);
             rg.Delete();
         }
@@ -70,12 +76,14 @@ namespace client
 
         private static void StartFromVm()
         {
+            // TODO: Look at VM nic/nsg operations on VM
             //make sure vm exists
             CreateSingleVmExample();
 
             //retrieve from lowest level, doesn't give ability to walk up and down the container structure
             AzureVm vm = VmCollection.GetVm(subscriptionId, rgName, vmName);
             Console.WriteLine("Found VM {0}", vm.Id);
+
 
             //retrieve from lowest level inside management package gives ability to walk up and down
             AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, rgName);
@@ -165,7 +173,7 @@ namespace client
 
             // Create Network Interface
             Console.WriteLine("--------Start create Network Interface--------");
-            var nic = resourceGroup.ConstructNic(ipAddress, subnet.Model.Id);
+            var nic = resourceGroup.ConstructNic(ipAddress, subnet.Id);
             nic = resourceGroup.Nics().CreateOrUpdateNic(String.Format("{0}_{1}_nic", vmName, i), nic);
             return nic;
         }
@@ -198,6 +206,8 @@ namespace client
             Console.WriteLine("--------Start create Subnet--------");
             if (!vnet.Subnets.TryGetValue(subnetName, out subnet))
             {
+                var nsg = resourceGroup.ConstructNsg(nsgName, 80);
+                nsg = resourceGroup.Nsgs().CreateOrUpdateNsgs(nsg);
                 subnet = vnet.ConstructSubnet(subnetName, "10.0.0.0/24");
                 subnet = vnet.Subnets.CreateOrUpdateSubnets(subnet);
             }

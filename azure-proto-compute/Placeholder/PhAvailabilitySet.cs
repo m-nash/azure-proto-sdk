@@ -6,28 +6,43 @@ using System.Text;
 
 namespace azure_proto_compute
 {
-    public class PhAvailabilitySet : AvailabilitySet, IModel
+    public class PhAvailabilitySet : TrackedResource<AvailabilitySet>
     {
-        public AvailabilitySet Data { get; private set; }
-
-        public PhAvailabilitySet(AvailabilitySet aset) : base(aset.Location)
+        public PhAvailabilitySet(AvailabilitySet aset) : base(aset.Id, aset.Location, aset)
         {
-            Data = aset;
+            if (null == aset.Tags)
+            {
+                aset.Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            }
         }
 
-        new public string Name => Data.Name;
-        new public string Id => Data.Id;
-        new public string Type => Data.Type;
-        new public string Location => Data.Location;
-        new public IDictionary<string, string> Tags => Data.Tags;
-
-        new public Sku Sku => Data.Sku;
-        new public int? PlatformUpdateDomainCount => Data.PlatformUpdateDomainCount;
-        new public int? PlatformFaultDomainCount => Data.PlatformFaultDomainCount;
-        new public IList<SubResource> VirtualMachines => Data.VirtualMachines;
-        new public SubResource ProximityPlacementGroup => Data.ProximityPlacementGroup;
-        new public IList<InstanceViewStatus> Statuses => Data.Statuses;
-
-        object IModel.Data => Data;
+        public override IDictionary<string, string> Tags => Model.Tags;
+        public override string Name => Model.Name;
+        public Azure.ResourceManager.Compute.Models.Sku Sku
+        {
+            get => Model.Sku;
+            set => Model.Sku = value;
+        }
+        public int? PlatformUpdateDomainCount
+        {
+            get => Model.PlatformUpdateDomainCount;
+            set => Model.PlatformUpdateDomainCount = value;
+        }
+        public int? PlatformFaultDomainCount
+        {
+            get => Model.PlatformFaultDomainCount;
+            set => Model.PlatformFaultDomainCount = value;
+        }
+        public IList<SubResource> VirtualMachines
+        {
+            get => Model.VirtualMachines;
+            set => Model.VirtualMachines = value;
+        }
+        public SubResource ProximityPlacementGroup
+        {
+            get => Model.ProximityPlacementGroup;
+            set => Model.ProximityPlacementGroup = value;
+        }
+        public IList<InstanceViewStatus> Statuses => Model.Statuses;
     }
 }

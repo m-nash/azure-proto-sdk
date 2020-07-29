@@ -1,6 +1,6 @@
 ﻿using azure_proto_core;
-using Microsoft.Azure.Management.ResourceManager;
-using Microsoft.Azure.Management.ResourceManager.Models;
+using Azure.ResourceManager.Resources;
+using Azure.ResourceManager.Resources.Models;
 using System.Collections.Generic;
 
 namespace azure_proto_management
@@ -9,7 +9,7 @@ namespace azure_proto_management
     {
         public ResourceGroupCollection(AzureSubscription location) : base(location) { }
 
-        private ResourceManagementClient Client => ClientFactory.Instance.GetResourceClient(Parent.Id);
+        private ResourcesManagementClient Client => ClientFactory.Instance.GetResourceClient(Parent.Id.Subscription);
 
         public AzureResourceGroup CreateOrUpdate(string resourceGroupName, string location)
         {

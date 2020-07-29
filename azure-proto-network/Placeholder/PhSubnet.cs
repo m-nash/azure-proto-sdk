@@ -6,40 +6,78 @@ using System.Text;
 
 namespace azure_proto_network
 {
-    public class PhSubnet : Subnet, IModel
+    /// <summary>
+    /// TODO: Subnet is a proxy resource, not a TrackedResource - need to adapt to using Resource as the base class
+    /// </summary>
+    public class PhSubnet : TrackedResource<Subnet>
     {
-        public Subnet Data { get; private set; }
-        public string Location { get; private set; }
-
-        public PhSubnet(Subnet sub, string location)
+        public PhSubnet(Subnet sub, string location) : base(sub.Id, location, sub)
         {
-            Data = sub;
-            Location = location;
         }
 
-        new public string Name => Data.Name;
-        new public string Id => Data.Id;
-        
-        new public ProvisioningState? ProvisioningState => Data.ProvisioningState;
-        new public string Purpose => Data.Purpose;
-        new public IList<Delegation> Delegations => Data.Delegations;
-        new public IList<ServiceAssociationLink> ServiceAssociationLinks => Data.ServiceAssociationLinks;
-        new public IList<ResourceNavigationLink> ResourceNavigationLinks => Data.ResourceNavigationLinks;
-        new public IList<SubResource> IpAllocations => Data.IpAllocations;
-        new public IList<IPConfigurationProfile> IpConfigurationProfiles => Data.IpConfigurationProfiles;
-        new public IList<IPConfiguration> IpConfigurations => Data.IpConfigurations;
-        new public string PrivateEndpointNetworkPolicies => Data.PrivateEndpointNetworkPolicies;
-        new public IList<PrivateEndpoint> PrivateEndpoints => Data.PrivateEndpoints;
-        new public IList<ServiceEndpointPropertiesFormat> ServiceEndpoints => Data.ServiceEndpoints;
-        new public SubResource NatGateway => Data.NatGateway;
-        new public RouteTable RouteTable => Data.RouteTable;
-        new public NetworkSecurityGroup NetworkSecurityGroup => Data.NetworkSecurityGroup;
-        new public IList<string> AddressPrefixes => Data.AddressPrefixes;
-        new public string AddressPrefix => Data.AddressPrefix;
-        new public string Etag => Data.Etag;
-        new public IList<ServiceEndpointPolicy> ServiceEndpointPolicies => Data.ServiceEndpointPolicies;
-        new public string PrivateLinkServiceNetworkPolicies => Data.PrivateLinkServiceNetworkPolicies;
-
-        object IModel.Data => Data;
+        public override string Name => Model.Name;
+        public ProvisioningState? ProvisioningState => Model.ProvisioningState;
+        public string Purpose => Model.Purpose;
+        public IList<Delegation> Delegations
+        {
+            get => Model.Delegations;
+            set => Model.Delegations = value;
+        }
+        public IList<ServiceAssociationLink> ServiceAssociationLinks => Model.ServiceAssociationLinks;
+        public IList<ResourceNavigationLink> ResourceNavigationLinks => Model.ResourceNavigationLinks;
+        public IList<SubResource> IpAllocations
+        {
+            get => Model.IpAllocations;
+            set => Model.IpAllocations = value;
+        }
+        public IList<IPConfigurationProfile> IpConfigurationProfiles => Model.IpConfigurationProfiles;
+        public IList<IPConfiguration> IpConfigurations => Model.IpConfigurations;
+        public string PrivateEndpointNetworkPolicies
+        {
+            get => Model.PrivateEndpointNetworkPolicies;
+            set => Model.PrivateEndpointNetworkPolicies = value;
+        }
+        public IList<PrivateEndpoint> PrivateEndpoints => Model.PrivateEndpoints;
+        public IList<ServiceEndpointPropertiesFormat> ServiceEndpoints
+        {
+            get => Model.ServiceEndpoints;
+            set => Model.ServiceEndpoints = value;
+        }
+        public SubResource NatGateway
+        {
+            get => Model.NatGateway;
+            set => Model.NatGateway = value;
+        }
+        public RouteTable RouteTable
+        {
+            get => Model.RouteTable;
+            set => Model.RouteTable = value;
+        }
+        public NetworkSecurityGroup NetworkSecurityGroup
+        {
+            get => Model.NetworkSecurityGroup;
+            set => Model.NetworkSecurityGroup = value;
+        }
+        public IList<string> AddressPrefixes
+        {
+            get => Model.AddressPrefixes;
+            set => Model.AddressPrefixes = value;
+        }
+        public string AddressPrefix
+        {
+            get => Model.AddressPrefix;
+            set => Model.AddressPrefix = value;
+        }
+        public string Etag => Model.Etag;
+        public IList<ServiceEndpointPolicy> ServiceEndpointPolicies
+        {
+            get => Model.ServiceEndpointPolicies;
+            set => Model.ServiceEndpointPolicies = value;
+        }
+        public string PrivateLinkServiceNetworkPolicies
+        {
+            get => Model.PrivateLinkServiceNetworkPolicies;
+            set => Model.PrivateLinkServiceNetworkPolicies = value;
+        }
     }
 }

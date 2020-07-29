@@ -1,10 +1,11 @@
 ﻿using azure_proto_core;
-using Microsoft.Azure.Management.Subscription.Models;
+using Azure.ResourceManager.Resources.Models;
 
 namespace azure_proto_management
 {
-    public class AzureSubscription : AzureResource
+    public class AzureSubscription : AzureEntity<PhSubscriptionModel>
     {
+        string _name;
         public LocationCollection Locations { get; private set; }
         public ResourceGroupCollection ResourceGroups { get; private set; }
 
@@ -12,8 +13,9 @@ namespace azure_proto_management
         {
             Locations = new LocationCollection(this);
             ResourceGroups = new ResourceGroupCollection(this);
+            _name = subModel.DisplayName;
         }
 
-        public override string Name => (Model as SubscriptionModel).DisplayName;
+        public override string Name => _name;
     }
 }

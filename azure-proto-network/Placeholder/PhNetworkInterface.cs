@@ -6,36 +6,54 @@ using System.Text;
 
 namespace azure_proto_network
 {
-    public class PhNetworkInterface : NetworkInterface, IModel
+    public class PhNetworkInterface : TrackedResource<NetworkInterface>, IEntityResource
     {
-        public NetworkInterface Data { get; private set; }
-
-        public PhNetworkInterface(NetworkInterface nic)
+        public PhNetworkInterface(NetworkInterface nic) : base(nic.Id, nic.Location, nic)
         {
-            Data = nic;
+            if (null == nic.Tags)
+            {
+                nic.Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            }
         }
 
-        new public string Name => Data.Name;
-        new public string Id => Data.Id;
-        new public string Type => Data.Type;
-        new public string Location => Data.Location;
-        new public IDictionary<string, string> Tags => Data.Tags;
+        public override IDictionary<string, string> Tags => Model.Tags;
 
-        new public string Etag => Data.Etag;
-        new public SubResource VirtualMachine => Data.VirtualMachine;
-        new public NetworkSecurityGroup NetworkSecurityGroup => Data.NetworkSecurityGroup;
-        new public PrivateEndpoint PrivateEndpoint => Data.PrivateEndpoint;
-        new public IList<NetworkInterfaceIPConfiguration> IpConfigurations => Data.IpConfigurations;
-        new public IList<NetworkInterfaceTapConfiguration> TapConfigurations => Data.TapConfigurations;
-        new public NetworkInterfaceDnsSettings DnsSettings => Data.DnsSettings;
-        new public string MacAddress => Data.MacAddress;
-        new public bool? Primary => Data.Primary;
-        new public bool? EnableAcceleratedNetworking => Data.EnableAcceleratedNetworking;
-        new public bool? EnableIPForwarding => Data.EnableIPForwarding;
-        new public IList<string> HostedWorkloads => Data.HostedWorkloads;
-        new public string ResourceGuid => Data.ResourceGuid;
-        new public ProvisioningState? ProvisioningState => Data.ProvisioningState;
+        public override string Name => Model.Name;
+        public string Etag => Model.Etag;
+        public SubResource VirtualMachine => Model.VirtualMachine;
+        public NetworkSecurityGroup NetworkSecurityGroup
+        {
+            get => Model.NetworkSecurityGroup;
+            set => Model.NetworkSecurityGroup = value;
+        }
+        public PrivateEndpoint PrivateEndpoint => Model.PrivateEndpoint;
+        public IList<NetworkInterfaceIPConfiguration> IpConfigurations
+        {
+            get => Model.IpConfigurations;
+            set => Model.IpConfigurations = value;
+        }
+        public IList<NetworkInterfaceTapConfiguration> TapConfigurations=> Model.TapConfigurations;
+          
+        public NetworkInterfaceDnsSettings DnsSettings
+        {
+            get => Model.DnsSettings;
+            set => Model.DnsSettings = value;
+        }
+        public string MacAddress => Model.MacAddress;
+        public bool? Primary => Model.Primary;
+        public bool? EnableAcceleratedNetworking
+        {
+            get => Model.EnableAcceleratedNetworking;
+            set => Model.EnableAcceleratedNetworking = value;
+        }
+        public bool? EnableIPForwarding
+        {
+            get => Model.EnableIPForwarding;
+            set => Model.EnableIPForwarding = value;
+        }
 
-        object IModel.Data => Data;
+        public IList<string> HostedWorkloads => Model.HostedWorkloads;
+        public string ResourceGuid => Model.ResourceGuid;
+        public ProvisioningState? ProvisioningState => Model.ProvisioningState;
     }
 }
