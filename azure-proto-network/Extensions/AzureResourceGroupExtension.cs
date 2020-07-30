@@ -1,8 +1,6 @@
-﻿using Azure.ResourceManager.Network.Models;
-using azure_proto_core;
+﻿using azure_proto_core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace azure_proto_network
 {
@@ -88,74 +86,5 @@ namespace azure_proto_network
 
             return result;
         }
-
-        public static AzurePublicIpAddress ConstructIPAddress(this AzureResourceGroupBase resourceGroup)
-        {
-            var ipAddress = new PublicIPAddress()
-            {
-                PublicIPAddressVersion = Azure.ResourceManager.Network.Models.IPVersion.IPv4.ToString(),
-                PublicIPAllocationMethod = IPAllocationMethod.Dynamic,
-                Location = resourceGroup.Location,
-            };
-            return new AzurePublicIpAddress(resourceGroup, new PhPublicIPAddress(ipAddress));
-        }
-
-        public static AzureVnet ConstructVnet(this AzureResourceGroupBase resourceGroup, string vnetCidr)
-        {
-            var vnet = new VirtualNetwork()
-            {
-                Location = resourceGroup.Location,
-                AddressSpace = new AddressSpace() { AddressPrefixes = new List<string>() { vnetCidr } },
-            };
-            return new AzureVnet(resourceGroup, new PhVirtualNetwork(vnet));
-        }
-
-        public static AzureNic ConstructNic(this AzureResourceGroupBase resourceGroup, AzurePublicIpAddress ip, string subnetId)
-        {
-            var nic = new NetworkInterface()
-            {
-                Location = resourceGroup.Location,
-                IpConfigurations = new List<NetworkInterfaceIPConfiguration>()
-                {
-                    new NetworkInterfaceIPConfiguration()
-                    {
-                        Name = "Primary",
-                        Primary = true,
-                        Subnet = new Subnet() { Id = subnetId },
-                        PrivateIPAllocationMethod = IPAllocationMethod.Dynamic,
-                        PublicIPAddress = new PublicIPAddress() { Id = ip.Id }
-                    }
-                }
-            };
-            return new AzureNic(resourceGroup, new PhNetworkInterface(nic));
-        }
-
-        /// <summary>
-        /// Create an NSG with the given open TCP ports
-        /// </summary>
-        /// <param name="openPorts">The set of TCP ports to open</param>
-        /// <returns>An NSG, with the given TCP ports open</returns>
-        public static AzureNetworkSecurityGroup ConstructNsg(this AzureResourceGroupBase resourceGroup, string nsgName, params int[] openPorts)
-        {
-            var nsg = new NetworkSecurityGroup { Location = resourceGroup.Location};
-            var index = 0;
-            nsg.SecurityRules = openPorts.Select(openPort => new SecurityRule
-            {
-                Name = $"Port{openPort}",
-                Priority = 1000 + (++index),
-                Protocol = SecurityRuleProtocol.Tcp,
-                Access = SecurityRuleAccess.Allow,
-                Direction = SecurityRuleDirection.Inbound,
-                SourcePortRange = "*",
-                SourceAddressPrefix =  "*",
-                DestinationPortRange = $"{openPort}",
-                DestinationAddressPrefix = "*",
-                Description = $"Port_{openPort}"
-            }).ToList();
-            var result = new AzureNetworkSecurityGroup(resourceGroup, nsg, nsgName);
-
-            return result;
-        }
-
     }
 }

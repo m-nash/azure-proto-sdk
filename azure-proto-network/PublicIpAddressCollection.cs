@@ -29,5 +29,16 @@ namespace azure_proto_network
             var ipResult = Client.PublicIPAddresses.Get(Parent.Name, ipName);
             return new AzurePublicIpAddress(Parent, new PhPublicIPAddress(ipResult.Value));
         }
+
+        public AzurePublicIpAddress ConstructIPAddress()
+        {
+            var ipAddress = new PublicIPAddress()
+            {
+                PublicIPAddressVersion = Azure.ResourceManager.Network.Models.IPVersion.IPv4.ToString(),
+                PublicIPAllocationMethod = IPAllocationMethod.Dynamic,
+                Location = Parent.Location,
+            };
+            return new AzurePublicIpAddress(Parent, new PhPublicIPAddress(ipAddress));
+        }
     }
 }

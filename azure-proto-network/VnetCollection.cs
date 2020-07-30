@@ -31,5 +31,15 @@ namespace azure_proto_network
             var vnetResult = Client.VirtualNetworks.Get(Parent.Name, vnetName);
             return new AzureVnet(Parent, new PhVirtualNetwork(vnetResult.Value));
         }
+
+        public AzureVnet ConstructVnet(string vnetCidr)
+        {
+            var vnet = new VirtualNetwork()
+            {
+                Location = Parent.Location,
+                AddressSpace = new AddressSpace() { AddressPrefixes = new List<string>() { vnetCidr } },
+            };
+            return new AzureVnet(Parent, new PhVirtualNetwork(vnet));
+        }
     }
 }
