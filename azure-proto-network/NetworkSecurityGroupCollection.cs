@@ -1,11 +1,8 @@
 ﻿using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Xml.Schema;
 
 namespace azure_proto_network
 {
@@ -40,6 +37,33 @@ namespace azure_proto_network
         {
             var result = Client.NetworkSecurityGroups.StartCreateOrUpdate(Parent.Id.ResourceGroup, nsg.Name, nsg.Model).WaitForCompletionAsync().Result.Value;
             return new AzureNetworkSecurityGroup(Parent, result, result?.Name);
+        }
+
+        /// <summary>
+        /// Create an NSG with the given open TCP ports
+        /// </summary>
+        /// <param name="openPorts">The set of TCP ports to open</param>
+        /// <returns>An NSG, with the given TCP ports open</returns>
+        public AzureNetworkSecurityGroup ConstructNsg(string nsgName, params int[] openPorts)
+        {
+            var nsg = new NetworkSecurityGroup { Location = Parent.Location };
+            var index = 0;
+            nsg.SecurityRules = openPorts.Select(openPort => new SecurityRule
+            {
+                Name = $"Port{openPort}",
+                Priority = 1000 + (++index),
+                Protocol = SecurityRuleProtocol.Tcp,
+                Access = SecurityRuleAccess.Allow,
+                Direction = SecurityRuleDirection.Inbound,
+                SourcePortRange = "*",
+                SourceAddressPrefix = "*",
+                DestinationPortRange = $"{openPort}",
+                DestinationAddressPrefix = "*",
+                Description = $"Port_{openPort}"
+            }).ToList();
+            var result = new AzureNetworkSecurityGroup(Parent, nsg, nsgName);
+
+            return result;
         }
     }
 }

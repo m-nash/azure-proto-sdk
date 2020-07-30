@@ -48,5 +48,34 @@ namespace azure_proto_compute
                     yield return new AzureVm(Parent, new PhVirtualMachine(vm));
             }
         }
+
+        public AzureVm ConstructVm(string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, AzureAvailabilitySet aset)
+        {
+            var vm = new VirtualMachine(Parent.Location)
+            {
+                NetworkProfile = new NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nicId } } },
+                OsProfile = new OSProfile
+                {
+                    ComputerName = vmName,
+                    AdminUsername = adminUser,
+                    AdminPassword = adminPw,
+                    LinuxConfiguration = new LinuxConfiguration { DisablePasswordAuthentication = false, ProvisionVMAgent = true }
+                },
+                StorageProfile = new StorageProfile()
+                {
+                    ImageReference = new ImageReference()
+                    {
+                        Offer = "UbuntuServer",
+                        Publisher = "Canonical",
+                        Sku = "18.04-LTS",
+                        Version = "latest"
+                    },
+                    DataDisks = new List<DataDisk>()
+                },
+                HardwareProfile = new HardwareProfile() { VmSize = VirtualMachineSizeTypes.StandardB1Ms },
+                AvailabilitySet = new SubResource() { Id = aset.Id }
+            };
+            return new AzureVm(Parent, new PhVirtualMachine(vm));
+        }
     }
 }

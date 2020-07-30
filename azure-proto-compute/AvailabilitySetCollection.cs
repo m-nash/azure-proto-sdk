@@ -7,7 +7,6 @@ namespace azure_proto_compute
 {
     public class AvailabilitySetCollection : AzureCollection<AzureAvailabilitySet>
     {
-
         public AvailabilitySetCollection(TrackedResource resourceGroup) : base(resourceGroup) { }
 
         private ComputeManagementClient Client => ClientFactory.Instance.GetComputeClient(Parent.Id.Subscription);
@@ -31,6 +30,17 @@ namespace azure_proto_compute
             {
                 yield return new AzureAvailabilitySet(Parent, new PhAvailabilitySet(aset));
             }
+        }
+
+        public AzureAvailabilitySet ConstructAvailabilitySet(string skuName)
+        {
+            var availabilitySet = new AvailabilitySet(Parent.Location)
+            {
+                PlatformUpdateDomainCount = 5,
+                PlatformFaultDomainCount = 2,
+                Sku = new Azure.ResourceManager.Compute.Models.Sku() { Name = skuName },
+            };
+            return new AzureAvailabilitySet(Parent, new PhAvailabilitySet(availabilitySet));
         }
     }
 }

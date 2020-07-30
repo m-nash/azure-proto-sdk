@@ -23,8 +23,8 @@ namespace client
                 //CreateMultipleVmShutdownSome();
                 //StartStopVm();
                 //StartFromVm();
-                SetTagsOnVm();
-                //CreateMultipleVmShutdownByTag();
+                //SetTagsOnVm();
+                CreateMultipleVmShutdownByTag();
             }
             finally
             {
@@ -139,7 +139,7 @@ namespace client
                 // Create VM
                 string name = String.Format("{0}-{1}-z", vmName, i);
                 Console.WriteLine("--------Start create VM {0}--------", i);
-                var vm = resourceGroup.ConstructVm(name, "admin-user", "!@#$%asdfA", nic, aset);
+                var vm = resourceGroup.Vms().ConstructVm(name, "admin-user", "!@#$%asdfA", nic.Id, aset);
                 vm = resourceGroup.Vms().CreateOrUpdateVm(name, vm);
             }
 
@@ -157,7 +157,7 @@ namespace client
 
             // Create VM
             Console.WriteLine("--------Start create VM--------");
-            var vm = resourceGroup.ConstructVm(vmName, "admin-user", "!@#$%asdfA", nic, aset);
+            var vm = resourceGroup.Vms().ConstructVm(vmName, "admin-user", "!@#$%asdfA", nic.Id, aset);
             vm = resourceGroup.Vms().CreateOrUpdateVm(vmName, vm);
 
             Console.WriteLine("VM ID: " + vm.Id);
@@ -168,12 +168,12 @@ namespace client
         {
             // Create IP Address
             Console.WriteLine("--------Start create IP Address--------");
-            var ipAddress = resourceGroup.ConstructIPAddress();
+            var ipAddress = resourceGroup.IpAddresses().ConstructIPAddress();
             ipAddress = resourceGroup.IpAddresses().CreateOrUpdatePublicIpAddress(String.Format("{0}_{1}_ip", vmName, i), ipAddress);
 
             // Create Network Interface
             Console.WriteLine("--------Start create Network Interface--------");
-            var nic = resourceGroup.ConstructNic(ipAddress, subnet.Id);
+            var nic = resourceGroup.Nics().ConstructNic(ipAddress, subnet.Id);
             nic = resourceGroup.Nics().CreateOrUpdateNic(String.Format("{0}_{1}_nic", vmName, i), nic);
             return nic;
         }
@@ -189,7 +189,7 @@ namespace client
 
             // Create AvailabilitySet
             Console.WriteLine("--------Start create AvailabilitySet--------");
-            aset = resourceGroup.ConstructAvailabilitySet("Aligned");
+            aset = resourceGroup.AvailabilitySets().ConstructAvailabilitySet("Aligned");
             aset = resourceGroup.AvailabilitySets().CreateOrUpdateAvailabilityset(vmName + "_aSet", aset);
 
             // Create VNet
@@ -198,7 +198,7 @@ namespace client
             AzureVnet vnet;
             if (!resourceGroup.VNets().TryGetValue(vnetName, out vnet))
             {
-                vnet = resourceGroup.ConstructVnet("10.0.0.0/16");
+                vnet = resourceGroup.VNets().ConstructVnet("10.0.0.0/16");
                 vnet = resourceGroup.VNets().CreateOrUpdateVNet(vnetName, vnet);
             }
 
@@ -206,9 +206,9 @@ namespace client
             Console.WriteLine("--------Start create Subnet--------");
             if (!vnet.Subnets.TryGetValue(subnetName, out subnet))
             {
-                var nsg = resourceGroup.ConstructNsg(nsgName, 80);
+                var nsg = resourceGroup.Nsgs().ConstructNsg(nsgName, 80);
                 nsg = resourceGroup.Nsgs().CreateOrUpdateNsgs(nsg);
-                subnet = vnet.ConstructSubnet(subnetName, "10.0.0.0/24");
+                subnet = vnet.Subnets.ConstructSubnet(subnetName, "10.0.0.0/24");
                 subnet = vnet.Subnets.CreateOrUpdateSubnets(subnet);
             }
         }

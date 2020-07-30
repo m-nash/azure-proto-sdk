@@ -1,8 +1,5 @@
-﻿using Azure.ResourceManager.Compute.Models;
-using azure_proto_core;
-using azure_proto_network;
+﻿using azure_proto_core;
 using System.Collections.Generic;
-using Sku = azure_proto_core.Sku;
 
 namespace azure_proto_compute
 {
@@ -46,46 +43,6 @@ namespace azure_proto_compute
                 }
             }
             return result;
-        }
-
-        public static AzureVm ConstructVm(this AzureResourceGroupBase resourceGroup, string vmName, string adminUser, string adminPw, AzureNic nic, AzureAvailabilitySet aset)
-        {
-            var vm = new VirtualMachine(resourceGroup.Location)
-            {
-                NetworkProfile = new NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nic.Id } } },
-                OsProfile = new OSProfile
-                {
-                    ComputerName = vmName,
-                    AdminUsername = adminUser,
-                    AdminPassword = adminPw,
-                    LinuxConfiguration = new LinuxConfiguration { DisablePasswordAuthentication = false, ProvisionVMAgent = true }
-                },
-                StorageProfile = new StorageProfile()
-                {
-                    ImageReference = new ImageReference()
-                    {
-                        Offer = "UbuntuServer",
-                        Publisher = "Canonical",
-                        Sku = "18.04-LTS",
-                        Version = "latest"
-                    },
-                    DataDisks = new List<DataDisk>()
-                },
-                HardwareProfile = new HardwareProfile() { VmSize = VirtualMachineSizeTypes.StandardB1Ms },
-                AvailabilitySet = new SubResource() { Id = aset.Id }
-            };
-            return new AzureVm(resourceGroup, new PhVirtualMachine(vm));
-        }
-
-        public static AzureAvailabilitySet ConstructAvailabilitySet(this AzureResourceGroupBase resourceGroup, string skuName)
-        {
-            var availabilitySet = new AvailabilitySet(resourceGroup.Location)
-            {
-                PlatformUpdateDomainCount = 5,
-                PlatformFaultDomainCount = 2,
-                Sku = new Azure.ResourceManager.Compute.Models.Sku() { Name = skuName },
-            };
-            return new AzureAvailabilitySet(resourceGroup, new PhAvailabilitySet(availabilitySet));
         }
     }
 }

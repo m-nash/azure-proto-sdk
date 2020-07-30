@@ -34,5 +34,21 @@ namespace azure_proto_network
                 yield return new AzureSubnet(vnet, new PhSubnet(subnet, vnet.Location));
             }
         }
+
+        public AzureSubnet ConstructSubnet(string name, string cidr, AzureNetworkSecurityGroup group = null)
+        {
+            var subnet = new Subnet()
+            {
+                Name = name,
+                AddressPrefix = cidr,
+            };
+
+            if (null != group)
+            {
+                subnet.NetworkSecurityGroup = group.Model;
+            }
+
+            return new AzureSubnet(Parent as AzureVnet, new PhSubnet(subnet, Parent.Location));
+        }
     }
 }

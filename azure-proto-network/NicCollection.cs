@@ -29,5 +29,25 @@ namespace azure_proto_network
             var nicResult = Client.NetworkInterfaces.Get(Parent.Name, nicName);
             return new AzureNic(Parent, new PhNetworkInterface(nicResult.Value));
         }
+
+        public AzureNic ConstructNic(AzurePublicIpAddress ip, string subnetId)
+        {
+            var nic = new NetworkInterface()
+            {
+                Location = Parent.Location,
+                IpConfigurations = new List<NetworkInterfaceIPConfiguration>()
+                {
+                    new NetworkInterfaceIPConfiguration()
+                    {
+                        Name = "Primary",
+                        Primary = true,
+                        Subnet = new Subnet() { Id = subnetId },
+                        PrivateIPAllocationMethod = IPAllocationMethod.Dynamic,
+                        PublicIPAddress = new PublicIPAddress() { Id = ip.Id }
+                    }
+                }
+            };
+            return new AzureNic(Parent, new PhNetworkInterface(nic));
+        }
     }
 }
