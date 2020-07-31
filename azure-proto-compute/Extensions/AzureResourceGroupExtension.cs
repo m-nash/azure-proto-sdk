@@ -1,5 +1,8 @@
 ﻿using azure_proto_core;
 using System.Collections.Generic;
+using Sku = azure_proto_core.Sku;
+using azure_proto_compute.Convenience;
+using Azure.ResourceManager.Compute.Models;
 
 namespace azure_proto_compute
 {
@@ -43,6 +46,11 @@ namespace azure_proto_compute
                 }
             }
             return result;
+        }
+
+        public static AzureVmModelBuilder VmBuilder(this AzureResourceGroupBase resourceGroup, string name)
+        {
+            return new AzureVmModelBuilder(resourceGroup, name);
         }
     }
 }
