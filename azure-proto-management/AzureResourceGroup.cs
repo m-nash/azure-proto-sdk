@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace azure_proto_management
 {
-    public class AzureResourceGroup : AzureResourceGroupBase
+    public partial class AzureResourceGroup : AzureResourceGroupBase
     {
         public AzureResourceGroup(TrackedResource parent, PhResourceGroup resourceGroup) : base(parent, resourceGroup) { }
 
