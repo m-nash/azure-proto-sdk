@@ -3,6 +3,8 @@ using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
@@ -15,6 +17,13 @@ namespace azure_proto_network
         public AzureNic CreateOrUpdateNic(string name, AzureNic nic)
         {
             var nicResult = Client.NetworkInterfaces.StartCreateOrUpdate(Parent.Name, name, nic.Model).WaitForCompletionAsync().Result;
+            nic = new AzureNic(Parent, new PhNetworkInterface(nicResult.Value));
+            return nic;
+        }
+
+        public async Task<AzureNic> CreateOrUpdateNicAync(string name, AzureNic nic, CancellationToken cancellationToken = default)
+        {
+            var nicResult = await Client.NetworkInterfaces.StartCreateOrUpdateAsync(Parent.Name, name, nic.Model, cancellationToken);
             nic = new AzureNic(Parent, new PhNetworkInterface(nicResult.Value));
             return nic;
         }

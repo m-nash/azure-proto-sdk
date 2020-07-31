@@ -2,6 +2,8 @@
 using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
@@ -15,6 +17,14 @@ namespace azure_proto_network
         {
             AzureVnet vnet = Parent as AzureVnet;
             var subnetResult = Client.Subnets.StartCreateOrUpdate(vnet.Id.ResourceGroup, vnet.Name, subnet.Name, subnet.Model).WaitForCompletionAsync().Result;
+            subnet = new AzureSubnet(vnet, new PhSubnet(subnetResult.Value, vnet.Location));
+            return subnet;
+        }
+
+        public async Task<AzureSubnet> CreateOrUpdateSubnetsAsync(AzureSubnet subnet, CancellationToken cancellationToken = default)
+        {
+            AzureVnet vnet = Parent as AzureVnet;
+            var subnetResult = await Client.Subnets.StartCreateOrUpdateAsync(vnet.Id.ResourceGroup, vnet.Name, subnet.Name, subnet.Model, cancellationToken);
             subnet = new AzureSubnet(vnet, new PhSubnet(subnetResult.Value, vnet.Location));
             return subnet;
         }

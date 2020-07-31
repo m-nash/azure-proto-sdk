@@ -2,6 +2,7 @@
 using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
@@ -14,6 +15,13 @@ namespace azure_proto_network
         public AzureVnet CreateOrUpdateVNet(string name, AzureVnet vnet)
         {
             var vnetResult = Client.VirtualNetworks.StartCreateOrUpdate(Parent.Name, name, vnet.Model).WaitForCompletionAsync().Result;
+            var avnet = new AzureVnet(Parent, new PhVirtualNetwork(vnetResult.Value));
+            return avnet;
+        }
+
+        public async Task<AzureVnet> CreateOrUpdateVNetAsync(string name, AzureVnet vnet)
+        {
+            var vnetResult = await Client.VirtualNetworks.StartCreateOrUpdateAsync(Parent.Name, name, vnet.Model);
             var avnet = new AzureVnet(Parent, new PhVirtualNetwork(vnetResult.Value));
             return avnet;
         }

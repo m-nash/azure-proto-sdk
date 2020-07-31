@@ -2,6 +2,8 @@
 using Azure.ResourceManager.Compute.Models;
 using azure_proto_core;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace azure_proto_compute
 {
@@ -14,6 +16,13 @@ namespace azure_proto_compute
         public AzureAvailabilitySet CreateOrUpdateAvailabilityset(string name, AzureAvailabilitySet availabilitySet)
         {
             var aSet = Client.AvailabilitySets.CreateOrUpdate(Parent.Name, name, availabilitySet.Model);
+            AzureAvailabilitySet azureAvailabilitySet = new AzureAvailabilitySet(Parent, new PhAvailabilitySet(aSet.Value));
+            return azureAvailabilitySet;
+        }
+
+        public async Task<AzureAvailabilitySet> CreateOrUpdateAvailabilitysetAsync(string name, AzureAvailabilitySet availabilitySet, CancellationToken cancellationToken = default)
+        {
+            var aSet = await Client.AvailabilitySets.CreateOrUpdateAsync(Parent.Name, name, availabilitySet.Model, cancellationToken);
             AzureAvailabilitySet azureAvailabilitySet = new AzureAvailabilitySet(Parent, new PhAvailabilitySet(aSet.Value));
             return azureAvailabilitySet;
         }
