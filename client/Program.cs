@@ -3,9 +3,6 @@ using azure_proto_management;
 using azure_proto_network;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
-using azure_proto_compute.Convenience;
-using azure_proto_core;
 
 namespace client
 {
@@ -23,7 +20,7 @@ namespace client
             try
             {
                 //CreateSingleVmExample();
-                CreateMultipleVmShutdownSome();
+                //CreateMultipleVmShutdownSome();
                 //StartStopVm();
                 //StartFromVm();
                 //SetTagsOnVm();
@@ -38,15 +35,6 @@ namespace client
         private static void CleanUp()
         {
             Console.WriteLine($"--------Deleting {rgName}--------");
-
-            // TODO: For delete scenario, non-OOB patter would be easier and less chatty. Check with Nick on any indication of user preference
-            // GetRG() on Client seems to break the encapsulation.
-            //      client
-            //          .Subscriptions[subscriptionId]
-            //          .ResourceGroups[rg]
-            //          .Delete
-            // BTW, using indexer[] does not give clear indication to user that it is actually issuing a GET.
-            // What about method call GetOneAsync(id)?
             AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, rgName);
             rg.Delete();
         }
@@ -188,37 +176,6 @@ namespace client
             var nic = resourceGroup.Nics().ConstructNic(ipAddress, subnet.Id);
             nic = resourceGroup.Nics().CreateOrUpdateNic(String.Format("{0}_{1}_nic", vmName, i), nic);
             return nic;
-        }
-
-        private static Task<AzureVm> CreateVmWithBuilderAsync()
-        {
-            AzureResourceGroup resourceGroup;
-            AzureAvailabilitySet aset;
-            AzureSubnet subnet;
-            SetupVmHost(out resourceGroup, out aset, out subnet);
-
-            AzureNic nic = CreateNic(resourceGroup, subnet, 0);
-
-            // Create VM
-            string name = String.Format("{0}-{1}-z", vmName, 0);
-            Console.WriteLine("--------Start create VM {0}--------", 0);
-            var ip = new AzurePublicIpAddress(null, null);
-
-            // TODO: Open questions
-            // 0. Builder is an convenience feature. Simpler model would just use new xxx()
-            // 1. Wish we can do compile time check for required properties. And now, ToModel() will do validation. 
-            // 2. Is there a risk that the referenced model has not been created in ARM yet resource id is populated?
-            var vm = resourceGroup.VmBuilder(name)
-                .Location(new Location("uswest2"))
-                .ConfigureWith(nic)
-                .ConfigureWith(aset)
-                .ConfigureWith(ip)  // here it should throw since PublicIP is not associated with VM
-                .UseWindowsImage("admin-user", "!@#$%asdfA")
-                .ToModel();
-
-            vm = resourceGroup.Vms().CreateOrUpdateVm(name, vm);
-
-            return Task.FromResult(vm);
         }
 
         private static void SetupVmHost(out AzureResourceGroup resourceGroup, out AzureAvailabilitySet aset, out AzureSubnet subnet)

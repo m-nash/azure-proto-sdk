@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using azure_proto_core;
+﻿using azure_proto_core;
 using Azure.ResourceManager.Resources.Models;
 
 namespace azure_proto_management
@@ -16,12 +14,6 @@ namespace azure_proto_management
             Locations = new LocationCollection(this);
             ResourceGroups = new ResourceGroupCollection(this);
             _name = subModel.DisplayName;
-        }
-
-        // TODO: Question, reconcile region and location
-        public Task<AzureResourceGroup> CreateResourceGroup(string region, string name)
-        {
-            throw new NotImplementedException();
         }
 
         public override string Name => _name;

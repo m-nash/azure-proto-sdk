@@ -3,7 +3,7 @@ using Azure.ResourceManager.Resources;
 
 namespace azure_proto_management
 {
-    public partial class AzureResourceGroup : AzureResourceGroupBase
+    public class AzureResourceGroup : AzureResourceGroupBase
     {
         public AzureResourceGroup(TrackedResource location, PhResourceGroup resourceGroup) : base(resourceGroup.Id, resourceGroup.Location) { }
 
