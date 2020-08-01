@@ -2,6 +2,8 @@
 using Azure.ResourceManager.Compute.Models;
 using azure_proto_core;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace azure_proto_compute
 {
@@ -14,6 +16,13 @@ namespace azure_proto_compute
         public AzureVm CreateOrUpdateVm(string name, AzureVm vm)
         {
             var vmResult = Client.VirtualMachines.StartCreateOrUpdate(Parent.Name, name, vm.Model).WaitForCompletionAsync().Result;
+            AzureVm avm = new AzureVm(Parent, new PhVirtualMachine(vmResult.Value));
+            return avm;
+        }
+
+        public async Task<AzureVm> CreateOrUpdateVmAsync(string name, AzureVm vm, CancellationToken cancellationToken = default)
+        {
+            var vmResult = await Client.VirtualMachines.StartCreateOrUpdateAsync(Parent.Name, name, vm.Model, cancellationToken);
             AzureVm avm = new AzureVm(Parent, new PhVirtualMachine(vmResult.Value));
             return avm;
         }

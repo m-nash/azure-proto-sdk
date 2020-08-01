@@ -3,6 +3,8 @@ using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
@@ -15,6 +17,13 @@ namespace azure_proto_network
         public AzurePublicIpAddress CreateOrUpdatePublicIpAddress(string name, AzurePublicIpAddress ipAddress)
         {
             var ipResult = Client.PublicIPAddresses.StartCreateOrUpdate(Parent.Name, name, ipAddress.Model).WaitForCompletionAsync().Result;
+            ipAddress = new AzurePublicIpAddress(Parent, new PhPublicIPAddress(ipResult.Value));
+            return ipAddress;
+        }
+
+        public async Task<AzurePublicIpAddress> CreateOrUpdatePublicIpAddressAsync(string name, AzurePublicIpAddress ipAddress, CancellationToken cancellationToken = default)
+        {
+            var ipResult = await Client.PublicIPAddresses.StartCreateOrUpdateAsync(Parent.Name, name, ipAddress.Model, cancellationToken);
             ipAddress = new AzurePublicIpAddress(Parent, new PhPublicIPAddress(ipResult.Value));
             return ipAddress;
         }

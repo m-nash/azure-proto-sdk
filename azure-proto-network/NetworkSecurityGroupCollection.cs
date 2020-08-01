@@ -3,6 +3,8 @@ using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
@@ -37,6 +39,12 @@ namespace azure_proto_network
         {
             var result = Client.NetworkSecurityGroups.StartCreateOrUpdate(Parent.Id.ResourceGroup, nsg.Name, nsg.Model).WaitForCompletionAsync().Result.Value;
             return new AzureNetworkSecurityGroup(Parent, result, result?.Name);
+        }
+
+        public async Task<AzureNetworkSecurityGroup> CreateOrUpdateNsgsAsync(AzureNetworkSecurityGroup nsg, CancellationToken cancellationToken = default)
+        {
+            var result = await Client.NetworkSecurityGroups.StartCreateOrUpdateAsync(Parent.Id.ResourceGroup, nsg.Name, nsg.Model, cancellationToken);
+            return new AzureNetworkSecurityGroup(Parent, result.Value, result?.Value.Name);
         }
 
         /// <summary>
