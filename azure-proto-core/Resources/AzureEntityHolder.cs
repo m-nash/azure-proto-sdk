@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 
 namespace azure_proto_core
 {
-    // TODO: Think about other base classes for different resource 'containers'
     public abstract class AzureEntityHolder<T> : AzureEntity<T>
         where T: TrackedResource
     {
