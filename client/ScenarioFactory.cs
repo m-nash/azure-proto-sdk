@@ -8,7 +8,8 @@
         StartFromVm,
         SetTagsOnVm,
         ShutdownVmsByTag,
-        CreateMultipleVms
+        CreateMultipleVms,
+        GenericEntityLoop
     }
 
     class ScenarioFactory
@@ -31,6 +32,8 @@
                     return new ShutdownVmsByTag();
                 case Scenarios.CreateMultipleVms:
                     return new CreateMultipleVms();
+                case Scenarios.GenericEntityLoop:
+                    return new GenericEntityLoop();
                 default:
                     return null;
             }
