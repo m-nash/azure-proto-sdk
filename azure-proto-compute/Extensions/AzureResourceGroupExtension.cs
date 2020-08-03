@@ -5,24 +5,9 @@ namespace azure_proto_compute
 {
     public static class AzureResourceGroupExtension
     {
-        private static Dictionary<string, VmCollection> vmCollections = new Dictionary<string, VmCollection>();
-        private static readonly object vmLock = new object();
-
         public static VmCollection Vms(this AzureResourceGroupBase resourceGroup)
         {
-            VmCollection result;
-            if(!vmCollections.TryGetValue(resourceGroup.Id, out result))
-            {
-                lock (vmLock)
-                {
-                    if (!vmCollections.TryGetValue(resourceGroup.Id, out result))
-                    {
-                        result = new VmCollection(resourceGroup);
-                        vmCollections.Add(resourceGroup.Id, result);
-                    }
-                }
-            }
-            return result;
+            return resourceGroup.GetCollection<VmCollection, AzureVm>("vms", () => { return new VmCollection(resourceGroup); });
         }
 
         private static Dictionary<string, AvailabilitySetCollection> asetCollections = new Dictionary<string, AvailabilitySetCollection>();

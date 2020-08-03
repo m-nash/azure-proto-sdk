@@ -2,6 +2,8 @@
 using azure_proto_management;
 using azure_proto_network;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace client
 {
@@ -38,6 +40,12 @@ namespace client
             var subnet = vnet.Subnets.ConstructSubnet(Context.SubnetName, "10.0.0.0/24");
             subnet = vnet.Subnets.CreateOrUpdateSubnets(subnet);
 
+            CreateVmsAsync(resourceGroup, aset, subnet).Wait();
+        }
+
+        private async Task CreateVmsAsync(AzureResourceGroup resourceGroup, AzureAvailabilitySet aset, AzureSubnet subnet)
+        {
+            List<Task<AzureVm>> tasks = new List<Task<AzureVm>>();
             for (int i = 0; i < 10; i++)
             {
                 // Create IP Address
@@ -54,7 +62,13 @@ namespace client
                 string name = $"{Context.VmName}-{i}-z";
                 Console.WriteLine("--------Start create VM {0}--------", i);
                 var vm = resourceGroup.Vms().ConstructVm(name, "admin-user", "!@#$%asdfA", nic.Id, aset);
-                vm = resourceGroup.Vms().CreateOrUpdateVm(name, vm);
+                tasks.Add(resourceGroup.Vms().CreateOrUpdateVmAsync(name, vm));
+            }
+
+            foreach (var task in tasks)
+            {
+                var vm = await task;
+                Console.WriteLine($"--------Finished creating VM {vm.Name}");
             }
         }
     }

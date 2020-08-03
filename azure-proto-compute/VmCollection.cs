@@ -16,16 +16,29 @@ namespace azure_proto_compute
         public AzureVm CreateOrUpdateVm(string name, AzureVm vm)
         {
             var vmResult = Client.VirtualMachines.StartCreateOrUpdate(Parent.Name, name, vm.Model).WaitForCompletionAsync().Result;
-            AzureVm avm = new AzureVm(Parent, new PhVirtualMachine(vmResult.Value));
-            return avm;
+            return new AzureVm(Parent, new PhVirtualMachine(vmResult.Value));
         }
+
+        //TODO: implement the following
+        //public AzureVm StartCreateOrUpdateVm(string name, AzureVm vm)
+        //{
+        //    //convert to azurevm valuetask<>
+        //    var vmResult = Client.VirtualMachines.StartCreateOrUpdate(Parent.Name, name, vm.Model).WaitForCompletionAsync().Result;
+        //    return new AzureVm(Parent, new PhVirtualMachine(vmResult.Value));
+        //}
 
         public async Task<AzureVm> CreateOrUpdateVmAsync(string name, AzureVm vm, CancellationToken cancellationToken = default)
         {
-            var vmResult = await Client.VirtualMachines.StartCreateOrUpdateAsync(Parent.Name, name, vm.Model, cancellationToken);
-            AzureVm avm = new AzureVm(Parent, new PhVirtualMachine(vmResult.Value));
-            return avm;
+            var puller = await Client.VirtualMachines.StartCreateOrUpdateAsync(Parent.Name, name, vm.Model, cancellationToken);
+            var vmResult = await puller.WaitForCompletionAsync();
+            return new AzureVm(Parent, new PhVirtualMachine(vmResult.Value));
         }
+
+        //TODO: implement the following
+        //public async Task<AzureVm> StartCreateOrUpdateVmAsync(string name, AzureVm vm, CancellationToken cancellationToken = default)
+        //{
+        //    return await Client.VirtualMachines.StartCreateOrUpdateAsync(Parent.Name, name, vm.Model, cancellationToken);
+        //}
 
         public static AzureVm GetVm(string subscriptionId, string rgName, string vmName)
         {
