@@ -39,5 +39,10 @@ namespace azure_proto_compute
                 var result = Client.VirtualMachines.StartCreateOrUpdate(Id.ResourceGroup, Name, vmData.Model);
             }
         }
+
+        public static AzureVmModelBuilder ModelBuilder(AzureResourceGroupBase resourceGroup, string name)
+        {
+            return new AzureVmModelBuilder(resourceGroup, name);
+        }
     }
 }

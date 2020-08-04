@@ -7,26 +7,17 @@ using azure_proto_core;
 
 namespace azure_proto_compute.Convenience
 {
-    public class AzureVmModelBuilder : IAzureVmModelBuilder
+    public class AzureVmModelBuilderBase : IAzureVmModelBuilder
     {
         // TODO: Azure or Ph model?
         // has to use generated model for now
         private VirtualMachine _model;
 
-        internal AzureVmModelBuilder(TrackedResource resourceGroup, string name)
+        internal AzureVmModelBuilderBase(string vmName, Location location)
         {
             // TODO: Ph model should allow default constructor and property individually settable
-            _model = new VirtualMachine(resourceGroup.Location);
-        }
-
-        public IAzureVmModelBuilder ConfigureNetworkInterface(ResourceIdentifier networkInterfaceId)
-        {
-            _model.NetworkProfile = new NetworkProfile
-            {
-                NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = networkInterfaceId } }
-            };
-
-            return this;
+            // _model.Name = vmName;
+            _model = new VirtualMachine(location);
         }
 
         public IAzureVmModelBuilder AttachDataDisk(AzureEntity azureEntity)
@@ -59,17 +50,15 @@ namespace azure_proto_compute.Convenience
 
         public AzureVm ToModel()
         {
-            // TODO: Any model validation
-
-            return _model;
+            throw new NotImplementedException();
         }
 
-        public IAzureVmModelBuilder ConfigureWith(AzureEntity azureEntity)
+        public IAzureVmModelBuilder RequiredNetworkInterface(ResourceIdentifier nicResourceId)
         {
             throw new NotImplementedException();
         }
 
-        IAzureModelBuilderBase<AzureVm> IAzureModelBuilderBase<AzureVm>.Location(Location location)
+        public IAzureVmModelBuilder RequiredAvalabilitySet(ResourceIdentifier asetResourceId)
         {
             throw new NotImplementedException();
         }
