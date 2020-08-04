@@ -1,9 +1,8 @@
 ﻿using azure_proto_core;
-using Azure.ResourceManager.Resources.Models;
 
 namespace azure_proto_management
 {
-    public class AzureSubscription : AzureEntity<PhSubscriptionModel>
+    public class AzureSubscription : AzureSubscriptionBase
     {
         string _name;
         public LocationCollection Locations { get; private set; }

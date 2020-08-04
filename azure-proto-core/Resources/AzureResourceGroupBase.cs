@@ -1,11 +1,8 @@
-﻿
-namespace azure_proto_core
+﻿namespace azure_proto_core
 {
-    // TODO: Think about other base classes for different resource 'containers'
-    public class AzureResourceGroupBase : AzureEntity
+    //TODO: If we decide to put base types plus core classes all in one this this class is no longer necessary
+    public class AzureResourceGroupBase : AzureEntityHolder<TrackedResource>
     {
-        public AzureResourceGroupBase(ResourceIdentifier id) { Id = id; }
-
-        public AzureResourceGroupBase(ResourceIdentifier id, Location location) { Id = id; Location = location; }
+        public AzureResourceGroupBase(TrackedResource parent, TrackedResource model) : base(parent, model) { }
     }
 }

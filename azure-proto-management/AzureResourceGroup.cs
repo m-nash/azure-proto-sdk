@@ -7,7 +7,7 @@ namespace azure_proto_management
 {
     public class AzureResourceGroup : AzureResourceGroupBase
     {
-        public AzureResourceGroup(TrackedResource location, PhResourceGroup resourceGroup) : base(resourceGroup.Id, resourceGroup.Location) { }
+        public AzureResourceGroup(TrackedResource parent, PhResourceGroup resourceGroup) : base(parent, resourceGroup) { }
 
         private ResourcesManagementClient Client => ClientFactory.Instance.GetResourceClient(Id.Subscription);
 
