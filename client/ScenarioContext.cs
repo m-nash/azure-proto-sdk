@@ -4,7 +4,7 @@ namespace client
 {
     class ScenarioContext
     {
-        public string VmName => $"{Environment.UserName}-quickstartvm";
+        public string VmName => $"{Environment.UserName}-vm";
         public string RgName { get; private set; }
         public string NsgName => $"{Environment.UserName}-test-nsg";
         public string SubscriptionId => Environment.GetEnvironmentVariable("AZURE_SUBSCRIPTION_ID");

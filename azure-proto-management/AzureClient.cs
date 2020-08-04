@@ -14,6 +14,12 @@ namespace azure_proto_management
 
         public override ResourceIdentifier Id { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
 
+        public static AzureSubscription GetSubscription(string subscriptionId)
+        {
+            AzureClient client = new AzureClient();
+            return client.Subscriptions[subscriptionId];
+        }
+
         public AzureClient()
         {
             Subscriptions = new SubscriptionCollection(this);

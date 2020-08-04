@@ -10,15 +10,15 @@ namespace client
             Scenario scenario = null;
             try
             {
-                scenario = ScenarioFactory.GetScenario(Scenarios.ShutdownVmsByTag);
+                scenario = ScenarioFactory.GetScenario(Scenarios.ShutdownVmsByNameAcrossResourceGroups);
                 scenario.Execute();
             }
             finally
             {
-                if (scenario != null)
+                foreach (var rgName in scenario.CleanUp)
                 {
-                    Console.WriteLine($"--------Deleting {scenario.Context.RgName}--------");
-                    AzureResourceGroup rg = AzureClient.GetResourceGroup(scenario.Context.SubscriptionId, scenario.Context.RgName);
+                    Console.WriteLine($"--------Deleting {rgName}--------");
+                    AzureResourceGroup rg = AzureClient.GetResourceGroup(scenario.Context.SubscriptionId, rgName);
                     _ = rg.DeleteAsync();
                 }
             }

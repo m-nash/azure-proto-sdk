@@ -59,7 +59,8 @@ namespace client
                 nic = resourceGroup.Nics().CreateOrUpdateNic($"{Context.VmName}_{i}_nic", nic);
 
                 // Create VM
-                string name = $"{Context.VmName}-{i}-z";
+                string num = i % 2 == 0 ? "even" : "odd";
+                string name = $"{Context.VmName}-{i}-{num}";
                 Console.WriteLine("--------Start create VM {0}--------", i);
                 var vm = resourceGroup.Vms().ConstructVm(name, "admin-user", "!@#$%asdfA", nic.Id, aset);
                 tasks.Add(resourceGroup.Vms().CreateOrUpdateVmAsync(name, vm));

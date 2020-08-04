@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.Design.Serialization;
+﻿using System.Collections.Generic;
 
 namespace client
 {
     abstract class Scenario
     {
         public ScenarioContext Context { get; private set; }
+
+        public List<string> CleanUp { get; private set; }
 
         public abstract void Execute();
 
@@ -13,6 +15,7 @@ namespace client
         public Scenario(ScenarioContext context)
         {
             Context = context;
+            CleanUp = new List<string>() { context.RgName };
         }
     }
 }
