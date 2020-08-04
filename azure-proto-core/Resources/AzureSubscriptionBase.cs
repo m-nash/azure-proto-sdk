@@ -10,15 +10,16 @@ namespace azure_proto_core
 
         protected abstract IEnumerable<AzureEntityHolder<TrackedResource>> ResourceGroupsGeneric { get; set; }
 
-        public IEnumerable<E> GetResources<C, E>(Func<TrackedResource, C> constructor)
+        //TODO: change to IPageable
+        public virtual IEnumerable<E> GetResources<C, E>(Func<TrackedResource, C> constructor)
             where C : AzureCollection<E>
             where E : AzureEntity
         {
             foreach (var rg in ResourceGroupsGeneric)
             {
-                foreach (var vm in rg.GetCollection<C, E>(() => { return constructor(rg); }))
+                foreach (var entity in rg.GetCollection<C, E>(() => { return constructor(rg); }))
                 {
-                    yield return vm;
+                    yield return entity;
                 }
             }
         }

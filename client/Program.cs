@@ -10,7 +10,7 @@ namespace client
             Scenario scenario = null;
             try
             {
-                scenario = ScenarioFactory.GetScenario(Scenarios.ShutdownVmsByNameAcrossResourceGroups);
+                scenario = ScenarioFactory.GetScenario(Scenarios.ShutdownVmsByNameAcrossSubscriptions);
                 scenario.Execute();
             }
             finally

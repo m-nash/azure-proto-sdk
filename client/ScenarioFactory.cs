@@ -12,7 +12,8 @@
         CreateMultipleVms,
         GenericEntityLoop,
         ShutdownVmsByLINQ,
-        ShutdownVmsByNameAcrossResourceGroups
+        ShutdownVmsByNameAcrossResourceGroups,
+        ShutdownVmsByNameAcrossSubscriptions
     }
 
     class ScenarioFactory
@@ -43,6 +44,8 @@
                     return new All();
                 case Scenarios.ShutdownVmsByNameAcrossResourceGroups:
                     return new ShutdownVmsByNameAcrossResourceGroups();
+                case Scenarios.ShutdownVmsByNameAcrossSubscriptions:
+                    return new ShutdownVmsByNameAcrossSubscriptions();
                 default:
                     return null;
             }
