@@ -1,4 +1,5 @@
-﻿using azure_proto_management;
+﻿using azure_proto_core;
+using azure_proto_management;
 using System;
 
 namespace client
@@ -15,11 +16,16 @@ namespace client
             }
             finally
             {
-                foreach (var rgName in scenario.CleanUp)
+                foreach (var rgId in Scenario.CleanUp)
                 {
-                    Console.WriteLine($"--------Deleting {rgName}--------");
-                    AzureResourceGroup rg = AzureClient.GetResourceGroup(scenario.Context.SubscriptionId, rgName);
-                    _ = rg.DeleteAsync();
+                    ResourceIdentifier id = new ResourceIdentifier(rgId);
+                    var sub = AzureClient.GetSubscription(id.Subscription);
+                    AzureResourceGroup rg;
+                    if (sub.ResourceGroups.TryGetValue(id.ResourceGroup, out rg))
+                    {
+                        Console.WriteLine($"--------Deleting {rg.Name}--------");
+                        _ = rg.DeleteAsync();
+                    }
                 }
             }
         }

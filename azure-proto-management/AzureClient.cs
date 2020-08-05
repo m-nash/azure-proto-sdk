@@ -1,10 +1,13 @@
 ﻿using azure_proto_core;
+using System.Collections.Generic;
 
 namespace azure_proto_management
 {
-    public class AzureClient : TrackedResource
+    public class AzureClient : AzureClientBase
     {
-        public SubscriptionCollection Subscriptions { get; private set; }
+        protected override IEnumerable<AzureSubscriptionBase> SubscriptionsGeneric { get; set; }
+
+        public SubscriptionCollection Subscriptions => SubscriptionsGeneric as SubscriptionCollection;
 
         new public string Name => "MainClient";
 
@@ -22,7 +25,7 @@ namespace azure_proto_management
 
         public AzureClient()
         {
-            Subscriptions = new SubscriptionCollection(this);
+            SubscriptionsGeneric = new SubscriptionCollection(this);
         }
 
         public static AzureResourceGroup GetResourceGroup(string subscriptionId, string rgName)

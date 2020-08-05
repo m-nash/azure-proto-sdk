@@ -17,13 +17,11 @@ namespace client
                 var createMultipleVms = new CreateMultipleVms(context);
                 createMultipleVms.Execute();
                 context = new ScenarioContext();
-                if (i < numberOfRgs - 1)
-                    CleanUp.Add(context.RgName);
             }
 
             var subscription = AzureClient.GetSubscription(Context.SubscriptionId);
 
-            Regex reg = new Regex("even");
+            Regex reg = new Regex($"{Context.VmName}.*even");
             Parallel.ForEach(subscription.Vms(), vm =>
             {
                 if (reg.IsMatch(vm.Name))

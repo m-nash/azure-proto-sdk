@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace azure_proto_compute
 {
-    public static class AzureSubscriptionBaseExtension
+    public static class AzureSubscriptionExtension
     {
         public static IEnumerable<AzureVm> Vms(this AzureSubscriptionBase subscription)
         {

@@ -1,5 +1,8 @@
-﻿using azure_proto_management;
+﻿using azure_proto_compute;
+using azure_proto_management;
 using System;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace client
 {
@@ -7,12 +10,31 @@ namespace client
     {
         public override void Execute()
         {
-            AzureClient client = new AzureClient();
-
-            foreach(var subscription in client.Subscriptions)
+            ScenarioContext[] contexts = new ScenarioContext[] { new ScenarioContext(), new ScenarioContext("c9cbd920-c00c-427c-852b-8aaf38badaeb") };
+            ParallelOptions options = new ParallelOptions
             {
-                Console.WriteLine(subscription.Id);
-            }
+                MaxDegreeOfParallelism = 1
+            };
+
+            Parallel.ForEach(contexts, options, context =>
+            {
+                var createMultipleVms = new CreateMultipleVms(context);
+                createMultipleVms.Execute();
+            });
+
+            var client = new AzureClient();
+
+            Regex reg = new Regex($"{Context.VmName}.*even");
+            Parallel.ForEach(client.Vms(), vm =>
+            {
+                if (reg.IsMatch(vm.Name))
+                {
+                    Console.WriteLine($"Stopping {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Name}");
+                    vm.Stop();
+                    Console.WriteLine($"Starting {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Name}");
+                    vm.Start();
+                }
+            });
         }
     }
 }
