@@ -7,6 +7,7 @@ namespace azure_proto_core
     {
         protected abstract IEnumerable<AzureSubscriptionBase> SubscriptionsGeneric { get; set; }
 
+        //TODO: change to IPageable
         public IEnumerable<E> GetSubscriptions<C, E>(Func<TrackedResource, C> constructor)
             where C : AzureCollection<E>
             where E : AzureEntity
