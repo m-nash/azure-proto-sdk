@@ -2,7 +2,6 @@
 using azure_proto_management;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace client
 {
@@ -13,14 +12,14 @@ namespace client
             var list = Enum.GetValues(typeof(Scenarios)).Cast<Scenarios>().ToList();
             try
             {
-                Parallel.ForEach(list, (scenario) =>
+                foreach(var scenario in list)
                 {
-                    if (scenario == Scenarios.All)
+                    if (scenario != Scenarios.All)
                     {
                         var executable = ScenarioFactory.GetScenario(scenario);
                         executable.Execute();
                     }
-                });
+                }
             }
             finally
             {

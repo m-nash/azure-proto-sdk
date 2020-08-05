@@ -23,7 +23,4 @@
         public Plan Plan { get; set; }
         public string Kind { get; set; }
     }
-
-
-
 }

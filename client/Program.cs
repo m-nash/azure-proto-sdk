@@ -11,7 +11,7 @@ namespace client
             Scenario scenario = null;
             try
             {
-                scenario = ScenarioFactory.GetScenario(Scenarios.ShutdownVmsByNameAcrossSubscriptions);
+                scenario = ScenarioFactory.GetScenario(Scenarios.All);
                 scenario.Execute();
             }
             finally

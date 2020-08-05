@@ -74,7 +74,6 @@ namespace azure_proto_core
             }
         }
 
-
         public override string ToString()
         {
             return $"{Namespace}/{Type}";
@@ -100,7 +99,4 @@ namespace azure_proto_core
             throw new NotImplementedException();
         }
     }
-
-
-
 }

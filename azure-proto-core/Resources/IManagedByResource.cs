@@ -7,7 +7,4 @@
     {
         string ManagedBy { get; set; }
     }
-
-
-
 }
