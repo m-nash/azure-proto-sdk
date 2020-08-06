@@ -51,6 +51,8 @@ namespace azure_proto_core
             }
         }
 
+        //TODO: if client construction doesn't require subid we won't need the collection to store them by subid
+        //we may end up converting this to a credential factory and always construct clients inline
         private static readonly object _clientLock = new object();
         private readonly Dictionary<Type, Dictionary<string, object>> _clients = new Dictionary<Type, Dictionary<string, object>>();
 

@@ -23,6 +23,8 @@ namespace azure_proto_management
             return client.Subscriptions[subscriptionId];
         }
 
+        //TODO: overload to allow for passing in a context which will include credential, uri, ?clientoptions?
+        //TODO: are we overloading Cloud with Tenant?
         public AzureClient()
         {
             SubscriptionsGeneric = new SubscriptionCollection(this);
