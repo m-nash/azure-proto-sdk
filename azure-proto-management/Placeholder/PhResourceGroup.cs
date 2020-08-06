@@ -1,8 +1,7 @@
-﻿using azure_proto_core;
-using Azure.ResourceManager.Resources.Models;
+﻿using Azure.ResourceManager.Resources.Models;
+using azure_proto_core;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace azure_proto_management
 {

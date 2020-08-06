@@ -1,5 +1,4 @@
-﻿using Azure.ResourceManager.Compute.Models;
-using azure_proto_core;
+﻿using azure_proto_core;
 
 namespace azure_proto_compute
 {

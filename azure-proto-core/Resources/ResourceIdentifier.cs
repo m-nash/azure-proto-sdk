@@ -166,7 +166,4 @@ namespace azure_proto_core
         public static implicit operator string(ResourceIdentifier other) => other.Id;
         public static implicit operator ResourceIdentifier(string other) => new ResourceIdentifier( other);
     }
-
-
-
 }

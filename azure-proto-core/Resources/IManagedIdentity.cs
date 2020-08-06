@@ -9,7 +9,4 @@ namespace azure_proto_core
     {
         IList<Identity> Identity { get; set; }
     }
-
-
-
 }

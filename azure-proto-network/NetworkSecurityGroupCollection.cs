@@ -10,9 +10,7 @@ namespace azure_proto_network
 {
     public class NetworkSecurityGroupCollection : AzureCollection<AzureNetworkSecurityGroup>
     {
-        public NetworkSecurityGroupCollection(TrackedResource parent) : base(parent)
-        {
-        }
+        public NetworkSecurityGroupCollection(TrackedResource parent) : base(parent) { }
 
         private NetworkManagementClient Client => ClientFactory.Instance.GetNetworkClient(Parent.Id.Subscription);
 

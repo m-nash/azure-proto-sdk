@@ -1,10 +1,8 @@
-﻿using Microsoft.VisualBasic.CompilerServices;
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace azure_proto_core
 {
-
     /// <summary>
     /// Base resource type: All resources have these properties. Proxy and other untracked resources should extend this class
     /// TODO: Implement comparison, equality, and type coercion operator overloads

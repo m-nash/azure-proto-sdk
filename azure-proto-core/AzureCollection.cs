@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace azure_proto_core
 {
@@ -58,6 +59,18 @@ namespace azure_proto_core
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetItems().GetEnumerator();
+        }
+
+        //overridable in case the service implements the filter on the service side
+        //otherwise filtering will be done client side but 
+        public virtual IEnumerable<T> GetItemsByName(string pattern)
+        {
+            Regex reg = new Regex(pattern);
+            foreach(var T in this)
+            {
+                if (reg.IsMatch(T.Name))
+                    yield return T;
+            }
         }
     }
 }
