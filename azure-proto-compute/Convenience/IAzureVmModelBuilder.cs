@@ -6,14 +6,16 @@ using azure_proto_core;
 
 namespace azure_proto_compute.Convenience
 {
-    public interface IAzureVmModelBuilder : IAzureModelBuilderBase<AzureVm>
+    public interface IAzureVmModelBuilder
     {
-        // TODO: While using generics would avoid compile time package reference, it is
-        // less clear. And we can not do compile type check. I think adding an enum flag
-        // param as constraint signal to user may make sense.
-        IAzureVmModelBuilder ConfigureNetworkInterface(ResourceIdentifier networkInterfaceId);
+        IAzureVmModelBuilder UseWindowsImage(string adminUser, string password);
 
-        // TODO: Cann't do compile type check
-        IAzureVmModelBuilder AttachDataDisk(AzureEntity azureEntity);
+        IAzureVmModelBuilder UseLinuxImage(string adminUser, string password);
+
+        IAzureVmModelBuilder RequiredNetworkInterface(ResourceIdentifier nicResourceId);
+
+        IAzureVmModelBuilder RequiredAvalabilitySet(ResourceIdentifier asetResourceId);
+
+        AzureVm ToModel();
     }
 }

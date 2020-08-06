@@ -40,9 +40,9 @@ namespace azure_proto_compute
             }
         }
 
-        public static AzureVmModelBuilder ModelBuilder(AzureResourceGroupBase resourceGroup, string name)
+        public static AzureVmModelBuilder ModelBuilder(string vmName, Location location)
         {
-            return new AzureVmModelBuilder(resourceGroup, name);
+            return new AzureVmModelBuilder(vmName, location);
         }
     }
 }

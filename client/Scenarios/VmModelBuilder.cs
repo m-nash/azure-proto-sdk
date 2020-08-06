@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Threading.Tasks;
 using azure_proto_compute;
 using azure_proto_management;
 using azure_proto_network;
-using azure_proto_core;
 
-namespace client.Scenarios
+namespace client
 {
-    public class VmModelBuilder : Scenario
+    class VmModelBuilder : Scenario
     {
         public override void Execute()
         {
@@ -18,14 +18,40 @@ namespace client.Scenarios
 
         private Task<AzureVm> CreateVmWithBuilderAsync()
         {
-            AzureResourceGroup resourceGroup;
-            AzureAvailabilitySet aset;
-            AzureSubnet subnet;
-            
-            //SetupVmHost(out resourceGroup, out aset, out subnet);
-            AzureNic nic = CreateNic(resourceGroup, subnet, 0);
+            AzureClient client = new AzureClient();
+            var subscription = client.Subscriptions[Context.SubscriptionId];
 
-            // Create VM
+            // Create Resource Group
+            Console.WriteLine($"--------Start create group {Context.RgName}--------");
+            var resourceGroup = subscription.ResourceGroups.CreateOrUpdate(Context.RgName, Context.Loc);
+
+            // Create AvailabilitySet
+            Console.WriteLine("--------Start create AvailabilitySet--------");
+            var aset = resourceGroup.AvailabilitySets().ConstructAvailabilitySet("Aligned");
+            aset = resourceGroup.AvailabilitySets().CreateOrUpdateAvailabilityset(Context.VmName + "_aSet", aset);
+
+            // Create VNet
+            Console.WriteLine("--------Start create VNet--------");
+            string vnetName = Context.VmName + "_vnet";
+            var vnet = resourceGroup.VNets().ConstructVnet("10.0.0.0/16");
+            vnet = resourceGroup.VNets().CreateOrUpdateVNet(vnetName, vnet);
+
+            //create subnet
+            Console.WriteLine("--------Start create Subnet--------");
+            var nsg = resourceGroup.Nsgs().ConstructNsg(Context.NsgName, 80);
+            nsg = resourceGroup.Nsgs().CreateOrUpdateNsgs(nsg);
+            var subnet = vnet.Subnets.ConstructSubnet(Context.SubnetName, "10.0.0.0/24");
+            subnet = vnet.Subnets.CreateOrUpdateSubnets(subnet);
+
+            // Create IP Address
+            Console.WriteLine("--------Start create IP Address--------");
+            var ipAddress = resourceGroup.IpAddresses().ConstructIPAddress();
+            ipAddress = resourceGroup.IpAddresses().CreateOrUpdatePublicIpAddress($"{Context.VmName}_ip", ipAddress);
+
+            // Create Network Interface
+            Console.WriteLine("--------Start create Network Interface--------");
+            var nic = resourceGroup.Nics().ConstructNic(ipAddress, subnet.Id);
+            nic = resourceGroup.Nics().CreateOrUpdateNic($"{Context.VmName}_nic", nic);
 
             // TODO:
             // 0. Builder is an convenience feature. Simpler model would just use new xxx()
@@ -33,13 +59,13 @@ namespace client.Scenarios
             // 2. Is there a risk that the referenced model has not been created in ARM yet resource id is populated?
 
             // Options: required parameters on in the constructor
-            var vm = AzureVm.Builder(resourceGroup, Context.VmName, Context.Loc)
+            var vmModel = AzureVm.ModelBuilder(Context.VmName, Context.Loc)
                 .UseWindowsImage("admin-user", "!@#$%asdfA")
                 .RequiredNetworkInterface(nic.Id)
                 .RequiredAvalabilitySet(aset.Id)
                 .ToModel();
 
-            vm = resourceGroup.Vms().CreateOrUpdateVm(vm);
+            var vm = resourceGroup.Vms().CreateOrUpdateVm(Context.VmName, vmModel);
 
             return Task.FromResult(vm);
         }
