@@ -12,7 +12,4 @@ namespace azure_proto_core
 
         public virtual Location Location { get; protected set; }
     }
-
-
-
 }

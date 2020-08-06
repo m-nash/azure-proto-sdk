@@ -10,7 +10,7 @@ namespace azure_proto_core
         private static readonly object resourceLock = new object();
 
         //TODO: do we want to expose this as public to list/search all resource types in a resourcegroup
-        private ReadOnlyDictionary<Type, object> Resources { get; set; }
+        protected ReadOnlyDictionary<Type, object> Resources { get; set; }
 
         public AzureEntityHolder(TrackedResource parent, T model):base(parent, model)
         {

@@ -1,22 +1,29 @@
 ﻿using azure_proto_core;
 using azure_proto_management;
 using System;
+using System.Linq;
 
 namespace client
 {
-    class Program
+    class All : Scenario
     {
-        static void Main(string[] args)
+        public override void Execute()
         {
-            Scenario scenario = null;
+            var list = Enum.GetValues(typeof(Scenarios)).Cast<Scenarios>().ToList();
             try
             {
-                scenario = ScenarioFactory.GetScenario(Scenarios.CreateSingleVmExample);
-                scenario.Execute();
+                foreach(var scenario in list)
+                {
+                    if (scenario != Scenarios.All)
+                    {
+                        var executable = ScenarioFactory.GetScenario(scenario);
+                        executable.Execute();
+                    }
+                }
             }
             finally
             {
-                foreach (var rgId in Scenario.CleanUp)
+                foreach (var rgId in CleanUp)
                 {
                     ResourceIdentifier id = new ResourceIdentifier(rgId);
                     var sub = AzureClient.GetSubscription(id.Subscription);

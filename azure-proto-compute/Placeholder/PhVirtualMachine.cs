@@ -2,11 +2,10 @@
 using azure_proto_core;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace azure_proto_compute
 {
-    public class PhVirtualMachine : TrackedResource<VirtualMachine>
+    public class PhVirtualMachine : TrackedResource<VirtualMachine>, ITaggable
     {
         public PhVirtualMachine(VirtualMachine vm) : base(vm.Id, vm.Location, vm)
         {

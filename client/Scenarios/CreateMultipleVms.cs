@@ -19,8 +19,9 @@ namespace client
             var subscription = client.Subscriptions[Context.SubscriptionId];
 
             // Create Resource Group
-            Console.WriteLine("--------Start create group--------");
+            Console.WriteLine($"--------Start create group {Context.RgName}--------");
             var resourceGroup = subscription.ResourceGroups.CreateOrUpdate(Context.RgName, Context.Loc);
+            CleanUp.Add(resourceGroup.Id);
 
             // Create AvailabilitySet
             Console.WriteLine("--------Start create AvailabilitySet--------");
@@ -59,7 +60,8 @@ namespace client
                 nic = resourceGroup.Nics().CreateOrUpdateNic($"{Context.VmName}_{i}_nic", nic);
 
                 // Create VM
-                string name = $"{Context.VmName}-{i}-z";
+                string num = i % 2 == 0 ? "even" : "odd";
+                string name = $"{Context.VmName}-{i}-{num}";
                 Console.WriteLine("--------Start create VM {0}--------", i);
                 var vm = resourceGroup.Vms().ConstructVm(name, "admin-user", "!@#$%asdfA", nic.Id, aset);
                 tasks.Add(resourceGroup.Vms().CreateOrUpdateVmAsync(name, vm));

@@ -1,10 +1,13 @@
 ﻿using azure_proto_core;
+using System.Collections.Generic;
 
 namespace azure_proto_management
 {
-    public class AzureClient : TrackedResource
+    public class AzureClient : AzureClientBase
     {
-        public SubscriptionCollection Subscriptions { get; private set; }
+        protected override IEnumerable<AzureSubscriptionBase> SubscriptionsGeneric { get; set; }
+
+        public SubscriptionCollection Subscriptions => SubscriptionsGeneric as SubscriptionCollection;
 
         new public string Name => "MainClient";
 
@@ -14,9 +17,17 @@ namespace azure_proto_management
 
         public override ResourceIdentifier Id { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
 
+        public static AzureSubscription GetSubscription(string subscriptionId)
+        {
+            AzureClient client = new AzureClient();
+            return client.Subscriptions[subscriptionId];
+        }
+
+        //TODO: overload to allow for passing in a context which will include credential, uri, ?clientoptions?
+        //TODO: are we overloading Cloud with Tenant?
         public AzureClient()
         {
-            Subscriptions = new SubscriptionCollection(this);
+            SubscriptionsGeneric = new SubscriptionCollection(this);
         }
 
         public static AzureResourceGroup GetResourceGroup(string subscriptionId, string rgName)

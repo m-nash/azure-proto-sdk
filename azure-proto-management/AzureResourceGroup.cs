@@ -1,7 +1,7 @@
-﻿using azure_proto_core;
-using Azure.ResourceManager.Resources;
-using System.Threading.Tasks;
+﻿using Azure.ResourceManager.Resources;
+using azure_proto_core;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace azure_proto_management
 {

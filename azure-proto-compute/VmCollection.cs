@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_compute
 {
-    public class VmCollection : AzureCollection<AzureVm>
+    public class VmCollection : AzureTaggableCollection<AzureVm, PhVirtualMachine>
     {
         public VmCollection(TrackedResource resourceGroup) : base(resourceGroup) { }
 
@@ -58,16 +58,6 @@ namespace azure_proto_compute
             foreach (var vm in Client.VirtualMachines.List(Parent.Name))
             {
                 yield return new AzureVm(Parent, new PhVirtualMachine(vm));
-            }
-        }
-
-        public IEnumerable<AzureVm> GetItemsByTag(string key, string value)
-        {
-            foreach(var vm in Client.VirtualMachines.List(Parent.Name))
-            {
-                string rValue;
-                if (vm.Tags != null && vm.Tags.TryGetValue(key, out rValue) && rValue == value)
-                    yield return new AzureVm(Parent, new PhVirtualMachine(vm));
             }
         }
 

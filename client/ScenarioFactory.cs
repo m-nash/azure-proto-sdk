@@ -2,6 +2,7 @@
 {
     enum Scenarios
     {
+        All,
         CreateSingleVmExample,
         ShutdownVmsByName,
         StartStopVm,
@@ -9,7 +10,10 @@
         SetTagsOnVm,
         ShutdownVmsByTag,
         CreateMultipleVms,
-        GenericEntityLoop
+        GenericEntityLoop,
+        ShutdownVmsByLINQ,
+        ShutdownVmsByNameAcrossResourceGroups,
+        ShutdownVmsByNameAcrossSubscriptions
     }
 
     class ScenarioFactory
@@ -34,6 +38,14 @@
                     return new CreateMultipleVms();
                 case Scenarios.GenericEntityLoop:
                     return new GenericEntityLoop();
+                case Scenarios.ShutdownVmsByLINQ:
+                    return new ShutdownVmsByLINQ();
+                case Scenarios.All:
+                    return new All();
+                case Scenarios.ShutdownVmsByNameAcrossResourceGroups:
+                    return new ShutdownVmsByNameAcrossResourceGroups();
+                case Scenarios.ShutdownVmsByNameAcrossSubscriptions:
+                    return new ShutdownVmsByNameAcrossSubscriptions();
                 default:
                     return null;
             }

@@ -13,7 +13,4 @@
         Plan Plan { get; set; }
         string Kind { get; set; }
     }
-
-
-
 }

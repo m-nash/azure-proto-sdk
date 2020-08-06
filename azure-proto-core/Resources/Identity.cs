@@ -29,7 +29,4 @@ namespace azure_proto_core
             throw new NotImplementedException();
         }
     }
-
-
-
 }
