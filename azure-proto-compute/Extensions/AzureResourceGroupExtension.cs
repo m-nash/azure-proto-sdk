@@ -1,4 +1,7 @@
 ﻿using azure_proto_core;
+using Sku = azure_proto_core.Sku;
+using azure_proto_compute.Convenience;
+using Azure.ResourceManager.Compute.Models;
 
 namespace azure_proto_compute
 {

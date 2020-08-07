@@ -27,7 +27,9 @@ namespace azure_proto_core
         }
 
         public override string Name => Model.Name;
+
         public virtual TrackedResource Parent { get; protected set; }
+
         public virtual T Model { get; protected set; }
 
         public override ResourceIdentifier Id => Model.Id;

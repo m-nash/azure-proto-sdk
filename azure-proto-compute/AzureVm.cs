@@ -1,5 +1,7 @@
 ﻿using Azure.ResourceManager.Compute;
 using azure_proto_core;
+using System.Collections.Generic;
+using azure_proto_compute.Convenience;
 
 namespace azure_proto_compute
 {
@@ -35,6 +37,11 @@ namespace azure_proto_compute
                 vmData.Tags[key] = value;
                 var result = Client.VirtualMachines.StartCreateOrUpdate(Id.ResourceGroup, Name, vmData.Model);
             }
+        }
+
+        public static AzureVmModelBuilder ModelBuilder(string vmName, Location location)
+        {
+            return new AzureVmModelBuilder(vmName, location);
         }
     }
 }
