@@ -25,7 +25,7 @@ namespace azure_proto_core
         }
 
 
-        protected ResourceIdentifier Context { get; }
+        public ResourceIdentifier Context { get; }
 
         public virtual void Validate(ResourceIdentifier identifier)
         {

@@ -32,10 +32,10 @@ namespace azure_proto_core
 
         public SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred)).Subscriptions;
 
-        public ResourceGroupContainerOperations ResourceGroups() => new ResourceGroupContainerOperations(this, DefaultSubscription);
+        public ResourceGroupContainerOperations AtDefaultScope() => new ResourceGroupContainerOperations(this, DefaultSubscription);
 
-        public ResourceGroupContainerOperations ResourceGroups(ResourceIdentifier sub) => new ResourceGroupContainerOperations(this, sub);
-        public ResourceGroupContainerOperations ResourceGroups(Resource sub) => new ResourceGroupContainerOperations(this, sub);
+        public ResourceGroupContainerOperations AtScope(ResourceIdentifier sub) => new ResourceGroupContainerOperations(this, sub);
+        public ResourceGroupContainerOperations AtScope(Resource sub) => new ResourceGroupContainerOperations(this, sub);
     }
 
 

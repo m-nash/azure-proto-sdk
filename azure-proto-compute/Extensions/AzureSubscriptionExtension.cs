@@ -8,24 +8,24 @@ namespace azure_proto_compute
 {
     public static class AzureSubscriptionExtension
     {
-        public static VmCollection Vms(this SubscriptionCollectionOperations subscription)
+        public static VmCollection Vms(this SubscriptionCollectionOperations subscriptionOperations)
         {
-            return new VmCollection(subscription, subscription.DefaultSubscription);
+            return new VmCollection(subscriptionOperations, subscriptionOperations.DefaultSubscription);
         }
 
-        public static VmCollection Vms(this SubscriptionCollectionOperations subscription, ResourceIdentifier context)
+        public static VmCollection Vms(this SubscriptionCollectionOperations subscriptionOperations, ResourceIdentifier subscription)
         {
-            return new VmCollection(subscription, context);
+            return new VmCollection(subscriptionOperations, subscription);
         }
 
-        public static VmCollection Vms(this SubscriptionCollectionOperations subscription, azure_proto_core.Resource context)
+        public static VmCollection Vms(this SubscriptionCollectionOperations subscriptionOperations, azure_proto_core.Resource subscription)
         {
-            return new VmCollection(subscription, context);
+            return new VmCollection(subscriptionOperations, subscription);
         }
 
-        public static VmCollection Vms(this SubscriptionCollectionOperations subscription, string subscriptionId)
+        public static VmCollection Vms(this SubscriptionCollectionOperations subscriptionOperations, string subscriptionId)
         {
-            return new VmCollection(subscription, $"/subscriptions/{subscriptionId}");
+            return new VmCollection(subscriptionOperations, $"/subscriptions/{subscriptionId}");
         }
     }
 }

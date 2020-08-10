@@ -34,17 +34,17 @@ namespace azure_proto_compute
             return new PhVmValueOperation(await VmOperations.StartCreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails.Model, cancellationToken));
         }
 
-        public VmOperations Operations(string vmName)
+        public VmOperations WithVm(string vmName)
         {
             return new VmOperations(this, new ResourceIdentifier($"{Context}/providers/Microsoft.Compute/virtualMachines/{vmName}"));
         }
 
-        public VmOperations Operations(ResourceIdentifier vm)
+        public VmOperations WithVm(ResourceIdentifier vm)
         {
             return new VmOperations(this, vm);
         }
 
-        public VmOperations Operations(TrackedResource vm)
+        public VmOperations WithVm(TrackedResource vm)
         {
             return new VmOperations(this, vm);
         }

@@ -19,17 +19,17 @@ namespace azure_proto_compute
         {
         }
 
-        public VmOperations Operations(string resourceGroupName, string vmName)
+        public VmOperations Vm(string resourceGroupName, string vmName)
         {
             return new VmOperations(this, new ResourceIdentifier($"{Context}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmName}"));
         }
 
-        public VmOperations Operations(ResourceIdentifier vm)
+        public VmOperations Vm(ResourceIdentifier vm)
         {
             return new VmOperations(this, vm);
         }
 
-        public VmOperations Operations(TrackedResource vm)
+        public VmOperations Vm(TrackedResource vm)
         {
             return new VmOperations(this, vm);
         }

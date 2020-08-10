@@ -44,7 +44,7 @@ namespace azure_proto_management
 
         public string DefaultSubscription { get; set; }
 
-        public SubscriptionCollectionOperations Subscriptions() => new SubscriptionCollectionOperations(this, DefaultSubscription);
+        public SubscriptionCollectionOperations Subscriptions => new SubscriptionCollectionOperations(this, DefaultSubscription);
 
         internal AsyncPageable<PhSubscriptionModel> ListSubscriptionsAsync(CancellationToken token = default(CancellationToken))
         {

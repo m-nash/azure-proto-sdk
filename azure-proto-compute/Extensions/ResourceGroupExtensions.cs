@@ -7,19 +7,24 @@ namespace azure_proto_compute.Extensions
 {
     public static class ResourceGroupExtensions
     {
-        public static VmContainer Vms(this ResourceGroupContainerOperations rg, ResourceIdentifier context)
+        public static VmContainer Vms(this ResourceGroupContainerOperations operations, ResourceIdentifier resourceGroup)
         {
-            return new VmContainer(rg, context);
+            return new VmContainer(operations, resourceGroup);
         }
 
-        public static VmCollection Vms(this ResourceGroupContainerOperations rg, Resource context)
+        public static VmContainer Vms(this ResourceGroupContainerOperations operations, Resource resourceGroup)
         {
-            return new VmCollection(rg, context);
+            return new VmContainer(operations, resourceGroup);
         }
 
-        public static VmCollection Vms(this ResourceGroupContainerOperations rg, string resourceGroupName)
+        public static VmContainer Vms(this ResourceGroupContainerOperations operations, string resourceGroupName)
         {
-            return new VmCollection(rg, $"/{rg.Context}/resourceGroups/{resourceGroupName}");
+            return new VmContainer(operations, $"/{operations.Context}/resourceGroups/{resourceGroupName}");
+        }
+
+        public static VmContainer Vms(this ResourceGroupOperations operations)
+        {
+            return new VmContainer(operations, operations.Context);
         }
     }
 }

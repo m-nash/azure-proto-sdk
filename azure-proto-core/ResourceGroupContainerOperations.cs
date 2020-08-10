@@ -51,17 +51,17 @@ namespace azure_proto_core
 
         internal ResourceGroupsOperations GetRgOperations(string subscriptionId) => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, subscriptionId, cred)).ResourceGroups;
 
-        public ResourceGroupOperations AtScope(ResourceIdentifier context)
+        public ResourceGroupOperations WithResourceGroup(ResourceIdentifier context)
         {
             return new ResourceGroupOperations(this, context);
         }
 
-        public ResourceGroupOperations AtScope(Resource context)
+        public ResourceGroupOperations WithResourceGroup(Resource context)
         {
             return new ResourceGroupOperations(this, context);
         }
 
-        public ResourceGroupOperations AtScope(string rg)
+        public ResourceGroupOperations WithResourceGroup(string rg)
         {
             return new ResourceGroupOperations(this, $"{Context}/resourceGroups/{rg}");
         }
