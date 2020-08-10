@@ -13,7 +13,7 @@ namespace azure_proto_network
     /// An operations + Model class for NSGs
     /// TODO: How does the operation signature change for resources that support Etags?
     /// </summary>
-    public class AzureNetworkSecurityGroup : AzureEntity<PhNetworkSecurityGroup>
+    public class AzureNetworkSecurityGroup : AzureOperations<PhNetworkSecurityGroup>
     {
         string _name;
         class RuleIdEqualityComparer : IEqualityComparer<SecurityRule>

@@ -1,52 +1,39 @@
 ﻿using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Compute.Models;
+using Azure.ResourceManager.Resources.Models;
 using azure_proto_core;
 using System.Collections.Generic;
 
 namespace azure_proto_compute
 {
-    public class VmCollection : AzureCollection<AzureVm>
+    /// <summary>
+    /// VM Operations at the subscription level
+    /// </summary>
+    public class VmCollection : ArmResourceCollectionOperations
     {
-        public VmCollection(TrackedResource resourceGroup) : base(resourceGroup) { }
-
-        private ComputeManagementClient Client => ClientFactory.Instance.GetComputeClient(Parent.Id.Subscription);
-
-        public AzureVm CreateOrUpdateVm(string name, AzureVm vm)
+        public VmCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
-            var vmResult = Client.VirtualMachines.StartCreateOrUpdate(Parent.Name, name, vm.Model).WaitForCompletionAsync().Result;
-            AzureVm avm = new AzureVm(Parent, new PhVirtualMachine(vmResult.Value));
-            return avm;
         }
 
-        public static AzureVm GetVm(string subscriptionId, string rgName, string vmName)
+        public VmCollection(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
         {
-            var client = ClientFactory.Instance.GetComputeClient(subscriptionId);
-            var vmResult = client.VirtualMachines.Get(rgName, vmName);
-            return new AzureVm(null, new PhVirtualMachine(vmResult.Value));
         }
 
-        protected override AzureVm Get(string vmName)
+        public VmOperations Operations(string resourceGroupName, string vmName)
         {
-            var vmResult = Client.VirtualMachines.Get(Parent.Name, vmName);
-            return new AzureVm(Parent, new PhVirtualMachine(vmResult.Value));
+            return new VmOperations(this, new ResourceIdentifier($"{Context}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmName}"));
         }
 
-        protected override IEnumerable<AzureVm> GetItems()
+        public VmOperations Operations(ResourceIdentifier vm)
         {
-            foreach (var vm in Client.VirtualMachines.List(Parent.Name))
-            {
-                yield return new AzureVm(Parent, new PhVirtualMachine(vm));
-            }
+            return new VmOperations(this, vm);
         }
 
-        public IEnumerable<AzureVm> GetItemsByTag(string key, string value)
+        public VmOperations Operations(TrackedResource vm)
         {
-            foreach(var vm in Client.VirtualMachines.List(Parent.Name))
-            {
-                string rValue;
-                if (vm.Tags != null && vm.Tags.TryGetValue(key, out rValue) && rValue == value)
-                    yield return new AzureVm(Parent, new PhVirtualMachine(vm));
-            }
+            return new VmOperations(this, vm);
         }
+
+        protected override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
     }
 }

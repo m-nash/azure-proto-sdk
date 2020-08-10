@@ -3,7 +3,7 @@ using azure_proto_core;
 
 namespace azure_proto_network
 {
-    public class AzureVnet : AzureEntity<PhVirtualNetwork>
+    public class AzureVnet : AzureOperations<PhVirtualNetwork>
     {
         public SubnetCollection Subnets { get; private set; }
 

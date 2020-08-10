@@ -11,7 +11,7 @@ namespace azure_proto_network
         private static Dictionary<string, PublicIpAddressCollection> ipCollections = new Dictionary<string, PublicIpAddressCollection>(StringComparer.InvariantCultureIgnoreCase);
         private static readonly object ipLock = new object();
 
-        public static PublicIpAddressCollection IpAddresses(this AzureResourceGroupBase resourceGroup)
+        public static PublicIpAddressCollection IpAddresses(this AzureProviderBase resourceGroup)
         {
             PublicIpAddressCollection result;
             if (!ipCollections.TryGetValue(resourceGroup.Id, out result))
@@ -32,7 +32,7 @@ namespace azure_proto_network
         private static Dictionary<string, VnetCollection> vnetCollections = new Dictionary<string, VnetCollection>(StringComparer.InvariantCultureIgnoreCase);
         private static readonly object vnetLock = new object();
 
-        public static VnetCollection VNets(this AzureResourceGroupBase resourceGroup)
+        public static VnetCollection VNets(this AzureProviderBase resourceGroup)
         {
             VnetCollection result;
             if (!vnetCollections.TryGetValue(resourceGroup.Id, out result))
@@ -53,7 +53,7 @@ namespace azure_proto_network
         private static Dictionary<string, NicCollection> nicCollections = new Dictionary<string, NicCollection>(StringComparer.InvariantCultureIgnoreCase);
         private static readonly object nicLock = new object();
 
-        public static NicCollection Nics(this AzureResourceGroupBase resourceGroup)
+        public static NicCollection Nics(this AzureProviderBase resourceGroup)
         {
             NicCollection result;
             if (!nicCollections.TryGetValue(resourceGroup.Id, out result))
@@ -74,7 +74,7 @@ namespace azure_proto_network
         private static Dictionary<string, NetworkSecurityGroupCollection> nsgCollections = new Dictionary<string, NetworkSecurityGroupCollection>(StringComparer.InvariantCultureIgnoreCase);
         private static readonly object nsgLock = new object();
 
-        public static NetworkSecurityGroupCollection Nsgs(this AzureResourceGroupBase resourceGroup)
+        public static NetworkSecurityGroupCollection Nsgs(this AzureProviderBase resourceGroup)
         {
             NetworkSecurityGroupCollection result;
             lock(nsgLock)
@@ -89,7 +89,7 @@ namespace azure_proto_network
             return result;
         }
 
-        public static AzurePublicIpAddress ConstructIPAddress(this AzureResourceGroupBase resourceGroup)
+        public static AzurePublicIpAddress ConstructIPAddress(this AzureProviderBase resourceGroup)
         {
             var ipAddress = new PublicIPAddress()
             {
@@ -100,7 +100,7 @@ namespace azure_proto_network
             return new AzurePublicIpAddress(resourceGroup, new PhPublicIPAddress(ipAddress));
         }
 
-        public static AzureVnet ConstructVnet(this AzureResourceGroupBase resourceGroup, string vnetCidr)
+        public static AzureVnet ConstructVnet(this AzureProviderBase resourceGroup, string vnetCidr)
         {
             var vnet = new VirtualNetwork()
             {
@@ -110,7 +110,7 @@ namespace azure_proto_network
             return new AzureVnet(resourceGroup, new PhVirtualNetwork(vnet));
         }
 
-        public static AzureNic ConstructNic(this AzureResourceGroupBase resourceGroup, AzurePublicIpAddress ip, string subnetId)
+        public static AzureNic ConstructNic(this AzureProviderBase resourceGroup, AzurePublicIpAddress ip, string subnetId)
         {
             var nic = new NetworkInterface()
             {
@@ -135,7 +135,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="openPorts">The set of TCP ports to open</param>
         /// <returns>An NSG, with the given TCP ports open</returns>
-        public static AzureNetworkSecurityGroup ConstructNsg(this AzureResourceGroupBase resourceGroup, string nsgName, params int[] openPorts)
+        public static AzureNetworkSecurityGroup ConstructNsg(this AzureProviderBase resourceGroup, string nsgName, params int[] openPorts)
         {
             var nsg = new NetworkSecurityGroup { Location = resourceGroup.Location};
             var index = 0;

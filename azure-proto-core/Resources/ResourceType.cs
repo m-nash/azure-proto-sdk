@@ -11,11 +11,18 @@ namespace azure_proto_core
     /// </summary>
     public class ResourceType : IEquatable<ResourceType>, IEquatable<string>, IComparable<ResourceType>, IComparable<string>
     {
+        /// <summary>
+        /// The "none" resource type
+        /// </summary>
+        public static readonly ResourceType None = new ResourceType { Namespace = string.Empty, Type = string.Empty };
+
+        private ResourceType()
+        {
+        }
         public ResourceType(string resourceIdOrType)
         {
             Parse(resourceIdOrType);
         }
-
         public string Namespace { get; private set; }
         public string Type { get; private set; }
 
@@ -99,6 +106,28 @@ namespace azure_proto_core
         {
             throw new NotImplementedException();
         }
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            var resourceObj = obj as ResourceType;
+            if (resourceObj != null) return Equals(resourceObj);
+            var stringObj = obj as string;
+            if (stringObj != null) return Equals(stringObj);
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
+
+        public static implicit operator ResourceType(string other) => new ResourceType(other);
+        public static bool operator ==(ResourceType source, string target) => source != null && source.Equals(target);
+        public static bool operator ==(string source, ResourceType target) => target != null && target.Equals(source);
+        public static bool operator ==(ResourceType source, ResourceType target) => source != null && source.Equals(target);
+        public static bool operator !=(ResourceType source, string target) => source == null || !source.Equals(target);
+        public static bool operator !=(string source, ResourceType target) => target == null || !target.Equals(source);
+        public static bool operator !=(ResourceType source, ResourceType target) => source == null || !source.Equals(target);
     }
 
 

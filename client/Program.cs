@@ -35,7 +35,7 @@ namespace client
         private static void CleanUp()
         {
             Console.WriteLine($"--------Deleting {rgName}--------");
-            AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, rgName);
+            AzureResourceGroup rg = ArmClient.GetResourceGroup(subscriptionId, rgName);
             rg.Delete();
         }
 
@@ -68,8 +68,8 @@ namespace client
             //make sure vm exists
             CreateSingleVmExample();
 
-            AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, rgName);
-            AzureVm vm = rg.Vms()[vmName];
+            AzureResourceGroup rg = ArmClient.GetResourceGroup(subscriptionId, rgName);
+            VmOperations vm = rg.Vms()[vmName];
 
             vm.AddTag("tagkey", "tagvalue");
         }
@@ -81,19 +81,19 @@ namespace client
             CreateSingleVmExample();
 
             //retrieve from lowest level, doesn't give ability to walk up and down the container structure
-            AzureVm vm = VmCollection.GetVm(subscriptionId, rgName, vmName);
+            VmOperations vm = VmCollection.GetVm(subscriptionId, rgName, vmName);
             Console.WriteLine("Found VM {0}", vm.Id);
 
 
             //retrieve from lowest level inside management package gives ability to walk up and down
-            AzureResourceGroup rg = AzureClient.GetResourceGroup(subscriptionId, rgName);
-            AzureVm vm2 = rg.Vms()[vmName];
+            AzureResourceGroup rg = ArmClient.GetResourceGroup(subscriptionId, rgName);
+            VmOperations vm2 = rg.Vms()[vmName];
             Console.WriteLine("Found VM {0}", vm2.Id);
         }
 
         private static void StartStopVm()
         {
-            AzureClient client = new AzureClient();
+            ArmClient client = new ArmClient();
             var subscription = client.Subscriptions[subscriptionId];
             var resourceGroup = subscription.ResourceGroups[rgName];
             var vm = resourceGroup.Vms()[vmName];
@@ -180,7 +180,7 @@ namespace client
 
         private static void SetupVmHost(out AzureResourceGroup resourceGroup, out AzureAvailabilitySet aset, out AzureSubnet subnet)
         {
-            AzureClient client = new AzureClient();
+            ArmClient client = new ArmClient();
             var subscription = client.Subscriptions[subscriptionId];
 
             // Create Resource Group
