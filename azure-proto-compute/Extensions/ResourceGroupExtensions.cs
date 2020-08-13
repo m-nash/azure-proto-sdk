@@ -26,5 +26,26 @@ namespace azure_proto_compute.Extensions
         {
             return new VmContainer(operations, operations.Context);
         }
+
+        public static AvailabilitySetContainer AvailabilitySets(this ResourceGroupContainerOperations operations, ResourceIdentifier resourceGroup)
+        {
+            return new AvailabilitySetContainer(operations, resourceGroup);
+        }
+
+        public static AvailabilitySetContainer AvailabilitySets(this ResourceGroupContainerOperations operations, Resource resourceGroup)
+        {
+            return new AvailabilitySetContainer(operations, resourceGroup);
+        }
+
+        public static AvailabilitySetContainer AvailabilitySets(this ResourceGroupContainerOperations operations, string resourceGroupName)
+        {
+            return new AvailabilitySetContainer(operations, $"/{operations.Context}/resourceGroups/{resourceGroupName}");
+        }
+
+        public static AvailabilitySetContainer AvailabilitySets(this ResourceGroupOperations operations)
+        {
+            return new AvailabilitySetContainer(operations, operations.Context);
+        }
+
     }
 }

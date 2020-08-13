@@ -12,7 +12,7 @@ namespace azure_proto_network
             Subnets = new SubnetCollection(this);
         }
 
-        public AzureSubnet ConstructSubnet(string name, string cidr, AzureNetworkSecurityGroup group = null)
+        public AzureSubnet ConstructSubnet(string name, string cidr, NsgOperations group = null)
         {
             var subnet = new Subnet()
             {

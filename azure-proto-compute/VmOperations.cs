@@ -22,8 +22,6 @@ namespace azure_proto_compute
         public VmOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
         }
-
-
         protected override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 
         public override PhVoidOperation Delete()

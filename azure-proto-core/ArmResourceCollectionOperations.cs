@@ -18,22 +18,17 @@ namespace azure_proto_core
     /// <summary>
     /// Generic list operations class - can be extended if a specific RP has more list operations
     /// </summary>
-    public abstract class ArmResourceCollectionOperations : ArmOperations
+    public abstract class ArmResourceCollectionOperations : ArmResourceOperations
     {
-        public ArmResourceCollectionOperations(ArmOperations parent, ResourceIdentifier context) : base(parent)
+        public ArmResourceCollectionOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
-            Validate(context);
-            Context = context;
         }
 
         public ArmResourceCollectionOperations(ArmOperations parent, Resource context) : this(parent, context?.Id)
         {
         }
 
-
-        public virtual ResourceIdentifier Context { get; }
-
-        public virtual void Validate(ResourceIdentifier identifier)
+        public override void Validate(ResourceIdentifier identifier)
         {
             if (identifier?.Type != ResourceType)
             {

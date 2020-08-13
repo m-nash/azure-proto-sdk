@@ -20,6 +20,17 @@ namespace azure_proto_core
         {
         }
 
+        public T GetOperations<T>(ResourceIdentifier context) where T : ArmResourceOperations
+        {
+            return Activator.CreateInstance(typeof(T), this, context) as T;
+        }
+
+        public T GetOperations<T>(azure_proto_core.Resource context) where T : ArmResourceOperations
+        {
+            return Activator.CreateInstance(typeof(T), this, context) as T;
+        }
+
+
         protected TokenCredential Credential { get; }
 
         protected Uri BaseUri { get; }

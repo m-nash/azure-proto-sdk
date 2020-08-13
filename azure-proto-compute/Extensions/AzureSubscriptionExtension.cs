@@ -8,6 +8,11 @@ namespace azure_proto_compute
 {
     public static class AzureSubscriptionExtension
     {
+        /// <summary>
+        /// Extensions for VMs
+        /// </summary>
+        /// <param name="subscriptionOperations"></param>
+        /// <returns></returns>
         public static VmCollection Vms(this SubscriptionCollectionOperations subscriptionOperations)
         {
             return new VmCollection(subscriptionOperations, subscriptionOperations.DefaultSubscription);
@@ -27,5 +32,31 @@ namespace azure_proto_compute
         {
             return new VmCollection(subscriptionOperations, $"/subscriptions/{subscriptionId}");
         }
+
+        /// <summary>
+        /// Extensions for Availability Sets
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="context"></param>
+        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionCollectionOperations subscriptionOperations)
+        {
+            return new AvailabilitySetCollection(subscriptionOperations, subscriptionOperations.DefaultSubscription);
+        }
+
+        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionCollectionOperations subscriptionOperations, ResourceIdentifier subscription)
+        {
+            return new AvailabilitySetCollection(subscriptionOperations, subscription);
+        }
+
+        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionCollectionOperations subscriptionOperations, azure_proto_core.Resource subscription)
+        {
+            return new AvailabilitySetCollection(subscriptionOperations, subscription);
+        }
+
+        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionCollectionOperations subscriptionOperations, string subscriptionId)
+        {
+            return new AvailabilitySetCollection(subscriptionOperations, $"/subscriptions/{subscriptionId}");
+        }
+
     }
 }

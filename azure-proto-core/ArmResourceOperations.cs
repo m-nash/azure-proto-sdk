@@ -24,8 +24,7 @@ namespace azure_proto_core
             Context = context?.Id;
         }
 
-
-        public ResourceIdentifier Context { get; }
+        public virtual ResourceIdentifier Context { get; }
 
         public virtual void Validate(ResourceIdentifier identifier)
         {
@@ -54,4 +53,30 @@ namespace azure_proto_core
         public abstract DeleteResult Delete();
         public abstract Task<DeleteResult> DeleteAsync(CancellationToken cancellationToken = default);
     }
+
+    public abstract class Patchable<T> where T: Resource
+    {
+        IDictionary<string, string> Tag { get; }
+    }
+
+    public abstract class ArmSyncResourceOperations<T> : ArmResourceOperations<T, Patchable<T>, Response<T>, Response> where T: Resource
+    {
+        public ArmSyncResourceOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        {
+        }
+        public ArmSyncResourceOperations(ArmOperations parent, Resource context) : base(parent, context)
+        {
+        }
+    }
+
+    public abstract class ArmAsyncResourceOperations<T> : ArmResourceOperations<T, Patchable<T>, Operation<T>, Operation<Response>> where T : Resource
+    {
+        public ArmAsyncResourceOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        {
+        }
+        public ArmAsyncResourceOperations(ArmOperations parent, Resource context) : base(parent, context)
+        {
+        }
+    }
+
 }

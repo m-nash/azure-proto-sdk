@@ -135,7 +135,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="openPorts">The set of TCP ports to open</param>
         /// <returns>An NSG, with the given TCP ports open</returns>
-        public static AzureNetworkSecurityGroup ConstructNsg(this AzureProviderBase resourceGroup, string nsgName, params int[] openPorts)
+        public static NsgOperations ConstructNsg(this AzureProviderBase resourceGroup, string nsgName, params int[] openPorts)
         {
             var nsg = new NetworkSecurityGroup { Location = resourceGroup.Location};
             var index = 0;
@@ -152,7 +152,7 @@ namespace azure_proto_network
                 DestinationAddressPrefix = "*",
                 Description = $"Port_{openPort}"
             }).ToList();
-            var result = new AzureNetworkSecurityGroup(resourceGroup, nsg, nsgName);
+            var result = new NsgOperations(resourceGroup, nsg, nsgName);
 
             return result;
         }

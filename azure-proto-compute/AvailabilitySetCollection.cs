@@ -5,32 +5,31 @@ using System.Collections.Generic;
 
 namespace azure_proto_compute
 {
-    public class AvailabilitySetCollection : AzureCollection<AzureAvailabilitySet>
+    /// <summary>
+    /// Class conatinaing list operations for availabiliuty sets
+    /// </summary>
+    public class AvailabilitySetCollection : ArmResourceCollectionOperations
     {
 
-        public AvailabilitySetCollection(TrackedResource resourceGroup) : base(resourceGroup) { }
+        public AvailabilitySetCollection(ArmOperations parent, azure_proto_core.Resource resourceGroup) : base(parent, resourceGroup) { }
+        public AvailabilitySetCollection(ArmOperations parent, ResourceIdentifier resourceGroup) : base(parent, resourceGroup) { }
 
-        private ComputeManagementClient Client => ClientFactory.Instance.GetComputeClient(Parent.Id.Subscription);
+        protected override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
 
-        public AzureAvailabilitySet CreateOrUpdateAvailabilityset(string name, AzureAvailabilitySet availabilitySet)
+        public AvailabilitySetOperations AvailabilitySet(string resourceGroupName, string name)
         {
-            var aSet = Client.AvailabilitySets.CreateOrUpdate(Parent.Name, name, availabilitySet.Model);
-            AzureAvailabilitySet azureAvailabilitySet = new AzureAvailabilitySet(Parent, new PhAvailabilitySet(aSet.Value));
-            return azureAvailabilitySet;
+            return new AvailabilitySetOperations(this, new ResourceIdentifier($"{Context}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{name}"));
         }
 
-        protected override AzureAvailabilitySet Get(string availabilitySetName)
+        public AvailabilitySetOperations AvailabilitySet(ResourceIdentifier vm)
         {
-            var asetResult = Client.AvailabilitySets.Get(Parent.Name, availabilitySetName);
-            return new AzureAvailabilitySet(Parent, new PhAvailabilitySet(asetResult.Value));
+            return new AvailabilitySetOperations(this, vm);
         }
 
-        protected override IEnumerable<AzureAvailabilitySet> GetItems()
+        public AvailabilitySetOperations AvailabilitySet(TrackedResource vm)
         {
-            foreach (var aset in Client.AvailabilitySets.List(Parent.Name))
-            {
-                yield return new AzureAvailabilitySet(Parent, new PhAvailabilitySet(aset));
-            }
+            return new AvailabilitySetOperations(this, vm);
         }
+
     }
 }
