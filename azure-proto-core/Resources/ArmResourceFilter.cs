@@ -85,6 +85,36 @@ namespace azure_proto_core.Resources
         }
     }
 
+    public class ArmTagFilter : ArmResourceFilter
+    {
+        Tuple<string, string> _tag;
+
+        public ArmTagFilter(Tuple<string, string> tag)
+        {
+            _tag = tag;
+        }
+
+        public ArmTagFilter(string tagKey, string tagValue)
+        {
+            _tag = new Tuple<string, string>(tagKey, tagValue);
+        }
+
+        public override bool Equals([AllowNull] string other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals([AllowNull] ArmResourceFilter other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetFilterString()
+        {
+            return $"$filter=tagName eq '{_tag.Item1}' and tagValue eq '{_tag.Item2}'";
+        }
+    }
+
     public class ArmFilterCollection
     {
         public ArmFilterCollection(ResourceType type)
@@ -95,11 +125,19 @@ namespace azure_proto_core.Resources
 
         public ArmResourceTypeFilter ResourceTypeFilter { get; }
 
+        public ArmTagFilter TagFilter { get; set; }
+
         public override string ToString()
         {
             var builder = new List<string>();
             builder.Add(ResourceTypeFilter.GetFilterString());
             var substring = SubstringFilter?.GetFilterString();
+            if (!string.IsNullOrWhiteSpace(substring))
+            {
+                builder.Add(substring);
+            }
+
+            substring = TagFilter?.GetFilterString();
             if (!string.IsNullOrWhiteSpace(substring))
             {
                 builder.Add(substring);

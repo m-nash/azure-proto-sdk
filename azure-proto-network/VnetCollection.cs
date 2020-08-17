@@ -5,31 +5,17 @@ using System.Collections.Generic;
 
 namespace azure_proto_network
 {
-    public class VnetCollection : AzureCollection<AzureVnet>
+    public class VnetCollection : ArmResourceCollectionOperations
     {
-        public VnetCollection(TrackedResource resourceGroup) : base(resourceGroup) { }
-
-        private NetworkManagementClient Client => ClientFactory.Instance.GetNetworkClient(Parent.Id.Subscription);
-
-        public AzureVnet CreateOrUpdateVNet(string name, AzureVnet vnet)
+        public VnetCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
-            var vnetResult = Client.VirtualNetworks.StartCreateOrUpdate(Parent.Name, name, vnet.Model).WaitForCompletionAsync().Result;
-            var avnet = new AzureVnet(Parent, new PhVirtualNetwork(vnetResult.Value));
-            return avnet;
         }
 
-        protected override IEnumerable<AzureVnet> GetItems()
+        public VnetCollection(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
         {
-            foreach (var vnet in Client.VirtualNetworks.List(Parent.Name))
-            {
-                yield return new AzureVnet(Parent, new PhVirtualNetwork(vnet));
-            }
         }
 
-        protected override AzureVnet Get(string vnetName)
-        {
-            var vnetResult = Client.VirtualNetworks.Get(Parent.Name, vnetName);
-            return new AzureVnet(Parent, new PhVirtualNetwork(vnetResult.Value));
-        }
+        protected override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
     }
+
 }

@@ -16,12 +16,19 @@ namespace azure_proto_core
         {
             Validate(context);
             Context = context;
+            DefaultLocation = parent.DefaultLocation;
         }
 
         public ArmResourceOperations(ArmOperations parent, Resource context) : this(parent, context.Id)
         {
             Validate(context?.Id);
             Context = context?.Id;
+            DefaultLocation = parent.DefaultLocation;
+            var tracked = context as TrackedResource;
+            if (tracked != null)
+            {
+                DefaultLocation = tracked.Location;
+            }
         }
 
         public virtual ResourceIdentifier Context { get; }
@@ -53,30 +60,4 @@ namespace azure_proto_core
         public abstract DeleteResult Delete();
         public abstract Task<DeleteResult> DeleteAsync(CancellationToken cancellationToken = default);
     }
-
-    public abstract class Patchable<T> where T: Resource
-    {
-        IDictionary<string, string> Tag { get; }
-    }
-
-    public abstract class ArmSyncResourceOperations<T> : ArmResourceOperations<T, Patchable<T>, Response<T>, Response> where T: Resource
-    {
-        public ArmSyncResourceOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
-        {
-        }
-        public ArmSyncResourceOperations(ArmOperations parent, Resource context) : base(parent, context)
-        {
-        }
-    }
-
-    public abstract class ArmAsyncResourceOperations<T> : ArmResourceOperations<T, Patchable<T>, Operation<T>, Operation<Response>> where T : Resource
-    {
-        public ArmAsyncResourceOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
-        {
-        }
-        public ArmAsyncResourceOperations(ArmOperations parent, Resource context) : base(parent, context)
-        {
-        }
-    }
-
 }

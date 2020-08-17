@@ -17,6 +17,7 @@ namespace azure_proto_management
 {
     /// <summary>
     /// The entry point for all ARM clients
+    /// TODO: What is appropriate naming for ArmClient , given that we would not liek to make distinctions between data and management.
     /// </summary>
     public class ArmClient : ArmOperations
     {
@@ -143,6 +144,37 @@ namespace azure_proto_management
 
             return sub;
         }
+
+        public ResourceGroupContainerOperations ResourceGroups(ResourceIdentifier subscription)
+        {
+            return new ResourceGroupContainerOperations(this, subscription);
+        }
+
+        public ResourceGroupContainerOperations ResourceGroups(PhSubscriptionModel subscription)
+        {
+            return new ResourceGroupContainerOperations(this, subscription);
+        }
+
+        public ResourceGroupContainerOperations ResourceGroups(string subscription)
+        {
+            return new ResourceGroupContainerOperations(this, $"/subscriptions/{subscription}");
+        }
+
+
+        public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
+        {
+            return new ResourceGroupOperations(this, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}");
+        }
+
+        public ResourceGroupOperations ResourceGroup(ResourceIdentifier resourceGroup)
+        {
+            return new ResourceGroupOperations(this, resourceGroup);
+        }
+        public ResourceGroupOperations ResourceGroup(PhResourceGroup resourceGroup)
+        {
+            return new ResourceGroupOperations(this, resourceGroup);
+        }
+
 
 
         internal SubscriptionsOperations SubscriptionsClient => GetResourcesClient(Guid.NewGuid().ToString()).Subscriptions;

@@ -3,7 +3,6 @@ using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Compute.Models;
 using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
-using azure_proto_core.Placeholder;
 using System;
 using System.Collections.Generic;
 using System.Text;

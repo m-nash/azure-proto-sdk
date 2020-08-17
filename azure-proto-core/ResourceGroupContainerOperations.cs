@@ -33,6 +33,13 @@ namespace azure_proto_core
             return new PhResponse<PhResourceGroup, ResourceGroup>(GetRgOperations(Context.Subscription).CreateOrUpdate(name, resourceDetails), g => new PhResourceGroup(g));
         }
 
+        public Response<PhResourceGroup> Create(string name, Location location)
+        {
+            var model = new PhResourceGroup(new ResourceGroup(location));
+            return new PhResponse<PhResourceGroup, ResourceGroup>(GetRgOperations(Context.Subscription).CreateOrUpdate(name, model), g => new PhResourceGroup(g));
+        }
+
+
         public async override Task<Response<PhResourceGroup>> CreateAsync(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhResponse<PhResourceGroup, ResourceGroup>(await GetRgOperations(Context.Subscription).CreateOrUpdateAsync(name, resourceDetails, cancellationToken), g => new PhResourceGroup(g));
@@ -51,17 +58,17 @@ namespace azure_proto_core
 
         internal ResourceGroupsOperations GetRgOperations(string subscriptionId) => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, subscriptionId, cred)).ResourceGroups;
 
-        public ResourceGroupOperations WithResourceGroup(ResourceIdentifier context)
+        public ResourceGroupOperations ResourceGroup(ResourceIdentifier context)
         {
             return new ResourceGroupOperations(this, context);
         }
 
-        public ResourceGroupOperations WithResourceGroup(Resource context)
+        public ResourceGroupOperations ResourceGroup(Resource context)
         {
             return new ResourceGroupOperations(this, context);
         }
 
-        public ResourceGroupOperations WithResourceGroup(string rg)
+        public ResourceGroupOperations ResourceGroup(string rg)
         {
             return new ResourceGroupOperations(this, $"{Context}/resourceGroups/{rg}");
         }

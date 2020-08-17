@@ -31,6 +31,18 @@ namespace azure_proto_compute
             return new PhResponse<PhAvailabilitySet, AvailabilitySet>(await Operations.CreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails.Model, cancellationToken), a => new PhAvailabilitySet(a));
         }
 
+        public PhAvailabilitySet ConstructAvailabilitySet(string skuName, Location location = null)
+        {
+            var availabilitySet = new AvailabilitySet(location ?? DefaultLocation)
+            {
+                PlatformUpdateDomainCount = 5,
+                PlatformFaultDomainCount = 2,
+                Sku = new Azure.ResourceManager.Compute.Models.Sku() { Name = skuName },
+            };
+
+            return new PhAvailabilitySet(availabilitySet);
+        }
+
         public AvailabilitySetOperations AvailabilitySet(string name)
         {
             return new AvailabilitySetOperations(this, new ResourceIdentifier($"{Context}/providers/Microsoft.Compute/availabilitySets/{name}"));

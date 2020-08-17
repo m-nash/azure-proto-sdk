@@ -1,4 +1,5 @@
 ﻿using Azure.ResourceManager.Compute;
+using Azure.ResourceManager.Compute.Models;
 using azure_proto_compute.Placeholder;
 using azure_proto_core;
 using System;
@@ -47,6 +48,35 @@ namespace azure_proto_compute
         public VmOperations Vm(TrackedResource vm)
         {
             return new VmOperations(this, vm);
+        }
+
+        public PhVirtualMachine ConstructVm(string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, PhAvailabilitySet aset, Location location = null)
+        {
+            var vm = new VirtualMachine(location ?? DefaultLocation)
+            {
+                NetworkProfile = new NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nicId } } },
+                OsProfile = new OSProfile
+                {
+                    ComputerName = vmName,
+                    AdminUsername = adminUser,
+                    AdminPassword = adminPw,
+                    LinuxConfiguration = new LinuxConfiguration { DisablePasswordAuthentication = false, ProvisionVMAgent = true }
+                },
+                StorageProfile = new StorageProfile()
+                {
+                    ImageReference = new ImageReference()
+                    {
+                        Offer = "UbuntuServer",
+                        Publisher = "Canonical",
+                        Sku = "18.04-LTS",
+                        Version = "latest"
+                    },
+                    DataDisks = new List<DataDisk>()
+                },
+                HardwareProfile = new HardwareProfile() { VmSize = VirtualMachineSizeTypes.StandardB1Ms },
+                AvailabilitySet = new SubResource() { Id = aset.Id }
+            };
+            return new PhVirtualMachine(vm);
         }
 
         internal VirtualMachinesOperations VmOperations => new ComputeManagementClient(BaseUri, Context.Subscription, Credential).VirtualMachines;

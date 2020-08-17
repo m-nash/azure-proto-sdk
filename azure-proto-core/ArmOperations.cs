@@ -30,7 +30,7 @@ namespace azure_proto_core
             return Activator.CreateInstance(typeof(T), this, context) as T;
         }
 
-
+        public virtual Location DefaultLocation { get; set; }
         protected TokenCredential Credential { get; }
 
         protected Uri BaseUri { get; }

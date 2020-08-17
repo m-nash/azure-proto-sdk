@@ -1,4 +1,5 @@
 ﻿using azure_proto_compute;
+using azure_proto_core;
 using azure_proto_management;
 using azure_proto_network;
 using System;
@@ -14,6 +15,7 @@ namespace client
         private static string subscriptionId = Environment.GetEnvironmentVariable("AZURE_SUBSCRIPTION_ID");
         private static string loc = "westus2";
         private static string subnetName = "mySubnet";
+        private static ArmClient client = new ArmClient();
 
         static void Main(string[] args)
         {
@@ -35,7 +37,18 @@ namespace client
         private static void CleanUp()
         {
             Console.WriteLine($"--------Deleting {rgName}--------");
-            AzureResourceGroup rg = ArmClient.GetResourceGroup(subscriptionId, rgName);
+            var rg = client.Subscriptions.ResourceGroups(subscriptionId).ResourceGroup(rgName);
+            /*client.ListSubscriptions()
+            client.Subscriptions(subscriptionId).ListResourceGroups();
+            client.Subscriptions(subscriptionId).ResourceGroups(rgName)
+
+            client.Subscriptions(options) 
+            client.ListSubscriptions()
+            client.Subscriptions("foo", options)
+            client.Vms(filter, options) //uses arm
+            client.Vms(a, b, options) //uses vm client
+            client.GetVm(subscriptionId, rgName, vmName, options))
+            client.Subscriptions.GetResourceGroup(subscription, rgName).Get();*/
             rg.Delete();
         }
 
@@ -45,21 +58,21 @@ namespace client
 
             //set tags on random vms
             Random rand = new Random(Environment.TickCount);
-            foreach(var vm in rg.Vms())
+            foreach(var vm in rg.Vms().List())
             {
                 if (rand.NextDouble() > 0.5)
                 {
                     Console.WriteLine("adding tag to {0}", vm.Name);
-                    vm.AddTag("tagkey", "tagvalue");
+                    rg.Vm(vm).AddTag("tagkey", "tagvalue");
                 }
             }
 
-            foreach(var vm in rg.Vms().GetItemsByTag("tagkey", "tagvalue"))
+            foreach(var vm in rg.Vms().ListByTag(new azure_proto_core.Resources.ArmTagFilter("tagkey", "tagvalue")))
             {
                 Console.WriteLine("--------Stopping VM {0}--------", vm.Name);
-                vm.Stop();
+                rg.Vm(vm).Stop();
                 Console.WriteLine("--------Starting VM {0}--------", vm.Name);
-                vm.Start();
+                rg.Vm(vm).Start();
             }
         }
 
@@ -68,10 +81,8 @@ namespace client
             //make sure vm exists
             CreateSingleVmExample();
 
-            AzureResourceGroup rg = ArmClient.GetResourceGroup(subscriptionId, rgName);
-            VmOperations vm = rg.Vms()[vmName];
-
-            vm.AddTag("tagkey", "tagvalue");
+            var rg = client.Subscriptions.ResourceGroups(subscriptionId).ResourceGroup(rgName);
+            rg.Vm(vmName).AddTag("tagkey", "tagvalue");
         }
 
         private static void StartFromVm()
@@ -81,22 +92,22 @@ namespace client
             CreateSingleVmExample();
 
             //retrieve from lowest level, doesn't give ability to walk up and down the container structure
-            VmOperations vm = VmCollection.GetVm(subscriptionId, rgName, vmName);
+            var vm = client.Subscriptions.ResourceGroups(subscriptionId).ResourceGroup(rgName).Vm(vmName).Get().Value;
             Console.WriteLine("Found VM {0}", vm.Id);
 
 
             //retrieve from lowest level inside management package gives ability to walk up and down
-            AzureResourceGroup rg = ArmClient.GetResourceGroup(subscriptionId, rgName);
-            VmOperations vm2 = rg.Vms()[vmName];
-            Console.WriteLine("Found VM {0}", vm2.Id);
+            var rg = client.Subscriptions.ResourceGroups(subscriptionId).ResourceGroup(rgName);
+            var vm2 = rg.Vm(vmName);
+            Console.WriteLine("Found VM {0}", vm2.Context);
         }
 
         private static void StartStopVm()
         {
             ArmClient client = new ArmClient();
-            var subscription = client.Subscriptions[subscriptionId];
-            var resourceGroup = subscription.ResourceGroups[rgName];
-            var vm = resourceGroup.Vms()[vmName];
+            var subscription = client.Subscriptions.ResourceGroups(subscriptionId);
+            var resourceGroup = subscription.ResourceGroup(rgName);
+            var vm = resourceGroup.Vms().Vm(vmName);
             Console.WriteLine("Found VM {0}", vmName);
             Console.WriteLine("--------Stopping VM--------");
             vm.Stop();
@@ -106,110 +117,115 @@ namespace client
 
         private static void CreateMultipleVmShutdownSome()
         {
-            AzureResourceGroup resourceGroup = CreateMultipleVms();
+            var resourceGroup = CreateMultipleVms();
 
-            resourceGroup.Vms().Select(vm =>
+            foreach (var vm in resourceGroup.Vms().List("-"))
             {
-                var parts = vm.Name.Split('-');
-                var n = Convert.ToInt32(parts[parts.Length - 2]);
-                return (vm, n);
-            })
-                .Where(tuple => tuple.n % 2 == 0)
-                .ToList()
-                .ForEach(tuple =>
-                {
-                    Console.WriteLine("Stopping {0}", tuple.vm.Name);
-                    tuple.vm.Stop();
-                    Console.WriteLine("Starting {0}", tuple.vm.Name);
-                    tuple.vm.Start();
-                });
+                resourceGroup.Vm(vm).Stop();
+                resourceGroup.Vm(vm).Start();
+            }
         }
 
-        private static AzureResourceGroup CreateMultipleVms()
+        private static ResourceGroupOperations CreateMultipleVms()
         {
-            AzureResourceGroup resourceGroup;
-            AzureAvailabilitySet aset;
-            AzureSubnet subnet;
+            PhResourceGroup resourceGroup;
+            PhAvailabilitySet aset;
+            PhSubnet subnet;
             SetupVmHost(out resourceGroup, out aset, out subnet);
-
+            var rgClient = client.ResourceGroup(resourceGroup);
             for (int i = 0; i < 10; i++)
             {
-                AzureNic nic = CreateNic(resourceGroup, subnet, i);
+                var nic = CreateNic(rgClient, subnet, i);
 
                 // Create VM
                 string name = String.Format("{0}-{1}-z", vmName, i);
                 Console.WriteLine("--------Start create VM {0}--------", i);
-                var vm = resourceGroup.ConstructVm(name, "admin-user", "!@#$%asdfA", nic, aset);
-                vm = resourceGroup.Vms().CreateOrUpdateVm(name, vm);
+                var vm = rgClient.Vms().ConstructVm(name, "admin-user", "!@#$%asdfA", nic.Id, aset);
+                vm = rgClient.Vms().Create(name, vm).Value;
             }
 
-            return resourceGroup;
+            return rgClient;
         }
 
         private static void CreateSingleVmExample()
         {
-            AzureResourceGroup resourceGroup;
-            AzureAvailabilitySet aset;
-            AzureSubnet subnet;
+            PhResourceGroup resourceGroup;
+            PhAvailabilitySet aset;
+            PhSubnet subnet;
             SetupVmHost(out resourceGroup, out aset, out subnet);
+            var rgClient = client.ResourceGroup(resourceGroup);
 
-            AzureNic nic = CreateNic(resourceGroup, subnet, 1000);
+            var nic = CreateNic(client.ResourceGroup(resourceGroup), subnet, 1000);
 
             // Create VM
             Console.WriteLine("--------Start create VM--------");
-            var vm = resourceGroup.ConstructVm(vmName, "admin-user", "!@#$%asdfA", nic, aset);
-            vm = resourceGroup.Vms().CreateOrUpdateVm(vmName, vm);
+            var vm = rgClient.Vms().ConstructVm(vmName, "admin-user", "!@#$%asdfA", nic.Id, aset);
+            vm = rgClient.Vms().Create(vmName, vm).Value;
 
             Console.WriteLine("VM ID: " + vm.Id);
             Console.WriteLine("--------Done create VM--------");
         }
 
-        private static AzureNic CreateNic(AzureResourceGroup resourceGroup, AzureSubnet subnet, int i)
+        private static PhNetworkInterface CreateNic(ResourceGroupOperations resourceGroup, PhSubnet subnet, int i)
         {
             // Create IP Address
             Console.WriteLine("--------Start create IP Address--------");
-            var ipAddress = resourceGroup.ConstructIPAddress();
-            ipAddress = resourceGroup.IpAddresses().CreateOrUpdatePublicIpAddress(String.Format("{0}_{1}_ip", vmName, i), ipAddress);
+            var ipAddress = resourceGroup.PublicIps().ConstructIPAddress();
+            ipAddress = resourceGroup.PublicIps().Create(String.Format("{0}_{1}_ip", vmName, i), ipAddress).Value;
 
             // Create Network Interface
             Console.WriteLine("--------Start create Network Interface--------");
-            var nic = resourceGroup.ConstructNic(ipAddress, subnet.Id);
-            nic = resourceGroup.Nics().CreateOrUpdateNic(String.Format("{0}_{1}_nic", vmName, i), nic);
+            var nic = resourceGroup.Nics().ConstructNic(ipAddress, subnet.Id);
+            nic = resourceGroup.Nics().Create(String.Format("{0}_{1}_nic", vmName, i), nic).Value;
             return nic;
         }
 
-        private static void SetupVmHost(out AzureResourceGroup resourceGroup, out AzureAvailabilitySet aset, out AzureSubnet subnet)
+        private static void SetupVmHost(out PhResourceGroup resourceGroup, out PhAvailabilitySet aset, out PhSubnet subnet)
         {
             ArmClient client = new ArmClient();
-            var subscription = client.Subscriptions[subscriptionId];
+            var subscription = client.Subscriptions.ResourceGroups(subscriptionId);
 
             // Create Resource Group
             Console.WriteLine("--------Start create group--------");
-            resourceGroup = subscription.ResourceGroups.CreateOrUpdate(rgName, loc);
+            resourceGroup = subscription.Create(rgName, loc);
+            var rgClient = client.ResourceGroup(resourceGroup);
 
             // Create AvailabilitySet
             Console.WriteLine("--------Start create AvailabilitySet--------");
-            aset = resourceGroup.ConstructAvailabilitySet("Aligned");
-            aset = resourceGroup.AvailabilitySets().CreateOrUpdateAvailabilityset(vmName + "_aSet", aset);
+            aset = rgClient.AvailabilitySets().ConstructAvailabilitySet("Aligned");
+            aset = rgClient.AvailabilitySets().Create(vmName + "_aSet", aset).Value;
 
             // Create VNet
             Console.WriteLine("--------Start create VNet--------");
             string vnetName = vmName + "_vnet";
-            AzureVnet vnet;
-            if (!resourceGroup.VNets().TryGetValue(vnetName, out vnet))
+            var vnetClient = rgClient.Vnets();
+            var vnet = vnetClient.List(vnetName).FirstOrDefault();
+            PhVirtualNetwork vnetModel;
+            if (vnet == null)
             {
-                vnet = resourceGroup.ConstructVnet("10.0.0.0/16");
-                vnet = resourceGroup.VNets().CreateOrUpdateVNet(vnetName, vnet);
+               vnetModel = vnetClient.ConstructVnet("10.0.0.0/16");
+               vnetModel = vnetClient.Create(vnetName, vnetModel).Value;
+            }
+            else
+            {
+                vnetModel = vnetClient.Vnet(vnet).Get().Value;
             }
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
-            if (!vnet.Subnets.TryGetValue(subnetName, out subnet))
+
+            var sub = vnetModel.Subnets.FirstOrDefault( s => string.Equals(s.Name, subnetName, StringComparison.InvariantCultureIgnoreCase));
+            if (sub == null)
             {
-                var nsg = resourceGroup.ConstructNsg(nsgName, 80);
-                nsg = resourceGroup.Nsgs().CreateOrUpdateNsgs(nsg);
-                subnet = vnet.ConstructSubnet(subnetName, "10.0.0.0/24");
-                subnet = vnet.Subnets.CreateOrUpdateSubnets(subnet);
+                var nsgClient = rgClient.Nsgs();
+                var nsg = nsgClient.ConstructNsg(nsgName, 80);
+                nsg = rgClient.Nsgs().Create(nsgName, nsg).Value;
+                subnet = vnetClient.Vnet(vnetModel).Subnets().ConstructSubnet(subnetName, "10.0.0.0/24");
+                subnet = vnetClient.Vnet(vnetModel).Subnets().Create(subnetName, subnet).Value;
+            }
+            else
+            {
+                subnet = rgClient.Vnet(vnetModel).Subnet(new ResourceIdentifier(sub.Id)).Get().Value;
             }
         }
     }

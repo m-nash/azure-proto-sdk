@@ -6,7 +6,7 @@ namespace azure_proto_core
     /// <summary>
     /// TODO: foolow the full guidelines for these immutable types (IComparable, IEquatable, operator overloads, etc.)
     /// </summary>
-    public struct Location : IEquatable<Location>, IEquatable<string>, IComparable<Location>, IComparable<string>
+    public class Location : IEquatable<Location>, IEquatable<string>, IComparable<Location>, IComparable<string>
     {
         public static Location Default = Location.WestUS;
         public static Location WestUS = new Location { Name = "WestUS", CanonicalName = "west-us", DisplayName = "West US"};
@@ -14,6 +14,9 @@ namespace azure_proto_core
         public string CanonicalName { get; internal set; }
         public string DisplayName { get; internal set; }
 
+        internal Location()
+        {
+        }
         public Location(string location)
         {
             Name = GetDefaultName(location);

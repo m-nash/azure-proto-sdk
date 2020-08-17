@@ -50,6 +50,21 @@ namespace azure_proto_core
             return ListAtContextAsync(Context, innerFilter, top, cancellationToken);
         }
 
+        public virtual Pageable<TrackedResource> ListByTag(ArmTagFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var innerFilter = new ArmFilterCollection(ResourceType);
+            innerFilter.TagFilter = filter;
+            return ListAtContext(Context, innerFilter, top, cancellationToken);
+        }
+
+        public virtual AsyncPageable<TrackedResource> ListByTagAsync(ArmTagFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var innerFilter = new ArmFilterCollection(ResourceType);
+            innerFilter.TagFilter = filter;
+            return ListAtContextAsync(Context, innerFilter, top, cancellationToken);
+        }
+
+
         protected Pageable<TrackedResource> ListAtContext(ResourceIdentifier context, ArmFilterCollection filters, int? top, CancellationToken cancellationToken = default)
         {
             Pageable<GenericResourceExpanded> result;

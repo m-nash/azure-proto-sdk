@@ -26,6 +26,18 @@ namespace azure_proto_core
         public string Namespace { get; private set; }
         public string Type { get; private set; }
 
+        public ResourceType Parent 
+        { 
+            get
+            {
+                var parts = Type.Split('/', StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length < 2) return ResourceType.None;
+                var list = new List<string>(parts);
+                list.RemoveAt(list.Count - 1);
+                return new ResourceType($"{Namespace}/{string.Join('/', list.ToArray())}");
+            } 
+        }
+
         internal void Parse(string resourceIdOrType)
         {
             resourceIdOrType = resourceIdOrType?.Trim('/');

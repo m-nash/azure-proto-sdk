@@ -5,34 +5,18 @@ using System.Collections.Generic;
 
 namespace azure_proto_network
 {
-    public class SubnetCollection : AzureCollection<AzureSubnet>
+    /// <summary>
+    /// TODO: refactor list methods to include type-specific lists, and allow Child Resources
+    /// </summary>
+    public class SubnetCollection : ArmResourceCollectionOperations
     {
-        public SubnetCollection(AzureVnet vnet) : base(vnet) { }
-
-        private NetworkManagementClient Client => ClientFactory.Instance.GetNetworkClient(Parent.Id.Subscription);
-
-        public AzureSubnet CreateOrUpdateSubnets(AzureSubnet subnet)
+        public SubnetCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
-            AzureVnet vnet = Parent as AzureVnet;
-            var subnetResult = Client.Subnets.StartCreateOrUpdate(vnet.Id.ResourceGroup, vnet.Name, subnet.Name, subnet.Model).WaitForCompletionAsync().Result;
-            subnet = new AzureSubnet(vnet, new PhSubnet(subnetResult.Value, vnet.Location));
-            return subnet;
         }
 
-        protected override AzureSubnet Get(string subnetName)
+        public SubnetCollection(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
         {
-            AzureVnet vnet = Parent as AzureVnet;
-            var subnetResult = Client.Subnets.Get(vnet.Id.ResourceGroup, vnet.Name, subnetName);
-            return new AzureSubnet(vnet, new PhSubnet(subnetResult.Value, vnet.Location));
         }
-
-        protected override IEnumerable<AzureSubnet> GetItems()
-        {
-            AzureVnet vnet = Parent as AzureVnet;
-            foreach (var subnet in Client.Subnets.List(vnet.Id.ResourceGroup, vnet.Name))
-            {
-                yield return new AzureSubnet(vnet, new PhSubnet(subnet, vnet.Location));
-            }
-        }
+        protected override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
     }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace azure_proto_core
 {
     /// <summary>
-    /// TODO: Refactor this as a set of interfaces at Container and Leaf scopes
+    /// TODO: Refactor using the new ArmOperations class, which allows synchronous or asynchronous operations
     /// Create known Container and Leaf scopes for ARM Containers
     /// Think about how to extend known scope types in an extensible fashion (is it just adding them to the default, or is it having scopes for all provider or consumer services?
     /// For example, INetworkConsumer, IDatabaseConsumer, IEncryptionConsumer, IControlConsumer, ITriggerConsumer which also allows you to attach at that scope? [AttachDatabase]
@@ -32,6 +32,14 @@ namespace azure_proto_core
 
         protected ArmResourceContainerOperations(ArmResourceOperations parent, Resource contexts) : base(parent, contexts)
         {
+        }
+
+        public override void Validate(ResourceIdentifier identifier)
+        {
+            if (identifier.Type != "Microsoft.Resources/resourceGroups" && identifier.Type != ResourceType.Parent)
+            {
+                throw new InvalidOperationException($"{identifier.Type} is not a valid container for {ResourceType}");
+            }
         }
 
         public virtual U Create(T resourceDetails)

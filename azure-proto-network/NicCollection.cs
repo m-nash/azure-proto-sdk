@@ -6,28 +6,18 @@ using System.Collections.Generic;
 
 namespace azure_proto_network
 {
-    public class NicCollection : AzureCollection<AzureNic>
+    public class NicCollection : ArmResourceCollectionOperations
     {
-        public NicCollection(TrackedResource resourceGroup) : base(resourceGroup) { }
-
-        private NetworkManagementClient Client => ClientFactory.Instance.GetNetworkClient(Parent.Id.Subscription);
-
-        public AzureNic CreateOrUpdateNic(string name, AzureNic nic)
+        public NicCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
-            var nicResult = Client.NetworkInterfaces.StartCreateOrUpdate(Parent.Name, name, nic.Model).WaitForCompletionAsync().Result;
-            nic = new AzureNic(Parent, new PhNetworkInterface(nicResult.Value));
-            return nic;
+
         }
 
-        protected override IEnumerable<AzureNic> GetItems()
+        public NicCollection(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
         {
-            throw new NotImplementedException();
+
         }
 
-        protected override AzureNic Get(string nicName)
-        {
-            var nicResult = Client.NetworkInterfaces.Get(Parent.Name, nicName);
-            return new AzureNic(Parent, new PhNetworkInterface(nicResult.Value));
-        }
+        protected override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
     }
 }

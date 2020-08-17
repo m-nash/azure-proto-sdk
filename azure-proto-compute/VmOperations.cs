@@ -45,7 +45,7 @@ namespace azure_proto_compute
         }
 
 
-        public PhVoidOperation Stop(bool? skipShutdown)
+        public PhVoidOperation Stop(bool? skipShutdown = null)
         {
             return new PhVoidOperation(Operations.StartPowerOff(Context.ResourceGroup, Context.Name, skipShutdown));
         }
