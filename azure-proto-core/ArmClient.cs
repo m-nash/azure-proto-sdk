@@ -160,6 +160,9 @@ namespace azure_proto_management
             return new ResourceGroupContainerOperations(this, $"/subscriptions/{subscription}");
         }
 
+        public IAsyncEnumerable<T> ListResource<T>() where T: Resource
+            {
+            }
 
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
         {

@@ -42,8 +42,8 @@ namespace azure_proto_core
         }
     }
 
-    public abstract class ArmResourceOperations<Model, PatchModel, PatchResult, DeleteResult> : ArmResourceOperations 
-        where Model: Resource where PatchModel : class where PatchResult: class where DeleteResult : class
+    public abstract class ArmResourceOperations<Model, PatchModel, PatchResult, DeleteResult> : ArmResourceOperations
+        where Model : Resource where PatchModel : class where PatchResult : class where DeleteResult : class
     {
         public ArmResourceOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
@@ -53,11 +53,53 @@ namespace azure_proto_core
         {
         }
 
+        public abstract ArmResponse<Model> GetModel()
+
+
+
+
         public abstract Response<Model> Get();
         public abstract Task<Response<Model>> GetAsync(CancellationToken cancellationToken = default);
         public abstract PatchResult Update(PatchModel patchable);
         public abstract Task<PatchResult> UpdateAsync(PatchModel patchable, CancellationToken cancellationToken = default);
         public abstract DeleteResult Delete();
         public abstract Task<DeleteResult> DeleteAsync(CancellationToken cancellationToken = default);
+    }
+
+    public abstract class RpOperations<T> : ArmResourceOperations<T, T, T, T>
+        {
+        private T _model;
+        public T Model
+        {
+            get
+            {
+                //if(_model == null)
+                //{
+                //    _model = Get();
+                //}
+                return _model;
+            }
+        }
+
+        public class ArmResponse<T> where T : Resource
+        {
+            T _value;
+            Func<T> _call;
+            public T Value
+            {
+                get
+                {
+                    if (_value != null) return _value;
+                    return _call();
+                }
+            }
+            public bool CompletedSynchronously { get { return _value == null; }
+        }
+        //        {
+        //            _model = GetAsync();
+        //        }
+        //        return _model;
+        //    }
+        //}
     }
 }

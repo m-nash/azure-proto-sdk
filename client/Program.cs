@@ -81,6 +81,9 @@ namespace client
             //make sure vm exists
             CreateSingleVmExample();
 
+            client.Subscription(sub).ResourceGroup(rgName)
+                client.ListSubscriptions()
+                client.Suscription(subscriptionId).ListResourceGroups()
             var rg = client.Subscriptions.ResourceGroups(subscriptionId).ResourceGroup(rgName);
             rg.Vm(vmName).AddTag("tagkey", "tagvalue");
         }
