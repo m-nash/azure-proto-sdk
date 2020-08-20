@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class PublicIpOperations : ArmResourceOperations<PhPublicIPAddress, TagsObject, ArmOperation<PhPublicIPAddress>, ArmOperation<Response>>
+    public class PublicIpOperations : ResourceOperations<PhPublicIPAddress, TagsObject, ArmOperation<PhPublicIPAddress>, ArmOperation<Response>>
     {
         public PublicIpOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {

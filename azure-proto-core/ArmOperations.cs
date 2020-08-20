@@ -20,12 +20,12 @@ namespace azure_proto_core
         {
         }
 
-        public T GetOperations<T>(ResourceIdentifier context) where T : ArmResourceOperations
+        public T GetOperations<T>(ResourceIdentifier context) where T : ResourceOperations
         {
             return Activator.CreateInstance(typeof(T), this, context) as T;
         }
 
-        public T GetOperations<T>(azure_proto_core.Resource context) where T : ArmResourceOperations
+        public T GetOperations<T>(azure_proto_core.Resource context) where T : ResourceOperations
         {
             return Activator.CreateInstance(typeof(T), this, context) as T;
         }

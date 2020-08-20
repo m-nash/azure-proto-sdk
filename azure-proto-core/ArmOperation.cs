@@ -77,7 +77,7 @@ namespace azure_proto_core
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="U"></typeparam>
-    public class PhArmOperation<T, U> : ArmOperation<T> where T: Resource where U : class
+    public class PhArmOperation<T, U> : ArmOperation<T> where T: class where U : class
     {
         Operation<U> _wrapped;
         Func<U, T> _converter;

@@ -13,7 +13,7 @@ namespace azure_proto_compute
     /// <summary>
     /// Operations over a single virtual machine
     /// </summary>
-    public class VmOperations : ArmResourceOperations<PhVirtualMachine, VirtualMachineUpdate, PhVmValueOperation, PhVoidOperation>
+    public class VmOperations : ResourceOperations<PhVirtualMachine, VirtualMachineUpdate, PhVmValueOperation, PhVoidOperation>
     {
         public VmOperations(ArmOperations parent, TrackedResource context) : base(parent, context)
         {

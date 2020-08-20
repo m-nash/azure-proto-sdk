@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_compute
 {
-    public class AvailabilitySetOperations : ArmResourceOperations<PhAvailabilitySet, AvailabilitySetUpdate, Response<PhAvailabilitySet>, Response>
+    public class AvailabilitySetOperations : ResourceOperations<PhAvailabilitySet, AvailabilitySetUpdate, Response<PhAvailabilitySet>, Response>
     {
 
         public AvailabilitySetOperations(ArmOperations parent, TrackedResource context) : base(parent, context)

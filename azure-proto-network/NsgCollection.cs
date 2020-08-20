@@ -9,7 +9,7 @@ using System.Xml.Schema;
 
 namespace azure_proto_network
 {
-    public class NsgCollection : ArmResourceCollectionOperations
+    public class NsgCollection : ResourceCollectionOperations
     {
         public NsgCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {

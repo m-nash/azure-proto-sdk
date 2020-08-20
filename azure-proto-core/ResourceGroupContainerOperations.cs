@@ -17,7 +17,7 @@ namespace azure_proto_core
     /// Operations for the RespourceGroups container in the given subscription context.  Allows Creating and listign respource groups
     /// and provides an attachment point for Collections of Tracked Resources.
     /// </summary>
-    public class ResourceGroupContainerOperations : ArmResourceContainerOperations<PhResourceGroup, Response<PhResourceGroup>>
+    public class ResourceGroupContainerOperations : ResourceContainerOperations<PhResourceGroup>
     {
         protected override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
 
@@ -28,31 +28,31 @@ namespace azure_proto_core
         {
         }
 
-        public override Response<PhResourceGroup> Create(string name, PhResourceGroup resourceDetails)
+        public override ArmOperation<PhResourceGroup> Create(string name, PhResourceGroup resourceDetails)
         {
-            return new PhResponse<PhResourceGroup, ResourceGroup>(GetRgOperations(Context.Subscription).CreateOrUpdate(name, resourceDetails), g => new PhResourceGroup(g));
+            return new PhArmOperation<PhResourceGroup, ResourceGroup>(GetRgOperations(Context.Subscription).CreateOrUpdate(name, resourceDetails), g => new PhResourceGroup(g));
         }
 
-        public Response<PhResourceGroup> Create(string name, Location location)
+        public ArmOperation<PhResourceGroup> Create(string name, Location location)
         {
             var model = new PhResourceGroup(new ResourceGroup(location));
-            return new PhResponse<PhResourceGroup, ResourceGroup>(GetRgOperations(Context.Subscription).CreateOrUpdate(name, model), g => new PhResourceGroup(g));
+            return new PhArmOperation<PhResourceGroup, ResourceGroup>(GetRgOperations(Context.Subscription).CreateOrUpdate(name, model), g => new PhResourceGroup(g));
         }
 
 
-        public async override Task<Response<PhResourceGroup>> CreateAsync(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<PhResourceGroup>> CreateAsync(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhResponse<PhResourceGroup, ResourceGroup>(await GetRgOperations(Context.Subscription).CreateOrUpdateAsync(name, resourceDetails, cancellationToken), g => new PhResourceGroup(g));
+            return new PhArmOperation<PhResourceGroup, ResourceGroup>(await GetRgOperations(Context.Subscription).CreateOrUpdateAsync(name, resourceDetails, cancellationToken), g => new PhResourceGroup(g));
         }
 
         public Pageable<PhResourceGroup> ListResourceGroups(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return new WrappingPageable<ResourceGroup, PhResourceGroup>(GetResourcesClient(Context.Subscription).ResourceGroups.List(null, null, cancellationToken), s => new PhResourceGroup(s));
+            return new WrappingPageable<ResourceGroup, PhResourceGroup>(GetRgOperations(Context.Subscription).List(null, null, cancellationToken), s => new PhResourceGroup(s));
         }
 
         public AsyncPageable<PhResourceGroup> ListResourceGroupsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return new WrappingAsyncPageable<ResourceGroup, PhResourceGroup>(GetResourcesClient(Context.Subscription).ResourceGroups.ListAsync(null, null, cancellationToken), s => new PhResourceGroup(s));
+            return new WrappingAsyncPageable<ResourceGroup, PhResourceGroup>(GetRgOperations(Context.Subscription).ListAsync(null, null, cancellationToken), s => new PhResourceGroup(s));
         }
 
 

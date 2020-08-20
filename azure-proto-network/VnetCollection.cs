@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace azure_proto_network
 {
-    public class VnetCollection : ArmResourceCollectionOperations
+    public class VnetCollection : ResourceCollectionOperations
     {
         public VnetCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {

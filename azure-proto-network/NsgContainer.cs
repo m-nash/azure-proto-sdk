@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class NsgContainer : ArmResourceContainerOperations<PhNetworkSecurityGroup, Operation<PhNetworkSecurityGroup>>
+    public class NsgContainer : ResourceContainerOperations<PhNetworkSecurityGroup, Operation<PhNetworkSecurityGroup>>
     {
         public NsgContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {

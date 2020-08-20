@@ -8,7 +8,7 @@ namespace azure_proto_network
     /// <summary>
     /// TODO: refactor list methods to include type-specific lists, and allow Child Resources
     /// </summary>
-    public class SubnetCollection : ArmResourceCollectionOperations
+    public class SubnetCollection : ResourceCollectionOperations
     {
         public SubnetCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {

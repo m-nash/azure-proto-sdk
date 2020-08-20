@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace azure_proto_network
 {
-    public class NicCollection : ArmResourceCollectionOperations
+    public class NicCollection : ResourceCollectionOperations
     {
         public NicCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {

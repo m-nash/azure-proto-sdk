@@ -5,7 +5,7 @@ using System.Text;
 
 namespace azure_proto_network
 {
-    public class PublicIpCollection : ArmResourceCollectionOperations
+    public class PublicIpCollection : ResourceCollectionOperations
     {
         public PublicIpCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {

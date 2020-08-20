@@ -13,22 +13,22 @@ namespace azure_proto_compute
         /// </summary>
         /// <param name="subscriptionOperations"></param>
         /// <returns></returns>
-        public static VmCollection Vms(this SubscriptionCollectionOperations subscriptionOperations)
+        public static VmCollection Vms(this SubscriptionOperations subscriptionOperations)
         {
             return new VmCollection(subscriptionOperations, subscriptionOperations.DefaultSubscription);
         }
 
-        public static VmCollection Vms(this SubscriptionCollectionOperations subscriptionOperations, ResourceIdentifier subscription)
+        public static VmCollection Vms(this SubscriptionOperations subscriptionOperations, ResourceIdentifier subscription)
         {
             return new VmCollection(subscriptionOperations, subscription);
         }
 
-        public static VmCollection Vms(this SubscriptionCollectionOperations subscriptionOperations, azure_proto_core.Resource subscription)
+        public static VmCollection Vms(this SubscriptionOperations subscriptionOperations, azure_proto_core.Resource subscription)
         {
             return new VmCollection(subscriptionOperations, subscription);
         }
 
-        public static VmCollection Vms(this SubscriptionCollectionOperations subscriptionOperations, string subscriptionId)
+        public static VmCollection Vms(this SubscriptionOperations subscriptionOperations, string subscriptionId)
         {
             return new VmCollection(subscriptionOperations, $"/subscriptions/{subscriptionId}");
         }
@@ -38,22 +38,22 @@ namespace azure_proto_compute
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="context"></param>
-        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionCollectionOperations subscriptionOperations)
+        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionOperations subscriptionOperations)
         {
             return new AvailabilitySetCollection(subscriptionOperations, subscriptionOperations.DefaultSubscription);
         }
 
-        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionCollectionOperations subscriptionOperations, ResourceIdentifier subscription)
+        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionOperations subscriptionOperations, ResourceIdentifier subscription)
         {
             return new AvailabilitySetCollection(subscriptionOperations, subscription);
         }
 
-        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionCollectionOperations subscriptionOperations, azure_proto_core.Resource subscription)
+        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionOperations subscriptionOperations, azure_proto_core.Resource subscription)
         {
             return new AvailabilitySetCollection(subscriptionOperations, subscription);
         }
 
-        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionCollectionOperations subscriptionOperations, string subscriptionId)
+        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionOperations subscriptionOperations, string subscriptionId)
         {
             return new AvailabilitySetCollection(subscriptionOperations, $"/subscriptions/{subscriptionId}");
         }

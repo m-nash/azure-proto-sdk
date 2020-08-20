@@ -8,7 +8,7 @@ namespace azure_proto_compute
     /// <summary>
     /// Class conatinaing list operations for availabiliuty sets
     /// </summary>
-    public class AvailabilitySetCollection : ArmResourceCollectionOperations
+    public class AvailabilitySetCollection : ResourceCollectionOperations
     {
 
         public AvailabilitySetCollection(ArmOperations parent, azure_proto_core.Resource resourceGroup) : base(parent, resourceGroup) { }

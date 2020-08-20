@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class NicContainer : ArmResourceContainerOperations<PhNetworkInterface, ArmOperation<PhNetworkInterface>>
+    public class NicContainer : ResourceContainerOperations<PhNetworkInterface, ArmOperation<PhNetworkInterface>>
     {
         public NicContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {

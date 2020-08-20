@@ -13,7 +13,7 @@ namespace azure_proto_compute
     /// <summary>
     /// Vm Operations over a resource group
     /// </summary>
-    public class VmContainer : ArmResourceContainerOperations<PhVirtualMachine, PhVmValueOperation>
+    public class VmContainer : ResourceContainerOperations<PhVirtualMachine, PhVmValueOperation>
     {
         public VmContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {

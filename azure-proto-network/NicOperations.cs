@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace azure_proto_network
 {
 
-    public class NicOperations : ArmResourceOperations<PhNetworkInterface, TagsObject, ArmOperation<PhNetworkInterface>, ArmOperation<Response>>
+    public class NicOperations : ResourceOperations<PhNetworkInterface, TagsObject, ArmOperation<PhNetworkInterface>, ArmOperation<Response>>
     {
         public NicOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {

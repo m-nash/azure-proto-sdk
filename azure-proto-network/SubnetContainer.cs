@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class SubnetContainer : ArmResourceContainerOperations<PhSubnet, ArmOperation<PhSubnet>>
+    public class SubnetContainer : ResourceContainerOperations<PhSubnet, ArmOperation<PhSubnet>>
     {
         public SubnetContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {

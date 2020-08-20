@@ -9,7 +9,7 @@ namespace azure_proto_compute
     /// <summary>
     /// VM Operations at the subscription level
     /// </summary>
-    public class VmCollection : ArmResourceCollectionOperations
+    public class VmCollection : ResourceCollectionOperations
     {
         public VmCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {

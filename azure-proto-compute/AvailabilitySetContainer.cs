@@ -10,7 +10,7 @@ namespace azure_proto_compute
     /// <summary>
     /// Operatiosn class for Availability Set Contaienrs (resource groups)
     /// </summary>
-    public class AvailabilitySetContainer : ArmResourceContainerOperations<PhAvailabilitySet, Response<PhAvailabilitySet>>
+    public class AvailabilitySetContainer : ResourceContainerOperations<PhAvailabilitySet, Response<PhAvailabilitySet>>
     {
         public AvailabilitySetContainer(ArmOperations parent, TrackedResource context):base(parent, context) 
         {

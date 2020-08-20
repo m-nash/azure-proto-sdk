@@ -5,15 +5,15 @@ using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using azure_proto_core;
 using azure_proto_core.Adapters;
+using azure_proto_core.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Transactions;
 
-namespace azure_proto_management
+namespace azure_proto_core
 {
     /// <summary>
     /// The entry point for all ARM clients
@@ -21,6 +21,17 @@ namespace azure_proto_management
     /// </summary>
     public class ArmClient : ArmOperations
     {
+        static ArmClient()
+        {
+            Registry.Register<PhResourceGroup>(
+                new azure_proto_core.Internal.ArmResourceRegistration<PhResourceGroup>(
+                    new ResourceType("Microsoft.Resources/resourceGroups"),
+                    (o, r) => new ResourceGroupContainerOperations(o, r),
+                    null,
+                    (o, r) => new ResourceGroupOperations(o, r)));
+        }
+
+        public static ArmResourceRegistry Registry { get; }  = new ArmResourceRegistry();
         internal static readonly string DefaultUri = "https://management.azure.com";
         public ArmClient() : this(new Uri(DefaultUri), new DefaultAzureCredential())
         {
@@ -45,11 +56,26 @@ namespace azure_proto_management
 
         public string DefaultSubscription { get; set; }
 
-        public SubscriptionCollectionOperations Subscriptions => new SubscriptionCollectionOperations(this, DefaultSubscription);
+        public SubscriptionOperations Subscriptions() => new SubscriptionOperations(this, DefaultSubscription);
+        public SubscriptionOperations Subscriptions(PhSubscriptionModel subscription) => new SubscriptionOperations(this, subscription);
 
-        internal AsyncPageable<PhSubscriptionModel> ListSubscriptionsAsync(CancellationToken token = default(CancellationToken))
+        /// <summary>
+        /// TODO: represent strings that take both resource id or just subscription id
+        /// TODO: should we allow subscription friendly names?
+        /// </summary>
+        /// <param name="subscription"></param>
+        /// <returns></returns>
+        public SubscriptionOperations Subscriptions(ResourceIdentifier subscription) => new SubscriptionOperations(this, subscription);
+        public SubscriptionOperations Subscriptions(string subscription) => new SubscriptionOperations(this, $"/subscriptions/{subscription}");
+
+        public AsyncPageable<SubscriptionOperations> ListSubscriptionsAsync(CancellationToken token = default(CancellationToken))
         {
-            return new WrappingAsyncPageable<Subscription, PhSubscriptionModel>(SubscriptionsClient.ListAsync(token), s => new PhSubscriptionModel(s));
+            return new WrappingAsyncPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.ListAsync(token), s => new SubscriptionOperations(this, new PhSubscriptionModel(s)));
+        }
+
+        public Pageable<SubscriptionOperations> ListSubscriptions(CancellationToken token = default(CancellationToken))
+        {
+            return new WrappingPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.List(token), s => new SubscriptionOperations(this, new PhSubscriptionModel(s)));
         }
 
         public AsyncPageable<PhLocation> ListLocationsAsync(string subscriptionId = null, CancellationToken token = default(CancellationToken))
@@ -138,31 +164,17 @@ namespace azure_proto_management
                 var subs = ListSubscriptionsAsync(token).GetAsyncEnumerator();
                 if (await subs.MoveNextAsync())
                 {
-                    sub = subs.Current?.SubscriptionId;
+                    PhSubscriptionModel localSub;
+                    if (subs.Current != null && subs.Current.TryGetModel(out localSub))
+                    {
+                        sub = localSub?.Id.Subscription;
+                    }
                 }
             }
 
             return sub;
         }
 
-        public ResourceGroupContainerOperations ResourceGroups(ResourceIdentifier subscription)
-        {
-            return new ResourceGroupContainerOperations(this, subscription);
-        }
-
-        public ResourceGroupContainerOperations ResourceGroups(PhSubscriptionModel subscription)
-        {
-            return new ResourceGroupContainerOperations(this, subscription);
-        }
-
-        public ResourceGroupContainerOperations ResourceGroups(string subscription)
-        {
-            return new ResourceGroupContainerOperations(this, $"/subscriptions/{subscription}");
-        }
-
-        public IAsyncEnumerable<T> ListResource<T>() where T: Resource
-            {
-            }
 
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
         {
@@ -177,6 +189,160 @@ namespace azure_proto_management
         {
             return new ResourceGroupOperations(this, resourceGroup);
         }
+
+        public Pageable<ResourceOperations<T>> ListResource<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        {
+            ResourceCollectionOperations<T> collection;
+            if (!Registry.TryGetColletcion<T>(this, $"/subscriptions/{DefaultSubscription}", out collection))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return collection.List(filter, top, cancellationToken);
+        }
+
+        public Pageable<ResourceOperations<T>> ListResource<T>(ResourceIdentifier subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        {
+            ResourceCollectionOperations<T> collection;
+            if (!Registry.TryGetColletcion<T>(this, subscription, out collection))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return collection.List(filter, top, cancellationToken);
+        }
+
+        public Pageable<ResourceOperations<T>> ListResource<T>(PhSubscriptionModel subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        {
+            ResourceCollectionOperations<T> collection;
+            if (!Registry.TryGetColletcion<T>(this, subscription.Id, out collection))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return collection.List(filter, top, cancellationToken);
+        }
+
+
+
+        public AsyncPageable<ResourceOperations<T>> ListResourceAsync<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        {
+            ResourceCollectionOperations<T> collection;
+            if (!Registry.TryGetColletcion<T>(this, $"/subscriptions/{DefaultSubscription}", out collection))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return collection.ListAsync(filter, top, cancellationToken);
+        }
+
+        public AsyncPageable<ResourceOperations<T>> ListResourceAsync<T>(ResourceIdentifier resource, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        {
+            ResourceCollectionOperations<T> collection;
+            if (!Registry.TryGetColletcion<T>(this, resource, out collection))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return collection.ListAsync(filter, top, cancellationToken);
+        }
+
+        public AsyncPageable<ResourceOperations<T>> ListResourceAsync<T>(PhSubscriptionModel model, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        {
+            ResourceCollectionOperations<T> collection;
+            if (!Registry.TryGetColletcion<T>(this, model.Id, out collection))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return collection.ListAsync(filter, top, cancellationToken);
+        }
+
+
+        public virtual IEnumerable<azure_proto_core.Location> ListAvailableLocations<T>(CancellationToken cancellationToken = default) where T:TrackedResource
+        {
+            ResourceCollectionOperations<T> collection;
+            if (!Registry.TryGetColletcion<T>(this, $"/subscriptions/{DefaultSubscription}", out collection))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return collection.ListAvailableLocations(cancellationToken);
+        }
+
+        public virtual IEnumerable<azure_proto_core.Location> ListAvailableLocations<T>(PhSubscriptionModel subscription, CancellationToken cancellationToken = default) where T : TrackedResource
+        {
+            ResourceCollectionOperations<T> collection;
+            if (!Registry.TryGetColletcion<T>(this, subscription.Id, out collection))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return collection.ListAvailableLocations(cancellationToken);
+        }
+
+        public virtual IEnumerable<azure_proto_core.Location> ListAvailableLocations<T>(ResourceIdentifier subscription, CancellationToken cancellationToken = default) where T : TrackedResource
+        {
+            ResourceCollectionOperations<T> collection;
+            if (!Registry.TryGetColletcion<T>(this, subscription, out collection))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return collection.ListAvailableLocations(cancellationToken);
+        }
+
+        public virtual IEnumerable<azure_proto_core.Location> ListAvailableLocations<T>(string subscription, CancellationToken cancellationToken = default) where T : TrackedResource
+        {
+            ResourceCollectionOperations<T> collection;
+            if (!Registry.TryGetColletcion<T>(this, $"/subscriptions/{subscription}", out collection))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return collection.ListAvailableLocations(cancellationToken);
+        }
+
+
+        public ResourceOperations<T> GetResourceOperations<T>(TrackedResource resource) where T : TrackedResource
+        {
+            ResourceOperations<T> operations;
+            if (!Registry.TryGetOperations<T>(this, resource, out operations))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return operations;
+        }
+
+        public ResourceOperations<T> GetResourceOperations<T>(ResourceIdentifier resource) where T : TrackedResource
+        {
+            var placeholder = new ArmResource(resource);
+            ResourceOperations<T> operations;
+            if (!Registry.TryGetOperations<T>(this, placeholder, out operations))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return operations;
+        }
+
+        public ArmOperation<T> CreateResource<T>(string subscription, string resourceGroup, string name, T model, azure_proto_core.Location location = default) where T:TrackedResource
+        {
+            if (location == null)
+            {
+                location = azure_proto_core.Location.Default;
+            }
+
+            ResourceContainerOperations<T> container;
+            if (!Registry.TryGetContainer<T>(this, new ArmResource($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", location), out container))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return container.Create(name, model);
+        }
+
 
 
 

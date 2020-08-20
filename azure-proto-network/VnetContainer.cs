@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class VnetContainer : ArmResourceContainerOperations<PhVirtualNetwork, ArmOperation<PhVirtualNetwork>>
+    public class VnetContainer : ResourceContainerOperations<PhVirtualNetwork, ArmOperation<PhVirtualNetwork>>
     {
         public VnetContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {

@@ -16,7 +16,7 @@ namespace azure_proto_network
     /// An operations + Model class for NSGs
     /// TODO: How does the operation signature change for resources that support Etags?
     /// </summary>
-    public class NsgOperations : ArmResourceOperations<PhNetworkSecurityGroup, TagsObject, Response<PhNetworkSecurityGroup>, Operation<Response> >
+    public class NsgOperations : ResourceOperations<PhNetworkSecurityGroup, TagsObject, Response<PhNetworkSecurityGroup>, Operation<Response> >
     {
         class RuleIdEqualityComparer : IEqualityComparer<SecurityRule>
         {

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class VnetOperations : ArmResourceOperations<PhVirtualNetwork, TagsObject, ArmOperation<PhVirtualNetwork>, ArmOperation<Response>>
+    public class VnetOperations : ResourceOperations<PhVirtualNetwork, TagsObject, ArmOperation<PhVirtualNetwork>, ArmOperation<Response>>
     {
         public VnetOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {

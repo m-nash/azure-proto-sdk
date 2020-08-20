@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class PublicIpContainer : ArmResourceContainerOperations<PhPublicIPAddress, ArmOperation<PhPublicIPAddress>>
+    public class PublicIpContainer : ResourceContainerOperations<PhPublicIPAddress, ArmOperation<PhPublicIPAddress>>
     {
         public PublicIpContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {

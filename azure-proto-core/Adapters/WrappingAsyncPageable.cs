@@ -108,7 +108,7 @@ namespace azure_proto_core.Adapters
             }
         }
     }
-    public class WrappingPageable<T, U> : Pageable<U> where U : TrackedResource where T : class
+    public class WrappingPageable<T, U> : Pageable<U> where U : class where T : class
     {
         IEnumerable<Pageable<T>> _wrapped;
         Func<T, U> _converter;
@@ -137,7 +137,7 @@ namespace azure_proto_core.Adapters
     }
 
  
-    public class WrappingAsyncPageable<T, U> : AsyncPageable<U> where U: TrackedResource where T: class
+    public class WrappingAsyncPageable<T, U> : AsyncPageable<U> where U: class where T: class
     {
         IEnumerable<AsyncPageable<T>> _wrapped;
         Func<T, U> _converter;
@@ -165,7 +165,7 @@ namespace azure_proto_core.Adapters
         }
     }
 
-    internal class WrappingPage<T, U> : Page<U> where U : TrackedResource where T : class
+    internal class WrappingPage<T, U> : Page<U> where U : class where T : class
     {
         Page<T> _wrapped;
         Func<T, U> _converter;
