@@ -13,7 +13,7 @@ namespace azure_proto_compute
     /// <summary>
     /// Vm Operations over a resource group
     /// </summary>
-    public class VmContainer : ResourceContainerOperations<PhVirtualMachine, PhVmValueOperation>
+    public class VmContainer : ResourceContainerOperations<PhVirtualMachine>
     {
         public VmContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
@@ -25,12 +25,12 @@ namespace azure_proto_compute
 
         protected override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 
-        public override PhVmValueOperation Create(string name, PhVirtualMachine resourceDetails)
+        public override ArmOperation<PhVirtualMachine> Create(string name, PhVirtualMachine resourceDetails)
         {
             return new PhVmValueOperation(VmOperations.StartCreateOrUpdate(Context.ResourceGroup, name, resourceDetails.Model));
         }
 
-        public async override Task<PhVmValueOperation> CreateAsync(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<PhVirtualMachine>> CreateAsync(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhVmValueOperation(await VmOperations.StartCreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails.Model, cancellationToken));
         }

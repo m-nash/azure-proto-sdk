@@ -1,10 +1,5 @@
 ﻿using Azure;
-using Azure.Core;
-using azure_proto_core;
 using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -46,7 +41,9 @@ namespace azure_proto_core
     }
 
     /// <summary>
-    /// Common base type for lifecycle operations overs
+    /// Common base type for lifecycle operations over a resource
+    /// TODO: Consider whehter to represent POST operations and the acommpanyong actions list call
+    /// TODO: Consider whether to provide a Normalized PATCH functionality across RP resources
     /// </summary>
     /// <typeparam name="Model"></typeparam>
     public abstract class ResourceOperations<Model> : ResourceOperations where Model : Resource 
@@ -62,17 +59,18 @@ namespace azure_proto_core
         }
 
 
-        protected virtual Resource Resource { get; }
-        public virtual bool TryGetResource(out Model model)
+        protected virtual Resource Resource { get;  set; }
+        public override ResourceIdentifier Context => Resource.Id;
+        public virtual bool TryGetModel(out Model model)
         {
             model = Resource as Model;
             return model != null;
         }
 
-        public abstract Response<Model> Get();
-        public abstract Task<Response<Model>> GetAsync(CancellationToken cancellationToken = default);
-        public abstract ArmOperation<Model> Update(IPatchModel patchable);
-        public abstract Task<ArmOperation<Model>> UpdateAsync(IPatchModel patchable, CancellationToken cancellationToken = default);
+        public abstract Response<ResourceOperations<Model>> Get();
+        public abstract Task<Response<ResourceOperations<Model>>> GetAsync(CancellationToken cancellationToken = default);
+        public abstract ArmOperation<ResourceOperations<Model>> AddTag(string key, string value);
+        public abstract Task<ArmOperation<ResourceOperations<Model>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default);
         public abstract ArmOperation<Response> Delete();
         public abstract Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default);
     }

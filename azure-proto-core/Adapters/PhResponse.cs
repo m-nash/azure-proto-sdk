@@ -5,7 +5,7 @@ using System.Text;
 
 namespace azure_proto_core
 {
-    public class PhResponse<T, U> : Response<T> where T: Resource where U : class
+    public class PhResponse<T, U> : Response<T> where T: class where U : class
     {
         Response<U> _wrapped;
         Func<U, T> _converter;

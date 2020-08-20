@@ -14,7 +14,7 @@ namespace azure_proto_compute.Placeholder
     /// <summary>
     /// Placeholder class - operations that return PHVirtualMachine, makes use of the underlying operationa s a wrapper
     /// </summary>
-    public class PhVmValueOperation : PhValueOperation<PhVirtualMachine, VirtualMachine>
+    public class PhVmValueOperation : PhArmOperation<PhVirtualMachine, VirtualMachine>
     {
         public PhVmValueOperation(Operation<VirtualMachine> wrapped) : base(wrapped, v => new PhVirtualMachine(v))
         {

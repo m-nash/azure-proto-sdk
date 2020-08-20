@@ -28,35 +28,34 @@ namespace azure_proto_core
         {
         }
 
-        public override ArmOperation<PhResourceGroup> Create(string name, PhResourceGroup resourceDetails)
+        public override ArmOperation<ResourceOperations<PhResourceGroup>> Create(string name, PhResourceGroup resourceDetails)
         {
-            return new PhArmOperation<PhResourceGroup, ResourceGroup>(GetRgOperations(Context.Subscription).CreateOrUpdate(name, resourceDetails), g => new PhResourceGroup(g));
+            return new PhArmOperation<ResourceOperations<PhResourceGroup>, ResourceGroup>(Operations.CreateOrUpdate(name, resourceDetails), g => ResourceGroup(new PhResourceGroup(g)));
         }
 
-        public ArmOperation<PhResourceGroup> Create(string name, Location location)
+        public ArmOperation<ResourceOperations<PhResourceGroup>> Create(string name, Location location)
         {
             var model = new PhResourceGroup(new ResourceGroup(location));
-            return new PhArmOperation<PhResourceGroup, ResourceGroup>(GetRgOperations(Context.Subscription).CreateOrUpdate(name, model), g => new PhResourceGroup(g));
+            return new PhArmOperation<ResourceOperations<PhResourceGroup>, ResourceGroup>(Operations.CreateOrUpdate(name, model), g => ResourceGroup(new PhResourceGroup(g)));
         }
 
 
-        public async override Task<ArmOperation<PhResourceGroup>> CreateAsync(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperations<PhResourceGroup>>> CreateAsync(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<PhResourceGroup, ResourceGroup>(await GetRgOperations(Context.Subscription).CreateOrUpdateAsync(name, resourceDetails, cancellationToken), g => new PhResourceGroup(g));
+            return new PhArmOperation<ResourceOperations<PhResourceGroup>, ResourceGroup>(await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken), g => ResourceGroup(new PhResourceGroup(g)));
         }
 
-        public Pageable<PhResourceGroup> ListResourceGroups(CancellationToken cancellationToken = default(CancellationToken))
+        public Pageable<ResourceOperations<PhResourceGroup>> ListResourceGroups(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return new WrappingPageable<ResourceGroup, PhResourceGroup>(GetRgOperations(Context.Subscription).List(null, null, cancellationToken), s => new PhResourceGroup(s));
+            return new WrappingPageable<ResourceGroup, ResourceOperations<PhResourceGroup>>(Operations.List(null, null, cancellationToken), s => ResourceGroup(new PhResourceGroup(s)));
         }
 
-        public AsyncPageable<PhResourceGroup> ListResourceGroupsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public AsyncPageable<ResourceOperations<PhResourceGroup>> ListResourceGroupsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return new WrappingAsyncPageable<ResourceGroup, PhResourceGroup>(GetRgOperations(Context.Subscription).ListAsync(null, null, cancellationToken), s => new PhResourceGroup(s));
+            return new WrappingAsyncPageable<ResourceGroup, ResourceOperations<PhResourceGroup>>(Operations.ListAsync(null, null, cancellationToken), s => ResourceGroup(new PhResourceGroup(s)));
         }
 
-
-        internal ResourceGroupsOperations GetRgOperations(string subscriptionId) => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, subscriptionId, cred)).ResourceGroups;
+        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Context.Subscription, cred)).ResourceGroups;
 
         public ResourceGroupOperations ResourceGroup(ResourceIdentifier context)
         {

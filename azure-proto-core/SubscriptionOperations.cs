@@ -3,7 +3,6 @@ using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using azure_proto_core.Adapters;
 using azure_proto_core.Resources;
-using azure_proto_management;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -96,8 +95,6 @@ namespace azure_proto_core
             return collection.List(filter, top, cancellationToken);
         }
 
-
-
         public AsyncPageable<ResourceOperations<T>> ListResourceAsync<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
@@ -146,7 +143,6 @@ namespace azure_proto_core
         {
             return new ResourceGroupOperations(this, $"{DefaultSubscription.Id}/resourceGroups/{resourceGroup}");
         }
-
 
         protected override ResourceType ResourceType => ResourceType.None;
 

@@ -13,7 +13,7 @@ namespace azure_proto_compute
     /// <summary>
     /// Operations over a single virtual machine
     /// </summary>
-    public class VmOperations : ResourceOperations<PhVirtualMachine, VirtualMachineUpdate, PhVmValueOperation, PhVoidOperation>
+    public class VmOperations : ResourceOperations<PhVirtualMachine>
     {
         public VmOperations(ArmOperations parent, TrackedResource context) : base(parent, context)
         {
@@ -24,35 +24,35 @@ namespace azure_proto_compute
         }
         protected override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 
-        public override PhVoidOperation Delete()
+        public override ArmOperation<Response> Delete()
         {
-            return new PhVoidOperation(Operations.StartDelete(Context.ResourceGroup, Context.Name));
+            return new ArmVoidOperation(Operations.StartDelete(Context.ResourceGroup, Context.Name));
         }
 
-        public async override Task<PhVoidOperation> DeleteAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new PhVoidOperation(await Operations.StartDeleteAsync(Context.ResourceGroup, Context.Name, cancellationToken));
+            return new ArmVoidOperation(await Operations.StartDeleteAsync(Context.ResourceGroup, Context.Name, cancellationToken));
         }
 
-        public PhVoidOperation Start()
+        public ArmOperation<Response> Start()
         {
-            return new PhVoidOperation(Operations.StartStart(Context.ResourceGroup, Context.Name));
+            return new ArmVoidOperation(Operations.StartStart(Context.ResourceGroup, Context.Name));
         }
 
-        public async Task<PhVoidOperation> StartAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> StartAsync(CancellationToken cancellationToken = default)
         {
-            return new PhVoidOperation(await Operations.StartStartAsync(Context.ResourceGroup, Context.Name, cancellationToken));
+            return new ArmVoidOperation(await Operations.StartStartAsync(Context.ResourceGroup, Context.Name, cancellationToken));
         }
 
 
-        public PhVoidOperation Stop(bool? skipShutdown = null)
+        public ArmOperation<Response> Stop(bool? skipShutdown = null)
         {
-            return new PhVoidOperation(Operations.StartPowerOff(Context.ResourceGroup, Context.Name, skipShutdown));
+            return new ArmVoidOperation(Operations.StartPowerOff(Context.ResourceGroup, Context.Name, skipShutdown));
         }
 
-        public async Task<PhVoidOperation> StopAsync(bool? skipShutdown = null, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> StopAsync(bool? skipShutdown = null, CancellationToken cancellationToken = default)
         {
-            return new PhVoidOperation(await Operations.StartPowerOffAsync(Context.ResourceGroup, Context.Name, skipShutdown, cancellationToken));
+            return new ArmVoidOperation(await Operations.StartPowerOffAsync(Context.ResourceGroup, Context.Name, skipShutdown, cancellationToken));
         }
 
 
@@ -66,24 +66,24 @@ namespace azure_proto_compute
             return new PhResponse<PhVirtualMachine, VirtualMachine>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, cancellationToken), v => new PhVirtualMachine(v));
         }
 
-        public override PhVmValueOperation Update(VirtualMachineUpdate patchable)
+        public override ArmOperation<PhVirtualMachine> Update(IPatchModel patchable)
         {
-            return new PhVmValueOperation(Operations.StartUpdate(Context.ResourceGroup, Context.Name, patchable));
+            return new PhVmValueOperation(Operations.StartUpdate(Context.ResourceGroup, Context.Name, patchable as VirtualMachineUpdate));
         }
 
-        public async override Task<PhVmValueOperation> UpdateAsync(VirtualMachineUpdate patchable, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<PhVirtualMachine>> UpdateAsync(IPatchModel patchable, CancellationToken cancellationToken = default)
         {
-            return new PhVmValueOperation(await Operations.StartUpdateAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken));
+            return new PhVmValueOperation(await Operations.StartUpdateAsync(Context.ResourceGroup, Context.Name, patchable as VirtualMachineUpdate, cancellationToken));
         }
 
-        public PhVmValueOperation AddTag(string key, string value)
+        public ArmOperation<PhVirtualMachine> AddTag(string key, string value)
         {
             var patchable = new VirtualMachineUpdate { Tags= new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)};
             patchable.Tags.Add(key, value);
             return new PhVmValueOperation(Operations.StartUpdate(Context.ResourceGroup, Context.Name, patchable));
         }
 
-        public async Task<PhVmValueOperation> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<PhVirtualMachine>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new VirtualMachineUpdate { Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) };
             patchable.Tags.Add(key, value);

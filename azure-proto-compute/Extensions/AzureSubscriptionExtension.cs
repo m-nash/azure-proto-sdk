@@ -1,7 +1,11 @@
-﻿using Azure.ResourceManager.Compute.Models;
+﻿using Azure;
+using Azure.ResourceManager.Compute.Models;
 using azure_proto_core;
+using azure_proto_core.Adapters;
+using azure_proto_core.Resources;
 using azure_proto_network;
 using System.Collections.Generic;
+using System.Threading;
 using Sku = azure_proto_core.Sku;
 
 namespace azure_proto_compute
@@ -32,6 +36,14 @@ namespace azure_proto_compute
         {
             return new VmCollection(subscriptionOperations, $"/subscriptions/{subscriptionId}");
         }
+
+        public static Pageable<VmOperations> ListVms(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var collection = new VmCollection(subscription, subscription.DefaultSubscription);
+
+            return new WrappingPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.List(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
+        }
+
 
         /// <summary>
         /// Extensions for Availability Sets

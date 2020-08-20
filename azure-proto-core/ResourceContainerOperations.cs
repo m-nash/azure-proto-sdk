@@ -43,18 +43,18 @@ namespace azure_proto_core
             }
         }
 
-        public virtual ArmOperation<T> Create(T resourceDetails)
+        public virtual ArmOperation<ResourceOperations<T>> Create(T resourceDetails)
         {
             return Create(resourceDetails.Id.Name, resourceDetails);
         }
 
-        public abstract ArmOperation<T> Create(string name, T resourceDetails);
-        public virtual Task<ArmOperation<T>> CreateAsync(T resourceDetails, CancellationToken cancellationToken = default)
+        public abstract ArmOperation<ResourceOperations<T>> Create(string name, T resourceDetails);
+        public virtual Task<ArmOperation<ResourceOperations<T>>> CreateAsync(T resourceDetails, CancellationToken cancellationToken = default)
         {
             return CreateAsync(resourceDetails?.Id?.Name, resourceDetails, cancellationToken);
         }
 
-        public abstract Task<ArmOperation<T>> CreateAsync(string name, T resourceDetails, CancellationToken cancellationToken = default);
+        public abstract Task<ArmOperation<ResourceOperations<T>>> CreateAsync(string name, T resourceDetails, CancellationToken cancellationToken = default);
 
     }
 }

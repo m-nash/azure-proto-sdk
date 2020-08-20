@@ -68,12 +68,12 @@ namespace azure_proto_core
         public SubscriptionOperations Subscriptions(ResourceIdentifier subscription) => new SubscriptionOperations(this, subscription);
         public SubscriptionOperations Subscriptions(string subscription) => new SubscriptionOperations(this, $"/subscriptions/{subscription}");
 
-        public AsyncPageable<SubscriptionOperations> ListSubscriptionsAsync(CancellationToken token = default(CancellationToken))
+        public AsyncPageable<SubscriptionOperations> ListSubscriptionsAsync(CancellationToken token = default)
         {
             return new WrappingAsyncPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.ListAsync(token), s => new SubscriptionOperations(this, new PhSubscriptionModel(s)));
         }
 
-        public Pageable<SubscriptionOperations> ListSubscriptions(CancellationToken token = default(CancellationToken))
+        public Pageable<SubscriptionOperations> ListSubscriptions(CancellationToken token = default)
         {
             return new WrappingPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.List(token), s => new SubscriptionOperations(this, new PhSubscriptionModel(s)));
         }
@@ -156,24 +156,50 @@ namespace azure_proto_core
                 .Locations.Select(l => new azure_proto_core.Location(l));
         }
 
-        internal async Task<string> GetDefaultSubscription(CancellationToken token = default(CancellationToken))
+        public virtual IEnumerable<azure_proto_core.Location> ListAvailableLocations<T>(CancellationToken cancellationToken = default) where T : TrackedResource
         {
-            string sub = DefaultSubscription;
-            if (null == sub)
+            ResourceCollectionOperations<T> collection;
+            if (!Registry.TryGetColletcion<T>(this, $"/subscriptions/{DefaultSubscription}", out collection))
             {
-                var subs = ListSubscriptionsAsync(token).GetAsyncEnumerator();
-                if (await subs.MoveNextAsync())
-                {
-                    PhSubscriptionModel localSub;
-                    if (subs.Current != null && subs.Current.TryGetModel(out localSub))
-                    {
-                        sub = localSub?.Id.Subscription;
-                    }
-                }
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
 
-            return sub;
+            return collection.ListAvailableLocations(cancellationToken);
         }
+
+        public virtual IEnumerable<azure_proto_core.Location> ListAvailableLocations<T>(PhSubscriptionModel subscription, CancellationToken cancellationToken = default) where T : TrackedResource
+        {
+            ResourceCollectionOperations<T> collection;
+            if (!Registry.TryGetColletcion<T>(this, subscription.Id, out collection))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return collection.ListAvailableLocations(cancellationToken);
+        }
+
+        public virtual IEnumerable<azure_proto_core.Location> ListAvailableLocations<T>(ResourceIdentifier subscription, CancellationToken cancellationToken = default) where T : TrackedResource
+        {
+            ResourceCollectionOperations<T> collection;
+            if (!Registry.TryGetColletcion<T>(this, subscription, out collection))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return collection.ListAvailableLocations(cancellationToken);
+        }
+
+        public virtual IEnumerable<azure_proto_core.Location> ListAvailableLocations<T>(string subscription, CancellationToken cancellationToken = default) where T : TrackedResource
+        {
+            ResourceCollectionOperations<T> collection;
+            if (!Registry.TryGetColletcion<T>(this, $"/subscriptions/{subscription}", out collection))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return collection.ListAvailableLocations(cancellationToken);
+        }
+
 
 
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
@@ -223,8 +249,6 @@ namespace azure_proto_core
             return collection.List(filter, top, cancellationToken);
         }
 
-
-
         public AsyncPageable<ResourceOperations<T>> ListResourceAsync<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
@@ -258,52 +282,6 @@ namespace azure_proto_core
             return collection.ListAsync(filter, top, cancellationToken);
         }
 
-
-        public virtual IEnumerable<azure_proto_core.Location> ListAvailableLocations<T>(CancellationToken cancellationToken = default) where T:TrackedResource
-        {
-            ResourceCollectionOperations<T> collection;
-            if (!Registry.TryGetColletcion<T>(this, $"/subscriptions/{DefaultSubscription}", out collection))
-            {
-                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
-            }
-
-            return collection.ListAvailableLocations(cancellationToken);
-        }
-
-        public virtual IEnumerable<azure_proto_core.Location> ListAvailableLocations<T>(PhSubscriptionModel subscription, CancellationToken cancellationToken = default) where T : TrackedResource
-        {
-            ResourceCollectionOperations<T> collection;
-            if (!Registry.TryGetColletcion<T>(this, subscription.Id, out collection))
-            {
-                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
-            }
-
-            return collection.ListAvailableLocations(cancellationToken);
-        }
-
-        public virtual IEnumerable<azure_proto_core.Location> ListAvailableLocations<T>(ResourceIdentifier subscription, CancellationToken cancellationToken = default) where T : TrackedResource
-        {
-            ResourceCollectionOperations<T> collection;
-            if (!Registry.TryGetColletcion<T>(this, subscription, out collection))
-            {
-                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
-            }
-
-            return collection.ListAvailableLocations(cancellationToken);
-        }
-
-        public virtual IEnumerable<azure_proto_core.Location> ListAvailableLocations<T>(string subscription, CancellationToken cancellationToken = default) where T : TrackedResource
-        {
-            ResourceCollectionOperations<T> collection;
-            if (!Registry.TryGetColletcion<T>(this, $"/subscriptions/{subscription}", out collection))
-            {
-                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
-            }
-
-            return collection.ListAvailableLocations(cancellationToken);
-        }
-
-
         public ResourceOperations<T> GetResourceOperations<T>(TrackedResource resource) where T : TrackedResource
         {
             ResourceOperations<T> operations;
@@ -327,7 +305,7 @@ namespace azure_proto_core
             return operations;
         }
 
-        public ArmOperation<T> CreateResource<T>(string subscription, string resourceGroup, string name, T model, azure_proto_core.Location location = default) where T:TrackedResource
+        public ArmOperation<ResourceOperations<T>> CreateResource<T>(string subscription, string resourceGroup, string name, T model, azure_proto_core.Location location = default) where T:TrackedResource
         {
             if (location == null)
             {
@@ -344,7 +322,29 @@ namespace azure_proto_core
         }
 
 
+        /// <summary>
+        /// Fill in the default subscription in the simple case (passed in, or only one subscription available)
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        internal async Task<string> GetDefaultSubscription(CancellationToken token = default(CancellationToken))
+        {
+            string sub = DefaultSubscription;
+            if (null == sub)
+            {
+                var subs = ListSubscriptionsAsync(token).GetAsyncEnumerator();
+                if (await subs.MoveNextAsync())
+                {
+                    PhSubscriptionModel localSub;
+                    if (subs.Current != null && subs.Current.TryGetModel(out localSub))
+                    {
+                        sub = localSub?.Id.Subscription;
+                    }
+                }
+            }
 
+            return sub;
+        }
 
         internal SubscriptionsOperations SubscriptionsClient => GetResourcesClient(Guid.NewGuid().ToString()).Subscriptions;
 

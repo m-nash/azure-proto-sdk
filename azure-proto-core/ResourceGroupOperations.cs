@@ -29,42 +29,42 @@ namespace azure_proto_core
 
         public override ArmOperation<Response> Delete()
         {
-            return new ArmVoidOperation(GetOperationsClient(Context.Subscription).StartDelete(Context.Name));
+            return new ArmVoidOperation(Operations.StartDelete(Context.Name));
         }
 
         public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidOperation(await GetOperationsClient(Context.Subscription).StartDeleteAsync(Context.Name, cancellationToken));
+            return new ArmVoidOperation(await Operations.StartDeleteAsync(Context.Name, cancellationToken));
         }
 
-        public override Response<PhResourceGroup> Get()
+        public override Response<ResourceOperations<PhResourceGroup>> Get()
         {
-            return new PhResponse<PhResourceGroup, ResourceGroup>(GetOperationsClient(Context.Subscription).Get(Context.Name), g => new PhResourceGroup(g));
+            return new PhResponse<ResourceOperations<PhResourceGroup>, ResourceGroup>(Operations.Get(Context.Name), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public async override Task<Response<PhResourceGroup>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<Response<ResourceOperations<PhResourceGroup>>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhResponse<PhResourceGroup, ResourceGroup>(await GetOperationsClient(Context.Subscription).GetAsync(Context.Name, cancellationToken), g => new PhResourceGroup(g));
+            return new PhResponse<ResourceOperations<PhResourceGroup>, ResourceGroup>(await Operations.GetAsync(Context.Name, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public override ArmOperation<PhResourceGroup> Update(IPatchModel patchable)
-        {
-            var patch = new ResourceGroupPatchable();
-            foreach (var tuple in patchable.Tags) { patch.Tags.Add(tuple); }
-            return new PhArmOperation<PhResourceGroup, ResourceGroup>(GetOperationsClient(Context.Subscription).Update(Context.Name, patch), g => new PhResourceGroup(g));
-        }
-
-        public async override Task<ArmOperation<PhResourceGroup>> UpdateAsync(IPatchModel patchable, CancellationToken cancellationToken = default)
+        public override ArmOperation<ResourceOperations<PhResourceGroup>> AddTag(string name, string value)
         {
             var patch = new ResourceGroupPatchable();
-            foreach (var tuple in patchable.Tags) { patch.Tags.Add(tuple); }
-            return new PhArmOperation<PhResourceGroup, ResourceGroup>(await GetOperationsClient(Context.Subscription).UpdateAsync(Context.Name, patch, cancellationToken), g => new PhResourceGroup(g));
+            patch.Tags[name] = value;
+            return new PhArmOperation<ResourceOperations<PhResourceGroup>, ResourceGroup>(Operations.Update(Context.Name, patch), g => { this.Resource = new PhResourceGroup(g); return this; });
+        }
+
+        public async override Task<ArmOperation<ResourceOperations<PhResourceGroup>>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
+        {
+            var patch = new ResourceGroupPatchable();
+            patch.Tags[name] = value;
+            return new PhArmOperation<ResourceOperations<PhResourceGroup>, ResourceGroup>(await Operations.UpdateAsync(Context.Name, patch, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
         public Pageable<ResourceOperations<T>> ListResource<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
-            if (!ArmClient.Registry.TryGetColletcion<T>(this, $"/subscriptions/{DefaultSubscription}", out collection))
+            if (!ArmClient.Registry.TryGetColletcion<T>(this, Context, out collection))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
@@ -75,7 +75,7 @@ namespace azure_proto_core
         public AsyncPageable<ResourceOperations<T>> ListResourceAsync<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
-            if (!ArmClient.Registry.TryGetColletcion<T>(this, Context.Id, out collection))
+            if (!ArmClient.Registry.TryGetColletcion<T>(this, Context, out collection))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
@@ -83,8 +83,54 @@ namespace azure_proto_core
             return collection.ListAsync(filter, top, cancellationToken);
         }
 
+        public ArmOperation<ResourceOperations<T>> CreateResource<T>(string name, T model, azure_proto_core.Location location = default) where T : TrackedResource
+        {
 
+            var myResource = Resource as TrackedResource;
 
-        internal ResourceGroupsOperations GetOperationsClient(string subscription) => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(uri, subscription, creds))?.ResourceGroups;
+            if (myResource == null)
+            {
+                myResource = new ArmResource(Context);
+            }
+
+            if (location != null)
+            {
+                myResource = new ArmResource(Context, location);
+            }
+
+            ResourceContainerOperations<T> container;
+            if (!ArmClient.Registry.TryGetContainer<T>(this, myResource, out container))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return container.Create(name, model);
+        }
+
+        public Task<ArmOperation<ResourceOperations<T>>> CreateResourceAsync<T>(string name, T model, azure_proto_core.Location location = default, CancellationToken token = default) where T : TrackedResource
+        {
+
+            var myResource = Resource as TrackedResource;
+
+            if (myResource == null)
+            {
+                myResource = new ArmResource(Context);
+            }
+
+            if (location != null)
+            {
+                myResource = new ArmResource(Context, location);
+            }
+
+            ResourceContainerOperations<T> container;
+            if (!ArmClient.Registry.TryGetContainer<T>(this, myResource, out container))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            return container.CreateAsync(name, model, token);
+        }
+
+        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(uri, Context.Subscription, creds))?.ResourceGroups;
     }
 }

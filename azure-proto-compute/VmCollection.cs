@@ -9,7 +9,7 @@ namespace azure_proto_compute
     /// <summary>
     /// VM Operations at the subscription level
     /// </summary>
-    public class VmCollection : ResourceCollectionOperations
+    public class VmCollection : ResourceCollectionOperations<PhVirtualMachine>
     {
         public VmCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
@@ -32,6 +32,11 @@ namespace azure_proto_compute
         public VmOperations Vm(TrackedResource vm)
         {
             return new VmOperations(this, vm);
+        }
+
+        protected override ResourceOperations<PhVirtualMachine> GetOperations(ResourceIdentifier identifier, azure_proto_core.Location location)
+        {
+            return new VmOperations(this, new ArmResource(identifier, location));
         }
 
         protected override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
