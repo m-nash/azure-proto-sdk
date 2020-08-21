@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\azure-proto-compute\azure-proto-compute.csproj" />
+    <ProjectReference Include="..\azure-proto-network\azure-proto-network.csproj" />
   </ItemGroup>
 
 </Project>

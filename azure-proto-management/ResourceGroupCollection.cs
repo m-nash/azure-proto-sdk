@@ -1,7 +1,9 @@
-﻿using azure_proto_core;
-using Azure.ResourceManager.Resources;
+﻿using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
+using azure_proto_core;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace azure_proto_management
 {
@@ -14,7 +16,15 @@ namespace azure_proto_management
         public AzureResourceGroup CreateOrUpdate(string resourceGroupName, string location)
         {
             var resourceGroup = new ResourceGroup(location);
-            resourceGroup = Client.ResourceGroups.CreateOrUpdateAsync(resourceGroupName, resourceGroup).Result;
+            resourceGroup = Client.ResourceGroups.CreateOrUpdate(resourceGroupName, resourceGroup);
+            AzureResourceGroup result = new AzureResourceGroup(Parent, new PhResourceGroup(resourceGroup));
+            return result;
+        }
+
+        public async Task<AzureResourceGroup> CreateOrUpdateAsync(string resourceGroupName, string location, CancellationToken cancellationToken = default)
+        {
+            var resourceGroup = new ResourceGroup(location);
+            resourceGroup = await Client.ResourceGroups.CreateOrUpdateAsync(resourceGroupName, resourceGroup, cancellationToken);
             AzureResourceGroup result = new AzureResourceGroup(Parent, new PhResourceGroup(resourceGroup));
             return result;
         }

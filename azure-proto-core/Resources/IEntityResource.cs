@@ -7,7 +7,4 @@
     {
         string Etag { get; }
     }
-
-
-
 }

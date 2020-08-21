@@ -93,7 +93,6 @@ namespace azure_proto_core
             }
         }
 
-
         public override string ToString()
         {
             return $"{Namespace}/{Type}";
@@ -141,7 +140,4 @@ namespace azure_proto_core
         public static bool operator !=(string source, ResourceType target) => target == null || !target.Equals(source);
         public static bool operator !=(ResourceType source, ResourceType target) => source == null || !source.Equals(target);
     }
-
-
-
 }

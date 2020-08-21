@@ -2,8 +2,6 @@
 using azure_proto_core;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Xml.Schema;
 
 namespace azure_proto_network
 {

@@ -71,7 +71,4 @@ namespace azure_proto_core
         public static implicit operator string(Location other) => other.DisplayName;
         public static implicit operator Location(string other) => new Location( other);
     }
-
-
-
 }
