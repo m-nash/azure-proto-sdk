@@ -49,7 +49,7 @@ namespace azure_proto_core
 
         public async Task<ArmOperation<ResourceGroupOperations>> CreateResourceGroupAsync(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<PhResourceGroup, ResourceGroupOperations>(await RgOperations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken), s => new ResourceGroupOperations(this, new PhResourceGroup(s)));
+            return new PhArmOperation<ResourceGroupOperations, ResourceGroup>(await RgOperations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken), s => new ResourceGroupOperations(this, new PhResourceGroup(s)));
         }
 
         public Pageable<ResourceGroupOperations> ListResourceGroups(CancellationToken cancellationToken = default(CancellationToken))

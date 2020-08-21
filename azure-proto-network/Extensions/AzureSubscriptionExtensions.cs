@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using Azure;
 using azure_proto_core;
+using azure_proto_core.Adapters;
 using azure_proto_core.Resources;
 
 namespace azure_proto_network
@@ -12,16 +13,16 @@ namespace azure_proto_network
     {
         #region Virtual Network Operations
 
-        public static Pageable<ResourceOperations<PhVirtualNetwork>> ListVnets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<VnetOperations> ListVnets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VnetCollection( subscription, subscription.DefaultSubscription);
-            return collection.List(filter, top, cancellationToken);
+            return new WrappingPageable<ResourceOperations<PhVirtualNetwork>, VnetOperations>(collection.List(filter, top, cancellationToken), vnet => new VnetOperations(vnet, vnet.Context));
         }
 
-        public static AsyncPageable<ResourceOperations<PhVirtualNetwork>> ListVnetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<VnetOperations> ListVnetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VnetCollection(subscription, subscription.DefaultSubscription);
-            return collection.ListAsync(filter, top, cancellationToken);
+            return new WrappingAsyncPageable<ResourceOperations<PhVirtualNetwork>, VnetOperations>(collection.ListAsync(filter, top, cancellationToken), vnet => new VnetOperations(vnet, vnet.Context));
         }
 
 

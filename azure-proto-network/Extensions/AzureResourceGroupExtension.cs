@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
+using azure_proto_core.Adapters;
 using azure_proto_core.Resources;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,10 @@ namespace azure_proto_network
     {
         #region Virtual Network Operations
 
-        public static ArmOperation<ResourceOperations<PhVirtualNetwork>> CreateVnet(this ResourceGroupOperations operations, string name, PhVirtualNetwork resourceDetails)
+        public static ArmOperation<VnetOperations> CreateVnet(this ResourceGroupOperations operations, string name, PhVirtualNetwork resourceDetails)
         {
             var container = new VnetContainer(operations, operations.Context);
-            return container.Create(name, resourceDetails);
+            return new PhArmOperation<VnetOperations, ResourceOperations<PhVirtualNetwork>>(container.Create(name, resourceDetails), vnet => new VnetOperations(vnet, vnet.Context));
         }
 
         public static Task<ArmOperation<ResourceOperations<PhVirtualNetwork>>> CreateAsync(this ResourceGroupOperations operations, string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
@@ -47,23 +48,23 @@ namespace azure_proto_network
             return new VnetOperations(operations, new ResourceIdentifier($"{operations.Context}/providers/Microsoft.Network/virtualNetworks/{vnet}"));
         }
 
-        public static Pageable<ResourceOperations<PhVirtualNetwork>> ListVnets(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<VnetOperations> ListVnets(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VnetCollection(operations, operations.Context);
-            return collection.List(filter, top, cancellationToken);
+            return new WrappingPageable<ResourceOperations<PhVirtualNetwork>, VnetOperations>(collection.List(filter, top, cancellationToken), vnet => new VnetOperations(vnet, vnet.Context));
         }
 
-        public static AsyncPageable<ResourceOperations<PhVirtualNetwork>> ListVnetsAsync(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<VnetOperations> ListVnetsAsync(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VnetCollection(operations, operations.Context);
-            return collection.ListAsync(filter, top, cancellationToken);
+            return new WrappingAsyncPageable<ResourceOperations<PhVirtualNetwork>, VnetOperations>(collection.ListAsync(filter, top, cancellationToken), vnet => new VnetOperations(vnet, vnet.Context));
         }
 
 
         #endregion
 
         #region Public IP Address Operations
-        public static ArmOperation<ResourceOperations<PhPublicIPAddress>> Create(this ResourceGroupOperations operations, string name, PhPublicIPAddress resourceDetails)
+        public static ArmOperation<ResourceOperations<PhPublicIPAddress>> CreatePublicIp(this ResourceGroupOperations operations, string name, PhPublicIPAddress resourceDetails)
         {
             var container = new PublicIpContainer(operations, operations.Context);
             return container.Create(name, resourceDetails);
@@ -171,13 +172,13 @@ namespace azure_proto_network
         #endregion
 
         #region Network Security Group operations
-        public static ArmOperation<ResourceOperations<PhNetworkSecurityGroup>> Create(this ResourceGroupOperations operations, string name, PhNetworkSecurityGroup resourceDetails)
+        public static ArmOperation<ResourceOperations<PhNetworkSecurityGroup>> CreateNsg(this ResourceGroupOperations operations, string name, PhNetworkSecurityGroup resourceDetails)
         {
             var container = new NsgContainer(operations, operations.Context);
             return container.Create(name, resourceDetails);
         }
 
-        public static Task<ArmOperation<ResourceOperations<PhNetworkSecurityGroup>>> CreateAsync(this ResourceGroupOperations operations, string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmOperation<ResourceOperations<PhNetworkSecurityGroup>>> CreateNsgAsync(this ResourceGroupOperations operations, string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
         {
             var container = new NsgContainer(operations, operations.Context);
             return container.CreateAsync(name, resourceDetails, cancellationToken);
@@ -230,12 +231,12 @@ namespace azure_proto_network
             return new PhNetworkSecurityGroup(nsg);
         }
 
-        public static NsgOperations Nsg(this ResourceGroupOperations operations, TrackedResource vnet)
+        public static NsgOperations Nsgs(this ResourceGroupOperations operations, TrackedResource vnet)
         {
             return new NsgOperations(operations, vnet);
         }
 
-        public static NsgOperations Nsg(this ResourceGroupOperations operations, string vnet)
+        public static NsgOperations Nsgs(this ResourceGroupOperations operations, string vnet)
         {
             return new NsgOperations(operations, new ResourceIdentifier($"{operations.Context}/providers/Microsoft.Network/virtualNetworks/{vnet}"));
         }

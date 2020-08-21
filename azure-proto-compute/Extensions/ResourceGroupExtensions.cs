@@ -1,5 +1,8 @@
-﻿using Azure.ResourceManager.Compute.Models;
+﻿using Azure;
+using Azure.ResourceManager.Compute.Models;
 using azure_proto_core;
+using azure_proto_core.Adapters;
+using azure_proto_core.Resources;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -71,7 +74,39 @@ namespace azure_proto_compute
             return new PhVirtualMachine(vm);
         }
 
+        /// <summary>
+        /// List vms at the given subscription context
+        /// </summary>
+        /// <param name="subscription"></param>
+        /// <param name="filter"></param>
+        /// <param name="top"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static Pageable<VmOperations> ListVms(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var collection = new VmCollection(operations, operations.Context);
+            return new WrappingPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.List(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subscription"></param>
+        /// <param name="filter"></param>
+        /// <param name="top"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static AsyncPageable<VmOperations> ListVmsAsync(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var collection = new VmCollection(operations, operations.Context);
+            return new WrappingAsyncPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.ListAsync(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
+        }
+
+        public static Pageable<VmOperations> ListVmsByTag(this ResourceGroupOperations operations, ArmTagFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var collection = new VmCollection(operations, operations.Context);
+            return new WrappingPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.ListByTag(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
+        }
 
         #endregion
 
