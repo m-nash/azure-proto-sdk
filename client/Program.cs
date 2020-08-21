@@ -140,8 +140,7 @@ namespace client
                 // Create VM
                 string name = String.Format("{0}-{1}-z", vmName, i);
                 Console.WriteLine("--------Start create VM {0}--------", i);
-                var vm = rgClient.ConstructVm(name, "admin-user", "!@#$%asdfA", nic.Context, aset);
-                var result = rgClient.CreateVm(name, vm).Value;
+                var vm = rgClient.ConstructVm(name, "admin-user", "!@#$%asdfA", nic.Context, aset).Create();
             }
 
             return rgClient;
@@ -158,10 +157,11 @@ namespace client
 
             // Create VM
             Console.WriteLine("--------Start create VM--------");
-            var vm = rgClient.ConstructVm(vmName, "admin-user", "!@#$%asdfA", nic.Context, aset);
-            var result = rgClient.CreateVm(vmName, vm).Value;
 
-            Console.WriteLine("VM ID: " + vm.Id);
+            // Note: this is something we might do with all of the construction methods
+            var vm = rgClient.ConstructVm(vmName, "admin-user", "!@#$%asdfA", nic.Context, aset).Create().Value;
+
+            Console.WriteLine("VM ID: " + vm.Context);
             Console.WriteLine("--------Done create VM--------");
         }
 

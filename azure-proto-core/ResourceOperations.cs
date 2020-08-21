@@ -27,7 +27,11 @@ namespace azure_proto_core
             {
                 DefaultLocation = tracked.Location;
             }
+            Resource = context;
         }
+
+        protected virtual Resource Resource { get; set; }
+
 
         public virtual ResourceIdentifier Context { get; }
 
@@ -60,7 +64,7 @@ namespace azure_proto_core
         }
 
 
-        protected virtual Resource Resource { get;  set; }
+        protected override Resource Resource { get;  set; }
         public override ResourceIdentifier Context => Resource.Id;
         public virtual bool TryGetModel(out Model model)
         {

@@ -17,12 +17,14 @@ namespace azure_proto_compute
 
         public VmContainer(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
         {
+            
         }
 
         protected override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 
-        public override ArmOperation<ResourceOperations<PhVirtualMachine>> Create(string name, PhVirtualMachine resourceDetails)
+        public override ArmOperation<ResourceOperations<PhVirtualMachine>> Create(string name, PhVirtualMachine resourceDetails = null)
         {
+            resourceDetails ??= Resource as PhVirtualMachine;
             return new PhArmOperation<ResourceOperations<PhVirtualMachine>, VirtualMachine>(Operations.StartCreateOrUpdate(base.Context.ResourceGroup, name, resourceDetails.Model), v => Vm(new PhVirtualMachine(v)));
         }
 
