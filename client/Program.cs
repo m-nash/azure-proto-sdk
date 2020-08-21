@@ -4,6 +4,7 @@ using azure_proto_core;
 using azure_proto_network;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace client
 {
@@ -27,6 +28,7 @@ namespace client
                 StartFromVm();
                 SetTagsOnVm();
                 CreateMultipleVmShutdownByTag();
+                StartStopAllVmsAsync().Wait();
             }
             finally
             {
@@ -101,7 +103,7 @@ namespace client
             vm.Start();
         }
 
-        private static async void StartStopAllVmsAsync()
+        private static async Task StartStopAllVmsAsync()
         {
             var client = new ArmClient();
             await foreach (var subscription in client.ListSubscriptionsAsync())

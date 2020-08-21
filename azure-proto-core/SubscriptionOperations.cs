@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
+    /// <summary>
+    /// Subscription operations
+    /// TODO: Look at selecting subscriptions by name
+    /// </summary>
     public class SubscriptionOperations : ArmOperations
     {
         public Resource DefaultSubscription { get; }
