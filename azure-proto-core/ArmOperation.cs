@@ -112,11 +112,11 @@ namespace azure_proto_core
             => CompletedSynchronously ? new ValueTask<Response>(_syncWrapped.GetRawResponse()) : _wrapped.UpdateStatusAsync(cancellationToken);
 
         public async override ValueTask<Response<T>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
-            => CompletedSynchronously ? new PhResponse<T, U>(_syncWrapped, _converter)
-            : new PhResponse<T, U>( await _wrapped.WaitForCompletionAsync(cancellationToken), _converter);
+            => CompletedSynchronously ? new PhArmResponse<T, U>(_syncWrapped, _converter)
+            : new PhArmResponse<T, U>( await _wrapped.WaitForCompletionAsync(cancellationToken), _converter);
 
         public async override ValueTask<Response<T>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken) 
-            => CompletedSynchronously ? new PhResponse<T, U>(_syncWrapped, _converter)
-            : new PhResponse<T, U>(await _wrapped.WaitForCompletionAsync(pollingInterval, cancellationToken), _converter);
+            => CompletedSynchronously ? new PhArmResponse<T, U>(_syncWrapped, _converter)
+            : new PhArmResponse<T, U>(await _wrapped.WaitForCompletionAsync(pollingInterval, cancellationToken), _converter);
     }
 }

@@ -10,7 +10,11 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class VnetOperations : ResourceOperations<PhVirtualNetwork, TagsObject, ArmOperation<PhVirtualNetwork>, ArmOperation<Response>>
+    /// <summary>
+    /// Virtual Network Operations
+    /// TODO: Verify that DefaultLocation is correctly plumbed through
+    /// </summary>
+    public class VnetOperations : ResourceOperations<PhVirtualNetwork>
     {
         public VnetOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
@@ -32,29 +36,32 @@ namespace azure_proto_network
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Context.ResourceGroup, Context.Name, cancellationToken));
         }
 
-        public override Response<PhVirtualNetwork> Get()
+        public override Response<ResourceOperations<PhVirtualNetwork>> Get()
         {
-            return new PhResponse<PhVirtualNetwork, VirtualNetwork>(Operations.Get(Context.ResourceGroup, Context.Name), n => new PhVirtualNetwork(n));
+            return new PhArmResponse<ResourceOperations<PhVirtualNetwork>, VirtualNetwork>(Operations.Get(Context.ResourceGroup, Context.Name), 
+                n => { Resource = new PhVirtualNetwork(n); return this; });
         }
 
-        public async override Task<Response<PhVirtualNetwork>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<Response<ResourceOperations<PhVirtualNetwork>>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhResponse<PhVirtualNetwork, VirtualNetwork>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, null, cancellationToken), n => new PhVirtualNetwork(n));
+            return new PhArmResponse<ResourceOperations<PhVirtualNetwork>, VirtualNetwork>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, null, cancellationToken),
+                n => { Resource = new PhVirtualNetwork(n); return this;});
         }
 
-        public override ArmOperation<PhVirtualNetwork> Update(TagsObject patchable)
+        public override ArmOperation<ResourceOperations<PhVirtualNetwork>> AddTag(string key, string value)
         {
-            return new PhArmOperation<PhVirtualNetwork, VirtualNetwork>(Operations.UpdateTags(Context.ResourceGroup, Context.Name, patchable), n => new PhVirtualNetwork(n));
+            var patchable = new TagsObject();
+            patchable.Tags[key] = value;
+            return new PhArmOperation<ResourceOperations<PhVirtualNetwork>, VirtualNetwork>(Operations.UpdateTags(Context.ResourceGroup, Context.Name, patchable),
+                n => { Resource = new PhVirtualNetwork(n); return this; });
         }
 
-        public async override Task<ArmOperation<PhVirtualNetwork>> UpdateAsync(TagsObject patchable, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperations<PhVirtualNetwork>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<PhVirtualNetwork, VirtualNetwork>(await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken), n => new PhVirtualNetwork(n));
-        }
-
-        public SubnetContainer Subnets()
-        {
-            return new SubnetContainer(this, Context);
+            var patchable = new TagsObject();
+            patchable.Tags[key] = value;
+            return new PhArmOperation<ResourceOperations<PhVirtualNetwork>, VirtualNetwork>(await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken),
+                n => { Resource = new PhVirtualNetwork(n); return this; });
         }
 
         public SubnetOperations Subnet(TrackedResource subnet)
@@ -72,6 +79,51 @@ namespace azure_proto_network
             return new SubnetOperations(this, $"{this.Context}/subnets/{subnet}");
         }
 
+        public PhSubnet ConstructSubnet(string name, string cidr, Location location = null, PhNetworkSecurityGroup group = null)
+        {
+            var subnet = new Subnet()
+            {
+                Name = name,
+                AddressPrefix = cidr,
+            };
+
+            if (null != group)
+            {
+                subnet.NetworkSecurityGroup = group.Model;
+            }
+
+            return new PhSubnet(subnet, location ?? DefaultLocation);
+        }
+
+        public ArmOperation<ResourceOperations<PhSubnet>> CreateSubnet(string name, PhSubnet resourceDetails)
+        {
+            return GetSubnetContainer().Create(name, resourceDetails);
+        }
+
+        public Task<ArmOperation<ResourceOperations<PhSubnet>>> CreateSubnetAsync(string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
+        {
+            return GetSubnetContainer().CreateAsync(name, resourceDetails, cancellationToken);
+        }
+
+        public Pageable<ResourceOperations<PhSubnet>> ListSubnets(CancellationToken cancellationToken = default)
+        {
+            return GetSubnetCollection().List(null, null, cancellationToken);
+        }
+
+        public AsyncPageable<ResourceOperations<PhSubnet>> ListSubnetsAsync(CancellationToken cancellationToken = default)
+        {
+            return GetSubnetCollection().ListAsync(null, null, cancellationToken);
+        }
+
+        internal SubnetContainer GetSubnetContainer()
+        {
+            return new SubnetContainer(this, Context);
+        }
+
+        internal SubnetCollection GetSubnetCollection()
+        {
+            return new SubnetCollection(this, Context);
+        }
 
 
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).VirtualNetworks;

@@ -10,7 +10,10 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class SubnetOperations : ResourceOperations<PhSubnet, Subnet, ArmOperation<PhSubnet>, ArmOperation<Response>>
+    /// <summary>
+    /// TODO: Split into ResourceOperations/TrackedResourceOperations
+    /// </summary>
+    public class SubnetOperations : ResourceOperations<PhSubnet>
     {
         public SubnetOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
@@ -33,24 +36,30 @@ namespace azure_proto_network
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Context.ResourceGroup, Context.Parent.Name, Context.Name, cancellationToken));
         }
 
-        public override Response<PhSubnet> Get()
+        public override Response<ResourceOperations<PhSubnet>> Get()
         {
-            return new PhResponse<PhSubnet, Subnet>(Operations.Get(Context.ResourceGroup, Context.Parent.Name, Context.Name), n => new PhSubnet(n, Location.Default));
+            return new PhArmResponse<ResourceOperations<PhSubnet>, Subnet>(Operations.Get(Context.ResourceGroup, Context.Parent.Name, Context.Name), 
+                n => { Resource = new PhSubnet(n, DefaultLocation); return this; });
         }
 
-        public async override Task<Response<PhSubnet>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<Response<ResourceOperations<PhSubnet>>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhResponse<PhSubnet, Subnet>(await Operations.GetAsync(Context.ResourceGroup, Context.Parent.Name, Context.Name, null, cancellationToken), n => new PhSubnet(n, Location.Default));
+            return new PhArmResponse<ResourceOperations<PhSubnet>, Subnet>(await Operations.GetAsync(Context.ResourceGroup, Context.Parent.Name, Context.Name, null, cancellationToken), 
+                n => { Resource = new PhSubnet(n, DefaultLocation); return this; });
         }
 
-        public override ArmOperation<PhSubnet> Update(Subnet patchable)
+        public override ArmOperation<ResourceOperations<PhSubnet>> AddTag(string key, string value)
         {
-            return new PhArmOperation<PhSubnet, Subnet>(Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Parent.Name, Context.Name, patchable), n => new PhSubnet(n, Location.Default));
+            Subnet patchable = new Subnet();
+            return new PhArmOperation<ResourceOperations<PhSubnet>, Subnet>(Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Parent.Name, Context.Name, patchable), 
+                n => { Resource = new PhSubnet(n, DefaultLocation); return this; });
         }
 
-        public async override Task<ArmOperation<PhSubnet>> UpdateAsync(Subnet patchable, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperations<PhSubnet>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<PhSubnet, Subnet>(await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, Context.Parent.Name, Context.Name, patchable, cancellationToken), n => new PhSubnet(n, Location.Default));
+            Subnet patchable = new Subnet();
+            return new PhArmOperation<ResourceOperations<PhSubnet>, Subnet>(await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, Context.Parent.Name, Context.Name, patchable, cancellationToken),
+                n => { Resource = new PhSubnet(n, DefaultLocation); return this; });
         }
 
         internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).Subnets;

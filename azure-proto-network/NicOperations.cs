@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace azure_proto_network
 {
 
-    public class NicOperations : ResourceOperations<PhNetworkInterface, TagsObject, ArmOperation<PhNetworkInterface>, ArmOperation<Response>>
+    public class NicOperations : ResourceOperations<PhNetworkInterface>
     {
         public NicOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
@@ -34,24 +34,35 @@ namespace azure_proto_network
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Context.ResourceGroup, Context.Name, cancellationToken));
         }
 
-        public override Response<PhNetworkInterface> Get()
+        public override Response<ResourceOperations<PhNetworkInterface>> Get()
         {
-            return new PhResponse<PhNetworkInterface, NetworkInterface>(Operations.Get(Context.ResourceGroup, Context.Name), n => new PhNetworkInterface(n));
+            return new PhArmResponse<ResourceOperations<PhNetworkInterface>, NetworkInterface>(
+                Operations.Get(Context.ResourceGroup, Context.Name),
+                n => { Resource = new PhNetworkInterface(n); return this; });
         }
 
-        public async override Task<Response<PhNetworkInterface>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<Response<ResourceOperations<PhNetworkInterface>>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhResponse<PhNetworkInterface, NetworkInterface>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, null, cancellationToken), n => new PhNetworkInterface(n));
+            return new PhArmResponse<ResourceOperations<PhNetworkInterface>, NetworkInterface>(
+                await Operations.GetAsync(Context.ResourceGroup, Context.Name, null, cancellationToken),
+                n => { Resource = new PhNetworkInterface(n); return this; });
         }
 
-        public override ArmOperation<PhNetworkInterface> Update(TagsObject patchable)
+        public override ArmOperation<ResourceOperations<PhNetworkInterface>> AddTag(string key, string value)
         {
-            return new PhArmOperation<PhNetworkInterface, NetworkInterface>(Operations.UpdateTags(Context.ResourceGroup, Context.Name, patchable), n => new PhNetworkInterface(n));
+            var patchable = new TagsObject();
+            patchable.Tags[key] = value;
+            return new PhArmOperation<ResourceOperations<PhNetworkInterface>, NetworkInterface>(Operations.UpdateTags(Context.ResourceGroup, Context.Name, patchable),
+                n => { Resource = new PhNetworkInterface(n); return this; });
         }
 
-        public async override Task<ArmOperation<PhNetworkInterface>> UpdateAsync(TagsObject patchable, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperations<PhNetworkInterface>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<PhNetworkInterface, NetworkInterface>(await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken), n => new PhNetworkInterface(n));
+            var patchable = new TagsObject();
+            patchable.Tags[key] = value;
+            return new PhArmOperation<ResourceOperations<PhNetworkInterface>, NetworkInterface>(
+                await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken), 
+                n => { Resource = new PhNetworkInterface(n); return this; });
         }
 
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).NetworkInterfaces;

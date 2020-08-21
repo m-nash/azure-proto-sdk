@@ -1,15 +1,8 @@
-﻿using Azure.ResourceManager.Network;
-using Azure.ResourceManager.Network.Models;
-using azure_proto_core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Schema;
+﻿using azure_proto_core;
 
 namespace azure_proto_network
 {
-    public class NsgCollection : ResourceCollectionOperations
+    public class NsgCollection : ResourceCollectionOperations<PhNetworkSecurityGroup>
     {
         public NsgCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
@@ -20,5 +13,11 @@ namespace azure_proto_network
         }
 
         protected override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
+
+        protected override ResourceOperations<PhNetworkSecurityGroup> GetOperations(ResourceIdentifier identifier, Location location)
+        {
+            var resource = new ArmResource(identifier, location ?? DefaultLocation);
+            return new NsgOperations(this, resource);
+        }
     }
 }

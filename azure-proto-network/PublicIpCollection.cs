@@ -5,7 +5,7 @@ using System.Text;
 
 namespace azure_proto_network
 {
-    public class PublicIpCollection : ResourceCollectionOperations
+    public class PublicIpCollection : ResourceCollectionOperations<PhPublicIPAddress>
     {
         public PublicIpCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
@@ -16,5 +16,11 @@ namespace azure_proto_network
         }
 
         protected override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
+
+        protected override ResourceOperations<PhPublicIPAddress> GetOperations(ResourceIdentifier identifier, Location location)
+        {
+            var resource = new ArmResource(identifier, location ?? DefaultLocation);
+            return new PublicIpOperations(this, resource);
+        }
     }
 }

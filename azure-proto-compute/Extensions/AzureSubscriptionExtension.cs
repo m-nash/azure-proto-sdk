@@ -10,65 +10,57 @@ using Sku = azure_proto_core.Sku;
 
 namespace azure_proto_compute
 {
+    /// <summary>
+    /// Extension methods for convenient access on SubscriptionOperations in a client
+    /// </summary>
     public static class AzureSubscriptionExtension
     {
+        #region Virtual Machine List Operations
         /// <summary>
-        /// Extensions for VMs
+        /// List vms at the given subscription context
         /// </summary>
-        /// <param name="subscriptionOperations"></param>
+        /// <param name="subscription"></param>
+        /// <param name="filter"></param>
+        /// <param name="top"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static VmCollection Vms(this SubscriptionOperations subscriptionOperations)
-        {
-            return new VmCollection(subscriptionOperations, subscriptionOperations.DefaultSubscription);
-        }
-
-        public static VmCollection Vms(this SubscriptionOperations subscriptionOperations, ResourceIdentifier subscription)
-        {
-            return new VmCollection(subscriptionOperations, subscription);
-        }
-
-        public static VmCollection Vms(this SubscriptionOperations subscriptionOperations, azure_proto_core.Resource subscription)
-        {
-            return new VmCollection(subscriptionOperations, subscription);
-        }
-
-        public static VmCollection Vms(this SubscriptionOperations subscriptionOperations, string subscriptionId)
-        {
-            return new VmCollection(subscriptionOperations, $"/subscriptions/{subscriptionId}");
-        }
-
         public static Pageable<VmOperations> ListVms(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VmCollection(subscription, subscription.DefaultSubscription);
-
             return new WrappingPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.List(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
         }
 
-
         /// <summary>
-        /// Extensions for Availability Sets
+        /// 
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="context"></param>
-        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionOperations subscriptionOperations)
+        /// <param name="subscription"></param>
+        /// <param name="filter"></param>
+        /// <param name="top"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static AsyncPageable<VmOperations> ListVmsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            return new AvailabilitySetCollection(subscriptionOperations, subscriptionOperations.DefaultSubscription);
+            var collection = new VmCollection(subscription, subscription.DefaultSubscription);
+            return new WrappingAsyncPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.ListAsync(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
         }
 
-        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionOperations subscriptionOperations, ResourceIdentifier subscription)
+        #endregion
+
+        #region AvailabilitySet List Operations
+
+        public static Pageable<AvailabilitySetOperations> ListAvailabilitySets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            return new AvailabilitySetCollection(subscriptionOperations, subscription);
+            var collection = new AvailabilitySetCollection(subscription, subscription.DefaultSubscription);
+            return new WrappingPageable<ResourceOperations<PhAvailabilitySet>, AvailabilitySetOperations>(collection.List(filter, top, cancellationToken), a => new AvailabilitySetOperations(a, a.Context));
         }
 
-        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionOperations subscriptionOperations, azure_proto_core.Resource subscription)
+        public static AsyncPageable<AvailabilitySetOperations> ListAvailabilitySetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            return new AvailabilitySetCollection(subscriptionOperations, subscription);
+            var collection = new AvailabilitySetCollection(subscription, subscription.DefaultSubscription);
+            return new WrappingAsyncPageable<ResourceOperations<PhAvailabilitySet>, AvailabilitySetOperations>(collection.ListAsync(filter, top, cancellationToken), a => new AvailabilitySetOperations(a, a.Context));
         }
 
-        public static AvailabilitySetCollection AvailabilitySets(this SubscriptionOperations subscriptionOperations, string subscriptionId)
-        {
-            return new AvailabilitySetCollection(subscriptionOperations, $"/subscriptions/{subscriptionId}");
-        }
+        #endregion
 
     }
 }

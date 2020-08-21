@@ -25,14 +25,14 @@ namespace azure_proto_compute
 
         protected override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 
-        public override ArmOperation<PhVirtualMachine> Create(string name, PhVirtualMachine resourceDetails)
+        public override ArmOperation<ResourceOperations<PhVirtualMachine>> Create(string name, PhVirtualMachine resourceDetails)
         {
-            return new PhVmValueOperation(VmOperations.StartCreateOrUpdate(Context.ResourceGroup, name, resourceDetails.Model));
+            return new PhArmOperation<ResourceOperations<PhVirtualMachine>, VirtualMachine>(Operations.StartCreateOrUpdate(base.Context.ResourceGroup, name, resourceDetails.Model), v => Vm(new PhVirtualMachine(v)));
         }
 
-        public async override Task<ArmOperation<PhVirtualMachine>> CreateAsync(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperations<PhVirtualMachine>>> CreateAsync(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhVmValueOperation(await VmOperations.StartCreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails.Model, cancellationToken));
+            return new PhArmOperation<ResourceOperations<PhVirtualMachine>, VirtualMachine>(await Operations.StartCreateOrUpdateAsync(base.Context.ResourceGroup, name, resourceDetails.Model, cancellationToken), v =>  Vm(new PhVirtualMachine(v)));
         }
 
         public VmOperations Vm(string vmName)
@@ -50,36 +50,7 @@ namespace azure_proto_compute
             return new VmOperations(this, vm);
         }
 
-        public PhVirtualMachine ConstructVm(string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, PhAvailabilitySet aset, Location location = null)
-        {
-            var vm = new VirtualMachine(location ?? DefaultLocation)
-            {
-                NetworkProfile = new NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nicId } } },
-                OsProfile = new OSProfile
-                {
-                    ComputerName = vmName,
-                    AdminUsername = adminUser,
-                    AdminPassword = adminPw,
-                    LinuxConfiguration = new LinuxConfiguration { DisablePasswordAuthentication = false, ProvisionVMAgent = true }
-                },
-                StorageProfile = new StorageProfile()
-                {
-                    ImageReference = new ImageReference()
-                    {
-                        Offer = "UbuntuServer",
-                        Publisher = "Canonical",
-                        Sku = "18.04-LTS",
-                        Version = "latest"
-                    },
-                    DataDisks = new List<DataDisk>()
-                },
-                HardwareProfile = new HardwareProfile() { VmSize = VirtualMachineSizeTypes.StandardB1Ms },
-                AvailabilitySet = new SubResource() { Id = aset.Id }
-            };
-            return new PhVirtualMachine(vm);
-        }
-
-        internal VirtualMachinesOperations VmOperations => new ComputeManagementClient(BaseUri, Context.Subscription, Credential).VirtualMachines;
+        internal VirtualMachinesOperations Operations => new ComputeManagementClient(BaseUri, Context.Subscription, Credential).VirtualMachines;
 
     }
 }

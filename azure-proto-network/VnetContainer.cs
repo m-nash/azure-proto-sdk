@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class VnetContainer : ResourceContainerOperations<PhVirtualNetwork, ArmOperation<PhVirtualNetwork>>
+    public class VnetContainer : ResourceContainerOperations<PhVirtualNetwork>
     {
         public VnetContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
@@ -19,14 +19,14 @@ namespace azure_proto_network
 
         protected override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
 
-        public override ArmOperation<PhVirtualNetwork> Create(string name, PhVirtualNetwork resourceDetails)
+        public override ArmOperation<ResourceOperations<PhVirtualNetwork>> Create(string name, PhVirtualNetwork resourceDetails)
         {
-            return new PhArmOperation<PhVirtualNetwork, VirtualNetwork>(Operations.StartCreateOrUpdate(Context.ResourceGroup, name, resourceDetails), n => new PhVirtualNetwork(n));
+            return new PhArmOperation<ResourceOperations<PhVirtualNetwork>, VirtualNetwork>(Operations.StartCreateOrUpdate(Context.ResourceGroup, name, resourceDetails), n => Vnet(new PhVirtualNetwork(n)));
         }
 
-        public async override Task<ArmOperation<PhVirtualNetwork>> CreateAsync(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperations<PhVirtualNetwork>>> CreateAsync(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<PhVirtualNetwork, VirtualNetwork>(await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails, cancellationToken), n => new PhVirtualNetwork(n));
+            return new PhArmOperation<ResourceOperations<PhVirtualNetwork>, VirtualNetwork>(await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails, cancellationToken), n => Vnet(new PhVirtualNetwork(n)));
         }
 
         public PhVirtualNetwork ConstructVnet(string vnetCidr, Location location = null)
@@ -39,21 +39,10 @@ namespace azure_proto_network
             return new PhVirtualNetwork(vnet);
         }
 
-        public VnetOperations Vnet(TrackedResource vnet)
+        internal VnetOperations Vnet(TrackedResource vnet)
         {
             return new VnetOperations(this, vnet);
         }
-
-        public VnetOperations Vnet(ResourceIdentifier vnet)
-        {
-            return new VnetOperations(this, vnet);
-        }
-
-        public VnetOperations Vnet(string vnetName)
-        {
-            return new VnetOperations(this, $"{Context}/providers/Microsoft.Network/virtualNetworks/{vnetName}");
-        }
-
 
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).VirtualNetworks;
 

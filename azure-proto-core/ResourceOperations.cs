@@ -44,6 +44,7 @@ namespace azure_proto_core
     /// Common base type for lifecycle operations over a resource
     /// TODO: Consider whehter to represent POST operations and the acommpanyong actions list call
     /// TODO: Consider whether to provide a Normalized PATCH functionality across RP resources
+    /// TODO: Refactor methods beyond the ResourceOperation as extensions [allowing them to appear in generic usage of the type]
     /// </summary>
     /// <typeparam name="Model"></typeparam>
     public abstract class ResourceOperations<Model> : ResourceOperations where Model : Resource 

@@ -1,114 +1,78 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using Azure;
 using azure_proto_core;
+using azure_proto_core.Resources;
 
 namespace azure_proto_network
 {
     public static class AzureSubscriptionExtensions
     {
-        /// <summary>
-        /// Extensions for Vnets
-        /// </summary>
-        /// <param name="subscriptionOperations"></param>
-        /// <returns></returns>
-        public static VnetCollection Vnets(this SubscriptionOperations subscriptionOperations)
+        #region Virtual Network Operations
+
+        public static Pageable<ResourceOperations<PhVirtualNetwork>> ListVnets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            return new VnetCollection(subscriptionOperations, subscriptionOperations.DefaultSubscription);
+            var collection = new VnetCollection( subscription, subscription.DefaultSubscription);
+            return collection.List(filter, top, cancellationToken);
         }
 
-        public static VnetCollection Vnets(this SubscriptionOperations subscriptionOperations, ResourceIdentifier subscription)
+        public static AsyncPageable<ResourceOperations<PhVirtualNetwork>> ListVnetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            return new VnetCollection(subscriptionOperations, subscription);
-        }
-
-        public static VnetCollection Vnets(this SubscriptionOperations subscriptionOperations, azure_proto_core.Resource subscription)
-        {
-            return new VnetCollection(subscriptionOperations, subscription);
-        }
-
-        public static VnetCollection Vnets(this SubscriptionOperations subscriptionOperations, string subscriptionId)
-        {
-            return new VnetCollection(subscriptionOperations, $"/subscriptions/{subscriptionId}");
-        }
-
-        /// <summary>
-        /// Extensions for PublicIps
-        /// </summary>
-        /// <param name="subscriptionOperations"></param>
-        /// <returns></returns>
-        public static PublicIpCollection PublicIps(this SubscriptionOperations subscriptionOperations)
-        {
-            return new PublicIpCollection(subscriptionOperations, subscriptionOperations.DefaultSubscription);
-        }
-
-        public static PublicIpCollection PublicIps(this SubscriptionOperations subscriptionOperations, ResourceIdentifier subscription)
-        {
-            return new PublicIpCollection(subscriptionOperations, subscription);
-        }
-
-        public static PublicIpCollection PublicIps(this SubscriptionOperations subscriptionOperations, azure_proto_core.Resource subscription)
-        {
-            return new PublicIpCollection(subscriptionOperations, subscription);
-        }
-
-        public static PublicIpCollection PublicIps(this SubscriptionOperations subscriptionOperations, string subscriptionId)
-        {
-            return new PublicIpCollection(subscriptionOperations, $"/subscriptions/{subscriptionId}");
+            var collection = new VnetCollection(subscription, subscription.DefaultSubscription);
+            return collection.ListAsync(filter, top, cancellationToken);
         }
 
 
-        /// <summary>
-        /// Extensions for Nics
-        /// </summary>
-        /// <param name="subscriptionOperations"></param>
-        /// <returns></returns>
-        public static NicCollection Nics(this SubscriptionOperations subscriptionOperations)
+        #endregion
+
+        #region Public IP Address Operations
+
+        public static Pageable<ResourceOperations<PhPublicIPAddress>> ListPublicIps(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            return new NicCollection(subscriptionOperations, subscriptionOperations.DefaultSubscription);
+            var collection = new PublicIpCollection(subscription, subscription.DefaultSubscription);
+            return collection.List(filter, top, cancellationToken);
         }
 
-        public static NicCollection Nics(this SubscriptionOperations subscriptionOperations, ResourceIdentifier subscription)
+        public static AsyncPageable<ResourceOperations<PhPublicIPAddress>> ListPublicIpsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            return new NicCollection(subscriptionOperations, subscription);
+            var collection = new PublicIpCollection(subscription, subscription.DefaultSubscription);
+            return collection.ListAsync(filter, top, cancellationToken);
         }
 
-        public static NicCollection Nics(this SubscriptionOperations subscriptionOperations, azure_proto_core.Resource subscription)
+        #endregion
+
+        #region Network Interface (NIC) operations
+
+        public static Pageable<ResourceOperations<PhNetworkInterface>> ListNics(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            return new NicCollection(subscriptionOperations, subscription);
+            var collection = new NicCollection(subscription, subscription.DefaultSubscription);
+            return collection.List(filter, top, cancellationToken);
         }
 
-        public static NicCollection Nics(this SubscriptionOperations subscriptionOperations, string subscriptionId)
+        public static AsyncPageable<ResourceOperations<PhNetworkInterface>> ListNicsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            return new NicCollection(subscriptionOperations, $"/subscriptions/{subscriptionId}");
-        }
-
-        /// <summary>
-        /// Extensions for Nics
-        /// </summary>
-        /// <param name="subscriptionOperations"></param>
-        /// <returns></returns>
-        public static NsgCollection Nsgs(this SubscriptionOperations subscriptionOperations)
-        {
-            return new NsgCollection(subscriptionOperations, subscriptionOperations.DefaultSubscription);
-        }
-
-        public static NsgCollection NiNsgscs(this SubscriptionOperations subscriptionOperations, ResourceIdentifier subscription)
-        {
-            return new NsgCollection(subscriptionOperations, subscription);
-        }
-
-        public static NsgCollection Nsgs(this SubscriptionOperations subscriptionOperations, azure_proto_core.Resource subscription)
-        {
-            return new NsgCollection(subscriptionOperations, subscription);
-        }
-
-        public static NsgCollection Nsgs(this SubscriptionOperations subscriptionOperations, string subscriptionId)
-        {
-            return new NsgCollection(subscriptionOperations, $"/subscriptions/{subscriptionId}");
+            var collection = new NicCollection(subscription, subscription.DefaultSubscription);
+            return collection.ListAsync(filter, top, cancellationToken);
         }
 
 
+        #endregion
 
+        #region Network Security Group operations
+        public static Pageable<ResourceOperations<PhNetworkSecurityGroup>> ListNsgs(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var collection = new NsgCollection(subscription, subscription.DefaultSubscription);
+            return collection.List(filter, top, cancellationToken);
+        }
+
+        public static AsyncPageable<ResourceOperations<PhNetworkSecurityGroup>> ListNsgsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var collection = new NsgCollection(subscription, subscription.DefaultSubscription);
+            return collection.ListAsync(filter, top, cancellationToken);
+        }
+
+        #endregion
     }
 }

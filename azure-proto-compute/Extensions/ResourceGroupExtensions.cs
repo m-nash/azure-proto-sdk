@@ -1,7 +1,10 @@
-﻿using azure_proto_core;
+﻿using Azure.ResourceManager.Compute.Models;
+using azure_proto_core;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace azure_proto_compute
 {
@@ -10,25 +13,7 @@ namespace azure_proto_compute
     /// </summary>
     public static class ResourceGroupExtensions
     {
-        public static VmContainer Vms(this ResourceGroupContainerOperations operations, ResourceIdentifier resourceGroup)
-        {
-            return new VmContainer(operations, resourceGroup);
-        }
-
-        public static VmContainer Vms(this ResourceGroupContainerOperations operations, Resource resourceGroup)
-        {
-            return new VmContainer(operations, resourceGroup);
-        }
-
-        public static VmContainer Vms(this ResourceGroupContainerOperations operations, string resourceGroupName)
-        {
-            return new VmContainer(operations, $"/{operations.Context}/resourceGroups/{resourceGroupName}");
-        }
-
-        public static VmContainer Vms(this ResourceGroupOperations operations)
-        {
-            return new VmContainer(operations, operations.Context);
-        }
+        #region VirtualMachines
 
         public static VmOperations Vm(this ResourceGroupOperations operations, string name)
         {
@@ -44,26 +29,94 @@ namespace azure_proto_compute
             return new VmOperations(operations, vm);
         }
 
-
-        public static AvailabilitySetContainer AvailabilitySets(this ResourceGroupContainerOperations operations, ResourceIdentifier resourceGroup)
+        public static ArmOperation<ResourceOperations<PhVirtualMachine>> CreateVm(this ResourceGroupOperations operations, string name, PhVirtualMachine resourceDetails)
         {
-            return new AvailabilitySetContainer(operations, resourceGroup);
+            var container = new VmContainer(operations, operations.Context);
+            return container.Create(name, resourceDetails);
         }
 
-        public static AvailabilitySetContainer AvailabilitySets(this ResourceGroupContainerOperations operations, TrackedResource resourceGroup)
+        public static Task<ArmOperation<ResourceOperations<PhVirtualMachine>>> CreateVmAsync(this ResourceGroupOperations operations, string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new AvailabilitySetContainer(operations, resourceGroup);
+            var container = new VmContainer(operations, operations.Context);
+            return container.CreateAsync(name, resourceDetails);
         }
 
-        public static AvailabilitySetContainer AvailabilitySets(this ResourceGroupContainerOperations operations, string resourceGroupName)
+        public static PhVirtualMachine ConstructVm(this ResourceGroupOperations operations, string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, PhAvailabilitySet aset, Location location = null)
         {
-            return new AvailabilitySetContainer(operations, $"/{operations.Context}/resourceGroups/{resourceGroupName}");
+            var vm = new VirtualMachine(location ?? operations.DefaultLocation)
+            {
+                NetworkProfile = new NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nicId } } },
+                OsProfile = new OSProfile
+                {
+                    ComputerName = vmName,
+                    AdminUsername = adminUser,
+                    AdminPassword = adminPw,
+                    LinuxConfiguration = new LinuxConfiguration { DisablePasswordAuthentication = false, ProvisionVMAgent = true }
+                },
+                StorageProfile = new StorageProfile()
+                {
+                    ImageReference = new ImageReference()
+                    {
+                        Offer = "UbuntuServer",
+                        Publisher = "Canonical",
+                        Sku = "18.04-LTS",
+                        Version = "latest"
+                    },
+                    DataDisks = new List<DataDisk>()
+                },
+                HardwareProfile = new HardwareProfile() { VmSize = VirtualMachineSizeTypes.StandardB1Ms },
+                AvailabilitySet = new SubResource() { Id = aset.Id }
+            };
+
+            return new PhVirtualMachine(vm);
         }
 
-        public static AvailabilitySetContainer AvailabilitySets(this ResourceGroupOperations operations)
+
+
+        #endregion
+
+        #region AvailabilitySets
+
+        public static AvailabilitySetOperations AvailabilitySets(this ResourceGroupOperations operations, string name)
         {
-            return new AvailabilitySetContainer(operations, operations.Context);
+            return new AvailabilitySetOperations(operations, $"{operations.Context}/providers/Microsoft.Compute/virtualMachines/{name}");
         }
+        public static AvailabilitySetOperations AvailabilitySets(this ResourceGroupOperations operations, ResourceIdentifier set)
+        {
+            return new AvailabilitySetOperations(operations, set);
+        }
+
+        public static AvailabilitySetOperations AvailabilitySets(this ResourceGroupOperations operations, TrackedResource set)
+        {
+            return new AvailabilitySetOperations(operations, set);
+        }
+
+        public static ArmOperation<ResourceOperations<PhAvailabilitySet>> CreateAvailabilitySet(this ResourceGroupOperations operations, string name, PhAvailabilitySet resourceDetails)
+        {
+            var container = new AvailabilitySetContainer(operations, operations.Context);
+            return container.Create(name, resourceDetails);
+        }
+
+        public static Task<ArmOperation<ResourceOperations<PhAvailabilitySet>>> CreateAvailabilitySetAsync(this ResourceGroupOperations operations, string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        {
+            var container = new AvailabilitySetContainer(operations, operations.Context);
+            return container.CreateAsync(name, resourceDetails);
+        }
+
+
+        public static PhAvailabilitySet ConstructAvailabilitySet(this ResourceGroupOperations operations, string skuName, Location location = null)
+        {
+            var availabilitySet = new AvailabilitySet(location ?? operations.DefaultLocation)
+            {
+                PlatformUpdateDomainCount = 5,
+                PlatformFaultDomainCount = 2,
+                Sku = new Azure.ResourceManager.Compute.Models.Sku() { Name = skuName },
+            };
+
+            return new PhAvailabilitySet(availabilitySet);
+        }
+
+        #endregion
 
     }
 }

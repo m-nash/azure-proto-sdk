@@ -10,7 +10,7 @@ namespace azure_proto_compute
     /// <summary>
     /// Operatiosn class for Availability Set Contaienrs (resource groups)
     /// </summary>
-    public class AvailabilitySetContainer : ResourceContainerOperations<PhAvailabilitySet, Response<PhAvailabilitySet>>
+    public class AvailabilitySetContainer : ResourceContainerOperations<PhAvailabilitySet>
     {
         public AvailabilitySetContainer(ArmOperations parent, TrackedResource context):base(parent, context) 
         {
@@ -21,26 +21,14 @@ namespace azure_proto_compute
 
         protected override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
 
-        public override Response<PhAvailabilitySet> Create(string name, PhAvailabilitySet resourceDetails)
+        public override ArmOperation<ResourceOperations<PhAvailabilitySet>> Create(string name, PhAvailabilitySet resourceDetails)
         {
-            return new PhResponse<PhAvailabilitySet, AvailabilitySet>(Operations.CreateOrUpdate(Context.ResourceGroup, name, resourceDetails.Model), a => new PhAvailabilitySet(a));
+            return new PhArmOperation<ResourceOperations<PhAvailabilitySet>, AvailabilitySet>(Operations.CreateOrUpdate(Context.ResourceGroup, name, resourceDetails.Model), a => AvailabilitySet(new PhAvailabilitySet(a)));
         }
 
-        public async override Task<Response<PhAvailabilitySet>> CreateAsync(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperations<PhAvailabilitySet>>> CreateAsync(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhResponse<PhAvailabilitySet, AvailabilitySet>(await Operations.CreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails.Model, cancellationToken), a => new PhAvailabilitySet(a));
-        }
-
-        public PhAvailabilitySet ConstructAvailabilitySet(string skuName, Location location = null)
-        {
-            var availabilitySet = new AvailabilitySet(location ?? DefaultLocation)
-            {
-                PlatformUpdateDomainCount = 5,
-                PlatformFaultDomainCount = 2,
-                Sku = new Azure.ResourceManager.Compute.Models.Sku() { Name = skuName },
-            };
-
-            return new PhAvailabilitySet(availabilitySet);
+            return new PhArmOperation<ResourceOperations<PhAvailabilitySet>, AvailabilitySet>(await Operations.CreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails.Model, cancellationToken), a => AvailabilitySet(new PhAvailabilitySet(a)));
         }
 
         public AvailabilitySetOperations AvailabilitySet(string name)

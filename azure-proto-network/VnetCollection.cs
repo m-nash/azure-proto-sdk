@@ -1,11 +1,8 @@
-﻿using Azure.ResourceManager.Network;
-using Azure.ResourceManager.Network.Models;
-using azure_proto_core;
-using System.Collections.Generic;
+﻿using azure_proto_core;
 
 namespace azure_proto_network
 {
-    public class VnetCollection : ResourceCollectionOperations
+    public class VnetCollection : ResourceCollectionOperations<PhVirtualNetwork>
     {
         public VnetCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
@@ -16,6 +13,12 @@ namespace azure_proto_network
         }
 
         protected override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
+
+        protected override ResourceOperations<PhVirtualNetwork> GetOperations(ResourceIdentifier identifier, Location location)
+        {
+            var resource = new ArmResource(identifier, location ?? DefaultLocation);
+            return new VnetOperations(this, resource);
+        }
     }
 
 }

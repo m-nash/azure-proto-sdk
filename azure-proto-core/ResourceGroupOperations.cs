@@ -39,12 +39,12 @@ namespace azure_proto_core
 
         public override Response<ResourceOperations<PhResourceGroup>> Get()
         {
-            return new PhResponse<ResourceOperations<PhResourceGroup>, ResourceGroup>(Operations.Get(Context.Name), g => { this.Resource = new PhResourceGroup(g); return this; });
+            return new PhArmResponse<ResourceOperations<PhResourceGroup>, ResourceGroup>(Operations.Get(Context.Name), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
         public async override Task<Response<ResourceOperations<PhResourceGroup>>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhResponse<ResourceOperations<PhResourceGroup>, ResourceGroup>(await Operations.GetAsync(Context.Name, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
+            return new PhArmResponse<ResourceOperations<PhResourceGroup>, ResourceGroup>(await Operations.GetAsync(Context.Name, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
         public override ArmOperation<ResourceOperations<PhResourceGroup>> AddTag(string name, string value)

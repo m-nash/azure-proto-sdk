@@ -1,14 +1,11 @@
-﻿using Azure.ResourceManager.Compute;
-using Azure.ResourceManager.Compute.Models;
-using azure_proto_core;
-using System.Collections.Generic;
+﻿using azure_proto_core;
 
 namespace azure_proto_compute
 {
     /// <summary>
     /// Class conatinaing list operations for availabiliuty sets
     /// </summary>
-    public class AvailabilitySetCollection : ResourceCollectionOperations
+    public class AvailabilitySetCollection : ResourceCollectionOperations<PhAvailabilitySet>
     {
 
         public AvailabilitySetCollection(ArmOperations parent, azure_proto_core.Resource resourceGroup) : base(parent, resourceGroup) { }
@@ -31,5 +28,10 @@ namespace azure_proto_compute
             return new AvailabilitySetOperations(this, vm);
         }
 
+        protected override ResourceOperations<PhAvailabilitySet> GetOperations(ResourceIdentifier identifier, Location location)
+        {
+            var resource = new ArmResource(identifier, location);
+            return AvailabilitySet(resource);
+        }
     }
 }

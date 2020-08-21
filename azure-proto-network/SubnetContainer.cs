@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class SubnetContainer : ResourceContainerOperations<PhSubnet, ArmOperation<PhSubnet>>
+    public class SubnetContainer : ResourceContainerOperations<PhSubnet>
     {
         public SubnetContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
@@ -25,30 +25,21 @@ namespace azure_proto_network
 
         internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).Subnets;
 
-        public override ArmOperation<PhSubnet> Create(string name, PhSubnet resourceDetails)
+        public override ArmOperation<ResourceOperations<PhSubnet>> Create(string name, PhSubnet resourceDetails)
         {
-            return new PhArmOperation<PhSubnet, Subnet>(Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, name, resourceDetails.Model), s => new PhSubnet(s, Location.Default));
+            return new PhArmOperation<ResourceOperations<PhSubnet>, Subnet>(Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, name, resourceDetails.Model), 
+                s => Subnet(new PhSubnet(s, Location.Default)));
         }
 
-        public async override Task<ArmOperation<PhSubnet>> CreateAsync(string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperations<PhSubnet>>> CreateAsync(string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<PhSubnet, Subnet>(await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, Context.Name, name, resourceDetails.Model, cancellationToken), s => new PhSubnet(s, Location.Default));
+            return new PhArmOperation<ResourceOperations<PhSubnet>, Subnet>(await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, Context.Name, name, resourceDetails.Model, cancellationToken),
+                s => Subnet(new PhSubnet(s, Location.Default)));
         }
 
-        public PhSubnet ConstructSubnet(string name, string cidr, Location location = null, PhNetworkSecurityGroup group = null)
+        internal SubnetOperations Subnet(PhSubnet subnet)
         {
-            var subnet = new Subnet()
-            {
-                Name = name,
-                AddressPrefix = cidr,
-            };
-
-            if (null != group)
-            {
-                subnet.NetworkSecurityGroup = group.Model;
-            }
-
-            return new PhSubnet(subnet, location ?? DefaultLocation);
+            return new SubnetOperations(this, subnet);
         }
     }
 }

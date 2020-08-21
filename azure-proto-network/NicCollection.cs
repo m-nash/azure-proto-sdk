@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace azure_proto_network
 {
-    public class NicCollection : ResourceCollectionOperations
+    public class NicCollection : ResourceCollectionOperations<PhNetworkInterface>
     {
         public NicCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
@@ -19,5 +19,11 @@ namespace azure_proto_network
         }
 
         protected override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
+
+        protected override ResourceOperations<PhNetworkInterface> GetOperations(ResourceIdentifier identifier, Location location)
+        {
+            var resource = new ArmResource(identifier, location ?? DefaultLocation);
+            return new NicOperations(this, resource);
+        }
     }
 }

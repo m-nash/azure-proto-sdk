@@ -56,38 +56,38 @@ namespace azure_proto_compute
         }
 
 
-        public override Response<PhVirtualMachine> Get()
+        public override Response<ResourceOperations<PhVirtualMachine>> Get()
         {
-            return new PhResponse<PhVirtualMachine, VirtualMachine>(Operations.Get(Context.ResourceGroup, Context.Name), v => new PhVirtualMachine(v));
+            return new PhArmResponse<ResourceOperations<PhVirtualMachine>, VirtualMachine>(Operations.Get(Context.ResourceGroup, Context.Name), v => { Resource = new PhVirtualMachine(v); return this; } );
         }
 
-        public async override Task<Response<PhVirtualMachine>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<Response<ResourceOperations<PhVirtualMachine>>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhResponse<PhVirtualMachine, VirtualMachine>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, cancellationToken), v => new PhVirtualMachine(v));
+            return new PhArmResponse<ResourceOperations<PhVirtualMachine>, VirtualMachine>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, cancellationToken), v => { Resource = new PhVirtualMachine(v); return this; });
         }
 
-        public override ArmOperation<PhVirtualMachine> Update(IPatchModel patchable)
+        public ArmOperation<ResourceOperations<PhVirtualMachine>> Update(VirtualMachineUpdate patchable)
         {
-            return new PhVmValueOperation(Operations.StartUpdate(Context.ResourceGroup, Context.Name, patchable as VirtualMachineUpdate));
+            return new PhArmOperation<ResourceOperations<PhVirtualMachine>, VirtualMachine>(Operations.StartUpdate(Context.ResourceGroup, Context.Name, patchable), v => { Resource = new PhVirtualMachine(v); return this; });
         }
 
-        public async override Task<ArmOperation<PhVirtualMachine>> UpdateAsync(IPatchModel patchable, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<ResourceOperations<PhVirtualMachine>>> UpdateAsync(VirtualMachineUpdate patchable, CancellationToken cancellationToken = default)
         {
-            return new PhVmValueOperation(await Operations.StartUpdateAsync(Context.ResourceGroup, Context.Name, patchable as VirtualMachineUpdate, cancellationToken));
+            return new PhArmOperation<ResourceOperations<PhVirtualMachine>, VirtualMachine>(await Operations.StartUpdateAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken), v => { Resource = new PhVirtualMachine(v); return this; });
         }
 
-        public ArmOperation<PhVirtualMachine> AddTag(string key, string value)
+        public override ArmOperation<ResourceOperations<PhVirtualMachine>> AddTag(string key, string value)
         {
             var patchable = new VirtualMachineUpdate { Tags= new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)};
             patchable.Tags.Add(key, value);
-            return new PhVmValueOperation(Operations.StartUpdate(Context.ResourceGroup, Context.Name, patchable));
+            return new PhArmOperation<ResourceOperations<PhVirtualMachine>, VirtualMachine>(Operations.StartUpdate(Context.ResourceGroup, Context.Name, patchable), v => { Resource = new PhVirtualMachine(v); return this; });
         }
 
-        public async Task<ArmOperation<PhVirtualMachine>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public override async Task<ArmOperation<ResourceOperations<PhVirtualMachine>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new VirtualMachineUpdate { Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) };
             patchable.Tags.Add(key, value);
-            return new PhVmValueOperation(await Operations.StartUpdateAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken));
+            return new PhArmOperation<ResourceOperations<PhVirtualMachine>, VirtualMachine>(await Operations.StartUpdateAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken), v => { Resource = new PhVirtualMachine(v); return this; });
         }
 
 

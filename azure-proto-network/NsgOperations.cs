@@ -16,7 +16,7 @@ namespace azure_proto_network
     /// An operations + Model class for NSGs
     /// TODO: How does the operation signature change for resources that support Etags?
     /// </summary>
-    public class NsgOperations : ResourceOperations<PhNetworkSecurityGroup, TagsObject, Response<PhNetworkSecurityGroup>, Operation<Response> >
+    public class NsgOperations : ResourceOperations<PhNetworkSecurityGroup>
     {
         class RuleIdEqualityComparer : IEqualityComparer<SecurityRule>
         {
@@ -35,6 +35,9 @@ namespace azure_proto_network
         {
         }
 
+        public NsgOperations(ArmOperations parent, TrackedResource context) : base(parent, context)
+        {
+        }
 
 
         /// <summary>
@@ -44,9 +47,14 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="rules">The new set of network security rules</param>
         /// <returns>A network security group with the given set of rules merged with thsi one</returns>
-        public Operation<PhNetworkSecurityGroup> UpdateRules(CancellationToken cancellationToken = default, params SecurityRule[] rules)
+        public ArmOperation<ResourceOperations<PhNetworkSecurityGroup>> UpdateRules(CancellationToken cancellationToken = default, params SecurityRule[] rules)
         {
-            var model = this.Get().Value;
+            PhNetworkSecurityGroup model;
+            if (!this.TryGetModel(out model))
+            {
+                this.Get().Value.TryGetModel(out model);
+            }
+
             foreach (var rule in rules)
             {
                 // Note that this makes use of the 
@@ -73,37 +81,46 @@ namespace azure_proto_network
                 }
             }
 
-            return new PhValueOperation<PhNetworkSecurityGroup, NetworkSecurityGroup>(Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, model.Model), n => new PhNetworkSecurityGroup(n));
+            return new PhArmOperation<ResourceOperations<PhNetworkSecurityGroup>, NetworkSecurityGroup>(Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, model.Model), 
+                n => { Resource = new PhNetworkSecurityGroup(n); return this;});
         }
 
-        public override Response<PhNetworkSecurityGroup> Get()
+        public override Response<ResourceOperations<PhNetworkSecurityGroup>> Get()
         {
-            return new PhResponse<PhNetworkSecurityGroup, NetworkSecurityGroup>(Operations.Get(Context.ResourceGroup, Context.Name), n => new PhNetworkSecurityGroup(n));
+            return new PhArmResponse<ResourceOperations<PhNetworkSecurityGroup>, NetworkSecurityGroup>(Operations.Get(Context.ResourceGroup, Context.Name),
+                n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
-        public async override Task<Response<PhNetworkSecurityGroup>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<Response<ResourceOperations<PhNetworkSecurityGroup>>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhResponse<PhNetworkSecurityGroup, NetworkSecurityGroup>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, null, cancellationToken), n => new PhNetworkSecurityGroup(n));
+            return new PhArmResponse<ResourceOperations<PhNetworkSecurityGroup>, NetworkSecurityGroup>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, null, cancellationToken),
+                n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
-        public override Response<PhNetworkSecurityGroup> Update(TagsObject patchable)
+        public override ArmOperation<ResourceOperations<PhNetworkSecurityGroup>> AddTag(string key, string value)
         {
-            return new PhResponse<PhNetworkSecurityGroup, NetworkSecurityGroup>(Operations.UpdateTags(Context.ResourceGroup, Context.Name, patchable), n => new PhNetworkSecurityGroup(n));
+            var patchable = new TagsObject();
+            patchable.Tags[key] = value;
+            return new PhArmOperation<ResourceOperations<PhNetworkSecurityGroup>, NetworkSecurityGroup>(Operations.UpdateTags(Context.ResourceGroup, Context.Name, patchable),
+                n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
-        public async override Task<Response<PhNetworkSecurityGroup>> UpdateAsync(TagsObject patchable, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperations<PhNetworkSecurityGroup>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
-            return new PhResponse<PhNetworkSecurityGroup, NetworkSecurityGroup>(await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken), n => new PhNetworkSecurityGroup(n));
+            var patchable = new TagsObject();
+            patchable.Tags[key] = value;
+            return new PhArmOperation<ResourceOperations<PhNetworkSecurityGroup>, NetworkSecurityGroup>(await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken),
+                n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
-        public override Operation<Response> Delete()
+        public override ArmOperation<Response> Delete()
         {
-            return new PhVoidOperation(Operations.StartDelete(Context.ResourceGroup, Context.Name));
+            return new ArmVoidOperation(Operations.StartDelete(Context.ResourceGroup, Context.Name));
         }
 
-        public async override Task<Operation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new PhVoidOperation(await Operations.StartDeleteAsync(Context.ResourceGroup, Context.Name, cancellationToken));
+            return new ArmVoidOperation(await Operations.StartDeleteAsync(Context.ResourceGroup, Context.Name, cancellationToken));
         }
 
         protected override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";

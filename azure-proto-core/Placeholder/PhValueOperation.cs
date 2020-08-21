@@ -38,9 +38,9 @@ namespace azure_proto_core
         public override ValueTask<Response> UpdateStatusAsync(CancellationToken cancellationToken = default) => _wrapped.UpdateStatusAsync(cancellationToken);
 
         public async override ValueTask<Response<T>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
-            => new PhResponse<T, U>(await _wrapped.WaitForCompletionAsync(cancellationToken), _converter);
+            => new PhArmResponse<T, U>(await _wrapped.WaitForCompletionAsync(cancellationToken), _converter);
 
         public async override ValueTask<Response<T>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken)
-            => new PhResponse<T, U>(await _wrapped.WaitForCompletionAsync(pollingInterval, cancellationToken), _converter);
+            => new PhArmResponse<T, U>(await _wrapped.WaitForCompletionAsync(pollingInterval, cancellationToken), _converter);
     }
 }
