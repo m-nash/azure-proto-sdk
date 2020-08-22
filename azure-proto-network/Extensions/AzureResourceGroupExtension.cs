@@ -28,14 +28,14 @@ namespace azure_proto_network
             return container.CreateAsync(name, resourceDetails, cancellationToken);
         }
 
-        public static PhVirtualNetwork ConstructVnet(this ResourceGroupOperations operations, string vnetCidr, Location location = null)
+        public static VnetContainer ConstructVnet(this ResourceGroupOperations operations, string vnetCidr, Location location = null)
         {
             var vnet = new VirtualNetwork()
             {
                 Location = location ?? operations.DefaultLocation,
                 AddressSpace = new AddressSpace() { AddressPrefixes = new List<string>() { vnetCidr } },
             };
-            return new PhVirtualNetwork(vnet);
+            return new VnetContainer(operations, new PhVirtualNetwork(vnet));
         }
 
         public static VnetOperations Vnet(this ResourceGroupOperations operations, TrackedResource vnet)
@@ -76,7 +76,7 @@ namespace azure_proto_network
             return container.CreateAsync(name, resourceDetails, cancellationToken);
         }
 
-        public static PhPublicIPAddress ConstructIPAddress(this ResourceGroupOperations operations, Location location = null)
+        public static PublicIpContainer ConstructIPAddress(this ResourceGroupOperations operations, Location location = null)
         {
             var ipAddress = new PublicIPAddress()
             {
@@ -85,7 +85,7 @@ namespace azure_proto_network
                 Location = location ?? operations.DefaultLocation,
             };
 
-            return new PhPublicIPAddress(ipAddress);
+            return new PublicIpContainer(operations,  new PhPublicIPAddress(ipAddress));
         }
 
         public static PublicIpOperations PublicIp(this ResourceGroupOperations operations, TrackedResource vnet)
@@ -125,7 +125,7 @@ namespace azure_proto_network
             return container.CreateAsync(name, resourceDetails, cancellationToken);
         }
 
-        public static PhNetworkInterface ConstructNic(this ResourceGroupOperations operations, PhPublicIPAddress ip, string subnetId, Location location = null)
+        public static NicContainer ConstructNic(this ResourceGroupOperations operations, PhPublicIPAddress ip, string subnetId, Location location = null)
         {
             var nic = new Azure.ResourceManager.Network.Models.NetworkInterface()
             {
@@ -143,7 +143,7 @@ namespace azure_proto_network
                 }
             };
 
-            return new PhNetworkInterface(nic);
+            return  new NicContainer(operations, new PhNetworkInterface(nic));
         }
 
         public static NicOperations Nic(this ResourceGroupOperations operations, TrackedResource vnet)
@@ -189,7 +189,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="openPorts">The set of TCP ports to open</param>
         /// <returns>An NSG, with the given TCP ports open</returns>
-        public static PhNetworkSecurityGroup ConstructNsg(this ResourceGroupOperations operations, string nsgName, Location location = null, params int[] openPorts)
+        public static NsgOperations ConstructNsg(this ResourceGroupOperations operations, string nsgName, Location location = null, params int[] openPorts)
         {
             var nsg = new NetworkSecurityGroup { Location = location ?? operations.DefaultLocation };
             var index = 0;
@@ -207,7 +207,7 @@ namespace azure_proto_network
                 Description = $"Port_{openPort}"
             }).ToList();
 
-            return new PhNetworkSecurityGroup(nsg);
+            return new NsgOperations(operations, new PhNetworkSecurityGroup(nsg));
         }
 
         public static PhNetworkSecurityGroup ConstructNsg(this ResourceGroupOperations operations, string nsgName, params int[] openPorts)

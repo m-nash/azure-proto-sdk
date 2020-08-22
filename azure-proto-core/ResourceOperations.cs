@@ -72,6 +72,21 @@ namespace azure_proto_core
             return model != null;
         }
 
+        public virtual Model SafeGet()
+        {
+            T model = null;
+            if (!TryGetModel(out model))
+            {
+                try
+                {
+                    Get().Value.TryGetModel(out model);
+                }
+                catch { }
+            }
+
+            return model;
+        }
+
         public abstract Response<ResourceOperations<Model>> Get();
         public abstract Task<Response<ResourceOperations<Model>>> GetAsync(CancellationToken cancellationToken = default);
         public abstract ArmOperation<ResourceOperations<Model>> AddTag(string key, string value);

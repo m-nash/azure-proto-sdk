@@ -139,7 +139,7 @@ namespace azure_proto_compute
         }
 
 
-        public static PhAvailabilitySet ConstructAvailabilitySet(this ResourceGroupOperations operations, string skuName, Location location = null)
+        public static AvailabilitySetContainer ConstructAvailabilitySet(this ResourceGroupOperations operations, string skuName, Location location = null)
         {
             var availabilitySet = new AvailabilitySet(location ?? operations.DefaultLocation)
             {
@@ -148,7 +148,7 @@ namespace azure_proto_compute
                 Sku = new Azure.ResourceManager.Compute.Models.Sku() { Name = skuName },
             };
 
-            return new PhAvailabilitySet(availabilitySet);
+            return new AvailabilitySetContainer( operations, new PhAvailabilitySet(availabilitySet));
         }
 
         #endregion
