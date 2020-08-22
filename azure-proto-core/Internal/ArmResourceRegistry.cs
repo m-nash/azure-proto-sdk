@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Security;
 using System.Text;
 
 namespace azure_proto_core
@@ -60,6 +61,19 @@ namespace azure_proto_core
             }
 
             collection = registration.GetCollection(parent, parentContext);
+            return true;
+        }
+
+        public bool TryGetResourceType<T>(out ResourceType type) where T : TrackedResource
+        {
+            type = ResourceType.None;
+            ArmResourceRegistration<T> registration;
+            if (!TryGetRegistration<T>(out registration))
+            {
+                return false;
+            }
+
+            type = registration.ResourceType;
             return true;
         }
 

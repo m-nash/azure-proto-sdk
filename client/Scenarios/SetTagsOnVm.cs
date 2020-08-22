@@ -1,5 +1,5 @@
 ﻿using azure_proto_compute;
-using azure_proto_management;
+using azure_proto_core;
 using System;
 
 namespace client
@@ -11,10 +11,10 @@ namespace client
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
 
-            AzureResourceGroup rg = AzureClient.GetResourceGroup(Context.SubscriptionId, Context.RgName);
-            AzureVm vm = rg.Vms()[Context.VmName];
+            var rg = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
+            var vm = rg.Vm(Context.VmName);
 
-            Console.WriteLine($"Adding tags to {vm.Name}");
+            Console.WriteLine($"Adding tags to {vm.SafeGet().Name}");
             vm.AddTag("tagkey", "tagvalue");
         }
     }

@@ -1,5 +1,5 @@
 ﻿using azure_proto_compute;
-using azure_proto_management;
+using azure_proto_core;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -25,19 +25,22 @@ namespace client
             });
             #endregion
 
-            var client = new AzureClient();
+            var client = new ArmClient();
 
             Regex reg = new Regex($"{Context.VmName}.*even");
-            Parallel.ForEach(client.Vms(), vm =>
-            {
-                if (reg.IsMatch(vm.Name))
-                {
-                    Console.WriteLine($"Stopping {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Name}");
-                    vm.Stop();
-                    Console.WriteLine($"Starting {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Name}");
-                    vm.Start();
-                }
-            });
+            Parallel.ForEach(client.ListSubscriptions(), sub =>
+           {
+               Parallel.ForEach(sub.ListVms(), vm =>
+               {
+                   if (reg.IsMatch(vm.Context.Name))
+                   {
+                       Console.WriteLine($"Stopping {vm.Context.Subscription} {vm.Context.ResourceGroup} {vm.Context.Name}");
+                       vm.Stop();
+                       Console.WriteLine($"Starting {vm.Context.Subscription} {vm.Context.ResourceGroup} {vm.Context.Name}");
+                       vm.Start();
+                   }
+               });
+           });          
         }
     }
 }

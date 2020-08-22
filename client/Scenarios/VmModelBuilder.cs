@@ -4,7 +4,7 @@
 using System;
 using System.Threading.Tasks;
 using azure_proto_compute;
-using azure_proto_management;
+using azure_proto_core;
 using azure_proto_network;
 
 namespace client
@@ -16,42 +16,36 @@ namespace client
             throw new NotImplementedException();
         }
 
-        private Task<AzureVm> CreateVmWithBuilderAsync()
+        private Task<VmOperations> CreateVmWithBuilderAsync()
         {
-            AzureClient client = new AzureClient();
-            var subscription = client.Subscriptions[Context.SubscriptionId];
+            var client = new ArmClient();
+            var subscription = client.Subscriptions(Context.SubscriptionId);
 
             // Create Resource Group
             Console.WriteLine($"--------Start create group {Context.RgName}--------");
-            var resourceGroup = subscription.ResourceGroups.CreateOrUpdate(Context.RgName, Context.Loc);
+            var resourceGroup = subscription.CreateResourceGroup(Context.RgName, Context.Loc).Value;
 
             // Create AvailabilitySet
             Console.WriteLine("--------Start create AvailabilitySet--------");
-            var aset = resourceGroup.AvailabilitySets().ConstructAvailabilitySet("Aligned");
-            aset = resourceGroup.AvailabilitySets().CreateOrUpdateAvailabilityset(Context.VmName + "_aSet", aset);
+            var aset = resourceGroup.ConstructAvailabilitySet("Aligned").Create(Context.VmName + "_aSet").Value;
 
             // Create VNet
             Console.WriteLine("--------Start create VNet--------");
             string vnetName = Context.VmName + "_vnet";
-            var vnet = resourceGroup.VNets().ConstructVnet("10.0.0.0/16");
-            vnet = resourceGroup.VNets().CreateOrUpdateVNet(vnetName, vnet);
+            var vnet = resourceGroup.ConstructVnet("10.0.0.0/16").Create(vnetName).Value;
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
-            var nsg = resourceGroup.Nsgs().ConstructNsg(Context.NsgName, 80);
-            nsg = resourceGroup.Nsgs().CreateOrUpdateNsgs(nsg);
-            var subnet = vnet.Subnets.ConstructSubnet(Context.SubnetName, "10.0.0.0/24");
-            subnet = vnet.Subnets.CreateOrUpdateSubnets(subnet);
+            var nsg = resourceGroup.ConstructNsg(Context.NsgName, 80).Create(Context.NsgName).Value;
+            var subnet = vnet.ConstructSubnet(Context.SubnetName, "10.0.0.0/24").Create(Context.SubnetName).Value;
 
             // Create IP Address
             Console.WriteLine("--------Start create IP Address--------");
-            var ipAddress = resourceGroup.IpAddresses().ConstructIPAddress();
-            ipAddress = resourceGroup.IpAddresses().CreateOrUpdatePublicIpAddress($"{Context.VmName}_ip", ipAddress);
+            var ipAddress = resourceGroup.ConstructIPAddress().Create($"{Context.VmName}_ip").Value;
 
             // Create Network Interface
             Console.WriteLine("--------Start create Network Interface--------");
-            var nic = resourceGroup.Nics().ConstructNic(ipAddress, subnet.Id);
-            nic = resourceGroup.Nics().CreateOrUpdateNic($"{Context.VmName}_nic", nic);
+            var nic = resourceGroup.ConstructNic(ipAddress.SafeGet(), subnet.Context).Create($"{Context.VmName}_nic").Value;
 
             // TODO:
             // 0. Builder is an convenience feature. Simpler model would just use new xxx()
@@ -59,15 +53,15 @@ namespace client
             // 2. Is there a risk that the referenced model has not been created in ARM yet resource id is populated?
 
             // Options: required parameters on in the constructor
-            var vmModel = AzureVm.ModelBuilder(Context.VmName, Context.Loc)
+            var vmModel = resourceGroup.VmBuilder(Context.VmName, Context.Loc)
                 .UseWindowsImage("admin-user", "!@#$%asdfA")
-                .RequiredNetworkInterface(nic.Id)
-                .RequiredAvalabilitySet(aset.Id)
+                .RequiredNetworkInterface(nic.Context)
+                .RequiredAvalabilitySet(aset.Context)
                 .ToModel();
 
-            var vm = resourceGroup.Vms().CreateOrUpdateVm(Context.VmName, vmModel);
+            var vm = resourceGroup.CreateVm(Context.VmName, vmModel).Value;
 
-            return Task.FromResult(vm);
+            return Task.FromResult(vm as VmOperations);
         }
     }
 }

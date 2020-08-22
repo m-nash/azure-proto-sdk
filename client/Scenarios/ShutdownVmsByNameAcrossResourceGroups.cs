@@ -1,5 +1,5 @@
 ﻿using azure_proto_compute;
-using azure_proto_management;
+using azure_proto_core;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -19,16 +19,16 @@ namespace client
                 context = new ScenarioContext();
             }
 
-            var subscription = AzureClient.GetSubscription(Context.SubscriptionId);
+            var subscription = new ArmClient().Subscriptions(Context.SubscriptionId);
 
             Regex reg = new Regex($"{Context.VmName}.*even");
-            Parallel.ForEach(subscription.Vms(), vm =>
+            Parallel.ForEach(subscription.ListVms(), vm =>
             {
-                if (reg.IsMatch(vm.Name))
+                if (reg.IsMatch(vm.Context.Name))
                 {
-                    Console.WriteLine($"Stopping {vm.Parent.Name} {vm.Name}");
+                    Console.WriteLine($"Stopping {vm.Context.ResourceGroup} {vm.Context.Name}");
                     vm.Stop();
-                    Console.WriteLine($"Starting {vm.Parent.Name} {vm.Name}");
+                    Console.WriteLine($"Starting {vm.Context.ResourceGroup} {vm.Context.Name}");
                     vm.Start();
                 }
             });

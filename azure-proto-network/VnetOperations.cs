@@ -64,68 +64,6 @@ namespace azure_proto_network
                 n => { Resource = new PhVirtualNetwork(n); return this; });
         }
 
-        public SubnetOperations Subnet(TrackedResource subnet)
-        {
-            return new SubnetOperations(this, subnet);
-        }
-
-        public SubnetOperations Subnet(ResourceIdentifier subnet)
-        {
-            return new SubnetOperations(this, subnet);
-        }
-
-        public SubnetOperations Subnet(string subnet)
-        {
-            return new SubnetOperations(this, $"{this.Context}/subnets/{subnet}");
-        }
-
-        public PhSubnet ConstructSubnet(string name, string cidr, Location location = null, PhNetworkSecurityGroup group = null)
-        {
-            var subnet = new Subnet()
-            {
-                Name = name,
-                AddressPrefix = cidr,
-            };
-
-            if (null != group)
-            {
-                subnet.NetworkSecurityGroup = group.Model;
-            }
-
-            return new PhSubnet(subnet, location ?? DefaultLocation);
-        }
-
-        public ArmOperation<ResourceOperations<PhSubnet>> CreateSubnet(string name, PhSubnet resourceDetails)
-        {
-            return GetSubnetContainer().Create(name, resourceDetails);
-        }
-
-        public Task<ArmOperation<ResourceOperations<PhSubnet>>> CreateSubnetAsync(string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
-        {
-            return GetSubnetContainer().CreateAsync(name, resourceDetails, cancellationToken);
-        }
-
-        public Pageable<ResourceOperations<PhSubnet>> ListSubnets(CancellationToken cancellationToken = default)
-        {
-            return GetSubnetCollection().List(null, null, cancellationToken);
-        }
-
-        public AsyncPageable<ResourceOperations<PhSubnet>> ListSubnetsAsync(CancellationToken cancellationToken = default)
-        {
-            return GetSubnetCollection().ListAsync(null, null, cancellationToken);
-        }
-
-        internal SubnetContainer GetSubnetContainer()
-        {
-            return new SubnetContainer(this, Context);
-        }
-
-        internal SubnetCollection GetSubnetCollection()
-        {
-            return new SubnetCollection(this, Context);
-        }
-
-
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).VirtualNetworks;
     }
 }

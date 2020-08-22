@@ -3,7 +3,6 @@ using Azure.ResourceManager.Compute.Models;
 using azure_proto_core;
 using azure_proto_core.Adapters;
 using azure_proto_core.Resources;
-using azure_proto_network;
 using System.Collections.Generic;
 using System.Threading;
 using Sku = azure_proto_core.Sku;
