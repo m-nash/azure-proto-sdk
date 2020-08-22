@@ -305,6 +305,19 @@ namespace azure_proto_core
             return operations;
         }
 
+        public ResourceOperations<T> GetResourceOperations<T>(string subscription, string resourceGroup, string name) where T : TrackedResource
+        {
+            ResourceType type;
+            if (!Registry.TryGetResourceType<T>(out type))
+            {
+                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+            }
+
+            var id = new ResourceIdentifier($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/{type.Namespace}/{type.Type}/name");
+            return GetResourceOperations<T>(id);
+        }
+
+
         public ArmOperation<ResourceOperations<T>> CreateResource<T>(string subscription, string resourceGroup, string name, T model, azure_proto_core.Location location = default) where T:TrackedResource
         {
             if (location == null)

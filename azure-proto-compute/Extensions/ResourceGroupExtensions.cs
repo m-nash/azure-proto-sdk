@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Azure.ResourceManager.Compute.Models;
+using azure_proto_compute.Convenience;
 using azure_proto_core;
 using azure_proto_core.Adapters;
 using azure_proto_core.Resources;
@@ -72,6 +73,11 @@ namespace azure_proto_compute
             };
 
             return new VmContainer(operations, new PhVirtualMachine(vm));
+        }
+
+        public static VmModelBuilder VmBuilder(this ResourceGroupOperations operations, string name, Location location)
+        {
+            return new VmModelBuilder(name, location);
         }
 
         /// <summary>

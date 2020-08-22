@@ -74,7 +74,7 @@ namespace azure_proto_core
 
         public virtual Model SafeGet()
         {
-            T model = null;
+            Model model = null;
             if (!TryGetModel(out model))
             {
                 try

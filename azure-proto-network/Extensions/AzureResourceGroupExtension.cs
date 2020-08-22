@@ -189,7 +189,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="openPorts">The set of TCP ports to open</param>
         /// <returns>An NSG, with the given TCP ports open</returns>
-        public static NsgOperations ConstructNsg(this ResourceGroupOperations operations, string nsgName, Location location = null, params int[] openPorts)
+        public static NsgContainer ConstructNsg(this ResourceGroupOperations operations, string nsgName, Location location = null, params int[] openPorts)
         {
             var nsg = new NetworkSecurityGroup { Location = location ?? operations.DefaultLocation };
             var index = 0;
@@ -207,10 +207,10 @@ namespace azure_proto_network
                 Description = $"Port_{openPort}"
             }).ToList();
 
-            return new NsgOperations(operations, new PhNetworkSecurityGroup(nsg));
+            return new NsgContainer(operations, new PhNetworkSecurityGroup(nsg));
         }
 
-        public static PhNetworkSecurityGroup ConstructNsg(this ResourceGroupOperations operations, string nsgName, params int[] openPorts)
+        public static NsgContainer ConstructNsg(this ResourceGroupOperations operations, string nsgName, params int[] openPorts)
         {
             var nsg = new NetworkSecurityGroup { Location = operations.DefaultLocation };
             var index = 0;
@@ -228,7 +228,7 @@ namespace azure_proto_network
                 Description = $"Port_{openPort}"
             }).ToList();
 
-            return new PhNetworkSecurityGroup(nsg);
+            return new NsgContainer(operations, new PhNetworkSecurityGroup(nsg));
         }
 
         public static NsgOperations Nsgs(this ResourceGroupOperations operations, TrackedResource vnet)
