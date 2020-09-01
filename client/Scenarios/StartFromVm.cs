@@ -1,5 +1,5 @@
 ﻿using azure_proto_compute;
-using azure_proto_management;
+using azure_proto_core;
 using System;
 
 namespace client
@@ -10,14 +10,14 @@ namespace client
         {
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
-
+            var client = new ArmClient();
             //retrieve from lowest level, doesn't give ability to walk up and down the container structure
-            AzureVm vm = VmCollection.GetVm(Context.SubscriptionId, Context.RgName, Context.VmName);
+            var vm = client.GetResourceOperations<PhVirtualMachine>(Context.SubscriptionId, Context.RgName, Context.VmName).SafeGet();
             Console.WriteLine($"Found VM {vm.Id}");
 
             //retrieve from lowest level inside management package gives ability to walk up and down
-            AzureResourceGroup rg = AzureClient.GetResourceGroup(Context.SubscriptionId, Context.RgName);
-            AzureVm vm2 = rg.Vms()[Context.VmName];
+            var rg = client.ResourceGroup(Context.SubscriptionId, Context.RgName);
+            var vm2 = rg.Vm(Context.VmName).SafeGet();
             Console.WriteLine($"Found VM {vm2.Id}");
         }
     }

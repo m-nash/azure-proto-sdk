@@ -1,5 +1,5 @@
 ﻿using azure_proto_compute;
-using azure_proto_management;
+using azure_proto_core;
 using azure_proto_network;
 using System;
 using System.Collections.Generic;
@@ -15,62 +15,55 @@ namespace client
 
         public override void Execute()
         {
-            AzureClient client = new AzureClient();
-            var subscription = client.Subscriptions[Context.SubscriptionId];
+            var client = new ArmClient();
+            var subscription = client.Subscriptions(Context.SubscriptionId);
 
             // Create Resource Group
             Console.WriteLine($"--------Start create group {Context.RgName}--------");
-            var resourceGroup = subscription.ResourceGroups.CreateOrUpdate(Context.RgName, Context.Loc);
-            CleanUp.Add(resourceGroup.Id);
+            var resourceGroup = subscription.CreateResourceGroup(Context.RgName, Context.Loc).Value;
+            CleanUp.Add(resourceGroup.Context);
 
             // Create AvailabilitySet
             Console.WriteLine("--------Start create AvailabilitySet--------");
-            var aset = resourceGroup.AvailabilitySets().ConstructAvailabilitySet("Aligned");
-            aset = resourceGroup.AvailabilitySets().CreateOrUpdateAvailabilityset(Context.VmName + "_aSet", aset);
+            var aset = resourceGroup.ConstructAvailabilitySet("Aligned").Create(Context.VmName + "_aSet").Value as AvailabilitySetOperations;
 
             // Create VNet
             Console.WriteLine("--------Start create VNet--------");
             string vnetName = Context.VmName + "_vnet";
-            var vnet = resourceGroup.VNets().ConstructVnet("10.0.0.0/16");
-            vnet = resourceGroup.VNets().CreateOrUpdateVNet(vnetName, vnet);
+            var vnet = resourceGroup.ConstructVnet("10.0.0.0/16").Create(vnetName).Value as VnetOperations;
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
-            var nsg = resourceGroup.Nsgs().ConstructNsg(Context.NsgName, 80);
-            nsg = resourceGroup.Nsgs().CreateOrUpdateNsgs(nsg);
-            var subnet = vnet.Subnets.ConstructSubnet(Context.SubnetName, "10.0.0.0/24");
-            subnet = vnet.Subnets.CreateOrUpdateSubnets(subnet);
+            var nsg = resourceGroup.ConstructNsg(Context.NsgName, 80).Create().Value;
+            var subnet = vnet.ConstructSubnet(Context.SubnetName, "10.0.0.0/24").Create().Value as SubnetOperations;
 
             CreateVmsAsync(resourceGroup, aset, subnet).Wait();
         }
 
-        private async Task CreateVmsAsync(AzureResourceGroup resourceGroup, AzureAvailabilitySet aset, AzureSubnet subnet)
+        private async Task CreateVmsAsync(ResourceGroupOperations resourceGroup, AvailabilitySetOperations aset, SubnetOperations subnet)
         {
-            List<Task<AzureVm>> tasks = new List<Task<AzureVm>>();
+            List<Task<VmOperations>> tasks = new List<Task<VmOperations>>();
             for (int i = 0; i < 10; i++)
             {
                 // Create IP Address
                 Console.WriteLine("--------Start create IP Address--------");
-                var ipAddress = resourceGroup.IpAddresses().ConstructIPAddress();
-                ipAddress = resourceGroup.IpAddresses().CreateOrUpdatePublicIpAddress($"{Context.VmName}_{i}_ip", ipAddress);
+                var ipAddress = resourceGroup.ConstructIPAddress().Create($"{Context.VmName}_{i}_ip").Value;
 
                 // Create Network Interface
                 Console.WriteLine("--------Start create Network Interface--------");
-                var nic = resourceGroup.Nics().ConstructNic(ipAddress, subnet.Id);
-                nic = resourceGroup.Nics().CreateOrUpdateNic($"{Context.VmName}_{i}_nic", nic);
+                var nic = resourceGroup.ConstructNic(ipAddress.SafeGet(), subnet.Context).Create($"{Context.VmName}_{i}_nic");
 
                 // Create VM
                 string num = i % 2 == 0 ? "even" : "odd";
                 string name = $"{Context.VmName}-{i}-{num}";
                 Console.WriteLine("--------Start create VM {0}--------", i);
-                var vm = resourceGroup.Vms().ConstructVm(name, "admin-user", "!@#$%asdfA", nic.Id, aset);
-                tasks.Add(resourceGroup.Vms().CreateOrUpdateVmAsync(name, vm));
+                var vm = resourceGroup.ConstructVm(name, "admin-user", "!@#$%asdfA", nic.Id, aset.SafeGet()).Create(name).Value;
             }
 
             foreach (var task in tasks)
             {
                 var vm = await task;
-                Console.WriteLine($"--------Finished creating VM {vm.Name}");
+                Console.WriteLine($"--------Finished creating VM {vm.Context.Name}");
             }
         }
     }

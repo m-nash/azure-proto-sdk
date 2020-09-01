@@ -1,5 +1,4 @@
 ﻿using azure_proto_core;
-using azure_proto_management;
 using System;
 using System.Linq;
 
@@ -26,11 +25,10 @@ namespace client
                 foreach (var rgId in CleanUp)
                 {
                     ResourceIdentifier id = new ResourceIdentifier(rgId);
-                    var sub = AzureClient.GetSubscription(id.Subscription);
-                    AzureResourceGroup rg;
-                    if (sub.ResourceGroups.TryGetValue(id.ResourceGroup, out rg))
+                    var rg = new ArmClient().ResourceGroup(rgId);
+                    if (rg.SafeGet() != null)
                     {
-                        Console.WriteLine($"--------Deleting {rg.Name}--------");
+                        Console.WriteLine($"--------Deleting {rg.Context.Name}--------");
                         _ = rg.DeleteAsync();
                     }
                 }

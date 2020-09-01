@@ -1,64 +1,47 @@
-﻿using Azure.ResourceManager.Network;
+﻿using Azure;
+using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
+using azure_proto_core.Adapters;
+using azure_proto_core.Resources;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class SubnetCollection : AzureCollection<AzureSubnet>
+    /// <summary>
+    /// TODO: refactor list methods to include type-specific lists, and allow Child Resources
+    /// TODO: refactor list methods for child objects to not have a ListAvailableLocations call
+    /// </summary>
+    public class SubnetCollection : ResourceCollectionOperations<PhSubnet>
     {
-        public SubnetCollection(AzureVnet vnet) : base(vnet) { }
-
-        private NetworkManagementClient Client => ClientFactory.Instance.GetNetworkClient(Parent.Id.Subscription);
-
-        public AzureSubnet CreateOrUpdateSubnets(AzureSubnet subnet)
+        public SubnetCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
-            AzureVnet vnet = Parent as AzureVnet;
-            var subnetResult = Client.Subnets.StartCreateOrUpdate(vnet.Id.ResourceGroup, vnet.Name, subnet.Name, subnet.Model).WaitForCompletionAsync().Result;
-            subnet = new AzureSubnet(vnet, new PhSubnet(subnetResult.Value, vnet.Location));
-            return subnet;
         }
 
-        public async Task<AzureSubnet> CreateOrUpdateSubnetsAsync(AzureSubnet subnet, CancellationToken cancellationToken = default)
+        public SubnetCollection(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
         {
-            AzureVnet vnet = Parent as AzureVnet;
-            var subnetResult = await Client.Subnets.StartCreateOrUpdateAsync(vnet.Id.ResourceGroup, vnet.Name, subnet.Name, subnet.Model, cancellationToken);
-            subnet = new AzureSubnet(vnet, new PhSubnet(subnetResult.Value, vnet.Location));
-            return subnet;
         }
 
-        protected override AzureSubnet Get(string subnetName)
+        protected override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
+
+        public override Pageable<ResourceOperations<PhSubnet>> List(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            AzureVnet vnet = Parent as AzureVnet;
-            var subnetResult = Client.Subnets.Get(vnet.Id.ResourceGroup, vnet.Name, subnetName);
-            return new AzureSubnet(vnet, new PhSubnet(subnetResult.Value, vnet.Location));
+            return new WrappingPageable<Subnet, ResourceOperations<PhSubnet>>(Operations.List(Context.ResourceGroup, Context.Parent.Name, cancellationToken), s => new SubnetOperations(this, new PhSubnet(s, DefaultLocation)));
         }
 
-        protected override IEnumerable<AzureSubnet> GetItems()
+        public override AsyncPageable<ResourceOperations<PhSubnet>> ListAsync(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            AzureVnet vnet = Parent as AzureVnet;
-            foreach (var subnet in Client.Subnets.List(vnet.Id.ResourceGroup, vnet.Name))
-            {
-                yield return new AzureSubnet(vnet, new PhSubnet(subnet, vnet.Location));
-            }
+            return new WrappingAsyncPageable<Subnet, ResourceOperations<PhSubnet>>(Operations.ListAsync(Context.ResourceGroup, Context.Parent.Name, cancellationToken), s => new SubnetOperations(this, new PhSubnet(s, DefaultLocation)));
         }
 
-        public AzureSubnet ConstructSubnet(string name, string cidr, AzureNetworkSecurityGroup group = null)
+        protected override ResourceOperations<PhSubnet> GetOperations(ResourceIdentifier identifier, Location location)
         {
-            var subnet = new Subnet()
-            {
-                Name = name,
-                AddressPrefix = cidr,
-            };
-
-            if (null != group)
-            {
-                subnet.NetworkSecurityGroup = group.Model;
-            }
-
-            return new AzureSubnet(Parent as AzureVnet, new PhSubnet(subnet, Parent.Location));
+            var resource = new ArmResource(identifier, location ?? DefaultLocation);
+            return new SubnetOperations(this, resource);
         }
+
+        internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).Subnets;
+
     }
 }

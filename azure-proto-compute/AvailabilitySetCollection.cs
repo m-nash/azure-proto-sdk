@@ -1,55 +1,37 @@
-﻿using Azure.ResourceManager.Compute;
-using Azure.ResourceManager.Compute.Models;
-using azure_proto_core;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using azure_proto_core;
 
 namespace azure_proto_compute
 {
-    public class AvailabilitySetCollection : AzureCollection<AzureAvailabilitySet>
+    /// <summary>
+    /// Class conatinaing list operations for availabiliuty sets
+    /// </summary>
+    public class AvailabilitySetCollection : ResourceCollectionOperations<PhAvailabilitySet>
     {
-        public AvailabilitySetCollection(TrackedResource resourceGroup) : base(resourceGroup) { }
 
-        private ComputeManagementClient Client => ClientFactory.Instance.GetComputeClient(Parent.Id.Subscription);
+        public AvailabilitySetCollection(ArmOperations parent, azure_proto_core.Resource resourceGroup) : base(parent, resourceGroup) { }
+        public AvailabilitySetCollection(ArmOperations parent, ResourceIdentifier resourceGroup) : base(parent, resourceGroup) { }
 
-        public AzureAvailabilitySet CreateOrUpdateAvailabilityset(string name, AzureAvailabilitySet availabilitySet)
+        protected override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
+
+        public AvailabilitySetOperations AvailabilitySet(string resourceGroupName, string name)
         {
-            var aSet = Client.AvailabilitySets.CreateOrUpdate(Parent.Name, name, availabilitySet.Model);
-            AzureAvailabilitySet azureAvailabilitySet = new AzureAvailabilitySet(Parent, new PhAvailabilitySet(aSet.Value));
-            return azureAvailabilitySet;
+            return new AvailabilitySetOperations(this, new ResourceIdentifier($"{Context}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/availabilitySets/{name}"));
         }
 
-        public async Task<AzureAvailabilitySet> CreateOrUpdateAvailabilitysetAsync(string name, AzureAvailabilitySet availabilitySet, CancellationToken cancellationToken = default)
+        public AvailabilitySetOperations AvailabilitySet(ResourceIdentifier vm)
         {
-            var aSet = await Client.AvailabilitySets.CreateOrUpdateAsync(Parent.Name, name, availabilitySet.Model, cancellationToken);
-            AzureAvailabilitySet azureAvailabilitySet = new AzureAvailabilitySet(Parent, new PhAvailabilitySet(aSet.Value));
-            return azureAvailabilitySet;
+            return new AvailabilitySetOperations(this, vm);
         }
 
-        protected override AzureAvailabilitySet Get(string availabilitySetName)
+        public AvailabilitySetOperations AvailabilitySet(TrackedResource vm)
         {
-            var asetResult = Client.AvailabilitySets.Get(Parent.Name, availabilitySetName);
-            return new AzureAvailabilitySet(Parent, new PhAvailabilitySet(asetResult.Value));
+            return new AvailabilitySetOperations(this, vm);
         }
 
-        protected override IEnumerable<AzureAvailabilitySet> GetItems()
+        protected override ResourceOperations<PhAvailabilitySet> GetOperations(ResourceIdentifier identifier, Location location)
         {
-            foreach (var aset in Client.AvailabilitySets.List(Parent.Name))
-            {
-                yield return new AzureAvailabilitySet(Parent, new PhAvailabilitySet(aset));
-            }
-        }
-
-        public AzureAvailabilitySet ConstructAvailabilitySet(string skuName)
-        {
-            var availabilitySet = new AvailabilitySet(Parent.Location)
-            {
-                PlatformUpdateDomainCount = 5,
-                PlatformFaultDomainCount = 2,
-                Sku = new Azure.ResourceManager.Compute.Models.Sku() { Name = skuName },
-            };
-            return new AzureAvailabilitySet(Parent, new PhAvailabilitySet(availabilitySet));
+            var resource = new ArmResource(identifier, location);
+            return AvailabilitySet(resource);
         }
     }
 }

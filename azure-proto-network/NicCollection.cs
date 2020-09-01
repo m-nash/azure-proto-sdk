@@ -3,60 +3,27 @@ using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class NicCollection : AzureCollection<AzureNic>
+    public class NicCollection : ResourceCollectionOperations<PhNetworkInterface>
     {
-        public NicCollection(TrackedResource resourceGroup) : base(resourceGroup) { }
-
-        private NetworkManagementClient Client => ClientFactory.Instance.GetNetworkClient(Parent.Id.Subscription);
-
-        public AzureNic CreateOrUpdateNic(string name, AzureNic nic)
+        public NicCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
-            var nicResult = Client.NetworkInterfaces.StartCreateOrUpdate(Parent.Name, name, nic.Model).WaitForCompletionAsync().Result;
-            nic = new AzureNic(Parent, new PhNetworkInterface(nicResult.Value));
-            return nic;
+
         }
 
-        public async Task<AzureNic> CreateOrUpdateNicAync(string name, AzureNic nic, CancellationToken cancellationToken = default)
+        public NicCollection(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
         {
-            var nicResult = await Client.NetworkInterfaces.StartCreateOrUpdateAsync(Parent.Name, name, nic.Model, cancellationToken);
-            nic = new AzureNic(Parent, new PhNetworkInterface(nicResult.Value));
-            return nic;
+
         }
 
-        protected override IEnumerable<AzureNic> GetItems()
-        {
-            throw new NotImplementedException();
-        }
+        protected override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 
-        protected override AzureNic Get(string nicName)
+        protected override ResourceOperations<PhNetworkInterface> GetOperations(ResourceIdentifier identifier, Location location)
         {
-            var nicResult = Client.NetworkInterfaces.Get(Parent.Name, nicName);
-            return new AzureNic(Parent, new PhNetworkInterface(nicResult.Value));
-        }
-
-        public AzureNic ConstructNic(AzurePublicIpAddress ip, string subnetId)
-        {
-            var nic = new NetworkInterface()
-            {
-                Location = Parent.Location,
-                IpConfigurations = new List<NetworkInterfaceIPConfiguration>()
-                {
-                    new NetworkInterfaceIPConfiguration()
-                    {
-                        Name = "Primary",
-                        Primary = true,
-                        Subnet = new Subnet() { Id = subnetId },
-                        PrivateIPAllocationMethod = IPAllocationMethod.Dynamic,
-                        PublicIPAddress = new PublicIPAddress() { Id = ip.Id }
-                    }
-                }
-            };
-            return new AzureNic(Parent, new PhNetworkInterface(nic));
+            var resource = new ArmResource(identifier, location ?? DefaultLocation);
+            return new NicOperations(this, resource);
         }
     }
 }

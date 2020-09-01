@@ -1,5 +1,5 @@
 ﻿using azure_proto_compute;
-using azure_proto_management;
+using azure_proto_core;
 using System;
 
 namespace client
@@ -11,10 +11,10 @@ namespace client
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
 
-            AzureClient client = new AzureClient();
-            var subscription = client.Subscriptions[Context.SubscriptionId];
-            var resourceGroup = subscription.ResourceGroups[Context.RgName];
-            var vm = resourceGroup.Vms()[Context.VmName];
+            var client = new ArmClient();
+            var subscription = client.Subscriptions(Context.SubscriptionId);
+            var resourceGroup = subscription.ResourceGroup(Context.RgName);
+            var vm = resourceGroup.Vm(Context.VmName);
             Console.WriteLine($"Found VM {Context.VmName}");
             Console.WriteLine("--------Stopping VM--------");
             vm.Stop();

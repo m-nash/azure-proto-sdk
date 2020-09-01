@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-core", "azure-p
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-network", "azure-proto-network\azure-proto-network.csproj", "{23ECE624-2ECD-4C48-BFEA-7D613163394A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-management", "azure-proto-management\azure-proto-management.csproj", "{E4A42425-8E14-4150-83BF-A1E166E11874}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{23ECE624-2ECD-4C48-BFEA-7D613163394A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23ECE624-2ECD-4C48-BFEA-7D613163394A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23ECE624-2ECD-4C48-BFEA-7D613163394A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E4A42425-8E14-4150-83BF-A1E166E11874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4A42425-8E14-4150-83BF-A1E166E11874}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4A42425-8E14-4150-83BF-A1E166E11874}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4A42425-8E14-4150-83BF-A1E166E11874}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

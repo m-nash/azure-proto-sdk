@@ -1,22 +1,20 @@
 ﻿using azure_proto_core;
-using System.Collections.Generic;
+using Azure.ResourceManager.Resources.Models;
 
 namespace azure_proto_management
 {
-    public class AzureSubscription : AzureSubscriptionBase
+    public class AzureSubscription : AzureOperations<PhSubscriptionModel>
     {
         string _name;
         public LocationCollection Locations { get; private set; }
-        protected override IEnumerable<AzureEntityHolder<TrackedResource>> ResourceGroupsGeneric { get; set; }
-        public ResourceGroupCollection ResourceGroups => ResourceGroupsGeneric as ResourceGroupCollection;
+        public ResourceGroupCollection ResourceGroups { get; private set; }
 
-        public AzureSubscription(AzureClient client, PhSubscriptionModel subModel) : base(client, subModel)
+        public AzureSubscription(ArmClient client, PhSubscriptionModel subModel) : base(client, subModel)
         {
             Locations = new LocationCollection(this);
-            ResourceGroupsGeneric = new ResourceGroupCollection(this);
+            ResourceGroups = new ResourceGroupCollection(this);
             _name = subModel.DisplayName;
         }
 
-        public override string Name => _name;
     }
 }

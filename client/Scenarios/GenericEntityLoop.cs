@@ -1,4 +1,6 @@
-﻿using azure_proto_management;
+﻿using Azure.ResourceManager.Compute.Models;
+using azure_proto_compute;
+using azure_proto_core;
 using System;
 
 namespace client
@@ -10,10 +12,10 @@ namespace client
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
 
-            AzureResourceGroup rg = AzureClient.GetResourceGroup(Context.SubscriptionId, Context.RgName);
-            foreach(var entity in rg.Entities)
+            var rg = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
+            foreach(var entity in rg.ListResource<PhVirtualMachine>())
             {
-                Console.WriteLine($"{entity.Name}");
+                Console.WriteLine($"{entity.Context.Name}");
             }
         }
     }

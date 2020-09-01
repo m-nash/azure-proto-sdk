@@ -1,24 +1,17 @@
-﻿using Azure.ResourceManager.Resources;
-using azure_proto_core;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using azure_proto_core;
+using Azure.ResourceManager.Resources;
 
 namespace azure_proto_management
 {
-    public partial class AzureResourceGroup : AzureResourceGroupBase
+    public class AzureResourceGroup : AzureProviderBase
     {
-        public AzureResourceGroup(TrackedResource parent, PhResourceGroup resourceGroup) : base(parent, resourceGroup) { }
+        public AzureResourceGroup(TrackedResource location, PhResourceGroup resourceGroup) : base(resourceGroup.Id, resourceGroup.Location) { }
 
         private ResourcesManagementClient Client => ClientFactory.Instance.GetResourceClient(Id.Subscription);
 
         public void Delete()
         {
             Client.ResourceGroups.StartDelete(Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-        }
-
-        public async Task DeleteAsync(CancellationToken cancellationToken = default)
-        {
-            await Client.ResourceGroups.StartDeleteAsync(Name, cancellationToken);
         }
     }
 }
