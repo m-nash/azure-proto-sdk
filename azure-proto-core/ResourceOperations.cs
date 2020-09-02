@@ -87,6 +87,21 @@ namespace azure_proto_core
             return model;
         }
 
+        public async virtual Task<Model> SafeGetAsync(CancellationToken cancellationToken = default)
+        {
+            Model model = null;
+            if (!TryGetModel(out model))
+            {
+                try
+                {
+                    (await GetAsync(cancellationToken)).Value.TryGetModel(out model);
+                }
+                catch { }
+            }
+
+            return model;
+        }
+
         public abstract Response<ResourceOperations<Model>> Get();
         public abstract Task<Response<ResourceOperations<Model>>> GetAsync(CancellationToken cancellationToken = default);
         public abstract ArmOperation<ResourceOperations<Model>> AddTag(string key, string value);
