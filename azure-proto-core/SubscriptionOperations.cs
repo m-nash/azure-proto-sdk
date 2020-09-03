@@ -15,19 +15,19 @@ namespace azure_proto_core
     /// Subscription operations
     /// TODO: Look at selecting subscriptions by name
     /// </summary>
-    public class SubscriptionOperations : ArmOperations
+    public class SubscriptionOperations : ArmClientBase
     {
         public Resource DefaultSubscription { get; }
-        public SubscriptionOperations(ArmOperations parent, string defaultSubscription) :base(parent)
+        public SubscriptionOperations(ArmClientBase parent, string defaultSubscription) :base(parent)
         {
             DefaultSubscription = new ArmResource($"/subscriptions/{defaultSubscription}");
         }
-        public SubscriptionOperations(ArmOperations parent, ResourceIdentifier defaultSubscription) : base(parent)
+        public SubscriptionOperations(ArmClientBase parent, ResourceIdentifier defaultSubscription) : base(parent)
         {
             DefaultSubscription = new ArmResource(defaultSubscription);
         }
 
-        public SubscriptionOperations(ArmOperations parent, Resource defaultSubscription) : base(parent)
+        public SubscriptionOperations(ArmClientBase parent, Resource defaultSubscription) : base(parent)
         {
             DefaultSubscription = defaultSubscription;
         }

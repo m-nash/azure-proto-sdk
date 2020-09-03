@@ -9,11 +9,11 @@ namespace azure_proto_network
 {
     public class VnetContainer : ResourceContainerOperations<PhVirtualNetwork>
     {
-        public VnetContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public VnetContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public VnetContainer(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
+        public VnetContainer(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 

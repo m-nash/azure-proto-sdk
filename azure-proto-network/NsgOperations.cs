@@ -31,11 +31,11 @@ namespace azure_proto_network
             }
         }
 
-        public NsgOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public NsgOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public NsgOperations(ArmOperations parent, TrackedResource context) : base(parent, context)
+        public NsgOperations(ArmClientBase parent, TrackedResource context) : base(parent, context)
         {
         }
 

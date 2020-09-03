@@ -7,11 +7,11 @@ namespace azure_proto_compute
     /// </summary>
     public class VmCollection : ResourceCollectionOperations<PhVirtualMachine>
     {
-        public VmCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public VmCollection(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public VmCollection(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
+        public VmCollection(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 

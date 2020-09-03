@@ -12,11 +12,11 @@ namespace azure_proto_network
 {
     public class SubnetContainer : ResourceContainerOperations<PhSubnet>
     {
-        public SubnetContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public SubnetContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public SubnetContainer(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
+        public SubnetContainer(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 

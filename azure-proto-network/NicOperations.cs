@@ -13,11 +13,11 @@ namespace azure_proto_network
 
     public class NicOperations : ResourceOperations<PhNetworkInterface>
     {
-        public NicOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public NicOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public NicOperations(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
+        public NicOperations(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 

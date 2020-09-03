@@ -8,12 +8,12 @@ namespace azure_proto_network
 {
     public class NicCollection : ResourceCollectionOperations<PhNetworkInterface>
     {
-        public NicCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public NicCollection(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
 
         }
 
-        public NicCollection(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
+        public NicCollection(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
 
         }

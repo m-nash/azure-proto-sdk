@@ -11,11 +11,11 @@ namespace azure_proto_compute
     /// </summary>
     public class VmContainer : ResourceContainerOperations<PhVirtualMachine>
     {
-        public VmContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public VmContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public VmContainer(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
+        public VmContainer(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
             
         }

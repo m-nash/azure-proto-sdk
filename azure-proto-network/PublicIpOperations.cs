@@ -9,11 +9,11 @@ namespace azure_proto_network
 {
     public class PublicIpOperations : ResourceOperations<PhPublicIPAddress>
     {
-        public PublicIpOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public PublicIpOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public PublicIpOperations(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
+        public PublicIpOperations(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 

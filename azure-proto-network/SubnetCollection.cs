@@ -15,11 +15,11 @@ namespace azure_proto_network
     /// </summary>
     public class SubnetCollection : ResourceCollectionOperations<PhSubnet>
     {
-        public SubnetCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public SubnetCollection(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public SubnetCollection(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
+        public SubnetCollection(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 

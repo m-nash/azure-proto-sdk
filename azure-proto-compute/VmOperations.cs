@@ -14,11 +14,11 @@ namespace azure_proto_compute
     /// </summary>
     public class VmOperations : ResourceOperations<PhVirtualMachine>
     {
-        public VmOperations(ArmOperations parent, TrackedResource context) : base(parent, context)
+        public VmOperations(ArmClientBase parent, TrackedResource context) : base(parent, context)
         {
         }
 
-        public VmOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public VmOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
         protected override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";

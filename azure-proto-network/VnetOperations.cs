@@ -16,11 +16,11 @@ namespace azure_proto_network
     /// </summary>
     public class VnetOperations : ResourceOperations<PhVirtualNetwork>
     {
-        public VnetOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public VnetOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public VnetOperations(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
+        public VnetOperations(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 

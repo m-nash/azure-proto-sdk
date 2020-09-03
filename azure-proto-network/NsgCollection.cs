@@ -4,11 +4,11 @@ namespace azure_proto_network
 {
     public class NsgCollection : ResourceCollectionOperations<PhNetworkSecurityGroup>
     {
-        public NsgCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public NsgCollection(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public NsgCollection(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
+        public NsgCollection(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 

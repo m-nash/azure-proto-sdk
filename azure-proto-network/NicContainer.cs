@@ -12,11 +12,11 @@ namespace azure_proto_network
 {
     public class NicContainer : ResourceContainerOperations<PhNetworkInterface>
     {
-        public NicContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public NicContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public NicContainer(ArmOperations parent, TrackedResource context) : base(parent, context)
+        public NicContainer(ArmClientBase parent, TrackedResource context) : base(parent, context)
         {
         }
 

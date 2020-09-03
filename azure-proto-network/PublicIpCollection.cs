@@ -7,11 +7,11 @@ namespace azure_proto_network
 {
     public class PublicIpCollection : ResourceCollectionOperations<PhPublicIPAddress>
     {
-        public PublicIpCollection(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public PublicIpCollection(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public PublicIpCollection(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
+        public PublicIpCollection(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 

@@ -8,11 +8,11 @@ namespace azure_proto_network
 {
     public class PublicIpContainer : ResourceContainerOperations<PhPublicIPAddress>
     {
-        public PublicIpContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public PublicIpContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public PublicIpContainer(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
+        public PublicIpContainer(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 

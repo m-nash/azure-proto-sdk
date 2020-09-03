@@ -15,11 +15,11 @@ namespace azure_proto_network
     /// </summary>
     public class SubnetOperations : ResourceOperations<PhSubnet>
     {
-        public SubnetOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public SubnetOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public SubnetOperations(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
+        public SubnetOperations(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 

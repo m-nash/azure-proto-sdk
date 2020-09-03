@@ -12,10 +12,10 @@ namespace azure_proto_compute
     /// </summary>
     public class AvailabilitySetContainer : ResourceContainerOperations<PhAvailabilitySet>
     {
-        public AvailabilitySetContainer(ArmOperations parent, TrackedResource context):base(parent, context) 
+        public AvailabilitySetContainer(ArmClientBase parent, TrackedResource context):base(parent, context) 
         {
         }
-        public AvailabilitySetContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public AvailabilitySetContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 

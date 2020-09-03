@@ -21,10 +21,10 @@ namespace azure_proto_core
     {
         protected override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
 
-        internal ResourceGroupContainerOperations(ArmOperations other, ResourceIdentifier context) : base(other, context)
+        internal ResourceGroupContainerOperations(ArmClientBase other, ResourceIdentifier context) : base(other, context)
         {
         }
-        internal ResourceGroupContainerOperations(ArmOperations other, Resource context) : base(other, context)
+        internal ResourceGroupContainerOperations(ArmClientBase other, Resource context) : base(other, context)
         {
         }
 

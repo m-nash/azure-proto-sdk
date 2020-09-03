@@ -19,7 +19,7 @@ namespace azure_proto_core
     /// The entry point for all ARM clients
     /// TODO: What is appropriate naming for ArmClient , given that we would not liek to make distinctions between data and management.
     /// </summary>
-    public class ArmClient : ArmOperations
+    public class ArmClient : ArmClientBase
     {
         static ArmClient()
         {

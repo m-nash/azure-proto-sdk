@@ -13,11 +13,11 @@ namespace azure_proto_network
 {
     public class NsgContainer : ResourceContainerOperations<PhNetworkSecurityGroup>
     {
-        public NsgContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public NsgContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public NsgContainer(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
+        public NsgContainer(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 

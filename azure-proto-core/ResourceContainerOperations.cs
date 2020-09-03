@@ -20,10 +20,10 @@ namespace azure_proto_core
     /// <typeparam name="U">The return type of the Creation methods, this can be Response<typeparamref name="T"/> or a long-running response</typeparam>
     public abstract class ResourceContainerOperations<T> : ResourceOperations where T : Resource
     {
-        protected ResourceContainerOperations(ArmOperations parent, ResourceIdentifier contexts) : base(parent, contexts)
+        protected ResourceContainerOperations(ArmClientBase parent, ResourceIdentifier contexts) : base(parent, contexts)
         {
         }
-        protected ResourceContainerOperations(ArmOperations parent, Resource contexts) : base(parent, contexts)
+        protected ResourceContainerOperations(ArmClientBase parent, Resource contexts) : base(parent, contexts)
         {
         }
 

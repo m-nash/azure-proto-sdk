@@ -17,11 +17,11 @@ namespace azure_proto_core
     }
     public class ResourceGroupOperations : ResourceOperations<PhResourceGroup>
     {
-        internal ResourceGroupOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        internal ResourceGroupOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        internal ResourceGroupOperations(ArmOperations parent, Resource context) : base(parent, context)
+        internal ResourceGroupOperations(ArmClientBase parent, Resource context) : base(parent, context)
         {
         }
 

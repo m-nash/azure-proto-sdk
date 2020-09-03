@@ -18,11 +18,11 @@ namespace azure_proto_core
     /// </summary>
     public abstract class ResourceCollectionOperations<T> : ResourceOperations where T : TrackedResource
     {
-        public ResourceCollectionOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public ResourceCollectionOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public ResourceCollectionOperations(ArmOperations parent, Resource context) : this(parent, context?.Id)
+        public ResourceCollectionOperations(ArmClientBase parent, Resource context) : this(parent, context?.Id)
         {
         }
 

@@ -8,16 +8,16 @@ namespace azure_proto_core
     /// <summary>
     /// TODO: split this into a base class for all Operations, and a base class for specific operations
     /// </summary>
-    public abstract class ResourceOperations : ArmOperations
+    public abstract class ResourceOperations : ArmClientBase
     {
-        public ResourceOperations(ArmOperations parent, ResourceIdentifier context) : base(parent)
+        public ResourceOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent)
         {
             Validate(context);
             Context = context;
             DefaultLocation = parent.DefaultLocation;
         }
 
-        public ResourceOperations(ArmOperations parent, Resource context) : this(parent, context.Id)
+        public ResourceOperations(ArmClientBase parent, Resource context) : this(parent, context.Id)
         {
             Validate(context?.Id);
             Context = context?.Id;
@@ -53,12 +53,12 @@ namespace azure_proto_core
     /// <typeparam name="Model"></typeparam>
     public abstract class ResourceOperations<Model> : ResourceOperations where Model : Resource 
     {
-        public ResourceOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public ResourceOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
             Resource = new ArmResource(context);
         }
 
-        public ResourceOperations(ArmOperations parent, Resource context) : base(parent, context)
+        public ResourceOperations(ArmClientBase parent, Resource context) : base(parent, context)
         {
             Resource = context;
         }

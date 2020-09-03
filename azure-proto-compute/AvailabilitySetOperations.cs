@@ -10,10 +10,10 @@ namespace azure_proto_compute
     public class AvailabilitySetOperations : ResourceOperations<PhAvailabilitySet>
     {
 
-        public AvailabilitySetOperations(ArmOperations parent, TrackedResource context) : base(parent, context)
+        public AvailabilitySetOperations(ArmClientBase parent, TrackedResource context) : base(parent, context)
         {
         }
-        public AvailabilitySetOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public AvailabilitySetOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
