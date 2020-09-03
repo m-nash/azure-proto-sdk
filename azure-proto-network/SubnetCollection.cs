@@ -27,12 +27,12 @@ namespace azure_proto_network
 
         public override Pageable<ResourceOperations<PhSubnet>> List(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            return new WrappingPageable<Subnet, ResourceOperations<PhSubnet>>(Operations.List(Context.ResourceGroup, Context.Parent.Name, cancellationToken), s => new SubnetOperations(this, new PhSubnet(s, DefaultLocation)));
+            return new PhWrappingPageable<Subnet, ResourceOperations<PhSubnet>>(Operations.List(Context.ResourceGroup, Context.Parent.Name, cancellationToken), s => new SubnetOperations(this, new PhSubnet(s, DefaultLocation)));
         }
 
         public override AsyncPageable<ResourceOperations<PhSubnet>> ListAsync(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            return new WrappingAsyncPageable<Subnet, ResourceOperations<PhSubnet>>(Operations.ListAsync(Context.ResourceGroup, Context.Parent.Name, cancellationToken), s => new SubnetOperations(this, new PhSubnet(s, DefaultLocation)));
+            return new PhWrappingAsyncPageable<Subnet, ResourceOperations<PhSubnet>>(Operations.ListAsync(Context.ResourceGroup, Context.Parent.Name, cancellationToken), s => new SubnetOperations(this, new PhSubnet(s, DefaultLocation)));
         }
 
         protected override ResourceOperations<PhSubnet> GetOperations(ResourceIdentifier identifier, Location location)

@@ -16,13 +16,13 @@ namespace azure_proto_network
         public static Pageable<VnetOperations> ListVnets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VnetCollection( subscription, subscription.DefaultSubscription);
-            return new WrappingPageable<ResourceOperations<PhVirtualNetwork>, VnetOperations>(collection.List(filter, top, cancellationToken), vnet => new VnetOperations(vnet, vnet.Context));
+            return new PhWrappingPageable<ResourceOperations<PhVirtualNetwork>, VnetOperations>(collection.List(filter, top, cancellationToken), vnet => new VnetOperations(vnet, vnet.Context));
         }
 
         public static AsyncPageable<VnetOperations> ListVnetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VnetCollection(subscription, subscription.DefaultSubscription);
-            return new WrappingAsyncPageable<ResourceOperations<PhVirtualNetwork>, VnetOperations>(collection.ListAsync(filter, top, cancellationToken), vnet => new VnetOperations(vnet, vnet.Context));
+            return new PhWrappingAsyncPageable<ResourceOperations<PhVirtualNetwork>, VnetOperations>(collection.ListAsync(filter, top, cancellationToken), vnet => new VnetOperations(vnet, vnet.Context));
         }
 
 

@@ -91,7 +91,7 @@ namespace azure_proto_compute
         public static Pageable<VmOperations> ListVms(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VmCollection(operations, operations.Context);
-            return new WrappingPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.List(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
+            return new PhWrappingPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.List(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
         }
 
         /// <summary>
@@ -105,13 +105,13 @@ namespace azure_proto_compute
         public static AsyncPageable<VmOperations> ListVmsAsync(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VmCollection(operations, operations.Context);
-            return new WrappingAsyncPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.ListAsync(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
+            return new PhWrappingAsyncPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.ListAsync(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
         }
 
         public static Pageable<VmOperations> ListVmsByTag(this ResourceGroupOperations operations, ArmTagFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VmCollection(operations, operations.Context);
-            return new WrappingPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.ListByTag(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
+            return new PhWrappingPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.ListByTag(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
         }
 
         #endregion

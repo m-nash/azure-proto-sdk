@@ -1,10 +1,13 @@
 ﻿using Azure;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace azure_proto_core
 {
+    /// <summary>
+    /// Placeholder class, used to convert the gewneric type argument for a response from the underlyign rest API to the desired type argument in the response
+    /// </summary>
+    /// <typeparam name="T">The desired type argument for the returned response</typeparam>
+    /// <typeparam name="U">The type argument of the response to be converted</typeparam>
     public class PhArmResponse<T, U> : Response<T> where T: class where U : class
     {
         Response<U> _wrapped;

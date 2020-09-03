@@ -26,7 +26,7 @@ namespace azure_proto_compute
         public static Pageable<VmOperations> ListVms(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VmCollection(subscription, subscription.DefaultSubscription);
-            return new WrappingPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.List(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
+            return new PhWrappingPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.List(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace azure_proto_compute
         public static AsyncPageable<VmOperations> ListVmsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VmCollection(subscription, subscription.DefaultSubscription);
-            return new WrappingAsyncPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.ListAsync(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
+            return new PhWrappingAsyncPageable<ResourceOperations<PhVirtualMachine>, VmOperations>(collection.ListAsync(filter, top, cancellationToken), vm => new VmOperations(vm, vm.Context));
         }
 
         #endregion
@@ -50,13 +50,13 @@ namespace azure_proto_compute
         public static Pageable<AvailabilitySetOperations> ListAvailabilitySets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new AvailabilitySetCollection(subscription, subscription.DefaultSubscription);
-            return new WrappingPageable<ResourceOperations<PhAvailabilitySet>, AvailabilitySetOperations>(collection.List(filter, top, cancellationToken), a => new AvailabilitySetOperations(a, a.Context));
+            return new PhWrappingPageable<ResourceOperations<PhAvailabilitySet>, AvailabilitySetOperations>(collection.List(filter, top, cancellationToken), a => new AvailabilitySetOperations(a, a.Context));
         }
 
         public static AsyncPageable<AvailabilitySetOperations> ListAvailabilitySetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new AvailabilitySetCollection(subscription, subscription.DefaultSubscription);
-            return new WrappingAsyncPageable<ResourceOperations<PhAvailabilitySet>, AvailabilitySetOperations>(collection.ListAsync(filter, top, cancellationToken), a => new AvailabilitySetOperations(a, a.Context));
+            return new PhWrappingAsyncPageable<ResourceOperations<PhAvailabilitySet>, AvailabilitySetOperations>(collection.ListAsync(filter, top, cancellationToken), a => new AvailabilitySetOperations(a, a.Context));
         }
 
         #endregion
