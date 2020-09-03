@@ -6,29 +6,29 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class PublicIpContainer : ResourceContainerOperations<PhPublicIPAddress>
+    public class PublicIpAddressContainer : ResourceContainerOperations<PhPublicIPAddress>
     {
-        public PublicIpContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
+        public PublicIpAddressContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public PublicIpContainer(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
+        public PublicIpAddressContainer(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 
         protected override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
-        public override ArmOperation<ResourceOperations<PhPublicIPAddress>> Create(string name, PhPublicIPAddress resourceDetails)
+        public override ArmOperation<ResourceClientBase<PhPublicIPAddress>> Create(string name, PhPublicIPAddress resourceDetails)
         {
-            return new PhArmOperation<ResourceOperations<PhPublicIPAddress>, PublicIPAddress>(Operations.StartCreateOrUpdate(Context.ResourceGroup, name, resourceDetails), 
-                n => new PublicIpOperations(this, new PhPublicIPAddress(n)));
+            return new PhArmOperation<ResourceClientBase<PhPublicIPAddress>, PublicIPAddress>(Operations.StartCreateOrUpdate(Context.ResourceGroup, name, resourceDetails), 
+                n => new PublicIpAddressOperations(this, new PhPublicIPAddress(n)));
         }
 
-        public async override Task<ArmOperation<ResourceOperations<PhPublicIPAddress>>> CreateAsync(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceClientBase<PhPublicIPAddress>>> CreateAsync(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<ResourceOperations<PhPublicIPAddress>, PublicIPAddress>(
+            return new PhArmOperation<ResourceClientBase<PhPublicIPAddress>, PublicIPAddress>(
                 await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails, cancellationToken),
-                n => new PublicIpOperations(this, new PhPublicIPAddress(n)));
+                n => new PublicIpAddressOperations(this, new PhPublicIPAddress(n)));
         }
 
         public PhPublicIPAddress ConstructIPAddress(Location location = null)

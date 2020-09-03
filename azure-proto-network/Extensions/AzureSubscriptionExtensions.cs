@@ -13,16 +13,16 @@ namespace azure_proto_network
     {
         #region Virtual Network Operations
 
-        public static Pageable<VnetOperations> ListVnets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<VirtualNetworkOperations> ListVnets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new VnetCollection( subscription, subscription.DefaultSubscription);
-            return new WrappingPageable<ResourceOperations<PhVirtualNetwork>, VnetOperations>(collection.List(filter, top, cancellationToken), vnet => new VnetOperations(vnet, vnet.Context));
+            var collection = new VirtualNetworkCollection( subscription, subscription.DefaultSubscription);
+            return new WrappingPageable<ResourceClientBase<PhVirtualNetwork>, VirtualNetworkOperations>(collection.List(filter, top, cancellationToken), vnet => new VirtualNetworkOperations(vnet, vnet.Context));
         }
 
-        public static AsyncPageable<VnetOperations> ListVnetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<VirtualNetworkOperations> ListVnetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new VnetCollection(subscription, subscription.DefaultSubscription);
-            return new WrappingAsyncPageable<ResourceOperations<PhVirtualNetwork>, VnetOperations>(collection.ListAsync(filter, top, cancellationToken), vnet => new VnetOperations(vnet, vnet.Context));
+            var collection = new VirtualNetworkCollection(subscription, subscription.DefaultSubscription);
+            return new WrappingAsyncPageable<ResourceClientBase<PhVirtualNetwork>, VirtualNetworkOperations>(collection.ListAsync(filter, top, cancellationToken), vnet => new VirtualNetworkOperations(vnet, vnet.Context));
         }
 
 
@@ -30,15 +30,15 @@ namespace azure_proto_network
 
         #region Public IP Address Operations
 
-        public static Pageable<ResourceOperations<PhPublicIPAddress>> ListPublicIps(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<ResourceClientBase<PhPublicIPAddress>> ListPublicIps(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new PublicIpCollection(subscription, subscription.DefaultSubscription);
+            var collection = new PublicIpAddressCollection(subscription, subscription.DefaultSubscription);
             return collection.List(filter, top, cancellationToken);
         }
 
-        public static AsyncPageable<ResourceOperations<PhPublicIPAddress>> ListPublicIpsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<ResourceClientBase<PhPublicIPAddress>> ListPublicIpsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new PublicIpCollection(subscription, subscription.DefaultSubscription);
+            var collection = new PublicIpAddressCollection(subscription, subscription.DefaultSubscription);
             return collection.ListAsync(filter, top, cancellationToken);
         }
 
@@ -46,15 +46,15 @@ namespace azure_proto_network
 
         #region Network Interface (NIC) operations
 
-        public static Pageable<ResourceOperations<PhNetworkInterface>> ListNics(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<ResourceClientBase<PhNetworkInterface>> ListNics(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new NicCollection(subscription, subscription.DefaultSubscription);
+            var collection = new NetworkInterfaceCollection(subscription, subscription.DefaultSubscription);
             return collection.List(filter, top, cancellationToken);
         }
 
-        public static AsyncPageable<ResourceOperations<PhNetworkInterface>> ListNicsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<ResourceClientBase<PhNetworkInterface>> ListNicsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new NicCollection(subscription, subscription.DefaultSubscription);
+            var collection = new NetworkInterfaceCollection(subscription, subscription.DefaultSubscription);
             return collection.ListAsync(filter, top, cancellationToken);
         }
 
@@ -62,15 +62,15 @@ namespace azure_proto_network
         #endregion
 
         #region Network Security Group operations
-        public static Pageable<ResourceOperations<PhNetworkSecurityGroup>> ListNsgs(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<ResourceClientBase<PhNetworkSecurityGroup>> ListNsgs(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new NsgCollection(subscription, subscription.DefaultSubscription);
+            var collection = new NetworkSecurityGroupCollection(subscription, subscription.DefaultSubscription);
             return collection.List(filter, top, cancellationToken);
         }
 
-        public static AsyncPageable<ResourceOperations<PhNetworkSecurityGroup>> ListNsgsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<ResourceClientBase<PhNetworkSecurityGroup>> ListNsgsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new NsgCollection(subscription, subscription.DefaultSubscription);
+            var collection = new NetworkSecurityGroupCollection(subscription, subscription.DefaultSubscription);
             return collection.ListAsync(filter, top, cancellationToken);
         }
 

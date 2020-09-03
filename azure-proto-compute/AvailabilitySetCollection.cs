@@ -28,7 +28,7 @@ namespace azure_proto_compute
             return new AvailabilitySetOperations(this, vm);
         }
 
-        protected override ResourceOperations<PhAvailabilitySet> GetOperations(ResourceIdentifier identifier, Location location)
+        protected override ResourceClientBase<PhAvailabilitySet> GetOperations(ResourceIdentifier identifier, Location location)
         {
             var resource = new ArmResource(identifier, location);
             return AvailabilitySet(resource);

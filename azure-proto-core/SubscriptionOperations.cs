@@ -66,7 +66,7 @@ namespace azure_proto_core
             return new WrappingAsyncPageable<ResourceGroup, ResourceGroupOperations>(RgOperations.ListAsync(null, null, cancellationToken), s => new ResourceGroupOperations(this, new PhResourceGroup(s)));
         }
 
-        public Pageable<ResourceOperations<T>> ListResource<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        public Pageable<ResourceClientBase<T>> ListResource<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
             if (!ArmClient.Registry.TryGetColletcion<T>(this, $"/subscriptions/{DefaultSubscription}", out collection))
@@ -77,7 +77,7 @@ namespace azure_proto_core
             return collection.List(filter, top, cancellationToken);
         }
 
-        public Pageable<ResourceOperations<T>> ListResource<T>(ResourceIdentifier subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        public Pageable<ResourceClientBase<T>> ListResource<T>(ResourceIdentifier subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
             if (!ArmClient.Registry.TryGetColletcion<T>(this, subscription, out collection))
@@ -88,7 +88,7 @@ namespace azure_proto_core
             return collection.List(filter, top, cancellationToken);
         }
 
-        public Pageable<ResourceOperations<T>> ListResource<T>(PhSubscriptionModel subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        public Pageable<ResourceClientBase<T>> ListResource<T>(PhSubscriptionModel subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
             if (!ArmClient.Registry.TryGetColletcion<T>(this, subscription.Id, out collection))
@@ -99,7 +99,7 @@ namespace azure_proto_core
             return collection.List(filter, top, cancellationToken);
         }
 
-        public AsyncPageable<ResourceOperations<T>> ListResourceAsync<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        public AsyncPageable<ResourceClientBase<T>> ListResourceAsync<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
             if (!ArmClient.Registry.TryGetColletcion<T>(this, $"/subscriptions/{DefaultSubscription}", out collection))
@@ -110,7 +110,7 @@ namespace azure_proto_core
             return collection.ListAsync(filter, top, cancellationToken);
         }
 
-        public AsyncPageable<ResourceOperations<T>> ListResourceAsync<T>(ResourceIdentifier resource, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        public AsyncPageable<ResourceClientBase<T>> ListResourceAsync<T>(ResourceIdentifier resource, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
             if (!ArmClient.Registry.TryGetColletcion<T>(this, resource, out collection))
@@ -121,7 +121,7 @@ namespace azure_proto_core
             return collection.ListAsync(filter, top, cancellationToken);
         }
 
-        public AsyncPageable<ResourceOperations<T>> ListResourceAsync<T>(PhSubscriptionModel model, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        public AsyncPageable<ResourceClientBase<T>> ListResourceAsync<T>(PhSubscriptionModel model, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
             if (!ArmClient.Registry.TryGetColletcion<T>(this, model.Id, out collection))

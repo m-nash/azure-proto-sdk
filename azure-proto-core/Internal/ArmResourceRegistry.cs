@@ -24,7 +24,7 @@ namespace azure_proto_core
         /// <param name="context"></param>
         /// <param name="operations"></param>
         /// <returns></returns>
-        public bool TryGetOperations<T>(ArmClientBase parent, TrackedResource context, out ResourceOperations<T> operations) where T : TrackedResource
+        public bool TryGetOperations<T>(ArmClientBase parent, TrackedResource context, out ResourceClientBase<T> operations) where T : TrackedResource
         {
             operations = null;
             ArmResourceRegistration<T> registration;

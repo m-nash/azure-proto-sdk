@@ -8,16 +8,16 @@ namespace azure_proto_core
     /// <summary>
     /// TODO: split this into a base class for all Operations, and a base class for specific operations
     /// </summary>
-    public abstract class ResourceOperations : ArmClientBase
+    public abstract class ResourceOperationsBase : ArmClientBase
     {
-        public ResourceOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent)
+        public ResourceOperationsBase(ArmClientBase parent, ResourceIdentifier context) : base(parent)
         {
             Validate(context);
             Context = context;
             DefaultLocation = parent.DefaultLocation;
         }
 
-        public ResourceOperations(ArmClientBase parent, Resource context) : this(parent, context.Id)
+        public ResourceOperationsBase(ArmClientBase parent, Resource context) : this(parent, context.Id)
         {
             Validate(context?.Id);
             Context = context?.Id;
@@ -51,14 +51,14 @@ namespace azure_proto_core
     /// TODO: Refactor methods beyond the ResourceOperation as extensions [allowing them to appear in generic usage of the type]
     /// </summary>
     /// <typeparam name="Model"></typeparam>
-    public abstract class ResourceOperations<Model> : ResourceOperations where Model : Resource 
+    public abstract class ResourceClientBase<Model> : ResourceOperationsBase where Model : Resource 
     {
-        public ResourceOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
+        public ResourceClientBase(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
             Resource = new ArmResource(context);
         }
 
-        public ResourceOperations(ArmClientBase parent, Resource context) : base(parent, context)
+        public ResourceClientBase(ArmClientBase parent, Resource context) : base(parent, context)
         {
             Resource = context;
         }
@@ -87,10 +87,10 @@ namespace azure_proto_core
             return model;
         }
 
-        public abstract Response<ResourceOperations<Model>> Get();
-        public abstract Task<Response<ResourceOperations<Model>>> GetAsync(CancellationToken cancellationToken = default);
-        public abstract ArmOperation<ResourceOperations<Model>> AddTag(string key, string value);
-        public abstract Task<ArmOperation<ResourceOperations<Model>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default);
+        public abstract Response<ResourceClientBase<Model>> Get();
+        public abstract Task<Response<ResourceClientBase<Model>>> GetAsync(CancellationToken cancellationToken = default);
+        public abstract ArmOperation<ResourceClientBase<Model>> AddTag(string key, string value);
+        public abstract Task<ArmOperation<ResourceClientBase<Model>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default);
         public abstract ArmOperation<Response> Delete();
         public abstract Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default);
     }

@@ -16,7 +16,7 @@ namespace azure_proto_core
     /// Generic list operations class - can be extended if a specific RP has more list operations
     /// TODO: Verify whether Listing by tag works when filtering by resource type
     /// </summary>
-    public abstract class ResourceCollectionOperations<T> : ResourceOperations where T : TrackedResource
+    public abstract class ResourceCollectionOperations<T> : ResourceOperationsBase where T : TrackedResource
     {
         public ResourceCollectionOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
@@ -34,28 +34,28 @@ namespace azure_proto_core
             }
         }
 
-        public virtual Pageable<ResourceOperations<T>> List(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public virtual Pageable<ResourceClientBase<T>> List(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var innerFilter = new ArmFilterCollection(ResourceType);
             innerFilter.SubstringFilter = filter;
             return ListAtContext(Context, innerFilter, top, cancellationToken);
         }
 
-        public virtual AsyncPageable<ResourceOperations<T>> ListAsync(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public virtual AsyncPageable<ResourceClientBase<T>> ListAsync(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var innerFilter = new ArmFilterCollection(ResourceType);
             innerFilter.SubstringFilter = filter;
             return ListAtContextAsync(Context, innerFilter, top, cancellationToken);
         }
 
-        public virtual Pageable<ResourceOperations<T>> ListByTag(ArmTagFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public virtual Pageable<ResourceClientBase<T>> ListByTag(ArmTagFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var innerFilter = new ArmFilterCollection(ResourceType);
             innerFilter.TagFilter = filter;
             return ListAtContext(Context, innerFilter, top, cancellationToken);
         }
 
-        public virtual AsyncPageable<ResourceOperations<T>> ListByTagAsync(ArmTagFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public virtual AsyncPageable<ResourceClientBase<T>> ListByTagAsync(ArmTagFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var innerFilter = new ArmFilterCollection(ResourceType);
             innerFilter.TagFilter = filter;
@@ -87,7 +87,7 @@ namespace azure_proto_core
 
 
 
-        protected virtual Pageable<ResourceOperations<T>> ListAtContext(ResourceIdentifier context, ArmFilterCollection filters, int? top, CancellationToken cancellationToken = default)
+        protected virtual Pageable<ResourceClientBase<T>> ListAtContext(ResourceIdentifier context, ArmFilterCollection filters, int? top, CancellationToken cancellationToken = default)
         {
             Pageable<GenericResourceExpanded> result;
             if (context?.Type == "Microsoft.Resources/resourceGroups")
@@ -105,10 +105,10 @@ namespace azure_proto_core
                 throw new InvalidOperationException("Invalid context: {subscription}");
             }
 
-            return new WrappingPageable<GenericResourceExpanded, ResourceOperations<T>>(result, s => GetOperations(s.Id, s.Location));
+            return new WrappingPageable<GenericResourceExpanded, ResourceClientBase<T>>(result, s => GetOperations(s.Id, s.Location));
         }
 
-        protected virtual AsyncPageable<ResourceOperations<T>> ListAtContextAsync(ResourceIdentifier context, ArmFilterCollection filters, int? top, CancellationToken cancellationToken = default)
+        protected virtual AsyncPageable<ResourceClientBase<T>> ListAtContextAsync(ResourceIdentifier context, ArmFilterCollection filters, int? top, CancellationToken cancellationToken = default)
         {
             AsyncPageable<GenericResourceExpanded> result;
             if (context?.Type == "Microsoft.Resources/resourceGroups")
@@ -126,10 +126,10 @@ namespace azure_proto_core
                 throw new InvalidOperationException("Invalid context: {subscription}");
             }
 
-            return new WrappingAsyncPageable<GenericResourceExpanded, ResourceOperations<T>>(result, s => GetOperations(s.Id, s.Location));
+            return new WrappingAsyncPageable<GenericResourceExpanded, ResourceClientBase<T>>(result, s => GetOperations(s.Id, s.Location));
         }
 
-        protected abstract ResourceOperations<T> GetOperations(ResourceIdentifier identifier, Location location);
+        protected abstract ResourceClientBase<T> GetOperations(ResourceIdentifier identifier, Location location);
 
         protected ResourcesManagementClient GetResourcesClient(string subscription)
         {
