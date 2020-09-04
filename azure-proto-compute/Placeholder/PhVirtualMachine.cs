@@ -7,6 +7,17 @@ namespace azure_proto_compute
 {
     public class PhVirtualMachine : TrackedResource<VirtualMachine>, ITaggable
     {
+        public static ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
+        static PhVirtualMachine()
+        {
+            ArmClient.Registry.Register<PhVirtualMachine>(
+               new azure_proto_core.Internal.ArmResourceRegistration<PhVirtualMachine>(
+                   new ResourceType("Microsoft.Compute/virtualMachines"),
+                    (o, r) => new VmContainer(o, r),
+                    null,
+                    (o, r) => new VmOperations(o, r as TrackedResource)));
+        }
+
         public PhVirtualMachine(VirtualMachine vm) : base(vm.Id, vm.Location, vm)
         {
             if (null == vm.Tags)

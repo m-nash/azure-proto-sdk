@@ -14,7 +14,7 @@ namespace client
             var rg = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
             var vm = rg.Vm(Context.VmName);
 
-            Console.WriteLine($"Adding tags to {vm.SafeGet().Name}");
+            Console.WriteLine($"Adding tags to {vm.GetModelIfNewer().Name}");
             vm.AddTag("tagkey", "tagvalue");
         }
     }

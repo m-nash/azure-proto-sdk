@@ -12,7 +12,6 @@ namespace azure_proto_network
 {
     /// <summary>
     /// Virtual Network Operations
-    /// TODO: Verify that DefaultLocation is correctly plumbed through
     /// </summary>
     public class VnetOperations : ResourceOperations<PhVirtualNetwork>
     {

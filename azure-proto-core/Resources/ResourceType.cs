@@ -57,10 +57,14 @@ namespace azure_proto_core
                 Type = parts[0];
                 Namespace = "Microsoft.Resources";
             }
-            if (string.Equals(parts[0], ResourceIdentifier.KnownKeys.ProviderNamespace, StringComparison.InvariantCultureIgnoreCase))
+            if (parts.Contains(ResourceIdentifier.KnownKeys.ProviderNamespace))
             {
                 // it is a resource id from a provider
-                parts.RemoveAt(0);
+                var index = parts.IndexOf(ResourceIdentifier.KnownKeys.ProviderNamespace);
+                for (int i = index; i >= 0; --i)
+                {
+                    parts.RemoveAt(i);
+                }
                 if (parts.Count < 3)
                 {
                     throw new ArgumentOutOfRangeException(nameof(resourceIdOrType), "Invalid resource id.");
@@ -100,12 +104,12 @@ namespace azure_proto_core
 
         public bool Equals([AllowNull] ResourceType other)
         {
-            throw new NotImplementedException();
+            return string.Equals(this.ToString(), other.ToString(), StringComparison.InvariantCultureIgnoreCase);
         }
 
         public bool Equals([AllowNull] string other)
         {
-            throw new NotImplementedException();
+            return string.Equals(this.ToString(), other, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public int CompareTo([AllowNull] ResourceType other)
@@ -133,11 +137,11 @@ namespace azure_proto_core
         }
 
         public static implicit operator ResourceType(string other) => new ResourceType(other);
-        public static bool operator ==(ResourceType source, string target) => source != null && source.Equals(target);
-        public static bool operator ==(string source, ResourceType target) => target != null && target.Equals(source);
-        public static bool operator ==(ResourceType source, ResourceType target) => source != null && source.Equals(target);
-        public static bool operator !=(ResourceType source, string target) => source == null || !source.Equals(target);
-        public static bool operator !=(string source, ResourceType target) => target == null || !target.Equals(source);
-        public static bool operator !=(ResourceType source, ResourceType target) => source == null || !source.Equals(target);
+        public static bool operator ==(ResourceType source, string target) => source.Equals(target);
+        public static bool operator ==(string source, ResourceType target) => target.Equals(source);
+        public static bool operator ==(ResourceType source, ResourceType target) => source.Equals(target);
+        public static bool operator !=(ResourceType source, string target) => !source.Equals(target);
+        public static bool operator !=(string source, ResourceType target) => !target.Equals(source);
+        public static bool operator !=(ResourceType source, ResourceType target) => !source.Equals(target);
     }
 }

@@ -44,14 +44,15 @@ namespace azure_proto_core
         }
     }
 
+
     /// <summary>
     /// Common base type for lifecycle operations over a resource
     /// TODO: Consider whehter to represent POST operations and the acommpanyong actions list call
     /// TODO: Consider whether to provide a Normalized PATCH functionality across RP resources
     /// TODO: Refactor methods beyond the ResourceOperation as extensions [allowing them to appear in generic usage of the type]
     /// </summary>
-    /// <typeparam name="Model"></typeparam>
-    public abstract class ResourceOperations<Model> : ResourceOperations where Model : Resource 
+    /// <typeparam name="T"></typeparam>
+    public abstract class ResourceOperations<T> : ResourceOperations where T : Resource 
     {
         public ResourceOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
         {
@@ -66,46 +67,48 @@ namespace azure_proto_core
 
         protected override Resource Resource { get;  set; }
         public override ResourceIdentifier Context => Resource.Id;
-        public virtual bool TryGetModel(out Model model)
-        {
-            model = Resource as Model;
-            return model != null;
+
+        public virtual bool HasModel { 
+            get 
+            {
+                var model = Resource as T;
+                return model != null;
+            }
         }
 
-        public virtual Model SafeGet()
+        public virtual T Model
         {
-            Model model = null;
-            if (!TryGetModel(out model))
+            get
             {
-                try
-                {
-                    Get().Value.TryGetModel(out model);
-                }
-                catch { }
+                return Resource as T;
+            }
+        }
+
+        public async virtual Task<T> GetModelIfNewerAsync(CancellationToken cancellationToken = default)
+        {
+            if (HasModel)
+            {
+                return Model;
             }
 
-            return model;
+            return (await GetAsync(cancellationToken)).Value.Model;
         }
 
-        public async virtual Task<Model> SafeGetAsync(CancellationToken cancellationToken = default)
+        public virtual T GetModelIfNewer()
         {
-            Model model = null;
-            if (!TryGetModel(out model))
+            if (HasModel)
             {
-                try
-                {
-                    (await GetAsync(cancellationToken)).Value.TryGetModel(out model);
-                }
-                catch { }
+                return Model;
             }
 
-            return model;
+            return Get().Value.Model;
         }
 
-        public abstract Response<ResourceOperations<Model>> Get();
-        public abstract Task<Response<ResourceOperations<Model>>> GetAsync(CancellationToken cancellationToken = default);
-        public abstract ArmOperation<ResourceOperations<Model>> AddTag(string key, string value);
-        public abstract Task<ArmOperation<ResourceOperations<Model>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default);
+
+        public abstract Response<ResourceOperations<T>> Get();
+        public abstract Task<Response<ResourceOperations<T>>> GetAsync(CancellationToken cancellationToken = default);
+        public abstract ArmOperation<ResourceOperations<T>> AddTag(string key, string value);
+        public abstract Task<ArmOperation<ResourceOperations<T>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default);
         public abstract ArmOperation<Response> Delete();
         public abstract Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default);
     }

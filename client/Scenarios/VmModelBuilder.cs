@@ -45,7 +45,7 @@ namespace client
 
             // Create Network Interface
             Console.WriteLine("--------Start create Network Interface--------");
-            var nic = resourceGroup.ConstructNic(ipAddress.SafeGet(), subnet.Context).Create($"{Context.VmName}_nic").Value;
+            var nic = resourceGroup.ConstructNic(ipAddress.GetModelIfNewer(), subnet.Context).Create($"{Context.VmName}_nic").Value;
 
             // TODO:
             // 0. Builder is an convenience feature. Simpler model would just use new xxx()
