@@ -12,7 +12,6 @@ namespace azure_proto_core
     /// <typeparam name="T"></typeparam>
     public abstract class ArmOperation<T> : Operation<T>
     {
-        T _syncValue;
         public ArmOperation(T syncValue)
         {
             CompletedSynchronously = syncValue == null;
