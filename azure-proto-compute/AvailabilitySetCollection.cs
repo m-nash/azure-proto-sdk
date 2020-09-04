@@ -8,8 +8,8 @@ namespace azure_proto_compute
     public class AvailabilitySetCollection : ResourceCollectionOperations<PhAvailabilitySet>
     {
 
-        public AvailabilitySetCollection(ArmOperations parent, azure_proto_core.Resource resourceGroup) : base(parent, resourceGroup) { }
-        public AvailabilitySetCollection(ArmOperations parent, ResourceIdentifier resourceGroup) : base(parent, resourceGroup) { }
+        public AvailabilitySetCollection(ArmClientBase parent, azure_proto_core.Resource resourceGroup) : base(parent, resourceGroup) { }
+        public AvailabilitySetCollection(ArmClientBase parent, ResourceIdentifier resourceGroup) : base(parent, resourceGroup) { }
 
         protected override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
 
@@ -28,7 +28,7 @@ namespace azure_proto_compute
             return new AvailabilitySetOperations(this, vm);
         }
 
-        protected override ResourceOperations<PhAvailabilitySet> GetOperations(ResourceIdentifier identifier, Location location)
+        protected override ResourceClientBase<PhAvailabilitySet> GetOperations(ResourceIdentifier identifier, Location location)
         {
             var resource = new ArmResource(identifier, location);
             return AvailabilitySet(resource);

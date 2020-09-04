@@ -10,30 +10,30 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class NicContainer : ResourceContainerOperations<PhNetworkInterface>
+    public class NetworkInterfaceContainer : ResourceContainerOperations<PhNetworkInterface>
     {
-        public NicContainer(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public NetworkInterfaceContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public NicContainer(ArmOperations parent, TrackedResource context) : base(parent, context)
+        public NetworkInterfaceContainer(ArmClientBase parent, TrackedResource context) : base(parent, context)
         {
         }
 
         protected override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 
-        public override ArmOperation<ResourceOperations<PhNetworkInterface>> Create(string name, PhNetworkInterface resourceDetails)
+        public override ArmOperation<ResourceClientBase<PhNetworkInterface>> Create(string name, PhNetworkInterface resourceDetails)
         {
-            return new PhArmOperation<ResourceOperations<PhNetworkInterface>, Azure.ResourceManager.Network.Models.NetworkInterface>(
+            return new PhArmOperation<ResourceClientBase<PhNetworkInterface>, Azure.ResourceManager.Network.Models.NetworkInterface>(
                 Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, resourceDetails),
-                n => new NicOperations(this, new PhNetworkInterface(n)));
+                n => new NetworkInterfaceOperations(this, new PhNetworkInterface(n)));
         }
 
-        public async override Task<ArmOperation<ResourceOperations<PhNetworkInterface>>> CreateAsync(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceClientBase<PhNetworkInterface>>> CreateAsync(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<ResourceOperations<PhNetworkInterface>, Azure.ResourceManager.Network.Models.NetworkInterface>(
+            return new PhArmOperation<ResourceClientBase<PhNetworkInterface>, Azure.ResourceManager.Network.Models.NetworkInterface>(
                 await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, Context.Name, resourceDetails, cancellationToken), 
-                n => new NicOperations(this, new PhNetworkInterface(n)));
+                n => new NetworkInterfaceOperations(this, new PhNetworkInterface(n)));
         }
 
         public PhNetworkInterface ConstructNic(PhPublicIPAddress ip, string subnetId, Location location = null)

@@ -8,24 +8,24 @@ namespace azure_proto_core
     /// <summary>
     /// Base class tracking context information for clients - when we have changed client constructors, this should not be necessary
     /// </summary>
-    public abstract class ArmOperations
+    public abstract class ArmClientBase
     {
-        public ArmOperations(Uri baseUri, TokenCredential credential)
+        public ArmClientBase(Uri baseUri, TokenCredential credential)
         {
             BaseUri = baseUri;
             Credential = credential;
         }
 
-        public ArmOperations(ArmOperations other) : this(other.BaseUri, other.Credential)
+        public ArmClientBase(ArmClientBase other) : this(other.BaseUri, other.Credential)
         {
         }
 
-        public T GetOperations<T>(ResourceIdentifier context) where T : ResourceOperations
+        public T GetOperations<T>(ResourceIdentifier context) where T : ResourceOperationsBase
         {
             return Activator.CreateInstance(typeof(T), this, context) as T;
         }
 
-        public T GetOperations<T>(azure_proto_core.Resource context) where T : ResourceOperations
+        public T GetOperations<T>(azure_proto_core.Resource context) where T : ResourceOperationsBase
         {
             return Activator.CreateInstance(typeof(T), this, context) as T;
         }

@@ -30,7 +30,7 @@ namespace client
             // Create VNet
             Console.WriteLine("--------Start create VNet--------");
             string vnetName = Context.VmName + "_vnet";
-            var vnet = resourceGroup.ConstructVnet("10.0.0.0/16").Create(vnetName).Value as VnetOperations;
+            var vnet = resourceGroup.ConstructVnet("10.0.0.0/16").Create(vnetName).Value as VirtualNetworkOperations;
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
@@ -42,7 +42,7 @@ namespace client
 
         private async Task CreateVmsAsync(ResourceGroupOperations resourceGroup, AvailabilitySetOperations aset, SubnetOperations subnet)
         {
-            List<Task<VmOperations>> tasks = new List<Task<VmOperations>>();
+            List<Task<VirtualMachineOperations>> tasks = new List<Task<VirtualMachineOperations>>();
             for (int i = 0; i < 10; i++)
             {
                 // Create IP Address
