@@ -7,29 +7,29 @@ using azure_proto_core;
 
 namespace azure_proto_compute.Convenience
 {
-    public class VmModelBuilder : VmModelBuilderBase
+    public class VirtualMachineModelBuilder : VirtualMachineModelBuilderBase
     {
         // TODO: Update Builder after models are incorporated in generated models
         private VirtualMachine _model;
 
-        internal VmModelBuilder(string vmName, Location location)
+        internal VirtualMachineModelBuilder(string vmName, Location location)
         {
             // TODO: Ph model should allow default constructor and property individually settable
             // _model.Name = vmName;
             _model = new VirtualMachine(location);
         }
 
-        public VmModelBuilderBase AttachDataDisk(TrackedResource azureEntity)
+        public VirtualMachineModelBuilderBase AttachDataDisk(TrackedResource azureEntity)
         {
             throw new NotImplementedException();
         }
 
-        public override VmModelBuilderBase UseWindowsImage(string adminUser, string password)
+        public override VirtualMachineModelBuilderBase UseWindowsImage(string adminUser, string password)
         {
             throw new NotImplementedException();
         }
 
-        public override VmModelBuilderBase UseLinuxImage(string adminUser, string password)
+        public override VirtualMachineModelBuilderBase UseLinuxImage(string adminUser, string password)
         {
             throw new NotImplementedException();
         }
@@ -39,12 +39,12 @@ namespace azure_proto_compute.Convenience
             throw new NotImplementedException();
         }
 
-        public override VmModelBuilderBase RequiredNetworkInterface(ResourceIdentifier nicResourceId)
+        public override VirtualMachineModelBuilderBase RequiredNetworkInterface(ResourceIdentifier nicResourceId)
         {
             throw new NotImplementedException();
         }
 
-        public override VmModelBuilderBase RequiredAvalabilitySet(ResourceIdentifier asetResourceId)
+        public override VirtualMachineModelBuilderBase RequiredAvalabilitySet(ResourceIdentifier asetResourceId)
         {
             throw new NotImplementedException();
         }

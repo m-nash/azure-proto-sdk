@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class PublicIpOperations : ResourceOperations<PhPublicIPAddress>
+    public class PublicIpAddressOperations : ResourceClientBase<PhPublicIPAddress>
     {
-        public PublicIpOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public PublicIpAddressOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public PublicIpOperations(ArmOperations parent, azure_proto_core.Resource context) : base(parent, context)
+        public PublicIpAddressOperations(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 
@@ -29,31 +29,31 @@ namespace azure_proto_network
             return new ArmVoidOperation(await Operations.StartDeleteAsync (Context.ResourceGroup, Context.Name, cancellationToken));
         }
 
-        public override Response<ResourceOperations<PhPublicIPAddress>> Get()
+        public override Response<ResourceClientBase<PhPublicIPAddress>> Get()
         {
-            return new PhArmResponse<ResourceOperations<PhPublicIPAddress>, PublicIPAddress>(Operations.Get(Context.ResourceGroup, Context.Name), 
+            return new PhArmResponse<ResourceClientBase<PhPublicIPAddress>, PublicIPAddress>(Operations.Get(Context.ResourceGroup, Context.Name), 
                 n => { Resource = new PhPublicIPAddress(n); return this; });
         }
 
-        public async override Task<Response<ResourceOperations<PhPublicIPAddress>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<Response<ResourceClientBase<PhPublicIPAddress>>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<ResourceOperations<PhPublicIPAddress>, PublicIPAddress>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, null, cancellationToken),
+            return new PhArmResponse<ResourceClientBase<PhPublicIPAddress>, PublicIPAddress>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, null, cancellationToken),
                n => { Resource = new PhPublicIPAddress(n); return this; });
         }
 
-        public override ArmOperation<ResourceOperations<PhPublicIPAddress>> AddTag(string key, string value)
+        public override ArmOperation<ResourceClientBase<PhPublicIPAddress>> AddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<ResourceOperations<PhPublicIPAddress>, PublicIPAddress>(Operations.UpdateTags(Context.ResourceGroup, Context.Name, patchable),
+            return new PhArmOperation<ResourceClientBase<PhPublicIPAddress>, PublicIPAddress>(Operations.UpdateTags(Context.ResourceGroup, Context.Name, patchable),
                 n => { Resource = new PhPublicIPAddress(n); return this; });
         }
 
-        public async override Task<ArmOperation<ResourceOperations<PhPublicIPAddress>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceClientBase<PhPublicIPAddress>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<ResourceOperations<PhPublicIPAddress>, PublicIPAddress>(await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken),
+            return new PhArmOperation<ResourceClientBase<PhPublicIPAddress>, PublicIPAddress>(await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken),
                 n => { Resource = new PhPublicIPAddress(n); return this; });
         }
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).PublicIPAddresses;

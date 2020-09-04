@@ -16,67 +16,67 @@ namespace azure_proto_network
     {
         #region Virtual Network Operations
 
-        public static ArmOperation<VnetOperations> CreateVnet(this ResourceGroupOperations operations, string name, PhVirtualNetwork resourceDetails)
+        public static ArmOperation<VirtualNetworkOperations> CreateVnet(this ResourceGroupOperations operations, string name, PhVirtualNetwork resourceDetails)
         {
-            var container = new VnetContainer(operations, operations.Context);
-            return new PhArmOperation<VnetOperations, ResourceOperations<PhVirtualNetwork>>(container.Create(name, resourceDetails), vnet => new VnetOperations(vnet, vnet.Context));
+            var container = new VirtualNetworkContainer(operations, operations.Context);
+            return new PhArmOperation<VirtualNetworkOperations, ResourceClientBase<PhVirtualNetwork>>(container.Create(name, resourceDetails), vnet => new VirtualNetworkOperations(vnet, vnet.Context));
         }
 
-        public static Task<ArmOperation<ResourceOperations<PhVirtualNetwork>>> CreateAsync(this ResourceGroupOperations operations, string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmOperation<ResourceClientBase<PhVirtualNetwork>>> CreateAsync(this ResourceGroupOperations operations, string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
         {
-            var container = new VnetContainer(operations, operations.Context);
+            var container = new VirtualNetworkContainer(operations, operations.Context);
             return container.CreateAsync(name, resourceDetails, cancellationToken);
         }
 
-        public static VnetContainer ConstructVnet(this ResourceGroupOperations operations, string vnetCidr, Location location = null)
+        public static VirtualNetworkContainer ConstructVnet(this ResourceGroupOperations operations, string vnetCidr, Location location = null)
         {
             var vnet = new VirtualNetwork()
             {
                 Location = location ?? operations.DefaultLocation,
                 AddressSpace = new AddressSpace() { AddressPrefixes = new List<string>() { vnetCidr } },
             };
-            return new VnetContainer(operations, new PhVirtualNetwork(vnet));
+            return new VirtualNetworkContainer(operations, new PhVirtualNetwork(vnet));
         }
 
-        public static VnetOperations Vnet(this ResourceGroupOperations operations, TrackedResource vnet)
+        public static VirtualNetworkOperations Vnet(this ResourceGroupOperations operations, TrackedResource vnet)
         {
-            return new VnetOperations(operations, vnet);
+            return new VirtualNetworkOperations(operations, vnet);
         }
 
-        public static VnetOperations Vnet(this ResourceGroupOperations operations, string vnet)
+        public static VirtualNetworkOperations Vnet(this ResourceGroupOperations operations, string vnet)
         {
-            return new VnetOperations(operations, new ResourceIdentifier($"{operations.Context}/providers/Microsoft.Network/virtualNetworks/{vnet}"));
+            return new VirtualNetworkOperations(operations, new ResourceIdentifier($"{operations.Context}/providers/Microsoft.Network/virtualNetworks/{vnet}"));
         }
 
-        public static Pageable<VnetOperations> ListVnets(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<VirtualNetworkOperations> ListVnets(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new VnetCollection(operations, operations.Context);
-            return new PhWrappingPageable<ResourceOperations<PhVirtualNetwork>, VnetOperations>(collection.List(filter, top, cancellationToken), vnet => new VnetOperations(vnet, vnet.Context));
+            var collection = new VirtualNetworkCollection(operations, operations.Context);
+            return new PhWrappingPageable<ResourceClientBase<PhVirtualNetwork>, VirtualNetworkOperations>(collection.List(filter, top, cancellationToken), vnet => new VirtualNetworkOperations(vnet, vnet.Context));
         }
 
-        public static AsyncPageable<VnetOperations> ListVnetsAsync(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<VirtualNetworkOperations> ListVnetsAsync(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new VnetCollection(operations, operations.Context);
-            return new PhWrappingAsyncPageable<ResourceOperations<PhVirtualNetwork>, VnetOperations>(collection.ListAsync(filter, top, cancellationToken), vnet => new VnetOperations(vnet, vnet.Context));
+            var collection = new VirtualNetworkCollection(operations, operations.Context);
+            return new PhWrappingAsyncPageable<ResourceClientBase<PhVirtualNetwork>, VirtualNetworkOperations>(collection.ListAsync(filter, top, cancellationToken), vnet => new VirtualNetworkOperations(vnet, vnet.Context));
         }
 
 
         #endregion
 
         #region Public IP Address Operations
-        public static ArmOperation<ResourceOperations<PhPublicIPAddress>> CreatePublicIp(this ResourceGroupOperations operations, string name, PhPublicIPAddress resourceDetails)
+        public static ArmOperation<ResourceClientBase<PhPublicIPAddress>> CreatePublicIp(this ResourceGroupOperations operations, string name, PhPublicIPAddress resourceDetails)
         {
-            var container = new PublicIpContainer(operations, operations.Context);
+            var container = new PublicIpAddressContainer(operations, operations.Context);
             return container.Create(name, resourceDetails);
         }
 
-        public static Task<ArmOperation<ResourceOperations<PhPublicIPAddress>>> CreatePublicIpAsync(this ResourceGroupOperations operations, string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmOperation<ResourceClientBase<PhPublicIPAddress>>> CreatePublicIpAsync(this ResourceGroupOperations operations, string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
         {
-            var container = new PublicIpContainer(operations, operations.Context);
+            var container = new PublicIpAddressContainer(operations, operations.Context);
             return container.CreateAsync(name, resourceDetails, cancellationToken);
         }
 
-        public static PublicIpContainer ConstructIPAddress(this ResourceGroupOperations operations, Location location = null)
+        public static PublicIpAddressContainer ConstructIPAddress(this ResourceGroupOperations operations, Location location = null)
         {
             var ipAddress = new PublicIPAddress()
             {
@@ -85,47 +85,47 @@ namespace azure_proto_network
                 Location = location ?? operations.DefaultLocation,
             };
 
-            return new PublicIpContainer(operations,  new PhPublicIPAddress(ipAddress));
+            return new PublicIpAddressContainer(operations,  new PhPublicIPAddress(ipAddress));
         }
 
-        public static PublicIpOperations PublicIp(this ResourceGroupOperations operations, TrackedResource vnet)
+        public static PublicIpAddressOperations PublicIp(this ResourceGroupOperations operations, TrackedResource vnet)
         {
-            return new PublicIpOperations(operations, vnet);
+            return new PublicIpAddressOperations(operations, vnet);
         }
 
-        public static PublicIpOperations PublicIp(this ResourceGroupOperations operations, string vnet)
+        public static PublicIpAddressOperations PublicIp(this ResourceGroupOperations operations, string vnet)
         {
-            return new PublicIpOperations(operations, new ResourceIdentifier($"{operations.Context}/providers/Microsoft.Network/virtualNetworks/{vnet}"));
+            return new PublicIpAddressOperations(operations, new ResourceIdentifier($"{operations.Context}/providers/Microsoft.Network/virtualNetworks/{vnet}"));
         }
 
-        public static Pageable<ResourceOperations<PhPublicIPAddress>> ListPublicIps(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<ResourceClientBase<PhPublicIPAddress>> ListPublicIps(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new PublicIpCollection(operations, operations.Context);
+            var collection = new PublicIpAddressCollection(operations, operations.Context);
             return collection.List(filter, top, cancellationToken);
         }
 
-        public static AsyncPageable<ResourceOperations<PhPublicIPAddress>> ListPublicIpsAsync(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<ResourceClientBase<PhPublicIPAddress>> ListPublicIpsAsync(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new PublicIpCollection(operations, operations.Context);
+            var collection = new PublicIpAddressCollection(operations, operations.Context);
             return collection.ListAsync(filter, top, cancellationToken);
         }
 
         #endregion
 
         #region Network Interface (NIC) operations
-        public static ArmOperation<ResourceOperations<PhNetworkInterface>> CreateNic(this ResourceGroupOperations operations, string name, PhNetworkInterface resourceDetails)
+        public static ArmOperation<ResourceClientBase<PhNetworkInterface>> CreateNic(this ResourceGroupOperations operations, string name, PhNetworkInterface resourceDetails)
         {
-            var container = new NicContainer(operations, operations.Context);
+            var container = new NetworkInterfaceContainer(operations, operations.Context);
             return container.Create(name, resourceDetails);
         }
 
-        public static Task<ArmOperation<ResourceOperations<PhNetworkInterface>>> CreateNicAsync(this ResourceGroupOperations operations, string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmOperation<ResourceClientBase<PhNetworkInterface>>> CreateNicAsync(this ResourceGroupOperations operations, string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
         {
-            var container = new NicContainer(operations, operations.Context);
+            var container = new NetworkInterfaceContainer(operations, operations.Context);
             return container.CreateAsync(name, resourceDetails, cancellationToken);
         }
 
-        public static NicContainer ConstructNic(this ResourceGroupOperations operations, PhPublicIPAddress ip, string subnetId, Location location = null)
+        public static NetworkInterfaceContainer ConstructNic(this ResourceGroupOperations operations, PhPublicIPAddress ip, string subnetId, Location location = null)
         {
             var nic = new Azure.ResourceManager.Network.Models.NetworkInterface()
             {
@@ -143,28 +143,28 @@ namespace azure_proto_network
                 }
             };
 
-            return  new NicContainer(operations, new PhNetworkInterface(nic));
+            return  new NetworkInterfaceContainer(operations, new PhNetworkInterface(nic));
         }
 
-        public static NicOperations Nic(this ResourceGroupOperations operations, TrackedResource vnet)
+        public static NetworkInterfaceOperations Nic(this ResourceGroupOperations operations, TrackedResource vnet)
         {
-            return new NicOperations(operations, vnet);
+            return new NetworkInterfaceOperations(operations, vnet);
         }
 
-        public static NicOperations Nic(this ResourceGroupOperations operations, string vnet)
+        public static NetworkInterfaceOperations Nic(this ResourceGroupOperations operations, string vnet)
         {
-            return new NicOperations(operations, new ResourceIdentifier($"{operations.Context}/providers/Microsoft.Network/virtualNetworks/{vnet}"));
+            return new NetworkInterfaceOperations(operations, new ResourceIdentifier($"{operations.Context}/providers/Microsoft.Network/virtualNetworks/{vnet}"));
         }
 
-        public static Pageable<ResourceOperations<PhNetworkInterface>> ListNics(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<ResourceClientBase<PhNetworkInterface>> ListNics(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new NicCollection(operations, operations.Context);
+            var collection = new NetworkInterfaceCollection(operations, operations.Context);
             return collection.List(filter, top, cancellationToken);
         }
 
-        public static AsyncPageable<ResourceOperations<PhNetworkInterface>> ListNicsAsync(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<ResourceClientBase<PhNetworkInterface>> ListNicsAsync(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new NicCollection(operations, operations.Context);
+            var collection = new NetworkInterfaceCollection(operations, operations.Context);
             return collection.ListAsync(filter, top, cancellationToken);
         }
 
@@ -172,15 +172,15 @@ namespace azure_proto_network
         #endregion
 
         #region Network Security Group operations
-        public static ArmOperation<ResourceOperations<PhNetworkSecurityGroup>> CreateNsg(this ResourceGroupOperations operations, string name, PhNetworkSecurityGroup resourceDetails)
+        public static ArmOperation<ResourceClientBase<PhNetworkSecurityGroup>> CreateNsg(this ResourceGroupOperations operations, string name, PhNetworkSecurityGroup resourceDetails)
         {
-            var container = new NsgContainer(operations, operations.Context);
+            var container = new NetworkSecurityGroupContainer(operations, operations.Context);
             return container.Create(name, resourceDetails);
         }
 
-        public static Task<ArmOperation<ResourceOperations<PhNetworkSecurityGroup>>> CreateNsgAsync(this ResourceGroupOperations operations, string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmOperation<ResourceClientBase<PhNetworkSecurityGroup>>> CreateNsgAsync(this ResourceGroupOperations operations, string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
         {
-            var container = new NsgContainer(operations, operations.Context);
+            var container = new NetworkSecurityGroupContainer(operations, operations.Context);
             return container.CreateAsync(name, resourceDetails, cancellationToken);
         }
 
@@ -189,7 +189,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="openPorts">The set of TCP ports to open</param>
         /// <returns>An NSG, with the given TCP ports open</returns>
-        public static NsgContainer ConstructNsg(this ResourceGroupOperations operations, string nsgName, Location location = null, params int[] openPorts)
+        public static NetworkSecurityGroupContainer ConstructNsg(this ResourceGroupOperations operations, string nsgName, Location location = null, params int[] openPorts)
         {
             var nsg = new NetworkSecurityGroup { Location = location ?? operations.DefaultLocation };
             var index = 0;
@@ -207,10 +207,10 @@ namespace azure_proto_network
                 Description = $"Port_{openPort}"
             }).ToList();
 
-            return new NsgContainer(operations, new PhNetworkSecurityGroup(nsg));
+            return new NetworkSecurityGroupContainer(operations, new PhNetworkSecurityGroup(nsg));
         }
 
-        public static NsgContainer ConstructNsg(this ResourceGroupOperations operations, string nsgName, params int[] openPorts)
+        public static NetworkSecurityGroupContainer ConstructNsg(this ResourceGroupOperations operations, string nsgName, params int[] openPorts)
         {
             var nsg = new NetworkSecurityGroup { Location = operations.DefaultLocation };
             var index = 0;
@@ -228,28 +228,28 @@ namespace azure_proto_network
                 Description = $"Port_{openPort}"
             }).ToList();
 
-            return new NsgContainer(operations, new PhNetworkSecurityGroup(nsg));
+            return new NetworkSecurityGroupContainer(operations, new PhNetworkSecurityGroup(nsg));
         }
 
-        public static NsgOperations Nsgs(this ResourceGroupOperations operations, TrackedResource vnet)
+        public static NetworkSecurityGroupOperations Nsgs(this ResourceGroupOperations operations, TrackedResource vnet)
         {
-            return new NsgOperations(operations, vnet);
+            return new NetworkSecurityGroupOperations(operations, vnet);
         }
 
-        public static NsgOperations Nsgs(this ResourceGroupOperations operations, string vnet)
+        public static NetworkSecurityGroupOperations Nsgs(this ResourceGroupOperations operations, string vnet)
         {
-            return new NsgOperations(operations, new ResourceIdentifier($"{operations.Context}/providers/Microsoft.Network/virtualNetworks/{vnet}"));
+            return new NetworkSecurityGroupOperations(operations, new ResourceIdentifier($"{operations.Context}/providers/Microsoft.Network/virtualNetworks/{vnet}"));
         }
 
-        public static Pageable<ResourceOperations<PhNetworkSecurityGroup>> ListNsgs(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<ResourceClientBase<PhNetworkSecurityGroup>> ListNsgs(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new NsgCollection(operations, operations.Context);
+            var collection = new NetworkSecurityGroupCollection(operations, operations.Context);
             return collection.List(filter, top, cancellationToken);
         }
 
-        public static AsyncPageable<ResourceOperations<PhNetworkSecurityGroup>> ListNsgsAsync(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<ResourceClientBase<PhNetworkSecurityGroup>> ListNsgsAsync(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new NsgCollection(operations, operations.Context);
+            var collection = new NetworkSecurityGroupCollection(operations, operations.Context);
             return collection.ListAsync(filter, top, cancellationToken);
         }
 

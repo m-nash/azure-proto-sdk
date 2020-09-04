@@ -8,16 +8,16 @@ namespace azure_proto_core
     /// <summary>
     /// TODO: split this into a base class for all Operations, and a base class for specific operations
     /// </summary>
-    public abstract class ResourceOperations : ArmOperations
+    public abstract class ResourceOperationsBase : ArmClientBase
     {
-        public ResourceOperations(ArmOperations parent, ResourceIdentifier context) : base(parent)
+        public ResourceOperationsBase(ArmClientBase parent, ResourceIdentifier context) : base(parent)
         {
             Validate(context);
             Context = context;
             DefaultLocation = parent.DefaultLocation;
         }
 
-        public ResourceOperations(ArmOperations parent, Resource context) : this(parent, context.Id)
+        public ResourceOperationsBase(ArmClientBase parent, Resource context) : this(parent, context.Id)
         {
             Validate(context?.Id);
             Context = context?.Id;
@@ -51,15 +51,15 @@ namespace azure_proto_core
     /// TODO: Consider whether to provide a Normalized PATCH functionality across RP resources
     /// TODO: Refactor methods beyond the ResourceOperation as extensions [allowing them to appear in generic usage of the type]
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public abstract class ResourceOperations<T> : ResourceOperations where T : Resource 
+    /// <typeparam name="Model"></typeparam>
+    public abstract class ResourceClientBase<T> : ResourceOperationsBase where T : Resource 
     {
-        public ResourceOperations(ArmOperations parent, ResourceIdentifier context) : base(parent, context)
+        public ResourceClientBase(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
         {
             Resource = new ArmResource(context);
         }
 
-        public ResourceOperations(ArmOperations parent, Resource context) : base(parent, context)
+        public ResourceClientBase(ArmClientBase parent, Resource context) : base(parent, context)
         {
             Resource = context;
         }
@@ -104,12 +104,10 @@ namespace azure_proto_core
             return Get().Value.Model;
         }
 
-
-        public abstract Response<ResourceOperations<T>> Get();
-        public abstract Task<Response<ResourceOperations<T>>> GetAsync(CancellationToken cancellationToken = default);
-        public abstract ArmOperation<ResourceOperations<T>> AddTag(string key, string value);
-        public abstract Task<ArmOperation<ResourceOperations<T>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default);
-        public abstract ArmOperation<Response> Delete();
+        public abstract Response<ResourceClientBase<T>> Get();
+        public abstract Task<Response<ResourceClientBase<T>>> GetAsync(CancellationToken cancellationToken = default);
+        public abstract ArmOperation<ResourceClientBase<T>> AddTag(string key, string value);
+        public abstract Task<ArmOperation<ResourceClientBase<T>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default);        public abstract ArmOperation<Response> Delete();
         public abstract Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default);
     }
 

@@ -16,7 +16,7 @@ namespace client
             throw new NotImplementedException();
         }
 
-        private Task<VmOperations> CreateVmWithBuilderAsync()
+        private Task<VirtualMachineOperations> CreateVmWithBuilderAsync()
         {
             var client = new ArmClient();
             var subscription = client.Subscriptions(Context.SubscriptionId);
@@ -61,7 +61,7 @@ namespace client
 
             var vm = resourceGroup.CreateVm(Context.VmName, vmModel).Value;
 
-            return Task.FromResult(vm as VmOperations);
+            return Task.FromResult(vm as VirtualMachineOperations);
         }
     }
 }
