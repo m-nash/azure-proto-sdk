@@ -9,8 +9,7 @@ namespace azure_proto_compute.Convenience
 {
     public class VirtualMachineModelBuilder : VirtualMachineModelBuilderBase
     {
-        // TODO: Azure or Ph model?
-        // has to use generated model for now
+        // TODO: Update Builder after models are incorporated in generated models
         private VirtualMachine _model;
 
         internal VirtualMachineModelBuilder(string vmName, Location location)

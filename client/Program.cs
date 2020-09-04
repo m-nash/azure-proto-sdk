@@ -1,5 +1,7 @@
-﻿using azure_proto_core;
+﻿using azure_proto_compute;
+using azure_proto_core;
 using System;
+using System.Linq;
 
 namespace client
 {
@@ -20,9 +22,9 @@ namespace client
                     ResourceIdentifier id = new ResourceIdentifier(rgId);
                     var rg = new ArmClient().Subscriptions(id.Subscription).ResourceGroup(id);
                     Console.WriteLine($"--------Deleting {rg.Context.Name}--------");
-                    var rgModel = rg.SafeGet();
+                    var rgModel = rg.GetModelIfNewer();
                     if (rgModel != null)
-                    { 
+                    {
                         _ = rg.DeleteAsync();
                     }
                 }

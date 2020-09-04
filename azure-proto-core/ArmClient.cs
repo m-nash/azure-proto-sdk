@@ -70,12 +70,12 @@ namespace azure_proto_core
 
         public AsyncPageable<SubscriptionOperations> ListSubscriptionsAsync(CancellationToken token = default)
         {
-            return new WrappingAsyncPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.ListAsync(token), s => new SubscriptionOperations(this, new PhSubscriptionModel(s)));
+            return new PhWrappingAsyncPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.ListAsync(token), s => new SubscriptionOperations(this, new PhSubscriptionModel(s)));
         }
 
         public Pageable<SubscriptionOperations> ListSubscriptions(CancellationToken token = default)
         {
-            return new WrappingPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.List(token), s => new SubscriptionOperations(this, new PhSubscriptionModel(s)));
+            return new PhWrappingPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.List(token), s => new SubscriptionOperations(this, new PhSubscriptionModel(s)));
         }
 
         public AsyncPageable<PhLocation> ListLocationsAsync(string subscriptionId = null, CancellationToken token = default(CancellationToken))
@@ -91,11 +91,11 @@ namespace azure_proto_core
                     }
                 }
 
-                return new WrappingAsyncPageable<Azure.ResourceManager.Resources.Models.Location, PhLocation>(SubscriptionsClient.ListLocationsAsync(subscriptionId, token), s => new PhLocation(s));
+                return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.Location, PhLocation>(SubscriptionsClient.ListLocationsAsync(subscriptionId, token), s => new PhLocation(s));
 
             }
 
-            return new TaskDeferringAsyncPageable<PhLocation>(PageableFunc);
+            return new PhTaskDeferringAsyncPageable<PhLocation>(PageableFunc);
 
         }
         public Pageable<PhLocation> ListLocations(string subscriptionId = null, CancellationToken cancellationToken = default(CancellationToken))
@@ -109,7 +109,7 @@ namespace azure_proto_core
                 }
             }
 
-            return new WrappingPageable<Azure.ResourceManager.Resources.Models.Location, PhLocation>(SubscriptionsClient.ListLocations(subscriptionId, cancellationToken), s => new PhLocation(s));
+            return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Location, PhLocation>(SubscriptionsClient.ListLocations(subscriptionId, cancellationToken), s => new PhLocation(s));
         }
 
 

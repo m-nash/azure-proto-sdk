@@ -105,7 +105,7 @@ namespace azure_proto_core
                 throw new InvalidOperationException("Invalid context: {subscription}");
             }
 
-            return new WrappingPageable<GenericResourceExpanded, ResourceClientBase<T>>(result, s => GetOperations(s.Id, s.Location));
+            return new PhWrappingPageable<GenericResourceExpanded, ResourceClientBase<T>>(result, s => GetOperations(s.Id, s.Location));
         }
 
         protected virtual AsyncPageable<ResourceClientBase<T>> ListAtContextAsync(ResourceIdentifier context, ArmFilterCollection filters, int? top, CancellationToken cancellationToken = default)
@@ -126,7 +126,7 @@ namespace azure_proto_core
                 throw new InvalidOperationException("Invalid context: {subscription}");
             }
 
-            return new WrappingAsyncPageable<GenericResourceExpanded, ResourceClientBase<T>>(result, s => GetOperations(s.Id, s.Location));
+            return new PhWrappingAsyncPageable<GenericResourceExpanded, ResourceClientBase<T>>(result, s => GetOperations(s.Id, s.Location));
         }
 
         protected abstract ResourceClientBase<T> GetOperations(ResourceIdentifier identifier, Location location);

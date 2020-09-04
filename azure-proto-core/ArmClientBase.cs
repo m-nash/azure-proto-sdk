@@ -20,15 +20,15 @@ namespace azure_proto_core
         {
         }
 
-        public T GetOperations<T>(ResourceIdentifier context) where T : ResourceOperationsBase
-        {
-            return Activator.CreateInstance(typeof(T), this, context) as T;
-        }
+        //public T GetOperations<T>(ResourceIdentifier context) where T : ResourceClientBase
+        //{
+        //    return Activator.CreateInstance(typeof(T), this, context) as T;
+        //}
 
-        public T GetOperations<T>(azure_proto_core.Resource context) where T : ResourceOperationsBase
-        {
-            return Activator.CreateInstance(typeof(T), this, context) as T;
-        }
+        //public T GetOperations<T>(azure_proto_core.Resource context) where T : ResourceClientBase
+        //{
+        //    return Activator.CreateInstance(typeof(T), this, context) as T;
+        //}
 
         public virtual Location DefaultLocation { get; set; }
         protected TokenCredential Credential { get; }
@@ -36,6 +36,13 @@ namespace azure_proto_core
         protected Uri BaseUri { get; }
 
         protected abstract ResourceType ResourceType { get; }
+
+        /// <summary>
+        /// Note that this is currently adapting to underlying management clients - once generator changes are in, this would likely be unnecessary
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="creator"></param>
+        /// <returns></returns>
         protected T GetClient<T>(Func<Uri, TokenCredential, T> creator)
         {
             return creator(BaseUri, Credential);

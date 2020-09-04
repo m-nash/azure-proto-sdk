@@ -91,7 +91,7 @@ namespace azure_proto_compute
         public static Pageable<VirtualMachineOperations> ListVms(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VirtualMachineCollection(operations, operations.Context);
-            return new WrappingPageable<ResourceClientBase<PhVirtualMachine>, VirtualMachineOperations>(collection.List(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
+            return new PhWrappingPageable<ResourceClientBase<PhVirtualMachine>, VirtualMachineOperations>(collection.List(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
         }
 
         /// <summary>
@@ -105,13 +105,13 @@ namespace azure_proto_compute
         public static AsyncPageable<VirtualMachineOperations> ListVmsAsync(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VirtualMachineCollection(operations, operations.Context);
-            return new WrappingAsyncPageable<ResourceClientBase<PhVirtualMachine>, VirtualMachineOperations>(collection.ListAsync(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
+            return new PhWrappingAsyncPageable<ResourceClientBase<PhVirtualMachine>, VirtualMachineOperations>(collection.ListAsync(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
         }
 
         public static Pageable<VirtualMachineOperations> ListVmsByTag(this ResourceGroupOperations operations, ArmTagFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VirtualMachineCollection(operations, operations.Context);
-            return new WrappingPageable<ResourceClientBase<PhVirtualMachine>, VirtualMachineOperations>(collection.ListByTag(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
+            return new PhWrappingPageable<ResourceClientBase<PhVirtualMachine>, VirtualMachineOperations>(collection.ListByTag(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
         }
 
         #endregion

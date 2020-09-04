@@ -47,12 +47,12 @@ namespace azure_proto_core
 
         public Pageable<ResourceClientBase<PhResourceGroup>> ListResourceGroups(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return new WrappingPageable<ResourceGroup, ResourceClientBase<PhResourceGroup>>(Operations.List(null, null, cancellationToken), s => ResourceGroup(new PhResourceGroup(s)));
+            return new PhWrappingPageable<ResourceGroup, ResourceClientBase<PhResourceGroup>>(Operations.List(null, null, cancellationToken), s => ResourceGroup(new PhResourceGroup(s)));
         }
 
         public AsyncPageable<ResourceClientBase<PhResourceGroup>> ListResourceGroupsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return new WrappingAsyncPageable<ResourceGroup, ResourceClientBase<PhResourceGroup>>(Operations.ListAsync(null, null, cancellationToken), s => ResourceGroup(new PhResourceGroup(s)));
+            return new PhWrappingAsyncPageable<ResourceGroup, ResourceClientBase<PhResourceGroup>>(Operations.ListAsync(null, null, cancellationToken), s => ResourceGroup(new PhResourceGroup(s)));
         }
 
         internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Context.Subscription, cred)).ResourceGroups;

@@ -1,14 +1,13 @@
 ﻿using Azure;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
     /// <summary>
-    /// Abstract class for long-running or synchronous applications
+    /// Abstract class for long-running or synchronous applications. If we want to add ARM-specific OM, this is where we would add it.
+    /// TODO: Remove protected properties, as this should be integrated into the generated client
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class ArmOperation<T> : Operation<T>
@@ -19,11 +18,15 @@ namespace azure_proto_core
             SyncValue = syncValue;
         }
 
-        public bool CompletedSynchronously { get; }
+        protected bool CompletedSynchronously { get; }
 
-        public T SyncValue { get; }
+        protected T SyncValue { get; }
     }
 
+    /// <summary>
+    /// Generic ARM long runnign operation class for operatiosnw ith no returned value
+    /// TODO: Reimplement without wrapping
+    /// </summary>
     public class ArmVoidOperation : ArmOperation<Response>
     {
         internal class WrappingResponse : Response<Response>
@@ -73,7 +76,7 @@ namespace azure_proto_core
     }
 
     /// <summary>
-    /// TODO: Reimplement this class without wrappint the underlying Operation
+    /// TODO: Reimplement this class without wrapping the underlying Operation
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="U"></typeparam>
