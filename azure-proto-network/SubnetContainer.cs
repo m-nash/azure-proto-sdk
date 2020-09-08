@@ -27,7 +27,8 @@ namespace azure_proto_network
 
         public override ArmOperation<ResourceClientBase<PhSubnet>> Create(string name, PhSubnet resourceDetails)
         {
-            return new PhArmOperation<ResourceClientBase<PhSubnet>, Subnet>(Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, name, resourceDetails.Model), 
+            var operation = Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, name, resourceDetails.Model);
+            return new PhArmOperation<ResourceClientBase<PhSubnet>, Subnet>(operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(), 
                 s => Subnet(new PhSubnet(s, Location.Default)));
         }
 

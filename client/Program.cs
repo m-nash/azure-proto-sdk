@@ -20,7 +20,7 @@ namespace client
                 foreach (var rgId in Scenario.CleanUp)
                 {
                     ResourceIdentifier id = new ResourceIdentifier(rgId);
-                    var rg = new ArmClient().Subscriptions(id.Subscription).ResourceGroup(id);
+                    var rg = new ArmClient().Subscription(id.Subscription).ResourceGroup(id);
                     Console.WriteLine($"--------Deleting {rg.Context.Name}--------");
                     var rgModel = rg.GetModelIfNewer();
                     if (rgModel != null)

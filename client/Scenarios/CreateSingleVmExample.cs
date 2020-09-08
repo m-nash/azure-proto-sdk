@@ -14,7 +14,7 @@ namespace client
         public override void Execute()
         {
             var client = new ArmClient();
-            var subscription = client.Subscriptions(Context.SubscriptionId);
+            var subscription = client.Subscription(Context.SubscriptionId);
 
             // Create Resource Group
             Console.WriteLine($"--------Start create group {Context.RgName}--------");
@@ -45,7 +45,7 @@ namespace client
 
             // Create VM
             Console.WriteLine("--------Start create VM--------");
-            var vm = resourceGroup.ConstructVm(Context.VmName, "admin-user", "!@#$%asdfA", nic.Context, aset.GetModelIfNewer()).Create().Value;
+            var vm = resourceGroup.ConstructVm(Context.VmName, "admin-user", "!@#$%asdfA", nic.Context, aset.GetModelIfNewer()).Create(Context.VmName).Value;
 
             Console.WriteLine("VM ID: " + vm.Context);
             Console.WriteLine("--------Done create VM--------");

@@ -28,14 +28,14 @@ namespace azure_proto_network
             return container.CreateAsync(name, resourceDetails, cancellationToken);
         }
 
-        public static VirtualNetworkContainer ConstructVnet(this ResourceGroupOperations operations, string vnetCidr, Location location = null)
+        public static ArmBuilder<PhVirtualNetwork> ConstructVnet(this ResourceGroupOperations operations, string vnetCidr, Location location = null)
         {
             var vnet = new VirtualNetwork()
             {
                 Location = location ?? operations.DefaultLocation,
                 AddressSpace = new AddressSpace() { AddressPrefixes = new List<string>() { vnetCidr } },
             };
-            return new VirtualNetworkContainer(operations, new PhVirtualNetwork(vnet));
+            return new ArmBuilder<PhVirtualNetwork>(new VirtualNetworkContainer(operations, operations.Context), new PhVirtualNetwork(vnet));
         }
 
         public static VirtualNetworkOperations Vnet(this ResourceGroupOperations operations, TrackedResource vnet)
@@ -76,7 +76,7 @@ namespace azure_proto_network
             return container.CreateAsync(name, resourceDetails, cancellationToken);
         }
 
-        public static PublicIpAddressContainer ConstructIPAddress(this ResourceGroupOperations operations, Location location = null)
+        public static ArmBuilder<PhPublicIPAddress> ConstructIPAddress(this ResourceGroupOperations operations, Location location = null)
         {
             var ipAddress = new PublicIPAddress()
             {
@@ -85,7 +85,7 @@ namespace azure_proto_network
                 Location = location ?? operations.DefaultLocation,
             };
 
-            return new PublicIpAddressContainer(operations,  new PhPublicIPAddress(ipAddress));
+            return new ArmBuilder<PhPublicIPAddress>(new PublicIpAddressContainer(operations, operations.Context),  new PhPublicIPAddress(ipAddress));
         }
 
         public static PublicIpAddressOperations PublicIp(this ResourceGroupOperations operations, TrackedResource vnet)
@@ -125,7 +125,7 @@ namespace azure_proto_network
             return container.CreateAsync(name, resourceDetails, cancellationToken);
         }
 
-        public static NetworkInterfaceContainer ConstructNic(this ResourceGroupOperations operations, PhPublicIPAddress ip, string subnetId, Location location = null)
+        public static ArmBuilder<PhNetworkInterface> ConstructNic(this ResourceGroupOperations operations, PhPublicIPAddress ip, string subnetId, Location location = null)
         {
             var nic = new Azure.ResourceManager.Network.Models.NetworkInterface()
             {
@@ -143,7 +143,7 @@ namespace azure_proto_network
                 }
             };
 
-            return  new NetworkInterfaceContainer(operations, new PhNetworkInterface(nic));
+            return new ArmBuilder<PhNetworkInterface>(new NetworkInterfaceContainer(operations, operations.Context), new PhNetworkInterface(nic));
         }
 
         public static NetworkInterfaceOperations Nic(this ResourceGroupOperations operations, TrackedResource vnet)
@@ -189,7 +189,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="openPorts">The set of TCP ports to open</param>
         /// <returns>An NSG, with the given TCP ports open</returns>
-        public static NetworkSecurityGroupContainer ConstructNsg(this ResourceGroupOperations operations, string nsgName, Location location = null, params int[] openPorts)
+        public static ArmBuilder<PhNetworkSecurityGroup> ConstructNsg(this ResourceGroupOperations operations, string nsgName, Location location = null, params int[] openPorts)
         {
             var nsg = new NetworkSecurityGroup { Location = location ?? operations.DefaultLocation };
             var index = 0;
@@ -207,10 +207,10 @@ namespace azure_proto_network
                 Description = $"Port_{openPort}"
             }).ToList();
 
-            return new NetworkSecurityGroupContainer(operations, new PhNetworkSecurityGroup(nsg));
+            return new ArmBuilder<PhNetworkSecurityGroup>(new NetworkSecurityGroupContainer(operations, operations.Context), new PhNetworkSecurityGroup(nsg));
         }
 
-        public static NetworkSecurityGroupContainer ConstructNsg(this ResourceGroupOperations operations, string nsgName, params int[] openPorts)
+        public static ArmBuilder<PhNetworkSecurityGroup> ConstructNsg(this ResourceGroupOperations operations, string nsgName, params int[] openPorts)
         {
             var nsg = new NetworkSecurityGroup { Location = operations.DefaultLocation };
             var index = 0;
@@ -228,7 +228,7 @@ namespace azure_proto_network
                 Description = $"Port_{openPort}"
             }).ToList();
 
-            return new NetworkSecurityGroupContainer(operations, new PhNetworkSecurityGroup(nsg));
+            return new ArmBuilder<PhNetworkSecurityGroup>(new NetworkSecurityGroupContainer(operations, operations.Context), new PhNetworkSecurityGroup(nsg));
         }
 
         public static NetworkSecurityGroupOperations Nsgs(this ResourceGroupOperations operations, TrackedResource vnet)

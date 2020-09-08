@@ -17,26 +17,21 @@ namespace azure_proto_core
     /// </summary>
     public class SubscriptionOperations : ArmClientBase
     {
-        public Resource DefaultSubscription { get; }
-        public SubscriptionOperations(ArmClientBase parent, string defaultSubscription) :base(parent)
-        {
-            DefaultSubscription = new ArmResource($"/subscriptions/{defaultSubscription}");
-        }
-        public SubscriptionOperations(ArmClientBase parent, ResourceIdentifier defaultSubscription) : base(parent)
-        {
-            DefaultSubscription = new ArmResource(defaultSubscription);
-        }
+        public ResourceIdentifier Id { get; private set; }
 
-        public SubscriptionOperations(ArmClientBase parent, Resource defaultSubscription) : base(parent)
+        public SubscriptionOperations(ArmClientBase parent, string subscriptionId) : base(parent)
         {
-            DefaultSubscription = defaultSubscription;
+            Id = new ResourceIdentifier($"/subscriptions/{subscriptionId}");
+        }
+ 
+        public SubscriptionOperations(ArmClientBase parent, ResourceIdentifier subscriptionId) : base(parent)
+        {
+            Id = subscriptionId;
         }
 
-
-        public bool TryGetModel( out PhSubscriptionModel model)
+        public SubscriptionOperations(ArmClientBase parent, Resource subscriptionId) : base(parent)
         {
-            model = DefaultSubscription as PhSubscriptionModel;
-            return model != null;
+            Id = subscriptionId.Id;
         }
 
         public ArmOperation<ResourceGroupOperations> CreateResourceGroup(string name, PhResourceGroup resourceDetails)
@@ -47,9 +42,9 @@ namespace azure_proto_core
         public ArmOperation<ResourceGroupOperations> CreateResourceGroup(string name, Location location)
         {
             var model = new PhResourceGroup(new ResourceGroup(location));
-            return new PhArmOperation<ResourceGroupOperations, ResourceGroup>(RgOperations.CreateOrUpdate(name, model), s => new ResourceGroupOperations(this, new PhResourceGroup(s)));
+            var rgResponse = RgOperations.CreateOrUpdate(name, model);
+            return new PhArmOperation<ResourceGroupOperations, ResourceGroup>(rgResponse, s => new ResourceGroupOperations(this, new PhResourceGroup(s)));
         }
-
 
         public async Task<ArmOperation<ResourceGroupOperations>> CreateResourceGroupAsync(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
         {
@@ -69,7 +64,7 @@ namespace azure_proto_core
         public Pageable<ResourceClientBase<T>> ListResource<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
-            if (!ArmClient.Registry.TryGetColletcion<T>(this, $"/subscriptions/{DefaultSubscription}", out collection))
+            if (!ArmClient.Registry.TryGetColletcion<T>(this, Id, out collection))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
@@ -102,7 +97,7 @@ namespace azure_proto_core
         public AsyncPageable<ResourceClientBase<T>> ListResourceAsync<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
-            if (!ArmClient.Registry.TryGetColletcion<T>(this, $"/subscriptions/{DefaultSubscription}", out collection))
+            if (!ArmClient.Registry.TryGetColletcion<T>(this, Id, out collection))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
@@ -145,16 +140,13 @@ namespace azure_proto_core
 
         public ResourceGroupOperations ResourceGroup(string resourceGroup)
         {
-            return new ResourceGroupOperations(this, $"{DefaultSubscription.Id}/resourceGroups/{resourceGroup}");
+            return new ResourceGroupOperations(this, $"{Id}/resourceGroups/{resourceGroup}");
         }
 
         protected override ResourceType ResourceType => ResourceType.None;
 
         internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred)).Subscriptions;
 
-        internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, DefaultSubscription.Id.Subscription, cred)).ResourceGroups;
-
+        internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Id.Subscription, cred)).ResourceGroups;
     }
-
-
 }

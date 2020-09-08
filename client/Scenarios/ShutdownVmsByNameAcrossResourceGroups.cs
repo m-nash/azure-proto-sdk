@@ -19,7 +19,7 @@ namespace client
                 context = new ScenarioContext();
             }
 
-            var subscription = new ArmClient().Subscriptions(Context.SubscriptionId);
+            var subscription = new ArmClient().Subscription(Context.SubscriptionId);
 
             Regex reg = new Regex($"{Context.VmName}.*even");
             Parallel.ForEach(subscription.ListVms(), vm =>
