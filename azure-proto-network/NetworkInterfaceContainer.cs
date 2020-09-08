@@ -24,8 +24,9 @@ namespace azure_proto_network
 
         public override ArmOperation<ResourceClientBase<PhNetworkInterface>> Create(string name, PhNetworkInterface resourceDetails)
         {
+            var operation = Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, resourceDetails);
             return new PhArmOperation<ResourceClientBase<PhNetworkInterface>, Azure.ResourceManager.Network.Models.NetworkInterface>(
-                Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, resourceDetails),
+                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
                 n => new NetworkInterfaceOperations(this, new PhNetworkInterface(n)));
         }
 
@@ -35,28 +36,6 @@ namespace azure_proto_network
                 await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, Context.Name, resourceDetails, cancellationToken), 
                 n => new NetworkInterfaceOperations(this, new PhNetworkInterface(n)));
         }
-
-        public PhNetworkInterface ConstructNic(PhPublicIPAddress ip, string subnetId, Location location = null)
-        {
-            var nic = new Azure.ResourceManager.Network.Models.NetworkInterface()
-            {
-                Location = location ?? DefaultLocation,
-                IpConfigurations = new List<NetworkInterfaceIPConfiguration>()
-                {
-                    new NetworkInterfaceIPConfiguration()
-                    {
-                        Name = "Primary",
-                        Primary = true,
-                        Subnet = new Subnet() { Id = subnetId },
-                        PrivateIPAllocationMethod = IPAllocationMethod.Dynamic,
-                        PublicIPAddress = new PublicIPAddress() { Id = ip.Id }
-                    }
-                }
-            };
-
-            return new PhNetworkInterface(nic);
-        }
-
 
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).NetworkInterfaces;
     }

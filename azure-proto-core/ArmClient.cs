@@ -37,27 +37,27 @@ namespace azure_proto_core
         {
         }
 
-        public ArmClient(string subscription) : this(new Uri(DefaultUri), new DefaultAzureCredential(), subscription)
+        public ArmClient(string defaultSubscriptionId) : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId)
         {
         }
 
-        public ArmClient(TokenCredential credential, string subscription) : this(new Uri(DefaultUri), credential, subscription)
+        public ArmClient(TokenCredential credential, string defaultSubscriptionId) : this(new Uri(DefaultUri), credential, defaultSubscriptionId)
         {
         }
 
         public ArmClient(Uri baseUri, TokenCredential credential) : base(baseUri, credential)
         {
-            DefaultSubscription = GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult();
+            DefaultSubscription = new SubscriptionOperations(this, GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult());
         }
-        public ArmClient(Uri baseUri, TokenCredential credential, string subscription) : base(baseUri, credential)
+
+        public ArmClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId) : base(baseUri, credential)
         {
-            DefaultSubscription = subscription;
+            DefaultSubscription = new SubscriptionOperations(this, defaultSubscriptionId);
         }
 
-        public string DefaultSubscription { get; set; }
+        public SubscriptionOperations DefaultSubscription { get; private set; }
 
-        public SubscriptionOperations Subscriptions() => new SubscriptionOperations(this, DefaultSubscription);
-        public SubscriptionOperations Subscriptions(PhSubscriptionModel subscription) => new SubscriptionOperations(this, subscription);
+        public SubscriptionOperations Subscription(PhSubscriptionModel subscription) => new SubscriptionOperations(this, subscription);
 
         /// <summary>
         /// TODO: represent strings that take both resource id or just subscription id
@@ -65,8 +65,9 @@ namespace azure_proto_core
         /// </summary>
         /// <param name="subscription"></param>
         /// <returns></returns>
-        public SubscriptionOperations Subscriptions(ResourceIdentifier subscription) => new SubscriptionOperations(this, subscription);
-        public SubscriptionOperations Subscriptions(string subscription) => new SubscriptionOperations(this, $"/subscriptions/{subscription}");
+        public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(this, subscription);
+
+        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(this, subscription);
 
         public AsyncPageable<SubscriptionOperations> ListSubscriptionsAsync(CancellationToken token = default)
         {
@@ -98,6 +99,7 @@ namespace azure_proto_core
             return new PhTaskDeferringAsyncPageable<PhLocation>(PageableFunc);
 
         }
+
         public Pageable<PhLocation> ListLocations(string subscriptionId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrWhiteSpace(subscriptionId))
@@ -111,7 +113,6 @@ namespace azure_proto_core
 
             return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Location, PhLocation>(SubscriptionsClient.ListLocations(subscriptionId, cancellationToken), s => new PhLocation(s));
         }
-
 
         public async IAsyncEnumerable<azure_proto_core.Location> ListAvailableLocationsAsync(ResourceType resourceType, [EnumeratorCancellation] CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -199,8 +200,6 @@ namespace azure_proto_core
 
             return collection.ListAvailableLocations(cancellationToken);
         }
-
-
 
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
         {
@@ -317,7 +316,6 @@ namespace azure_proto_core
             return GetResourceOperations<T>(id);
         }
 
-
         public ArmOperation<ResourceClientBase<T>> CreateResource<T>(string subscription, string resourceGroup, string name, T model, azure_proto_core.Location location = default) where T:TrackedResource
         {
             if (location == null)
@@ -334,7 +332,6 @@ namespace azure_proto_core
             return container.Create(name, model);
         }
 
-
         /// <summary>
         /// Fill in the default subscription in the simple case (passed in, or only one subscription available)
         /// </summary>
@@ -342,20 +339,18 @@ namespace azure_proto_core
         /// <returns></returns>
         internal async Task<string> GetDefaultSubscription(CancellationToken token = default(CancellationToken))
         {
-            string sub = DefaultSubscription;
+            string sub = DefaultSubscription?.Id?.Subscription;
             if (null == sub)
             {
                 var subs = ListSubscriptionsAsync(token).GetAsyncEnumerator();
                 if (await subs.MoveNextAsync())
                 {
-                    PhSubscriptionModel localSub;
-                    if (subs.Current != null && subs.Current.TryGetModel(out localSub))
+                    if (subs.Current != null)
                     {
-                        sub = localSub?.Id.Subscription;
+                        sub = subs.Current.Id.Subscription;
                     }
                 }
             }
-
             return sub;
         }
 
@@ -364,6 +359,5 @@ namespace azure_proto_core
         protected override ResourceType ResourceType => ResourceType.None;
 
         internal ResourcesManagementClient GetResourcesClient(string subscription) => GetClient<ResourcesManagementClient>((uri, credential) => new ResourcesManagementClient(uri, subscription, credential));
-
     }
 }

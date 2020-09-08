@@ -45,7 +45,7 @@ namespace azure_proto_compute
             return container.CreateAsync(name, resourceDetails);
         }
 
-        public static VirtualMachineContainer ConstructVm(this ResourceGroupOperations operations, string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, PhAvailabilitySet aset, Location location = null)
+        public static ArmBuilder<PhVirtualMachine> ConstructVm(this ResourceGroupOperations operations, string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, PhAvailabilitySet aset, Location location = null)
         {
             var vm = new VirtualMachine(location ?? operations.DefaultLocation)
             {
@@ -72,7 +72,7 @@ namespace azure_proto_compute
                 AvailabilitySet = new SubResource() { Id = aset.Id }
             };
 
-            return new VirtualMachineContainer(operations, new PhVirtualMachine(vm));
+            return new ArmBuilder<PhVirtualMachine>(new VirtualMachineContainer(operations, operations.Context), new PhVirtualMachine(vm));
         }
 
         public static VirtualMachineModelBuilder VmBuilder(this ResourceGroupOperations operations, string name, Location location)
@@ -144,17 +144,16 @@ namespace azure_proto_compute
             return container.CreateAsync(name, resourceDetails);
         }
 
-
-        public static AvailabilitySetContainer ConstructAvailabilitySet(this ResourceGroupOperations operations, string skuName, Location location = null)
+        public static ArmBuilder<PhAvailabilitySet> ConstructAvailabilitySet(this ResourceGroupOperations operations, string skuName, Location location = null)
         {
             var availabilitySet = new AvailabilitySet(location ?? operations.DefaultLocation)
             {
                 PlatformUpdateDomainCount = 5,
                 PlatformFaultDomainCount = 2,
-                Sku = new Azure.ResourceManager.Compute.Models.Sku() { Name = skuName },
+                Sku = new Azure.ResourceManager.Compute.Models.Sku() { Name = skuName }
             };
 
-            return new AvailabilitySetContainer( operations, new PhAvailabilitySet(availabilitySet));
+            return new ArmBuilder<PhAvailabilitySet>(new AvailabilitySetContainer(operations, operations.Context), new PhAvailabilitySet(availabilitySet));
         }
 
         #endregion

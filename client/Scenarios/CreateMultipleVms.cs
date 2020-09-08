@@ -16,7 +16,7 @@ namespace client
         public override void Execute()
         {
             var client = new ArmClient();
-            var subscription = client.Subscriptions(Context.SubscriptionId);
+            var subscription = client.Subscription(Context.SubscriptionId);
 
             // Create Resource Group
             Console.WriteLine($"--------Start create group {Context.RgName}--------");

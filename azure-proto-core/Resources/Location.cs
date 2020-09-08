@@ -8,8 +8,8 @@ namespace azure_proto_core
     /// </summary>
     public class Location : IEquatable<Location>, IEquatable<string>, IComparable<Location>, IComparable<string>
     {
-        public static Location Default = Location.WestUS;
-        public static Location WestUS = new Location { Name = "WestUS", CanonicalName = "west-us", DisplayName = "West US"};
+        public static ref readonly Location Default => ref WestUS;
+        public static readonly Location WestUS = new Location { Name = "WestUS", CanonicalName = "west-us", DisplayName = "West US"};
         public string Name { get; internal set; }
         public string CanonicalName { get; internal set; }
         public string DisplayName { get; internal set; }
@@ -17,6 +17,7 @@ namespace azure_proto_core
         internal Location()
         {
         }
+
         public Location(string location)
         {
             Name = GetDefaultName(location);

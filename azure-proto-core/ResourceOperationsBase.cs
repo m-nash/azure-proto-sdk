@@ -16,9 +16,6 @@ namespace azure_proto_core
 
         public ResourceOperationsBase(ArmClientBase parent, Resource context) : this(parent, context.Id)
         {
-            Validate(context?.Id);
-            Context = context?.Id;
-            DefaultLocation = parent.DefaultLocation;
             var tracked = context as TrackedResource;
             if (tracked != null)
             {

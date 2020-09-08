@@ -20,7 +20,8 @@ namespace azure_proto_network
 
         public override ArmOperation<ResourceClientBase<PhPublicIPAddress>> Create(string name, PhPublicIPAddress resourceDetails)
         {
-            return new PhArmOperation<ResourceClientBase<PhPublicIPAddress>, PublicIPAddress>(Operations.StartCreateOrUpdate(Context.ResourceGroup, name, resourceDetails), 
+            var operation = Operations.StartCreateOrUpdate(Context.ResourceGroup, name, resourceDetails);
+            return new PhArmOperation<ResourceClientBase<PhPublicIPAddress>, PublicIPAddress>(operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(), 
                 n => new PublicIpAddressOperations(this, new PhPublicIPAddress(n)));
         }
 
@@ -31,19 +32,6 @@ namespace azure_proto_network
                 n => new PublicIpAddressOperations(this, new PhPublicIPAddress(n)));
         }
 
-        public PhPublicIPAddress ConstructIPAddress(Location location = null)
-        {
-            var ipAddress = new PublicIPAddress()
-            {
-                PublicIPAddressVersion = Azure.ResourceManager.Network.Models.IPVersion.IPv4.ToString(),
-                PublicIPAllocationMethod = IPAllocationMethod.Dynamic,
-                Location = location ?? DefaultLocation,
-            };
-
-            return new PhPublicIPAddress(ipAddress);
-        }
-
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).PublicIPAddresses;
-
     }
 }

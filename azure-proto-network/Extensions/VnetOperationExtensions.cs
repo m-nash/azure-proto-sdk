@@ -23,7 +23,7 @@ namespace azure_proto_network
             return new SubnetOperations(operations, $"{operations.Context}/subnets/{subnet}");
         }
 
-        public static SubnetContainer ConstructSubnet(this ResourceClientBase<PhVirtualNetwork> operations, string name, string cidr, Location location = null, PhNetworkSecurityGroup group = null)
+        public static ArmBuilder<PhSubnet> ConstructSubnet(this ResourceClientBase<PhVirtualNetwork> operations, string name, string cidr, Location location = null, PhNetworkSecurityGroup group = null)
         {
             var subnet = new Subnet()
             {
@@ -36,7 +36,7 @@ namespace azure_proto_network
                 subnet.NetworkSecurityGroup = group.Model;
             }
 
-            return new SubnetContainer(operations, new PhSubnet(subnet, location ?? operations.DefaultLocation));
+            return new ArmBuilder<PhSubnet>(new SubnetContainer(operations, operations.Context), new PhSubnet(subnet, location ?? operations.DefaultLocation));
         }
 
         public static ArmOperation<ResourceClientBase<PhSubnet>> CreateSubnet(this ResourceClientBase<PhVirtualNetwork> operations, string name, PhSubnet resourceDetails)

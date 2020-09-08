@@ -64,8 +64,8 @@ namespace azure_proto_core
             return Create(name, resourceDetails);
         }
 
-
         public abstract ArmOperation<ResourceClientBase<T>> Create(string name, T resourceDetails = null);
+
         public virtual Task<ArmOperation<ResourceClientBase<T>>> CreateAsync(T resourceDetails, CancellationToken cancellationToken = default)
         {
             return CreateAsync(resourceDetails?.Id?.Name, resourceDetails, cancellationToken);

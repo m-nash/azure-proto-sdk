@@ -27,7 +27,8 @@ namespace azure_proto_network
 
         public override ArmOperation<ResourceClientBase<PhNetworkSecurityGroup>> Create(string name, PhNetworkSecurityGroup resourceDetails)
         {
-            return new PhArmOperation<ResourceClientBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, resourceDetails.Model), 
+            var operation = Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, resourceDetails.Model);
+            return new PhArmOperation<ResourceClientBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(), 
                 n => new NetworkSecurityGroupOperations(this, new PhNetworkSecurityGroup(n)));
         }
 
@@ -37,53 +38,5 @@ namespace azure_proto_network
                 await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, Context.Name, resourceDetails.Model, cancellationToken),
                 n => new NetworkSecurityGroupOperations(this, new PhNetworkSecurityGroup(n)));
         }
-
-        /// <summary>
-        /// Create an NSG with the given open TCP ports
-        /// </summary>
-        /// <param name="openPorts">The set of TCP ports to open</param>
-        /// <returns>An NSG, with the given TCP ports open</returns>
-        public PhNetworkSecurityGroup ConstructNsg(string nsgName, Location location = null, params int[] openPorts)
-        {
-            var nsg = new NetworkSecurityGroup { Location = location ?? DefaultLocation };
-            var index = 0;
-            nsg.SecurityRules = openPorts.Select(openPort => new SecurityRule
-            {
-                Name = $"Port{openPort}",
-                Priority = 1000 + (++index),
-                Protocol = SecurityRuleProtocol.Tcp,
-                Access = SecurityRuleAccess.Allow,
-                Direction = SecurityRuleDirection.Inbound,
-                SourcePortRange = "*",
-                SourceAddressPrefix = "*",
-                DestinationPortRange = $"{openPort}",
-                DestinationAddressPrefix = "*",
-                Description = $"Port_{openPort}"
-            }).ToList();
-
-            return new PhNetworkSecurityGroup(nsg); 
-        }
-
-        public PhNetworkSecurityGroup ConstructNsg(string nsgName, params int[] openPorts)
-        {
-            var nsg = new NetworkSecurityGroup { Location = DefaultLocation };
-            var index = 0;
-            nsg.SecurityRules = openPorts.Select(openPort => new SecurityRule
-            {
-                Name = $"Port{openPort}",
-                Priority = 1000 + (++index),
-                Protocol = SecurityRuleProtocol.Tcp,
-                Access = SecurityRuleAccess.Allow,
-                Direction = SecurityRuleDirection.Inbound,
-                SourcePortRange = "*",
-                SourceAddressPrefix = "*",
-                DestinationPortRange = $"{openPort}",
-                DestinationAddressPrefix = "*",
-                Description = $"Port_{openPort}"
-            }).ToList();
-
-            return new PhNetworkSecurityGroup(nsg);
-        }
-
     }
 }
