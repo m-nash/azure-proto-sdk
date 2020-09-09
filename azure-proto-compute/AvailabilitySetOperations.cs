@@ -7,17 +7,22 @@ using System.Threading.Tasks;
 
 namespace azure_proto_compute
 {
-    public class AvailabilitySetOperations : ResourceClientBase<PhAvailabilitySet>
+    public class AvailabilitySetOperations : ResourceOperationsBase<PhAvailabilitySet>
     {
 
-        public AvailabilitySetOperations(ArmClientBase parent, TrackedResource context) : base(parent, context)
+        public AvailabilitySetOperations(ArmClientContext parent, TrackedResource context) : base(parent, context)
         {
         }
-        public AvailabilitySetOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
+        public AvailabilitySetOperations(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
         {
         }
-
-        protected override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
+        public AvailabilitySetOperations(OperationsBase parent, TrackedResource context) : base(parent, context)
+        {
+        }
+        public AvailabilitySetOperations(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
+        {
+        }
+        public override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
 
         public override ArmOperation<Response> Delete()
         {
@@ -29,34 +34,34 @@ namespace azure_proto_compute
             return new ArmVoidOperation(await Operations.DeleteAsync(Context.ResourceGroup, Context.Name));
         }
 
-        public override Response<ResourceClientBase<PhAvailabilitySet>> Get()
+        public override Response<ResourceOperationsBase<PhAvailabilitySet>> Get()
         {
-            return new PhArmResponse<ResourceClientBase<PhAvailabilitySet>, AvailabilitySet>(Operations.Get(Context.ResourceGroup, Context.Name), a => { Resource = new PhAvailabilitySet(a); return this; });
+            return new PhArmResponse<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySet>(Operations.Get(Context.ResourceGroup, Context.Name), a => { Resource = new PhAvailabilitySet(a); return this; });
         }
 
-        public async override Task<Response<ResourceClientBase<PhAvailabilitySet>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<Response<ResourceOperationsBase<PhAvailabilitySet>>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<ResourceClientBase<PhAvailabilitySet>, AvailabilitySet>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, cancellationToken), a => { Resource = new PhAvailabilitySet(a); return this; });
+            return new PhArmResponse<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySet>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, cancellationToken), a => { Resource = new PhAvailabilitySet(a); return this; });
         }
 
-        public ArmOperation<ResourceClientBase<PhAvailabilitySet>> Update(AvailabilitySetUpdate patchable)
+        public ArmOperation<ResourceOperationsBase<PhAvailabilitySet>> Update(AvailabilitySetUpdate patchable)
         {
-            return new PhArmOperation<ResourceClientBase<PhAvailabilitySet>, AvailabilitySet>(Operations.Update(Context.ResourceGroup, Context.Name, patchable), a => { Resource = new PhAvailabilitySet(a); return this; });
+            return new PhArmOperation<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySet>(Operations.Update(Context.ResourceGroup, Context.Name, patchable), a => { Resource = new PhAvailabilitySet(a); return this; });
         }
 
-        public async Task<ArmOperation<ResourceClientBase<PhAvailabilitySet>>> UpdateAsync(AvailabilitySetUpdate patchable, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<ResourceOperationsBase<PhAvailabilitySet>>> UpdateAsync(AvailabilitySetUpdate patchable, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<ResourceClientBase<PhAvailabilitySet>, AvailabilitySet>(await Operations.UpdateAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken), a => { Resource = new PhAvailabilitySet(a); return this; });
+            return new PhArmOperation<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySet>(await Operations.UpdateAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken), a => { Resource = new PhAvailabilitySet(a); return this; });
         }
 
-        public override ArmOperation<ResourceClientBase<PhAvailabilitySet>> AddTag(string key, string value)
+        public override ArmOperation<ResourceOperationsBase<PhAvailabilitySet>> AddTag(string key, string value)
         {
             var patchable = new AvailabilitySetUpdate();
             patchable.Tags[key] = value;
             return Update(patchable);
         }
 
-        public override Task<ArmOperation<ResourceClientBase<PhAvailabilitySet>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public override Task<ArmOperation<ResourceOperationsBase<PhAvailabilitySet>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new AvailabilitySetUpdate();
             patchable.Tags[key] = value;

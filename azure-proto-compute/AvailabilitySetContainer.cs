@@ -12,23 +12,30 @@ namespace azure_proto_compute
     /// </summary>
     public class AvailabilitySetContainer : ResourceContainerOperations<PhAvailabilitySet>
     {
-        public AvailabilitySetContainer(ArmClientBase parent, TrackedResource context):base(parent, context) 
+        public AvailabilitySetContainer(ArmClientContext parent, TrackedResource context):base(parent, context) 
         {
         }
-        public AvailabilitySetContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
+        public AvailabilitySetContainer(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
+        {
+        }
+
+        public AvailabilitySetContainer(OperationsBase parent, TrackedResource context) : base(parent, context)
+        {
+        }
+        public AvailabilitySetContainer(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        protected override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
+        public override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
 
-        public override ArmOperation<ResourceClientBase<PhAvailabilitySet>> Create(string name, PhAvailabilitySet resourceDetails)
+        public override ArmOperation<ResourceOperationsBase<PhAvailabilitySet>> Create(string name, PhAvailabilitySet resourceDetails)
         {
-            return new PhArmOperation<ResourceClientBase<PhAvailabilitySet>, AvailabilitySet>(Operations.CreateOrUpdate(Context.ResourceGroup, name, resourceDetails.Model), a => AvailabilitySet(new PhAvailabilitySet(a)));
+            return new PhArmOperation<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySet>(Operations.CreateOrUpdate(Context.ResourceGroup, name, resourceDetails.Model), a => AvailabilitySet(new PhAvailabilitySet(a)));
         }
 
-        public async override Task<ArmOperation<ResourceClientBase<PhAvailabilitySet>>> CreateAsync(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperationsBase<PhAvailabilitySet>>> CreateAsync(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<ResourceClientBase<PhAvailabilitySet>, AvailabilitySet>(await Operations.CreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails.Model, cancellationToken), a => AvailabilitySet(new PhAvailabilitySet(a)));
+            return new PhArmOperation<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySet>(await Operations.CreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails.Model, cancellationToken), a => AvailabilitySet(new PhAvailabilitySet(a)));
         }
 
         public AvailabilitySetOperations AvailabilitySet(string name)

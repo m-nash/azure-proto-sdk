@@ -11,9 +11,9 @@ namespace client
             var createMultipleVms = new CreateMultipleVms(Context);
             createMultipleVms.Execute();
 
-            var resourceGroup = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
+            var sub = new ArmClient().Subscription(Context.SubscriptionId);
 
-            foreach(var vm in resourceGroup.ListVms("even"))
+            foreach(var vm in sub.ListVms("even"))
             {
                 Console.WriteLine($"Stopping {vm.Context.Name}");
                 vm.Stop();

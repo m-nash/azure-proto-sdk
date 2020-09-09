@@ -8,22 +8,22 @@ namespace azure_proto_network
 {
     public static class VnetOperationExtensions
     {
-        public static SubnetOperations Subnet(this ResourceClientBase<PhVirtualNetwork> operations, TrackedResource subnet)
+        public static SubnetOperations Subnet(this ResourceOperationsBase<PhVirtualNetwork> operations, TrackedResource subnet)
         {
             return new SubnetOperations(operations, subnet);
         }
 
-        public static SubnetOperations Subnet(this ResourceClientBase<PhVirtualNetwork> operations, ResourceIdentifier subnet)
+        public static SubnetOperations Subnet(this ResourceOperationsBase<PhVirtualNetwork> operations, ResourceIdentifier subnet)
         {
             return new SubnetOperations(operations, subnet);
         }
 
-        public static SubnetOperations Subnet(this ResourceClientBase<PhVirtualNetwork> operations, string subnet)
+        public static SubnetOperations Subnet(this ResourceOperationsBase<PhVirtualNetwork> operations, string subnet)
         {
             return new SubnetOperations(operations, $"{operations.Context}/subnets/{subnet}");
         }
 
-        public static ArmBuilder<PhSubnet> ConstructSubnet(this ResourceClientBase<PhVirtualNetwork> operations, string name, string cidr, Location location = null, PhNetworkSecurityGroup group = null)
+        public static ArmBuilder<PhSubnet> ConstructSubnet(this ResourceOperationsBase<PhVirtualNetwork> operations, string name, string cidr, Location location = null, PhNetworkSecurityGroup group = null)
         {
             var subnet = new Subnet()
             {
@@ -39,12 +39,12 @@ namespace azure_proto_network
             return new ArmBuilder<PhSubnet>(new SubnetContainer(operations, operations.Context), new PhSubnet(subnet, location ?? operations.DefaultLocation));
         }
 
-        public static ArmOperation<ResourceClientBase<PhSubnet>> CreateSubnet(this ResourceClientBase<PhVirtualNetwork> operations, string name, PhSubnet resourceDetails)
+        public static ArmOperation<ResourceOperationsBase<PhSubnet>> CreateSubnet(this ResourceOperationsBase<PhVirtualNetwork> operations, string name, PhSubnet resourceDetails)
         {
             return GetSubnetContainer(operations).Create(name, resourceDetails);
         }
 
-        public static Task<ArmOperation<ResourceClientBase<PhSubnet>>> CreateSubnetAsync(this ResourceClientBase<PhVirtualNetwork> operations, string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmOperation<ResourceOperationsBase<PhSubnet>>> CreateSubnetAsync(this ResourceOperationsBase<PhVirtualNetwork> operations, string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
         {
             return GetSubnetContainer(operations).CreateAsync(name, resourceDetails, cancellationToken);
         }

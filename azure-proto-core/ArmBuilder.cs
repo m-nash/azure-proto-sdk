@@ -17,12 +17,12 @@ namespace azure_proto_core
         }
 
         //TODO: should not allow both on the same type
-        public virtual ArmOperation<ResourceClientBase<T>> Create(string name)
+        public virtual ArmOperation<ResourceOperationsBase<T>> Create(string name)
         {
             return _containerOperations.Create(name, _resource);
         }
 
-        public virtual ArmOperation<ResourceClientBase<T>> Create()
+        public virtual ArmOperation<ResourceOperationsBase<T>> Create()
         {
             return _containerOperations.Create(_resource);
         }

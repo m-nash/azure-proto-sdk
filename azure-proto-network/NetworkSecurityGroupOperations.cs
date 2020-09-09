@@ -16,7 +16,7 @@ namespace azure_proto_network
     /// An operations + Model class for NSGs
     /// TODO: How does the operation signature change for resources that support Etags?
     /// </summary>
-    public class NetworkSecurityGroupOperations : ResourceClientBase<PhNetworkSecurityGroup>
+    public class NetworkSecurityGroupOperations : ResourceOperationsBase<PhNetworkSecurityGroup>
     {
         class RuleIdEqualityComparer : IEqualityComparer<SecurityRule>
         {
@@ -31,11 +31,19 @@ namespace azure_proto_network
             }
         }
 
-        public NetworkSecurityGroupOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
+        public NetworkSecurityGroupOperations(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public NetworkSecurityGroupOperations(ArmClientBase parent, TrackedResource context) : base(parent, context)
+        public NetworkSecurityGroupOperations(ArmClientContext parent, TrackedResource context) : base(parent, context)
+        {
+        }
+
+        public NetworkSecurityGroupOperations(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
+        {
+        }
+
+        public NetworkSecurityGroupOperations(OperationsBase parent, TrackedResource context) : base(parent, context)
         {
         }
 
@@ -47,9 +55,9 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="rules">The new set of network security rules</param>
         /// <returns>A network security group with the given set of rules merged with thsi one</returns>
-        public ArmOperation<ResourceClientBase<PhNetworkSecurityGroup>> UpdateRules(CancellationToken cancellationToken = default, params SecurityRule[] rules)
+        public ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>> UpdateRules(CancellationToken cancellationToken = default, params SecurityRule[] rules)
         {
-            var model = GetModelIfNewer();
+            var model = Model;
             foreach (var rule in rules)
             {
                 // Note that this makes use of the 
@@ -76,35 +84,35 @@ namespace azure_proto_network
                 }
             }
 
-            return new PhArmOperation<ResourceClientBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, model.Model), 
+            return new PhArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, model.Model), 
                 n => { Resource = new PhNetworkSecurityGroup(n); return this;});
         }
 
-        public override Response<ResourceClientBase<PhNetworkSecurityGroup>> Get()
+        public override Response<ResourceOperationsBase<PhNetworkSecurityGroup>> Get()
         {
-            return new PhArmResponse<ResourceClientBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(Operations.Get(Context.ResourceGroup, Context.Name),
+            return new PhArmResponse<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(Operations.Get(Context.ResourceGroup, Context.Name),
                 n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
-        public async override Task<Response<ResourceClientBase<PhNetworkSecurityGroup>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<Response<ResourceOperationsBase<PhNetworkSecurityGroup>>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<ResourceClientBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, null, cancellationToken),
+            return new PhArmResponse<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, null, cancellationToken),
                 n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
-        public override ArmOperation<ResourceClientBase<PhNetworkSecurityGroup>> AddTag(string key, string value)
+        public override ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>> AddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<ResourceClientBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(Operations.UpdateTags(Context.ResourceGroup, Context.Name, patchable),
+            return new PhArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(Operations.UpdateTags(Context.ResourceGroup, Context.Name, patchable),
                 n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
-        public async override Task<ArmOperation<ResourceClientBase<PhNetworkSecurityGroup>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<ResourceClientBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken),
+            return new PhArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken),
                 n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
@@ -118,7 +126,7 @@ namespace azure_proto_network
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Context.ResourceGroup, Context.Name, cancellationToken));
         }
 
-        protected override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
+        public override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
 
         internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).NetworkSecurityGroups;
 

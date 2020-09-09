@@ -11,21 +11,26 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    public class PhResourceGroupPatchable : IPatchModel
+    public class ResourceGroupOperations : ResourceOperationsBase<PhResourceGroup>
     {
-        public IDictionary<string, string> Tags => throw new NotImplementedException();
-    }
-    public class ResourceGroupOperations : ResourceClientBase<PhResourceGroup>
-    {
-        internal ResourceGroupOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
+        internal ResourceGroupOperations(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        internal ResourceGroupOperations(ArmClientBase parent, Resource context) : base(parent, context)
+        internal ResourceGroupOperations(OperationsBase parent, Resource context) : base(parent, context)
         {
         }
 
-        protected override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
+        internal ResourceGroupOperations(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
+        {
+        }
+
+        internal ResourceGroupOperations(ArmClientContext parent, Resource context) : base(parent, context)
+        {
+        }
+
+
+        public override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
 
         public override ArmOperation<Response> Delete()
         {
@@ -37,28 +42,28 @@ namespace azure_proto_core
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Context.Name, cancellationToken));
         }
 
-        public override Response<ResourceClientBase<PhResourceGroup>> Get()
+        public override Response<ResourceOperationsBase<PhResourceGroup>> Get()
         {
-            return new PhArmResponse<ResourceClientBase<PhResourceGroup>, ResourceGroup>(Operations.Get(Context.Name), g => { this.Resource = new PhResourceGroup(g); return this; });
+            return new PhArmResponse<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(Operations.Get(Context.Name), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public async override Task<Response<ResourceClientBase<PhResourceGroup>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<Response<ResourceOperationsBase<PhResourceGroup>>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<ResourceClientBase<PhResourceGroup>, ResourceGroup>(await Operations.GetAsync(Context.Name, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
+            return new PhArmResponse<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(await Operations.GetAsync(Context.Name, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public override ArmOperation<ResourceClientBase<PhResourceGroup>> AddTag(string name, string value)
+        public override ArmOperation<ResourceOperationsBase<PhResourceGroup>> AddTag(string name, string value)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;
-            return new PhArmOperation<ResourceClientBase<PhResourceGroup>, ResourceGroup>(Operations.Update(Context.Name, patch), g => { this.Resource = new PhResourceGroup(g); return this; });
+            return new PhArmOperation<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(Operations.Update(Context.Name, patch), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public async override Task<ArmOperation<ResourceClientBase<PhResourceGroup>>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperationsBase<PhResourceGroup>>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;
-            return new PhArmOperation<ResourceClientBase<PhResourceGroup>, ResourceGroup>(await Operations.UpdateAsync(Context.Name, patch, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
+            return new PhArmOperation<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(await Operations.UpdateAsync(Context.Name, patch, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
         public ArmOperation<ResourceClientBase<T>> CreateResource<T>(string name, T model, azure_proto_core.Location location = default) where T : TrackedResource
@@ -77,7 +82,7 @@ namespace azure_proto_core
             }
 
             ResourceContainerOperations<T> container;
-            if (!ArmClient.Registry.TryGetContainer<T>(this, myResource, out container))
+            if (!ArmClient.Registry.TryGetContainer<T>(this.ClientContext, myResource, out container))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
@@ -85,7 +90,7 @@ namespace azure_proto_core
             return container.Create(name, model);
         }
 
-        public Task<ArmOperation<ResourceClientBase<T>>> CreateResourceAsync<T>(string name, T model, azure_proto_core.Location location = default, CancellationToken token = default) where T : TrackedResource
+        public Task<ArmOperation<ResourceOperationsBase<T>>> CreateResourceAsync<T>(string name, T model, azure_proto_core.Location location = default, CancellationToken token = default) where T : TrackedResource
         {
 
             var myResource = Resource as TrackedResource;
@@ -101,7 +106,7 @@ namespace azure_proto_core
             }
 
             ResourceContainerOperations<T> container;
-            if (!ArmClient.Registry.TryGetContainer<T>(this, myResource, out container))
+            if (!ArmClient.Registry.TryGetContainer<T>(this.ClientContext, myResource, out container))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }

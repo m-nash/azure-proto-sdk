@@ -15,23 +15,21 @@ namespace azure_proto_core
     /// Subscription operations
     /// TODO: Look at selecting subscriptions by name
     /// </summary>
-    public class SubscriptionOperations : ArmClientBase
+    public class SubscriptionOperations : OperationsBase
     {
         public ResourceIdentifier Id { get; private set; }
-
-        public SubscriptionOperations(ArmClientBase parent, string subscriptionId) : base(parent)
+        public SubscriptionOperations(ArmClientContext parent, string defaultSubscription) :base(parent, $"/subscriptions/{defaultSubscription}")
         {
-            Id = new ResourceIdentifier($"/subscriptions/{subscriptionId}");
+            Id = new ResourceIdentifier($"/subscriptions/{defaultSubscription}");
         }
- 
-        public SubscriptionOperations(ArmClientBase parent, ResourceIdentifier subscriptionId) : base(parent)
+        public SubscriptionOperations(ArmClientContext parent, ResourceIdentifier defaultSubscription) : base(parent, defaultSubscription)
         {
-            Id = subscriptionId;
+            Id = defaultSubscription;
         }
 
-        public SubscriptionOperations(ArmClientBase parent, Resource subscriptionId) : base(parent)
+        public SubscriptionOperations(ArmClientContext parent, Resource defaultSubscription) : base(parent, defaultSubscription)
         {
-            Id = subscriptionId.Id;
+            Id = defaultSubscription.Id;
         }
 
         public ArmOperation<ResourceGroupOperations> CreateResourceGroup(string name, PhResourceGroup resourceDetails)
@@ -76,7 +74,7 @@ namespace azure_proto_core
             return new ResourceGroupOperations(this, $"{Id}/resourceGroups/{resourceGroup}");
         }
 
-        protected override ResourceType ResourceType => ResourceType.None;
+        public override ResourceType ResourceType => ResourceType.None;
 
         internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred)).Subscriptions;
 

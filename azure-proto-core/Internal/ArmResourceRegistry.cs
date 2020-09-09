@@ -24,7 +24,7 @@ namespace azure_proto_core
         /// <param name="context"></param>
         /// <param name="operations"></param>
         /// <returns></returns>
-        public bool TryGetOperations<T>(ArmClientBase parent, TrackedResource context, out ResourceClientBase<T> operations) where T : TrackedResource
+        public bool TryGetOperations<T>(ArmClientContext parent, TrackedResource context, out ResourceOperationsBase<T> operations) where T : TrackedResource
         {
             operations = null;
             ArmResourceRegistration<T> registration;
@@ -38,7 +38,7 @@ namespace azure_proto_core
         }
 
 
-        public bool TryGetContainer<T>(ArmClientBase parent, TrackedResource parentContext, out ResourceContainerOperations<T> container) where T: TrackedResource
+        public bool TryGetContainer<T>(ArmClientContext parent, TrackedResource parentContext, out ResourceContainerOperations<T> container) where T: TrackedResource
         {
             container = null;
             ArmResourceRegistration<T> registration;
@@ -51,7 +51,7 @@ namespace azure_proto_core
             return true;
         }
 
-        public bool TryGetColletcion<T>(ArmClientBase parent, ResourceIdentifier parentContext, out ResourceCollectionOperations<T> collection) where T : TrackedResource
+        public bool TryGetColletcion<T>(ArmClientContext parent, ResourceIdentifier parentContext, out ResourceCollectionOperations<T> collection) where T : TrackedResource
         {
             collection = null;
             ArmResourceRegistration<T> registration;

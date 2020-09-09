@@ -13,28 +13,34 @@ namespace azure_proto_network
 {
     public class NetworkSecurityGroupContainer : ResourceContainerOperations<PhNetworkSecurityGroup>
     {
-        public NetworkSecurityGroupContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
+        public NetworkSecurityGroupContainer(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public NetworkSecurityGroupContainer(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
+        public NetworkSecurityGroupContainer(ArmClientContext parent, azure_proto_core.Resource context) : base(parent, context)
+        {
+        }
+        public NetworkSecurityGroupContainer(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        protected override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
+        public NetworkSecurityGroupContainer(OperationsBase parent, azure_proto_core.Resource context) : base(parent, context)
+        {
+        }
+
+        public override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
 
         internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).NetworkSecurityGroups;
 
-        public override ArmOperation<ResourceClientBase<PhNetworkSecurityGroup>> Create(string name, PhNetworkSecurityGroup resourceDetails)
+        public override ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>> Create(string name, PhNetworkSecurityGroup resourceDetails)
         {
-            var operation = Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, resourceDetails.Model);
-            return new PhArmOperation<ResourceClientBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(), 
+            return new PhArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, resourceDetails.Model), 
                 n => new NetworkSecurityGroupOperations(this, new PhNetworkSecurityGroup(n)));
         }
 
-        public async override Task<ArmOperation<ResourceClientBase<PhNetworkSecurityGroup>>> CreateAsync(string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>>> CreateAsync(string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<ResourceClientBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(
+            return new PhArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(
                 await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, Context.Name, resourceDetails.Model, cancellationToken),
                 n => new NetworkSecurityGroupOperations(this, new PhNetworkSecurityGroup(n)));
         }

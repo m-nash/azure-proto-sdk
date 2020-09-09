@@ -12,29 +12,36 @@ namespace azure_proto_network
 {
     public class SubnetContainer : ResourceContainerOperations<PhSubnet>
     {
-        public SubnetContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
+        public SubnetContainer(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public SubnetContainer(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
+        public SubnetContainer(ArmClientContext parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 
-        protected override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
+        public SubnetContainer(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
+        {
+        }
+
+        public SubnetContainer(OperationsBase parent, azure_proto_core.Resource context) : base(parent, context)
+        {
+        }
+
+        public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
 
 
         internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).Subnets;
 
-        public override ArmOperation<ResourceClientBase<PhSubnet>> Create(string name, PhSubnet resourceDetails)
+        public override ArmOperation<ResourceOperationsBase<PhSubnet>> Create(string name, PhSubnet resourceDetails)
         {
-            var operation = Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, name, resourceDetails.Model);
-            return new PhArmOperation<ResourceClientBase<PhSubnet>, Subnet>(operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(), 
+            return new PhArmOperation<ResourceOperationsBase<PhSubnet>, Subnet>(Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, name, resourceDetails.Model), 
                 s => Subnet(new PhSubnet(s, Location.Default)));
         }
 
-        public async override Task<ArmOperation<ResourceClientBase<PhSubnet>>> CreateAsync(string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperationsBase<PhSubnet>>> CreateAsync(string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<ResourceClientBase<PhSubnet>, Subnet>(await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, Context.Name, name, resourceDetails.Model, cancellationToken),
+            return new PhArmOperation<ResourceOperationsBase<PhSubnet>, Subnet>(await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, Context.Name, name, resourceDetails.Model, cancellationToken),
                 s => Subnet(new PhSubnet(s, Location.Default)));
         }
 

@@ -9,6 +9,7 @@ using azure_proto_core.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,10 +17,11 @@ using System.Threading.Tasks;
 namespace azure_proto_core
 {
     /// <summary>
-    /// The entry point for all ARM clients
+    /// The entry point for all ARM clients.  Note that, we may not want to take a dirrect dependency on Azure.Identity, so we may make the
+    /// credential required.
     /// TODO: What is appropriate naming for ArmClient , given that we would not liek to make distinctions between data and management.
     /// </summary>
-    public class ArmClient : ArmClientBase
+    public class ArmClient
     {
         static ArmClient()
         {
@@ -44,19 +46,21 @@ namespace azure_proto_core
         {
         }
 
-        public ArmClient(Uri baseUri, TokenCredential credential) : base(baseUri, credential)
+        public ArmClient(Uri baseUri, TokenCredential credential)
         {
-            DefaultSubscription = new SubscriptionOperations(this, GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult());
+            ClientContext = new ArmClientContext(new Uri(DefaultUri), new DefaultAzureCredential());
+            DefaultSubscription = new SubscriptionOperations(this.ClientContext, new ResourceIdentifier($"/subscriptions/{GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult()}"));
         }
-
-        public ArmClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId) : base(baseUri, credential)
+        public ArmClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId) 
         {
-            DefaultSubscription = new SubscriptionOperations(this, defaultSubscriptionId);
+            ClientContext = new ArmClientContext(new Uri(DefaultUri), new DefaultAzureCredential());
+            DefaultSubscription = new SubscriptionOperations(this.ClientContext, new ResourceIdentifier($"/subscriptions/{defaultSubscriptionId}"));
         }
 
         public SubscriptionOperations DefaultSubscription { get; private set; }
+        internal virtual ArmClientContext ClientContext { get; }
 
-        public SubscriptionOperations Subscription(PhSubscriptionModel subscription) => new SubscriptionOperations(this, subscription);
+        public SubscriptionOperations Subscription(PhSubscriptionModel subscription) => new SubscriptionOperations(this.ClientContext, subscription);
 
         /// <summary>
         /// TODO: represent strings that take both resource id or just subscription id
@@ -64,18 +68,17 @@ namespace azure_proto_core
         /// </summary>
         /// <param name="subscription"></param>
         /// <returns></returns>
-        public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(this, subscription);
-
-        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(this, subscription);
+        public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(this.ClientContext, subscription);
+        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(this.ClientContext, $"/subscriptions/{subscription}");
 
         public AsyncPageable<SubscriptionOperations> ListSubscriptionsAsync(CancellationToken token = default)
         {
-            return new PhWrappingAsyncPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.ListAsync(token), s => new SubscriptionOperations(this, new PhSubscriptionModel(s)));
+            return new PhWrappingAsyncPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.ListAsync(token), s => new SubscriptionOperations(this.ClientContext, new PhSubscriptionModel(s)));
         }
 
         public Pageable<SubscriptionOperations> ListSubscriptions(CancellationToken token = default)
         {
-            return new PhWrappingPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.List(token), s => new SubscriptionOperations(this, new PhSubscriptionModel(s)));
+            return new PhWrappingPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.List(token), s => new SubscriptionOperations(this.ClientContext, new PhSubscriptionModel(s)));
         }
 
         public AsyncPageable<PhLocation> ListLocationsAsync(string subscriptionId = null, CancellationToken token = default(CancellationToken))
@@ -158,54 +161,35 @@ namespace azure_proto_core
 
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
         {
-            return new ResourceGroupOperations(this, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}");
+            return new ResourceGroupOperations(this.ClientContext, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}");
         }
 
         public ResourceGroupOperations ResourceGroup(ResourceIdentifier resourceGroup)
         {
-            return new ResourceGroupOperations(this, resourceGroup);
+            return new ResourceGroupOperations(this.ClientContext, resourceGroup);
         }
         public ResourceGroupOperations ResourceGroup(PhResourceGroup resourceGroup)
         {
-            return new ResourceGroupOperations(this, resourceGroup);
+            return new ResourceGroupOperations(this.ClientContext, resourceGroup);
         }
 
         public ResourceClientBase<T> GetResourceOperations<T>(TrackedResource resource) where T : TrackedResource
         {
-            ResourceClientBase<T> operations;
-            if (!Registry.TryGetOperations<T>(this, resource, out operations))
-            {
-                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
-            }
-
-            return operations;
+            return Activator.CreateInstance(typeof(T), ClientContext, resource) as T;
         }
 
-        public ResourceClientBase<T> GetResourceOperations<T>(ResourceIdentifier resource) where T : TrackedResource
+        public T GetResourceOperations<T>(ResourceIdentifier resource) where T : OperationsBase
         {
-            var placeholder = new ArmResource(resource);
-            ResourceClientBase<T> operations;
-            if (!Registry.TryGetOperations<T>(this, placeholder, out operations))
-            {
-                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
-            }
-
-            return operations;
+            return Activator.CreateInstance(typeof(T), ClientContext, resource) as T;
         }
 
-        public ResourceClientBase<T> GetResourceOperations<T>(string subscription, string resourceGroup, string name) where T : TrackedResource
+        public T GetResourceOperations<T>(string subscription, string resourceGroup, string name) where T : OperationsBase
         {
-            ResourceType type;
-            if (!Registry.TryGetResourceType<T>(out type))
-            {
-                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
-            }
 
-            var id = new ResourceIdentifier($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/{type.Namespace}/{type.Type}/name");
-            return GetResourceOperations<T>(id);
+            return null;
         }
 
-        public ArmOperation<ResourceClientBase<T>> CreateResource<T>(string subscription, string resourceGroup, string name, T model, azure_proto_core.Location location = default) where T:TrackedResource
+        public ArmOperation<ResourceOperationsBase<T>> CreateResource<T>(string subscription, string resourceGroup, string name, T model, azure_proto_core.Location location = default) where T:TrackedResource
         {
             if (location == null)
             {
@@ -213,7 +197,7 @@ namespace azure_proto_core
             }
 
             ResourceContainerOperations<T> container;
-            if (!Registry.TryGetContainer<T>(this, new ArmResource($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", location), out container))
+            if (!Registry.TryGetContainer<T>(this.ClientContext, new ArmResource($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", location), out container))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
@@ -228,7 +212,7 @@ namespace azure_proto_core
         /// <returns></returns>
         internal async Task<string> GetDefaultSubscription(CancellationToken token = default(CancellationToken))
         {
-            string sub = DefaultSubscription?.Id?.Subscription;
+            string sub = DefaultSubscription?.Context?.Subscription;
             if (null == sub)
             {
                 var subs = ListSubscriptionsAsync(token).GetAsyncEnumerator();
@@ -245,8 +229,6 @@ namespace azure_proto_core
 
         internal SubscriptionsOperations SubscriptionsClient => GetResourcesClient(Guid.NewGuid().ToString()).Subscriptions;
 
-        protected override ResourceType ResourceType => ResourceType.None;
-
-        internal ResourcesManagementClient GetResourcesClient(string subscription) => GetClient<ResourcesManagementClient>((uri, credential) => new ResourcesManagementClient(uri, subscription, credential));
+        internal ResourcesManagementClient GetResourcesClient(string subscription) => ClientContext.GetClient<ResourcesManagementClient>((uri, credential) => new ResourcesManagementClient(uri, subscription, credential));
     }
 }
