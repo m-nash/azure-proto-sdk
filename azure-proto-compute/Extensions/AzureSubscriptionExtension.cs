@@ -23,8 +23,9 @@ namespace azure_proto_compute
         /// <param name="top"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static Pageable<VirtualMachineOperations> ListVms(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<VirtualMachineOperations> ListVirtualMachines(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
+            return ResourceListOperations.ListAtContext<VirtualMachineOperations, PhVirtualMachine>(subscription, filter, top, ( cancellationToken);
             var collection = new VirtualMachineCollection(subscription, subscription.Id);
             return new PhWrappingPageable<ResourceClientBase<PhVirtualMachine>, VirtualMachineOperations>(collection.List(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
         }
@@ -50,7 +51,8 @@ namespace azure_proto_compute
         public static Pageable<AvailabilitySetOperations> ListAvailabilitySets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new AvailabilitySetCollection(subscription, subscription.Id);
-            return new PhWrappingPageable<ResourceClientBase<PhAvailabilitySet>, AvailabilitySetOperations>(collection.List(filter, top, cancellationToken), a => new AvailabilitySetOperations(a, a.Context));
+            var pageable = collection.List(filter, top, cancellationToken);
+            return new PhWrappingPageable<ResourceClientBase<PhAvailabilitySet>, AvailabilitySetOperations>(pageable, a => new AvailabilitySetOperations(a, a.Context));
         }
 
         public static AsyncPageable<AvailabilitySetOperations> ListAvailabilitySetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)

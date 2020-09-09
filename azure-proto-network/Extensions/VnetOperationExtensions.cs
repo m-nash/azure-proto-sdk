@@ -49,24 +49,9 @@ namespace azure_proto_network
             return GetSubnetContainer(operations).CreateAsync(name, resourceDetails, cancellationToken);
         }
 
-        public static Pageable<ResourceClientBase<PhSubnet>> ListSubnets(this ResourceClientBase<PhVirtualNetwork> operations, CancellationToken cancellationToken = default)
-        {
-            return GetSubnetCollection(operations).List(null, null, cancellationToken);
-        }
-
-        public static AsyncPageable<ResourceClientBase<PhSubnet>> ListSubnetsAsync(this ResourceClientBase<PhVirtualNetwork> operations, CancellationToken cancellationToken = default)
-        {
-            return GetSubnetCollection(operations).ListAsync(null, null, cancellationToken);
-        }
-
         internal static SubnetContainer GetSubnetContainer(ResourceClientBase<PhVirtualNetwork> operations )
         {
             return new SubnetContainer(operations, operations.Context);
-        }
-
-        internal static SubnetCollection GetSubnetCollection(ResourceClientBase<PhVirtualNetwork> operations )
-        {
-            return new SubnetCollection(operations, operations.Context);
         }
     }
 }

@@ -1,4 +1,9 @@
 ﻿using Azure;
+using Azure.ResourceManager.Resources;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,9 +28,34 @@ namespace azure_proto_core
             Resource = context;
         }
 
-
         protected override Resource Resource { get;  set; }
+
         public override ResourceIdentifier Context => Resource.Id;
+
+        public virtual IEnumerable<Location> ListAvailableLocations(ResourceType resourceType, CancellationToken cancellationToken = default)
+        {
+            return Providers.List(expand: "metadata", cancellationToken: cancellationToken)
+                .FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase))
+                .ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType))
+                .Locations.Select(l => new Location(l));
+        }
+
+        public async virtual IAsyncEnumerable<Location> ListAvailableLocationsAsync(ResourceType resourceType, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            await foreach (var provider in Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken).WithCancellation(cancellationToken))
+            {
+                if (string.Equals(provider.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var foundResource = provider.ResourceTypes.FirstOrDefault(p => ResourceType.Equals(p.ResourceType));
+                    foreach (var location in foundResource.Locations)
+                    {
+                        yield return new Location(location);
+                    }
+                }
+            }
+        }
+
+        protected ProvidersOperations Providers => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Context.Subscription, cred)).Providers;
 
         public virtual bool HasModel { 
             get 
@@ -69,5 +99,4 @@ namespace azure_proto_core
         public abstract Task<ArmOperation<ResourceClientBase<T>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default);        public abstract ArmOperation<Response> Delete();
         public abstract Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default);
     }
-
 }

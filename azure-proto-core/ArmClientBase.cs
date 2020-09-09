@@ -31,9 +31,10 @@ namespace azure_proto_core
         //}
 
         public virtual Location DefaultLocation { get; set; }
-        protected TokenCredential Credential { get; }
 
-        protected Uri BaseUri { get; }
+        internal TokenCredential Credential { get; }
+
+        internal Uri BaseUri { get; }
 
         protected abstract ResourceType ResourceType { get; }
 

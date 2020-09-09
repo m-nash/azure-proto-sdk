@@ -2,6 +2,7 @@
 using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
+using azure_proto_core.Adapters;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -61,6 +62,18 @@ namespace azure_proto_network
             patchable.Tags[key] = value;
             return new PhArmOperation<ResourceClientBase<PhVirtualNetwork>, VirtualNetwork>(await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken),
                 n => { Resource = new PhVirtualNetwork(n); return this; });
+        }
+
+        public Pageable<ResourceClientBase<PhSubnet>> ListSubnets(CancellationToken cancellationToken = default)
+        {
+            var subnetClient = GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).Subnets;
+            return new PhWrappingPageable<Subnet, ResourceClientBase<PhSubnet>>(subnetClient.List(Context.ResourceGroup, Context.Name, cancellationToken), s => new SubnetOperations(this, new PhSubnet(s, DefaultLocation)));
+        }
+
+        public AsyncPageable<ResourceClientBase<PhSubnet>> ListSubnetsAsync(CancellationToken cancellationToken = default)
+        {
+            var subnetClient = GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).Subnets;
+            return new PhWrappingAsyncPageable<Subnet, ResourceClientBase<PhSubnet>>(subnetClient.ListAsync(Context.ResourceGroup, Context.Name, cancellationToken), s => new SubnetOperations(this, new PhSubnet(s, DefaultLocation)));
         }
 
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).VirtualNetworks;

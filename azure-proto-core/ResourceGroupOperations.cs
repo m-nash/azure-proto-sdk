@@ -61,28 +61,6 @@ namespace azure_proto_core
             return new PhArmOperation<ResourceClientBase<PhResourceGroup>, ResourceGroup>(await Operations.UpdateAsync(Context.Name, patch, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public Pageable<ResourceClientBase<T>> ListResource<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
-        {
-            ResourceCollectionOperations<T> collection;
-            if (!ArmClient.Registry.TryGetColletcion<T>(this, Context, out collection))
-            {
-                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
-            }
-
-            return collection.List(filter, top, cancellationToken);
-        }
-
-        public AsyncPageable<ResourceClientBase<T>> ListResourceAsync<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
-        {
-            ResourceCollectionOperations<T> collection;
-            if (!ArmClient.Registry.TryGetColletcion<T>(this, Context, out collection))
-            {
-                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
-            }
-
-            return collection.ListAsync(filter, top, cancellationToken);
-        }
-
         public ArmOperation<ResourceClientBase<T>> CreateResource<T>(string name, T model, azure_proto_core.Location location = default) where T : TrackedResource
         {
 
