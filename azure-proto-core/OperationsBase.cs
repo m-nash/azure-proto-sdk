@@ -10,15 +10,12 @@ namespace azure_proto_core
     {
         public OperationsBase(OperationsBase parent, ResourceIdentifier context) : this(parent.ClientContext, context)
         {
-            Validate(context);
-            Context = context;
             DefaultLocation = parent.DefaultLocation;
         }
 
-        public OperationsBase(OperationsBase parent, Resource context) : this(parent, context.Id)
+        public OperationsBase(OperationsBase parent, Resource context) : this(parent.ClientContext, context.Id)
         {
-            Validate(context?.Id);
-            Context = context?.Id;
+            DefaultLocation = parent.DefaultLocation;
             var tracked = context as TrackedResource;
             if (tracked != null)
             {
@@ -33,18 +30,18 @@ namespace azure_proto_core
             ClientContext = parent;
             Validate(context);
             Context = context;
-            DefaultLocation = Location.Default;
+            DefaultLocation ??= Location.Default;
+            Resource ??= new ArmResource(context);
         }
 
         public OperationsBase(ArmClientContext parent, Resource context) : this(parent, context.Id)
         {
-            Validate(context?.Id);
-            Context = context?.Id;
             var tracked = context as TrackedResource;
             if (tracked != null)
             {
                 DefaultLocation = tracked.Location;
             }
+
             Resource = context;
         }
 
