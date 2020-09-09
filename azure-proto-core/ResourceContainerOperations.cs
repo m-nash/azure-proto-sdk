@@ -49,21 +49,10 @@ namespace azure_proto_core
             return Create(resourceDetails.Name, resourceDetails);
         }
 
-        public abstract ArmOperation<ResourceOperationsBase<T>> Create(string name, T resourceDetails = null);
+        public abstract ArmOperation<ResourceOperationsBase<T>> Create(string name, T resourceDetails);
+
+
         public virtual Task<ArmOperation<ResourceOperationsBase<T>>> CreateAsync(T resourceDetails, CancellationToken cancellationToken = default)
-        {
-            T resourceDetails = Resource as T;
-            if (null == resourceDetails)
-            {
-                throw new InvalidOperationException("You must pass in resource details.");
-            }
-
-            return Create(name, resourceDetails);
-        }
-
-        public abstract ArmOperation<ResourceClientBase<T>> Create(string name, T resourceDetails = null);
-
-        public virtual Task<ArmOperation<ResourceClientBase<T>>> CreateAsync(T resourceDetails, CancellationToken cancellationToken = default)
         {
             return CreateAsync(resourceDetails?.Id?.Name, resourceDetails, cancellationToken);
         }

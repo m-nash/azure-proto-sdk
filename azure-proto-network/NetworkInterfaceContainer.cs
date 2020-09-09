@@ -26,10 +26,6 @@ namespace azure_proto_network
 
         public NetworkInterfaceContainer(OperationsBase parent, TrackedResource context) : base(parent, context)
         {
-            var operation = Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, resourceDetails);
-            return new PhArmOperation<ResourceClientBase<PhNetworkInterface>, Azure.ResourceManager.Network.Models.NetworkInterface>(
-                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new NetworkInterfaceOperations(this, new PhNetworkInterface(n)));
         }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";

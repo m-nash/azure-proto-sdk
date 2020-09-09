@@ -57,7 +57,7 @@ namespace azure_proto_network
         /// <returns>A network security group with the given set of rules merged with thsi one</returns>
         public ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>> UpdateRules(CancellationToken cancellationToken = default, params SecurityRule[] rules)
         {
-            var model = GetModelIfNewer();
+            var model = Model;
             foreach (var rule in rules)
             {
                 // Note that this makes use of the 

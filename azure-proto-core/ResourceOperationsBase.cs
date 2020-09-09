@@ -33,8 +33,6 @@ namespace azure_proto_core
             Resource = context;
         }
 
-
-
         protected override Resource Resource { get;  set; }
         public override ResourceIdentifier Context => Resource.Id;
 
@@ -46,10 +44,23 @@ namespace azure_proto_core
             }
         }
 
-        protected virtual Resource Resource { get; set; }
+        public T Model 
+        { 
+            get
+            {
+                return Resource as T;
+            } 
+        }
 
-        public virtual ResourceIdentifier Context { get; }
-        public virtual Resource Resource { get; }
+        public T GetModelIfNewer()
+        {
+            if (HasModel)
+            {
+                return Model;
+            }
+
+            return Get().Value.Model;
+        }
 
         public abstract Response<ResourceOperationsBase<T>> Get();
         public abstract Task<Response<ResourceOperationsBase<T>>> GetAsync(CancellationToken cancellationToken = default);

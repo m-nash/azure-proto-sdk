@@ -11,7 +11,7 @@ namespace client
             var createMultipleVms = new CreateMultipleVms(Context);
             createMultipleVms.Execute();
 
-            var sub = new ArmClient().Subscriptions(Context.SubscriptionId);
+            var sub = new ArmClient().Subscription(Context.SubscriptionId);
 
             foreach(var vm in sub.ListVms("even"))
             {

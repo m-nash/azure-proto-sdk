@@ -21,15 +21,17 @@ namespace azure_proto_network
         {
         }
 
-        //TODO make the StartCreate and Create consistent
-        {
-        }
-
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
 
+        //TODO make the StartCreate and Create consistent
         public override ArmOperation<ResourceOperationsBase<PhVirtualNetwork>> Create(string name, PhVirtualNetwork resourceDetails)
         {
             return new PhArmOperation<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(Operations.StartCreateOrUpdate(Context.ResourceGroup, name, resourceDetails), n => Vnet(new PhVirtualNetwork(n)));
+        }
+
+        public async override Task<ArmOperation<ResourceOperationsBase<PhVirtualNetwork>>> CreateAsync(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
+        {
+            return new PhArmOperation<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails, cancellationToken), n => Vnet(new PhVirtualNetwork(n)));
         }
 
         internal VirtualNetworkOperations Vnet(TrackedResource vnet)

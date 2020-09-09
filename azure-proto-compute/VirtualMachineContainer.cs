@@ -34,7 +34,7 @@ namespace azure_proto_compute
         {
             resourceDetails ??= Resource as PhVirtualMachine;
             var operation = Operations.StartCreateOrUpdate(base.Context.ResourceGroup, name, resourceDetails.Model);
-            return new PhArmOperation<ResourceClientBase<PhVirtualMachine>, VirtualMachine>(operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(), v => Vm(new PhVirtualMachine(v)));
+            return new PhArmOperation<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(), v => Vm(new PhVirtualMachine(v)));
         }
 
         public async override Task<ArmOperation<ResourceOperationsBase<PhVirtualMachine>>> CreateAsync(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)

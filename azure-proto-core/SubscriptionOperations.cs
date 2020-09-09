@@ -20,16 +20,16 @@ namespace azure_proto_core
         public ResourceIdentifier Id { get; private set; }
         public SubscriptionOperations(ArmClientContext parent, string defaultSubscription) :base(parent, $"/subscriptions/{defaultSubscription}")
         {
-            Id = new ResourceIdentifier($"/subscriptions/{subscriptionId}");
+            Id = new ResourceIdentifier($"/subscriptions/{defaultSubscription}");
         }
         public SubscriptionOperations(ArmClientContext parent, ResourceIdentifier defaultSubscription) : base(parent, defaultSubscription)
         {
-            Id = subscriptionId;
+            Id = defaultSubscription;
         }
 
         public SubscriptionOperations(ArmClientContext parent, Resource defaultSubscription) : base(parent, defaultSubscription)
         {
-            Id = subscriptionId.Id;
+            Id = defaultSubscription.Id;
         }
 
         public ArmOperation<ResourceGroupOperations> CreateResourceGroup(string name, PhResourceGroup resourceDetails)
@@ -62,7 +62,7 @@ namespace azure_proto_core
         public Pageable<ResourceOperationsBase<T>> ListResource<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
-            if (!ArmClient.Registry.TryGetColletcion<T>(this.ClientContext, $"/subscriptions/{DefaultSubscription}", out collection))
+            if (!ArmClient.Registry.TryGetColletcion<T>(this.ClientContext, Id, out collection))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
@@ -95,7 +95,7 @@ namespace azure_proto_core
         public AsyncPageable<ResourceOperationsBase<T>> ListResourceAsync<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
-            if (!ArmClient.Registry.TryGetColletcion<T>(this.ClientContext, $"/subscriptions/{DefaultSubscription}", out collection))
+            if (!ArmClient.Registry.TryGetColletcion<T>(this.ClientContext, Id, out collection))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }

@@ -42,17 +42,16 @@ namespace azure_proto_core
             ClientContext = new ArmClientContext(new Uri(DefaultUri), new DefaultAzureCredential());
             DefaultSubscription = new SubscriptionOperations(this.ClientContext, new ResourceIdentifier($"/subscriptions/{GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult()}"));
         }
-        public ArmClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId) : base(baseUri, credential)
+        public ArmClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId) 
         {
             ClientContext = new ArmClientContext(new Uri(DefaultUri), new DefaultAzureCredential());
-            DefaultSubscription = new SubscriptionOperations(this.ClientContext, new ResourceIdentifier($"/subscriptions/{subscription}"));
+            DefaultSubscription = new SubscriptionOperations(this.ClientContext, new ResourceIdentifier($"/subscriptions/{defaultSubscriptionId}"));
         }
 
         public SubscriptionOperations DefaultSubscription { get; private set; }
         internal virtual ArmClientContext ClientContext { get; }
-        public SubscriptionOperations Subscriptions() => new SubscriptionOperations(this, DefaultSubscription);
 
-        public SubscriptionOperations Subscriptions(PhSubscriptionModel subscription) => new SubscriptionOperations(this.ClientContext, subscription);
+        public SubscriptionOperations Subscription(PhSubscriptionModel subscription) => new SubscriptionOperations(this.ClientContext, subscription);
 
         /// <summary>
         /// TODO: represent strings that take both resource id or just subscription id
@@ -60,8 +59,8 @@ namespace azure_proto_core
         /// </summary>
         /// <param name="subscription"></param>
         /// <returns></returns>
-        public SubscriptionOperations Subscriptions(ResourceIdentifier subscription) => new SubscriptionOperations(this.ClientContext, subscription);
-        public SubscriptionOperations Subscriptions(string subscription) => new SubscriptionOperations(this.ClientContext, $"/subscriptions/{subscription}");
+        public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(this.ClientContext, subscription);
+        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(this.ClientContext, $"/subscriptions/{subscription}");
 
         public AsyncPageable<SubscriptionOperations> ListSubscriptionsAsync(CancellationToken token = default)
         {

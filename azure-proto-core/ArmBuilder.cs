@@ -17,7 +17,7 @@ namespace azure_proto_core
         }
 
         //TODO: should not allow both on the same type
-        public virtual ArmOperation<ResourceClientBase<T>> Create(string name)
+        public virtual ArmOperation<ResourceOperationsBase<T>> Create(string name)
         {
             if (null == _resource)
             {
@@ -27,7 +27,7 @@ namespace azure_proto_core
             return _containerOperations.Create(name, _resource);
         }
 
-        public virtual ArmOperation<ResourceClientBase<T>> Create()
+        public virtual ArmOperation<ResourceOperationsBase<T>> Create()
         {
             if (null == _resource)
             {

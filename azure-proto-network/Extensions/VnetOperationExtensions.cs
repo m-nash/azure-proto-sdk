@@ -23,7 +23,7 @@ namespace azure_proto_network
             return new SubnetOperations(operations, $"{operations.Context}/subnets/{subnet}");
         }
 
-        public static SubnetContainer ConstructSubnet(this ResourceOperationsBase<PhVirtualNetwork> operations, string name, string cidr, Location location = null, PhNetworkSecurityGroup group = null)
+        public static ArmBuilder<PhSubnet> ConstructSubnet(this ResourceOperationsBase<PhVirtualNetwork> operations, string name, string cidr, Location location = null, PhNetworkSecurityGroup group = null)
         {
             var subnet = new Subnet()
             {
