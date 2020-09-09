@@ -8,22 +8,22 @@ namespace azure_proto_network
 {
     public static class VnetOperationExtensions
     {
-        public static SubnetOperations Subnet(this ResourceClientBase<PhVirtualNetwork> operations, TrackedResource subnet)
+        public static SubnetOperations Subnet(this ResourceOperationsBase<PhVirtualNetwork> operations, TrackedResource subnet)
         {
             return new SubnetOperations(operations, subnet);
         }
 
-        public static SubnetOperations Subnet(this ResourceClientBase<PhVirtualNetwork> operations, ResourceIdentifier subnet)
+        public static SubnetOperations Subnet(this ResourceOperationsBase<PhVirtualNetwork> operations, ResourceIdentifier subnet)
         {
             return new SubnetOperations(operations, subnet);
         }
 
-        public static SubnetOperations Subnet(this ResourceClientBase<PhVirtualNetwork> operations, string subnet)
+        public static SubnetOperations Subnet(this ResourceOperationsBase<PhVirtualNetwork> operations, string subnet)
         {
             return new SubnetOperations(operations, $"{operations.Context}/subnets/{subnet}");
         }
 
-        public static SubnetContainer ConstructSubnet(this ResourceClientBase<PhVirtualNetwork> operations, string name, string cidr, Location location = null, PhNetworkSecurityGroup group = null)
+        public static SubnetContainer ConstructSubnet(this ResourceOperationsBase<PhVirtualNetwork> operations, string name, string cidr, Location location = null, PhNetworkSecurityGroup group = null)
         {
             var subnet = new Subnet()
             {
@@ -39,32 +39,32 @@ namespace azure_proto_network
             return new SubnetContainer(operations, new PhSubnet(subnet, location ?? operations.DefaultLocation));
         }
 
-        public static ArmOperation<ResourceClientBase<PhSubnet>> CreateSubnet(this ResourceClientBase<PhVirtualNetwork> operations, string name, PhSubnet resourceDetails)
+        public static ArmOperation<ResourceOperationsBase<PhSubnet>> CreateSubnet(this ResourceOperationsBase<PhVirtualNetwork> operations, string name, PhSubnet resourceDetails)
         {
             return GetSubnetContainer(operations).Create(name, resourceDetails);
         }
 
-        public static Task<ArmOperation<ResourceClientBase<PhSubnet>>> CreateSubnetAsync(this ResourceClientBase<PhVirtualNetwork> operations, string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmOperation<ResourceOperationsBase<PhSubnet>>> CreateSubnetAsync(this ResourceOperationsBase<PhVirtualNetwork> operations, string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
         {
             return GetSubnetContainer(operations).CreateAsync(name, resourceDetails, cancellationToken);
         }
 
-        public static Pageable<ResourceClientBase<PhSubnet>> ListSubnets(this ResourceClientBase<PhVirtualNetwork> operations, CancellationToken cancellationToken = default)
+        public static Pageable<ResourceOperationsBase<PhSubnet>> ListSubnets(this ResourceOperationsBase<PhVirtualNetwork> operations, CancellationToken cancellationToken = default)
         {
             return GetSubnetCollection(operations).List(null, null, cancellationToken);
         }
 
-        public static AsyncPageable<ResourceClientBase<PhSubnet>> ListSubnetsAsync(this ResourceClientBase<PhVirtualNetwork> operations, CancellationToken cancellationToken = default)
+        public static AsyncPageable<ResourceOperationsBase<PhSubnet>> ListSubnetsAsync(this ResourceOperationsBase<PhVirtualNetwork> operations, CancellationToken cancellationToken = default)
         {
             return GetSubnetCollection(operations).ListAsync(null, null, cancellationToken);
         }
 
-        internal static SubnetContainer GetSubnetContainer(ResourceClientBase<PhVirtualNetwork> operations )
+        internal static SubnetContainer GetSubnetContainer(ResourceOperationsBase<PhVirtualNetwork> operations )
         {
             return new SubnetContainer(operations, operations.Context);
         }
 
-        internal static SubnetCollection GetSubnetCollection(ResourceClientBase<PhVirtualNetwork> operations )
+        internal static SubnetCollection GetSubnetCollection(ResourceOperationsBase<PhVirtualNetwork> operations )
         {
             return new SubnetCollection(operations, operations.Context);
         }

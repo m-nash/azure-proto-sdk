@@ -7,6 +7,7 @@ namespace azure_proto_core
 {
     /// <summary>
     /// Abstract class for long-running or synchronous applications. If we want to add ARM-specific OM, this is where we would add it.
+    /// We may need to add ARM-specific OM, as customers have asked for additional configurability over polling stratgies on a per-operation basis
     /// TODO: Remove protected properties, as this should be integrated into the generated client
     /// </summary>
     /// <typeparam name="T"></typeparam>

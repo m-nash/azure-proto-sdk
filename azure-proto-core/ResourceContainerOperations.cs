@@ -18,20 +18,21 @@ namespace azure_proto_core
     /// </summary>
     /// <typeparam name="T">The type of the resource model</typeparam>
     /// <typeparam name="U">The return type of the Creation methods, this can be Response<typeparamref name="T"/> or a long-running response</typeparam>
-    public abstract class ResourceContainerOperations<T> : ResourceOperationsBase where T : Resource
+    public abstract class ResourceContainerOperations<T> : OperationsBase where T : Resource
     {
-        protected ResourceContainerOperations(ArmClientBase parent, ResourceIdentifier contexts) : base(parent, contexts)
-        {
-        }
-        protected ResourceContainerOperations(ArmClientBase parent, Resource contexts) : base(parent, contexts)
+        protected ResourceContainerOperations(ArmClientContext parent, ResourceIdentifier contexts) : base(parent, contexts)
         {
         }
 
-        protected ResourceContainerOperations(ResourceOperationsBase parent, ResourceIdentifier contexts) : base(parent, contexts)
+        protected ResourceContainerOperations(ArmClientContext parent, Resource contexts) : base(parent, contexts)
         {
         }
 
-        protected ResourceContainerOperations(ResourceOperationsBase parent, Resource contexts) : base(parent, contexts)
+        protected ResourceContainerOperations(OperationsBase parent, ResourceIdentifier contexts) : base(parent, contexts)
+        {
+        }
+
+        protected ResourceContainerOperations(OperationsBase parent, Resource contexts) : base(parent, contexts)
         {
         }
 
@@ -43,35 +44,17 @@ namespace azure_proto_core
             }
         }
 
-        public virtual ArmOperation<ResourceClientBase<T>> Create(T resourceDetails = null)
+        public virtual ArmOperation<ResourceOperationsBase<T>> Create(T resourceDetails)
         {
-            resourceDetails ??= Resource as T;
-            if (null == resourceDetails)
-            {
-                throw new InvalidOperationException("You must pass in resource details.");
-            }
-            return Create(resourceDetails.Id.Name, resourceDetails);
+            return Create(resourceDetails.Name, resourceDetails);
         }
 
-        public virtual ArmOperation<ResourceClientBase<T>> Create(string name)
-        {
-            T resourceDetails = Resource as T;
-            if (null == resourceDetails)
-            {
-                throw new InvalidOperationException("You must pass in resource details.");
-            }
-
-            return Create(name, resourceDetails);
-        }
-
-
-        public abstract ArmOperation<ResourceClientBase<T>> Create(string name, T resourceDetails = null);
-        public virtual Task<ArmOperation<ResourceClientBase<T>>> CreateAsync(T resourceDetails, CancellationToken cancellationToken = default)
+        public abstract ArmOperation<ResourceOperationsBase<T>> Create(string name, T resourceDetails = null);
+        public virtual Task<ArmOperation<ResourceOperationsBase<T>>> CreateAsync(T resourceDetails, CancellationToken cancellationToken = default)
         {
             return CreateAsync(resourceDetails?.Id?.Name, resourceDetails, cancellationToken);
         }
 
-        public abstract Task<ArmOperation<ResourceClientBase<T>>> CreateAsync(string name, T resourceDetails, CancellationToken cancellationToken = default);
-
+        public abstract Task<ArmOperation<ResourceOperationsBase<T>>> CreateAsync(string name, T resourceDetails, CancellationToken cancellationToken = default);
     }
 }

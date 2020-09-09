@@ -8,6 +8,20 @@ namespace client
 {
     class ShutdownVmsByNameAcrossSubscriptions : Scenario
     {
+        public async void ShutdownAsync()
+        {
+            var client = new ArmClient();
+
+            await foreach (var subscription in client.ListSubscriptionsAsync())
+            {
+                await foreach (var vm in subscription.ListVmsAsync("even"))
+                {
+                    await vm.StopAsync();
+                    await vm.StartAsync();
+                }
+            }
+        }
+
         public override void Execute()
         {
             #region SETUP
@@ -28,6 +42,7 @@ namespace client
             var client = new ArmClient();
 
             Regex reg = new Regex($"{Context.VmName}.*even");
+
             Parallel.ForEach(client.ListSubscriptions(), sub =>
            {
                Parallel.ForEach(sub.ListVms(), vm =>

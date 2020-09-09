@@ -16,15 +16,15 @@ namespace azure_proto_core.Internal
     /// <typeparam name="T"></typeparam>
     public class ArmResourceRegistration<T> where T : TrackedResource
     {
-        Func<ArmClientBase, TrackedResource, ResourceContainerOperations<T>> _containerFactory;
-        Func<ArmClientBase, ResourceIdentifier, ResourceCollectionOperations<T>> _collectionFactory;
-        Func<ArmClientBase, Resource, ResourceClientBase<T>> _operationsFactory;
+        Func<ArmClientContext, TrackedResource, ResourceContainerOperations<T>> _containerFactory;
+        Func<ArmClientContext, ResourceIdentifier, ResourceCollectionOperations<T>> _collectionFactory;
+        Func<ArmClientContext, Resource, ResourceOperationsBase<T>> _operationsFactory;
 
 
         public ArmResourceRegistration(
-            ResourceType type, Func<ArmClientBase, TrackedResource, ResourceContainerOperations<T>> containerFactory,
-            Func<ArmClientBase, ResourceIdentifier, ResourceCollectionOperations<T>> collectionFactory,
-            Func<ArmClientBase, Resource, ResourceClientBase<T>> operationsFactory)
+            ResourceType type, Func<ArmClientContext, TrackedResource, ResourceContainerOperations<T>> containerFactory,
+            Func<ArmClientContext, ResourceIdentifier, ResourceCollectionOperations<T>> collectionFactory,
+            Func<ArmClientContext, Resource, ResourceOperationsBase<T>> operationsFactory)
         {
 
             ResourceType = type;
@@ -40,8 +40,8 @@ namespace azure_proto_core.Internal
         public virtual bool HasOperations => _operationsFactory != null;
         public virtual bool HasContainer => _containerFactory != null;
         public virtual bool HasCollection => _collectionFactory != null;
-        public ResourceClientBase<T> GetOperations(ArmClientBase parent, Resource context) => _operationsFactory(parent, context);
-        public ResourceContainerOperations<T> GetContainer(ArmClientBase parent, TrackedResource parentContext) => _containerFactory(parent, parentContext);
-        public ResourceCollectionOperations<T> GetCollection(ArmClientBase parent, ResourceIdentifier parentContext) => _collectionFactory(parent, parentContext);
+        public ResourceOperationsBase<T> GetOperations(ArmClientContext parent, Resource context) => _operationsFactory(parent, context);
+        public ResourceContainerOperations<T> GetContainer(ArmClientContext parent, TrackedResource parentContext) => _containerFactory(parent, parentContext);
+        public ResourceCollectionOperations<T> GetCollection(ArmClientContext parent, ResourceIdentifier parentContext) => _collectionFactory(parent, parentContext);
     }
 }

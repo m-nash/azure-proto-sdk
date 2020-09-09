@@ -1,6 +1,7 @@
 ﻿using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Compute.Models;
 using azure_proto_core;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,26 +12,33 @@ namespace azure_proto_compute
     /// </summary>
     public class VirtualMachineContainer : ResourceContainerOperations<PhVirtualMachine>
     {
-        public VirtualMachineContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
+        public VirtualMachineContainer(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public VirtualMachineContainer(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
+        public VirtualMachineContainer(ArmClientContext parent, azure_proto_core.Resource context) : base(parent, context)
         {
-            
         }
 
-        protected override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
+        public VirtualMachineContainer(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
+        {
+        }
 
-        public override ArmOperation<ResourceClientBase<PhVirtualMachine>> Create(string name, PhVirtualMachine resourceDetails = null)
+        public VirtualMachineContainer(OperationsBase parent, azure_proto_core.Resource context) : base(parent, context)
+        {
+        }
+
+        public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
+
+        public override ArmOperation<ResourceOperationsBase<PhVirtualMachine>> Create(string name, PhVirtualMachine resourceDetails = null)
         {
             resourceDetails ??= Resource as PhVirtualMachine;
-            return new PhArmOperation<ResourceClientBase<PhVirtualMachine>, VirtualMachine>(Operations.StartCreateOrUpdate(base.Context.ResourceGroup, name, resourceDetails.Model), v => Vm(new PhVirtualMachine(v)));
+            return new PhArmOperation<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(Operations.StartCreateOrUpdate(base.Context.ResourceGroup, name, resourceDetails.Model), v => Vm(new PhVirtualMachine(v)));
         }
 
-        public async override Task<ArmOperation<ResourceClientBase<PhVirtualMachine>>> CreateAsync(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperationsBase<PhVirtualMachine>>> CreateAsync(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<ResourceClientBase<PhVirtualMachine>, VirtualMachine>(await Operations.StartCreateOrUpdateAsync(base.Context.ResourceGroup, name, resourceDetails.Model, cancellationToken), v =>  Vm(new PhVirtualMachine(v)));
+            return new PhArmOperation<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(await Operations.StartCreateOrUpdateAsync(base.Context.ResourceGroup, name, resourceDetails.Model, cancellationToken), v =>  Vm(new PhVirtualMachine(v)));
         }
 
         public VirtualMachineOperations Vm(string vmName)
@@ -48,7 +56,7 @@ namespace azure_proto_compute
             return new VirtualMachineOperations(this, vm);
         }
 
-        internal VirtualMachinesOperations Operations => new ComputeManagementClient(BaseUri, Context.Subscription, Credential).VirtualMachines;
+        internal VirtualMachinesOperations Operations => this.GetClient<ComputeManagementClient>((baseUri, cred) =>  new ComputeManagementClient(baseUri, Context.Subscription, cred)).VirtualMachines;
 
     }
 }

@@ -12,16 +12,23 @@ namespace azure_proto_compute
     /// <summary>
     /// Operations over a single virtual machine
     /// </summary>
-    public class VirtualMachineOperations : ResourceClientBase<PhVirtualMachine>
+    public class VirtualMachineOperations : ResourceOperationsBase<PhVirtualMachine>
     {
-        public VirtualMachineOperations(ArmClientBase parent, TrackedResource context) : base(parent, context)
+        public VirtualMachineOperations(ArmClientContext parent, TrackedResource context) : base(parent, context)
         {
         }
 
-        public VirtualMachineOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
+        public VirtualMachineOperations(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
         {
         }
-        protected override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
+        public VirtualMachineOperations(OperationsBase parent, TrackedResource context) : base(parent, context)
+        {
+        }
+
+        public VirtualMachineOperations(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
+        {
+        }
+        public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 
         public override ArmOperation<Response> Delete()
         {
@@ -55,41 +62,41 @@ namespace azure_proto_compute
         }
 
 
-        public override Response<ResourceClientBase<PhVirtualMachine>> Get()
+        public override Response<ResourceOperationsBase<PhVirtualMachine>> Get()
         {
-            return new PhArmResponse<ResourceClientBase<PhVirtualMachine>, VirtualMachine>(Operations.Get(Context.ResourceGroup, Context.Name), v => { Resource = new PhVirtualMachine(v); return this; } );
+            return new PhArmResponse<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(Operations.Get(Context.ResourceGroup, Context.Name), v => { Resource = new PhVirtualMachine(v); return this; } );
         }
 
-        public async override Task<Response<ResourceClientBase<PhVirtualMachine>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<Response<ResourceOperationsBase<PhVirtualMachine>>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<ResourceClientBase<PhVirtualMachine>, VirtualMachine>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, cancellationToken), v => { Resource = new PhVirtualMachine(v); return this; });
+            return new PhArmResponse<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, cancellationToken), v => { Resource = new PhVirtualMachine(v); return this; });
         }
 
-        public ArmOperation<ResourceClientBase<PhVirtualMachine>> Update(VirtualMachineUpdate patchable)
+        public ArmOperation<ResourceOperationsBase<PhVirtualMachine>> Update(VirtualMachineUpdate patchable)
         {
-            return new PhArmOperation<ResourceClientBase<PhVirtualMachine>, VirtualMachine>(Operations.StartUpdate(Context.ResourceGroup, Context.Name, patchable), v => { Resource = new PhVirtualMachine(v); return this; });
+            return new PhArmOperation<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(Operations.StartUpdate(Context.ResourceGroup, Context.Name, patchable), v => { Resource = new PhVirtualMachine(v); return this; });
         }
 
-        public async Task<ArmOperation<ResourceClientBase<PhVirtualMachine>>> UpdateAsync(VirtualMachineUpdate patchable, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<ResourceOperationsBase<PhVirtualMachine>>> UpdateAsync(VirtualMachineUpdate patchable, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<ResourceClientBase<PhVirtualMachine>, VirtualMachine>(await Operations.StartUpdateAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken), v => { Resource = new PhVirtualMachine(v); return this; });
+            return new PhArmOperation<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(await Operations.StartUpdateAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken), v => { Resource = new PhVirtualMachine(v); return this; });
         }
 
-        public override ArmOperation<ResourceClientBase<PhVirtualMachine>> AddTag(string key, string value)
+        public override ArmOperation<ResourceOperationsBase<PhVirtualMachine>> AddTag(string key, string value)
         {
             var patchable = new VirtualMachineUpdate { Tags= new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)};
             patchable.Tags.Add(key, value);
-            return new PhArmOperation<ResourceClientBase<PhVirtualMachine>, VirtualMachine>(Operations.StartUpdate(Context.ResourceGroup, Context.Name, patchable), v => { Resource = new PhVirtualMachine(v); return this; });
+            return new PhArmOperation<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(Operations.StartUpdate(Context.ResourceGroup, Context.Name, patchable), v => { Resource = new PhVirtualMachine(v); return this; });
         }
 
-        public override async Task<ArmOperation<ResourceClientBase<PhVirtualMachine>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public override async Task<ArmOperation<ResourceOperationsBase<PhVirtualMachine>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new VirtualMachineUpdate { Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) };
             patchable.Tags.Add(key, value);
-            return new PhArmOperation<ResourceClientBase<PhVirtualMachine>, VirtualMachine>(await Operations.StartUpdateAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken), v => { Resource = new PhVirtualMachine(v); return this; });
+            return new PhArmOperation<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(await Operations.StartUpdateAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken), v => { Resource = new PhVirtualMachine(v); return this; });
         }
 
 
-        internal VirtualMachinesOperations Operations => new ComputeManagementClient(BaseUri, Context.Subscription, Credential).VirtualMachines;
+        internal VirtualMachinesOperations Operations => GetClient<ComputeManagementClient>((baseUri, creds) => new ComputeManagementClient(baseUri, Context.Subscription, creds)).VirtualMachines;
     }
 }

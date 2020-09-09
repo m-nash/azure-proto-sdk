@@ -15,19 +15,19 @@ namespace azure_proto_core
     /// Subscription operations
     /// TODO: Look at selecting subscriptions by name
     /// </summary>
-    public class SubscriptionOperations : ArmClientBase
+    public class SubscriptionOperations : OperationsBase
     {
         public Resource DefaultSubscription { get; }
-        public SubscriptionOperations(ArmClientBase parent, string defaultSubscription) :base(parent)
+        public SubscriptionOperations(ArmClientContext parent, string defaultSubscription) :base(parent, $"/subscriptions/{defaultSubscription}")
         {
             DefaultSubscription = new ArmResource($"/subscriptions/{defaultSubscription}");
         }
-        public SubscriptionOperations(ArmClientBase parent, ResourceIdentifier defaultSubscription) : base(parent)
+        public SubscriptionOperations(ArmClientContext parent, ResourceIdentifier defaultSubscription) : base(parent, defaultSubscription)
         {
             DefaultSubscription = new ArmResource(defaultSubscription);
         }
 
-        public SubscriptionOperations(ArmClientBase parent, Resource defaultSubscription) : base(parent)
+        public SubscriptionOperations(ArmClientContext parent, Resource defaultSubscription) : base(parent, defaultSubscription)
         {
             DefaultSubscription = defaultSubscription;
         }
@@ -66,10 +66,10 @@ namespace azure_proto_core
             return new PhWrappingAsyncPageable<ResourceGroup, ResourceGroupOperations>(RgOperations.ListAsync(null, null, cancellationToken), s => new ResourceGroupOperations(this, new PhResourceGroup(s)));
         }
 
-        public Pageable<ResourceClientBase<T>> ListResource<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        public Pageable<ResourceOperationsBase<T>> ListResource<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
-            if (!ArmClient.Registry.TryGetColletcion<T>(this, $"/subscriptions/{DefaultSubscription}", out collection))
+            if (!ArmClient.Registry.TryGetColletcion<T>(this.ClientContext, $"/subscriptions/{DefaultSubscription}", out collection))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
@@ -77,10 +77,10 @@ namespace azure_proto_core
             return collection.List(filter, top, cancellationToken);
         }
 
-        public Pageable<ResourceClientBase<T>> ListResource<T>(ResourceIdentifier subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        public Pageable<ResourceOperationsBase<T>> ListResource<T>(ResourceIdentifier subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
-            if (!ArmClient.Registry.TryGetColletcion<T>(this, subscription, out collection))
+            if (!ArmClient.Registry.TryGetColletcion<T>(this.ClientContext, subscription, out collection))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
@@ -88,10 +88,10 @@ namespace azure_proto_core
             return collection.List(filter, top, cancellationToken);
         }
 
-        public Pageable<ResourceClientBase<T>> ListResource<T>(PhSubscriptionModel subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        public Pageable<ResourceOperationsBase<T>> ListResource<T>(PhSubscriptionModel subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
-            if (!ArmClient.Registry.TryGetColletcion<T>(this, subscription.Id, out collection))
+            if (!ArmClient.Registry.TryGetColletcion<T>(this.ClientContext, subscription.Id, out collection))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
@@ -99,10 +99,10 @@ namespace azure_proto_core
             return collection.List(filter, top, cancellationToken);
         }
 
-        public AsyncPageable<ResourceClientBase<T>> ListResourceAsync<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        public AsyncPageable<ResourceOperationsBase<T>> ListResourceAsync<T>(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
-            if (!ArmClient.Registry.TryGetColletcion<T>(this, $"/subscriptions/{DefaultSubscription}", out collection))
+            if (!ArmClient.Registry.TryGetColletcion<T>(this.ClientContext, $"/subscriptions/{DefaultSubscription}", out collection))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
@@ -110,10 +110,10 @@ namespace azure_proto_core
             return collection.ListAsync(filter, top, cancellationToken);
         }
 
-        public AsyncPageable<ResourceClientBase<T>> ListResourceAsync<T>(ResourceIdentifier resource, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        public AsyncPageable<ResourceOperationsBase<T>> ListResourceAsync<T>(ResourceIdentifier resource, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
-            if (!ArmClient.Registry.TryGetColletcion<T>(this, resource, out collection))
+            if (!ArmClient.Registry.TryGetColletcion<T>(this.ClientContext, resource, out collection))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
@@ -121,10 +121,10 @@ namespace azure_proto_core
             return collection.ListAsync(filter, top, cancellationToken);
         }
 
-        public AsyncPageable<ResourceClientBase<T>> ListResourceAsync<T>(PhSubscriptionModel model, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
+        public AsyncPageable<ResourceOperationsBase<T>> ListResourceAsync<T>(PhSubscriptionModel model, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default) where T : TrackedResource
         {
             ResourceCollectionOperations<T> collection;
-            if (!ArmClient.Registry.TryGetColletcion<T>(this, model.Id, out collection))
+            if (!ArmClient.Registry.TryGetColletcion<T>(this.ClientContext, model.Id, out collection))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
@@ -148,7 +148,7 @@ namespace azure_proto_core
             return new ResourceGroupOperations(this, $"{DefaultSubscription.Id}/resourceGroups/{resourceGroup}");
         }
 
-        protected override ResourceType ResourceType => ResourceType.None;
+        public override ResourceType ResourceType => ResourceType.None;
 
         internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred)).Subscriptions;
 
