@@ -53,7 +53,6 @@ namespace azure_proto_compute
             return new AvailabilitySetOperations(this, vm);
         }
 
-
         internal AvailabilitySetsOperations Operations => GetClient<ComputeManagementClient>((uri, cred) => new ComputeManagementClient(uri, Context.Subscription, cred)).AvailabilitySets;
     }
 }

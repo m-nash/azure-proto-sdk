@@ -21,7 +21,7 @@ namespace azure_proto_network
         {
         }
 
-        public VirtualNetworkContainer(OperationsBase parent, azure_proto_core.Resource context) : base(parent, context)
+        //TODO make the StartCreate and Create consistent
         {
         }
 
@@ -32,27 +32,11 @@ namespace azure_proto_network
             return new PhArmOperation<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(Operations.StartCreateOrUpdate(Context.ResourceGroup, name, resourceDetails), n => Vnet(new PhVirtualNetwork(n)));
         }
 
-        public async override Task<ArmOperation<ResourceOperationsBase<PhVirtualNetwork>>> CreateAsync(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
-        {
-            return new PhArmOperation<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails, cancellationToken), n => Vnet(new PhVirtualNetwork(n)));
-        }
-
-        public PhVirtualNetwork ConstructVnet(string vnetCidr, Location location = null)
-        {
-            var vnet = new VirtualNetwork()
-            {
-                Location = location ?? DefaultLocation,
-                AddressSpace = new AddressSpace() { AddressPrefixes = new List<string>() { vnetCidr } },
-            };
-            return new PhVirtualNetwork(vnet);
-        }
-
         internal VirtualNetworkOperations Vnet(TrackedResource vnet)
         {
             return new VirtualNetworkOperations(this, vnet);
         }
 
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).VirtualNetworks;
-
     }
 }

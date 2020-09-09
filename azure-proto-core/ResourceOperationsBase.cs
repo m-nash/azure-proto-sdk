@@ -46,33 +46,10 @@ namespace azure_proto_core
             }
         }
 
-        public virtual T Model
-        {
-            get
-            {
-                return Resource as T;
-            }
-        }
+        protected virtual Resource Resource { get; set; }
 
-        public async virtual Task<T> GetModelIfNewerAsync(CancellationToken cancellationToken = default)
-        {
-            if (HasModel)
-            {
-                return Model;
-            }
-
-            return (await GetAsync(cancellationToken)).Value.Model;
-        }
-
-        public virtual T GetModelIfNewer()
-        {
-            if (HasModel)
-            {
-                return Model;
-            }
-
-            return Get().Value.Model;
-        }
+        public virtual ResourceIdentifier Context { get; }
+        public virtual Resource Resource { get; }
 
         public abstract Response<ResourceOperationsBase<T>> Get();
         public abstract Task<Response<ResourceOperationsBase<T>>> GetAsync(CancellationToken cancellationToken = default);

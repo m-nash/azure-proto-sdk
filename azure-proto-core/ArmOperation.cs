@@ -15,7 +15,7 @@ namespace azure_proto_core
     {
         public ArmOperation(T syncValue)
         {
-            CompletedSynchronously = syncValue == null;
+            CompletedSynchronously = syncValue != null;
             SyncValue = syncValue;
         }
 

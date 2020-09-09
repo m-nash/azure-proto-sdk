@@ -12,7 +12,7 @@ namespace client
             createVm.Execute();
 
             var client = new ArmClient();
-            var subscription = client.Subscriptions(Context.SubscriptionId);
+            var subscription = client.Subscription(Context.SubscriptionId);
             var resourceGroup = subscription.ResourceGroup(Context.RgName);
             var vm = resourceGroup.Vm(Context.VmName);
             Console.WriteLine($"Found VM {Context.VmName}");

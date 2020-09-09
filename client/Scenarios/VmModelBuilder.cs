@@ -19,7 +19,7 @@ namespace client
         private Task<VirtualMachineOperations> CreateVmWithBuilderAsync()
         {
             var client = new ArmClient();
-            var subscription = client.Subscriptions(Context.SubscriptionId);
+            var subscription = client.Subscription(Context.SubscriptionId);
 
             // Create Resource Group
             Console.WriteLine($"--------Start create group {Context.RgName}--------");

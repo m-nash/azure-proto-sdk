@@ -29,11 +29,11 @@ namespace azure_proto_core
         {
         }
 
-        public ArmClient(string subscription) : this(new Uri(DefaultUri), new DefaultAzureCredential(), subscription)
+        public ArmClient(string defaultSubscriptionId) : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId)
         {
         }
 
-        public ArmClient(TokenCredential credential, string subscription) : this(new Uri(DefaultUri), credential, subscription)
+        public ArmClient(TokenCredential credential, string defaultSubscriptionId) : this(new Uri(DefaultUri), credential, defaultSubscriptionId)
         {
         }
 
@@ -42,16 +42,15 @@ namespace azure_proto_core
             ClientContext = new ArmClientContext(new Uri(DefaultUri), new DefaultAzureCredential());
             DefaultSubscription = new SubscriptionOperations(this.ClientContext, new ResourceIdentifier($"/subscriptions/{GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult()}"));
         }
-
-        public ArmClient(Uri baseUri, TokenCredential credential, string subscription)
+        public ArmClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId) : base(baseUri, credential)
         {
             ClientContext = new ArmClientContext(new Uri(DefaultUri), new DefaultAzureCredential());
             DefaultSubscription = new SubscriptionOperations(this.ClientContext, new ResourceIdentifier($"/subscriptions/{subscription}"));
         }
 
-        internal virtual ArmClientContext ClientContext { get; }
-
         public SubscriptionOperations DefaultSubscription { get; private set; }
+        internal virtual ArmClientContext ClientContext { get; }
+        public SubscriptionOperations Subscriptions() => new SubscriptionOperations(this, DefaultSubscription);
 
         public SubscriptionOperations Subscriptions(PhSubscriptionModel subscription) => new SubscriptionOperations(this.ClientContext, subscription);
 
@@ -94,6 +93,7 @@ namespace azure_proto_core
             return new PhTaskDeferringAsyncPageable<PhLocation>(PageableFunc);
 
         }
+
         public Pageable<PhLocation> ListLocations(string subscriptionId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrWhiteSpace(subscriptionId))
@@ -107,7 +107,6 @@ namespace azure_proto_core
 
             return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Location, PhLocation>(SubscriptionsClient.ListLocations(subscriptionId, cancellationToken), s => new PhLocation(s));
         }
-
 
         public async IAsyncEnumerable<azure_proto_core.Location> ListAvailableLocationsAsync(ResourceType resourceType, [EnumeratorCancellation] CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -195,8 +194,6 @@ namespace azure_proto_core
 
             return collection.ListAvailableLocations(cancellationToken);
         }
-
-
 
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
         {
@@ -294,7 +291,6 @@ namespace azure_proto_core
             return null;
         }
 
-
         public ArmOperation<ResourceOperationsBase<T>> CreateResource<T>(string subscription, string resourceGroup, string name, T model, azure_proto_core.Location location = default) where T:TrackedResource
         {
             if (location == null)
@@ -311,7 +307,6 @@ namespace azure_proto_core
             return container.Create(name, model);
         }
 
-
         /// <summary>
         /// Fill in the default subscription in the simple case (passed in, or only one subscription available)
         /// </summary>
@@ -325,14 +320,12 @@ namespace azure_proto_core
                 var subs = ListSubscriptionsAsync(token).GetAsyncEnumerator();
                 if (await subs.MoveNextAsync())
                 {
-                    PhSubscriptionModel localSub;
-                    if (subs.Current != null && subs.Current.TryGetModel(out localSub))
+                    if (subs.Current != null)
                     {
-                        sub = localSub?.Id.Subscription;
+                        sub = subs.Current.Id.Subscription;
                     }
                 }
             }
-
             return sub;
         }
 

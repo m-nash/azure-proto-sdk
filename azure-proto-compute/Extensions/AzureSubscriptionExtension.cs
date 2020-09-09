@@ -39,7 +39,7 @@ namespace azure_proto_compute
         /// <returns></returns>
         public static AsyncPageable<VirtualMachineOperations> ListVmsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new VirtualMachineCollection(subscription, subscription.DefaultSubscription);
+            var collection = new VirtualMachineCollection(subscription, subscription.Id);
             return new PhWrappingAsyncPageable<ResourceOperationsBase<PhVirtualMachine>, VirtualMachineOperations>(collection.ListAsync(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
         }
 
@@ -49,13 +49,13 @@ namespace azure_proto_compute
 
         public static Pageable<AvailabilitySetOperations> ListAvailabilitySets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new AvailabilitySetCollection(subscription, subscription.DefaultSubscription);
+            var collection = new AvailabilitySetCollection(subscription, subscription.Id);
             return new PhWrappingPageable<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySetOperations>(collection.List(filter, top, cancellationToken), a => new AvailabilitySetOperations(a, a.Context));
         }
 
         public static AsyncPageable<AvailabilitySetOperations> ListAvailabilitySetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new AvailabilitySetCollection(subscription, subscription.DefaultSubscription);
+            var collection = new AvailabilitySetCollection(subscription, subscription.Id);
             return new PhWrappingAsyncPageable<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySetOperations>(collection.ListAsync(filter, top, cancellationToken), a => new AvailabilitySetOperations(a, a.Context));
         }
 

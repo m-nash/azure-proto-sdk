@@ -17,26 +17,19 @@ namespace azure_proto_core
     /// </summary>
     public class SubscriptionOperations : OperationsBase
     {
-        public Resource DefaultSubscription { get; }
+        public ResourceIdentifier Id { get; private set; }
         public SubscriptionOperations(ArmClientContext parent, string defaultSubscription) :base(parent, $"/subscriptions/{defaultSubscription}")
         {
-            DefaultSubscription = new ArmResource($"/subscriptions/{defaultSubscription}");
+            Id = new ResourceIdentifier($"/subscriptions/{subscriptionId}");
         }
         public SubscriptionOperations(ArmClientContext parent, ResourceIdentifier defaultSubscription) : base(parent, defaultSubscription)
         {
-            DefaultSubscription = new ArmResource(defaultSubscription);
+            Id = subscriptionId;
         }
 
         public SubscriptionOperations(ArmClientContext parent, Resource defaultSubscription) : base(parent, defaultSubscription)
         {
-            DefaultSubscription = defaultSubscription;
-        }
-
-
-        public bool TryGetModel( out PhSubscriptionModel model)
-        {
-            model = DefaultSubscription as PhSubscriptionModel;
-            return model != null;
+            Id = subscriptionId.Id;
         }
 
         public ArmOperation<ResourceGroupOperations> CreateResourceGroup(string name, PhResourceGroup resourceDetails)
@@ -47,9 +40,9 @@ namespace azure_proto_core
         public ArmOperation<ResourceGroupOperations> CreateResourceGroup(string name, Location location)
         {
             var model = new PhResourceGroup(new ResourceGroup(location));
-            return new PhArmOperation<ResourceGroupOperations, ResourceGroup>(RgOperations.CreateOrUpdate(name, model), s => new ResourceGroupOperations(this, new PhResourceGroup(s)));
+            var rgResponse = RgOperations.CreateOrUpdate(name, model);
+            return new PhArmOperation<ResourceGroupOperations, ResourceGroup>(rgResponse, s => new ResourceGroupOperations(this, new PhResourceGroup(s)));
         }
-
 
         public async Task<ArmOperation<ResourceGroupOperations>> CreateResourceGroupAsync(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
         {
@@ -145,16 +138,13 @@ namespace azure_proto_core
 
         public ResourceGroupOperations ResourceGroup(string resourceGroup)
         {
-            return new ResourceGroupOperations(this, $"{DefaultSubscription.Id}/resourceGroups/{resourceGroup}");
+            return new ResourceGroupOperations(this, $"{Id}/resourceGroups/{resourceGroup}");
         }
 
         public override ResourceType ResourceType => ResourceType.None;
 
         internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred)).Subscriptions;
 
-        internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, DefaultSubscription.Id.Subscription, cred)).ResourceGroups;
-
+        internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Id.Subscription, cred)).ResourceGroups;
     }
-
-
 }
