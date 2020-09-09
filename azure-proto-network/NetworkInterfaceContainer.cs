@@ -12,27 +12,34 @@ namespace azure_proto_network
 {
     public class NetworkInterfaceContainer : ResourceContainerOperations<PhNetworkInterface>
     {
-        public NetworkInterfaceContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
+        public NetworkInterfaceContainer(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public NetworkInterfaceContainer(ArmClientBase parent, TrackedResource context) : base(parent, context)
+        public NetworkInterfaceContainer(ArmClientContext parent, TrackedResource context) : base(parent, context)
         {
         }
 
-        protected override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
-
-        public override ArmOperation<ResourceClientBase<PhNetworkInterface>> Create(string name, PhNetworkInterface resourceDetails)
+        public NetworkInterfaceContainer(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
         {
-            var operation = Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, resourceDetails);
-            return new PhArmOperation<ResourceClientBase<PhNetworkInterface>, Azure.ResourceManager.Network.Models.NetworkInterface>(
-                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+        }
+
+        public NetworkInterfaceContainer(OperationsBase parent, TrackedResource context) : base(parent, context)
+        {
+        }
+
+        public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
+
+        public override ArmOperation<ResourceOperationsBase<PhNetworkInterface>> Create(string name, PhNetworkInterface resourceDetails)
+        {
+            return new PhArmOperation<ResourceOperationsBase<PhNetworkInterface>, Azure.ResourceManager.Network.Models.NetworkInterface>(
+                Operations.StartCreateOrUpdate(Context.ResourceGroup, Context.Name, resourceDetails),
                 n => new NetworkInterfaceOperations(this, new PhNetworkInterface(n)));
         }
 
-        public async override Task<ArmOperation<ResourceClientBase<PhNetworkInterface>>> CreateAsync(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperationsBase<PhNetworkInterface>>> CreateAsync(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<ResourceClientBase<PhNetworkInterface>, Azure.ResourceManager.Network.Models.NetworkInterface>(
+            return new PhArmOperation<ResourceOperationsBase<PhNetworkInterface>, Azure.ResourceManager.Network.Models.NetworkInterface>(
                 await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, Context.Name, resourceDetails, cancellationToken), 
                 n => new NetworkInterfaceOperations(this, new PhNetworkInterface(n)));
         }

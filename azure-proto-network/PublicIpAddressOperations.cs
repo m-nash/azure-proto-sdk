@@ -7,17 +7,25 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class PublicIpAddressOperations : ResourceClientBase<PhPublicIPAddress>
+    public class PublicIpAddressOperations : ResourceOperationsBase<PhPublicIPAddress>
     {
-        public PublicIpAddressOperations(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
+        public PublicIpAddressOperations(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public PublicIpAddressOperations(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
+        public PublicIpAddressOperations(ArmClientContext parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 
-        protected override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
+        public PublicIpAddressOperations(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
+        {
+        }
+
+        public PublicIpAddressOperations(OperationsBase parent, azure_proto_core.Resource context) : base(parent, context)
+        {
+        }
+
+        public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
         public override ArmOperation<Response> Delete()
         {
@@ -29,31 +37,31 @@ namespace azure_proto_network
             return new ArmVoidOperation(await Operations.StartDeleteAsync (Context.ResourceGroup, Context.Name, cancellationToken));
         }
 
-        public override Response<ResourceClientBase<PhPublicIPAddress>> Get()
+        public override Response<ResourceOperationsBase<PhPublicIPAddress>> Get()
         {
-            return new PhArmResponse<ResourceClientBase<PhPublicIPAddress>, PublicIPAddress>(Operations.Get(Context.ResourceGroup, Context.Name), 
+            return new PhArmResponse<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(Operations.Get(Context.ResourceGroup, Context.Name), 
                 n => { Resource = new PhPublicIPAddress(n); return this; });
         }
 
-        public async override Task<Response<ResourceClientBase<PhPublicIPAddress>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<Response<ResourceOperationsBase<PhPublicIPAddress>>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<ResourceClientBase<PhPublicIPAddress>, PublicIPAddress>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, null, cancellationToken),
+            return new PhArmResponse<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, null, cancellationToken),
                n => { Resource = new PhPublicIPAddress(n); return this; });
         }
 
-        public override ArmOperation<ResourceClientBase<PhPublicIPAddress>> AddTag(string key, string value)
+        public override ArmOperation<ResourceOperationsBase<PhPublicIPAddress>> AddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<ResourceClientBase<PhPublicIPAddress>, PublicIPAddress>(Operations.UpdateTags(Context.ResourceGroup, Context.Name, patchable),
+            return new PhArmOperation<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(Operations.UpdateTags(Context.ResourceGroup, Context.Name, patchable),
                 n => { Resource = new PhPublicIPAddress(n); return this; });
         }
 
-        public async override Task<ArmOperation<ResourceClientBase<PhPublicIPAddress>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperationsBase<PhPublicIPAddress>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<ResourceClientBase<PhPublicIPAddress>, PublicIPAddress>(await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken),
+            return new PhArmOperation<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken),
                 n => { Resource = new PhPublicIPAddress(n); return this; });
         }
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).PublicIPAddresses;

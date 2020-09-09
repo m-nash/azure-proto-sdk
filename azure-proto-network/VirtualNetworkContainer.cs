@@ -9,26 +9,29 @@ namespace azure_proto_network
 {
     public class VirtualNetworkContainer : ResourceContainerOperations<PhVirtualNetwork>
     {
-        public VirtualNetworkContainer(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
+        public VirtualNetworkContainer(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public VirtualNetworkContainer(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
+        public VirtualNetworkContainer(ArmClientContext parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 
-        protected override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
+        public VirtualNetworkContainer(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
+        {
+        }
+
+        public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
 
         //TODO make the StartCreate and Create consistent
-        public override ArmOperation<ResourceClientBase<PhVirtualNetwork>> Create(string name, PhVirtualNetwork resourceDetails)
+        public override ArmOperation<ResourceOperationsBase<PhVirtualNetwork>> Create(string name, PhVirtualNetwork resourceDetails)
         {
-            var operation = Operations.StartCreateOrUpdate(Context.ResourceGroup, name, resourceDetails);
-            return new PhArmOperation<ResourceClientBase<PhVirtualNetwork>, VirtualNetwork>(operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(), n => Vnet(new PhVirtualNetwork(n)));
+            return new PhArmOperation<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(Operations.StartCreateOrUpdate(Context.ResourceGroup, name, resourceDetails), n => Vnet(new PhVirtualNetwork(n)));
         }
 
-        public async override Task<ArmOperation<ResourceClientBase<PhVirtualNetwork>>> CreateAsync(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperationsBase<PhVirtualNetwork>>> CreateAsync(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<ResourceClientBase<PhVirtualNetwork>, VirtualNetwork>(await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails, cancellationToken), n => Vnet(new PhVirtualNetwork(n)));
+            return new PhArmOperation<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails, cancellationToken), n => Vnet(new PhVirtualNetwork(n)));
         }
 
         internal VirtualNetworkOperations Vnet(TrackedResource vnet)

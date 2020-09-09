@@ -33,13 +33,13 @@ namespace azure_proto_compute
             return new VirtualMachineOperations(operations, vm);
         }
 
-        public static ArmOperation<ResourceClientBase<PhVirtualMachine>> CreateVm(this ResourceGroupOperations operations, string name, PhVirtualMachine resourceDetails)
+        public static ArmOperation<ResourceOperationsBase<PhVirtualMachine>> CreateVm(this ResourceGroupOperations operations, string name, PhVirtualMachine resourceDetails)
         {
             var container = new VirtualMachineContainer(operations, operations.Context);
             return container.Create(name, resourceDetails);
         }
 
-        public static Task<ArmOperation<ResourceClientBase<PhVirtualMachine>>> CreateVmAsync(this ResourceGroupOperations operations, string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmOperation<ResourceOperationsBase<PhVirtualMachine>>> CreateVmAsync(this ResourceGroupOperations operations, string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
         {
             var container = new VirtualMachineContainer(operations, operations.Context);
             return container.CreateAsync(name, resourceDetails);
@@ -91,7 +91,7 @@ namespace azure_proto_compute
         public static Pageable<VirtualMachineOperations> ListVms(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VirtualMachineCollection(operations, operations.Context);
-            return new PhWrappingPageable<ResourceClientBase<PhVirtualMachine>, VirtualMachineOperations>(collection.List(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
+            return new PhWrappingPageable<ResourceOperationsBase<PhVirtualMachine>, VirtualMachineOperations>(collection.List(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
         }
 
         /// <summary>
@@ -105,13 +105,13 @@ namespace azure_proto_compute
         public static AsyncPageable<VirtualMachineOperations> ListVmsAsync(this ResourceGroupOperations operations, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VirtualMachineCollection(operations, operations.Context);
-            return new PhWrappingAsyncPageable<ResourceClientBase<PhVirtualMachine>, VirtualMachineOperations>(collection.ListAsync(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
+            return new PhWrappingAsyncPageable<ResourceOperationsBase<PhVirtualMachine>, VirtualMachineOperations>(collection.ListAsync(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
         }
 
         public static Pageable<VirtualMachineOperations> ListVmsByTag(this ResourceGroupOperations operations, ArmTagFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var collection = new VirtualMachineCollection(operations, operations.Context);
-            return new PhWrappingPageable<ResourceClientBase<PhVirtualMachine>, VirtualMachineOperations>(collection.ListByTag(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
+            return new PhWrappingPageable<ResourceOperationsBase<PhVirtualMachine>, VirtualMachineOperations>(collection.ListByTag(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
         }
 
         #endregion
@@ -132,13 +132,13 @@ namespace azure_proto_compute
             return new AvailabilitySetOperations(operations, set);
         }
 
-        public static ArmOperation<ResourceClientBase<PhAvailabilitySet>> CreateAvailabilitySet(this ResourceGroupOperations operations, string name, PhAvailabilitySet resourceDetails)
+        public static ArmOperation<ResourceOperationsBase<PhAvailabilitySet>> CreateAvailabilitySet(this ResourceGroupOperations operations, string name, PhAvailabilitySet resourceDetails)
         {
             var container = new AvailabilitySetContainer(operations, operations.Context);
             return container.Create(name, resourceDetails);
         }
 
-        public static Task<ArmOperation<ResourceClientBase<PhAvailabilitySet>>> CreateAvailabilitySetAsync(this ResourceGroupOperations operations, string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmOperation<ResourceOperationsBase<PhAvailabilitySet>>> CreateAvailabilitySetAsync(this ResourceGroupOperations operations, string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
         {
             var container = new AvailabilitySetContainer(operations, operations.Context);
             return container.CreateAsync(name, resourceDetails);

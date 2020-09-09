@@ -15,27 +15,35 @@ namespace azure_proto_network
     /// </summary>
     public class SubnetCollection : ResourceCollectionOperations<PhSubnet>
     {
-        public SubnetCollection(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
+        public SubnetCollection(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public SubnetCollection(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
+        public SubnetCollection(ArmClientContext parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 
-        protected override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
-
-        public override Pageable<ResourceClientBase<PhSubnet>> List(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public SubnetCollection(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
         {
-            return new PhWrappingPageable<Subnet, ResourceClientBase<PhSubnet>>(Operations.List(Context.ResourceGroup, Context.Parent.Name, cancellationToken), s => new SubnetOperations(this, new PhSubnet(s, DefaultLocation)));
         }
 
-        public override AsyncPageable<ResourceClientBase<PhSubnet>> ListAsync(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public SubnetCollection(OperationsBase parent, azure_proto_core.Resource context) : base(parent, context)
         {
-            return new PhWrappingAsyncPageable<Subnet, ResourceClientBase<PhSubnet>>(Operations.ListAsync(Context.ResourceGroup, Context.Parent.Name, cancellationToken), s => new SubnetOperations(this, new PhSubnet(s, DefaultLocation)));
         }
 
-        protected override ResourceClientBase<PhSubnet> GetOperations(ResourceIdentifier identifier, Location location)
+        public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
+
+        public override Pageable<ResourceOperationsBase<PhSubnet>> List(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        {
+            return new PhWrappingPageable<Subnet, ResourceOperationsBase<PhSubnet>>(Operations.List(Context.ResourceGroup, Context.Parent.Name, cancellationToken), s => new SubnetOperations(this, new PhSubnet(s, DefaultLocation)));
+        }
+
+        public override AsyncPageable<ResourceOperationsBase<PhSubnet>> ListAsync(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        {
+            return new PhWrappingAsyncPageable<Subnet, ResourceOperationsBase<PhSubnet>>(Operations.ListAsync(Context.ResourceGroup, Context.Parent.Name, cancellationToken), s => new SubnetOperations(this, new PhSubnet(s, DefaultLocation)));
+        }
+
+        protected override ResourceOperationsBase<PhSubnet> GetOperations(ResourceIdentifier identifier, Location location)
         {
             var resource = new ArmResource(identifier, location ?? DefaultLocation);
             return new SubnetOperations(this, resource);

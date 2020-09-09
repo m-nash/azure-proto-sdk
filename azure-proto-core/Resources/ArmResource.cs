@@ -22,5 +22,6 @@
         public Sku Sku { get; set; }
         public Plan Plan { get; set; }
         public string Kind { get; set; }
+
     }
 }

@@ -19,43 +19,41 @@ namespace azure_proto_core
     /// </summary>
     public class ResourceGroupContainerOperations : ResourceContainerOperations<PhResourceGroup>
     {
-        protected override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
+        public override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
 
-        internal ResourceGroupContainerOperations(ArmClientBase other, ResourceIdentifier context) : base(other, context)
+        internal ResourceGroupContainerOperations(OperationsBase other, ResourceIdentifier context) : base(other, context)
         {
         }
-        internal ResourceGroupContainerOperations(ArmClientBase other, Resource context) : base(other, context)
+        internal ResourceGroupContainerOperations(OperationsBase other, Resource context) : base(other, context)
         {
         }
 
-        public override ArmOperation<ResourceClientBase<PhResourceGroup>> Create(string name, PhResourceGroup resourceDetails)
+        public override ArmOperation<ResourceOperationsBase<PhResourceGroup>> Create(string name, PhResourceGroup resourceDetails)
         {
-            return new PhArmOperation<ResourceClientBase<PhResourceGroup>, ResourceGroup>(Operations.CreateOrUpdate(name, resourceDetails), g => ResourceGroup(new PhResourceGroup(g)));
+            return new PhArmOperation<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(Operations.CreateOrUpdate(name, resourceDetails), g => ResourceGroup(new PhResourceGroup(g)));
         }
 
-        public ArmOperation<ResourceClientBase<PhResourceGroup>> Create(string name, Location location)
+        public ArmOperation<ResourceOperationsBase<PhResourceGroup>> Create(string name, Location location)
         {
             var model = new PhResourceGroup(new ResourceGroup(location));
-            return new PhArmOperation<ResourceClientBase<PhResourceGroup>, ResourceGroup>(Operations.CreateOrUpdate(name, model), g => ResourceGroup(new PhResourceGroup(g)));
+            return new PhArmOperation<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(Operations.CreateOrUpdate(name, model), g => ResourceGroup(new PhResourceGroup(g)));
         }
 
 
-        public async override Task<ArmOperation<ResourceClientBase<PhResourceGroup>>> CreateAsync(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceOperationsBase<PhResourceGroup>>> CreateAsync(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<ResourceClientBase<PhResourceGroup>, ResourceGroup>(await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken), g => ResourceGroup(new PhResourceGroup(g)));
+            return new PhArmOperation<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken), g => ResourceGroup(new PhResourceGroup(g)));
         }
 
-        public Pageable<ResourceClientBase<PhResourceGroup>> ListResourceGroups(CancellationToken cancellationToken = default(CancellationToken))
+        public Pageable<ResourceOperationsBase<PhResourceGroup>> ListResourceGroups(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return new PhWrappingPageable<ResourceGroup, ResourceClientBase<PhResourceGroup>>(Operations.List(null, null, cancellationToken), s => ResourceGroup(new PhResourceGroup(s)));
+            return new PhWrappingPageable<ResourceGroup, ResourceOperationsBase<PhResourceGroup>>(Operations.List(null, null, cancellationToken), s => ResourceGroup(new PhResourceGroup(s)));
         }
 
-        public AsyncPageable<ResourceClientBase<PhResourceGroup>> ListResourceGroupsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public AsyncPageable<ResourceOperationsBase<PhResourceGroup>> ListResourceGroupsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return new PhWrappingAsyncPageable<ResourceGroup, ResourceClientBase<PhResourceGroup>>(Operations.ListAsync(null, null, cancellationToken), s => ResourceGroup(new PhResourceGroup(s)));
+            return new PhWrappingAsyncPageable<ResourceGroup, ResourceOperationsBase<PhResourceGroup>>(Operations.ListAsync(null, null, cancellationToken), s => ResourceGroup(new PhResourceGroup(s)));
         }
-
-        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Context.Subscription, cred)).ResourceGroups;
 
         public ResourceGroupOperations ResourceGroup(ResourceIdentifier context)
         {
@@ -72,6 +70,7 @@ namespace azure_proto_core
             return new ResourceGroupOperations(this, $"{Context}/resourceGroups/{rg}");
         }
 
+        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Context.Subscription, cred)).ResourceGroups;
 
 
     }

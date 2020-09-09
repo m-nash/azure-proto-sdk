@@ -7,17 +7,25 @@ namespace azure_proto_network
 {
     public class PublicIpAddressCollection : ResourceCollectionOperations<PhPublicIPAddress>
     {
-        public PublicIpAddressCollection(ArmClientBase parent, ResourceIdentifier context) : base(parent, context)
+        public PublicIpAddressCollection(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
         {
         }
 
-        public PublicIpAddressCollection(ArmClientBase parent, azure_proto_core.Resource context) : base(parent, context)
+        public PublicIpAddressCollection(ArmClientContext parent, azure_proto_core.Resource context) : base(parent, context)
         {
         }
 
-        protected override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
+        public PublicIpAddressCollection(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
+        {
+        }
 
-        protected override ResourceClientBase<PhPublicIPAddress> GetOperations(ResourceIdentifier identifier, Location location)
+        public PublicIpAddressCollection(OperationsBase parent, azure_proto_core.Resource context) : base(parent, context)
+        {
+        }
+
+        public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
+
+        protected override ResourceOperationsBase<PhPublicIPAddress> GetOperations(ResourceIdentifier identifier, Location location)
         {
             var resource = new ArmResource(identifier, location ?? DefaultLocation);
             return new PublicIpAddressOperations(this, resource);

@@ -8,15 +8,15 @@ namespace azure_proto_core
     /// <summary>
     /// Base class tracking context information for clients - when we have changed client constructors, this should not be necessary
     /// </summary>
-    public abstract class ArmClientBase
+    public class ArmClientContext
     {
-        public ArmClientBase(Uri baseUri, TokenCredential credential)
+        public ArmClientContext(Uri baseUri, TokenCredential credential)
         {
             BaseUri = baseUri;
             Credential = credential;
         }
 
-        public ArmClientBase(ArmClientBase other) : this(other.BaseUri, other.Credential)
+        public ArmClientContext(ArmClientContext other) : this(other.BaseUri, other.Credential)
         {
         }
 
@@ -30,12 +30,9 @@ namespace azure_proto_core
         //    return Activator.CreateInstance(typeof(T), this, context) as T;
         //}
 
-        public virtual Location DefaultLocation { get; set; }
         protected TokenCredential Credential { get; }
 
         protected Uri BaseUri { get; }
-
-        protected abstract ResourceType ResourceType { get; }
 
         /// <summary>
         /// Note that this is currently adapting to underlying management clients - once generator changes are in, this would likely be unnecessary
@@ -43,7 +40,7 @@ namespace azure_proto_core
         /// <typeparam name="T"></typeparam>
         /// <param name="creator"></param>
         /// <returns></returns>
-        protected T GetClient<T>(Func<Uri, TokenCredential, T> creator)
+        internal T GetClient<T>(Func<Uri, TokenCredential, T> creator)
         {
             return creator(BaseUri, Credential);
         }
