@@ -15,20 +15,20 @@ namespace client
 
             //set tags on random vms
             Random rand = new Random(Environment.TickCount);
-            foreach (var vm in rg.ListVms())
+            foreach (var vm in rg.ListVirtualMachines())
             {
                 if (rand.NextDouble() > 0.5)
                 {
-                    Console.WriteLine("adding tag to {0}", vm.Context.Name);
+                    Console.WriteLine("adding tag to {0}", vm.Id.Name);
                     vm.AddTag("tagkey", "tagvalue");
                 }
             }
 
-            foreach (var vm in rg.ListVmsByTag(new azure_proto_core.Resources.ArmTagFilter("tagkey", "tagvalue")))
+            foreach (var vm in rg.ListVirtualMachinesByTag(new azure_proto_core.Resources.ArmTagFilter("tagkey", "tagvalue")))
             {
-                Console.WriteLine("--------Stopping VM {0}--------", vm.Context.Name);
+                Console.WriteLine("--------Stopping VM {0}--------", vm.Id.Name);
                 vm.Stop();
-                Console.WriteLine("--------Starting VM {0}--------", vm.Context.Name);
+                Console.WriteLine("--------Starting VM {0}--------", vm.Id.Name);
                 vm.Start();
             }
         }

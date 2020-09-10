@@ -121,6 +121,7 @@ namespace azure_proto_core.Resources
         {
             ResourceTypeFilter = new ArmResourceTypeFilter(type);
         }
+
         public ArmSubstringFilter SubstringFilter {get; set;}
 
         public ArmResourceTypeFilter ResourceTypeFilter { get; }

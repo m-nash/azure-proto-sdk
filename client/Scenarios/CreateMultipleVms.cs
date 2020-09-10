@@ -21,7 +21,7 @@ namespace client
             // Create Resource Group
             Console.WriteLine($"--------Start create group {Context.RgName}--------");
             var resourceGroup = subscription.CreateResourceGroup(Context.RgName, Context.Loc).Value;
-            CleanUp.Add(resourceGroup.Context);
+            CleanUp.Add(resourceGroup.Id);
 
             // Create AvailabilitySet
             Console.WriteLine("--------Start create AvailabilitySet--------");
@@ -51,19 +51,19 @@ namespace client
 
                 // Create Network Interface
                 Console.WriteLine("--------Start create Network Interface--------");
-                var nic = resourceGroup.ConstructNic(ipAddress.GetModelIfNewer(), subnet.Context).Create($"{Context.VmName}_{i}_nic");
+                var nic = resourceGroup.ConstructNic(ipAddress.GetModelIfNewer(), subnet.Id).Create($"{Context.VmName}_{i}_nic");
 
                 // Create VM
                 string num = i % 2 == 0 ? "even" : "odd";
                 string name = $"{Context.VmName}-{i}-{num}";
                 Console.WriteLine("--------Start create VM {0}--------", i);
-                var vm = resourceGroup.ConstructVm(name, "admin-user", "!@#$%asdfA", nic.Id, aset.GetModelIfNewer()).Create(name).Value;
+                var vm = resourceGroup.ConstructVirtualMachine(name, "admin-user", "!@#$%asdfA", nic.Id, aset.GetModelIfNewer()).Create(name).Value;
             }
 
             foreach (var task in tasks)
             {
                 var vm = await task;
-                Console.WriteLine($"--------Finished creating VM {vm.Context.Name}");
+                Console.WriteLine($"--------Finished creating VM {vm.Id.Name}");
             }
         }
     }

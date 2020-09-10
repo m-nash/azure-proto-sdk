@@ -12,7 +12,7 @@ namespace client
             createVm.Execute();
 
             var rg = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
-            var vm = rg.Vm(Context.VmName);
+            var vm = rg.VirtualMachine(Context.VmName);
 
             Console.WriteLine($"Adding tags to {vm.GetModelIfNewer().Name}");
             vm.AddTag("tagkey", "tagvalue");

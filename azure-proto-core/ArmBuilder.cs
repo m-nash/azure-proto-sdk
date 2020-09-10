@@ -19,21 +19,11 @@ namespace azure_proto_core
         //TODO: should not allow both on the same type
         public virtual ArmOperation<ResourceOperationsBase<T>> Create(string name)
         {
-            if (null == _resource)
-            {
-                throw new InvalidOperationException("You must pass in resource details.");
-            }
-
             return _containerOperations.Create(name, _resource);
         }
 
         public virtual ArmOperation<ResourceOperationsBase<T>> Create()
         {
-            if (null == _resource)
-            {
-                throw new InvalidOperationException("You must pass in resource details.");
-            }
-
             return _containerOperations.Create(_resource);
         }
     }

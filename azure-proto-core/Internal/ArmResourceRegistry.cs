@@ -51,19 +51,6 @@ namespace azure_proto_core
             return true;
         }
 
-        public bool TryGetColletcion<T>(ArmClientContext parent, ResourceIdentifier parentContext, out ResourceCollectionOperations<T> collection) where T : TrackedResource
-        {
-            collection = null;
-            ArmResourceRegistration<T> registration;
-            if (!TryGetRegistration<T>(out registration) || !registration.HasCollection)
-            {
-                return false;
-            }
-
-            collection = registration.GetCollection(parent, parentContext);
-            return true;
-        }
-
         public bool TryGetResourceType<T>(out ResourceType type) where T : TrackedResource
         {
             type = ResourceType.None;
@@ -88,6 +75,5 @@ namespace azure_proto_core
 
             return true;
         }
-
     }
 }

@@ -28,7 +28,7 @@ namespace client
                     var rg = new ArmClient().ResourceGroup(rgId);
                     if (rg.GetModelIfNewer() != null)
                     {
-                        Console.WriteLine($"--------Deleting {rg.Context.Name}--------");
+                        Console.WriteLine($"--------Deleting {rg.Id.Name}--------");
                         _ = rg.DeleteAsync();
                     }
                 }

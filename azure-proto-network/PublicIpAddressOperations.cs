@@ -29,23 +29,23 @@ namespace azure_proto_network
 
         public override ArmOperation<Response> Delete()
         {
-            return new ArmVoidOperation(Operations.StartDelete(Context.ResourceGroup, Context.Name));
+            return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name));
         }
 
         public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidOperation(await Operations.StartDeleteAsync (Context.ResourceGroup, Context.Name, cancellationToken));
+            return new ArmVoidOperation(await Operations.StartDeleteAsync (Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
         public override Response<ResourceOperationsBase<PhPublicIPAddress>> Get()
         {
-            return new PhArmResponse<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(Operations.Get(Context.ResourceGroup, Context.Name), 
+            return new PhArmResponse<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(Operations.Get(Id.ResourceGroup, Id.Name), 
                 n => { Resource = new PhPublicIPAddress(n); return this; });
         }
 
         public async override Task<Response<ResourceOperationsBase<PhPublicIPAddress>>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, null, cancellationToken),
+            return new PhArmResponse<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
                n => { Resource = new PhPublicIPAddress(n); return this; });
         }
 
@@ -53,7 +53,7 @@ namespace azure_proto_network
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(Operations.UpdateTags(Context.ResourceGroup, Context.Name, patchable),
+            return new PhArmOperation<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
                 n => { Resource = new PhPublicIPAddress(n); return this; });
         }
 
@@ -61,9 +61,10 @@ namespace azure_proto_network
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken),
+            return new PhArmOperation<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
                 n => { Resource = new PhPublicIPAddress(n); return this; });
         }
-        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).PublicIPAddresses;
+
+        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).PublicIPAddresses;
     }
 }

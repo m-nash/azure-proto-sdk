@@ -45,7 +45,7 @@ namespace client
 
             // Create Network Interface
             Console.WriteLine("--------Start create Network Interface--------");
-            var nic = resourceGroup.ConstructNic(ipAddress.GetModelIfNewer(), subnet.Context).Create($"{Context.VmName}_nic").Value;
+            var nic = resourceGroup.ConstructNic(ipAddress.GetModelIfNewer(), subnet.Id).Create($"{Context.VmName}_nic").Value;
 
             // TODO:
             // 0. Builder is an convenience feature. Simpler model would just use new xxx()
@@ -53,13 +53,13 @@ namespace client
             // 2. Is there a risk that the referenced model has not been created in ARM yet resource id is populated?
 
             // Options: required parameters on in the constructor
-            var vmModel = resourceGroup.VmBuilder(Context.VmName, Context.Loc)
+            var vmModel = resourceGroup.VirtualMachineBuilder(Context.VmName, Context.Loc)
                 .UseWindowsImage("admin-user", "!@#$%asdfA")
-                .RequiredNetworkInterface(nic.Context)
-                .RequiredAvalabilitySet(aset.Context)
+                .RequiredNetworkInterface(nic.Id)
+                .RequiredAvalabilitySet(aset.Id)
                 .ToModel();
 
-            var vm = resourceGroup.CreateVm(Context.VmName, vmModel).Value;
+            var vm = resourceGroup.CreateVirtualMachine(Context.VmName, vmModel).Value;
 
             return Task.FromResult(vm as VirtualMachineOperations);
         }

@@ -14,7 +14,7 @@ namespace client
 
             await foreach (var subscription in client.ListSubscriptionsAsync())
             {
-                await foreach (var vm in subscription.ListVmsAsync("even"))
+                await foreach (var vm in subscription.ListVirtualMachinesAsync("even"))
                 {
                     await vm.StopAsync();
                     await vm.StartAsync();
@@ -45,13 +45,13 @@ namespace client
 
             Parallel.ForEach(client.ListSubscriptions(), sub =>
            {
-               Parallel.ForEach(sub.ListVms(), vm =>
+               Parallel.ForEach(sub.ListVirtualMachines(), vm =>
                {
-                   if (reg.IsMatch(vm.Context.Name))
+                   if (reg.IsMatch(vm.Id.Name))
                    {
-                       Console.WriteLine($"Stopping {vm.Context.Subscription} {vm.Context.ResourceGroup} {vm.Context.Name}");
+                       Console.WriteLine($"Stopping {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");
                        vm.Stop();
-                       Console.WriteLine($"Starting {vm.Context.Subscription} {vm.Context.ResourceGroup} {vm.Context.Name}");
+                       Console.WriteLine($"Starting {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");
                        vm.Start();
                    }
                });

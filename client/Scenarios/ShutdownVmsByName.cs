@@ -13,11 +13,11 @@ namespace client
 
             var sub = new ArmClient().Subscription(Context.SubscriptionId);
 
-            foreach(var vm in sub.ListVms("even"))
+            foreach(var vm in sub.ListVirtualMachines("even"))
             {
-                Console.WriteLine($"Stopping {vm.Context.Name}");
+                Console.WriteLine($"Stopping {vm.Id.Name}");
                 vm.Stop();
-                Console.WriteLine($"Starting {vm.Context.Name}");
+                Console.WriteLine($"Starting {vm.Id.Name}");
                 vm.Start();
             }
         }
