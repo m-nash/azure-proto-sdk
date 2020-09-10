@@ -28,17 +28,18 @@ namespace azure_proto_network
 
         public override ArmOperation<ResourceOperationsBase<PhPublicIPAddress>> Create(string name, PhPublicIPAddress resourceDetails)
         {
-            return new PhArmOperation<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(Operations.StartCreateOrUpdate(Context.ResourceGroup, name, resourceDetails), 
+            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails);
+            return new PhArmOperation<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(), 
                 n => new PublicIpAddressOperations(this, new PhPublicIPAddress(n)));
         }
 
         public async override Task<ArmOperation<ResourceOperationsBase<PhPublicIPAddress>>> CreateAsync(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(
-                await Operations.StartCreateOrUpdateAsync(Context.ResourceGroup, name, resourceDetails, cancellationToken),
+                await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken),
                 n => new PublicIpAddressOperations(this, new PhPublicIPAddress(n)));
         }
 
-        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).PublicIPAddresses;
+        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).PublicIPAddresses;
     }
 }

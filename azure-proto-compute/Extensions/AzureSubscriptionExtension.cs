@@ -1,11 +1,7 @@
 ﻿using Azure;
-using Azure.ResourceManager.Compute.Models;
 using azure_proto_core;
-using azure_proto_core.Adapters;
 using azure_proto_core.Resources;
-using System.Collections.Generic;
 using System.Threading;
-using Sku = azure_proto_core.Sku;
 
 namespace azure_proto_compute
 {
@@ -25,9 +21,10 @@ namespace azure_proto_compute
         /// <returns></returns>
         public static Pageable<VirtualMachineOperations> ListVirtualMachines(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            //return ResourceListOperations.ListAtContext<VirtualMachineOperations, PhVirtualMachine>(subscription, filter, top, ( cancellationToken);
-            var collection = new VirtualMachineCollection(subscription, subscription.Id);
-            return new PhWrappingPageable<ResourceOperationsBase<PhVirtualMachine>, VirtualMachineOperations>(collection.List(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
+            //TODO: consider ArmPageable<T> to introduce post network call filtering and avoid breaking changes
+            //TODO: validate LINQ/LINQ-Async behavior of requiring entire set before filtering
+            //TODO: come up with a way to make sure its known if filtering is service side or client side
+            return ResourceListOperations.ListAtContext<VirtualMachineOperations, PhVirtualMachine>(subscription, filter, top, cancellationToken);
         }
 
         /// <summary>
@@ -38,10 +35,9 @@ namespace azure_proto_compute
         /// <param name="top"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static AsyncPageable<VirtualMachineOperations> ListVmsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<VirtualMachineOperations> ListVirtualMachinesAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new VirtualMachineCollection(subscription, subscription.Id);
-            return new PhWrappingAsyncPageable<ResourceOperationsBase<PhVirtualMachine>, VirtualMachineOperations>(collection.ListAsync(filter, top, cancellationToken), vm => new VirtualMachineOperations(vm, vm.Context));
+            return ResourceListOperations.ListAtContextAsync<VirtualMachineOperations, PhVirtualMachine>(subscription, filter, top, cancellationToken);
         }
 
         #endregion
@@ -50,15 +46,12 @@ namespace azure_proto_compute
 
         public static Pageable<AvailabilitySetOperations> ListAvailabilitySets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new AvailabilitySetCollection(subscription, subscription.Id);
-            var pageable = collection.List(filter, top, cancellationToken);
-            return new PhWrappingPageable<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySetOperations>(pageable, a => new AvailabilitySetOperations(a, a.Context));
+            return ResourceListOperations.ListAtContext<AvailabilitySetOperations, PhAvailabilitySet>(subscription, filter, top, cancellationToken);
         }
 
         public static AsyncPageable<AvailabilitySetOperations> ListAvailabilitySetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            var collection = new AvailabilitySetCollection(subscription, subscription.Id);
-            return new PhWrappingAsyncPageable<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySetOperations>(collection.ListAsync(filter, top, cancellationToken), a => new AvailabilitySetOperations(a, a.Context));
+            return ResourceListOperations.ListAtContextAsync<AvailabilitySetOperations, PhAvailabilitySet>(subscription, filter, top, cancellationToken);
         }
 
         #endregion

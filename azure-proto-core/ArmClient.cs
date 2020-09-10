@@ -3,13 +3,10 @@ using Azure.Core;
 using Azure.Identity;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
-using azure_proto_core;
 using azure_proto_core.Adapters;
-using azure_proto_core.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -69,7 +66,8 @@ namespace azure_proto_core
         /// <param name="subscription"></param>
         /// <returns></returns>
         public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(this.ClientContext, subscription);
-        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(this.ClientContext, $"/subscriptions/{subscription}");
+
+        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(this.ClientContext, subscription);
 
         public AsyncPageable<SubscriptionOperations> ListSubscriptionsAsync(CancellationToken token = default)
         {
@@ -173,7 +171,7 @@ namespace azure_proto_core
             return new ResourceGroupOperations(this.ClientContext, resourceGroup);
         }
 
-        public ResourceClientBase<T> GetResourceOperations<T>(TrackedResource resource) where T : TrackedResource
+        public T GetResourceOperations<T>(TrackedResource resource) where T : TrackedResource
         {
             return Activator.CreateInstance(typeof(T), ClientContext, resource) as T;
         }
@@ -185,7 +183,6 @@ namespace azure_proto_core
 
         public T GetResourceOperations<T>(string subscription, string resourceGroup, string name) where T : OperationsBase
         {
-
             return null;
         }
 
@@ -212,7 +209,7 @@ namespace azure_proto_core
         /// <returns></returns>
         internal async Task<string> GetDefaultSubscription(CancellationToken token = default(CancellationToken))
         {
-            string sub = DefaultSubscription?.Context?.Subscription;
+            string sub = DefaultSubscription?.Id?.Subscription;
             if (null == sub)
             {
                 var subs = ListSubscriptionsAsync(token).GetAsyncEnumerator();

@@ -4,6 +4,7 @@ using Azure.ResourceManager.Resources.Models;
 using azure_proto_core.Adapters;
 using azure_proto_core.Resources;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace azure_proto_core
@@ -14,70 +15,116 @@ namespace azure_proto_core
     /// </summary>
     public class ResourceListOperations
     {
-        public static Pageable<U> ListAtContext<U, T>(SubscriptionOperations subscription, ArmSubstringFilter substringFilter, int? top, Func<string, string, U> ctor, CancellationToken cancellationToken = default)
-            where U : ResourceClientBase<T>
+        //TODO: this isn't a finalized design for this its a placeholder to expose the functionality for now
+        private static Dictionary<Type, Action<ArmFilterCollection, ArmResourceFilter>> _typeSwitch = new Dictionary<Type, Action<ArmFilterCollection, ArmResourceFilter>>()
+        {
+            { typeof(ArmSubstringFilter), (filterCollection, filter) => { filterCollection.SubstringFilter = (filter as ArmSubstringFilter); } },
+            { typeof(ArmTagFilter), (filterCollection, filter) => { filterCollection.TagFilter = (filter as ArmTagFilter); } }
+        };
+
+        //TODO: Add overloads to take a set such as ArmFilterCollection
+        public static Pageable<U> ListAtContext<U, T>(SubscriptionOperations subscription, ArmResourceFilter resourceFilter = null, int? top = null, CancellationToken cancellationToken = default)
+            where U : ResourceOperationsBase<T>
             where T : Resource
         {
-            var filters = GetFilters(subscription.Id, substringFilter);
-            var result = GetResourcesClient(subscription, subscription.Id.Subscription).Resources.List(filters.ToString(), null, top, cancellationToken);
-
-            return ConvertResults<U, T>(ctor, result);
+            return _ListAtContext<U, T>(subscription.ClientContext, subscription.Id, null, resourceFilter, top, cancellationToken);
         }
 
-        public static Pageable<U> ListAtContext<U, T>(ResourceGroupOperations resourceGroup, ArmSubstringFilter substringFilter, int? top, Func<string, string, U> ctor, CancellationToken cancellationToken = default)
-            where U : ResourceClientBase<T>
+        public static Pageable<U> ListAtContext<U, T>(ResourceGroupOperations resourceGroup, ArmResourceFilter resourceFilter = null, int? top = null, CancellationToken cancellationToken = default)
+            where U : ResourceOperationsBase<T>
             where T : Resource
         {
-            var filters = GetFilters(resourceGroup.Context, substringFilter);
-            var result = GetResourcesClient(resourceGroup, resourceGroup.Context.Subscription).Resources.ListByResourceGroup(resourceGroup.Context.Name, filters.ToString(), null, top, cancellationToken);
-
-            return ConvertResults<U, T>(ctor, result);
+            return _ListAtContext<U, T>(resourceGroup.ClientContext, resourceGroup.Id, resourceGroup.Id.Name, resourceFilter, top, cancellationToken);
         }
 
-        public static AsyncPageable<U> ListAtContextAsync<U, T>(SubscriptionOperations subscription, ArmSubstringFilter substringFilter, int? top, Func<string, string, U> ctor, CancellationToken cancellationToken = default)
-            where U : ResourceClientBase<T>
+        public static AsyncPageable<U> ListAtContextAsync<U, T>(SubscriptionOperations subscription, ArmResourceFilter resourceFilter = null, int? top = null, CancellationToken cancellationToken = default)
+            where U : ResourceOperationsBase<T>
             where T : Resource
         {
-            var filters = GetFilters(subscription.Id, substringFilter);
-            var result = GetResourcesClient(subscription, subscription.Id.Subscription).Resources.ListAsync(filters.ToString(), null, top, cancellationToken);
-
-            return ConvertResultsAsync<U, T>(ctor, result);
+            return _ListAtContextAsync<U, T>(subscription.ClientContext, subscription.Id, null, resourceFilter, top, cancellationToken);
         }
 
-        public static AsyncPageable<U> ListAtContextAsync<U, T>(ResourceGroupOperations resourceGroup, ArmSubstringFilter substringFilter, int? top, Func<string, string, U> ctor, CancellationToken cancellationToken = default)
-            where U : ResourceClientBase<T>
+        public static AsyncPageable<U> ListAtContextAsync<U, T>(ResourceGroupOperations resourceGroup, ArmResourceFilter resourceFilter = null, int? top = null, CancellationToken cancellationToken = default)
+            where U : ResourceOperationsBase<T>
             where T : Resource
         {
-            var filters = GetFilters(resourceGroup.Context, substringFilter);
-            var result = GetResourcesClient(resourceGroup, resourceGroup.Context.Subscription).Resources.ListByResourceGroupAsync(resourceGroup.Context.Name, filters.ToString(), null, top, cancellationToken);
-
-            return ConvertResultsAsync<U, T>(ctor, result);
+            return _ListAtContextAsync<U, T>(resourceGroup.ClientContext, resourceGroup.Id, resourceGroup.Id.Name, resourceFilter, top, cancellationToken);
         }
 
-        private static Pageable<U> ConvertResults<U, T>(Func<string, string, U> ctor, Pageable<GenericResourceExpanded> result)
-            where U : ResourceClientBase<T>
+        private static AsyncPageable<U> _ListAtContextAsync<U, T>(ArmClientContext clientContext, ResourceIdentifier scopeId, string scopeFilter = null, ArmResourceFilter resourceFilter = null, int? top = null, CancellationToken cancellationToken = default)
+            where U : ResourceOperationsBase<T>
             where T : Resource
         {
-            return new PhWrappingPageable<GenericResourceExpanded, U>(result, s => ctor(s.Id, s.Location));
+            //TODO: Add the following logic
+            //if armfilter != null then use arm list call
+            //if armfilter == null && listbysub exists for the rp use rp call
+            //else use arm list call
+
+            var filters = GetFilters(scopeId, resourceFilter);
+            var resourceOperations = GetResourcesClient(clientContext, scopeId.Subscription).Resources;
+            AsyncPageable<GenericResourceExpanded> result;
+            if (scopeFilter == null)
+            {
+                result = resourceOperations.ListAsync(filters.ToString(), null, top, cancellationToken);
+            }
+            else
+            {
+                result = resourceOperations.ListByResourceGroupAsync(scopeFilter, filters.ToString(), null, top, cancellationToken);
+            }
+
+            return ConvertResultsAsync<U, T>(result);
         }
 
-        private static AsyncPageable<U> ConvertResultsAsync<U, T>(Func<string, string, U> ctor, AsyncPageable<GenericResourceExpanded> result)
-            where U : ResourceClientBase<T>
+        private static Pageable<U> _ListAtContext<U, T>(ArmClientContext clientContext, ResourceIdentifier scopeId, string scopeFilter = null, ArmResourceFilter resourceFilter = null, int? top = null, CancellationToken cancellationToken = default)
+            where U : ResourceOperationsBase<T>
             where T : Resource
         {
-            return new PhWrappingAsyncPageable<GenericResourceExpanded, U>(result, s => ctor(s.Id, s.Location));
+            //TODO: Add the following logic
+            //if armfilter != null then use arm list call
+            //if armfilter == null && listbysub exists for the rp use rp call
+            //else use arm list call
+
+            var filters = GetFilters(scopeId, resourceFilter);
+            var resourceOperations = GetResourcesClient(clientContext, scopeId.Subscription).Resources;
+            Pageable<GenericResourceExpanded> result;
+            if(scopeFilter == null)
+            {
+                result = resourceOperations.List(filters.ToString(), null, top, cancellationToken);
+            }
+            else
+            {
+                result = resourceOperations.ListByResourceGroup(scopeFilter, filters.ToString(), null, top, cancellationToken);
+            }
+
+            return ConvertResults<U, T>(result);
         }
 
-        private static object GetFilters(ResourceIdentifier id, ArmSubstringFilter substringFilter)
+        private static Pageable<U> ConvertResults<U, T>(Pageable<GenericResourceExpanded> result)
+            where U : ResourceOperationsBase<T>
+            where T : Resource
+        {
+            return new PhWrappingPageable<GenericResourceExpanded, U>(result, s => Activator.CreateInstance(typeof(U), s, s.Id) as U);
+        }
+
+        private static AsyncPageable<U> ConvertResultsAsync<U, T>(AsyncPageable<GenericResourceExpanded> result)
+            where U : ResourceOperationsBase<T>
+            where T : Resource
+        {
+            return new PhWrappingAsyncPageable<GenericResourceExpanded, U>(result, s => Activator.CreateInstance(typeof(U), s, s.Id) as U);
+        }
+
+        private static ArmFilterCollection GetFilters(ResourceIdentifier id, ArmResourceFilter resourceFilter)
         {
             var filters = new ArmFilterCollection(id.Type);
-            filters.SubstringFilter = substringFilter;
+            if (resourceFilter != null)
+                _typeSwitch[resourceFilter.GetType()](filters, resourceFilter);
             return filters;
         }
 
-        protected static ResourcesManagementClient GetResourcesClient(ArmClientBase context, string subscription)
+        //TODO: should be able to access context.GetClient() instead of needing this method
+        protected static ResourcesManagementClient GetResourcesClient(ArmClientContext context, string id)
         {
-            return new ResourcesManagementClient(context.BaseUri, subscription, context.Credential);
+            return new ResourcesManagementClient(context.BaseUri, id, context.Credential);
         }
     }
 }

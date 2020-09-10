@@ -14,9 +14,9 @@ namespace client
 
             var resourceGroup = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
 
-            resourceGroup.ListVms().Select(vm =>
+            resourceGroup.ListVirtualMachines().Select(vm =>
             {
-                var parts = vm.Context.Name.Split('-');
+                var parts = vm.Id.Name.Split('-');
                 var n = Convert.ToInt32(parts[parts.Length - 2]);
                 return (vm, n);
             })
@@ -24,9 +24,9 @@ namespace client
                 .ToList()
                 .ForEach(tuple =>
                 {
-                    Console.WriteLine($"Stopping {tuple.vm.Context.Name}");
+                    Console.WriteLine($"Stopping {tuple.vm.Id.Name}");
                     tuple.vm.Stop();
-                    Console.WriteLine($"Starting {tuple.vm.Context.Name}");
+                    Console.WriteLine($"Starting {tuple.vm.Id.Name}");
                     tuple.vm.Start();
                 });
         }

@@ -34,7 +34,7 @@ namespace azure_proto_core
         }
 
         protected override Resource Resource { get;  set; }
-        public override ResourceIdentifier Context => Resource.Id;
+        public override ResourceIdentifier Id => Resource.Id;
 
         public virtual bool HasModel { 
             get 
@@ -68,7 +68,5 @@ namespace azure_proto_core
         public abstract Task<ArmOperation<ResourceOperationsBase<T>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default);
         public abstract ArmOperation<Response> Delete();
         public abstract Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default);
-
     }
-
 }

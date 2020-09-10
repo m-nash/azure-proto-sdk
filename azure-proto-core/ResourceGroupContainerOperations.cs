@@ -1,13 +1,7 @@
 ﻿using Azure;
-using Azure.Core;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
-using azure_proto_core;
 using azure_proto_core.Adapters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,13 +15,20 @@ namespace azure_proto_core
     {
         public override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
 
+        internal ResourceGroupContainerOperations(ArmClientContext other, ResourceIdentifier context) : base(other, context)
+        {
+        }
+        internal ResourceGroupContainerOperations(ArmClientContext other, Resource context) : base(other, context)
+        {
+        }
+
         internal ResourceGroupContainerOperations(OperationsBase other, ResourceIdentifier context) : base(other, context)
         {
         }
         internal ResourceGroupContainerOperations(OperationsBase other, Resource context) : base(other, context)
         {
         }
-
+        
         public override ArmOperation<ResourceOperationsBase<PhResourceGroup>> Create(string name, PhResourceGroup resourceDetails)
         {
             return new PhArmOperation<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(Operations.CreateOrUpdate(name, resourceDetails), g => ResourceGroup(new PhResourceGroup(g)));
@@ -67,11 +68,9 @@ namespace azure_proto_core
 
         public ResourceGroupOperations ResourceGroup(string rg)
         {
-            return new ResourceGroupOperations(this, $"{Context}/resourceGroups/{rg}");
+            return new ResourceGroupOperations(this, $"{Id}/resourceGroups/{rg}");
         }
 
-        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Context.Subscription, cred)).ResourceGroups;
-
-
+        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Id.Subscription, cred)).ResourceGroups;
     }
 }

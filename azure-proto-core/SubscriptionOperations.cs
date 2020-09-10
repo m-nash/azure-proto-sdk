@@ -2,10 +2,7 @@
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using azure_proto_core.Adapters;
-using azure_proto_core.Resources;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,20 +14,13 @@ namespace azure_proto_core
     /// </summary>
     public class SubscriptionOperations : OperationsBase
     {
-        public ResourceIdentifier Id { get; private set; }
-        public SubscriptionOperations(ArmClientContext parent, string defaultSubscription) :base(parent, $"/subscriptions/{defaultSubscription}")
-        {
-            Id = new ResourceIdentifier($"/subscriptions/{defaultSubscription}");
-        }
-        public SubscriptionOperations(ArmClientContext parent, ResourceIdentifier defaultSubscription) : base(parent, defaultSubscription)
-        {
-            Id = defaultSubscription;
-        }
+        public SubscriptionOperations(ArmClientContext parent, string defaultSubscription) : base(parent, $"/subscriptions/{defaultSubscription}") { }
 
-        public SubscriptionOperations(ArmClientContext parent, Resource defaultSubscription) : base(parent, defaultSubscription)
-        {
-            Id = defaultSubscription.Id;
-        }
+        public SubscriptionOperations(ArmClientContext parent, ResourceIdentifier defaultSubscription) : base(parent, defaultSubscription) { }
+
+        public SubscriptionOperations(ArmClientContext parent, Resource defaultSubscription) : base(parent, defaultSubscription) { }
+
+        public override ResourceType ResourceType => "Microsoft.Resources/subscriptions";
 
         public ArmOperation<ResourceGroupOperations> CreateResourceGroup(string name, PhResourceGroup resourceDetails)
         {
@@ -73,8 +63,6 @@ namespace azure_proto_core
         {
             return new ResourceGroupOperations(this, $"{Id}/resourceGroups/{resourceGroup}");
         }
-
-        public override ResourceType ResourceType => ResourceType.None;
 
         internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred)).Subscriptions;
 

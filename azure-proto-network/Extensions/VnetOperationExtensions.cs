@@ -1,5 +1,4 @@
-﻿using Azure;
-using Azure.ResourceManager.Network.Models;
+﻿using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +19,7 @@ namespace azure_proto_network
 
         public static SubnetOperations Subnet(this ResourceOperationsBase<PhVirtualNetwork> operations, string subnet)
         {
-            return new SubnetOperations(operations, $"{operations.Context}/subnets/{subnet}");
+            return new SubnetOperations(operations, $"{operations.Id}/subnets/{subnet}");
         }
 
         public static ArmBuilder<PhSubnet> ConstructSubnet(this ResourceOperationsBase<PhVirtualNetwork> operations, string name, string cidr, Location location = null, PhNetworkSecurityGroup group = null)
@@ -36,7 +35,7 @@ namespace azure_proto_network
                 subnet.NetworkSecurityGroup = group.Model;
             }
 
-            return new ArmBuilder<PhSubnet>(new SubnetContainer(operations, operations.Context), new PhSubnet(subnet, location ?? operations.DefaultLocation));
+            return new ArmBuilder<PhSubnet>(new SubnetContainer(operations, operations.Id), new PhSubnet(subnet, location ?? operations.DefaultLocation));
         }
 
         public static ArmOperation<ResourceOperationsBase<PhSubnet>> CreateSubnet(this ResourceOperationsBase<PhVirtualNetwork> operations, string name, PhSubnet resourceDetails)
@@ -49,9 +48,9 @@ namespace azure_proto_network
             return GetSubnetContainer(operations).CreateAsync(name, resourceDetails, cancellationToken);
         }
 
-        internal static SubnetContainer GetSubnetContainer(ResourceClientBase<PhVirtualNetwork> operations )
+        internal static SubnetContainer GetSubnetContainer(ResourceOperationsBase<PhVirtualNetwork> operations )
         {
-            return new SubnetContainer(operations, operations.Context);
+            return new SubnetContainer(operations, operations.Id);
         }
     }
 }

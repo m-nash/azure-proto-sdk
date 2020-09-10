@@ -1,7 +1,5 @@
 ﻿using Azure.Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace azure_proto_core
 {
@@ -32,7 +30,7 @@ namespace azure_proto_core
 
         public virtual Location DefaultLocation { get; set; }
 
-        protected TokenCredential Credential { get; }
+        internal TokenCredential Credential { get; }
 
         internal Uri BaseUri { get; }
 
