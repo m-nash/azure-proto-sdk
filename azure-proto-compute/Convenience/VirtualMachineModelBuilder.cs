@@ -10,13 +10,12 @@ namespace azure_proto_compute.Convenience
     public class VirtualMachineModelBuilder : VirtualMachineModelBuilderBase
     {
         // TODO: Update Builder after models are incorporated in generated models
-        private VirtualMachine _model;
 
-        internal VirtualMachineModelBuilder(string vmName, Location location)
+        internal VirtualMachineModelBuilder(VirtualMachineContainer containerOperations, PhVirtualMachine vm): base(containerOperations, vm)
         {
             // TODO: Ph model should allow default constructor and property individually settable
             // _model.Name = vmName;
-            _model = new VirtualMachine(location);
+            //_model = new VirtualMachine(location);
         }
 
         public VirtualMachineModelBuilderBase AttachDataDisk(TrackedResource azureEntity)

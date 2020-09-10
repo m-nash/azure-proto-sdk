@@ -42,7 +42,7 @@ namespace azure_proto_compute
             return container.CreateAsync(name, resourceDetails);
         }
 
-        public static ArmBuilder<PhVirtualMachine> ConstructVirtualMachine(this ResourceGroupOperations operations, string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, PhAvailabilitySet aset, Location location = null)
+        public static VirtualMachineModelBuilder ConstructVirtualMachine(this ResourceGroupOperations operations, string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, PhAvailabilitySet aset, Location location = null)
         {
             var vm = new VirtualMachine(location ?? operations.DefaultLocation)
             {
@@ -69,12 +69,13 @@ namespace azure_proto_compute
                 AvailabilitySet = new SubResource() { Id = aset.Id }
             };
 
-            return new ArmBuilder<PhVirtualMachine>(new VirtualMachineContainer(operations, operations.Id), new PhVirtualMachine(vm));
+            return new VirtualMachineModelBuilder(new VirtualMachineContainer(operations, operations.Id), new PhVirtualMachine(vm));
         }
 
         public static VirtualMachineModelBuilder VirtualMachineBuilder(this ResourceGroupOperations operations, string name, Location location)
         {
-            return new VirtualMachineModelBuilder(name, location);
+            //TODO: Fix this case
+            return new VirtualMachineModelBuilder(null, null);
         }
 
         /// <summary>

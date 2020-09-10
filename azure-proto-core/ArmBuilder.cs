@@ -7,24 +7,29 @@ namespace azure_proto_core
     public class ArmBuilder<T>
         where T: Resource
     {
-        private T _resource;
-        private ResourceContainerOperations<T> _containerOperations;
+        protected T _resource;
+        protected ResourceContainerOperations<T> _unTypedContainerOperations;
 
         public ArmBuilder(ResourceContainerOperations<T> containerOperations, T resource)
         {
             _resource = resource;
-            _containerOperations = containerOperations;
+            _unTypedContainerOperations = containerOperations;
         }
 
-        //TODO: should not allow both on the same type
+        //TODO: should not allow both create(string name) and create() on the same type
         public virtual ArmOperation<ResourceOperationsBase<T>> Create(string name)
         {
-            return _containerOperations.Create(name, _resource);
+            return _unTypedContainerOperations.Create(name, _resource);
         }
 
-        public virtual ArmOperation<ResourceOperationsBase<T>> Create()
+        //public virtual ArmOperation<ResourceOperationsBase<T>> Create()
+        //{
+        //    return _unTypedContainerOperations.Create(_resource);
+        //}
+
+        public virtual T Build()
         {
-            return _containerOperations.Create(_resource);
+            return _resource;
         }
     }
 }

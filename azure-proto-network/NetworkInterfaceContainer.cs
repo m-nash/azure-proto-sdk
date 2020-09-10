@@ -27,7 +27,7 @@ namespace azure_proto_network
 
         public override ArmOperation<ResourceOperationsBase<PhNetworkInterface>> Create(string name, PhNetworkInterface resourceDetails)
         {
-            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, resourceDetails);
+            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails);
             return new PhArmOperation<ResourceOperationsBase<PhNetworkInterface>, Azure.ResourceManager.Network.Models.NetworkInterface>(
                 operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
                 n => new NetworkInterfaceOperations(this, new PhNetworkInterface(n)));
@@ -36,7 +36,7 @@ namespace azure_proto_network
         public async override Task<ArmOperation<ResourceOperationsBase<PhNetworkInterface>>> CreateAsync(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<ResourceOperationsBase<PhNetworkInterface>, Azure.ResourceManager.Network.Models.NetworkInterface>(
-                await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, Id.Name, resourceDetails, cancellationToken), 
+                await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken), 
                 n => new NetworkInterfaceOperations(this, new PhNetworkInterface(n)));
         }
 
