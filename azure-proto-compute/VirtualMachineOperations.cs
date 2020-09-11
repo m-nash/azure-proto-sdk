@@ -14,20 +14,14 @@ namespace azure_proto_compute
     /// </summary>
     public class VirtualMachineOperations : ResourceOperationsBase<PhVirtualMachine>
     {
-        public VirtualMachineOperations(ArmClientContext parent, TrackedResource context) : base(parent, context)
-        {
-        }
+        public VirtualMachineOperations(ArmClientContext parent, TrackedResource context) : base(parent, context) { }
 
-        public VirtualMachineOperations(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
-        {
-        }
-        public VirtualMachineOperations(OperationsBase parent, TrackedResource context) : base(parent, context)
-        {
-        }
+        public VirtualMachineOperations(ArmClientContext parent, ResourceIdentifier context) : base(parent, context) { }
 
-        public VirtualMachineOperations(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
-        {
-        }
+        public VirtualMachineOperations(OperationsBase parent, TrackedResource context) : base(parent, context) { }
+
+        public VirtualMachineOperations(OperationsBase parent, ResourceIdentifier context) : base(parent, context) { }
+
         public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 
         public override ArmOperation<Response> Delete()
@@ -50,7 +44,6 @@ namespace azure_proto_compute
             return new ArmVoidOperation(await Operations.StartStartAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
-
         public ArmOperation<Response> Stop(bool? skipShutdown = null)
         {
             return new ArmVoidOperation(Operations.StartPowerOff(Id.ResourceGroup, Id.Name, skipShutdown));
@@ -60,7 +53,6 @@ namespace azure_proto_compute
         {
             return new ArmVoidOperation(await Operations.StartPowerOffAsync(Id.ResourceGroup, Id.Name, skipShutdown, cancellationToken));
         }
-
 
         public override Response<ResourceOperationsBase<PhVirtualMachine>> Get()
         {

@@ -25,24 +25,25 @@ namespace client
 
             // Create AvailabilitySet
             Console.WriteLine("--------Start create AvailabilitySet--------");
-            var aset = resourceGroup.ConstructAvailabilitySet("Aligned").Create(Context.VmName + "_aSet").Value as AvailabilitySetOperations;
+            var aset = resourceGroup.ConstructAvailabilitySet("Aligned").Create(Context.VmName + "_aSet").Value;
 
             // Create VNet
             Console.WriteLine("--------Start create VNet--------");
             string vnetName = Context.VmName + "_vnet";
-            var vnet = resourceGroup.ConstructVnet("10.0.0.0/16").Create(vnetName).Value as VirtualNetworkOperations;
+            var vnet = resourceGroup.ConstructVnet("10.0.0.0/16").Create(vnetName).Value;
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
-            var nsg = resourceGroup.ConstructNsg(Context.NsgName, 80).Create().Value;
-            var subnet = vnet.ConstructSubnet(Context.SubnetName, "10.0.0.0/24").Create().Value as SubnetOperations;
+            var nsg = resourceGroup.ConstructNsg(Context.NsgName, 80).Create(Context.NsgName).Value;
+            var subnet = vnet.ConstructSubnet(Context.SubnetName, "10.0.0.0/24").Create(Context.SubnetName).Value;
 
-            CreateVmsAsync(resourceGroup, aset, subnet).Wait();
+            //TODO: Can we do the cast here implicitly
+            CreateVms(resourceGroup, aset as AvailabilitySetOperations, subnet as SubnetOperations);
         }
 
-        private async Task CreateVmsAsync(ResourceGroupOperations resourceGroup, AvailabilitySetOperations aset, SubnetOperations subnet)
+        private void CreateVms(ResourceGroupOperations resourceGroup, AvailabilitySetOperations aset, SubnetOperations subnet)
         {
-            List<Task<VirtualMachineOperations>> tasks = new List<Task<VirtualMachineOperations>>();
+            List<ArmOperation<ResourceOperationsBase<PhVirtualMachine>>> operations = new List<ArmOperation<ResourceOperationsBase<PhVirtualMachine>>>();
             for (int i = 0; i < 10; i++)
             {
                 // Create IP Address
@@ -51,18 +52,19 @@ namespace client
 
                 // Create Network Interface
                 Console.WriteLine("--------Start create Network Interface--------");
-                var nic = resourceGroup.ConstructNic(ipAddress.GetModelIfNewer(), subnet.Id).Create($"{Context.VmName}_{i}_nic");
+                var nic = resourceGroup.ConstructNic(ipAddress.GetModelIfNewer(), subnet.Id).Create($"{Context.VmName}_{i}_nic").Value;
 
                 // Create VM
                 string num = i % 2 == 0 ? "even" : "odd";
                 string name = $"{Context.VmName}-{i}-{num}";
                 Console.WriteLine("--------Start create VM {0}--------", i);
-                var vm = resourceGroup.ConstructVirtualMachine(name, "admin-user", "!@#$%asdfA", nic.Id, aset.GetModelIfNewer()).Create(name).Value;
+                var vmOp = resourceGroup.ConstructVirtualMachine(name, "admin-user", "!@#$%asdfA", nic.Id, aset.GetModelIfNewer()).StartCreate(name);
+                operations.Add(vmOp);
             }
 
-            foreach (var task in tasks)
+            foreach (var operation in operations)
             {
-                var vm = await task;
+                var vm = operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult().Value;
                 Console.WriteLine($"--------Finished creating VM {vm.Id.Name}");
             }
         }

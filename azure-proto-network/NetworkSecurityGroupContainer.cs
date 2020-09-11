@@ -29,7 +29,7 @@ namespace azure_proto_network
 
         public override ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>> Create(string name, PhNetworkSecurityGroup resourceDetails)
         {
-            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, resourceDetails.Model);
+            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model);
             return new PhArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(), 
                 n => new NetworkSecurityGroupOperations(this, new PhNetworkSecurityGroup(n)));
         }
@@ -37,7 +37,7 @@ namespace azure_proto_network
         public async override Task<ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>>> CreateAsync(string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(
-                await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, Id.Name, resourceDetails.Model, cancellationToken),
+                await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
                 n => new NetworkSecurityGroupOperations(this, new PhNetworkSecurityGroup(n)));
         }
     }
