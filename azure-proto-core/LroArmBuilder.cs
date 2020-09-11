@@ -4,6 +4,7 @@ using System.Text;
 
 namespace azure_proto_core
 {
+    //TODO: Need to address the naming of this object
     public abstract class LroArmBuilder<U, T> : ArmBuilder< T>
         where U : ResourceContainerOperations<T>
         where T : Resource
