@@ -34,7 +34,12 @@ namespace azure_proto_compute
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
-        public ArmOperation<Response> Start()
+        public ArmOperation<Response> PowerOn()
+        {
+            return new ArmVoidOperation(StartPowerOn().WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+        }
+
+        public ArmOperation<Response> StartPowerOn()
         {
             return new ArmVoidOperation(Operations.StartStart(Id.ResourceGroup, Id.Name));
         }
@@ -44,7 +49,12 @@ namespace azure_proto_compute
             return new ArmVoidOperation(await Operations.StartStartAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
-        public ArmOperation<Response> Stop(bool? skipShutdown = null)
+        public ArmOperation<Response> PowerOff(bool? skipShutdown = null)
+        {
+            return new ArmVoidOperation(StartPowerOff(skipShutdown).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+        }
+
+        public ArmOperation<Response> StartPowerOff(bool? skipShutdown = null)
         {
             return new ArmVoidOperation(Operations.StartPowerOff(Id.ResourceGroup, Id.Name, skipShutdown));
         }

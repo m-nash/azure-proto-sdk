@@ -20,7 +20,7 @@ namespace azure_proto_core.Resources
 
         public override string ToString()
         {
-            return $"$filter={GetFilterString()}";
+            return GetFilterString();
         }
     }
 
@@ -79,7 +79,7 @@ namespace azure_proto_core.Resources
 
         public override string GetFilterString()
         {
-           return $"resourceType eq '{ResourceType}'";
+           return $"resourceType EQ '{ResourceType}'";
         }
     }
 
@@ -109,7 +109,7 @@ namespace azure_proto_core.Resources
 
         public override string GetFilterString()
         {
-            return $"$filter=tagName eq '{_tag.Item1}' and tagValue eq '{_tag.Item2}'";
+            return $"tagName eq '{_tag.Item1}' and tagValue eq '{_tag.Item2}'";
         }
     }
 
@@ -142,7 +142,7 @@ namespace azure_proto_core.Resources
                 builder.Add(substring);
             }
 
-            return $"$filter={string.Join(" and ", builder)}";
+            return $"{string.Join(" and ", builder)}";
         }
     }
 }

@@ -27,9 +27,9 @@ namespace client
             foreach (var vm in rg.ListVirtualMachinesByTag(new azure_proto_core.Resources.ArmTagFilter("tagkey", "tagvalue")))
             {
                 Console.WriteLine("--------Stopping VM {0}--------", vm.Id.Name);
-                vm.Stop();
+                vm.PowerOff();
                 Console.WriteLine("--------Starting VM {0}--------", vm.Id.Name);
-                vm.Start();
+                vm.PowerOn();
             }
         }
     }

@@ -74,7 +74,7 @@ namespace azure_proto_core
                 result = resourceOperations.ListByResourceGroupAsync(scopeFilter, filters.ToString(), null, top, cancellationToken);
             }
 
-            return ConvertResultsAsync<U, T>(result);
+            return ConvertResultsAsync<U, T>(result, clientContext);
         }
 
         private static Pageable<U> _ListAtContext<U, T>(ArmClientContext clientContext, ResourceIdentifier scopeId, string scopeFilter = null, ArmResourceFilter resourceFilter = null, int? top = null, CancellationToken cancellationToken = default)
@@ -101,21 +101,21 @@ namespace azure_proto_core
                 result = resourceOperations.ListByResourceGroup(scopeFilter, filters.ToString(), null, top, cancellationToken);
             }
 
-            return ConvertResults<U, T>(result);
+            return ConvertResults<U, T>(result, clientContext);
         }
 
-        private static Pageable<U> ConvertResults<U, T>(Pageable<GenericResourceExpanded> result)
+        private static Pageable<U> ConvertResults<U, T>(Pageable<GenericResourceExpanded> result, ArmClientContext clientContext)
             where U : ResourceOperationsBase<T>
             where T : TrackedResource
         {
-            return new PhWrappingPageable<GenericResourceExpanded, U>(result, s => Activator.CreateInstance(typeof(U), s, s.Id) as U);
+            return new PhWrappingPageable<GenericResourceExpanded, U>(result, s => Activator.CreateInstance(typeof(U), clientContext, new ResourceIdentifier(s.Id)) as U);
         }
 
-        private static AsyncPageable<U> ConvertResultsAsync<U, T>(AsyncPageable<GenericResourceExpanded> result)
+        private static AsyncPageable<U> ConvertResultsAsync<U, T>(AsyncPageable<GenericResourceExpanded> result, ArmClientContext clientContext)
             where U : ResourceOperationsBase<T>
             where T : TrackedResource
         {
-            return new PhWrappingAsyncPageable<GenericResourceExpanded, U>(result, s => Activator.CreateInstance(typeof(U), s, s.Id) as U);
+            return new PhWrappingAsyncPageable<GenericResourceExpanded, U>(result, s => Activator.CreateInstance(typeof(U), clientContext, new ResourceIdentifier(s.Id)) as U);
         }
 
         private static ArmFilterCollection GetFilters(ResourceType type, ArmResourceFilter resourceFilter)

@@ -25,20 +25,36 @@ namespace azure_proto_network
 
         public override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
 
-        internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).NetworkSecurityGroups;
-
-        public override ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>> Create(string name, PhNetworkSecurityGroup resourceDetails)
+        public override ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>> Create(string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
         {
-            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model);
-            return new PhArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(), 
+            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
+            return new PhArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(
+                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(), 
                 n => new NetworkSecurityGroupOperations(this, new PhNetworkSecurityGroup(n)));
         }
 
         public async override Task<ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>>> CreateAsync(string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
         {
+            var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
+            return new PhArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(
+                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+                n => new NetworkSecurityGroupOperations(this, new PhNetworkSecurityGroup(n)));
+        }
+
+        public override ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>> StartCreate(string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
+        {
+            return new PhArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(
+                Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
+                n => new NetworkSecurityGroupOperations(this, new PhNetworkSecurityGroup(n)));
+        }
+
+        public async override Task<ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>>> StartCreateAsync(string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
+        {
             return new PhArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
                 n => new NetworkSecurityGroupOperations(this, new PhNetworkSecurityGroup(n)));
         }
+
+        internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).NetworkSecurityGroups;
     }
 }

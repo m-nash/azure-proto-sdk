@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security;
-using System.Text;
-using Azure.ResourceManager.Compute.Models;
-using azure_proto_core;
+﻿using azure_proto_core;
+using System;
 
 namespace azure_proto_compute.Convenience
 {
@@ -29,11 +25,6 @@ namespace azure_proto_compute.Convenience
         }
 
         public override VirtualMachineModelBuilderBase UseLinuxImage(string adminUser, string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override PhVirtualMachine ToModel()
         {
             throw new NotImplementedException();
         }

@@ -53,13 +53,11 @@ namespace client
             // 2. Is there a risk that the referenced model has not been created in ARM yet resource id is populated?
 
             // Options: required parameters on in the constructor
-            var vmModel = resourceGroup.VirtualMachineBuilder(Context.VmName, Context.Loc)
+            var vm = resourceGroup.VirtualMachineBuilder(Context.VmName, Context.Loc)
                 .UseWindowsImage("admin-user", "!@#$%asdfA")
                 .RequiredNetworkInterface(nic.Id)
                 .RequiredAvalabilitySet(aset.Id)
-                .ToModel();
-
-            var vm = resourceGroup.CreateVirtualMachine(Context.VmName, vmModel).Value;
+                .Create(Context.VmName).Value;
 
             return Task.FromResult(vm as VirtualMachineOperations);
         }
