@@ -30,7 +30,7 @@ namespace azure_proto_core
     /// </summary>
     public class ArmVoidOperation : ArmOperation<Response>
     {
-        internal class WrappingResponse : Response<Response>
+        internal class WrappingResponse : ArmResponse<Response>
         {
             Response _wrapped;
 

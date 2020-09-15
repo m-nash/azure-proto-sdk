@@ -26,19 +26,19 @@ namespace azure_proto_network
 
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 
-        public override ArmOperation<ResourceOperationsBase<PhNetworkInterface>> Create(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<ResourceOperationsBase<PhNetworkInterface>> Create(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
-            return new PhArmOperation<ResourceOperationsBase<PhNetworkInterface>, NetworkInterface>(
-                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+            return new PhArmResponse<ResourceOperationsBase<PhNetworkInterface>, NetworkInterface>(
+                operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
                 n => new NetworkInterfaceOperations(this, new PhNetworkInterface(n)));
         }
 
-        public async override Task<ArmOperation<ResourceOperationsBase<PhNetworkInterface>>> CreateAsync(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceOperationsBase<PhNetworkInterface>>> CreateAsync(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
         {
-            var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken);
-            return new PhArmOperation<ResourceOperationsBase<PhNetworkInterface>, NetworkInterface>(
-                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(), 
+            var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
+            return new PhArmResponse<ResourceOperationsBase<PhNetworkInterface>, NetworkInterface>(
+                await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false), 
                 n => new NetworkInterfaceOperations(this, new PhNetworkInterface(n)));
         }
 
@@ -52,7 +52,7 @@ namespace azure_proto_network
         public async override Task<ArmOperation<ResourceOperationsBase<PhNetworkInterface>>> StartCreateAsync(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<ResourceOperationsBase<PhNetworkInterface>, NetworkInterface>(
-                await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken),
+                await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),
                 n => new NetworkInterfaceOperations(this, new PhNetworkInterface(n)));
         }
 

@@ -29,12 +29,12 @@ namespace azure_proto_core
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.Name, cancellationToken));
         }
 
-        public override Response<ResourceOperationsBase<PhResourceGroup>> Get()
+        public override ArmResponse<ResourceOperationsBase<PhResourceGroup>> Get()
         {
             return new PhArmResponse<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(Operations.Get(Id.Name), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public async override Task<Response<ResourceOperationsBase<PhResourceGroup>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceOperationsBase<PhResourceGroup>>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(await Operations.GetAsync(Id.Name, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
@@ -53,7 +53,7 @@ namespace azure_proto_core
             return new PhArmOperation<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(await Operations.UpdateAsync(Id.Name, patch, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public ArmOperation<ResourceOperationsBase<T>> CreateResource<T>(string name, T model, azure_proto_core.Location location = default) where T : TrackedResource
+        public ArmResponse<ResourceOperationsBase<T>> CreateResource<T>(string name, T model, azure_proto_core.Location location = default) where T : TrackedResource
         {
 
             var myResource = Resource as TrackedResource;
@@ -77,7 +77,7 @@ namespace azure_proto_core
             return container.Create(name, model);
         }
 
-        public Task<ArmOperation<ResourceOperationsBase<T>>> CreateResourceAsync<T>(string name, T model, azure_proto_core.Location location = default, CancellationToken token = default) where T : TrackedResource
+        public Task<ArmResponse<ResourceOperationsBase<T>>> CreateResourceAsync<T>(string name, T model, azure_proto_core.Location location = default, CancellationToken token = default) where T : TrackedResource
         {
 
             var myResource = Resource as TrackedResource;

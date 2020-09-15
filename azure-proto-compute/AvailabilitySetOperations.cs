@@ -34,12 +34,12 @@ namespace azure_proto_compute
             return new ArmVoidOperation(await Operations.DeleteAsync(Id.ResourceGroup, Id.Name));
         }
 
-        public override Response<ResourceOperationsBase<PhAvailabilitySet>> Get()
+        public override ArmResponse<ResourceOperationsBase<PhAvailabilitySet>> Get()
         {
             return new PhArmResponse<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySet>(Operations.Get(Id.ResourceGroup, Id.Name), a => { Resource = new PhAvailabilitySet(a); return this; });
         }
 
-        public async override Task<Response<ResourceOperationsBase<PhAvailabilitySet>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceOperationsBase<PhAvailabilitySet>>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySet>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, cancellationToken), a => { Resource = new PhAvailabilitySet(a); return this; });
         }

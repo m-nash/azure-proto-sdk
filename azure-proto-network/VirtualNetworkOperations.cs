@@ -41,13 +41,13 @@ namespace azure_proto_network
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
-        public override Response<ResourceOperationsBase<PhVirtualNetwork>> Get()
+        public override ArmResponse<ResourceOperationsBase<PhVirtualNetwork>> Get()
         {
             return new PhArmResponse<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(Operations.Get(Id.ResourceGroup, Id.Name), 
                 n => { Resource = new PhVirtualNetwork(n); return this; });
         }
 
-        public async override Task<Response<ResourceOperationsBase<PhVirtualNetwork>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceOperationsBase<PhVirtualNetwork>>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
                 n => { Resource = new PhVirtualNetwork(n); return this;});

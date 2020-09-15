@@ -26,19 +26,19 @@ namespace azure_proto_network
 
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
-        public override ArmOperation<ResourceOperationsBase<PhPublicIPAddress>> Create(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<ResourceOperationsBase<PhPublicIPAddress>> Create(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
-            return new PhArmOperation<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(
-                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(), 
+            return new PhArmResponse<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(
+                operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(), 
                 n => new PublicIpAddressOperations(this, new PhPublicIPAddress(n)));
         }
 
-        public async override Task<ArmOperation<ResourceOperationsBase<PhPublicIPAddress>>> CreateAsync(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceOperationsBase<PhPublicIPAddress>>> CreateAsync(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
         {
-            var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken);
-            return new PhArmOperation<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(
-                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+            var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
+            return new PhArmResponse<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(
+                await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
                 n => new PublicIpAddressOperations(this, new PhPublicIPAddress(n)));
         }
 
@@ -52,7 +52,7 @@ namespace azure_proto_network
         public async override Task<ArmOperation<ResourceOperationsBase<PhPublicIPAddress>>> StartCreateAsync(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(
-                await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken),
+                await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),
                 n => new PublicIpAddressOperations(this, new PhPublicIPAddress(n)));
         }
 

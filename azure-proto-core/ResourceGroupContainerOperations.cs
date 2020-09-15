@@ -50,19 +50,19 @@ namespace azure_proto_core
             return new PhArmOperation<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(Operations.CreateOrUpdate(name, model), g => ResourceGroup(new PhResourceGroup(g)));
         }
 
-        public override ArmOperation<ResourceOperationsBase<PhResourceGroup>> Create(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<ResourceOperationsBase<PhResourceGroup>> Create(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
         {
-            var operation = Operations.CreateOrUpdate(name, resourceDetails, cancellationToken);
-            return new PhArmOperation<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(
-                operation,
+            var response = Operations.CreateOrUpdate(name, resourceDetails, cancellationToken);
+            return new PhArmResponse<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(
+                response,
                 g => ResourceGroup(new PhResourceGroup(g)));
         }
 
-        public async override Task<ArmOperation<ResourceOperationsBase<PhResourceGroup>>> CreateAsync(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceOperationsBase<PhResourceGroup>>> CreateAsync(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
         {
-            var operation = await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken);
-            return new PhArmOperation<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(
-                operation,
+            var response = await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken).ConfigureAwait(false);
+            return new PhArmResponse<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(
+                response,
                 g => ResourceGroup(new PhResourceGroup(g)));
         }
 
@@ -76,7 +76,7 @@ namespace azure_proto_core
         public async override Task<ArmOperation<ResourceOperationsBase<PhResourceGroup>>> StartCreateAsync(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(
-                await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken),
+                await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken).ConfigureAwait(false),
                 g => ResourceGroup(new PhResourceGroup(g)));
         }
 

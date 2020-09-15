@@ -38,12 +38,12 @@ namespace azure_proto_core
             }
         }
 
-        public abstract ArmOperation<ResourceOperationsBase<T>> Create(string name, T resourceDetails, CancellationToken cancellationToken = default);
+        public abstract ArmResponse<ResourceOperationsBase<T>> Create(string name, T resourceDetails, CancellationToken cancellationToken = default);
+
+        public abstract Task<ArmResponse<ResourceOperationsBase<T>>> CreateAsync(string name, T resourceDetails, CancellationToken cancellationToken = default);
 
         public abstract ArmOperation<ResourceOperationsBase<T>> StartCreate(string name, T resourceDetails, CancellationToken cancellationToken = default);
 
         public abstract Task<ArmOperation<ResourceOperationsBase<T>>> StartCreateAsync(string name, T resourceDetails, CancellationToken cancellationToken = default);
-
-        public abstract Task<ArmOperation<ResourceOperationsBase<T>>> CreateAsync(string name, T resourceDetails, CancellationToken cancellationToken = default);
     }
 }

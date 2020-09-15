@@ -186,7 +186,7 @@ namespace azure_proto_core
             return null;
         }
 
-        public ArmOperation<ResourceOperationsBase<T>> CreateResource<T>(string subscription, string resourceGroup, string name, T model, azure_proto_core.Location location = default) where T:TrackedResource
+        public ArmResponse<ResourceOperationsBase<T>> CreateResource<T>(string subscription, string resourceGroup, string name, T model, azure_proto_core.Location location = default) where T:TrackedResource
         {
             if (location == null)
             {

@@ -15,12 +15,12 @@ namespace azure_proto_core
             _unTypedContainerOperations = containerOperations;
         }
 
-        public virtual ArmOperation<ResourceOperationsBase<T>> Create(string name, CancellationToken cancellationToken = default)
+        public virtual ArmResponse<ResourceOperationsBase<T>> Create(string name, CancellationToken cancellationToken = default)
         {
             return _unTypedContainerOperations.Create(name, _resource, cancellationToken);
         }
 
-        public async virtual Task<ArmOperation<ResourceOperationsBase<T>>> CreateAsync(string name, CancellationToken cancellationToken = default)
+        public async virtual Task<ArmResponse<ResourceOperationsBase<T>>> CreateAsync(string name, CancellationToken cancellationToken = default)
         {
             return await _unTypedContainerOperations.CreateAsync(name, _resource, cancellationToken);
         }

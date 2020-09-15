@@ -37,13 +37,13 @@ namespace azure_proto_network
             return new ArmVoidOperation(await Operations.StartDeleteAsync (Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
-        public override Response<ResourceOperationsBase<PhPublicIPAddress>> Get()
+        public override ArmResponse<ResourceOperationsBase<PhPublicIPAddress>> Get()
         {
             return new PhArmResponse<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(Operations.Get(Id.ResourceGroup, Id.Name), 
                 n => { Resource = new PhPublicIPAddress(n); return this; });
         }
 
-        public async override Task<Response<ResourceOperationsBase<PhPublicIPAddress>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceOperationsBase<PhPublicIPAddress>>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<ResourceOperationsBase<PhPublicIPAddress>, PublicIPAddress>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
                n => { Resource = new PhPublicIPAddress(n); return this; });

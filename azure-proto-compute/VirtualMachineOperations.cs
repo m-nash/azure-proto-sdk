@@ -64,12 +64,12 @@ namespace azure_proto_compute
             return new ArmVoidOperation(await Operations.StartPowerOffAsync(Id.ResourceGroup, Id.Name, skipShutdown, cancellationToken));
         }
 
-        public override Response<ResourceOperationsBase<PhVirtualMachine>> Get()
+        public override ArmResponse<ResourceOperationsBase<PhVirtualMachine>> Get()
         {
             return new PhArmResponse<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(Operations.Get(Id.ResourceGroup, Id.Name), v => { Resource = new PhVirtualMachine(v); return this; } );
         }
 
-        public async override Task<Response<ResourceOperationsBase<PhVirtualMachine>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceOperationsBase<PhVirtualMachine>>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, cancellationToken), v => { Resource = new PhVirtualMachine(v); return this; });
         }

@@ -35,19 +35,19 @@ namespace azure_proto_compute
         {
             return new VirtualMachineOperations(this, vm);
         }
-        public override ArmOperation<ResourceOperationsBase<PhVirtualMachine>> Create(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<ResourceOperationsBase<PhVirtualMachine>> Create(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartCreateOrUpdate(base.Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
-            return new PhArmOperation<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(
-                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+            return new PhArmResponse<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(
+                operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
                 v => VirtualMachine(new PhVirtualMachine(v)));
         }
 
-        public async override Task<ArmOperation<ResourceOperationsBase<PhVirtualMachine>>> CreateAsync(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceOperationsBase<PhVirtualMachine>>> CreateAsync(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
         {
-            var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
-            return new PhArmOperation<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(
-                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+            var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
+            return new PhArmResponse<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(
+                await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
                 v => VirtualMachine(new PhVirtualMachine(v)));
         }
 
@@ -61,7 +61,7 @@ namespace azure_proto_compute
         public async override Task<ArmOperation<ResourceOperationsBase<PhVirtualMachine>>> StartCreateAsync(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(
-                await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
+                await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
                 v => VirtualMachine(new PhVirtualMachine(v)));
         }
 

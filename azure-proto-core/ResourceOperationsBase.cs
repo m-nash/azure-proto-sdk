@@ -63,8 +63,8 @@ namespace azure_proto_core
             return Get().Value.Model;
         }
 
-        public abstract Response<ResourceOperationsBase<T>> Get();
-        public abstract Task<Response<ResourceOperationsBase<T>>> GetAsync(CancellationToken cancellationToken = default);
+        public abstract ArmResponse<ResourceOperationsBase<T>> Get();
+        public abstract Task<ArmResponse<ResourceOperationsBase<T>>> GetAsync(CancellationToken cancellationToken = default);
         public abstract ArmOperation<ResourceOperationsBase<T>> AddTag(string key, string value);
         public abstract Task<ArmOperation<ResourceOperationsBase<T>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default);
         public abstract ArmOperation<Response> Delete();

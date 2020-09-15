@@ -20,6 +20,7 @@ namespace azure_proto_compute
         {
             return new VirtualMachineOperations(operations, $"{operations.Id}/providers/Microsoft.Compute/virtualMachines/{name}");
         }
+
         public static VirtualMachineOperations VirtualMachine(this ResourceGroupOperations operations, ResourceIdentifier vm)
         {
             return new VirtualMachineOperations(operations, vm);
@@ -30,13 +31,13 @@ namespace azure_proto_compute
             return new VirtualMachineOperations(operations, vm);
         }
 
-        public static ArmOperation<ResourceOperationsBase<PhVirtualMachine>> CreateVirtualMachine(this ResourceGroupOperations operations, string name, PhVirtualMachine resourceDetails)
+        public static ArmResponse<ResourceOperationsBase<PhVirtualMachine>> CreateVirtualMachine(this ResourceGroupOperations operations, string name, PhVirtualMachine resourceDetails)
         {
             var container = new VirtualMachineContainer(operations, operations.Id);
             return container.Create(name, resourceDetails);
         }
 
-        public static Task<ArmOperation<ResourceOperationsBase<PhVirtualMachine>>> CreateVirtualMachineAsync(this ResourceGroupOperations operations, string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmResponse<ResourceOperationsBase<PhVirtualMachine>>> CreateVirtualMachineAsync(this ResourceGroupOperations operations, string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
         {
             var container = new VirtualMachineContainer(operations, operations.Id);
             return container.CreateAsync(name, resourceDetails);
@@ -72,7 +73,7 @@ namespace azure_proto_compute
             return new VirtualMachineModelBuilder(new VirtualMachineContainer(operations, operations.Id), new PhVirtualMachine(vm));
         }
 
-        public static VirtualMachineModelBuilder VirtualMachineBuilder(this ResourceGroupOperations operations, string name, Location location)
+        public static VirtualMachineModelBuilder ConstructVirtualMachine(this ResourceGroupOperations operations, string name, Location location)
         {
             //TODO: Fix this case
             return new VirtualMachineModelBuilder(null, null);
@@ -133,13 +134,13 @@ namespace azure_proto_compute
             return new AvailabilitySetOperations(operations, set);
         }
 
-        public static ArmOperation<ResourceOperationsBase<PhAvailabilitySet>> CreateAvailabilitySet(this ResourceGroupOperations operations, string name, PhAvailabilitySet resourceDetails)
+        public static ArmResponse<ResourceOperationsBase<PhAvailabilitySet>> CreateAvailabilitySet(this ResourceGroupOperations operations, string name, PhAvailabilitySet resourceDetails)
         {
             var container = new AvailabilitySetContainer(operations, operations.Id);
             return container.Create(name, resourceDetails);
         }
 
-        public static Task<ArmOperation<ResourceOperationsBase<PhAvailabilitySet>>> CreateAvailabilitySetAsync(this ResourceGroupOperations operations, string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmResponse<ResourceOperationsBase<PhAvailabilitySet>>> CreateAvailabilitySetAsync(this ResourceGroupOperations operations, string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
         {
             var container = new AvailabilitySetContainer(operations, operations.Id);
             return container.CreateAsync(name, resourceDetails);
