@@ -15,34 +15,46 @@ namespace azure_proto_compute
     public static class ResourceGroupExtensions
     {
         #region VirtualMachines
-
-        public static VirtualMachineOperations VirtualMachine(this ResourceGroupOperations operations, string name)
+        public static VirtualMachineOperations VirtualMachine(this ResourceGroupOperations resourceGroup, string name)
         {
-            return new VirtualMachineOperations(operations, $"{operations.Id}/providers/Microsoft.Compute/virtualMachines/{name}");
+            return new VirtualMachineOperations(resourceGroup, $"{resourceGroup.Id}/providers/Microsoft.Compute/virtualMachines/{name}");
         }
 
-        public static VirtualMachineOperations VirtualMachine(this ResourceGroupOperations operations, ResourceIdentifier vm)
+        public static VirtualMachineOperations VirtualMachine(this ResourceGroupOperations resourceGroup, ResourceIdentifier vm)
         {
-            return new VirtualMachineOperations(operations, vm);
+            return new VirtualMachineOperations(resourceGroup, vm);
         }
 
-        public static VirtualMachineOperations VirtualMachine(this ResourceGroupOperations operations, TrackedResource vm)
+        public static VirtualMachineOperations VirtualMachine(this ResourceGroupOperations resourceGroup, TrackedResource vm)
         {
-            return new VirtualMachineOperations(operations, vm);
+            return new VirtualMachineOperations(resourceGroup, vm);
         }
 
-        public static ArmResponse<ResourceOperationsBase<PhVirtualMachine>> CreateVirtualMachine(this ResourceGroupOperations operations, string name, PhVirtualMachine resourceDetails)
+        public static ArmResponse<ResourceOperationsBase<PhVirtualMachine>> CreateVirtualMachine(this ResourceGroupOperations resourceGroup, string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
         {
-            var container = new VirtualMachineContainer(operations, operations.Id);
-            return container.Create(name, resourceDetails);
+            var container = new VirtualMachineContainer(resourceGroup, resourceGroup.Id);
+            return container.Create(name, resourceDetails, cancellationToken);
         }
 
-        public static Task<ArmResponse<ResourceOperationsBase<PhVirtualMachine>>> CreateVirtualMachineAsync(this ResourceGroupOperations operations, string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmResponse<ResourceOperationsBase<PhVirtualMachine>>> CreateVirtualMachineAsync(this ResourceGroupOperations resourceGroup, string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
         {
-            var container = new VirtualMachineContainer(operations, operations.Id);
-            return container.CreateAsync(name, resourceDetails);
+            var container = new VirtualMachineContainer(resourceGroup, resourceGroup.Id);
+            return container.CreateAsync(name, resourceDetails, cancellationToken);
         }
 
+        public static ArmOperation<ResourceOperationsBase<PhVirtualMachine>> StartCreateVirtualMachine(this ResourceGroupOperations resourceGroup, string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
+        {
+            var container = new VirtualMachineContainer(resourceGroup, resourceGroup.Id);
+            return container.StartCreate(name, resourceDetails, cancellationToken);
+        }
+
+        public static Task<ArmOperation<ResourceOperationsBase<PhVirtualMachine>>> StartCreateVirtualMachineAsync(this ResourceGroupOperations resourceGroup, string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
+        {
+            var container = new VirtualMachineContainer(resourceGroup, resourceGroup.Id);
+            return container.StartCreateAsync(name, resourceDetails, cancellationToken);
+        }
+
+        //TODO: Should this hang off of resourceGroup.Compute.ConstructVirtualMachine??
         public static VirtualMachineModelBuilder ConstructVirtualMachine(this ResourceGroupOperations operations, string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, PhAvailabilitySet aset, Location location = null)
         {
             var vm = new VirtualMachine(location ?? operations.DefaultLocation)
@@ -115,49 +127,58 @@ namespace azure_proto_compute
         {
             return ResourceListOperations.ListAtContextAsync<VirtualMachineOperations, PhVirtualMachine>(resourceGroup, filter, top, cancellationToken);
         }
-
         #endregion
 
         #region AvailabilitySets
-
-        public static AvailabilitySetOperations AvailabilitySets(this ResourceGroupOperations operations, string name)
+        public static AvailabilitySetOperations AvailabilitySets(this ResourceGroupOperations resourceGroup, string name)
         {
-            return new AvailabilitySetOperations(operations, $"{operations.Id}/providers/Microsoft.Compute/virtualMachines/{name}");
+            return new AvailabilitySetOperations(resourceGroup, $"{resourceGroup.Id}/providers/Microsoft.Compute/virtualMachines/{name}");
         }
-        public static AvailabilitySetOperations AvailabilitySets(this ResourceGroupOperations operations, ResourceIdentifier set)
+        public static AvailabilitySetOperations AvailabilitySets(this ResourceGroupOperations resourceGroup, ResourceIdentifier set)
         {
-            return new AvailabilitySetOperations(operations, set);
-        }
-
-        public static AvailabilitySetOperations AvailabilitySets(this ResourceGroupOperations operations, TrackedResource set)
-        {
-            return new AvailabilitySetOperations(operations, set);
+            return new AvailabilitySetOperations(resourceGroup, set);
         }
 
-        public static ArmResponse<ResourceOperationsBase<PhAvailabilitySet>> CreateAvailabilitySet(this ResourceGroupOperations operations, string name, PhAvailabilitySet resourceDetails)
+        public static AvailabilitySetOperations AvailabilitySets(this ResourceGroupOperations resourceGroup, TrackedResource set)
         {
-            var container = new AvailabilitySetContainer(operations, operations.Id);
-            return container.Create(name, resourceDetails);
+            return new AvailabilitySetOperations(resourceGroup, set);
         }
 
-        public static Task<ArmResponse<ResourceOperationsBase<PhAvailabilitySet>>> CreateAvailabilitySetAsync(this ResourceGroupOperations operations, string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        public static ArmResponse<ResourceOperationsBase<PhAvailabilitySet>> CreateAvailabilitySet(this ResourceGroupOperations resourceGroup, string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
         {
-            var container = new AvailabilitySetContainer(operations, operations.Id);
-            return container.CreateAsync(name, resourceDetails);
+            var container = new AvailabilitySetContainer(resourceGroup, resourceGroup.Id);
+            return container.Create(name, resourceDetails, cancellationToken);
         }
 
-        public static ArmBuilder<PhAvailabilitySet> ConstructAvailabilitySet(this ResourceGroupOperations operations, string skuName, Location location = null)
+        public static Task<ArmResponse<ResourceOperationsBase<PhAvailabilitySet>>> CreateAvailabilitySetAsync(this ResourceGroupOperations resourceGroup, string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
         {
-            var availabilitySet = new AvailabilitySet(location ?? operations.DefaultLocation)
+            var container = new AvailabilitySetContainer(resourceGroup, resourceGroup.Id);
+            return container.CreateAsync(name, resourceDetails, cancellationToken);
+        }
+
+        public static ArmOperation<ResourceOperationsBase<PhAvailabilitySet>> StartCreateAvailabilitySet(this ResourceGroupOperations resourceGroup, string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        {
+            var container = new AvailabilitySetContainer(resourceGroup, resourceGroup.Id);
+            return container.StartCreate(name, resourceDetails, cancellationToken);
+        }
+
+        public static Task<ArmOperation<ResourceOperationsBase<PhAvailabilitySet>>> StartCreateAvailabilitySetAsync(this ResourceGroupOperations resourceGroup, string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        {
+            var container = new AvailabilitySetContainer(resourceGroup, resourceGroup.Id);
+            return container.StartCreateAsync(name, resourceDetails, cancellationToken);
+        }
+
+        public static ArmBuilder<PhAvailabilitySet> ConstructAvailabilitySet(this ResourceGroupOperations resourceGroup, string skuName, Location location = null)
+        {
+            var availabilitySet = new AvailabilitySet(location ?? resourceGroup.DefaultLocation)
             {
                 PlatformUpdateDomainCount = 5,
                 PlatformFaultDomainCount = 2,
                 Sku = new Azure.ResourceManager.Compute.Models.Sku() { Name = skuName }
             };
 
-            return new ArmBuilder<PhAvailabilitySet>(new AvailabilitySetContainer(operations, operations.Id), new PhAvailabilitySet(availabilitySet));
+            return new ArmBuilder<PhAvailabilitySet>(new AvailabilitySetContainer(resourceGroup, resourceGroup.Id), new PhAvailabilitySet(availabilitySet));
         }
-
         #endregion
     }
 }

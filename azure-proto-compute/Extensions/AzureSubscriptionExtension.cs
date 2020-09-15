@@ -39,11 +39,9 @@ namespace azure_proto_compute
         {
             return ResourceListOperations.ListAtContextAsync<VirtualMachineOperations, PhVirtualMachine>(subscription, filter, top, cancellationToken);
         }
-
         #endregion
 
         #region AvailabilitySet List Operations
-
         public static Pageable<AvailabilitySetOperations> ListAvailabilitySets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             return ResourceListOperations.ListAtContext<AvailabilitySetOperations, PhAvailabilitySet>(subscription, filter, top, cancellationToken);
@@ -53,8 +51,6 @@ namespace azure_proto_compute
         {
             return ResourceListOperations.ListAtContextAsync<AvailabilitySetOperations, PhAvailabilitySet>(subscription, filter, top, cancellationToken);
         }
-
         #endregion
-
     }
 }

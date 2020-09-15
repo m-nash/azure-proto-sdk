@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace azure_proto_core
@@ -15,28 +16,61 @@ namespace azure_proto_core
             _unTypedContainerOperations = containerOperations;
         }
 
-        public virtual ArmResponse<ResourceOperationsBase<T>> Create(string name, CancellationToken cancellationToken = default)
+        public ArmResponse<ResourceOperationsBase<T>> Create(string name, CancellationToken cancellationToken = default)
         {
+            _resource = Build();
+
             return _unTypedContainerOperations.Create(name, _resource, cancellationToken);
         }
 
-        public async virtual Task<ArmResponse<ResourceOperationsBase<T>>> CreateAsync(string name, CancellationToken cancellationToken = default)
+        public async Task<ArmResponse<ResourceOperationsBase<T>>> CreateAsync(string name, CancellationToken cancellationToken = default)
         {
+            _resource = Build();
+
             return await _unTypedContainerOperations.CreateAsync(name, _resource, cancellationToken);
         }
 
-        public virtual ArmOperation<ResourceOperationsBase<T>> StartCreate(string name, CancellationToken cancellationToken = default)
+        public ArmOperation<ResourceOperationsBase<T>> StartCreate(string name, CancellationToken cancellationToken = default)
         {
+            _resource = Build();
+
             return _unTypedContainerOperations.StartCreate(name, _resource, cancellationToken);
         }
 
-        public async virtual Task<ArmOperation<ResourceOperationsBase<T>>> StartCreateAsync(string name, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<ResourceOperationsBase<T>>> StartCreateAsync(string name, CancellationToken cancellationToken = default)
         {
+            _resource = Build();
+
             return await _unTypedContainerOperations.StartCreateAsync(name, _resource, cancellationToken);
         }
 
-        public virtual T Build()
+        private void ThrowIfNotValid()
         {
+            string message;
+            if (!IsValid(out message))
+                throw new InvalidOperationException(message);
+        }
+
+        protected virtual bool IsValid(out string message)
+        {
+            message = String.Empty;
+            return true;
+        }
+
+        protected virtual void OnBeforeBuild()
+        {
+        }
+
+        protected virtual void OnAfterBuild()
+        {
+        }
+
+        public T Build()
+        {
+            ThrowIfNotValid();
+            OnBeforeBuild();
+
+            OnAfterBuild();
             return _resource;
         }
     }

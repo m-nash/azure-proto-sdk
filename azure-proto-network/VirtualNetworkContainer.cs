@@ -27,7 +27,6 @@ namespace azure_proto_network
             return new VirtualNetworkOperations(this, vnet);
         }
 
-        //TODO make the StartCreate and Create consistent
         public override ArmResponse<ResourceOperationsBase<PhVirtualNetwork>> Create(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);

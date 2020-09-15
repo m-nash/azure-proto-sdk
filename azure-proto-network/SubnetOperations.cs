@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 namespace azure_proto_network
 {
     /// <summary>
-    /// TODO: Split into ResourceOperations/TrackedResourceOperations
     /// </summary>
     public class SubnetOperations : ResourceOperationsBase<PhSubnet>
     {
