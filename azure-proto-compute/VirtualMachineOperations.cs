@@ -34,32 +34,60 @@ namespace azure_proto_compute
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
-        public ArmOperation<Response> Start()
+        #region PowerOn
+        public ArmResponse<Response> PowerOn(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidOperation(Operations.StartStart(Id.ResourceGroup, Id.Name));
+            var operation = Operations.StartStart(Id.ResourceGroup, Id.Name, cancellationToken);
+            return new ArmVoidResponse(operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
-        public async Task<ArmOperation<Response>> StartAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmResponse<Response>> PowerOnAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidOperation(await Operations.StartStartAsync(Id.ResourceGroup, Id.Name, cancellationToken));
+            var operation = await Operations.StartStartAsync(Id.ResourceGroup, Id.Name, cancellationToken).ConfigureAwait(false);
+            return new ArmVoidResponse(await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false));
         }
 
-        public ArmOperation<Response> Stop(bool? skipShutdown = null)
+        public ArmOperation<Response> StartPowerOn(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidOperation(Operations.StartPowerOff(Id.ResourceGroup, Id.Name, skipShutdown));
+            return new ArmVoidOperation(Operations.StartStart(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
-        public async Task<ArmOperation<Response>> StopAsync(bool? skipShutdown = null, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> StartPowerOnAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidOperation(await Operations.StartPowerOffAsync(Id.ResourceGroup, Id.Name, skipShutdown, cancellationToken));
+            return new ArmVoidOperation(await Operations.StartStartAsync(Id.ResourceGroup, Id.Name, cancellationToken).ConfigureAwait(false));
+        }
+        #endregion
+
+        #region PowerOff
+        public ArmResponse<Response> PowerOff(bool? skipShutdown = null, CancellationToken cancellationToken = default)
+        {
+            var operation = Operations.StartPowerOff(Id.ResourceGroup, Id.Name, skipShutdown, cancellationToken);
+            return new ArmVoidResponse(operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
-        public override Response<ResourceOperationsBase<PhVirtualMachine>> Get()
+        public async Task<ArmResponse<Response>> PowerOffAsync(bool? skipShutdown = null, CancellationToken cancellationToken = default)
+        {
+            var operation = await Operations.StartPowerOffAsync(Id.ResourceGroup, Id.Name, skipShutdown, cancellationToken).ConfigureAwait(false);
+            return new ArmVoidResponse(await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false));
+        }
+
+        public ArmOperation<Response> StartPowerOff(bool? skipShutdown = null, CancellationToken cancellationToken = default)
+        {
+            return new ArmVoidOperation(Operations.StartPowerOff(Id.ResourceGroup, Id.Name, skipShutdown, cancellationToken));
+        }
+
+        public async Task<ArmOperation<Response>> StartPowerOffAsync(bool? skipShutdown = null, CancellationToken cancellationToken = default)
+        {
+            return new ArmVoidOperation(await Operations.StartPowerOffAsync(Id.ResourceGroup, Id.Name, skipShutdown, cancellationToken).ConfigureAwait(false));
+        }
+        #endregion
+
+        public override ArmResponse<ResourceOperationsBase<PhVirtualMachine>> Get()
         {
             return new PhArmResponse<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(Operations.Get(Id.ResourceGroup, Id.Name), v => { Resource = new PhVirtualMachine(v); return this; } );
         }
 
-        public async override Task<Response<ResourceOperationsBase<PhVirtualMachine>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceOperationsBase<PhVirtualMachine>>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<ResourceOperationsBase<PhVirtualMachine>, VirtualMachine>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, cancellationToken), v => { Resource = new PhVirtualMachine(v); return this; });
         }

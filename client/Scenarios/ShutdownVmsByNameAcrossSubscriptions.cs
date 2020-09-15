@@ -16,8 +16,8 @@ namespace client
             {
                 await foreach (var vm in subscription.ListVirtualMachinesAsync("even"))
                 {
-                    await vm.StopAsync();
-                    await vm.StartAsync();
+                    await vm.PowerOffAsync();
+                    await vm.PowerOnAsync();
                 }
             }
         }
@@ -50,9 +50,9 @@ namespace client
                    if (reg.IsMatch(vm.Id.Name))
                    {
                        Console.WriteLine($"Stopping {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");
-                       vm.Stop();
+                       vm.PowerOff();
                        Console.WriteLine($"Starting {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");
-                       vm.Start();
+                       vm.PowerOn();
                    }
                });
            });          

@@ -86,13 +86,13 @@ namespace azure_proto_network
                 n => { Resource = new PhNetworkSecurityGroup(n); return this;});
         }
 
-        public override Response<ResourceOperationsBase<PhNetworkSecurityGroup>> Get()
+        public override ArmResponse<ResourceOperationsBase<PhNetworkSecurityGroup>> Get()
         {
             return new PhArmResponse<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(Operations.Get(Id.ResourceGroup, Id.Name),
                 n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
-        public async override Task<Response<ResourceOperationsBase<PhNetworkSecurityGroup>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceOperationsBase<PhNetworkSecurityGroup>>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
                 n => { Resource = new PhNetworkSecurityGroup(n); return this; });

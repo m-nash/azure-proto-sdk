@@ -27,16 +27,6 @@ namespace azure_proto_compute
 
         public override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
 
-        public override ArmOperation<ResourceOperationsBase<PhAvailabilitySet>> Create(string name, PhAvailabilitySet resourceDetails)
-        {
-            return new PhArmOperation<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySet>(Operations.CreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model), a => AvailabilitySet(new PhAvailabilitySet(a)));
-        }
-
-        public async override Task<ArmOperation<ResourceOperationsBase<PhAvailabilitySet>>> CreateAsync(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
-        {
-            return new PhArmOperation<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySet>(await Operations.CreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken), a => AvailabilitySet(new PhAvailabilitySet(a)));
-        }
-
         public AvailabilitySetOperations AvailabilitySet(string name)
         {
             return new AvailabilitySetOperations(this, new ResourceIdentifier($"{Id}/providers/Microsoft.Compute/availabilitySets/{name}"));
@@ -50,6 +40,36 @@ namespace azure_proto_compute
         public AvailabilitySetOperations AvailabilitySet(TrackedResource vm)
         {
             return new AvailabilitySetOperations(this, vm);
+        }
+
+        public override ArmResponse<ResourceOperationsBase<PhAvailabilitySet>> Create(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        {
+            var response = Operations.CreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
+            return new PhArmResponse<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySet>(
+                response,
+                a => AvailabilitySet(new PhAvailabilitySet(a)));
+        }
+
+        public async override Task<ArmResponse<ResourceOperationsBase<PhAvailabilitySet>>> CreateAsync(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        {
+            var response = await Operations.CreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
+            return new PhArmResponse<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySet>(
+                response,
+                a => AvailabilitySet(new PhAvailabilitySet(a)));
+        }
+
+        public override ArmOperation<ResourceOperationsBase<PhAvailabilitySet>> StartCreate(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        {
+            return new PhArmOperation<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySet>(
+                Operations.CreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
+                a => AvailabilitySet(new PhAvailabilitySet(a)));
+        }
+
+        public async override Task<ArmOperation<ResourceOperationsBase<PhAvailabilitySet>>> StartCreateAsync(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        {
+            return new PhArmOperation<ResourceOperationsBase<PhAvailabilitySet>, AvailabilitySet>(
+                await Operations.CreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
+                a => AvailabilitySet(new PhAvailabilitySet(a)));
         }
 
         internal AvailabilitySetsOperations Operations => GetClient<ComputeManagementClient>((uri, cred) => new ComputeManagementClient(uri, Id.Subscription, cred)).AvailabilitySets;

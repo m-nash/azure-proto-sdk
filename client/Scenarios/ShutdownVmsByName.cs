@@ -16,9 +16,9 @@ namespace client
             foreach(var vm in sub.ListVirtualMachines("even"))
             {
                 Console.WriteLine($"Stopping {vm.Id.Name}");
-                vm.Stop();
+                vm.PowerOff();
                 Console.WriteLine($"Starting {vm.Id.Name}");
-                vm.Start();
+                vm.PowerOn();
             }
         }
     }

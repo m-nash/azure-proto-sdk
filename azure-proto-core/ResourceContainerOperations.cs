@@ -1,10 +1,4 @@
-﻿using Azure;
-using Azure.ResourceManager.Resources;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -44,19 +38,12 @@ namespace azure_proto_core
             }
         }
 
-        public virtual ArmOperation<ResourceOperationsBase<T>> Create(T resourceDetails)
-        {
-            return Create(resourceDetails.Name, resourceDetails);
-        }
+        public abstract ArmResponse<ResourceOperationsBase<T>> Create(string name, T resourceDetails, CancellationToken cancellationToken = default);
 
-        public abstract ArmOperation<ResourceOperationsBase<T>> Create(string name, T resourceDetails);
+        public abstract Task<ArmResponse<ResourceOperationsBase<T>>> CreateAsync(string name, T resourceDetails, CancellationToken cancellationToken = default);
 
+        public abstract ArmOperation<ResourceOperationsBase<T>> StartCreate(string name, T resourceDetails, CancellationToken cancellationToken = default);
 
-        public virtual Task<ArmOperation<ResourceOperationsBase<T>>> CreateAsync(T resourceDetails, CancellationToken cancellationToken = default)
-        {
-            return CreateAsync(resourceDetails?.Id?.Name, resourceDetails, cancellationToken);
-        }
-
-        public abstract Task<ArmOperation<ResourceOperationsBase<T>>> CreateAsync(string name, T resourceDetails, CancellationToken cancellationToken = default);
+        public abstract Task<ArmOperation<ResourceOperationsBase<T>>> StartCreateAsync(string name, T resourceDetails, CancellationToken cancellationToken = default);
     }
 }

@@ -17,9 +17,9 @@ namespace client
             var vm = resourceGroup.VirtualMachine(Context.VmName);
             Console.WriteLine($"Found VM {Context.VmName}");
             Console.WriteLine("--------Stopping VM--------");
-            vm.Stop();
+            vm.PowerOff();
             Console.WriteLine("--------Starting VM--------");
-            vm.Start();
+            vm.PowerOn();
         }
     }
 }

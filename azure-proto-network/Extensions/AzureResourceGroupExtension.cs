@@ -19,7 +19,7 @@ namespace azure_proto_network
             return new PhArmOperation<VirtualNetworkOperations, ResourceOperationsBase<PhVirtualNetwork>>(container.Create(name, resourceDetails), vnet => new VirtualNetworkOperations(vnet, vnet.Id));
         }
 
-        public static Task<ArmOperation<ResourceOperationsBase<PhVirtualNetwork>>> CreateAsync(this ResourceGroupOperations operations, string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmResponse<ResourceOperationsBase<PhVirtualNetwork>>> CreateAsync(this ResourceGroupOperations operations, string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
         {
             var container = new VirtualNetworkContainer(operations, operations.Id);
             return container.CreateAsync(name, resourceDetails, cancellationToken);
@@ -59,13 +59,13 @@ namespace azure_proto_network
         #endregion
 
         #region Public IP Address Operations
-        public static ArmOperation<ResourceOperationsBase<PhPublicIPAddress>> CreatePublicIp(this ResourceGroupOperations operations, string name, PhPublicIPAddress resourceDetails)
+        public static ArmResponse<ResourceOperationsBase<PhPublicIPAddress>> CreatePublicIp(this ResourceGroupOperations operations, string name, PhPublicIPAddress resourceDetails)
         {
             var container = new PublicIpAddressContainer(operations, operations.Id);
             return container.Create(name, resourceDetails);
         }
 
-        public static Task<ArmOperation<ResourceOperationsBase<PhPublicIPAddress>>> CreatePublicIpAsync(this ResourceGroupOperations operations, string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmResponse<ResourceOperationsBase<PhPublicIPAddress>>> CreatePublicIpAsync(this ResourceGroupOperations operations, string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
         {
             var container = new PublicIpAddressContainer(operations, operations.Id);
             return container.CreateAsync(name, resourceDetails, cancellationToken);
@@ -106,13 +106,13 @@ namespace azure_proto_network
         #endregion
 
         #region Network Interface (NIC) operations
-        public static ArmOperation<ResourceOperationsBase<PhNetworkInterface>> CreateNic(this ResourceGroupOperations operations, string name, PhNetworkInterface resourceDetails)
+        public static ArmResponse<ResourceOperationsBase<PhNetworkInterface>> CreateNic(this ResourceGroupOperations operations, string name, PhNetworkInterface resourceDetails)
         {
             var container = new NetworkInterfaceContainer(operations, operations.Id);
             return container.Create(name, resourceDetails);
         }
 
-        public static Task<ArmOperation<ResourceOperationsBase<PhNetworkInterface>>> CreateNicAsync(this ResourceGroupOperations operations, string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmResponse<ResourceOperationsBase<PhNetworkInterface>>> CreateNicAsync(this ResourceGroupOperations operations, string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
         {
             var container = new NetworkInterfaceContainer(operations, operations.Id);
             return container.CreateAsync(name, resourceDetails, cancellationToken);
@@ -163,13 +163,13 @@ namespace azure_proto_network
         #endregion
 
         #region Network Security Group operations
-        public static ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>> CreateNsg(this ResourceGroupOperations operations, string name, PhNetworkSecurityGroup resourceDetails)
+        public static ArmResponse<ResourceOperationsBase<PhNetworkSecurityGroup>> CreateNsg(this ResourceGroupOperations operations, string name, PhNetworkSecurityGroup resourceDetails)
         {
             var container = new NetworkSecurityGroupContainer(operations, operations.Id);
             return container.Create(name, resourceDetails);
         }
 
-        public static Task<ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>>> CreateNsgAsync(this ResourceGroupOperations operations, string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmResponse<ResourceOperationsBase<PhNetworkSecurityGroup>>> CreateNsgAsync(this ResourceGroupOperations operations, string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
         {
             var container = new NetworkSecurityGroupContainer(operations, operations.Id);
             return container.CreateAsync(name, resourceDetails, cancellationToken);

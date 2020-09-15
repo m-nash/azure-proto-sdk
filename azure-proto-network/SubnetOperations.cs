@@ -40,13 +40,13 @@ namespace azure_proto_network
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, cancellationToken));
         }
 
-        public override Response<ResourceOperationsBase<PhSubnet>> Get()
+        public override ArmResponse<ResourceOperationsBase<PhSubnet>> Get()
         {
             return new PhArmResponse<ResourceOperationsBase<PhSubnet>, Subnet>(Operations.Get(Id.ResourceGroup, Id.Parent.Name, Id.Name), 
                 n => { Resource = new PhSubnet(n, DefaultLocation); return this; });
         }
 
-        public async override Task<Response<ResourceOperationsBase<PhSubnet>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceOperationsBase<PhSubnet>>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<ResourceOperationsBase<PhSubnet>, Subnet>(await Operations.GetAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, null, cancellationToken), 
                 n => { Resource = new PhSubnet(n, DefaultLocation); return this; });

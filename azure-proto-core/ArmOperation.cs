@@ -25,12 +25,12 @@ namespace azure_proto_core
     }
 
     /// <summary>
-    /// Generic ARM long runnign operation class for operatiosnw ith no returned value
+    /// Generic ARM long runnign operation class for operatiosn with no returned value
     /// TODO: Reimplement without wrapping
     /// </summary>
     public class ArmVoidOperation : ArmOperation<Response>
     {
-        internal class WrappingResponse : Response<Response>
+        internal class WrappingResponse : ArmResponse<Response>
         {
             Response _wrapped;
 
@@ -68,12 +68,12 @@ namespace azure_proto_core
 
         public async override ValueTask<Response> UpdateStatusAsync(CancellationToken cancellationToken = default)
             => CompletedSynchronously ? SyncValue : await _wrapped.UpdateStatusAsync(cancellationToken);
+
         public async override ValueTask<Response<Response>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
             => CompletedSynchronously ? new WrappingResponse(SyncValue) : await _wrapped.WaitForCompletionAsync(cancellationToken);
 
         public async override ValueTask<Response<Response>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken) 
             => CompletedSynchronously ? new WrappingResponse(SyncValue) : await _wrapped.WaitForCompletionAsync(pollingInterval, cancellationToken);
-
     }
 
     /// <summary>

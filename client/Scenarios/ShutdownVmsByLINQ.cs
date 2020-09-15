@@ -25,9 +25,9 @@ namespace client
                 .ForEach(tuple =>
                 {
                     Console.WriteLine($"Stopping {tuple.vm.Id.Name}");
-                    tuple.vm.Stop();
+                    tuple.vm.PowerOff();
                     Console.WriteLine($"Starting {tuple.vm.Id.Name}");
-                    tuple.vm.Start();
+                    tuple.vm.PowerOn();
                 });
         }
     }

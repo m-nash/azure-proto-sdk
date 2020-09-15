@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
@@ -16,16 +15,25 @@ namespace azure_proto_core
             _unTypedContainerOperations = containerOperations;
         }
 
-        //TODO: should not allow both create(string name) and create() on the same type
-        public virtual ArmOperation<ResourceOperationsBase<T>> Create(string name)
+        public virtual ArmResponse<ResourceOperationsBase<T>> Create(string name, CancellationToken cancellationToken = default)
         {
-            return _unTypedContainerOperations.Create(name, _resource);
+            return _unTypedContainerOperations.Create(name, _resource, cancellationToken);
         }
 
-        //public virtual ArmOperation<ResourceOperationsBase<T>> Create()
-        //{
-        //    return _unTypedContainerOperations.Create(_resource);
-        //}
+        public async virtual Task<ArmResponse<ResourceOperationsBase<T>>> CreateAsync(string name, CancellationToken cancellationToken = default)
+        {
+            return await _unTypedContainerOperations.CreateAsync(name, _resource, cancellationToken);
+        }
+
+        public virtual ArmOperation<ResourceOperationsBase<T>> StartCreate(string name, CancellationToken cancellationToken = default)
+        {
+            return _unTypedContainerOperations.StartCreate(name, _resource, cancellationToken);
+        }
+
+        public async virtual Task<ArmOperation<ResourceOperationsBase<T>>> StartCreateAsync(string name, CancellationToken cancellationToken = default)
+        {
+            return await _unTypedContainerOperations.StartCreateAsync(name, _resource, cancellationToken);
+        }
 
         public virtual T Build()
         {

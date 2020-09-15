@@ -38,12 +38,12 @@ namespace azure_proto_network
             return new ArmBuilder<PhSubnet>(new SubnetContainer(operations, operations.Id), new PhSubnet(subnet, location ?? operations.DefaultLocation));
         }
 
-        public static ArmOperation<ResourceOperationsBase<PhSubnet>> CreateSubnet(this ResourceOperationsBase<PhVirtualNetwork> operations, string name, PhSubnet resourceDetails)
+        public static ArmResponse<ResourceOperationsBase<PhSubnet>> CreateSubnet(this ResourceOperationsBase<PhVirtualNetwork> operations, string name, PhSubnet resourceDetails)
         {
             return GetSubnetContainer(operations).Create(name, resourceDetails);
         }
 
-        public static Task<ArmOperation<ResourceOperationsBase<PhSubnet>>> CreateSubnetAsync(this ResourceOperationsBase<PhVirtualNetwork> operations, string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
+        public static Task<ArmResponse<ResourceOperationsBase<PhSubnet>>> CreateSubnetAsync(this ResourceOperationsBase<PhVirtualNetwork> operations, string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
         {
             return GetSubnetContainer(operations).CreateAsync(name, resourceDetails, cancellationToken);
         }
