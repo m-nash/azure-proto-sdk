@@ -34,6 +34,7 @@ namespace azure_proto_core
         }
 
         protected override Resource Resource { get;  set; }
+
         public override ResourceIdentifier Id => Resource.Id;
 
         public virtual bool HasModel { 

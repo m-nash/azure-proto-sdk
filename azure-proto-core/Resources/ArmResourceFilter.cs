@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace azure_proto_core.Resources
 {
@@ -46,12 +44,12 @@ namespace azure_proto_core.Resources
             var builder = new List<string>();
             if (!string.IsNullOrWhiteSpace(Name))
             {
-                builder.Add($"substringof({Name}, name)");
+                builder.Add($"substringof('{Name}', name)");
             }
 
             if (!string.IsNullOrWhiteSpace(ResourceGroup))
             {
-                builder.Add($"substringof({ResourceGroup}, name)");
+                builder.Add($"substringof('{ResourceGroup}', name)");
             }
 
             return string.Join(" and ", builder);

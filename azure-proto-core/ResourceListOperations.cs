@@ -25,42 +25,44 @@ namespace azure_proto_core
         //TODO: Add overloads to take a set such as ArmFilterCollection
         public static Pageable<U> ListAtContext<U, T>(SubscriptionOperations subscription, ArmResourceFilter resourceFilter = null, int? top = null, CancellationToken cancellationToken = default)
             where U : ResourceOperationsBase<T>
-            where T : Resource
+            where T : TrackedResource
         {
             return _ListAtContext<U, T>(subscription.ClientContext, subscription.Id, null, resourceFilter, top, cancellationToken);
         }
 
         public static Pageable<U> ListAtContext<U, T>(ResourceGroupOperations resourceGroup, ArmResourceFilter resourceFilter = null, int? top = null, CancellationToken cancellationToken = default)
             where U : ResourceOperationsBase<T>
-            where T : Resource
+            where T : TrackedResource
         {
             return _ListAtContext<U, T>(resourceGroup.ClientContext, resourceGroup.Id, resourceGroup.Id.Name, resourceFilter, top, cancellationToken);
         }
 
         public static AsyncPageable<U> ListAtContextAsync<U, T>(SubscriptionOperations subscription, ArmResourceFilter resourceFilter = null, int? top = null, CancellationToken cancellationToken = default)
             where U : ResourceOperationsBase<T>
-            where T : Resource
+            where T : TrackedResource
         {
             return _ListAtContextAsync<U, T>(subscription.ClientContext, subscription.Id, null, resourceFilter, top, cancellationToken);
         }
 
         public static AsyncPageable<U> ListAtContextAsync<U, T>(ResourceGroupOperations resourceGroup, ArmResourceFilter resourceFilter = null, int? top = null, CancellationToken cancellationToken = default)
             where U : ResourceOperationsBase<T>
-            where T : Resource
+            where T : TrackedResource
         {
             return _ListAtContextAsync<U, T>(resourceGroup.ClientContext, resourceGroup.Id, resourceGroup.Id.Name, resourceFilter, top, cancellationToken);
         }
 
         private static AsyncPageable<U> _ListAtContextAsync<U, T>(ArmClientContext clientContext, ResourceIdentifier scopeId, string scopeFilter = null, ArmResourceFilter resourceFilter = null, int? top = null, CancellationToken cancellationToken = default)
             where U : ResourceOperationsBase<T>
-            where T : Resource
+            where T : TrackedResource
         {
             //TODO: Add the following logic
             //if armfilter != null then use arm list call
             //if armfilter == null && listbysub exists for the rp use rp call
             //else use arm list call
-
-            var filters = GetFilters(scopeId, resourceFilter);
+            ResourceType type;
+            if (!ArmClient.Registry.TryGetResourceType<T>(out type))
+                throw new ArgumentException($"{typeof(T)} was not registered");
+            var filters = GetFilters(type, resourceFilter);
             var resourceOperations = GetResourcesClient(clientContext, scopeId.Subscription).Resources;
             AsyncPageable<GenericResourceExpanded> result;
             if (scopeFilter == null)
@@ -77,14 +79,17 @@ namespace azure_proto_core
 
         private static Pageable<U> _ListAtContext<U, T>(ArmClientContext clientContext, ResourceIdentifier scopeId, string scopeFilter = null, ArmResourceFilter resourceFilter = null, int? top = null, CancellationToken cancellationToken = default)
             where U : ResourceOperationsBase<T>
-            where T : Resource
+            where T : TrackedResource
         {
             //TODO: Add the following logic
             //if armfilter != null then use arm list call
             //if armfilter == null && listbysub exists for the rp use rp call
             //else use arm list call
 
-            var filters = GetFilters(scopeId, resourceFilter);
+            ResourceType type;
+            if (!ArmClient.Registry.TryGetResourceType<T>(out type))
+                throw new ArgumentException($"{typeof(T)} was not registered");
+            var filters = GetFilters(type, resourceFilter);
             var resourceOperations = GetResourcesClient(clientContext, scopeId.Subscription).Resources;
             Pageable<GenericResourceExpanded> result;
             if(scopeFilter == null)
@@ -101,21 +106,21 @@ namespace azure_proto_core
 
         private static Pageable<U> ConvertResults<U, T>(Pageable<GenericResourceExpanded> result)
             where U : ResourceOperationsBase<T>
-            where T : Resource
+            where T : TrackedResource
         {
             return new PhWrappingPageable<GenericResourceExpanded, U>(result, s => Activator.CreateInstance(typeof(U), s, s.Id) as U);
         }
 
         private static AsyncPageable<U> ConvertResultsAsync<U, T>(AsyncPageable<GenericResourceExpanded> result)
             where U : ResourceOperationsBase<T>
-            where T : Resource
+            where T : TrackedResource
         {
             return new PhWrappingAsyncPageable<GenericResourceExpanded, U>(result, s => Activator.CreateInstance(typeof(U), s, s.Id) as U);
         }
 
-        private static ArmFilterCollection GetFilters(ResourceIdentifier id, ArmResourceFilter resourceFilter)
+        private static ArmFilterCollection GetFilters(ResourceType type, ArmResourceFilter resourceFilter)
         {
-            var filters = new ArmFilterCollection(id.Type);
+            var filters = new ArmFilterCollection(type);
             if (resourceFilter != null)
                 _typeSwitch[resourceFilter.GetType()](filters, resourceFilter);
             return filters;
