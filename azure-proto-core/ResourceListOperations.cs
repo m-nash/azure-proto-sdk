@@ -25,7 +25,7 @@ namespace azure_proto_core
         //TODO: Add overloads to take a set such as ArmFilterCollection
         public static Pageable<U> ListAtContext<U, T>(SubscriptionOperations subscription, ArmResourceFilter resourceFilter = null, int? top = null, CancellationToken cancellationToken = default)
             where U : ResourceOperationsBase<T>
-            where T : TrackedResource
+            where T : TrackedResource //TODO: Revisit after we remove Registry to see if we can drop this down to Resource instead of TrackedResource
         {
             return _ListAtContext<U, T>(subscription.ClientContext, subscription.Id, null, resourceFilter, top, cancellationToken);
         }
