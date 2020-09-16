@@ -9,6 +9,7 @@ namespace azure_proto_core
     /// TODO: Consider whehter to represent POST operations and the acommpanyong actions list call
     /// TODO: Consider whether to provide a Normalized PATCH functionality across RP resources
     /// TODO: Refactor methods beyond the ResourceOperation as extensions [allowing them to appear in generic usage of the type]
+    /// TODO: Split into ResourceOperations/TrackedResourceOperations
     /// </summary>
     /// <typeparam name="Model"></typeparam>
     public abstract class ResourceOperationsBase<T> : OperationsBase where T : Resource 

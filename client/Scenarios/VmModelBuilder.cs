@@ -32,11 +32,11 @@ namespace client
             // Create VNet
             Console.WriteLine("--------Start create VNet--------");
             string vnetName = Context.VmName + "_vnet";
-            var vnet = resourceGroup.ConstructVnet("10.0.0.0/16").Create(vnetName).Value;
+            var vnet = resourceGroup.ConstructVirtualNetwork("10.0.0.0/16").Create(vnetName).Value;
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
-            var nsg = resourceGroup.ConstructNsg(Context.NsgName, 80).Create(Context.NsgName).Value;
+            var nsg = resourceGroup.ConstructNetworkSecurityGroup(Context.NsgName, 80).Create(Context.NsgName).Value;
             var subnet = vnet.ConstructSubnet(Context.SubnetName, "10.0.0.0/24").Create(Context.SubnetName).Value;
 
             // Create IP Address
@@ -45,12 +45,7 @@ namespace client
 
             // Create Network Interface
             Console.WriteLine("--------Start create Network Interface--------");
-            var nic = resourceGroup.ConstructNic(ipAddress.GetModelIfNewer(), subnet.Id).Create($"{Context.VmName}_nic").Value;
-
-            // TODO:
-            // 0. Builder is an convenience feature. Simpler model would just use new xxx()
-            // 1. Wish we can do compile time check for required properties. And now, ToModel() will do validation. 
-            // 2. Is there a risk that the referenced model has not been created in ARM yet resource id is populated?
+            var nic = resourceGroup.ConstructNetworkInterface(ipAddress.GetModelIfNewer(), subnet.Id).Create($"{Context.VmName}_nic").Value;
 
             // Options: required parameters on in the constructor
             var vm = resourceGroup.ConstructVirtualMachine(Context.VmName, Context.Loc)
