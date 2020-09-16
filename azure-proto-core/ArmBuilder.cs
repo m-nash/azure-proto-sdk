@@ -65,11 +65,16 @@ namespace azure_proto_core
         {
         }
 
+        private void _Build()
+        {
+
+        }
+
         public T Build()
         {
             ThrowIfNotValid();
             OnBeforeBuild();
-
+            _Build();
             OnAfterBuild();
             return _resource;
         }
