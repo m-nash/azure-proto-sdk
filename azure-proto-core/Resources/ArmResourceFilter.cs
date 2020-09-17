@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace azure_proto_core.Resources
 {
@@ -22,7 +20,7 @@ namespace azure_proto_core.Resources
 
         public override string ToString()
         {
-            return $"$filter={GetFilterString()}";
+            return GetFilterString();
         }
     }
 
@@ -46,12 +44,12 @@ namespace azure_proto_core.Resources
             var builder = new List<string>();
             if (!string.IsNullOrWhiteSpace(Name))
             {
-                builder.Add($"substringof({Name}, name)");
+                builder.Add($"substringof('{Name}', name)");
             }
 
             if (!string.IsNullOrWhiteSpace(ResourceGroup))
             {
-                builder.Add($"substringof({ResourceGroup}, name)");
+                builder.Add($"substringof('{ResourceGroup}', name)");
             }
 
             return string.Join(" and ", builder);
@@ -81,7 +79,7 @@ namespace azure_proto_core.Resources
 
         public override string GetFilterString()
         {
-           return $"resourceType eq '{ResourceType}'";
+           return $"resourceType EQ '{ResourceType}'";
         }
     }
 
@@ -111,7 +109,7 @@ namespace azure_proto_core.Resources
 
         public override string GetFilterString()
         {
-            return $"$filter=tagName eq '{_tag.Item1}' and tagValue eq '{_tag.Item2}'";
+            return $"tagName eq '{_tag.Item1}' and tagValue eq '{_tag.Item2}'";
         }
     }
 
@@ -121,6 +119,7 @@ namespace azure_proto_core.Resources
         {
             ResourceTypeFilter = new ArmResourceTypeFilter(type);
         }
+
         public ArmSubstringFilter SubstringFilter {get; set;}
 
         public ArmResourceTypeFilter ResourceTypeFilter { get; }
@@ -143,7 +142,7 @@ namespace azure_proto_core.Resources
                 builder.Add(substring);
             }
 
-            return $"$filter={string.Join(" and ", builder)}";
+            return $"{string.Join(" and ", builder)}";
         }
     }
 }

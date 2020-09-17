@@ -1,7 +1,5 @@
-﻿using azure_proto_compute;
-using azure_proto_core;
+﻿using azure_proto_core;
 using System;
-using System.Linq;
 
 namespace client
 {
@@ -12,7 +10,7 @@ namespace client
             Scenario scenario = null;
             try
             {
-                scenario = ScenarioFactory.GetScenario(Scenarios.CreateSingleVmExample);
+                scenario = ScenarioFactory.GetScenario(Scenarios.ShutdownVmsByName);
                 scenario.Execute();
             }
             finally
@@ -21,7 +19,7 @@ namespace client
                 {
                     ResourceIdentifier id = new ResourceIdentifier(rgId);
                     var rg = new ArmClient().Subscription(id.Subscription).ResourceGroup(id);
-                    Console.WriteLine($"--------Deleting {rg.Context.Name}--------");
+                    Console.WriteLine($"--------Deleting {rg.Id.Name}--------");
                     var rgModel = rg.GetModelIfNewer();
                     if (rgModel != null)
                     {

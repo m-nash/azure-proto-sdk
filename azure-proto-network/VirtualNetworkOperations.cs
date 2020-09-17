@@ -2,9 +2,7 @@
 using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using azure_proto_core.Adapters;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,23 +33,23 @@ namespace azure_proto_network
 
         public override ArmOperation<Response> Delete()
         {
-            return new ArmVoidOperation(Operations.StartDelete(Context.ResourceGroup, Context.Name));
+            return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name));
         }
 
         public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidOperation(await Operations.StartDeleteAsync(Context.ResourceGroup, Context.Name, cancellationToken));
+            return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
-        public override Response<ResourceOperationsBase<PhVirtualNetwork>> Get()
+        public override ArmResponse<ResourceOperationsBase<PhVirtualNetwork>> Get()
         {
-            return new PhArmResponse<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(Operations.Get(Context.ResourceGroup, Context.Name), 
+            return new PhArmResponse<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(Operations.Get(Id.ResourceGroup, Id.Name), 
                 n => { Resource = new PhVirtualNetwork(n); return this; });
         }
 
-        public async override Task<Response<ResourceOperationsBase<PhVirtualNetwork>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceOperationsBase<PhVirtualNetwork>>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(await Operations.GetAsync(Context.ResourceGroup, Context.Name, null, cancellationToken),
+            return new PhArmResponse<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
                 n => { Resource = new PhVirtualNetwork(n); return this;});
         }
 
@@ -59,7 +57,7 @@ namespace azure_proto_network
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(Operations.UpdateTags(Context.ResourceGroup, Context.Name, patchable),
+            return new PhArmOperation<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
                 n => { Resource = new PhVirtualNetwork(n); return this; });
         }
 
@@ -67,10 +65,22 @@ namespace azure_proto_network
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken),
+            return new PhArmOperation<ResourceOperationsBase<PhVirtualNetwork>, VirtualNetwork>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
                 n => { Resource = new PhVirtualNetwork(n); return this; });
         }
 
-        internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).VirtualNetworks;
+        public Pageable<ResourceOperationsBase<PhSubnet>> ListSubnets(CancellationToken cancellationToken = default)
+        {
+            var subnetClient = GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).Subnets;
+            return new PhWrappingPageable<Subnet, ResourceOperationsBase<PhSubnet>>(subnetClient.List(Id.ResourceGroup, Id.Name, cancellationToken), s => new SubnetOperations(this, new PhSubnet(s, DefaultLocation)));
+        }
+
+        public AsyncPageable<ResourceOperationsBase<PhSubnet>> ListSubnetsAsync(CancellationToken cancellationToken = default)
+        {
+            var subnetClient = GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).Subnets;
+            return new PhWrappingAsyncPageable<Subnet, ResourceOperationsBase<PhSubnet>>(subnetClient.ListAsync(Id.ResourceGroup, Id.Name, cancellationToken), s => new SubnetOperations(this, new PhSubnet(s, DefaultLocation)));
+        }
+
+        internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).VirtualNetworks;
     }
 }

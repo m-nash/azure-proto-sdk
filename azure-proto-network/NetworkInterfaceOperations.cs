@@ -2,15 +2,11 @@
 using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-
     public class NetworkInterfaceOperations : ResourceOperationsBase<PhNetworkInterface>
     {
         public NetworkInterfaceOperations(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
@@ -31,28 +27,27 @@ namespace azure_proto_network
 
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 
-
         public override ArmOperation<Response> Delete()
         {
-            return new ArmVoidOperation(Operations.StartDelete(Context.ResourceGroup, Context.Name));
+            return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name));
         }
 
         public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidOperation(await Operations.StartDeleteAsync(Context.ResourceGroup, Context.Name, cancellationToken));
+            return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
-        public override Response<ResourceOperationsBase<PhNetworkInterface>> Get()
+        public override ArmResponse<ResourceOperationsBase<PhNetworkInterface>> Get()
         {
             return new PhArmResponse<ResourceOperationsBase<PhNetworkInterface>, NetworkInterface>(
-                Operations.Get(Context.ResourceGroup, Context.Name),
+                Operations.Get(Id.ResourceGroup, Id.Name),
                 n => { Resource = new PhNetworkInterface(n); return this; });
         }
 
-        public async override Task<Response<ResourceOperationsBase<PhNetworkInterface>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceOperationsBase<PhNetworkInterface>>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<ResourceOperationsBase<PhNetworkInterface>, NetworkInterface>(
-                await Operations.GetAsync(Context.ResourceGroup, Context.Name, null, cancellationToken),
+                await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
                 n => { Resource = new PhNetworkInterface(n); return this; });
         }
 
@@ -60,7 +55,7 @@ namespace azure_proto_network
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<ResourceOperationsBase<PhNetworkInterface>, NetworkInterface>(Operations.UpdateTags(Context.ResourceGroup, Context.Name, patchable),
+            return new PhArmOperation<ResourceOperationsBase<PhNetworkInterface>, NetworkInterface>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
                 n => { Resource = new PhNetworkInterface(n); return this; });
         }
 
@@ -69,11 +64,10 @@ namespace azure_proto_network
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
             return new PhArmOperation<ResourceOperationsBase<PhNetworkInterface>, NetworkInterface>(
-                await Operations.UpdateTagsAsync(Context.ResourceGroup, Context.Name, patchable, cancellationToken), 
+                await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken), 
                 n => { Resource = new PhNetworkInterface(n); return this; });
         }
 
-        internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Context.Subscription, uri, cred)).NetworkInterfaces;
-
+        internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).NetworkInterfaces;
     }
 }

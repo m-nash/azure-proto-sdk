@@ -14,7 +14,6 @@ namespace azure_proto_compute
                new azure_proto_core.Internal.ArmResourceRegistration<PhVirtualMachine>(
                    new ResourceType("Microsoft.Compute/virtualMachines"),
                     (o, r) => new VirtualMachineContainer(o, r),
-                    null,
                     (o, r) => new VirtualMachineOperations(o, r as TrackedResource)));
         }
 
@@ -126,6 +125,5 @@ namespace azure_proto_compute
             set => Model.LicenseType = value;
         }
         public string VmId => Model.VmId;
-
     }
 }

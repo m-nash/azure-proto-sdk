@@ -1,7 +1,5 @@
 ﻿using Azure.Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace azure_proto_core
 {
@@ -30,9 +28,9 @@ namespace azure_proto_core
         //    return Activator.CreateInstance(typeof(T), this, context) as T;
         //}
 
-        protected TokenCredential Credential { get; }
+        internal TokenCredential Credential { get; }
 
-        protected Uri BaseUri { get; }
+        internal Uri BaseUri { get; }
 
         /// <summary>
         /// Note that this is currently adapting to underlying management clients - once generator changes are in, this would likely be unnecessary

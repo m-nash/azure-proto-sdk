@@ -29,7 +29,7 @@ namespace azure_proto_core
         {
             ClientContext = parent;
             Validate(context);
-            Context = context;
+            Id = context;
             DefaultLocation ??= Location.Default;
             Resource ??= new ArmResource(context);
         }
@@ -45,7 +45,7 @@ namespace azure_proto_core
             Resource = context;
         }
 
-        protected virtual ArmClientContext ClientContext { get; }
+        public virtual ArmClientContext ClientContext { get; }
 
         protected virtual Resource Resource { get; set; }
 
@@ -53,7 +53,7 @@ namespace azure_proto_core
 
         public virtual Location DefaultLocation { get; }
 
-        public virtual ResourceIdentifier Context { get; }
+        public virtual ResourceIdentifier Id { get; }
 
         public virtual void Validate(ResourceIdentifier identifier)
         {
@@ -73,7 +73,5 @@ namespace azure_proto_core
         {
             return ClientContext.GetClient<T>(creator);
         }
-
     }
-
 }

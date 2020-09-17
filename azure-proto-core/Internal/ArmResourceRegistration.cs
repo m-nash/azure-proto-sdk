@@ -17,19 +17,16 @@ namespace azure_proto_core.Internal
     public class ArmResourceRegistration<T> where T : TrackedResource
     {
         Func<ArmClientContext, TrackedResource, ResourceContainerOperations<T>> _containerFactory;
-        Func<ArmClientContext, ResourceIdentifier, ResourceCollectionOperations<T>> _collectionFactory;
         Func<ArmClientContext, Resource, ResourceOperationsBase<T>> _operationsFactory;
 
 
         public ArmResourceRegistration(
             ResourceType type, Func<ArmClientContext, TrackedResource, ResourceContainerOperations<T>> containerFactory,
-            Func<ArmClientContext, ResourceIdentifier, ResourceCollectionOperations<T>> collectionFactory,
             Func<ArmClientContext, Resource, ResourceOperationsBase<T>> operationsFactory)
         {
 
             ResourceType = type;
             _containerFactory = containerFactory;
-            _collectionFactory = collectionFactory;
             _operationsFactory = operationsFactory;
 
         }
@@ -39,9 +36,7 @@ namespace azure_proto_core.Internal
 
         public virtual bool HasOperations => _operationsFactory != null;
         public virtual bool HasContainer => _containerFactory != null;
-        public virtual bool HasCollection => _collectionFactory != null;
         public ResourceOperationsBase<T> GetOperations(ArmClientContext parent, Resource context) => _operationsFactory(parent, context);
         public ResourceContainerOperations<T> GetContainer(ArmClientContext parent, TrackedResource parentContext) => _containerFactory(parent, parentContext);
-        public ResourceCollectionOperations<T> GetCollection(ArmClientContext parent, ResourceIdentifier parentContext) => _collectionFactory(parent, parentContext);
     }
 }

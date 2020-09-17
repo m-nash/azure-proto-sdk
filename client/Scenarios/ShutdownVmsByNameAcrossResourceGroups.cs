@@ -22,14 +22,14 @@ namespace client
             var subscription = new ArmClient().Subscription(Context.SubscriptionId);
 
             Regex reg = new Regex($"{Context.VmName}.*even");
-            Parallel.ForEach(subscription.ListVms(), vm =>
+            Parallel.ForEach(subscription.ListVirtualMachines(), vm =>
             {
-                if (reg.IsMatch(vm.Context.Name))
+                if (reg.IsMatch(vm.Id.Name))
                 {
-                    Console.WriteLine($"Stopping {vm.Context.ResourceGroup} {vm.Context.Name}");
-                    vm.Stop();
-                    Console.WriteLine($"Starting {vm.Context.ResourceGroup} {vm.Context.Name}");
-                    vm.Start();
+                    Console.WriteLine($"Stopping {vm.Id.ResourceGroup} {vm.Id.Name}");
+                    vm.PowerOff();
+                    Console.WriteLine($"Starting {vm.Id.ResourceGroup} {vm.Id.Name}");
+                    vm.PowerOn();
                 }
             });
         }

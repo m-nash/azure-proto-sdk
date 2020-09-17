@@ -14,10 +14,10 @@ namespace client
 
             await foreach (var subscription in client.ListSubscriptionsAsync())
             {
-                await foreach (var vm in subscription.ListVmsAsync("even"))
+                await foreach (var vm in subscription.ListVirtualMachinesAsync("even"))
                 {
-                    await vm.StopAsync();
-                    await vm.StartAsync();
+                    await vm.PowerOffAsync();
+                    await vm.PowerOnAsync();
                 }
             }
         }
@@ -46,9 +46,10 @@ namespace client
                 foreach (var vm in sub.ListVms("even"))
                 {
 
-                    Console.WriteLine($"Found VM {vm.Context.Name}");
-                    Console.WriteLine("--------Stopping VM--------");
-                    vm.Stop();
+                       Console.WriteLine($"Stopping {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");
+                       vm.PowerOff();
+                       Console.WriteLine($"Starting {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");
+                       vm.PowerOn();
                 }
             }
         }

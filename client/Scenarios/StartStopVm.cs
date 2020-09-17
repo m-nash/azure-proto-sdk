@@ -14,12 +14,12 @@ namespace client
             var client = new ArmClient();
             var subscription = client.Subscription(Context.SubscriptionId);
             var resourceGroup = subscription.ResourceGroup(Context.RgName);
-            var vm = resourceGroup.Vm(Context.VmName);
+            var vm = resourceGroup.VirtualMachine(Context.VmName);
             Console.WriteLine($"Found VM {Context.VmName}");
             Console.WriteLine("--------Stopping VM--------");
-            vm.Stop();
+            vm.PowerOff();
             Console.WriteLine("--------Starting VM--------");
-            vm.Start();
+            vm.PowerOn();
         }
     }
 }
