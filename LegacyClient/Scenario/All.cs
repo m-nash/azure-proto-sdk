@@ -1,24 +1,29 @@
 ﻿using Azure.ResourceManager.Resources;
-using client;
 using System;
 using System.Linq;
 
-namespace LegacyClient
+namespace client
 {
-    class Program
+    class All : Scenario
     {
-        static void Main(string[] args)
+        public override void Execute()
         {
-            Scenario scenario = null;
+            var client = new ResourcesManagementClient(Context.SubscriptionId, Context.Credential);
+            var list = Enum.GetValues(typeof(Scenarios)).Cast<Scenarios>().ToList();
             try
             {
-                scenario = ScenarioFactory.GetScenario(Scenarios.CreateSingleVmExample);
-                scenario.Execute();
+                foreach(var scenario in list)
+                {
+                    if (scenario != Scenarios.All)
+                    {
+                        var executable = ScenarioFactory.GetScenario(scenario);
+                        executable.Execute();
+                    }
+                }
             }
             finally
             {
-                var client = new ResourcesManagementClient(scenario.Context.SubscriptionId, scenario.Context.Credential);
-                foreach (var rgId in Scenario.CleanUp)
+                foreach (var rgId in CleanUp)
                 {
                     var name = GetResourceName(rgId);
                     try
@@ -42,6 +47,5 @@ namespace LegacyClient
         {
             return resourceId?.Split('/', StringSplitOptions.RemoveEmptyEntries)?.Last();
         }
-
     }
 }

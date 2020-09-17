@@ -43,7 +43,7 @@ namespace client
             var client = new ArmClient();
             foreach (var sub in client.ListSubscriptions())
             {
-                foreach (var vm in sub.ListVms("even"))
+                foreach (var vm in sub.ListVirtualMachines("even"))
                 {
 
                        Console.WriteLine($"Stopping {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");

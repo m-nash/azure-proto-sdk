@@ -15,9 +15,9 @@ namespace client
             var client = new ArmClient();
             foreach (var sub in client.ListSubscriptions())
             {
-                foreach (var vm in sub.ListVms("mc").Where(vm => vm.Model.Name.Contains("foo")))
+                foreach (var vm in sub.ListVirtualMachines("mc").Where(vm => vm.Model.Name.Contains("foo")))
                 {
-                    vm.Stop();
+                    vm.PowerOff();
                 }
             }
 
