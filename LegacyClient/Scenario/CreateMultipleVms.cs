@@ -6,26 +6,24 @@ using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace client
 {
-    class CreateSingleVmExample : Scenario
+    class CreateMultipleVms : Scenario
     {
-        public CreateSingleVmExample() : base() { }
+        public CreateMultipleVms() : base() { }
 
-        public CreateSingleVmExample(ScenarioContext context) : base(context) { }
+        public CreateMultipleVms(ScenarioContext context) : base(context) { }
 
         public override void Execute()
         {
-            // Note that we need to create 3 clients from this scenario; customer must know which client contains which resource
             var rmClient = new ResourcesManagementClient(Context.SubscriptionId, Context.Credential);
             var computeClient = new ComputeManagementClient(Context.SubscriptionId, Context.Credential);
             var networkClient = new NetworkManagementClient(Context.SubscriptionId, Context.Credential);
 
             // Create Resource Group
             Console.WriteLine($"--------Start create group {Context.RgName}--------");
-
-            // note that some resources use the StartCreate and some use Create - this can make it a bit difficult to handle resource creation generically
             var resourceGroup = rmClient.ResourceGroups.CreateOrUpdate(Context.RgName, new ResourceGroup(Context.Loc)).Value;
             CleanUp.Add(resourceGroup.Id);
 
@@ -77,24 +75,34 @@ namespace client
             };
 
             subnet = networkClient.Subnets.StartCreateOrUpdate(Context.RgName, vnetName, Context.SubnetName, subnet).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult().Value;
+            CreateVmsAsync(resourceGroup, aset, subnet).ConfigureAwait(false).GetAwaiter().GetResult();
+        }
 
-            // Create IP Address
-            Console.WriteLine("--------Start create IP Address--------");
-            var ipAddress = new PublicIPAddress()
+        private async Task CreateVmsAsync(ResourceGroup resourceGroup, AvailabilitySet aset, Subnet subnet)
+        {
+            var computeClient = new ComputeManagementClient(Context.SubscriptionId, Context.Credential);
+            var networkClient = new NetworkManagementClient(Context.SubscriptionId, Context.Credential);
+
+            for (int i = 0; i < 10; i++)
             {
-                PublicIPAddressVersion = Azure.ResourceManager.Network.Models.IPVersion.IPv4.ToString(),
-                PublicIPAllocationMethod = IPAllocationMethod.Dynamic,
-                Location = Context.Loc,
-            };
+                var vmName = $"{Context.VmName}_{i}";
+                // Create IP Address
+                Console.WriteLine("--------Start create IP Address--------");
+                var ipAddress = new PublicIPAddress()
+                {
+                    PublicIPAddressVersion = Azure.ResourceManager.Network.Models.IPVersion.IPv4.ToString(),
+                    PublicIPAllocationMethod = IPAllocationMethod.Dynamic,
+                    Location = Context.Loc,
+                };
 
-            ipAddress = networkClient.PublicIPAddresses.StartCreateOrUpdate(Context.RgName, $"{Context.VmName}_ip", ipAddress).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult().Value;
+                ipAddress = await networkClient.PublicIPAddresses.StartCreateOrUpdate(resourceGroup.Name, $"{vmName}_ip", ipAddress).WaitForCompletionAsync();
 
-            // Create Network Interface
-            Console.WriteLine("--------Start create Network Interface--------");
-            var nic = new NetworkInterface()
-            {
-                Location = Context.Loc,
-                IpConfigurations = new List<NetworkInterfaceIPConfiguration>()
+                // Create Network Interface
+                Console.WriteLine("--------Start create Network Interface--------");
+                var nic = new NetworkInterface()
+                {
+                    Location = Context.Loc,
+                    IpConfigurations = new List<NetworkInterfaceIPConfiguration>()
                 {
                     new NetworkInterfaceIPConfiguration()
                     {
@@ -105,41 +113,40 @@ namespace client
                         PublicIPAddress = new PublicIPAddress() { Id = ipAddress.Id }
                     }
                 }
-            };
-            
-            nic = networkClient.NetworkInterfaces.StartCreateOrUpdate(Context.RgName, $"{Context.VmName}_nic", nic).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult().Value;
+                };
 
-            // Create VM
-            Console.WriteLine("--------Start create VM--------");
-            var vm = new VirtualMachine(Context.Loc)
-            {
-                NetworkProfile = new Azure.ResourceManager.Compute.Models.NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nic.Id } } },
-                OsProfile = new OSProfile
+                nic = await networkClient.NetworkInterfaces.StartCreateOrUpdate(resourceGroup.Name, $"{vmName}_nic", nic).WaitForCompletionAsync();
+                // Create VM
+                string num = i % 2 == 0 ? "even" : "odd";
+                string name = $"{vmName}-{num}";
+                Console.WriteLine("--------Start create VM {0}--------", i);
+                var vm = new VirtualMachine(Context.Loc)
                 {
-                    ComputerName = Context.VmName,
-                    AdminUsername = "admin-user",
-                    AdminPassword = "!@#$%asdfA",
-                    LinuxConfiguration = new LinuxConfiguration { DisablePasswordAuthentication = false, ProvisionVMAgent = true }
-                },
-                StorageProfile = new StorageProfile()
-                {
-                    ImageReference = new ImageReference()
+                    NetworkProfile = new Azure.ResourceManager.Compute.Models.NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nic.Id } } },
+                    OsProfile = new OSProfile
                     {
-                        Offer = "UbuntuServer",
-                        Publisher = "Canonical",
-                        Sku = "18.04-LTS",
-                        Version = "latest"
+                        ComputerName = name,
+                        AdminUsername = "admin-user",
+                        AdminPassword = "!@#$%asdfA",
+                        LinuxConfiguration = new LinuxConfiguration { DisablePasswordAuthentication = false, ProvisionVMAgent = true }
                     },
-                    DataDisks = new List<DataDisk>()
-                },
-                HardwareProfile = new HardwareProfile() { VmSize = VirtualMachineSizeTypes.StandardB1Ms },
-                // The namespace-qualified type for SubResource is needed because all 3 libraries define an identical SubResource type. In the proposed model, the common type would be part of the core library
-                AvailabilitySet = new Azure.ResourceManager.Compute.Models.SubResource() { Id = aset.Id }
-            };
-            vm = computeClient.VirtualMachines.StartCreateOrUpdate(Context.RgName, Context.VmName, vm).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult().Value;
-
-            Console.WriteLine("VM ID: " + vm.Id);
-            Console.WriteLine("--------Done create VM--------");
+                    StorageProfile = new StorageProfile()
+                    {
+                        ImageReference = new ImageReference()
+                        {
+                            Offer = "UbuntuServer",
+                            Publisher = "Canonical",
+                            Sku = "18.04-LTS",
+                            Version = "latest"
+                        },
+                        DataDisks = new List<DataDisk>()
+                    },
+                    HardwareProfile = new HardwareProfile() { VmSize = VirtualMachineSizeTypes.StandardB1Ms },
+                    // The namespace-qualified type for SubResource is needed because all 3 libraries define an identical SubResource type. In the proposed model, the common type would be part of the core library
+                    AvailabilitySet = new Azure.ResourceManager.Compute.Models.SubResource() { Id = aset.Id }
+                };
+                vm = await computeClient.VirtualMachines.StartCreateOrUpdate(Context.RgName, Context.VmName, vm).WaitForCompletionAsync();
+            }
         }
     }
 }

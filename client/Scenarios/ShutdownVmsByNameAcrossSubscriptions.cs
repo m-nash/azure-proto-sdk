@@ -39,23 +39,18 @@ namespace client
             });
             #endregion
 
+
             var client = new ArmClient();
+            foreach (var sub in client.ListSubscriptions())
+            {
+                foreach (var vm in sub.ListVms("even"))
+                {
 
-            Regex reg = new Regex($"{Context.VmName}.*even");
-
-            Parallel.ForEach(client.ListSubscriptions(), sub =>
-           {
-               Parallel.ForEach(sub.ListVms(), vm =>
-               {
-                   if (reg.IsMatch(vm.Context.Name))
-                   {
-                       Console.WriteLine($"Stopping {vm.Context.Subscription} {vm.Context.ResourceGroup} {vm.Context.Name}");
-                       vm.Stop();
-                       Console.WriteLine($"Starting {vm.Context.Subscription} {vm.Context.ResourceGroup} {vm.Context.Name}");
-                       vm.Start();
-                   }
-               });
-           });          
+                    Console.WriteLine($"Found VM {vm.Context.Name}");
+                    Console.WriteLine("--------Stopping VM--------");
+                    vm.Stop();
+                }
+            }
         }
     }
 }

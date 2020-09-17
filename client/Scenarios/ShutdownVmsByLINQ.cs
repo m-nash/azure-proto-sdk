@@ -12,6 +12,15 @@ namespace client
             var createMultipleVms = new CreateMultipleVms(Context);
             createMultipleVms.Execute();
 
+            var client = new ArmClient();
+            foreach (var sub in client.ListSubscriptions())
+            {
+                foreach (var vm in sub.ListVms("mc").Where(vm => vm.Model.Name.Contains("foo")))
+                {
+                    vm.Stop();
+                }
+            }
+
             var resourceGroup = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
 
             resourceGroup.ListVms().Select(vm =>

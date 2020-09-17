@@ -16,6 +16,7 @@ namespace client
             foreach(var entity in rg.ListResource<PhVirtualMachine>())
             {
                 Console.WriteLine($"{entity.Context.Name}");
+                entity.AddTag("name", "Value");
             }
         }
     }
