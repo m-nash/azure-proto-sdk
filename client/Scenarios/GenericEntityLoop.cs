@@ -15,6 +15,7 @@ namespace client
             foreach(var entity in rg.ListVirtualMachines())
             {
                 Console.WriteLine($"{entity.Id.Name}");
+                entity.AddTag("name", "Value");
             }
         }
     }
