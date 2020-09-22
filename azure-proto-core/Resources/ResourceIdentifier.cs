@@ -105,11 +105,25 @@ namespace azure_proto_core
         {
             if (string.IsNullOrWhiteSpace(id) || !id.Contains('/'))
             {
-                return;
+                throw new ArgumentOutOfRangeException($"'{id}' is not a valid resource");
+            }
+
+            var parts = id.Split('/', StringSplitOptions.RemoveEmptyEntries).ToList();
+            if (parts.Count < 2)
+            {
+                throw new ArgumentOutOfRangeException($"'{id}' is not a valid resource");
+            }
+
+            if (!(KnownKeys.Subscription.Equals(parts[0], StringComparison.InvariantCultureIgnoreCase)
+               || KnownKeys.Tenant.Equals(parts[0], StringComparison.InvariantCultureIgnoreCase)
+               || KnownKeys.Location.Equals(parts[0], StringComparison.InvariantCultureIgnoreCase)))
+            {
+                throw new ArgumentOutOfRangeException($"'{id}' is not a valid resource");
             }
 
             Type = new ResourceType(id);
-            var parts = id.Split('/', StringSplitOptions.RemoveEmptyEntries).ToList();
+
+
             if (parts.Count % 2 != 0)
             {
                 _partsDictionary.Add(KnownKeys.UntrackedSubResource, parts.Last());
