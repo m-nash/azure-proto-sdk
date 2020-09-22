@@ -4,40 +4,41 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    public class ArmBuilder<T>
-        where T: Resource
+    public class ArmBuilder<U, T>
+        where T : Resource
+        where U : ResourceOperationsBase<T>
     {
         protected T _resource;
-        protected ResourceContainerOperations<T> _unTypedContainerOperations;
+        protected ResourceContainerOperations<U, T> _unTypedContainerOperations;
 
-        public ArmBuilder(ResourceContainerOperations<T> containerOperations, T resource)
+        public ArmBuilder(ResourceContainerOperations<U, T> containerOperations, T resource)
         {
             _resource = resource;
             _unTypedContainerOperations = containerOperations;
         }
 
-        public ArmResponse<ResourceOperationsBase<T>> Create(string name, CancellationToken cancellationToken = default)
+        public ArmResponse<U> Create(string name, CancellationToken cancellationToken = default)
         {
             _resource = Build();
 
             return _unTypedContainerOperations.Create(name, _resource, cancellationToken);
         }
 
-        public async Task<ArmResponse<ResourceOperationsBase<T>>> CreateAsync(string name, CancellationToken cancellationToken = default)
+        public async Task<ArmResponse<U>> CreateAsync(string name, CancellationToken cancellationToken = default)
         {
             _resource = Build();
 
             return await _unTypedContainerOperations.CreateAsync(name, _resource, cancellationToken);
         }
 
-        public ArmOperation<ResourceOperationsBase<T>> StartCreate(string name, CancellationToken cancellationToken = default)
+        public ArmOperation<U> StartCreate(string name, CancellationToken cancellationToken = default)
         {
             _resource = Build();
 
             return _unTypedContainerOperations.StartCreate(name, _resource, cancellationToken);
         }
 
-        public async Task<ArmOperation<ResourceOperationsBase<T>>> StartCreateAsync(string name, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<U>> StartCreateAsync(string name, CancellationToken cancellationToken = default)
         {
             _resource = Build();
 

@@ -10,8 +10,8 @@ namespace azure_proto_compute
         public static ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
         static PhVirtualMachine()
         {
-            ArmClient.Registry.Register<PhVirtualMachine>(
-               new azure_proto_core.Internal.ArmResourceRegistration<PhVirtualMachine>(
+            ArmClient.Registry.Register<VirtualMachineOperations, PhVirtualMachine>(
+               new azure_proto_core.Internal.ArmResourceRegistration<VirtualMachineOperations, PhVirtualMachine>(
                    new ResourceType("Microsoft.Compute/virtualMachines"),
                     (o, r) => new VirtualMachineContainer(o, r),
                     (o, r) => new VirtualMachineOperations(o, r as TrackedResource)));

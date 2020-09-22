@@ -60,7 +60,7 @@ namespace azure_proto_core
             //if armfilter == null && listbysub exists for the rp use rp call
             //else use arm list call
             ResourceType type;
-            if (!ArmClient.Registry.TryGetResourceType<T>(out type))
+            if (!ArmClient.Registry.TryGetResourceType<U, T>(out type))
                 throw new ArgumentException($"{typeof(T)} was not registered");
             var filters = GetFilters(type, resourceFilter);
             var resourceOperations = GetResourcesClient(clientContext, scopeId.Subscription).Resources;
@@ -87,7 +87,7 @@ namespace azure_proto_core
             //else use arm list call
 
             ResourceType type;
-            if (!ArmClient.Registry.TryGetResourceType<T>(out type))
+            if (!ArmClient.Registry.TryGetResourceType<U, T>(out type))
                 throw new ArgumentException($"{typeof(T)} was not registered");
             var filters = GetFilters(type, resourceFilter);
             var resourceOperations = GetResourcesClient(clientContext, scopeId.Subscription).Resources;

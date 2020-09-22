@@ -3,7 +3,6 @@ using azure_proto_core;
 using azure_proto_network;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace client
 {
@@ -20,45 +19,44 @@ namespace client
 
             // Create Resource Group
             Console.WriteLine($"--------Start create group {Context.RgName}--------");
-            var resourceGroup = subscription.CreateResourceGroup(Context.RgName, Context.Loc).Value;
+            var resourceGroup = subscription.ResourceGroups().Create(Context.RgName, Context.Loc).Value;
             CleanUp.Add(resourceGroup.Id);
 
             // Create AvailabilitySet
             Console.WriteLine("--------Start create AvailabilitySet--------");
-            var aset = resourceGroup.ConstructAvailabilitySet("Aligned").Create(Context.VmName + "_aSet").Value;
+            var aset = resourceGroup.AvailabilitySets().Construct("Aligned").Create(Context.VmName + "_aSet").Value;
 
             // Create VNet
             Console.WriteLine("--------Start create VNet--------");
             string vnetName = Context.VmName + "_vnet";
-            var vnet = resourceGroup.ConstructVirtualNetwork("10.0.0.0/16").Create(vnetName).Value;
+            var vnet = resourceGroup.VirtualNetworks().Construct("10.0.0.0/16").Create(vnetName).Value;
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
-            var nsg = resourceGroup.ConstructNetworkSecurityGroup(Context.NsgName, 80).Create(Context.NsgName).Value;
-            var subnet = vnet.ConstructSubnet(Context.SubnetName, "10.0.0.0/24").Create(Context.SubnetName).Value;
+            var nsg = resourceGroup.NetworkSecurityGroups().Construct(Context.NsgName, 80).Create(Context.NsgName).Value;
+            var subnet = vnet.Subnets().Construct(Context.SubnetName, "10.0.0.0/24").Create(Context.SubnetName).Value;
 
-            //TODO: Can we do the cast here implicitly
-            CreateVms(resourceGroup, aset as AvailabilitySetOperations, subnet as SubnetOperations);
+            CreateVms(resourceGroup, aset, subnet);
         }
 
         private void CreateVms(ResourceGroupOperations resourceGroup, AvailabilitySetOperations aset, SubnetOperations subnet)
         {
-            List<ArmOperation<ResourceOperationsBase<PhVirtualMachine>>> operations = new List<ArmOperation<ResourceOperationsBase<PhVirtualMachine>>>();
+            List<ArmOperation<VirtualMachineOperations>> operations = new List<ArmOperation<VirtualMachineOperations>>();
             for (int i = 0; i < 10; i++)
             {
                 // Create IP Address
                 Console.WriteLine("--------Start create IP Address--------");
-                var ipAddress = resourceGroup.ConstructIPAddress().Create($"{Context.VmName}_{i}_ip").Value;
+                var ipAddress = resourceGroup.PublicIpAddresses().Construct().Create($"{Context.VmName}_{i}_ip").Value;
 
                 // Create Network Interface
                 Console.WriteLine("--------Start create Network Interface--------");
-                var nic = resourceGroup.ConstructNetworkInterface(ipAddress.GetModelIfNewer(), subnet.Id).Create($"{Context.VmName}_{i}_nic").Value;
+                var nic = resourceGroup.NetworkInterfaces().Construct(ipAddress.GetModelIfNewer(), subnet.Id).Create($"{Context.VmName}_{i}_nic").Value;
 
                 // Create VM
                 string num = i % 2 == 0 ? "even" : "odd";
                 string name = $"{Context.VmName}-{i}-{num}";
                 Console.WriteLine("--------Start create VM {0}--------", i);
-                var vmOp = resourceGroup.ConstructVirtualMachine(name, "admin-user", "!@#$%asdfA", nic.Id, aset.GetModelIfNewer()).StartCreate(name);
+                var vmOp = resourceGroup.VirtualMachines().Construct(name, "admin-user", "!@#$%asdfA", nic.Id, aset.GetModelIfNewer()).StartCreate(name);
                 operations.Add(vmOp);
             }
 

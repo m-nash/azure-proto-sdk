@@ -12,7 +12,9 @@ namespace azure_proto_core
     /// </summary>
     /// <typeparam name="T">The type of the resource model</typeparam>
     /// <typeparam name="U">The return type of the Creation methods, this can be Response<typeparamref name="T"/> or a long-running response</typeparam>
-    public abstract class ResourceContainerOperations<T> : OperationsBase where T : Resource
+    public abstract class ResourceContainerOperations<U, T> : OperationsBase
+        where U : ResourceOperationsBase<T>
+        where T : Resource
     {
         protected ResourceContainerOperations(ArmClientContext parent, ResourceIdentifier contexts) : base(parent, contexts)
         {
@@ -32,18 +34,18 @@ namespace azure_proto_core
 
         public override void Validate(ResourceIdentifier identifier)
         {
-            if (identifier.Type != "Microsoft.Resources/resourceGroups" && identifier.Type != ResourceType.Parent)
+            if (identifier.Type != "Microsoft.Resources/resourceGroups" && identifier.Type != "Microsoft.Resources/subscriptions" && identifier.Type != ResourceType.Parent)
             {
                 throw new InvalidOperationException($"{identifier.Type} is not a valid container for {ResourceType}");
             }
         }
 
-        public abstract ArmResponse<ResourceOperationsBase<T>> Create(string name, T resourceDetails, CancellationToken cancellationToken = default);
+        public abstract ArmResponse<U> Create(string name, T resourceDetails, CancellationToken cancellationToken = default);
 
-        public abstract Task<ArmResponse<ResourceOperationsBase<T>>> CreateAsync(string name, T resourceDetails, CancellationToken cancellationToken = default);
+        public abstract Task<ArmResponse<U>> CreateAsync(string name, T resourceDetails, CancellationToken cancellationToken = default);
 
-        public abstract ArmOperation<ResourceOperationsBase<T>> StartCreate(string name, T resourceDetails, CancellationToken cancellationToken = default);
+        public abstract ArmOperation<U> StartCreate(string name, T resourceDetails, CancellationToken cancellationToken = default);
 
-        public abstract Task<ArmOperation<ResourceOperationsBase<T>>> StartCreateAsync(string name, T resourceDetails, CancellationToken cancellationToken = default);
+        public abstract Task<ArmOperation<U>> StartCreateAsync(string name, T resourceDetails, CancellationToken cancellationToken = default);
     }
 }

@@ -68,8 +68,8 @@ namespace azure_proto_core
                 myResource = new ArmResource(Id, location);
             }
 
-            ResourceContainerOperations<T> container;
-            if (!ArmClient.Registry.TryGetContainer<T>(this.ClientContext, myResource, out container))
+            ResourceContainerOperations<ResourceOperationsBase<T>, T> container;
+            if (!ArmClient.Registry.TryGetContainer(this.ClientContext, myResource, out container))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
@@ -92,8 +92,8 @@ namespace azure_proto_core
                 myResource = new ArmResource(Id, location);
             }
 
-            ResourceContainerOperations<T> container;
-            if (!ArmClient.Registry.TryGetContainer<T>(this.ClientContext, myResource, out container))
+            ResourceContainerOperations<ResourceOperationsBase<T>, T> container;
+            if (!ArmClient.Registry.TryGetContainer(this.ClientContext, myResource, out container))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }

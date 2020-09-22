@@ -22,11 +22,11 @@ namespace azure_proto_core
     {
         static ArmClient()
         {
-            Registry.Register<PhResourceGroup>(
-                new azure_proto_core.Internal.ArmResourceRegistration<PhResourceGroup>(
+            Registry.Register<ResourceGroupOperations, PhResourceGroup>(
+                new azure_proto_core.Internal.ArmResourceRegistration<ResourceGroupOperations, PhResourceGroup>(
                     new ResourceType("Microsoft.Resources/resourceGroups"),
                     (o, r) => new ResourceGroupContainerOperations(o, r),
-                    (o, r) => new ResourceGroupOperations(o, r)));
+                    (o, r) => new ResourceGroupOperations(o, r.Id)));
         }
 
         public static ArmResourceRegistry Registry { get; }  = new ArmResourceRegistry();
@@ -168,7 +168,7 @@ namespace azure_proto_core
         }
         public ResourceGroupOperations ResourceGroup(PhResourceGroup resourceGroup)
         {
-            return new ResourceGroupOperations(this.ClientContext, resourceGroup);
+            return new ResourceGroupOperations(this.ClientContext, resourceGroup.Id);
         }
 
         public T GetResourceOperations<T>(TrackedResource resource) where T : TrackedResource
@@ -193,8 +193,8 @@ namespace azure_proto_core
                 location = azure_proto_core.Location.Default;
             }
 
-            ResourceContainerOperations<T> container;
-            if (!Registry.TryGetContainer<T>(this.ClientContext, new ArmResource($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", location), out container))
+            ResourceContainerOperations<ResourceOperationsBase<T>, T> container;
+            if (!Registry.TryGetContainer(this.ClientContext, new ArmResource($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", location), out container))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
