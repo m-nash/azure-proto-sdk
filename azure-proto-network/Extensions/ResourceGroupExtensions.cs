@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace azure_proto_network
 {
-    public static class ResourceGroupExtension
+    public static class ResourceGroupExtensions
     {
         #region Virtual Network Operations
         public static VirtualNetworkOperations VirtualNetwork(this ResourceGroupOperations resourceGroup, TrackedResource vnet)
