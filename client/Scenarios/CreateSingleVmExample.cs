@@ -32,8 +32,11 @@ namespace client
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
-            var nsg = resourceGroup.NetworkSecurityGroups().Construct(Context.NsgName, 80).Create(Context.NsgName).Value;
             var subnet = vnet.Subnets().Construct(Context.SubnetName, "10.0.0.0/24").Create(Context.SubnetName).Value;
+
+            //create network security group
+            Console.WriteLine("--------Start create NetworkSecurityGroup--------");
+            _ = resourceGroup.NetworkSecurityGroups().Construct(Context.NsgName, 80).Create(Context.NsgName).Value;
 
             // Create IP Address
             Console.WriteLine("--------Start create IP Address--------");

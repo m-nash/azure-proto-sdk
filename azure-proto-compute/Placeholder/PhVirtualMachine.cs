@@ -25,6 +25,16 @@ namespace azure_proto_compute
             }
         }
 
+        public PhVirtualMachine(Azure.ResourceManager.Resources.Models.Resource vm) : base(
+            vm.Id,
+            vm.Location,
+            new VirtualMachine(vm.Location)
+            {
+                Tags = vm.Tags == null ? new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) : vm.Tags
+            })
+        {
+        }
+
         public override IDictionary<string, string> Tags => Model.Tags;
         public override string Name => Model.Name;
         public VirtualMachineInstanceView InstanceView => Model.InstanceView;

@@ -1,8 +1,11 @@
-﻿using Azure.ResourceManager.Compute;
+﻿using Azure;
+using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Compute.Models;
 using azure_proto_compute.Convenience;
 using azure_proto_core;
+using azure_proto_core.Resources;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -87,6 +90,61 @@ namespace azure_proto_compute
         {
             //TODO: Fix this case
             return new VirtualMachineModelBuilder(null, null);
+        }
+
+        /// <summary>
+        /// List vms at the given subscription context
+        /// </summary>
+        /// <param name="subscription"></param>
+        /// <param name="filter"></param>
+        /// <param name="top"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Pageable<VirtualMachineOperations> List(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        {
+            return ResourceListOperations.ListAtContext<VirtualMachineOperations, PhVirtualMachine>(ClientContext, Id.Parent, filter, top, cancellationToken);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subscription"></param>
+        /// <param name="filter"></param>
+        /// <param name="top"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public AsyncPageable<VirtualMachineOperations> ListAsync(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        {
+            return ResourceListOperations.ListAtContextAsync<VirtualMachineOperations, PhVirtualMachine>(ClientContext, Id.Parent, filter, top, cancellationToken);
+        }
+
+        //TODO: add rp specific filter example
+        public IEnumerable<VirtualMachineOperations> ListByTag(ArmTagFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var vms = ResourceListOperations.ListAtContext<VirtualMachineOperations, PhVirtualMachine>(ClientContext, Id.Parent, null, top, cancellationToken);
+            foreach(var vm in vms)
+            {
+                string value;
+                if (vm.Model.Tags.TryGetValue(filter.Key, out value))
+                {
+                    if (value == filter.Value)
+                        yield return vm;
+                }
+            }
+        }
+
+        public async IAsyncEnumerable<VirtualMachineOperations> ListByTagAsync(ArmTagFilter filter, int? top = null, [EnumeratorCancellation]CancellationToken cancellationToken = default)
+        {
+            var vms = ResourceListOperations.ListAtContextAsync<VirtualMachineOperations, PhVirtualMachine>(ClientContext, Id.Parent, null, top, cancellationToken);
+            await foreach (var vm in vms)
+            {
+                string value;
+                if (vm.Model.Tags.TryGetValue(filter.Key, out value))
+                {
+                    if (value == filter.Value)
+                        yield return vm;
+                }
+            }
         }
 
         internal VirtualMachinesOperations Operations => this.GetClient((baseUri, cred) =>  new ComputeManagementClient(baseUri, Id.Subscription, cred)).VirtualMachines;

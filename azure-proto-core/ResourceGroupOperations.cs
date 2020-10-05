@@ -9,6 +9,8 @@ namespace azure_proto_core
 {
     public class ResourceGroupOperations : ResourceOperationsBase<PhResourceGroup>
     {
+        public static readonly string AzureResourceType = "Microsoft.Resources/resourceGroups";
+
         internal ResourceGroupOperations(OperationsBase parent, ResourceIdentifier context) : base(parent, context) { }
 
         internal ResourceGroupOperations(OperationsBase parent, Resource context) : base(parent, context) { }
@@ -17,7 +19,7 @@ namespace azure_proto_core
 
         internal ResourceGroupOperations(ArmClientContext parent, Resource context) : base(parent, context) { }
 
-        public override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
+        public override ResourceType ResourceType => AzureResourceType;
 
         public override ArmOperation<Response> Delete()
         {

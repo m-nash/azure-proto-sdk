@@ -13,13 +13,15 @@ namespace azure_proto_core
     /// </summary>
     public class SubscriptionOperations : OperationsBase
     {
+        public static readonly string AzureResourceType = "Microsoft.Resources/subscriptions";
+
         public SubscriptionOperations(ArmClientContext parent, string defaultSubscription) : base(parent, $"/subscriptions/{defaultSubscription}") { }
 
         public SubscriptionOperations(ArmClientContext parent, ResourceIdentifier defaultSubscription) : base(parent, defaultSubscription) { }
 
         public SubscriptionOperations(ArmClientContext parent, Resource defaultSubscription) : base(parent, defaultSubscription) { }
 
-        public override ResourceType ResourceType => "Microsoft.Resources/subscriptions";
+        public override ResourceType ResourceType => AzureResourceType;
 
         public Pageable<ResourceGroupOperations> ListResourceGroups(CancellationToken cancellationToken = default(CancellationToken))
         {

@@ -12,7 +12,7 @@ namespace client
             createVm.Execute();
 
             var rg = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
-            foreach(var entity in rg.ListVirtualMachines())
+            foreach(var entity in rg.VirtualMachines().List())
             {
                 Console.WriteLine($"{entity.Id.Name}");
                 entity.AddTag("name", "Value");

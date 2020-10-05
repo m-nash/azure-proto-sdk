@@ -55,12 +55,12 @@ namespace azure_proto_core.Resources
             return string.Join(" and ", builder);
         }
 
-        public static implicit operator ArmSubstringFilter(string nameString) => new ArmSubstringFilter { Name = nameString};
+        public static implicit operator ArmSubstringFilter(string nameString) => new ArmSubstringFilter { Name = nameString };
     }
 
     public class ArmResourceTypeFilter : ArmResourceFilter
     {
-        public ArmResourceTypeFilter( ResourceType resourceType)
+        public ArmResourceTypeFilter(ResourceType resourceType)
         {
             ResourceType = resourceType;
         }
@@ -79,7 +79,7 @@ namespace azure_proto_core.Resources
 
         public override string GetFilterString()
         {
-           return $"resourceType EQ '{ResourceType}'";
+            return $"resourceType EQ '{ResourceType}'";
         }
     }
 
@@ -87,15 +87,17 @@ namespace azure_proto_core.Resources
     {
         Tuple<string, string> _tag;
 
+        public string Key { get; private set; }
+        public string Value { get; private set; }
+
         public ArmTagFilter(Tuple<string, string> tag)
         {
             _tag = tag;
+            Key = _tag.Item1;
+            Value = _tag.Item2;
         }
 
-        public ArmTagFilter(string tagKey, string tagValue)
-        {
-            _tag = new Tuple<string, string>(tagKey, tagValue);
-        }
+        public ArmTagFilter(string tagKey, string tagValue) : this(new Tuple<string, string>(tagKey, tagValue)) { }
 
         public override bool Equals([AllowNull] string other)
         {
@@ -115,12 +117,14 @@ namespace azure_proto_core.Resources
 
     public class ArmFilterCollection
     {
+        public ArmFilterCollection() { }
+
         public ArmFilterCollection(ResourceType type)
         {
             ResourceTypeFilter = new ArmResourceTypeFilter(type);
         }
 
-        public ArmSubstringFilter SubstringFilter {get; set;}
+        public ArmSubstringFilter SubstringFilter { get; set; }
 
         public ArmResourceTypeFilter ResourceTypeFilter { get; }
 
@@ -129,8 +133,14 @@ namespace azure_proto_core.Resources
         public override string ToString()
         {
             var builder = new List<string>();
-            builder.Add(ResourceTypeFilter.GetFilterString());
-            var substring = SubstringFilter?.GetFilterString();
+
+            var substring = ResourceTypeFilter?.GetFilterString();
+            if (!string.IsNullOrWhiteSpace(substring))
+            {
+                builder.Add(substring);
+            }
+
+            substring = SubstringFilter?.GetFilterString();
             if (!string.IsNullOrWhiteSpace(substring))
             {
                 builder.Add(substring);
