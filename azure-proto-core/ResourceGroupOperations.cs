@@ -9,6 +9,8 @@ namespace azure_proto_core
 {
     public class ResourceGroupOperations : ResourceOperationsBase<PhResourceGroup>
     {
+        public static readonly string AzureResourceType = "Microsoft.Resources/resourceGroups";
+
         internal ResourceGroupOperations(OperationsBase parent, ResourceIdentifier context) : base(parent, context) { }
 
         internal ResourceGroupOperations(OperationsBase parent, Resource context) : base(parent, context) { }
@@ -17,7 +19,7 @@ namespace azure_proto_core
 
         internal ResourceGroupOperations(ArmClientContext parent, Resource context) : base(parent, context) { }
 
-        public override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
+        public override ResourceType ResourceType => AzureResourceType;
 
         public override ArmOperation<Response> Delete()
         {
@@ -68,8 +70,8 @@ namespace azure_proto_core
                 myResource = new ArmResource(Id, location);
             }
 
-            ResourceContainerOperations<T> container;
-            if (!ArmClient.Registry.TryGetContainer<T>(this.ClientContext, myResource, out container))
+            ResourceContainerOperations<ResourceOperationsBase<T>, T> container;
+            if (!ArmClient.Registry.TryGetContainer(this.ClientContext, myResource, out container))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }
@@ -92,8 +94,8 @@ namespace azure_proto_core
                 myResource = new ArmResource(Id, location);
             }
 
-            ResourceContainerOperations<T> container;
-            if (!ArmClient.Registry.TryGetContainer<T>(this.ClientContext, myResource, out container))
+            ResourceContainerOperations<ResourceOperationsBase<T>, T> container;
+            if (!ArmClient.Registry.TryGetContainer(this.ClientContext, myResource, out container))
             {
                 throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
             }

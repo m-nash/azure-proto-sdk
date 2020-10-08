@@ -2,7 +2,7 @@
 
 namespace azure_proto_compute.Convenience
 {
-    public abstract class VirtualMachineModelBuilderBase : ArmBuilder<PhVirtualMachine>
+    public abstract class VirtualMachineModelBuilderBase : ArmBuilder<VirtualMachineOperations, PhVirtualMachine>
     {
         protected VirtualMachineModelBuilderBase(VirtualMachineContainer containerOperations, PhVirtualMachine vm): base(containerOperations, vm){ }
 

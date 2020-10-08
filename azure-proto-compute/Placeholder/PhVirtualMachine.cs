@@ -10,8 +10,8 @@ namespace azure_proto_compute
         public static ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
         static PhVirtualMachine()
         {
-            ArmClient.Registry.Register<PhVirtualMachine>(
-               new azure_proto_core.Internal.ArmResourceRegistration<PhVirtualMachine>(
+            ArmClient.Registry.Register<VirtualMachineOperations, PhVirtualMachine>(
+               new azure_proto_core.Internal.ArmResourceRegistration<VirtualMachineOperations, PhVirtualMachine>(
                    new ResourceType("Microsoft.Compute/virtualMachines"),
                     (o, r) => new VirtualMachineContainer(o, r),
                     (o, r) => new VirtualMachineOperations(o, r as TrackedResource)));
@@ -23,6 +23,16 @@ namespace azure_proto_compute
             {
                 vm.Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
             }
+        }
+
+        public PhVirtualMachine(Azure.ResourceManager.Resources.Models.Resource vm) : base(
+            vm.Id,
+            vm.Location,
+            new VirtualMachine(vm.Location)
+            {
+                Tags = vm.Tags == null ? new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) : vm.Tags
+            })
+        {
         }
 
         public override IDictionary<string, string> Tags => Model.Tags;

@@ -23,7 +23,7 @@ namespace client
 
             var resourceGroup = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
 
-            resourceGroup.ListVirtualMachines().Select(vm =>
+            resourceGroup.VirtualMachines().List().Select(vm =>
             {
                 var parts = vm.Id.Name.Split('-');
                 var n = Convert.ToInt32(parts[parts.Length - 2]);

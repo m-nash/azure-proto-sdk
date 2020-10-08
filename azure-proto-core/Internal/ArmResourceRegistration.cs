@@ -14,15 +14,16 @@ namespace azure_proto_core.Internal
     /// constructing list, creation, and Patch/Post/Delete methods for a resource 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ArmResourceRegistration<T> where T : TrackedResource
+    public class ArmResourceRegistration<U, T>
+        where T : TrackedResource
+        where U : ResourceOperationsBase<T>
     {
-        Func<ArmClientContext, TrackedResource, ResourceContainerOperations<T>> _containerFactory;
-        Func<ArmClientContext, Resource, ResourceOperationsBase<T>> _operationsFactory;
-
+        Func<ArmClientContext, TrackedResource, ResourceContainerOperations<U, T>> _containerFactory;
+        Func<ArmClientContext, Resource, U> _operationsFactory;
 
         public ArmResourceRegistration(
-            ResourceType type, Func<ArmClientContext, TrackedResource, ResourceContainerOperations<T>> containerFactory,
-            Func<ArmClientContext, Resource, ResourceOperationsBase<T>> operationsFactory)
+            ResourceType type, Func<ArmClientContext, TrackedResource, ResourceContainerOperations<U, T>> containerFactory,
+            Func<ArmClientContext, Resource, U> operationsFactory)
         {
 
             ResourceType = type;
@@ -36,7 +37,7 @@ namespace azure_proto_core.Internal
 
         public virtual bool HasOperations => _operationsFactory != null;
         public virtual bool HasContainer => _containerFactory != null;
-        public ResourceOperationsBase<T> GetOperations(ArmClientContext parent, Resource context) => _operationsFactory(parent, context);
-        public ResourceContainerOperations<T> GetContainer(ArmClientContext parent, TrackedResource parentContext) => _containerFactory(parent, parentContext);
+        public U GetOperations(ArmClientContext parent, Resource context) => _operationsFactory(parent, context);
+        public ResourceContainerOperations<U, T> GetContainer(ArmClientContext parent, TrackedResource parentContext) => _containerFactory(parent, parentContext);
     }
 }

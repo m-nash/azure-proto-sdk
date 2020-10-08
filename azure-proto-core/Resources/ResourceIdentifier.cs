@@ -28,7 +28,9 @@ namespace azure_proto_core
         public ResourceIdentifier(string id)
         {
             Id = id;
-            Parse(id);
+            //TODO: Due to the implicit this is called for blank constructions such as new PhResourceGroup
+            if (id != null)
+                Parse(id);
         }
 
         public string Id { get; protected set; }

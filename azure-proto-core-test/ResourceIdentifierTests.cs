@@ -86,6 +86,5 @@ namespace azure_proto_core_test
             ResourceIdentifier subject = resourceId;
             return subject;
         }
-
     }
 }
