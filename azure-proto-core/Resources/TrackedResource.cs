@@ -11,5 +11,7 @@ namespace azure_proto_core
         public virtual IDictionary<string, string> Tags => new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
         public virtual Location Location { get; protected set; }
+        
+        public override ResourceIdentifier Id { get; protected set; }
     }
 }
