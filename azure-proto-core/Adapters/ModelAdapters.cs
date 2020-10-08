@@ -17,8 +17,6 @@ namespace azure_proto_core
             Model = data;
         }
 
-        public override ResourceIdentifier Id { get; protected set; }
-
         public virtual T Model { get; set; }
 
         public static implicit operator T(TrackedResource<T> other)
