@@ -17,18 +17,18 @@ namespace azure_proto_core
 
         public virtual ResourceType Type => Id?.Type;
 
-        public virtual int CompareTo([AllowNull] Resource other)
+        public virtual int CompareTo(Resource other)
         {
             return string.Compare(Id?.Id, other?.Id);
         }
 
-        public virtual int CompareTo([AllowNull] string other)
+        public virtual int CompareTo(string other)
         {
             return string.Compare(Id?.Id, other);
         }
 
 
-        public virtual bool Equals([AllowNull] Resource other)
+        public virtual bool Equals(Resource other)
         {
             if (Id == null)
             {
@@ -38,7 +38,7 @@ namespace azure_proto_core
             return (Id.Equals(other?.Id));
         }
 
-        public virtual bool Equals([AllowNull] string other)
+        public virtual bool Equals(string other)
         {
             if (Id == null)
             {

@@ -25,12 +25,12 @@ namespace azure_proto_core
             DisplayName = GetDisplayName(location);
         }
 
-        public bool Equals([AllowNull] Location other)
+        public bool Equals(Location other)
         {
             return CanonicalName == other.CanonicalName;
         }
 
-        public bool Equals([AllowNull] string other)
+        public bool Equals(string other)
         {
             return CanonicalName == GetCanonicalName(other);
         }
@@ -55,12 +55,12 @@ namespace azure_proto_core
             return name;
         }
 
-        public int CompareTo([AllowNull] Location other)
+        public int CompareTo(Location other)
         {
             throw new NotImplementedException();
         }
 
-        public int CompareTo([AllowNull] string other)
+        public int CompareTo(string other)
         {
             throw new NotImplementedException();
         }

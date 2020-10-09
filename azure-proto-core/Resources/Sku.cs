@@ -15,12 +15,12 @@ namespace azure_proto_core
         public string Size { get; set; }
         public long? Capacity { get; set; }
 
-        public int CompareTo([AllowNull] Sku other)
+        public int CompareTo(Sku other)
         {
             throw new NotImplementedException();
         }
 
-        public bool Equals([AllowNull] Sku other)
+        public bool Equals(Sku other)
         {
             throw new NotImplementedException();
         }
