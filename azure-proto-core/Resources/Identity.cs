@@ -19,12 +19,12 @@ namespace azure_proto_core
 
         public IdentityKind Kind { get; set; }
 
-        public int CompareTo([AllowNull] Identity other)
+        public int CompareTo(Identity other)
         {
             throw new NotImplementedException();
         }
 
-        public bool Equals([AllowNull] Identity other)
+        public bool Equals(Identity other)
         {
             throw new NotImplementedException();
         }

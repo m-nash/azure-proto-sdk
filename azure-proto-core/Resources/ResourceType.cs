@@ -30,11 +30,11 @@ namespace azure_proto_core
         { 
             get
             {
-                var parts = Type.Split('/', StringSplitOptions.RemoveEmptyEntries);
+                var parts = Type.Split(new char[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length < 2) return ResourceType.None;
                 var list = new List<string>(parts);
                 list.RemoveAt(list.Count - 1);
-                return new ResourceType($"{Namespace}/{string.Join('/', list.ToArray())}");
+                return new ResourceType($"{Namespace}/{string.Join("/", list.ToArray())}");
             } 
         }
 
@@ -46,7 +46,7 @@ namespace azure_proto_core
                 throw new ArgumentOutOfRangeException(nameof(resourceIdOrType));
             }
 
-            var parts = resourceIdOrType.Split('/', StringSplitOptions.RemoveEmptyEntries).ToList();
+            var parts = resourceIdOrType.Split(new char[] {'/'}, StringSplitOptions.RemoveEmptyEntries).ToList();
             if (parts.Count < 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(resourceIdOrType));
@@ -77,13 +77,13 @@ namespace azure_proto_core
                 }
 
                 Namespace = parts[0];
-                Type = string.Join('/', type);
+                Type = string.Join("/", type);
             }
             else if (parts[0].Contains('.'))
             {
                 // it is a full type name
                 Namespace = parts[0];
-                Type = string.Join('/', parts.TakeLast(parts.Count - 1));
+                Type = string.Join("/", parts.Skip(Math.Max(0, 1)).Take(parts.Count() - 1));
             }
             else if (parts.Count %2 == 0)
             {
@@ -102,22 +102,22 @@ namespace azure_proto_core
             return $"{Namespace}/{Type}";
         }
 
-        public bool Equals([AllowNull] ResourceType other)
+        public bool Equals(ResourceType other)
         {
             return string.Equals(this.ToString(), other.ToString(), StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public bool Equals([AllowNull] string other)
+        public bool Equals(string other)
         {
             return string.Equals(this.ToString(), other, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public int CompareTo([AllowNull] ResourceType other)
+        public int CompareTo(ResourceType other)
         {
             throw new NotImplementedException();
         }
 
-        public int CompareTo([AllowNull] string other)
+        public int CompareTo(string other)
         {
             throw new NotImplementedException();
         }

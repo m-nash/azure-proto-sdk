@@ -1,6 +1,7 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace azure_proto_core.Resources
 {
@@ -12,11 +13,11 @@ namespace azure_proto_core.Resources
         public ArmResourceFilter()
         {
         }
-        public abstract bool Equals([AllowNull] string other);
+        public abstract bool Equals(string other);
 
         public abstract string GetFilterString();
 
-        public abstract bool Equals([AllowNull] ArmResourceFilter other);
+        public abstract bool Equals(ArmResourceFilter other);
 
         public override string ToString()
         {
@@ -29,12 +30,12 @@ namespace azure_proto_core.Resources
         public string Name { get; set; }
 
         public string ResourceGroup { get; set; }
-        public override bool Equals([AllowNull] string other)
+        public override bool Equals(string other)
         {
             throw new NotImplementedException();
         }
 
-        public override bool Equals([AllowNull] ArmResourceFilter other)
+        public override bool Equals(ArmResourceFilter other)
         {
             throw new NotImplementedException();
         }
@@ -67,12 +68,12 @@ namespace azure_proto_core.Resources
 
         public ResourceType ResourceType { get; }
 
-        public override bool Equals([AllowNull] string other)
+        public override bool Equals(string other)
         {
             throw new NotImplementedException();
         }
 
-        public override bool Equals([AllowNull] ArmResourceFilter other)
+        public override bool Equals(ArmResourceFilter other)
         {
             throw new NotImplementedException();
         }
@@ -97,12 +98,12 @@ namespace azure_proto_core.Resources
             _tag = new Tuple<string, string>(tagKey, tagValue);
         }
 
-        public override bool Equals([AllowNull] string other)
+        public override bool Equals(string other)
         {
             throw new NotImplementedException();
         }
 
-        public override bool Equals([AllowNull] ArmResourceFilter other)
+        public override bool Equals(ArmResourceFilter other)
         {
             throw new NotImplementedException();
         }

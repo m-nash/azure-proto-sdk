@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace azure_proto_core
@@ -17,22 +18,22 @@ namespace azure_proto_core
         }
 
         public string Value { get; private set; }
-        public int CompareTo([AllowNull] IdentityKind other)
+        public int CompareTo(IdentityKind other)
         {
             throw new NotImplementedException();
         }
 
-        public int CompareTo([AllowNull] string other)
+        public int CompareTo(string other)
         {
             throw new NotImplementedException();
         }
 
-        public bool Equals([AllowNull] IdentityKind other)
+        public bool Equals(IdentityKind other)
         {
             throw new NotImplementedException();
         }
 
-        public bool Equals([AllowNull] string other)
+        public bool Equals(string other)
         {
             throw new NotImplementedException();
         }

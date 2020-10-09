@@ -51,7 +51,7 @@ namespace azure_proto_core
         /// <param name="x">A resource id</param>
         /// <param name="y">A resource id</param>
         /// <returns>true if the resource ids are equivalent, otherwise false</returns>
-        public static bool Equals([AllowNull] ResourceIdentifier x, [AllowNull]ResourceIdentifier y)
+        public static bool Equals(ResourceIdentifier x, ResourceIdentifier y)
         {
             if (null == x && null == y) return true;
             if (null == x || null == y) return false;
@@ -64,7 +64,7 @@ namespace azure_proto_core
         /// <param name="x">A resource id</param>
         /// <param name="y">A resource id</param>
         /// <returns>-1 if x &lt; y, 0 if x == y, 1 if x &gt; y</returns>
-        public static int CompareTo([AllowNull]ResourceIdentifier x, [AllowNull]ResourceIdentifier y)
+        public static int CompareTo(ResourceIdentifier x, ResourceIdentifier y)
         {
             if (null == x && null == y) return 0;
             if (null == x) return -1;
@@ -108,7 +108,7 @@ namespace azure_proto_core
                 throw new ArgumentOutOfRangeException($"'{id}' is not a valid resource");
             }
 
-            var parts = id.Split('/', StringSplitOptions.RemoveEmptyEntries).ToList();
+            var parts = id.Split(new char[] {'/'}, StringSplitOptions.RemoveEmptyEntries).ToList();
             if (parts.Count < 2)
             {
                 throw new ArgumentOutOfRangeException($"'{id}' is not a valid resource");
@@ -152,7 +152,7 @@ namespace azure_proto_core
             Name = parts.Last();
             parts.RemoveAt(parts.Count-1);
             parts.RemoveAt(parts.Count-1);
-            Parent = parts.Count > 1 ? new ResourceIdentifier($"/{string.Join('/', parts)}") : null;
+            Parent = parts.Count > 1 ? new ResourceIdentifier($"/{string.Join("/", parts)}") : null;
         }
 
         protected virtual void ParseProviderResource(IList<string> parts)
@@ -174,7 +174,7 @@ namespace azure_proto_core
                 parts.RemoveAt(parts.Count-1);
             }
 
-            Parent = parts.Count > 1 ? new ResourceIdentifier($"/{string.Join('/', parts)}") : null;
+            Parent = parts.Count > 1 ? new ResourceIdentifier($"/{string.Join("/", parts)}") : null;
         }
 
         public static implicit operator string(ResourceIdentifier other) => other.Id;

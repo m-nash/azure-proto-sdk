@@ -15,12 +15,12 @@ namespace azure_proto_core
         public string PromotionCode { get; set; }
         public string Version { get; set; }
 
-        public int CompareTo([AllowNull] Plan other)
+        public int CompareTo(Plan other)
         {
             throw new NotImplementedException();
         }
 
-        public bool Equals([AllowNull] Plan other)
+        public bool Equals(Plan other)
         {
             throw new NotImplementedException();
         }
