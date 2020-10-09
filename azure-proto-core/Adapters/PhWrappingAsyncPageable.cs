@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-using Azure;
+﻿using Azure;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
