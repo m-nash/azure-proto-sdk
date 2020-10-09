@@ -19,14 +19,14 @@ namespace azure_proto_network
     {
         class RuleIdEqualityComparer : IEqualityComparer<SecurityRule>
         {
-            public bool Equals([AllowNull] SecurityRule x, [AllowNull] SecurityRule y)
+            public bool Equals(SecurityRule x, SecurityRule y)
             {
                 return ResourceIdentifier.Equals(x?.Id, y?.Id);
             }
 
-            public int GetHashCode([DisallowNull] SecurityRule obj)
+            public int GetHashCode(SecurityRule obj)
             {
-                return string.GetHashCode(obj.Id, StringComparison.InvariantCultureIgnoreCase);
+                return obj.Id.ToLower().GetHashCode();
             }
         }
 
