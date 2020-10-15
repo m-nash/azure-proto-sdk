@@ -8,41 +8,17 @@ namespace azure_proto_core
     /// </summary>
     public abstract class OperationsBase
     {
-        public OperationsBase(OperationsBase parent, ResourceIdentifier context) : this(parent.ClientContext, context)
+        public OperationsBase(ArmClientContext context, ResourceIdentifier id, Location location = null) : this(context, new ArmResource(id, location ?? Location.Default)) { }
+
+        public OperationsBase(ArmClientContext context, Resource resource)
         {
-            DefaultLocation = parent.DefaultLocation;
-        }
+            Validate(resource?.Id);
 
-        public OperationsBase(OperationsBase parent, Resource context) : this(parent.ClientContext, context.Id)
-        {
-            DefaultLocation = parent.DefaultLocation;
-            var tracked = context as TrackedResource;
-            if (tracked != null)
-            {
-                DefaultLocation = tracked.Location;
-            }
-
-            Resource = context;
-        }
-
-        public OperationsBase(ArmClientContext parent, ResourceIdentifier context)
-        {
-            ClientContext = parent;
-            Validate(context);
-            Id = context;
-            DefaultLocation ??= Location.Default;
-            Resource ??= new ArmResource(context);
-        }
-
-        public OperationsBase(ArmClientContext parent, Resource context) : this(parent, context.Id)
-        {
-            var tracked = context as TrackedResource;
-            if (tracked != null)
-            {
-                DefaultLocation = tracked.Location;
-            }
-
-            Resource = context;
+            ClientContext = context;
+            Id = resource.Id;
+            TrackedResource trackedResource = resource as TrackedResource;
+            DefaultLocation = trackedResource?.Location ?? Location.Default;
+            Resource = resource;
         }
 
         public virtual ArmClientContext ClientContext { get; }

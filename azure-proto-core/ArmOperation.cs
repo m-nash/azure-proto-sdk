@@ -8,12 +8,12 @@ namespace azure_proto_core
     /// <summary>
     /// Abstract class for long-running or synchronous applications. If we want to add ARM-specific OM, this is where we would add it.
     /// We may need to add ARM-specific OM, as customers have asked for additional configurability over polling stratgies on a per-operation basis
-    /// TODO: Remove protected properties, as this should be integrated into the generated client
+    /// TODO: GENERATOR Remove protected properties, as this should be integrated into the generated client
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class ArmOperation<T> : Operation<T>
+    public abstract class ArmOperation<TOperations> : Operation<TOperations>
     {
-        public ArmOperation(T syncValue)
+        public ArmOperation(TOperations syncValue)
         {
             CompletedSynchronously = syncValue != null;
             SyncValue = syncValue;
@@ -21,7 +21,7 @@ namespace azure_proto_core
 
         protected bool CompletedSynchronously { get; }
 
-        protected T SyncValue { get; }
+        protected TOperations SyncValue { get; }
     }
 
     /// <summary>
@@ -77,23 +77,25 @@ namespace azure_proto_core
     }
 
     /// <summary>
-    /// TODO: Reimplement this class without wrapping the underlying Operation
+    /// TODO: GENERATOR Reimplement this class without wrapping the underlying Operation
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="U"></typeparam>
-    public class PhArmOperation<T, U> : ArmOperation<T> where T: class where U : class
+    public class PhArmOperation<TOperations, TModel> : ArmOperation<TOperations>
+        where TOperations : class
+        where TModel : class
     {
-        Operation<U> _wrapped;
-        Func<U, T> _converter;
-        Response<U> _syncWrapped;
+        Operation<TModel> _wrapped;
+        Func<TModel, TOperations> _converter;
+        Response<TModel> _syncWrapped;
 
-        public PhArmOperation(Operation<U> wrapped, Func<U, T> converter) : base(null)
+        public PhArmOperation(Operation<TModel> wrapped, Func<TModel, TOperations> converter) : base(null)
         {
             _wrapped = wrapped;
             _converter = converter;
         }
 
-        public PhArmOperation(Response<U> wrapped, Func<U, T> converter) : base(converter(wrapped.Value))
+        public PhArmOperation(Response<TModel> wrapped, Func<TModel, TOperations> converter) : base(converter(wrapped.Value))
         {
             _converter = converter;
             _syncWrapped = wrapped;
@@ -101,7 +103,7 @@ namespace azure_proto_core
 
         public override string Id => _wrapped?.Id;
 
-        public override T Value => CompletedSynchronously ? SyncValue : _converter(_wrapped.Value);
+        public override TOperations Value => CompletedSynchronously ? SyncValue : _converter(_wrapped.Value);
 
         public override bool HasCompleted => CompletedSynchronously || _wrapped.HasCompleted;
 
@@ -115,12 +117,12 @@ namespace azure_proto_core
         public override ValueTask<Response> UpdateStatusAsync(CancellationToken cancellationToken = default) 
             => CompletedSynchronously ? new ValueTask<Response>(_syncWrapped.GetRawResponse()) : _wrapped.UpdateStatusAsync(cancellationToken);
 
-        public async override ValueTask<Response<T>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
-            => CompletedSynchronously ? new PhArmResponse<T, U>(_syncWrapped, _converter)
-            : new PhArmResponse<T, U>( await _wrapped.WaitForCompletionAsync(cancellationToken), _converter);
+        public async override ValueTask<Response<TOperations>> WaitForCompletionAsync(CancellationToken cancellationToken = default)
+            => CompletedSynchronously ? new PhArmResponse<TOperations, TModel>(_syncWrapped, _converter)
+            : new PhArmResponse<TOperations, TModel>( await _wrapped.WaitForCompletionAsync(cancellationToken), _converter);
 
-        public async override ValueTask<Response<T>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken) 
-            => CompletedSynchronously ? new PhArmResponse<T, U>(_syncWrapped, _converter)
-            : new PhArmResponse<T, U>(await _wrapped.WaitForCompletionAsync(pollingInterval, cancellationToken), _converter);
+        public async override ValueTask<Response<TOperations>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken) 
+            => CompletedSynchronously ? new PhArmResponse<TOperations, TModel>(_syncWrapped, _converter)
+            : new PhArmResponse<TOperations, TModel>(await _wrapped.WaitForCompletionAsync(pollingInterval, cancellationToken), _converter);
     }
 }

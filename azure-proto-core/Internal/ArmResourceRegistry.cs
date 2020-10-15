@@ -9,9 +9,10 @@ namespace azure_proto_core
     {
         internal IDictionary<Type, object> _registry = new ConcurrentDictionary<Type, object>();
 
-        public void Register<U, T>(ArmResourceRegistration<U, T> registration)
-            where T : TrackedResource
-            where U : ResourceOperationsBase<T>
+        public void Register<TContainer, TContainerParent, TOperations, TResource>(ArmResourceRegistration<TContainer, TContainerParent, TOperations, TResource> registration)
+            where TResource : TrackedResource
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             _registry[registration.ModelType] = registration;
         }
@@ -24,13 +25,14 @@ namespace azure_proto_core
         /// <param name="context"></param>
         /// <param name="operations"></param>
         /// <returns></returns>
-        public bool TryGetOperations<U, T>(ArmClientContext parent, TrackedResource context, out ResourceOperationsBase<T> operations)
-            where T : TrackedResource
-            where U : ResourceOperationsBase<T>
+        public bool TryGetOperations<TContainer, TContainerParent, TOperations, TResource>(ArmClientContext parent, TrackedResource context, out TOperations operations)
+            where TResource : TrackedResource
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             operations = null;
-            ArmResourceRegistration<U, T> registration;
-            if (!TryGetRegistration<U, T>(out registration) || !registration.HasOperations)
+            ArmResourceRegistration<TContainer, TContainerParent, TOperations, TResource> registration;
+            if (!TryGetRegistration<TContainer, TContainerParent, TOperations, TResource>(out registration) || !registration.HasOperations)
             {
                 return false;
             }
@@ -39,13 +41,14 @@ namespace azure_proto_core
             return true;
         }
 
-        public bool TryGetContainer<U, T>(ArmClientContext parent, TrackedResource parentContext, out ResourceContainerOperations<U, T> container)
-            where T: TrackedResource
-            where U : ResourceOperationsBase<T>
+        public bool TryGetContainer<TContainer, TContainerParent, TOperations, TResource>(ArmClientContext parent, TContainerParent parentContext, out TContainer container)
+            where TResource : TrackedResource
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             container = null;
-            ArmResourceRegistration<U, T> registration;
-            if (!TryGetRegistration<U, T>(out registration) || !registration.HasContainer)
+            ArmResourceRegistration<TContainer, TContainerParent, TOperations, TResource> registration;
+            if (!TryGetRegistration<TContainer, TContainerParent, TOperations, TResource>(out registration) || !registration.HasContainer)
             {
                 return false;
             }
@@ -54,13 +57,14 @@ namespace azure_proto_core
             return true;
         }
 
-        public bool TryGetResourceType<U, T>(out ResourceType type)
-            where T : TrackedResource
-            where U : ResourceOperationsBase<T>
+        public bool TryGetResourceType<TContainer, TContainerParent, TOperations, TResource>(out ResourceType type)
+            where TResource : TrackedResource
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             type = ResourceType.None;
-            ArmResourceRegistration<U, T> registration;
-            if (!TryGetRegistration<U, T>(out registration))
+            ArmResourceRegistration<TContainer, TContainerParent, TOperations, TResource> registration;
+            if (!TryGetRegistration<TContainer, TContainerParent, TOperations, TResource>(out registration))
             {
                 return false;
             }
@@ -69,13 +73,14 @@ namespace azure_proto_core
             return true;
         }
 
-        internal bool TryGetRegistration<U, T>(out ArmResourceRegistration<U, T> registration)
-            where T : TrackedResource
-            where U : ResourceOperationsBase<T>
+        internal bool TryGetRegistration<TContainer, TContainerParent, TOperations, TResource>(out ArmResourceRegistration<TContainer, TContainerParent, TOperations, TResource> registration)
+            where TResource : TrackedResource
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             registration = null;
             object regObject;
-            if (!_registry.TryGetValue(typeof(T), out regObject) || ((registration = regObject as ArmResourceRegistration<U, T>) == null))
+            if (!_registry.TryGetValue(typeof(TResource), out regObject) || ((registration = regObject as ArmResourceRegistration<TContainer, TContainerParent, TOperations, TResource>) == null))
             {
                 return false;
             }

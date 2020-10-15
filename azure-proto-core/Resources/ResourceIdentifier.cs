@@ -9,7 +9,6 @@ namespace azure_proto_core
     /// <summary>
     /// Canonical Representation of a Resource Identity
     /// TODO: Implement operator overloads for equality, comparison, and coercion
-    /// TODO: Implement parsing
     /// </summary>
     public class ResourceIdentifier : IEquatable<ResourceIdentifier>, IEquatable<string>, IComparable<string>, IComparable<ResourceIdentifier>
     {

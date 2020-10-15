@@ -5,6 +5,17 @@
     /// </summary>
     public class ArmResource : TrackedResource, IManagedByResource, ISkuResource
     {
+        public ArmResource(Azure.ResourceManager.Resources.Models.Resource genericResource)
+        {
+            Id = genericResource.Id;
+            Location = genericResource.Location;
+            Tags.Clear();
+            foreach(var tag in genericResource.Tags)
+            {
+                Tags.Add(tag);
+            }
+        }
+
         public ArmResource(ResourceIdentifier id)
         {
             Id = id;

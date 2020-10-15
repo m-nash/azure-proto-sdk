@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace azure_proto_core
 {
     /// <summary>
-    /// TODO: foolow the full guidelines for these immutable types (IComparable, IEquatable, operator overloads, etc.)
+    /// TODO: follow the full guidelines for these immutable types (IComparable, IEquatable, operator overloads, etc.)
     /// </summary>
     public class Location : IEquatable<Location>, IEquatable<string>, IComparable<Location>, IComparable<string>
     {
@@ -66,7 +66,6 @@ namespace azure_proto_core
         }
 
         /// <summary>
-        /// TODO => Implement these and standard comparison operators for all of these immutable types
         /// </summary>
         /// <param name="other"></param>
         public static implicit operator string(Location other) => other.DisplayName;

@@ -22,9 +22,9 @@ namespace azure_proto_compute
         public static Pageable<VirtualMachineOperations> ListVirtualMachines(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             //TODO: consider ArmPageable<T> to introduce post network call filtering and avoid breaking changes
-            //TODO: validate LINQ/LINQ-Async behavior of requiring entire set before filtering
-            //TODO: come up with a way to make sure its known if filtering is service side or client side
-            return ResourceListOperations.ListAtContext<VirtualMachineOperations, PhVirtualMachine>(subscription, filter, top, cancellationToken);
+            ArmFilterCollection filters = new ArmFilterCollection(PhVirtualMachine.ResourceType);
+            filters.SubstringFilter = filter;
+            return ResourceListOperations.ListAtContext<VirtualMachineOperations, PhVirtualMachine>(subscription, filters, top, cancellationToken);
         }
 
         /// <summary>
@@ -37,19 +37,25 @@ namespace azure_proto_compute
         /// <returns></returns>
         public static AsyncPageable<VirtualMachineOperations> ListVirtualMachinesAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            return ResourceListOperations.ListAtContextAsync<VirtualMachineOperations, PhVirtualMachine>(subscription, filter, top, cancellationToken);
+            ArmFilterCollection filters = new ArmFilterCollection(PhVirtualMachine.ResourceType);
+            filters.SubstringFilter = filter;
+            return ResourceListOperations.ListAtContextAsync<VirtualMachineOperations, PhVirtualMachine>(subscription, filters, top, cancellationToken);
         }
         #endregion
 
         #region AvailabilitySet List Operations
         public static Pageable<AvailabilitySetOperations> ListAvailabilitySets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            return ResourceListOperations.ListAtContext<AvailabilitySetOperations, PhAvailabilitySet>(subscription, filter, top, cancellationToken);
+            ArmFilterCollection filters = new ArmFilterCollection(PhAvailabilitySet.ResourceType);
+            filters.SubstringFilter = filter;
+            return ResourceListOperations.ListAtContext<AvailabilitySetOperations, PhAvailabilitySet>(subscription, filters, top, cancellationToken);
         }
 
         public static AsyncPageable<AvailabilitySetOperations> ListAvailabilitySetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
-            return ResourceListOperations.ListAtContextAsync<AvailabilitySetOperations, PhAvailabilitySet>(subscription, filter, top, cancellationToken);
+            ArmFilterCollection filters = new ArmFilterCollection(PhAvailabilitySet.ResourceType);
+            filters.SubstringFilter = filter;
+            return ResourceListOperations.ListAtContextAsync<AvailabilitySetOperations, PhAvailabilitySet>(subscription, filters, top, cancellationToken);
         }
         #endregion
     }

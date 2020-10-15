@@ -1,7 +1,6 @@
 ﻿using azure_proto_compute;
 using azure_proto_core;
 using System;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace client
@@ -22,11 +21,10 @@ namespace client
             }
         }
 
-        public override void Execute()
+        public async override void Execute()
         {
             #region SETUP
             ScenarioContext[] contexts = new ScenarioContext[] { new ScenarioContext(), new ScenarioContext("c9cbd920-c00c-427c-852b-8aaf38badaeb") };
-            //TODO: there is a concurency issue in "new DefaultAzureCredential()" that needs to get investigated
             ParallelOptions options = new ParallelOptions
             {
                 MaxDegreeOfParallelism = 1
@@ -43,9 +41,8 @@ namespace client
             var client = new ArmClient();
             foreach (var sub in client.ListSubscriptions())
             {
-                foreach (var vm in sub.ListVirtualMachines("even"))
+                await foreach (var vm in sub.ListVirtualMachinesAsync("even"))
                 {
-
                        Console.WriteLine($"Stopping {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");
                        vm.PowerOff();
                        Console.WriteLine($"Starting {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");

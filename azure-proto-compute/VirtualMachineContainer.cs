@@ -3,6 +3,7 @@ using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Compute.Models;
 using azure_proto_compute.Convenience;
 using azure_proto_core;
+using azure_proto_core.Adapters;
 using azure_proto_core.Resources;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -14,15 +15,11 @@ namespace azure_proto_compute
     /// <summary>
     /// Vm Operations over a resource group
     /// </summary>
+    /// We should not expose Create method when a container is constructed at a subscription level as an example for a virtual machine.
+    /// Likewise we should not expose create when a subnet container is constructed at a resource group level
     public class VirtualMachineContainer : ResourceContainerOperations<VirtualMachineOperations, PhVirtualMachine>
     {
-        public VirtualMachineContainer(ArmClientContext parent, ResourceIdentifier context) : base(parent, context) { }
-
-        public VirtualMachineContainer(ArmClientContext parent, azure_proto_core.Resource context) : base(parent, context) { }
-
-        public VirtualMachineContainer(OperationsBase parent, ResourceIdentifier context) : base(parent, context) { }
-
-        public VirtualMachineContainer(OperationsBase parent, azure_proto_core.Resource context) : base(parent, context) { }
+        public VirtualMachineContainer(ArmClientContext context, PhResourceGroup resourceGroup) : base(context, resourceGroup) { }
 
         public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 
@@ -31,7 +28,7 @@ namespace azure_proto_compute
             var operation = Operations.StartCreateOrUpdate(base.Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
             return new PhArmResponse<VirtualMachineOperations, VirtualMachine>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                v => new VirtualMachineOperations(this, new PhVirtualMachine(v)));
+                v => new VirtualMachineOperations(ClientContext, new PhVirtualMachine(v)));
         }
 
         public async override Task<ArmResponse<VirtualMachineOperations>> CreateAsync(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
@@ -39,21 +36,21 @@ namespace azure_proto_compute
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<VirtualMachineOperations, VirtualMachine>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                v => new VirtualMachineOperations(this, new PhVirtualMachine(v)));
+                v => new VirtualMachineOperations(ClientContext, new PhVirtualMachine(v)));
         }
 
         public override ArmOperation<VirtualMachineOperations> StartCreate(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<VirtualMachineOperations, VirtualMachine>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
-                v => new VirtualMachineOperations(this, new PhVirtualMachine(v)));
+                v => new VirtualMachineOperations(ClientContext, new PhVirtualMachine(v)));
         }
 
         public async override Task<ArmOperation<VirtualMachineOperations>> StartCreateAsync(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<VirtualMachineOperations, VirtualMachine>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
-                v => new VirtualMachineOperations(this, new PhVirtualMachine(v)));
+                v => new VirtualMachineOperations(ClientContext, new PhVirtualMachine(v)));
         }
 
         public VirtualMachineModelBuilder Construct(string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, PhAvailabilitySet aset, Location location = null)
@@ -83,67 +80,63 @@ namespace azure_proto_compute
                 AvailabilitySet = new SubResource() { Id = aset.Id }
             };
 
-            return new VirtualMachineModelBuilder(new VirtualMachineContainer(this, Id), new PhVirtualMachine(vm));
+            return new VirtualMachineModelBuilder(this, new PhVirtualMachine(vm));
         }
 
         public VirtualMachineModelBuilder Construct(string name, Location location)
         {
-            //TODO: Fix this case
             return new VirtualMachineModelBuilder(null, null);
         }
 
-        /// <summary>
-        /// List vms at the given subscription context
-        /// </summary>
-        /// <param name="subscription"></param>
-        /// <param name="filter"></param>
-        /// <param name="top"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Pageable<VirtualMachineOperations> List(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public Pageable<VirtualMachineOperations> List(CancellationToken cancellationToken = default)
         {
-            return ResourceListOperations.ListAtContext<VirtualMachineOperations, PhVirtualMachine>(ClientContext, Id.Parent, filter, top, cancellationToken);
+            var result = Operations.List(Id.Name, cancellationToken);
+            return new PhWrappingPageable<VirtualMachine, VirtualMachineOperations>(
+                result,
+                s => new VirtualMachineOperations(ClientContext, new PhVirtualMachine(s)));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="subscription"></param>
-        /// <param name="filter"></param>
-        /// <param name="top"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public AsyncPageable<VirtualMachineOperations> ListAsync(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<VirtualMachineOperations> ListAsync(CancellationToken cancellationToken = default)
         {
-            return ResourceListOperations.ListAtContextAsync<VirtualMachineOperations, PhVirtualMachine>(ClientContext, Id.Parent, filter, top, cancellationToken);
+            var result = Operations.ListAsync(Id.Name, cancellationToken);
+            return new PhWrappingAsyncPageable<VirtualMachine, VirtualMachineOperations>(
+                result,
+                s => new VirtualMachineOperations(ClientContext, new PhVirtualMachine(s)));
         }
 
-        //TODO: add rp specific filter example
-        public IEnumerable<VirtualMachineOperations> ListByTag(ArmTagFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public Pageable<ArmResourceOperations> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            var vms = ResourceListOperations.ListAtContext<VirtualMachineOperations, PhVirtualMachine>(ClientContext, Id.Parent, null, top, cancellationToken);
-            foreach(var vm in vms)
+            ArmFilterCollection filters = new ArmFilterCollection(PhVirtualMachine.ResourceType);
+            filters.SubstringFilter = filter;
+            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+        }
+
+        public AsyncPageable<ArmResourceOperations> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            ArmFilterCollection filters = new ArmFilterCollection(PhVirtualMachine.ResourceType);
+            filters.SubstringFilter = filter;
+            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+        }
+
+        //TODO: See if we can turn this into pageable with a wrapper
+        //it would need to skip items that are filtered out and still return a normalized page size
+        public IEnumerable<VirtualMachineOperations> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var results = ListByName(filter, top, cancellationToken);
+            foreach(var genericResource in results)
             {
-                string value;
-                if (vm.Model.Tags.TryGetValue(filter.Key, out value))
-                {
-                    if (value == filter.Value)
-                        yield return vm;
-                }
+                var vmOperations = new VirtualMachineOperations(genericResource);
+                yield return vmOperations.Get().Value;
             }
         }
 
-        public async IAsyncEnumerable<VirtualMachineOperations> ListByTagAsync(ArmTagFilter filter, int? top = null, [EnumeratorCancellation]CancellationToken cancellationToken = default)
+        public async IAsyncEnumerable<VirtualMachineOperations> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            var vms = ResourceListOperations.ListAtContextAsync<VirtualMachineOperations, PhVirtualMachine>(ClientContext, Id.Parent, null, top, cancellationToken);
-            await foreach (var vm in vms)
+            var results = ListByNameAsync(filter, top, cancellationToken);
+            await foreach (var genericResource in results)
             {
-                string value;
-                if (vm.Model.Tags.TryGetValue(filter.Key, out value))
-                {
-                    if (value == filter.Value)
-                        yield return vm;
-                }
+                var vmOperations = new VirtualMachineOperations(genericResource);
+                yield return await vmOperations.GetAsync();
             }
         }
 

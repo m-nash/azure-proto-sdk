@@ -30,8 +30,13 @@ namespace client
                 }
             }
 
+            var filteredList = rmClient.Resources.ListByResourceGroup(Context.RgName, filter: $"tagName eq 'tagKey' and tagValue eq 'tagValue'").Where(r =>
+            {
+                return string.Equals(r.Type, "Microsoft.Compute/virtualMachines", StringComparison.InvariantCultureIgnoreCase);
+            });
+
             // note that we could also accomplish this by using the rp-specific list, but this would require client filtering by tag name and value
-            foreach (var vm in rmClient.Resources.ListByResourceGroup(Context.RgName, filter:$"tagName eq 'tagKey' and tagValue eq 'tagValue'").Where(r => string.Equals(r.Type, "Microsoft.Compute/virtualMachines", StringComparison.InvariantCultureIgnoreCase)))
+            foreach (var vm in filteredList)
             {
                 Console.WriteLine("--------Stopping VM {0}--------", vm.Name);
                 computeClient.VirtualMachines.StartPowerOff(Context.RgName, vm.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult();

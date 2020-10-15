@@ -5,7 +5,7 @@ using System.Text;
 namespace azure_proto_core
 {
     /// <summary>
-    /// TODO: Remove this class after generation updates
+    /// TODO: GENERATOR Remove this class after generation updates
     /// </summary>
     /// <typeparam name="T">The type of the underlying model this class wraps</typeparam>
     public abstract class TrackedResource<T> : TrackedResource where T : class

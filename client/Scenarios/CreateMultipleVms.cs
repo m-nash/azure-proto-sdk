@@ -59,7 +59,7 @@ namespace client
                 string num = i % 2 == 0 ? "even" : "odd";
                 string name = $"{Context.VmName}-{i}-{num}";
                 Console.WriteLine("--------Start create VM {0}--------", i);
-                var vmOp = resourceGroup.VirtualMachines().Construct(name, "admin-user", "!@#$%asdfA", nic.Id, aset.GetModelIfNewer()).StartCreate(name);
+                var vmOp = resourceGroup.VirtualMachines().Construct(name, "admin-user", "!@#$%asdfA", nic.Id, aset.Model).StartCreate(name);
                 operations.Add(vmOp);
             }
 

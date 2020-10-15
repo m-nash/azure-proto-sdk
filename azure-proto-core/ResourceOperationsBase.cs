@@ -6,32 +6,21 @@ namespace azure_proto_core
 {
     /// <summary>
     /// Common base type for lifecycle operations over a resource
-    /// TODO: Consider whehter to represent POST operations and the acommpanyong actions list call
-    /// TODO: Consider whether to provide a Normalized PATCH functionality across RP resources
     /// TODO: Refactor methods beyond the ResourceOperation as extensions [allowing them to appear in generic usage of the type]
     /// TODO: Split into ResourceOperations/TrackedResourceOperations
     /// </summary>
     /// <typeparam name="Model"></typeparam>
-    public abstract class ResourceOperationsBase<T> : OperationsBase where T : Resource 
+    public abstract class ResourceOperationsBase<TOperations, TResource> : OperationsBase
+        where TResource : Resource
+        where TOperations : ResourceOperationsBase<TOperations, TResource>
     {
-        public ResourceOperationsBase(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
-        {
-            Resource = new ArmResource(context);
-        }
+        public ResourceOperationsBase(ArmResourceOperations genericOperations) : this(genericOperations.ClientContext, genericOperations.Id) { }
 
-        public ResourceOperationsBase(OperationsBase parent, Resource context) : base(parent, context)
-        {
-            Resource = context;
-        }
+        public ResourceOperationsBase(ArmClientContext context, ResourceIdentifier id) : this(context, new ArmResource(id)) { }
 
-        public ResourceOperationsBase(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
+        public ResourceOperationsBase(ArmClientContext context, Resource resource) : base(context, resource)
         {
-            Resource = new ArmResource(context);
-        }
-
-        public ResourceOperationsBase(ArmClientContext parent, Resource context) : base(parent, context)
-        {
-            Resource = context;
+            Resource = resource;
         }
 
         protected override Resource Resource { get;  set; }
@@ -41,20 +30,20 @@ namespace azure_proto_core
         public virtual bool HasModel { 
             get 
             {
-                var model = Resource as T;
+                var model = Resource as TResource;
                 return model != null;
             }
         }
 
-        public T Model 
+        public TResource Model 
         { 
             get
             {
-                return Resource as T;
+                return Resource as TResource;
             } 
         }
 
-        public T GetModelIfNewer()
+        public TResource GetModelIfNewer()
         {
             if (HasModel)
             {
@@ -64,10 +53,10 @@ namespace azure_proto_core
             return Get().Value.Model;
         }
 
-        public abstract ArmResponse<ResourceOperationsBase<T>> Get();
-        public abstract Task<ArmResponse<ResourceOperationsBase<T>>> GetAsync(CancellationToken cancellationToken = default);
-        public abstract ArmOperation<ResourceOperationsBase<T>> AddTag(string key, string value);
-        public abstract Task<ArmOperation<ResourceOperationsBase<T>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default);
+        public abstract ArmResponse<TOperations> Get();
+        public abstract Task<ArmResponse<TOperations>> GetAsync(CancellationToken cancellationToken = default);
+        public abstract ArmOperation<TOperations> AddTag(string key, string value);
+        public abstract Task<ArmOperation<TOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default);
         public abstract ArmOperation<Response> Delete();
         public abstract Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default);
     }

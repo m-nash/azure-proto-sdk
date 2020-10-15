@@ -1,93 +1,57 @@
-﻿using Azure;
-using Azure.ResourceManager.Network.Models;
-using azure_proto_core;
-using azure_proto_core.Resources;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using azure_proto_core;
 
 namespace azure_proto_network
 {
     public static class ResourceGroupExtensions
     {
         #region Virtual Network Operations
-        public static VirtualNetworkOperations VirtualNetwork(this ResourceGroupOperations resourceGroup, TrackedResource vnet)
+        public static VirtualNetworkOperations VirtualNetwork(this ResourceGroupOperations resourceGroup, TrackedResource virtualNetwork)
         {
-            return new VirtualNetworkOperations(resourceGroup, vnet);
+            return new VirtualNetworkOperations(resourceGroup.ClientContext, virtualNetwork);
         }
 
-        public static VirtualNetworkOperations VirtualNetwork(this ResourceGroupOperations resourceGroup, string vnet)
+        public static VirtualNetworkOperations VirtualNetwork(this ResourceGroupOperations resourceGroup, string virtualNetwork)
         {
-            return new VirtualNetworkOperations(resourceGroup, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/virtualNetworks/{vnet}"));
+            return new VirtualNetworkOperations(resourceGroup.ClientContext, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/virtualNetworks/{virtualNetwork}"));
         }
 
         public static VirtualNetworkContainer VirtualNetworks(this ResourceGroupOperations resourceGroup)
         {
-            return new VirtualNetworkContainer(resourceGroup.ClientContext, resourceGroup.Id);
-        }
-
-        public static Pageable<VirtualNetworkOperations> ListVirtualNetworks(this ResourceGroupOperations resourceGroup, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
-        {
-            return ResourceListOperations.ListAtContext<VirtualNetworkOperations, PhVirtualNetwork>(resourceGroup, filter, top, cancellationToken);
-        }
-
-        public static AsyncPageable<VirtualNetworkOperations> ListVvirtualNetworksAsync(this ResourceGroupOperations resourceGroup, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
-        {
-            return ResourceListOperations.ListAtContextAsync<VirtualNetworkOperations, PhVirtualNetwork>(resourceGroup, filter, top, cancellationToken);
+            return new VirtualNetworkContainer(resourceGroup.ClientContext, resourceGroup.Model);
         }
         #endregion
 
         #region Public IP Address Operations
-        public static PublicIpAddressOperations PublicIpAddress(this ResourceGroupOperations resourceGroup, TrackedResource vnet)
+        public static PublicIpAddressOperations PublicIpAddress(this ResourceGroupOperations resourceGroup, TrackedResource publicIpAddress)
         {
-            return new PublicIpAddressOperations(resourceGroup, vnet);
+            return new PublicIpAddressOperations(resourceGroup.ClientContext, publicIpAddress);
         }
 
-        public static PublicIpAddressOperations PublicIpAddress(this ResourceGroupOperations resourceGroup, string vnet)
+        public static PublicIpAddressOperations PublicIpAddress(this ResourceGroupOperations resourceGroup, string publicIpAddress)
         {
-            return new PublicIpAddressOperations(resourceGroup, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/virtualNetworks/{vnet}"));
+            return new PublicIpAddressOperations(resourceGroup.ClientContext, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/publicIpAddresses/{publicIpAddress}"));
         }
 
         public static PublicIpAddressContainer PublicIpAddresses(this ResourceGroupOperations resourceGroup)
         {
-            return new PublicIpAddressContainer(resourceGroup.ClientContext, resourceGroup.Id);
-        }
-
-        public static Pageable<PublicIpAddressOperations> ListPublicIpAddresses(this ResourceGroupOperations resourceGroup, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
-        {
-            return ResourceListOperations.ListAtContext<PublicIpAddressOperations, PhPublicIPAddress>(resourceGroup, filter, top, cancellationToken);
-        }
-
-        public static AsyncPageable<PublicIpAddressOperations> ListPublicIpAddressesAsync(this ResourceGroupOperations resourceGroup, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
-        {
-            return ResourceListOperations.ListAtContextAsync<PublicIpAddressOperations, PhPublicIPAddress>(resourceGroup, filter, top, cancellationToken);
+            return new PublicIpAddressContainer(resourceGroup.ClientContext, resourceGroup.Model);
         }
         #endregion
 
         #region Network Interface (NIC) operations
-        public static NetworkInterfaceOperations NetworkInterface(this ResourceGroupOperations resourceGroup, TrackedResource vnet)
+        public static NetworkInterfaceOperations NetworkInterface(this ResourceGroupOperations resourceGroup, TrackedResource networkInterface)
         {
-            return new NetworkInterfaceOperations(resourceGroup, vnet);
+            return new NetworkInterfaceOperations(resourceGroup.ClientContext, networkInterface);
         }
 
-        public static NetworkInterfaceOperations NetworkInterface(this ResourceGroupOperations resourceGroup, string vnet)
+        public static NetworkInterfaceOperations NetworkInterface(this ResourceGroupOperations resourceGroup, string networkInterface)
         {
-            return new NetworkInterfaceOperations(resourceGroup, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/virtualNetworks/{vnet}"));
+            return new NetworkInterfaceOperations(resourceGroup.ClientContext, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/networkInterfaces/{networkInterface}"));
         }
 
         public static NetworkInterfaceContainer NetworkInterfaces(this ResourceGroupOperations resourceGroup)
         {
-            return new NetworkInterfaceContainer(resourceGroup.ClientContext, resourceGroup.Id);
-        }
-
-        public static Pageable<NetworkInterfaceOperations> ListNetworkInterfaces(this ResourceGroupOperations resourceGroup, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
-        {
-            return ResourceListOperations.ListAtContext<NetworkInterfaceOperations, PhNetworkInterface>(resourceGroup, filter, top, cancellationToken);
-        }
-
-        public static AsyncPageable<NetworkInterfaceOperations> ListNetworkInterfacesAsync(this ResourceGroupOperations resourceGroup, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
-        {
-            return ResourceListOperations.ListAtContextAsync<NetworkInterfaceOperations, PhNetworkInterface>(resourceGroup, filter, top, cancellationToken);
+            return new NetworkInterfaceContainer(resourceGroup.ClientContext, resourceGroup.Model);
         }
         #endregion
 
@@ -97,29 +61,19 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="openPorts">The set of TCP ports to open</param>
         /// <returns>An NSG, with the given TCP ports open</returns>
-        public static NetworkSecurityGroupOperations NetworkSecurityGroup(this ResourceGroupOperations resourceGroup, TrackedResource vnet)
+        public static NetworkSecurityGroupOperations NetworkSecurityGroup(this ResourceGroupOperations resourceGroup, TrackedResource networkSecurityGroup)
         {
-            return new NetworkSecurityGroupOperations(resourceGroup, vnet);
+            return new NetworkSecurityGroupOperations(resourceGroup.ClientContext, networkSecurityGroup);
         }
 
-        public static NetworkSecurityGroupOperations NetworkSecurityGroup(this ResourceGroupOperations operations, string vnet)
+        public static NetworkSecurityGroupOperations NetworkSecurityGroup(this ResourceGroupOperations operations, string networkSecurityGroup)
         {
-            return new NetworkSecurityGroupOperations(operations, new ResourceIdentifier($"{operations.Id}/providers/Microsoft.Network/virtualNetworks/{vnet}"));
+            return new NetworkSecurityGroupOperations(operations.ClientContext, new ResourceIdentifier($"{operations.Id}/providers/Microsoft.Network/networkSecurityGroups/{networkSecurityGroup}"));
         }
 
         public static NetworkSecurityGroupContainer NetworkSecurityGroups(this ResourceGroupOperations resourceGroup)
         {
-            return new NetworkSecurityGroupContainer(resourceGroup.ClientContext, resourceGroup.Id);
-        }
-
-        public static Pageable<NetworkSecurityGroupOperations> ListNetworkSecurityGroups(this ResourceGroupOperations resourceGroup, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
-        {
-            return ResourceListOperations.ListAtContext<NetworkSecurityGroupOperations, PhNetworkSecurityGroup>(resourceGroup, filter, top, cancellationToken);
-        }
-
-        public static AsyncPageable<NetworkSecurityGroupOperations> ListNetworkSecurityGroupsAsync(this ResourceGroupOperations resourceGroup, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
-        {
-            return ResourceListOperations.ListAtContextAsync<NetworkSecurityGroupOperations, PhNetworkSecurityGroup>(resourceGroup, filter, top, cancellationToken);
+            return new NetworkSecurityGroupContainer(resourceGroup.ClientContext, resourceGroup.Model);
         }
         #endregion
     }

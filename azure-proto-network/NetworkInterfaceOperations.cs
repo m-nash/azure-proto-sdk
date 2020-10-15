@@ -7,23 +7,11 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class NetworkInterfaceOperations : ResourceOperationsBase<PhNetworkInterface>
+    public class NetworkInterfaceOperations : ResourceOperationsBase<NetworkInterfaceOperations, PhNetworkInterface>
     {
-        public NetworkInterfaceOperations(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
-        {
-        }
+        public NetworkInterfaceOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 
-        public NetworkInterfaceOperations(ArmClientContext parent, azure_proto_core.Resource context) : base(parent, context)
-        {
-        }
-
-        public NetworkInterfaceOperations(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
-        {
-        }
-
-        public NetworkInterfaceOperations(OperationsBase parent, azure_proto_core.Resource context) : base(parent, context)
-        {
-        }
+        public NetworkInterfaceOperations(ArmClientContext context, azure_proto_core.Resource resource) : base(context, resource) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 
@@ -37,33 +25,33 @@ namespace azure_proto_network
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
-        public override ArmResponse<ResourceOperationsBase<PhNetworkInterface>> Get()
+        public override ArmResponse<NetworkInterfaceOperations> Get()
         {
-            return new PhArmResponse<ResourceOperationsBase<PhNetworkInterface>, NetworkInterface>(
+            return new PhArmResponse<NetworkInterfaceOperations, NetworkInterface>(
                 Operations.Get(Id.ResourceGroup, Id.Name),
                 n => { Resource = new PhNetworkInterface(n); return this; });
         }
 
-        public async override Task<ArmResponse<ResourceOperationsBase<PhNetworkInterface>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<NetworkInterfaceOperations>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<ResourceOperationsBase<PhNetworkInterface>, NetworkInterface>(
+            return new PhArmResponse<NetworkInterfaceOperations, NetworkInterface>(
                 await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
                 n => { Resource = new PhNetworkInterface(n); return this; });
         }
 
-        public override ArmOperation<ResourceOperationsBase<PhNetworkInterface>> AddTag(string key, string value)
+        public override ArmOperation<NetworkInterfaceOperations> AddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<ResourceOperationsBase<PhNetworkInterface>, NetworkInterface>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+            return new PhArmOperation<NetworkInterfaceOperations, NetworkInterface>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
                 n => { Resource = new PhNetworkInterface(n); return this; });
         }
 
-        public async override Task<ArmOperation<ResourceOperationsBase<PhNetworkInterface>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<NetworkInterfaceOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<ResourceOperationsBase<PhNetworkInterface>, NetworkInterface>(
+            return new PhArmOperation<NetworkInterfaceOperations, NetworkInterface>(
                 await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken), 
                 n => { Resource = new PhNetworkInterface(n); return this; });
         }
