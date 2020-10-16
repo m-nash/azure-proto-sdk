@@ -14,6 +14,7 @@ namespace azure_proto_core
             //the id can be of any type so do nothing
         }
 
+        //TODO: Fill out the methods using ResourceManagementClient 
         public override ArmOperation<ArmResourceOperations> AddTag(string key, string value)
         {
             throw new NotImplementedException();
