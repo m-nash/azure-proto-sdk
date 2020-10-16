@@ -22,15 +22,23 @@ namespace azure_proto_core
     {
         static ArmClient()
         {
-            Registry.Register<ResourceGroupOperations, PhResourceGroup>(
-                new azure_proto_core.Internal.ArmResourceRegistration<ResourceGroupOperations, PhResourceGroup>(
+            Registry.Register(
+                new azure_proto_core.Internal.ArmResourceRegistration<ResourceGroupContainerOperations, SubscriptionOperations, ResourceGroupOperations, PhResourceGroup>(
                     new ResourceType("Microsoft.Resources/resourceGroups"),
                     (o, r) => new ResourceGroupContainerOperations(o, r),
                     (o, r) => new ResourceGroupOperations(o, r.Id)));
+
+            Registry.Register(
+                new azure_proto_core.Internal.ArmResourceRegistration<ResourceContainerOperations<ArmResourceOperations, ArmResource>, TrackedResource, ArmResourceOperations, ArmResource>(
+                    new ResourceType("Microsoft.Resources/resourceGroups"),
+                    null,
+                    (o, r) => new ArmResourceOperations(o, r.Id)));
         }
 
         public static ArmResourceRegistry Registry { get; }  = new ArmResourceRegistry();
+
         internal static readonly string DefaultUri = "https://management.azure.com";
+
         public ArmClient() : this(new Uri(DefaultUri), new DefaultAzureCredential())
         {
         }
@@ -60,8 +68,6 @@ namespace azure_proto_core
         public SubscriptionOperations Subscription(PhSubscriptionModel subscription) => new SubscriptionOperations(this.ClientContext, subscription);
 
         /// <summary>
-        /// TODO: represent strings that take both resource id or just subscription id
-        /// TODO: should we allow subscription friendly names?
         /// </summary>
         /// <param name="subscription"></param>
         /// <returns></returns>
@@ -186,17 +192,20 @@ namespace azure_proto_core
             return null;
         }
 
-        public ArmResponse<ResourceOperationsBase<T>> CreateResource<T>(string subscription, string resourceGroup, string name, T model, azure_proto_core.Location location = default) where T:TrackedResource
+        public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string subscription, string resourceGroup, string name, TResource model, azure_proto_core.Location location = default)
+            where TResource : TrackedResource
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             if (location == null)
             {
                 location = azure_proto_core.Location.Default;
             }
 
-            ResourceContainerOperations<ResourceOperationsBase<T>, T> container;
-            if (!Registry.TryGetContainer(this.ClientContext, new ArmResource($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", location), out container))
+            TContainer container;
+            if (!Registry.TryGetContainer<TContainer, ArmResource, TOperations, TResource>(this.ClientContext, new ArmResource($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", location), out container))
             {
-                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+                throw new InvalidOperationException($"No resource type matching '{typeof(TResource)}' found.");
             }
 
             return container.Create(name, model);

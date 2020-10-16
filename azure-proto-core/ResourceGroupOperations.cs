@@ -7,17 +7,13 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    public class ResourceGroupOperations : ResourceOperationsBase<PhResourceGroup>
+    public class ResourceGroupOperations : ResourceOperationsBase<ResourceGroupOperations, PhResourceGroup>
     {
         public static readonly string AzureResourceType = "Microsoft.Resources/resourceGroups";
 
-        internal ResourceGroupOperations(OperationsBase parent, ResourceIdentifier context) : base(parent, context) { }
+        internal ResourceGroupOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 
-        internal ResourceGroupOperations(OperationsBase parent, Resource context) : base(parent, context) { }
-
-        internal ResourceGroupOperations(ArmClientContext parent, ResourceIdentifier context) : base(parent, context) { }
-
-        internal ResourceGroupOperations(ArmClientContext parent, Resource context) : base(parent, context) { }
+        internal ResourceGroupOperations(ArmClientContext context, Resource resource) : base(context, resource) { }
 
         public override ResourceType ResourceType => AzureResourceType;
 
@@ -31,33 +27,35 @@ namespace azure_proto_core
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.Name, cancellationToken));
         }
 
-        public override ArmResponse<ResourceOperationsBase<PhResourceGroup>> Get()
+        public override ArmResponse<ResourceGroupOperations> Get()
         {
-            return new PhArmResponse<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(Operations.Get(Id.Name), g => { this.Resource = new PhResourceGroup(g); return this; });
+            return new PhArmResponse<ResourceGroupOperations, ResourceGroup>(Operations.Get(Id.Name), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public async override Task<ArmResponse<ResourceOperationsBase<PhResourceGroup>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceGroupOperations>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(await Operations.GetAsync(Id.Name, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
+            return new PhArmResponse<ResourceGroupOperations, ResourceGroup>(await Operations.GetAsync(Id.Name, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public override ArmOperation<ResourceOperationsBase<PhResourceGroup>> AddTag(string name, string value)
+        public override ArmOperation<ResourceGroupOperations> AddTag(string name, string value)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;
-            return new PhArmOperation<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(Operations.Update(Id.Name, patch), g => { this.Resource = new PhResourceGroup(g); return this; });
+            return new PhArmOperation<ResourceGroupOperations, ResourceGroup>(Operations.Update(Id.Name, patch), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public async override Task<ArmOperation<ResourceOperationsBase<PhResourceGroup>>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceGroupOperations>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;
-            return new PhArmOperation<ResourceOperationsBase<PhResourceGroup>, ResourceGroup>(await Operations.UpdateAsync(Id.Name, patch, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
+            return new PhArmOperation<ResourceGroupOperations, ResourceGroup>(await Operations.UpdateAsync(Id.Name, patch, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public ArmResponse<ResourceOperationsBase<T>> CreateResource<T>(string name, T model, azure_proto_core.Location location = default) where T : TrackedResource
+        public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, azure_proto_core.Location location = default)
+            where TResource : TrackedResource
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
-
             var myResource = Resource as TrackedResource;
 
             if (myResource == null)
@@ -70,16 +68,19 @@ namespace azure_proto_core
                 myResource = new ArmResource(Id, location);
             }
 
-            ResourceContainerOperations<ResourceOperationsBase<T>, T> container;
-            if (!ArmClient.Registry.TryGetContainer(this.ClientContext, myResource, out container))
+            TContainer container;
+            if (!ArmClient.Registry.TryGetContainer<TContainer, TrackedResource, TOperations, TResource>(this.ClientContext, myResource, out container))
             {
-                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+                throw new InvalidOperationException($"No resource type matching '{typeof(TResource)}' found.");
             }
 
             return container.Create(name, model);
         }
 
-        public Task<ArmResponse<ResourceOperationsBase<T>>> CreateResourceAsync<T>(string name, T model, azure_proto_core.Location location = default, CancellationToken token = default) where T : TrackedResource
+        public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, azure_proto_core.Location location = default, CancellationToken token = default)
+            where TResource : TrackedResource
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
 
             var myResource = Resource as TrackedResource;
@@ -94,10 +95,10 @@ namespace azure_proto_core
                 myResource = new ArmResource(Id, location);
             }
 
-            ResourceContainerOperations<ResourceOperationsBase<T>, T> container;
-            if (!ArmClient.Registry.TryGetContainer(this.ClientContext, myResource, out container))
+            TContainer container;
+            if (!ArmClient.Registry.TryGetContainer<TContainer, TrackedResource, TOperations, TResource>(this.ClientContext, myResource, out container))
             {
-                throw new InvalidOperationException($"No resource type matching '{typeof(T)}' found.");
+                throw new InvalidOperationException($"No resource type matching '{typeof(TResource)}' found.");
             }
 
             return container.CreateAsync(name, model, token);

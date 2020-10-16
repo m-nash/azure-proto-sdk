@@ -7,6 +7,8 @@ namespace azure_proto_network
 {
     public class PhNetworkInterface : TrackedResource<NetworkInterface>, IEntityResource
     {
+        public static ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
+
         public PhNetworkInterface(NetworkInterface nic) : base(nic.Id, nic.Location, nic)
         {
             if (null == nic.Tags)

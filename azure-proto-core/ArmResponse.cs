@@ -2,7 +2,7 @@
 
 namespace azure_proto_core
 {
-    public abstract class ArmResponse<T> : Response<T>
+    public abstract class ArmResponse<TOperations> : Response<TOperations>
     {
     }
 

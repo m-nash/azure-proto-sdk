@@ -8,6 +8,8 @@ namespace azure_proto_network
     public class PhNetworkSecurityGroup : TrackedResource<NetworkSecurityGroup>, IEntityResource
 
     {
+        public static ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
+
         public PhNetworkSecurityGroup(NetworkSecurityGroup nsg) : base(nsg.Id, nsg.Location, nsg) 
         {
             if (null == nsg.Tags)

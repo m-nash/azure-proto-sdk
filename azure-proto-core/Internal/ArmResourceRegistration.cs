@@ -14,16 +14,17 @@ namespace azure_proto_core.Internal
     /// constructing list, creation, and Patch/Post/Delete methods for a resource 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ArmResourceRegistration<U, T>
-        where T : TrackedResource
-        where U : ResourceOperationsBase<T>
+    public class ArmResourceRegistration<TContainer, TContainerParent, TOperations, TResource>
+        where TResource : TrackedResource
+        where TOperations : ResourceOperationsBase<TOperations, TResource>
+        where TContainer : ResourceContainerOperations<TOperations, TResource>
     {
-        Func<ArmClientContext, TrackedResource, ResourceContainerOperations<U, T>> _containerFactory;
-        Func<ArmClientContext, Resource, U> _operationsFactory;
+        Func<ArmClientContext, TContainerParent, TContainer> _containerFactory;
+        Func<ArmClientContext, Resource, TOperations> _operationsFactory;
 
         public ArmResourceRegistration(
-            ResourceType type, Func<ArmClientContext, TrackedResource, ResourceContainerOperations<U, T>> containerFactory,
-            Func<ArmClientContext, Resource, U> operationsFactory)
+            ResourceType type, Func<ArmClientContext, TContainerParent, TContainer> containerFactory,
+            Func<ArmClientContext, Resource, TOperations> operationsFactory)
         {
 
             ResourceType = type;
@@ -32,12 +33,12 @@ namespace azure_proto_core.Internal
 
         }
 
-        public Type ModelType => typeof(T);
+        public Type ModelType => typeof(TResource);
         public ResourceType ResourceType { get; }
 
         public virtual bool HasOperations => _operationsFactory != null;
         public virtual bool HasContainer => _containerFactory != null;
-        public U GetOperations(ArmClientContext parent, Resource context) => _operationsFactory(parent, context);
-        public ResourceContainerOperations<U, T> GetContainer(ArmClientContext parent, TrackedResource parentContext) => _containerFactory(parent, parentContext);
+        public TOperations GetOperations(ArmClientContext parent, Resource context) => _operationsFactory(parent, context);
+        public TContainer GetContainer(ArmClientContext parent, TContainerParent parentContext) => _containerFactory(parent, parentContext);
     }
 }

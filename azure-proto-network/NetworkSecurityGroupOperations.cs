@@ -15,7 +15,7 @@ namespace azure_proto_network
     /// An operations + Model class for NSGs
     /// TODO: How does the operation signature change for resources that support Etags?
     /// </summary>
-    public class NetworkSecurityGroupOperations : ResourceOperationsBase<PhNetworkSecurityGroup>
+    public class NetworkSecurityGroupOperations : ResourceOperationsBase<NetworkSecurityGroupOperations, PhNetworkSecurityGroup>
     {
         class RuleIdEqualityComparer : IEqualityComparer<SecurityRule>
         {
@@ -30,30 +30,16 @@ namespace azure_proto_network
             }
         }
 
-        public NetworkSecurityGroupOperations(ArmClientContext parent, ResourceIdentifier context) : base(parent, context)
-        {
-        }
+        public NetworkSecurityGroupOperations(ArmClientContext parent, ResourceIdentifier context) : base(parent, context) { }
 
-        public NetworkSecurityGroupOperations(ArmClientContext parent, TrackedResource context) : base(parent, context)
-        {
-        }
-
-        public NetworkSecurityGroupOperations(OperationsBase parent, ResourceIdentifier context) : base(parent, context)
-        {
-        }
-
-        public NetworkSecurityGroupOperations(OperationsBase parent, TrackedResource context) : base(parent, context)
-        {
-        }
+        public NetworkSecurityGroupOperations(ArmClientContext parent, TrackedResource context) : base(parent, context) { }
 
         /// <summary>
-        /// TODO: Make use of the entity tags on the resource - we may need to add to the generated management client
-        /// TODO: Look for PATCH update methods in the swagger
-        /// TODO: How to represent PATCH where the patch model has properties that are collections (replace/merge)?
+        /// TODO: GENERATOR Make use of the entity tags on the resource - we may need to add to the generated management client
         /// </summary>
         /// <param name="rules">The new set of network security rules</param>
         /// <returns>A network security group with the given set of rules merged with thsi one</returns>
-        public ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>> UpdateRules(CancellationToken cancellationToken = default, params SecurityRule[] rules)
+        public ArmOperation<NetworkSecurityGroupOperations> UpdateRules(CancellationToken cancellationToken = default, params SecurityRule[] rules)
         {
             var model = Model;
             foreach (var rule in rules)
@@ -82,35 +68,35 @@ namespace azure_proto_network
                 }
             }
 
-            return new PhArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, model.Model), 
+            return new PhArmOperation<NetworkSecurityGroupOperations, NetworkSecurityGroup>(Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, model.Model), 
                 n => { Resource = new PhNetworkSecurityGroup(n); return this;});
         }
 
-        public override ArmResponse<ResourceOperationsBase<PhNetworkSecurityGroup>> Get()
+        public override ArmResponse<NetworkSecurityGroupOperations> Get()
         {
-            return new PhArmResponse<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(Operations.Get(Id.ResourceGroup, Id.Name),
+            return new PhArmResponse<NetworkSecurityGroupOperations, NetworkSecurityGroup>(Operations.Get(Id.ResourceGroup, Id.Name),
                 n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
-        public async override Task<ArmResponse<ResourceOperationsBase<PhNetworkSecurityGroup>>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<NetworkSecurityGroupOperations>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
+            return new PhArmResponse<NetworkSecurityGroupOperations, NetworkSecurityGroup>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
                 n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
-        public override ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>> AddTag(string key, string value)
+        public override ArmOperation<NetworkSecurityGroupOperations> AddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+            return new PhArmOperation<NetworkSecurityGroupOperations, NetworkSecurityGroup>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
                 n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
-        public async override Task<ArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<NetworkSecurityGroupOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<ResourceOperationsBase<PhNetworkSecurityGroup>, NetworkSecurityGroup>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+            return new PhArmOperation<NetworkSecurityGroupOperations, NetworkSecurityGroup>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
                 n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 

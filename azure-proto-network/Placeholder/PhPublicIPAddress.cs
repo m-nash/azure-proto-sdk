@@ -7,6 +7,8 @@ namespace azure_proto_network
 {
     public class PhPublicIPAddress : TrackedResource<PublicIPAddress>
     {
+        public static ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
+
         public PhPublicIPAddress(PublicIPAddress ip) : base(ip.Id, ip.Location, ip)
         {
             if (null == ip.Tags)

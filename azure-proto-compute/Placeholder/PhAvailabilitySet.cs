@@ -7,6 +7,8 @@ namespace azure_proto_compute
 {
     public class PhAvailabilitySet : TrackedResource<AvailabilitySet>
     {
+        public static ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
+
         public PhAvailabilitySet(AvailabilitySet aset) : base(aset.Id, aset.Location, aset)
         {
             if (null == aset.Tags)

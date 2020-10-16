@@ -7,6 +7,8 @@ namespace azure_proto_network
 {
     public class PhVirtualNetwork : TrackedResource<VirtualNetwork>
     {
+        public static ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
+
         public PhVirtualNetwork(VirtualNetwork vnet) : base(vnet.Id, vnet.Location, vnet)
         {
             if (null == vnet.Tags)
