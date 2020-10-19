@@ -6,7 +6,6 @@ namespace azure_proto_core
 {
     /// <summary>
     /// Common base type for lifecycle operations over a resource
-    /// TODO: Refactor methods beyond the ResourceOperation as extensions [allowing them to appear in generic usage of the type]
     /// TODO: Split into ResourceOperations/TrackedResourceOperations
     /// </summary>
     /// <typeparam name="Model"></typeparam>
