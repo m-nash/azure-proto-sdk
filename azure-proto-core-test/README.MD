@@ -1,10 +1,10 @@
 # azure-proto-core-test
 
-To run test: dotnet test
+To run test: ```dotnet test```
 
-To run test with code coverage and auto generate an html report: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+To run test with code coverage and auto generate an html report: ```dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura```
 
-Coverage report will be placed in /coverage in html format for viewing
+Coverage report will be placed in ```/coverage``` in html format for viewing
 
 Reports can also be viewed VS or VsCode with the proper viewer plugin
 
