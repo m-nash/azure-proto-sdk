@@ -1,3 +1,5 @@
+# azure-proto-core-test
+
 To run test: dotnet test
 
 To run test with code coverage and auto generate an html report: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
