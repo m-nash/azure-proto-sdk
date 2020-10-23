@@ -3,7 +3,7 @@ using NUnit.Framework;
 using System;
 
 namespace azure_proto_core_test
-{[TestFixture]
+{
     public class ResourceIdentifierTests
     {
         [SetUp]
@@ -26,7 +26,7 @@ namespace azure_proto_core_test
             Assert.AreEqual(Uri.UnescapeDataString(subject.Name), name);
         }
 
-        [TestCase]
+        [Test]
         public void CanParseSubscriptions()
         {
             ResourceIdentifier subject = "/subscriptions/0c2f6471-1bf0-4dda-aec3-cb9272f09575";
@@ -36,7 +36,7 @@ namespace azure_proto_core_test
             Assert.AreEqual(subject.Type.Type, "subscriptions");
         }
 
-        [TestCase]
+        [Test]
         public void CanParseResourceGroups()
         {
             ResourceIdentifier subject = "/subscriptions/0c2f6471-1bf0-4dda-aec3-cb9272f09575/resourceGroups/myRg";
