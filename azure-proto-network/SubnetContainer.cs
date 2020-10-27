@@ -5,6 +5,8 @@ using azure_proto_core;
 using azure_proto_core.Adapters;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
+using azure_proto_core.Adapters;.
 
 namespace azure_proto_network
 {
@@ -63,20 +65,20 @@ namespace azure_proto_network
             return new ArmBuilder<SubnetOperations, PhSubnet>(this, new PhSubnet(subnet, location ?? DefaultLocation));
         }
 
-        public Pageable<SubnetOperations> List(CancellationToken cancellationToken = default)
-        {
-            var subnetClient = GetClient((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).Subnets;
+        public Pageable<SubnetOperations> List(CancellationToken cancellationToken = default){
             return new PhWrappingPageable<Subnet, SubnetOperations>(
-                subnetClient.List(Id.ResourceGroup, Id.Name, cancellationToken),
-                s => new SubnetOperations(ClientContext, new PhSubnet(s, DefaultLocation)));
+                Operations.List(Id.ResourceGroup, Id.Name, cancellationToken),
+                this.convertor());
         }
 
-        public AsyncPageable<SubnetOperations> ListAsync(CancellationToken cancellationToken = default)
-        {
-            var subnetClient = GetClient((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).Subnets;
+        public AsyncPageable<SubnetOperations> ListAsync(CancellationToken cancellationToken = default){
             return new PhWrappingAsyncPageable<Subnet, SubnetOperations>(
-                subnetClient.ListAsync(Id.ResourceGroup, Id.Name, cancellationToken),
-                s => new SubnetOperations(ClientContext, new PhSubnet(s, DefaultLocation)));
+                Operations.ListAsync(Id.ResourceGroup, Id.Name, cancellationToken),
+                this.convertor());
         }
+        private Func<Subnet, SubnetOperations> convertor(){
+            return s => new SubnetOperations(ClientContext, new PhSubnet(s));
+        }
+
     }
 }

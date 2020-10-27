@@ -6,6 +6,8 @@ using azure_proto_core.Resources;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
+using azure_proto_core.Adapters;
 
 namespace azure_proto_network
 {
@@ -65,21 +67,37 @@ namespace azure_proto_network
 
             return new ArmBuilder<NetworkInterfaceOperations, PhNetworkInterface>(this, new PhNetworkInterface(nic));
         }
+    
+        public Pageable<NetworkInterfaceOperations> List(CancellationToken cancellationToken = default){
+            var result = Operations.List(Id.Name, cancellationToken);
+            return new PhWrappingPageable<NetworkInterface, NetworkInterfaceOperations>(
+                result,
+                this.convertor());
+        }
 
-        public Pageable<NetworkInterfaceOperations> List(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<NetworkInterfaceOperations> ListAsync(CancellationToken cancellationToken = default){
+            var result = Operations.ListAsync(Id.Name, cancellationToken);
+            return new PhWrappingAsyncPageable<NetworkInterface, NetworkInterfaceOperations>(
+                result,
+                this.convertor());
+        }
+
+        public Pageable<ArmResourceOperations> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhNetworkInterface.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<NetworkInterfaceOperations, PhNetworkInterface>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
 
-        public AsyncPageable<NetworkInterfaceOperations> ListAsync(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<ArmResourceOperations> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhNetworkInterface.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<NetworkInterfaceOperations, PhNetworkInterface>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
-
+        private  Func<NetworkInterface, NetworkInterfaceOperations> convertor(){
+            return s => new NetworkInterfaceOperations(ClientContext, new PhNetworkInterface(s));
+        }
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).NetworkInterfaces;
     }
 }

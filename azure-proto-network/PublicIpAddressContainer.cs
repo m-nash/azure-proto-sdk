@@ -5,6 +5,8 @@ using azure_proto_core;
 using azure_proto_core.Resources;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
+using azure_proto_core.Adapters;
 
 namespace azure_proto_network
 {
@@ -56,18 +58,33 @@ namespace azure_proto_network
             return new ArmBuilder<PublicIpAddressOperations, PhPublicIPAddress>(this, new PhPublicIPAddress(ipAddress));
         }
 
-        public Pageable<PublicIpAddressOperations> List(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
-        {
-            ArmFilterCollection filters = new ArmFilterCollection(PhPublicIPAddress.ResourceType);
-            filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<PublicIpAddressOperations, PhPublicIPAddress>(ClientContext, Id, filters, top, cancellationToken);
+        public Pageable<PublicIpAddressOperations> List(CancellationToken cancellationToken = default){
+            return new PhWrappingPageable<PublicIPAddress, PublicIpAddressOperations>(
+                Operations.List(Id.Name, cancellationToken),
+                this.convertor());
         }
 
-        public AsyncPageable<PublicIpAddressOperations> ListAsync(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<PublicIpAddressOperations> ListAsync(CancellationToken cancellationToken = default){
+            return new PhWrappingAsyncPageable<PublicIPAddress, PublicIpAddressOperations>(
+                Operations.ListAsync(Id.Name, cancellationToken),
+                this.convertor());
+        }
+
+        public Pageable<ArmResourceOperations> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhPublicIPAddress.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<PublicIpAddressOperations, PhPublicIPAddress>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+        }
+
+        public AsyncPageable<ArmResourceOperations> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            ArmFilterCollection filters = new ArmFilterCollection(PhPublicIPAddress.ResourceType);
+            filters.SubstringFilter = filter;
+            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+        }
+        private Func<PublicIPAddress, PublicIpAddressOperations> convertor(){
+            return s => new PublicIpAddressOperations(ClientContext, new PhPublicIPAddress(s));
         }
 
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).PublicIPAddresses;
