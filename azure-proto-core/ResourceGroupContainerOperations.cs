@@ -4,6 +4,8 @@ using Azure.ResourceManager.Resources.Models;
 using azure_proto_core.Adapters;
 using System.Threading;
 using System.Threading.Tasks;
+using azure_proto_core.Resources;
+
 
 namespace azure_proto_core
 {
@@ -61,6 +63,19 @@ namespace azure_proto_core
         {
             return new PhWrappingPageable<ResourceGroup, ResourceGroupOperations>(
                 Operations.List(null, null, cancellationToken),
+                s => new ResourceGroupOperations(ClientContext, new PhResourceGroup(s)));
+        }
+
+        public Pageable<ResourceGroupOperations> ListByName(ArmSubstringFilter filter, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return new PhWrappingPageable<ResourceGroup, ResourceGroupOperations>(
+                Operations.List(filter.ToString(), null, cancellationToken),
+                s => new ResourceGroupOperations(ClientContext, new PhResourceGroup(s)));
+        }
+        public AsyncPageable<ResourceGroupOperations> ListByNameAsync(ArmSubstringFilter filter, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return new PhWrappingAsyncPageable<ResourceGroup, ResourceGroupOperations>(
+                Operations.ListAsync(filter.ToString(), null, cancellationToken),
                 s => new ResourceGroupOperations(ClientContext, new PhResourceGroup(s)));
         }
 

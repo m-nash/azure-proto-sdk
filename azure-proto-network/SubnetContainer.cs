@@ -77,7 +77,8 @@ namespace azure_proto_network
                 this.convertor());
         }
         private Func<Subnet, SubnetOperations> convertor(){
-            return s => new SubnetOperations(ClientContext, new PhSubnet(s));
+            //TODO: Subnet will be a proxy resource and not a tracked resource ADO #4481
+            return s => new SubnetOperations(ClientContext, new PhSubnet(s, Location.Default));
         }
 
     }
