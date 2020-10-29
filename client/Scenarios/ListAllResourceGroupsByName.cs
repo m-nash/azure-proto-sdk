@@ -19,11 +19,6 @@ namespace client
                 CleanUp.Add(resourceGroup.Id);
             }
             var sub = new ArmClient().Subscription(Context.SubscriptionId);
-            var xx = sub.ResourceGroups().ListResourceGroupsByName("even");
-            foreach(var rg in sub.ResourceGroups().ListResourceGroupsByName("even"))
-            {
-                Console.WriteLine($"even {rg.Id.Name}");
-            }
         }
     }
 }

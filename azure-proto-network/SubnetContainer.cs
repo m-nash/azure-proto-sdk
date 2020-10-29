@@ -6,7 +6,6 @@ using azure_proto_core.Adapters;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
-using azure_proto_core.Adapters;.
 
 namespace azure_proto_network
 {
