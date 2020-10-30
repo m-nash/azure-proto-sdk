@@ -46,7 +46,6 @@ namespace azure_proto_core_test
         }
 
         [TestCase("/subscriptions/6b085460-5f21-477e-ba44-1035046e9101", "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test")]
-        [TestCase("/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test", "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web")]
         [TestCase("/subscriptions/6b085460-5f21-477e-ba44-1035046e9101", "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport")]
         public void CompareToMinusOne(string resourceId1, string resourceId2)
         {
