@@ -57,12 +57,12 @@ namespace azure_proto_core
 
         public int CompareTo(Location other)
         {
-            throw new NotImplementedException();
+            return string.Compare(this.Name, other.Name);
         }
 
         public int CompareTo(string other)
         {
-            throw new NotImplementedException();
+            return string.Compare(this.Name, other);
         }
 
         /// <summary>
