@@ -21,7 +21,7 @@ namespace azure_proto_network
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
             return new PhArmResponse<NetworkSecurityGroupOperations, NetworkSecurityGroup>(
-                operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(), 
+                operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
                 n => new NetworkSecurityGroupOperations(ClientContext, new PhNetworkSecurityGroup(n)));
         }
 
@@ -88,12 +88,14 @@ namespace azure_proto_network
 
             return new ArmBuilder<NetworkSecurityGroupOperations, PhNetworkSecurityGroup>(this, new PhNetworkSecurityGroup(nsg));
         }
-        public Pageable<NetworkSecurityGroupOperations> List(CancellationToken cancellationToken = default){
+        public Pageable<NetworkSecurityGroupOperations> List(CancellationToken cancellationToken = default)
+        {
             return new PhWrappingPageable<NetworkSecurityGroup, NetworkSecurityGroupOperations>(
                 Operations.List(Id.Name, cancellationToken),
                 this.convertor());
         }
-        public AsyncPageable<NetworkSecurityGroupOperations> ListAsync(CancellationToken cancellationToken = default){
+        public AsyncPageable<NetworkSecurityGroupOperations> ListAsync(CancellationToken cancellationToken = default)
+        {
             return new PhWrappingAsyncPageable<NetworkSecurityGroup, NetworkSecurityGroupOperations>(
                 Operations.ListAsync(Id.Name, cancellationToken),
                 this.convertor());
@@ -112,10 +114,11 @@ namespace azure_proto_network
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
-        private  Func<NetworkSecurityGroup, NetworkSecurityGroupOperations> convertor(){
+        private Func<NetworkSecurityGroup, NetworkSecurityGroupOperations> convertor()
+        {
             return s => new NetworkSecurityGroupOperations(ClientContext, new PhNetworkSecurityGroup(s));
         }
-        
+
 
         internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).NetworkSecurityGroups;
     }

@@ -57,13 +57,15 @@ namespace azure_proto_network
             return new ArmBuilder<VirtualNetworkOperations, PhVirtualNetwork>(this, new PhVirtualNetwork(vnet));
         }
 
-        public Pageable<VirtualNetworkOperations> List(CancellationToken cancellationToken = default){
+        public Pageable<VirtualNetworkOperations> List(CancellationToken cancellationToken = default)
+        {
             return new PhWrappingPageable<VirtualNetwork, VirtualNetworkOperations>(
                 Operations.List(Id.Name, cancellationToken),
                 this.convertor());
         }
 
-        public AsyncPageable<VirtualNetworkOperations> ListAsync(CancellationToken cancellationToken = default){
+        public AsyncPageable<VirtualNetworkOperations> ListAsync(CancellationToken cancellationToken = default)
+        {
             return new PhWrappingAsyncPageable<VirtualNetwork, VirtualNetworkOperations>(
                 Operations.ListAsync(Id.Name, cancellationToken),
                 this.convertor());

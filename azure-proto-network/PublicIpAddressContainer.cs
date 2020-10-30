@@ -20,7 +20,7 @@ namespace azure_proto_network
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
             return new PhArmResponse<PublicIpAddressOperations, PublicIPAddress>(
-                operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(), 
+                operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
                 n => new PublicIpAddressOperations(ClientContext, new PhPublicIPAddress(n)));
         }
 
@@ -58,13 +58,15 @@ namespace azure_proto_network
             return new ArmBuilder<PublicIpAddressOperations, PhPublicIPAddress>(this, new PhPublicIPAddress(ipAddress));
         }
 
-        public Pageable<PublicIpAddressOperations> List(CancellationToken cancellationToken = default){
+        public Pageable<PublicIpAddressOperations> List(CancellationToken cancellationToken = default)
+        {
             return new PhWrappingPageable<PublicIPAddress, PublicIpAddressOperations>(
                 Operations.List(Id.Name, cancellationToken),
                 this.convertor());
         }
 
-        public AsyncPageable<PublicIpAddressOperations> ListAsync(CancellationToken cancellationToken = default){
+        public AsyncPageable<PublicIpAddressOperations> ListAsync(CancellationToken cancellationToken = default)
+        {
             return new PhWrappingAsyncPageable<PublicIPAddress, PublicIpAddressOperations>(
                 Operations.ListAsync(Id.Name, cancellationToken),
                 this.convertor());
@@ -83,7 +85,8 @@ namespace azure_proto_network
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
-        private Func<PublicIPAddress, PublicIpAddressOperations> convertor(){
+        private Func<PublicIPAddress, PublicIpAddressOperations> convertor()
+        {
             return s => new PublicIpAddressOperations(ClientContext, new PhPublicIPAddress(s));
         }
 

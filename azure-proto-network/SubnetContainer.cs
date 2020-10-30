@@ -64,18 +64,21 @@ namespace azure_proto_network
             return new ArmBuilder<SubnetOperations, PhSubnet>(this, new PhSubnet(subnet, location ?? DefaultLocation));
         }
 
-        public Pageable<SubnetOperations> List(CancellationToken cancellationToken = default){
+        public Pageable<SubnetOperations> List(CancellationToken cancellationToken = default)
+        {
             return new PhWrappingPageable<Subnet, SubnetOperations>(
                 Operations.List(Id.ResourceGroup, Id.Name, cancellationToken),
                 this.convertor());
         }
 
-        public AsyncPageable<SubnetOperations> ListAsync(CancellationToken cancellationToken = default){
+        public AsyncPageable<SubnetOperations> ListAsync(CancellationToken cancellationToken = default)
+        {
             return new PhWrappingAsyncPageable<Subnet, SubnetOperations>(
                 Operations.ListAsync(Id.ResourceGroup, Id.Name, cancellationToken),
                 this.convertor());
         }
-        private Func<Subnet, SubnetOperations> convertor(){
+        private Func<Subnet, SubnetOperations> convertor()
+        {
             //TODO: Subnet will be a proxy resource and not a tracked resource ADO #4481
             return s => new SubnetOperations(ClientContext, new PhSubnet(s, Location.Default));
         }
