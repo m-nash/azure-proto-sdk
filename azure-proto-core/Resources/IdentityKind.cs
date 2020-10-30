@@ -30,12 +30,17 @@ namespace azure_proto_core
 
         public bool Equals(IdentityKind other)
         {
-            throw new NotImplementedException();
+            if (Object.ReferenceEquals(null, other))
+                return false;
+            return this.Value.Equals(other.Value);
+
         }
 
         public bool Equals(string other)
         {
-            throw new NotImplementedException();
+            if (Object.ReferenceEquals(null, other))
+                return false;
+            return (this.Value.Equals(other));
         }
     }
 }
