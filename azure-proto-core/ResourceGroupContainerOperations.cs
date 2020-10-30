@@ -4,8 +4,6 @@ using Azure.ResourceManager.Resources.Models;
 using azure_proto_core.Adapters;
 using System.Threading;
 using System.Threading.Tasks;
-using azure_proto_core.Resources;
-
 
 namespace azure_proto_core
 {

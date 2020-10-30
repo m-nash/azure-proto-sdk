@@ -68,10 +68,10 @@ namespace azure_proto_network
             return new ArmBuilder<NetworkInterfaceOperations, PhNetworkInterface>(this, new PhNetworkInterface(nic));
         }
     
-        public Pageable<NetworkInterfaceOperations> List(CancellationToken cancellationToken = default){
-            var result = Operations.List(Id.Name, cancellationToken);
+        public Pageable<NetworkInterfaceOperations> List(CancellationToken cancellationToken = default)
+        {
             return new PhWrappingPageable<NetworkInterface, NetworkInterfaceOperations>(
-                result,
+                Operations.List(Id.Name, cancellationToken),
                 this.convertor());
         }
 
