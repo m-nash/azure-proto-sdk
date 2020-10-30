@@ -13,7 +13,7 @@
         GenericEntityLoop,
         ShutdownVmsByLINQ,
         ShutdownVmsByNameAcrossResourceGroups,
-        ShutdownVmsByNameAcrossSubscriptions, 
+        ShutdownVmsByNameAcrossSubscriptions
     }
 
     class ScenarioFactory
