@@ -57,11 +57,19 @@ namespace azure_proto_core
 
         public int CompareTo(Location other)
         {
+            if (ReferenceEquals(other,null))
+            {
+                return 1;
+            }
             return string.Compare(this.Name, other.Name);
         }
 
         public int CompareTo(string other)
         {
+            if (ReferenceEquals(other,null))
+            {
+                return 1;
+            }
             return string.Compare(this.Name, other);
         }
 
