@@ -5,7 +5,6 @@ namespace azure_proto_core
 {
     /// <summary>
     /// Represents a managed identity
-    /// TODO: fill in properties, implement comparison and equality methods and operator overloads
     /// </summary>
     public class Identity : IEquatable<Identity>, IComparable<Identity>
     {

@@ -2,28 +2,35 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 
 namespace azure_proto_core
 {
     /// <summary>
     /// Structure respresenting a resource type
-    /// TODO: Fill in comparison methods and comparison, equality, and coercion operator overloads
     /// </summary>
     public class ResourceType : IEquatable<ResourceType>, IEquatable<string>, IComparable<ResourceType>, IComparable<string>
     {
         /// <summary>
         /// The "none" resource type
         /// </summary>
-        public static readonly ResourceType None = new ResourceType { Namespace = string.Empty, Type = string.Empty };
+        public static readonly ResourceType None = new ResourceType 
+        { 
+            Namespace = string.Empty, 
+            Type = string.Empty 
+        };
 
         private ResourceType()
         {
         }
+
         public ResourceType(string resourceIdOrType)
         {
             Parse(resourceIdOrType);
         }
+
         public string Namespace { get; private set; }
+
         public string Type { get; private set; }
 
         public ResourceType Parent 
@@ -114,12 +121,22 @@ namespace azure_proto_core
 
         public int CompareTo(ResourceType other)
         {
-            throw new NotImplementedException();
+            bool? checkNull = checkBothNull(other.ToString());
+            if (checkNull == true)
+                return 0;
+            else if (checkNull == false)
+                return -1;
+            return this.ToString().CompareTo(other.ToString());
         }
 
         public int CompareTo(string other)
         {
-            throw new NotImplementedException();
+            bool? checkNull = checkBothNull(other);
+            if (checkNull == true)
+                return 0;
+            if (checkNull == false)
+                return -1;
+            return this.ToString().CompareTo(other.ToString());
         }
         public override bool Equals(object obj)
         {
@@ -143,5 +160,15 @@ namespace azure_proto_core
         public static bool operator !=(ResourceType source, string target) => !source.Equals(target);
         public static bool operator !=(string source, ResourceType target) => !target.Equals(source);
         public static bool operator !=(ResourceType source, ResourceType target) => !source.Equals(target);
+
+        private bool? checkBothNull(string other)
+        {
+            bool? result = null;
+            if (this.ToString() == ResourceType.None && other == ResourceType.None)
+                result = true;
+            else if (this.ToString() == ResourceType.None)
+                result = false;
+            return result;
+        }
     }
 }
