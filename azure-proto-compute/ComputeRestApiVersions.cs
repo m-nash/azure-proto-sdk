@@ -1,8 +1,8 @@
 ﻿namespace azure_proto_compute
 {
-    public class ComputeRestVersions
+    public class ComputeRestApiVersions
     {
-        internal ComputeRestVersions()
+        internal ComputeRestApiVersions()
         {
             VirtualMachinesVersion = VirtualMachinesApiVersions.Default;
             AvailabilitySetsVersion = AvailabilitySetsApiVersions.Default;

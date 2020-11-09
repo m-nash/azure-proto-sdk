@@ -5,7 +5,7 @@ namespace azure_proto_core
 {
     public class ApiVersionsBase : IEquatable<string>, IComparable<string>
     {
-        private string _value;
+        private readonly string _value;
 
         protected ApiVersionsBase(string value)
         {

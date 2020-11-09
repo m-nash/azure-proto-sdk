@@ -4,9 +4,9 @@ namespace azure_proto_compute.Extensions
 {
     public static class ArmClientOptionsExtensions
     {
-        public static ComputeRestVersions ComputeRestVersions(this ArmClientOptions armClientOptions)
+        public static ComputeRestApiVersions ComputeRestVersions(this ArmClientOptions armClientOptions)
         {
-            return armClientOptions.GetOverrideObject<ComputeRestVersions>(() => new ComputeRestVersions()) as ComputeRestVersions;
+            return armClientOptions.GetOverrideObject<ComputeRestApiVersions>(() => new ComputeRestApiVersions()) as ComputeRestApiVersions;
         }
     }
 }
