@@ -7,8 +7,6 @@ namespace azure_proto_core
     {
         private string _value;
 
-        protected static HashSet<string> _validValues = new HashSet<string>();
-
         protected ApiVersionsBase(string value)
         {
             _value = value;

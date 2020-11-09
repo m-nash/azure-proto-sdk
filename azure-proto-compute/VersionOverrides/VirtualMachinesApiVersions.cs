@@ -8,12 +8,6 @@ namespace azure_proto_compute
         public static readonly VirtualMachinesApiVersions V2019_12_01 = new VirtualMachinesApiVersions("2019-12-01");
         public static readonly VirtualMachinesApiVersions Default = V2020_06_01;
 
-        static VirtualMachinesApiVersions()
-        {
-            _validValues.Add(V2020_06_01);
-            _validValues.Add(V2019_12_01);
-        }
-
         private VirtualMachinesApiVersions(string value) : base(value) { }
 
         public static implicit operator string(VirtualMachinesApiVersions version)

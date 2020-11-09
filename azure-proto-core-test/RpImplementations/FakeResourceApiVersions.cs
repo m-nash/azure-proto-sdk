@@ -8,12 +8,6 @@ namespace azure_proto_core_test
         public static readonly FakeResourceApiVersions V2019_12_01 = new FakeResourceApiVersions("2019-12-01");
         public static readonly FakeResourceApiVersions Default = V2020_06_01;
 
-        static FakeResourceApiVersions()
-        {
-            _validValues.Add(V2020_06_01);
-            _validValues.Add(V2019_12_01);
-        }
-
         private FakeResourceApiVersions(string value) : base(value) { }
 
         public static implicit operator string(FakeResourceApiVersions version)
