@@ -1,6 +1,5 @@
 ﻿using azure_proto_core;
 using NUnit.Framework;
-using System;
 
 namespace azure_proto_core_test
 {
@@ -10,7 +9,7 @@ namespace azure_proto_core_test
         public void VersionToString()
         {
             ArmClientOptions options = new ArmClientOptions();
-            Assert.AreEqual("2020-06-01", options.FakeRpRestVersions().FakeResourceVersion);
+            Assert.AreEqual("2020-06-01", options.FakeRpApiVersions().FakeResourceVersion);
         }
 
         [TestCase]
@@ -19,7 +18,7 @@ namespace azure_proto_core_test
             ArmClientOptions options1 = new ArmClientOptions();
             ArmClientOptions options2 = new ArmClientOptions();
 
-            Assert.IsTrue(options1.FakeRpRestVersions().FakeResourceVersion == options2.FakeRpRestVersions().FakeResourceVersion);
+            Assert.IsTrue(options1.FakeRpApiVersions().FakeResourceVersion == options2.FakeRpApiVersions().FakeResourceVersion);
         }
 
         [TestCase]
@@ -27,7 +26,7 @@ namespace azure_proto_core_test
         {
             ArmClientOptions options = new ArmClientOptions();
 
-            Assert.IsTrue(FakeResourceVersions.Default == options.FakeRpRestVersions().FakeResourceVersion);
+            Assert.IsTrue(FakeResourceApiVersions.Default == options.FakeRpApiVersions().FakeResourceVersion);
         }
 
         [TestCase]
@@ -35,7 +34,7 @@ namespace azure_proto_core_test
         {
             ArmClientOptions options = new ArmClientOptions();
 
-            Assert.IsFalse(null == options.FakeRpRestVersions().FakeResourceVersion);
+            Assert.IsFalse(null == options.FakeRpApiVersions().FakeResourceVersion);
         }
 
         [TestCase]
@@ -43,13 +42,13 @@ namespace azure_proto_core_test
         {
             ArmClientOptions options = new ArmClientOptions();
 
-            Assert.IsFalse(options.FakeRpRestVersions().FakeResourceVersion == null);
+            Assert.IsFalse(options.FakeRpApiVersions().FakeResourceVersion == null);
         }
 
         [TestCase]
         public void EqualsOperatorStringBothNull()
         {
-            FakeResourceVersions v1 = null;
+            FakeResourceApiVersions v1 = null;
 
             Assert.IsTrue(v1 == null);
         }
@@ -60,7 +59,7 @@ namespace azure_proto_core_test
             ArmClientOptions options1 = new ArmClientOptions();
             ArmClientOptions options2 = new ArmClientOptions();
 
-            Assert.IsFalse(options1.FakeRpRestVersions().FakeResourceVersion != options2.FakeRpRestVersions().FakeResourceVersion);
+            Assert.IsFalse(options1.FakeRpApiVersions().FakeResourceVersion != options2.FakeRpApiVersions().FakeResourceVersion);
         }
 
         [TestCase]
@@ -68,7 +67,7 @@ namespace azure_proto_core_test
         {
             ArmClientOptions options = new ArmClientOptions();
 
-            Assert.IsTrue(null != options.FakeRpRestVersions().FakeResourceVersion);
+            Assert.IsTrue(null != options.FakeRpApiVersions().FakeResourceVersion);
         }
 
         [TestCase]
@@ -76,13 +75,13 @@ namespace azure_proto_core_test
         {
             ArmClientOptions options = new ArmClientOptions();
 
-            Assert.IsTrue(options.FakeRpRestVersions().FakeResourceVersion != null);
+            Assert.IsTrue(options.FakeRpApiVersions().FakeResourceVersion != null);
         }
 
         [TestCase]
         public void NotEqualsOperatorStringBothNull()
         {
-            FakeResourceVersions v1 = null;
+            FakeResourceApiVersions v1 = null;
 
             Assert.IsFalse(v1 != null);
         }
@@ -93,15 +92,15 @@ namespace azure_proto_core_test
             ArmClientOptions options1 = new ArmClientOptions();
             ArmClientOptions options2 = new ArmClientOptions();
 
-            Assert.IsTrue(options1.FakeRpRestVersions().FakeResourceVersion.Equals(options2.FakeRpRestVersions().FakeResourceVersion));
+            Assert.IsTrue(options1.FakeRpApiVersions().FakeResourceVersion.Equals(options2.FakeRpApiVersions().FakeResourceVersion));
         }
 
         [TestCase]
         public void EqualsMethodVersionNull()
         {
             ArmClientOptions options = new ArmClientOptions();
-            FakeResourceVersions version = null;
-            Assert.IsFalse(options.FakeRpRestVersions().FakeResourceVersion.Equals(version));
+            FakeResourceApiVersions version = null;
+            Assert.IsFalse(options.FakeRpApiVersions().FakeResourceVersion.Equals(version));
         }
 
         [TestCase]
@@ -109,7 +108,7 @@ namespace azure_proto_core_test
         {
             ArmClientOptions options = new ArmClientOptions();
             string version = null;
-            Assert.IsFalse(options.FakeRpRestVersions().FakeResourceVersion.Equals(version));
+            Assert.IsFalse(options.FakeRpApiVersions().FakeResourceVersion.Equals(version));
         }
 
         [TestCase]
@@ -118,8 +117,8 @@ namespace azure_proto_core_test
             ArmClientOptions options1 = new ArmClientOptions();
             ArmClientOptions options2 = new ArmClientOptions();
 
-            object obj = options2.FakeRpRestVersions().FakeResourceVersion;
-            Assert.IsTrue(options1.FakeRpRestVersions().FakeResourceVersion.Equals(obj));
+            object obj = options2.FakeRpApiVersions().FakeResourceVersion;
+            Assert.IsTrue(options1.FakeRpApiVersions().FakeResourceVersion.Equals(obj));
         }
 
         [TestCase]
@@ -128,8 +127,8 @@ namespace azure_proto_core_test
             ArmClientOptions options1 = new ArmClientOptions();
             ArmClientOptions options2 = new ArmClientOptions();
 
-            object obj = options2.FakeRpRestVersions().FakeResourceVersion.ToString();
-            Assert.IsTrue(options1.FakeRpRestVersions().FakeResourceVersion.Equals(obj));
+            object obj = options2.FakeRpApiVersions().FakeResourceVersion.ToString();
+            Assert.IsTrue(options1.FakeRpApiVersions().FakeResourceVersion.Equals(obj));
         }
 
         [TestCase]
@@ -138,15 +137,15 @@ namespace azure_proto_core_test
             ArmClientOptions options = new ArmClientOptions();
 
             object obj = 1;
-            Assert.IsFalse(options.FakeRpRestVersions().FakeResourceVersion.Equals(obj));
+            Assert.IsFalse(options.FakeRpApiVersions().FakeResourceVersion.Equals(obj));
         }
 
         [TestCase]
         public void ImplicitToString()
         {
             ArmClientOptions options = new ArmClientOptions();
-            options.FakeRpRestVersions().FakeResourceVersion = FakeResourceVersions.V2019_12_01;
-            string version = options.FakeRpRestVersions().FakeResourceVersion;
+            options.FakeRpApiVersions().FakeResourceVersion = FakeResourceApiVersions.V2019_12_01;
+            string version = options.FakeRpApiVersions().FakeResourceVersion;
             Assert.IsTrue(version == "2019-12-01");
         }
 
@@ -156,8 +155,13 @@ namespace azure_proto_core_test
         [TestCase(1, "2020-06-01", null)]
         public void CompareToMethodString(int expected, string version1, string version2)
         {
-            FakeResourceVersions v1 = version1;
+            FakeResourceApiVersions v1 = version1 == "2019-12-01" ? FakeResourceApiVersions.V2019_12_01 : FakeResourceApiVersions.V2020_06_01;
             Assert.AreEqual(expected, v1.CompareTo(version2));
+        }
+
+        private FakeResourceApiVersions ConvertFromString(string version)
+        {
+            return version == "2019-12-01" ? FakeResourceApiVersions.V2019_12_01 : FakeResourceApiVersions.V2020_06_01;
         }
 
         [TestCase(-1, "2019-12-01", "2020-06-01")]
@@ -166,41 +170,23 @@ namespace azure_proto_core_test
         [TestCase(1, "2020-06-01", null)]
         public void CompareToMethodVersionObject(int expected, string version1, string version2)
         {
-            FakeResourceVersions v1 = version1;
-            FakeResourceVersions v2 = null;
+            FakeResourceApiVersions v1 = ConvertFromString(version1);
+            FakeResourceApiVersions v2 = null;
             if (version2 != null)
-                v2 = version2;
+                v2 = ConvertFromString(version2);
             Assert.AreEqual(expected, v1.CompareTo(v2));
-        }
-
-        [TestCase]
-        public void CreateFromNull()
-        {
-            string version = null;
-            FakeResourceVersions versionObject = version;
-            Assert.IsNull(versionObject);
-        }
-
-        [TestCase]
-        public void CreateFromInvalidVersion()
-        {
-            string version = "1900-01-01";
-            Assert.Throws<ArgumentException>(() =>
-            {
-                FakeResourceVersions versionObject = version;
-            });
         }
 
         [TestCase]
         public void ToStringTest()
         {
-            Assert.AreEqual("2020-06-01", FakeResourceVersions.Default.ToString());
+            Assert.AreEqual("2020-06-01", FakeResourceApiVersions.Default.ToString());
         }
 
         [TestCase]
         public void GetHashCodeTest()
         {
-            FakeResourceVersions version = FakeResourceVersions.Default;
+            FakeResourceApiVersions version = FakeResourceApiVersions.Default;
             Assert.AreEqual(version.ToString().GetHashCode(), version.GetHashCode());
         }
     }

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace azure_proto_core
 {
-    public class ApiVersionsBase : IEquatable<string>, IComparable<string>//, IEquatable<ApiVersionsBase>, IComparable<ApiVersionsBase>
+    public class ApiVersionsBase : IEquatable<string>, IComparable<string>
     {
         private string _value;
 
@@ -12,7 +11,6 @@ namespace azure_proto_core
 
         protected ApiVersionsBase(string value)
         {
-            Validate(value);
             _value = value;
         }
 
@@ -21,12 +19,7 @@ namespace azure_proto_core
             return version._value;
         }
 
-        public static implicit operator ApiVersionsBase(string value)
-        {
-            return new ApiVersionsBase(value);
-        }
-
-        public static bool operator ==(ApiVersionsBase first, ApiVersionsBase second)
+        public static bool operator ==(ApiVersionsBase first, string second)
         {
             if (ReferenceEquals(null, first))
                 return ReferenceEquals(null, second);
@@ -35,21 +28,13 @@ namespace azure_proto_core
             return first.Equals(second);
         }
 
-        public static bool operator !=(ApiVersionsBase first, ApiVersionsBase second)
+        public static bool operator !=(ApiVersionsBase first, string second)
         {
             if (ReferenceEquals(null, first))
                 return !ReferenceEquals(null, second);
             if (ReferenceEquals(null, second))
                 return true;
             return !first.Equals(second);
-        }
-
-        private static void Validate(string value)
-        {
-            if (!_validValues.Contains(value))
-            {
-                throw new ArgumentException($"{value} is not a valid version for VirtualMachines");
-            }
         }
 
         public override string ToString()

@@ -4,9 +4,9 @@ namespace azure_proto_core_test
 {
     public static class ArmClientOptionsExtensions
     {
-        public static FakeRpRestVersions FakeRpRestVersions(this ArmClientOptions armClientOptions)
+        public static FakeRpApiVersions FakeRpApiVersions(this ArmClientOptions armClientOptions)
         {
-            return armClientOptions.GetOverrideObject<FakeRpRestVersions>(() => new FakeRpRestVersions()) as FakeRpRestVersions;
+            return armClientOptions.GetOverrideObject<FakeRpApiVersions>(() => new FakeRpApiVersions()) as FakeRpApiVersions;
         }
     }
 }

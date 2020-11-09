@@ -9,7 +9,7 @@ namespace azure_proto_core_test
         public void VersionIsDefault()
         {
             ArmClientOptions options = new ArmClientOptions();
-            Assert.AreEqual(FakeResourceVersions.Default, options.FakeRpRestVersions().FakeResourceVersion);
+            Assert.AreEqual(FakeResourceApiVersions.Default, options.FakeRpApiVersions().FakeResourceVersion);
         }
 
         [TestCase]
@@ -18,9 +18,9 @@ namespace azure_proto_core_test
             ArmClientOptions options1 = new ArmClientOptions();
             ArmClientOptions options2 = new ArmClientOptions();
 
-            options2.FakeRpRestVersions().FakeResourceVersion = FakeResourceVersions.V2019_12_01;
-            Assert.AreEqual(FakeResourceVersions.Default, options1.FakeRpRestVersions().FakeResourceVersion);
-            Assert.AreEqual(FakeResourceVersions.V2019_12_01, options2.FakeRpRestVersions().FakeResourceVersion);
+            options2.FakeRpApiVersions().FakeResourceVersion = FakeResourceApiVersions.V2019_12_01;
+            Assert.AreEqual(FakeResourceApiVersions.Default, options1.FakeRpApiVersions().FakeResourceVersion);
+            Assert.AreEqual(FakeResourceApiVersions.V2019_12_01, options2.FakeRpApiVersions().FakeResourceVersion);
         }
     }
 }
