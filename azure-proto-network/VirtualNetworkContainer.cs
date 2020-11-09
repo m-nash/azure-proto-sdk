@@ -84,7 +84,8 @@ namespace azure_proto_network
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
-        private  Func<VirtualNetwork, VirtualNetworkOperations> convertor(){
+        private  Func<VirtualNetwork, VirtualNetworkOperations> convertor()
+        {
             return s => new VirtualNetworkOperations(ClientContext, new PhVirtualNetwork(s));
         }
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).VirtualNetworks;

@@ -29,7 +29,7 @@ namespace azure_proto_network
         {
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<NetworkInterfaceOperations, NetworkInterface>(
-                await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false), 
+                await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
                 n => new NetworkInterfaceOperations(ClientContext, new PhNetworkInterface(n)));
         }
 
@@ -67,7 +67,7 @@ namespace azure_proto_network
 
             return new ArmBuilder<NetworkInterfaceOperations, PhNetworkInterface>(this, new PhNetworkInterface(nic));
         }
-    
+
         public Pageable<NetworkInterfaceOperations> List(CancellationToken cancellationToken = default)
         {
             return new PhWrappingPageable<NetworkInterface, NetworkInterfaceOperations>(
@@ -75,7 +75,8 @@ namespace azure_proto_network
                 this.convertor());
         }
 
-        public AsyncPageable<NetworkInterfaceOperations> ListAsync(CancellationToken cancellationToken = default){
+        public AsyncPageable<NetworkInterfaceOperations> ListAsync(CancellationToken cancellationToken = default)
+        {
             var result = Operations.ListAsync(Id.Name, cancellationToken);
             return new PhWrappingAsyncPageable<NetworkInterface, NetworkInterfaceOperations>(
                 result,
@@ -95,7 +96,8 @@ namespace azure_proto_network
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
-        private  Func<NetworkInterface, NetworkInterfaceOperations> convertor(){
+        private Func<NetworkInterface, NetworkInterfaceOperations> convertor()
+        {
             return s => new NetworkInterfaceOperations(ClientContext, new PhNetworkInterface(s));
         }
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).NetworkInterfaces;
