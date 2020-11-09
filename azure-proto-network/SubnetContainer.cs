@@ -5,6 +5,7 @@ using azure_proto_core;
 using azure_proto_core.Adapters;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
 
 namespace azure_proto_network
 {
@@ -65,18 +66,22 @@ namespace azure_proto_network
 
         public Pageable<SubnetOperations> List(CancellationToken cancellationToken = default)
         {
-            var subnetClient = GetClient((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).Subnets;
             return new PhWrappingPageable<Subnet, SubnetOperations>(
-                subnetClient.List(Id.ResourceGroup, Id.Name, cancellationToken),
-                s => new SubnetOperations(ClientContext, new PhSubnet(s, DefaultLocation)));
+                Operations.List(Id.ResourceGroup, Id.Name, cancellationToken),
+                this.convertor());
         }
 
         public AsyncPageable<SubnetOperations> ListAsync(CancellationToken cancellationToken = default)
         {
-            var subnetClient = GetClient((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).Subnets;
             return new PhWrappingAsyncPageable<Subnet, SubnetOperations>(
-                subnetClient.ListAsync(Id.ResourceGroup, Id.Name, cancellationToken),
-                s => new SubnetOperations(ClientContext, new PhSubnet(s, DefaultLocation)));
+                Operations.ListAsync(Id.ResourceGroup, Id.Name, cancellationToken),
+                this.convertor());
         }
+        private Func<Subnet, SubnetOperations> convertor()
+        {
+            //TODO: Subnet will be a proxy resource and not a tracked resource ADO #4481
+            return s => new SubnetOperations(ClientContext, new PhSubnet(s, Location.Default));
+        }
+
     }
 }
