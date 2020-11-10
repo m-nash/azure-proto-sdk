@@ -6,6 +6,7 @@ using Azure.ResourceManager.Resources.Models;
 using azure_proto_core.Adapters;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -35,34 +36,33 @@ namespace azure_proto_core
                     (o, r) => new ArmResourceOperations(o, r.Id)));
         }
 
-        public static ArmResourceRegistry Registry { get; }  = new ArmResourceRegistry();
+        public static ArmResourceRegistry Registry { get; } = new ArmResourceRegistry();
 
         internal static readonly string DefaultUri = "https://management.azure.com";
 
-        public ArmClient() : this(new Uri(DefaultUri), new DefaultAzureCredential())
-        {
-        }
+        public Dictionary<string, string> ApiVersionOverrides { get; private set; }
 
-        public ArmClient(string defaultSubscriptionId) : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId)
-        {
-        }
+        public ArmClient() : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, new ArmClientOptions()) { }
 
-        public ArmClient(TokenCredential credential, string defaultSubscriptionId) : this(new Uri(DefaultUri), credential, defaultSubscriptionId)
-        {
-        }
+        public ArmClient(string defaultSubscriptionId) : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId, new ArmClientOptions()) { }
 
-        public ArmClient(Uri baseUri, TokenCredential credential)
+        public ArmClient(TokenCredential credential, string defaultSubscriptionId) : this(new Uri(DefaultUri), credential, defaultSubscriptionId, new ArmClientOptions()) { }
+
+        public ArmClient(Uri baseUri, TokenCredential credential) : this(baseUri, credential, null, new ArmClientOptions()) { }
+
+        public ArmClientOptions ClientOptions { get; private set; }
+
+        public ArmClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId, ArmClientOptions options)
         {
-            ClientContext = new ArmClientContext(new Uri(DefaultUri), new DefaultAzureCredential());
-            DefaultSubscription = new SubscriptionOperations(this.ClientContext, new ResourceIdentifier($"/subscriptions/{GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult()}"));
-        }
-        public ArmClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId) 
-        {
-            ClientContext = new ArmClientContext(new Uri(DefaultUri), new DefaultAzureCredential());
-            DefaultSubscription = new SubscriptionOperations(this.ClientContext, new ResourceIdentifier($"/subscriptions/{defaultSubscriptionId}"));
+            ClientContext = new ArmClientContext(baseUri, credential);
+            defaultSubscriptionId ??= GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult();
+            DefaultSubscription = new SubscriptionOperations(ClientContext, new ResourceIdentifier($"/subscriptions/{defaultSubscriptionId}"));
+            ApiVersionOverrides = new Dictionary<string, string>();
+            ClientOptions = options;
         }
 
         public SubscriptionOperations DefaultSubscription { get; private set; }
+
         internal virtual ArmClientContext ClientContext { get; }
 
         public SubscriptionOperations Subscription(PhSubscriptionModel subscription) => new SubscriptionOperations(this.ClientContext, subscription);
@@ -235,6 +235,6 @@ namespace azure_proto_core
 
         internal SubscriptionsOperations SubscriptionsClient => GetResourcesClient(Guid.NewGuid().ToString()).Subscriptions;
 
-        internal ResourcesManagementClient GetResourcesClient(string subscription) => ClientContext.GetClient<ResourcesManagementClient>((uri, credential) => new ResourcesManagementClient(uri, subscription, credential));
+        internal ResourcesManagementClient GetResourcesClient(string subscription) => ClientContext.GetClient((uri, credential) => new ResourcesManagementClient(uri, subscription, credential));
     }
 }
