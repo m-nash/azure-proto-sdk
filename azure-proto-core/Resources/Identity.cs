@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace azure_proto_core
 {
     /// <summary>
     /// Represents a managed identity
-    /// TODO: fill in properties, implement comparison and equality methods and operator overloads
     /// </summary>
     public class Identity : IEquatable<Identity>, IComparable<Identity>
     {
@@ -21,12 +19,23 @@ namespace azure_proto_core
 
         public int CompareTo(Identity other)
         {
-            throw new NotImplementedException();
+            if (Object.ReferenceEquals(null, other))
+                return 1;
+            return this.ResourceId.CompareTo(other.ResourceId);
         }
 
         public bool Equals(Identity other)
         {
-            throw new NotImplementedException();
+            if (Object.ReferenceEquals(null, other))
+                return false;
+            else if (this.TenantId.Equals(other.TenantId) &&
+                this.PrincipalId.Equals(other.PrincipalId) &&
+                this.ClientId.Equals(other.ClientId) &&
+                this.ResourceId.Equals(other.ResourceId) &&
+                this.Kind.Equals(other.Kind))
+                return true;
+            else
+                return false;
         }
     }
 }
