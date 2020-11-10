@@ -1,43 +1,48 @@
 ﻿using azure_proto_core;
 using NUnit.Framework;
-using System;
 
 namespace azure_proto_core_test
 {
     public class LocationTests
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
 
         [Test]
         public void CanCreateLocation()
         {
             Location tempLocation = new Location("West US");
             Assert.AreEqual("West US", tempLocation.Name);
-            
         }
 
         [Test]
-        public void EqualsToTrue()
+        public void EqualsToObjectTrue()
         {
             Location location1 = new Location("West US");
             Location location2 = new Location("West US");
 
             Assert.IsTrue(location1.Equals(location1));
             Assert.IsTrue(location1.Equals(location2));
+        }
 
+        [Test]
+        public void EqualsToStringTrue()
+        {
+            Location location1 = new Location("West US");
             Assert.IsTrue(location1.Equals("West US"));
         }
 
         [Test]
-        public void EqualsToFalse()
+        public void EqualsToObjectFalse()
         {
             Location location1 = new Location("West US");
             Location location2 = new Location("South US");
 
             Assert.IsFalse(location1.Equals(location2));
+        }
+
+        [Test]
+        public void EqualsToStringFalse()
+        {
+            Location location1 = new Location("West US");
             Assert.IsFalse(location1.Equals("WestUS"));
         }
 
@@ -50,49 +55,65 @@ namespace azure_proto_core_test
         }
 
         [Test]
-        public void CanCompareToEquals()
+        public void CanCompareToLocationEquals()
         {
             Location location1 = new Location("South US");
-
             Assert.AreEqual(0, location1.CompareTo(location1));
-            Assert.AreEqual(0, location1.CompareTo("South US"));
-
         }
 
         [Test]
-        public void CanCompareToGreaterThan()
+        public void CanCompareToStringEquals()
+        {
+            Location location1 = new Location("South US");
+            Assert.AreEqual(0, location1.CompareTo("South US"));
+        }
+
+        [Test]
+        public void CanCompareToLocationGreaterThan()
         {
             Location location1 = new Location("South US");
             Location location2 = new Location("East US");
 
             Assert.AreEqual(1, location1.CompareTo(location2));
+        }
+
+        [Test]
+        public void CanCompareToStringGreaterThan()
+        {
+            Location location1 = new Location("South US");
             Assert.AreEqual(1, location1.CompareTo("East US"));
         }
 
         [Test]
-        public void CanCompareToLessThan()
+        public void CanCompareToLocationLessThan()
         {
             Location location1 = new Location("South US");
             Location location3 = new Location("West US");
 
             Assert.AreEqual(-1, location1.CompareTo(location3));
+        }
+
+        [Test]
+        public void CanCompareToStringLessThan()
+        {
+            Location location1 = new Location("South US");
             Assert.AreEqual(-1, location1.CompareTo("West US"));
         }
 
-        [TestCase (true)]
-        public void CanCompareToNull(bool isNull)
+        [Test]
+        public void CanCompareToNull()
         {
             string x = null;
-            Assert.AreEqual(1, Location.Default.CompareTo(isNull ? null : Location.Default));
+            Location location1 = null;
+            Assert.AreEqual(1, Location.Default.CompareTo(location1));
             Assert.AreEqual(1, Location.Default.CompareTo(x));
-
         }
 
         [Test]
         public void CanCastLocationToString()
         {
             string x = Location.Default;
-            Assert.AreEqual(Location.Default.DisplayName,x);  
+            Assert.AreEqual(Location.Default.DisplayName, x);
         }
 
         [Test]
