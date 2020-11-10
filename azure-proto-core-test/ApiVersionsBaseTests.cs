@@ -172,6 +172,8 @@ namespace azure_proto_core_test
                     return FakeResourceApiVersions.V2019_12_01_preview;
                 case "2019-12-01-preview-1":
                     return FakeResourceApiVersions.V2019_12_01_preview_1;
+                case "2019-12-01-foobar":
+                    return FakeResourceApiVersions.V2019_12_01_foobar;
                 default:
                     throw new ArgumentException($"Version ({version}) was not valid");
             }
@@ -181,6 +183,8 @@ namespace azure_proto_core_test
         [TestCase(-1, "2019-12-01-preview", "2020-06-01")]
         [TestCase(1, "2020-06-01", "2019-12-01-preview")]
         [TestCase(0, "2019-12-01", "2019-12-01")]
+        [TestCase(-1, "2019-12-01-foobar", "2019-12-01-preview")]
+        [TestCase(1, "2019-12-01-preview", "2019-12-01-foobar")]
         [TestCase(1, "2019-12-01-preview-1", "2019-12-01-preview")]
         [TestCase(-1, "2019-12-01-preview", "2019-12-01-preview-1")]
         [TestCase(0, "2019-12-01-preview", "2019-12-01-preview")]
