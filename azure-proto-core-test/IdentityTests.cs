@@ -6,11 +6,7 @@ namespace azure_proto_core_test
 {
     public class IdentityTests
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
+        
         [TestCase]
         public void CheckNullProperty()
         {
