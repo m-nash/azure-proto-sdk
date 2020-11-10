@@ -1,5 +1,6 @@
 ﻿using azure_proto_core;
 using NUnit.Framework;
+using System;
 
 namespace azure_proto_core_test
 {
@@ -161,11 +162,30 @@ namespace azure_proto_core_test
 
         private FakeResourceApiVersions ConvertFromString(string version)
         {
-            return version == "2019-12-01" ? FakeResourceApiVersions.V2019_12_01 : FakeResourceApiVersions.V2020_06_01;
+            switch(version)
+            {
+                case "2019-12-01":
+                    return FakeResourceApiVersions.V2019_12_01;
+                case "2020-06-01":
+                    return FakeResourceApiVersions.V2020_06_01;
+                case "2019-12-01-preview":
+                    return FakeResourceApiVersions.V2019_12_01_preview;
+                case "2019-12-01-preview-1":
+                    return FakeResourceApiVersions.V2019_12_01_preview_1;
+                default:
+                    throw new ArgumentException($"Version ({version}) was not valid");
+            }
         }
 
         [TestCase(-1, "2019-12-01", "2020-06-01")]
+        [TestCase(-1, "2019-12-01-preview", "2020-06-01")]
+        [TestCase(1, "2020-06-01", "2019-12-01-preview")]
         [TestCase(0, "2019-12-01", "2019-12-01")]
+        [TestCase(1, "2019-12-01-preview-1", "2019-12-01-preview")]
+        [TestCase(-1, "2019-12-01-preview", "2019-12-01-preview-1")]
+        [TestCase(0, "2019-12-01-preview", "2019-12-01-preview")]
+        [TestCase(-1, "2019-12-01-preview", "2019-12-01")]
+        [TestCase(1, "2019-12-01", "2019-12-01-preview")]
         [TestCase(1, "2020-06-01", "2019-12-01")]
         [TestCase(1, "2020-06-01", null)]
         public void CompareToMethodVersionObject(int expected, string version1, string version2)
