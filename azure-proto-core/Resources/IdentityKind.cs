@@ -18,52 +18,42 @@ namespace azure_proto_core
         public string Value { get; private set; }
         public int CompareTo(IdentityKind other)
         {
-            bool? checkNull = checkBothNull(other.Value);
-            if (checkNull == true)
+            if (this.Value == null && other.Value == null)
                 return 0;
-            else if (checkNull == false)
+            else if (this.Value == null)
                 return -1;
-            return this.Value.CompareTo(other.Value);
+            else
+                return this.Value.CompareTo(other.Value);
         }
 
         public int CompareTo(string other)
         {
-            bool? checkNull = checkBothNull(other);
-            if (checkNull == true)
+            if (this.Value == null && other == null)
                 return 0;
-            else if (checkNull == false)
+            else if (this.Value == null)
                 return -1;
-            return this.Value.CompareTo(other);
+            else
+                return this.Value.CompareTo(other);
         }
 
         public bool Equals(IdentityKind other)
         {
-            bool? checkNull = checkBothNull(other.Value);
-            if (checkNull == true)
+            if (this.Value == null && other.Value == null)
                 return true;
-            if (checkNull == false)
+            else if (this.Value == null)
                 return false;
-            return this.Value.Equals(other.Value);
+            else
+                return this.Value.Equals(other.Value);
         }
 
         public bool Equals(string other)
         {
-            bool? checkNull = checkBothNull(other);
-            if (checkNull == true)
-                return true;
-            if (checkNull == false)
-                return false;
-            return this.Value.Equals(other);
-        }
-
-        private bool? checkBothNull(string other)
-        {
-            bool? result = null;
             if (this.Value == null && other == null)
-                result = true;
+                return true;
             else if (this.Value == null)
-                result = false;
-            return result;
+                return false;
+            else
+                return this.Value.Equals(other);
         }
     }
 }
