@@ -54,7 +54,7 @@ namespace azure_proto_core_test
         {
             IdentityKind ik1 = new IdentityKind(kind1);
             IdentityKind ik2 = new IdentityKind(kind2);
-            Assert.AreEqual(true, ik1.Equals(ik2));
+            Assert.IsTrue(ik1.Equals(ik2));
         }
 
         [TestCase(null, "UserAssigned")]
@@ -70,7 +70,7 @@ namespace azure_proto_core_test
         {
             IdentityKind ik1 = new IdentityKind(kind1);
             IdentityKind ik2 = new IdentityKind(kind2);
-            Assert.AreEqual(false, ik1.Equals(ik2));
+            Assert.IsFalse(ik1.Equals(ik2));
         }
 
         [TestCase("SystemAssigned", "SystemAssigned")]
@@ -117,7 +117,7 @@ namespace azure_proto_core_test
         public void EqualsMethodTrueString(string kind1, string kind2)
         {
             IdentityKind ik1 = new IdentityKind(kind1);
-            Assert.AreEqual(true, ik1.Equals(kind2));
+            Assert.IsTrue(ik1.Equals(kind2));
         }
 
         [TestCase ("SystemAssigned", null)]
@@ -132,15 +132,15 @@ namespace azure_proto_core_test
         public void EqualsMethodFalseString(string kind1, string kind2)
         {
             IdentityKind identityKind = new IdentityKind(kind1);
-            Assert.AreEqual(false, identityKind.Equals(kind2));
+            Assert.IsFalse(identityKind.Equals(kind2));
         }
 
         [Test]
         public void CheckStaticVars()
         {
-            Assert.AreEqual(true, IdentityKind.UserAssigned.Value.Equals("UserAssigned"));
-            Assert.AreEqual(true, IdentityKind.SystemAssigned.Value.Equals("SystemAssigned"));
-            Assert.AreEqual(true, IdentityKind.SystemAndUserAssigned.Value.Equals("SystemAndUserAssigned"));
+            Assert.IsTrue(IdentityKind.UserAssigned.Value.Equals("UserAssigned"));
+            Assert.IsTrue(IdentityKind.SystemAssigned.Value.Equals("SystemAssigned"));
+            Assert.IsTrue(IdentityKind.SystemAndUserAssigned.Value.Equals("SystemAndUserAssigned"));
         }
     }
 }
