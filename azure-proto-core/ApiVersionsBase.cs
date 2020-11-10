@@ -5,8 +5,6 @@ namespace azure_proto_core
 {
     public class ApiVersionsBase : IEquatable<string>, IComparable<string>
     {
-        private static readonly string RegPattern = @"(\d\d\d\d-\d\d-\d\d)(.*)";
-
         private readonly string _value;
 
         protected ApiVersionsBase(string value)
@@ -69,13 +67,15 @@ namespace azure_proto_core
             if (other == null)
                 return 1;
 
-            Match otherMatch = Regex.Match(other, RegPattern);
-            Match thisMatch = Regex.Match(_value, RegPattern);
+            string regPattern = @"(\d\d\d\d-\d\d-\d\d)(.*)";
+
+            Match otherMatch = Regex.Match(other, regPattern);
+            Match thisMatch = Regex.Match(_value, regPattern);
 
             string otherDatePart = otherMatch.Groups[1].Value;
             string thisDatePart = thisMatch.Groups[1].Value;
 
-            if(otherDatePart == thisDatePart)
+            if (otherDatePart == thisDatePart)
             {
                 string otherPreviewPart = otherMatch.Groups[2].Value;
                 string thisPreviewPart = thisMatch.Groups[2].Value;
