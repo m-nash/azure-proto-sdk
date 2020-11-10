@@ -9,7 +9,8 @@ namespace azure_proto_core_test
         [TestCase(null, null)]
         [TestCase("UserAssigned", "UserAssigned")]
         [TestCase("SystemAssigned", "SystemAssigned")]
-        [TestCase("SystemAndUserAssigned", "SystemAndUserAssigned")]        
+        [TestCase("SystemAndUserAssigned", "SystemAndUserAssigned")]
+        [TestCase("MyIdentity", "MyIdentity")]        
         public void CompareToZeroIdentityKind(string kind1, string kind2)
         {
             IdentityKind ik1 = new IdentityKind(kind1);
@@ -23,6 +24,7 @@ namespace azure_proto_core_test
         [TestCase("UserAssigned", "SystemAssigned")]
         [TestCase("UserAssigned", "SystemAndUserAssigned")]
         [TestCase("SystemAssigned", "SystemAndUserAssigned")]
+        [TestCase("SystemAssigned", "MyIdentity")]
         public void CompareToOneIdentityKind(string kind1, string kind2)
         {
             IdentityKind ik1 = new IdentityKind(kind1);
@@ -35,6 +37,7 @@ namespace azure_proto_core_test
         [TestCase(null, "UserAssigned")]
         [TestCase(null, "SystemAssigned")]
         [TestCase(null, "SystemAndUserAssigned")]
+        [TestCase(null, "MyIdentity")]
         public void CompareToMinusOneIdentityKind(string kind1, string kind2)
         {
             IdentityKind ik1 = new IdentityKind(kind1);
@@ -46,6 +49,7 @@ namespace azure_proto_core_test
         [TestCase("UserAssigned", "UserAssigned")]
         [TestCase("SystemAssigned", "SystemAssigned")]
         [TestCase("SystemAndUserAssigned", "SystemAndUserAssigned")]       
+        [TestCase("MyIdentity", "MyIdentity")]       
         public void EqualsMethodTrueIdentityKind(string kind1, string kind2)
         {
             IdentityKind ik1 = new IdentityKind(kind1);
@@ -61,6 +65,7 @@ namespace azure_proto_core_test
         [TestCase("UserAssigned", null)]
         [TestCase("SystemAssigned", null)]
         [TestCase("SystemAndUserAssigned", null)]
+        [TestCase("SystemAndUserAssigned", "MyIdentity")]
         public void EqualsMethodFalseIdentityKind(string kind1, string kind2)
         {
             IdentityKind ik1 = new IdentityKind(kind1);
@@ -71,6 +76,7 @@ namespace azure_proto_core_test
         [TestCase("SystemAssigned", "SystemAssigned")]
         [TestCase("UserAssigned", "UserAssigned")]
         [TestCase("SystemAndUserAssigned", "SystemAndUserAssigned")]
+        [TestCase("MyIdentity", "MyIdentity")]
         [TestCase(null, null)]
         public void CompareToZeroString(string kind1, string kind2)
         {
@@ -84,6 +90,7 @@ namespace azure_proto_core_test
         [TestCase("UserAssigned", "SystemAssigned")]
         [TestCase("UserAssigned", "SystemAndUserAssigned")]
         [TestCase("SystemAssigned", "SystemAndUserAssigned")]
+        [TestCase("UserAssigned", "MyIdentity")]
         public void CompareToOneString(string kind1, string kind2)
         {
             IdentityKind ik1 = new IdentityKind(kind1);
@@ -95,6 +102,7 @@ namespace azure_proto_core_test
         [TestCase(null, "UserAssigned")]
         [TestCase(null, "SystemAssigned")]
         [TestCase(null, "SystemAndUserAssigned")]
+        [TestCase(null, "MyIdentity")]
         public void CompareToMinusOneString(string kind1, string kind2)
         {
             IdentityKind ik1 = new IdentityKind(kind1);            
@@ -104,6 +112,7 @@ namespace azure_proto_core_test
         [TestCase("UserAssigned", "UserAssigned")]
         [TestCase("SystemAssigned", "SystemAssigned")]
         [TestCase("SystemAndUserAssigned", "SystemAndUserAssigned")]
+        [TestCase("MyIdentity", "MyIdentity")]
         [TestCase(null, null)]
         public void EqualsMethodTrueString(string kind1, string kind2)
         {
@@ -116,6 +125,7 @@ namespace azure_proto_core_test
         [TestCase ("SystemAndUserAssigned", null)]
         [TestCase("UserAssigned", "SystemAssigned")]
         [TestCase("UserAssigned", "SystemAndUserAssigned")]
+        [TestCase("UserAssigned", "MyIdentity")]
         [TestCase(null, "SystemAssigned")]
         [TestCase(null, "UserAssigned")]
         [TestCase(null, "SystemAndUserAssigned")]
