@@ -61,7 +61,7 @@ namespace azure_proto_core
             {
                 return 1;
             }
-            return string.Compare(this.Name, other.Name);
+            return Name.CompareTo(other.Name);
         }
 
         public int CompareTo(string other)
@@ -70,7 +70,7 @@ namespace azure_proto_core
             {
                 return 1;
             }
-            return string.Compare(this.Name, other);
+            return Name.CompareTo(other);
         }
 
         /// <summary>

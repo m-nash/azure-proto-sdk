@@ -5,7 +5,6 @@ namespace azure_proto_core_test
 {
     public class LocationTests
     {
-
         [Test]
         public void CanCreateLocation()
         {
