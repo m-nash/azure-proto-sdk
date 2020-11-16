@@ -1,22 +1,23 @@
 using azure_proto_core;
 using NUnit.Framework;
 using System;
+using System.Text.Json;
 
 namespace azure_proto_core_test
 {
-    public class IdentityTests
+    public class IdentityTests : Identity
     {
-        
+
         [TestCase]
-        public void CheckNullProperty()
+        public void CheckNullResourceId()
         {
             Identity identity1 = new Identity();
-            identity1.ResourceId = "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport";            
+            identity1.ResourceId = "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport";
             Assert.IsNotNull(identity1.ResourceId);
             Identity identity2 = new Identity();
             Assert.IsNull(identity2.ResourceId);
         }
-        
+
         [TestCase("/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport", "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport")]
         [TestCase("/subscriptions/6b085460-5f21-477e-ba44-1035046e9101", "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101")]
         [TestCase("/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test", "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test")]
@@ -36,8 +37,9 @@ namespace azure_proto_core_test
             Identity identity1 = new Identity();
             identity1.ResourceId = resourceId1;
             Identity identity2 = new Identity();
-            identity2.ResourceId = resourceId2;
-            Assert.AreEqual(1, identity1.CompareTo(isNull?null: identity2));           
+            if (!isNull)
+                identity2.ResourceId = resourceId2;
+            Assert.AreEqual(1, identity1.CompareTo(identity2));
         }
 
         [TestCase("/subscriptions/6b085460-5f21-477e-ba44-1035046e9101", "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test")]
@@ -56,7 +58,7 @@ namespace azure_proto_core_test
         {
             Identity identity1 = new Identity();
             Identity identity2 = new Identity();
-            
+
             identity1.ResourceId = "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport";
             identity2.ResourceId = "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport";
 
@@ -72,11 +74,11 @@ namespace azure_proto_core_test
             identity1.Kind = new IdentityKind("test");
             identity2.Kind = new IdentityKind("test");
 
-            Assert.AreEqual(identity1.Equals(identity2), true);
+            Assert.IsTrue(identity1.Equals(identity2));
 
             Identity identity3 = new Identity();
             Identity identity4 = new Identity();
-            Assert.AreEqual(identity1.Equals(identity2), true);
+            Assert.IsTrue(identity1.Equals(identity2));
         }
 
         [TestCase]
@@ -98,10 +100,30 @@ namespace azure_proto_core_test
             identity2.TenantId = tenantId;
             identity2.PrincipalId = Guid.NewGuid();
 
-            Assert.AreEqual(identity1.Equals(identity2), false);
+            Assert.IsFalse(identity1.Equals(identity2));
 
             Identity identity3 = null;
-            Assert.AreEqual(identity1.Equals(identity3), false);
+            Assert.IsFalse(identity1.Equals(identity3));
+        }
+         
+        string systemAssigned = "{" +
+            "\"identity\":" +
+                "{" +
+                    "\"principalId\": \"de29bab1-49e1-4705-819b-4dfddceaaa98\"," +
+                    "\"tenantId\": \"72f988bf-86f1-41af-91ab-2d7cd011db47\"," +
+                    "\"type\": \"SystemAssigned\"," +
+                    "\"userAssignedIdentities\": null" +
+                "}" +
+            "}";
+
+        JsonElement systemAssignedJson = new JsonElement(systemAssigned);
+
+        [TestCase]
+        public void TestDeserializer()
+        {
+            Identity back = Identity.DeserializeIdentity(systemAssignedJson);
+            Console.WriteLine(back);
+            Assert.IsNotNull(back);
         }
     }
 }

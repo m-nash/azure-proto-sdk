@@ -2,6 +2,7 @@
 using azure_proto_core;
 using System;
 using System.Collections.Generic;
+using static azure_proto_core.Identity;
 
 namespace azure_proto_compute
 {
@@ -118,10 +119,26 @@ namespace azure_proto_compute
             get => Model.Zones;
             set => Model.Zones = value;
         }
-        public VirtualMachineIdentity Identity
+        public Identity Identity {
+            get => phVmToIdentity(Model.Identity);
+            //set => phIdentityToVm(Model.Identity); 
+        }
+
+        private Identity phVmToIdentity(VirtualMachineIdentity vmIdentity)
         {
-            get => Model.Identity;
-            set => Model.Identity = value;
+            Identity userIdentity = new Identity();
+            userIdentity.TenantId = new Guid(vmIdentity.TenantId);
+            userIdentity.ResourceId = this.Model.Id;
+            userIdentity.PrincipalId = new Guid(vmIdentity.PrincipalId);
+            userIdentity.Kind = new IdentityKind(vmIdentity.Type.Value.ToString());
+            if (vmIdentity.UserAssignedIdentities != null)
+            {
+                Dictionary<string, UserClientAndPrincipalIds> userIdentities = new Dictionary<string, UserClientAndPrincipalIds>();
+                UserClientAndPrincipalIds userIds = new UserClientAndPrincipalIds("clientId", vmIdentity.PrincipalId);
+                userIdentities.Add(Model.Id, userIds);
+                userIdentity.UserAssignedIdentities = userIdentities;
+            }
+            return userIdentity;
         }
 
         public IList<VirtualMachineExtension> Resources => Model.Resources;

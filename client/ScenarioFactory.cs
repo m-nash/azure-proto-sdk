@@ -13,7 +13,8 @@
         GenericEntityLoop,
         ShutdownVmsByLINQ,
         ShutdownVmsByNameAcrossResourceGroups,
-        ShutdownVmsByNameAcrossSubscriptions
+        ShutdownVmsByNameAcrossSubscriptions,
+        CreateVMForIdentity
     }
 
     class ScenarioFactory
@@ -46,8 +47,10 @@
                     return new ShutdownVmsByNameAcrossResourceGroups();
                 case Scenarios.ShutdownVmsByNameAcrossSubscriptions:
                     return new ShutdownVmsByNameAcrossSubscriptions();
+                case Scenarios.CreateVMForIdentity:
+                    return new CreateVMForIdentity();
                 default:
-                    return null;
+                    throw new System.ArgumentException("No scenario found to run for " + scenario.ToString());
             }
         }
     }
