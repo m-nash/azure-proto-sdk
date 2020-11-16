@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-network", "azur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LegacyClient", "LegacyClient\LegacyClient.csproj", "{2361ABBC-0526-4920-A7F9-08E60BE6AF36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "azure-proto-core-test", "azure-proto-core-test\azure-proto-core-test.csproj", "{5F200CAA-8A98-4A47-AD21-750C716E80DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-core-test", "azure-proto-core-test\azure-proto-core-test.csproj", "{5F200CAA-8A98-4A47-AD21-750C716E80DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "azure-proto-authorization", "azure-proto-authorization\azure-proto-authorization.csproj", "{FF1BDD3B-22BF-4781-B2C5-2AD68A23EEC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{5F200CAA-8A98-4A47-AD21-750C716E80DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F200CAA-8A98-4A47-AD21-750C716E80DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F200CAA-8A98-4A47-AD21-750C716E80DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF1BDD3B-22BF-4781-B2C5-2AD68A23EEC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF1BDD3B-22BF-4781-B2C5-2AD68A23EEC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF1BDD3B-22BF-4781-B2C5-2AD68A23EEC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF1BDD3B-22BF-4781-B2C5-2AD68A23EEC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
