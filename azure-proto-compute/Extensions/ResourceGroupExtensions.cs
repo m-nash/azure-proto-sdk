@@ -34,6 +34,7 @@ namespace azure_proto_compute
         {
             return new AvailabilitySetOperations(resourceGroup.ClientContext, $"{resourceGroup.Id}/providers/Microsoft.Compute/availabilitySets/{name}");
         }
+
         public static AvailabilitySetOperations AvailabilitySet(this ResourceGroupOperations resourceGroup, ResourceIdentifier availabilitySetId)
         {
             return new AvailabilitySetOperations(resourceGroup.ClientContext, availabilitySetId);

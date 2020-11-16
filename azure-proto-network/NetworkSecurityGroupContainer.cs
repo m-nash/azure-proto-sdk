@@ -6,6 +6,8 @@ using azure_proto_core.Resources;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
+using azure_proto_core.Adapters;
 
 namespace azure_proto_network
 {
@@ -19,7 +21,7 @@ namespace azure_proto_network
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
             return new PhArmResponse<NetworkSecurityGroupOperations, NetworkSecurityGroup>(
-                operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(), 
+                operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
                 n => new NetworkSecurityGroupOperations(ClientContext, new PhNetworkSecurityGroup(n)));
         }
 
@@ -86,20 +88,37 @@ namespace azure_proto_network
 
             return new ArmBuilder<NetworkSecurityGroupOperations, PhNetworkSecurityGroup>(this, new PhNetworkSecurityGroup(nsg));
         }
+        public Pageable<NetworkSecurityGroupOperations> List(CancellationToken cancellationToken = default)
+        {
+            return new PhWrappingPageable<NetworkSecurityGroup, NetworkSecurityGroupOperations>(
+                Operations.List(Id.Name, cancellationToken),
+                this.convertor());
+        }
+        public AsyncPageable<NetworkSecurityGroupOperations> ListAsync(CancellationToken cancellationToken = default)
+        {
+            return new PhWrappingAsyncPageable<NetworkSecurityGroup, NetworkSecurityGroupOperations>(
+                Operations.ListAsync(Id.Name, cancellationToken),
+                this.convertor());
+        }
 
-        public Pageable<NetworkSecurityGroupOperations> List(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public Pageable<ArmResourceOperations> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhNetworkSecurityGroup.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<NetworkSecurityGroupOperations, PhNetworkSecurityGroup>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
 
-        public AsyncPageable<NetworkSecurityGroupOperations> ListAsync(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<ArmResourceOperations> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhNetworkSecurityGroup.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<NetworkSecurityGroupOperations, PhNetworkSecurityGroup>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
+        private Func<NetworkSecurityGroup, NetworkSecurityGroupOperations> convertor()
+        {
+            return s => new NetworkSecurityGroupOperations(ClientContext, new PhNetworkSecurityGroup(s));
+        }
+
 
         internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).NetworkSecurityGroups;
     }

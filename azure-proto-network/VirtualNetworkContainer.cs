@@ -6,6 +6,8 @@ using azure_proto_core.Resources;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
+using azure_proto_core.Adapters;
 
 namespace azure_proto_network
 {
@@ -55,20 +57,37 @@ namespace azure_proto_network
             return new ArmBuilder<VirtualNetworkOperations, PhVirtualNetwork>(this, new PhVirtualNetwork(vnet));
         }
 
-        public Pageable<VirtualNetworkOperations> List(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public Pageable<VirtualNetworkOperations> List(CancellationToken cancellationToken = default)
+        {
+            return new PhWrappingPageable<VirtualNetwork, VirtualNetworkOperations>(
+                Operations.List(Id.Name, cancellationToken),
+                this.convertor());
+        }
+
+        public AsyncPageable<VirtualNetworkOperations> ListAsync(CancellationToken cancellationToken = default)
+        {
+            return new PhWrappingAsyncPageable<VirtualNetwork, VirtualNetworkOperations>(
+                Operations.ListAsync(Id.Name, cancellationToken),
+                this.convertor());
+        }
+
+        public Pageable<ArmResourceOperations> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhVirtualNetwork.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<VirtualNetworkOperations, PhVirtualNetwork>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
 
-        public AsyncPageable<VirtualNetworkOperations> ListAsync(ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<ArmResourceOperations> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhVirtualNetwork.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<VirtualNetworkOperations, PhVirtualNetwork>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
-
+        private  Func<VirtualNetwork, VirtualNetworkOperations> convertor()
+        {
+            return s => new VirtualNetworkOperations(ClientContext, new PhVirtualNetwork(s));
+        }
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).VirtualNetworks;
     }
 }

@@ -366,3 +366,5 @@ FodyWeavers.xsd
 
 #code coverage
 **/coverage
+.vscode/launch.json
+.vscode/tasks.json
