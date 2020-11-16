@@ -39,7 +39,7 @@ namespace azure_proto_compute
             throw new NotImplementedException();
         }
 
-        internal RoleAssignmentsOperations Operations => GetClient<AuthorizationManagementClient>((baseUri, creds) => new AuthorizationManagementClient(baseUri, Id.Subscription, creds)).RoleAssignments;
+        internal RoleAssignmentsOperations Operations => GetClient<AuthorizationManagementClient>((baseUri, creds) => new AuthorizationManagementClient( Id.Subscription, baseUri, creds)).RoleAssignments;
 
     }
 }
