@@ -1,6 +1,7 @@
 using azure_proto_core;
 using NUnit.Framework;
 using System;
+using System.Linq;
 using System.Text.Json;
 
 namespace azure_proto_core_test
@@ -106,7 +107,10 @@ namespace azure_proto_core_test
             Assert.IsFalse(identity1.Equals(identity3));
         }
          
-        string systemAssigned = "{" +
+        [TestCase]
+        public void TestDeserializer()
+        {
+            string systemAssigned = "{" +
             "\"identity\":" +
                 "{" +
                     "\"principalId\": \"de29bab1-49e1-4705-819b-4dfddceaaa98\"," +
@@ -115,13 +119,10 @@ namespace azure_proto_core_test
                     "\"userAssignedIdentities\": null" +
                 "}" +
             "}";
-
-        JsonElement systemAssignedJson = new JsonElement(systemAssigned);
-
-        [TestCase]
-        public void TestDeserializer()
-        {
-            Identity back = Identity.DeserializeIdentity(systemAssignedJson);
+            JsonDocument document = JsonDocument.Parse(systemAssigned);
+            JsonElement rootElement = document.RootElement;
+            var identityJsonProperty = rootElement.EnumerateObject().First<JsonProperty>();
+            Identity back = Identity.DeserializeIdentity(identityJsonProperty.Value);
             Console.WriteLine(back);
             Assert.IsNotNull(back);
         }
