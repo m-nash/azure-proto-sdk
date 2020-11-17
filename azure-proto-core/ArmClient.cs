@@ -6,7 +6,6 @@ using Azure.ResourceManager.Resources.Models;
 using azure_proto_core.Adapters;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -21,23 +20,6 @@ namespace azure_proto_core
     /// </summary>
     public class ArmClient
     {
-        static ArmClient()
-        {
-            Registry.Register(
-                new azure_proto_core.Internal.ArmResourceRegistration<ResourceGroupContainerOperations, SubscriptionOperations, ResourceGroupOperations, PhResourceGroup>(
-                    new ResourceType("Microsoft.Resources/resourceGroups"),
-                    (o, r) => new ResourceGroupContainerOperations(o, r),
-                    (o, r) => new ResourceGroupOperations(o, r.Id)));
-
-            Registry.Register(
-                new azure_proto_core.Internal.ArmResourceRegistration<ResourceContainerOperations<ArmResourceOperations, ArmResource>, TrackedResource, ArmResourceOperations, ArmResource>(
-                    new ResourceType("Microsoft.Resources/resourceGroups"),
-                    null,
-                    (o, r) => new ArmResourceOperations(o, r.Id)));
-        }
-
-        public static ArmResourceRegistry Registry { get; } = new ArmResourceRegistry();
-
         internal static readonly string DefaultUri = "https://management.azure.com";
 
         public Dictionary<string, string> ApiVersionOverrides { get; private set; }
@@ -202,11 +184,7 @@ namespace azure_proto_core
                 location = azure_proto_core.Location.Default;
             }
 
-            TContainer container;
-            if (!Registry.TryGetContainer<TContainer, ArmResource, TOperations, TResource>(this.ClientContext, new ArmResource($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", location), out container))
-            {
-                throw new InvalidOperationException($"No resource type matching '{typeof(TResource)}' found.");
-            }
+            TContainer container = Activator.CreateInstance(typeof(TContainer), ClientContext, new ArmResource($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", location)) as TContainer;
 
             return container.Create(name, model);
         }

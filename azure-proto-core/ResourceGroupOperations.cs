@@ -68,11 +68,7 @@ namespace azure_proto_core
                 myResource = new ArmResource(Id, location);
             }
 
-            TContainer container;
-            if (!ArmClient.Registry.TryGetContainer<TContainer, TrackedResource, TOperations, TResource>(this.ClientContext, myResource, out container))
-            {
-                throw new InvalidOperationException($"No resource type matching '{typeof(TResource)}' found.");
-            }
+            TContainer container = Activator.CreateInstance(typeof(TContainer), ClientContext, myResource) as TContainer;
 
             return container.Create(name, model);
         }
@@ -95,11 +91,7 @@ namespace azure_proto_core
                 myResource = new ArmResource(Id, location);
             }
 
-            TContainer container;
-            if (!ArmClient.Registry.TryGetContainer<TContainer, TrackedResource, TOperations, TResource>(this.ClientContext, myResource, out container))
-            {
-                throw new InvalidOperationException($"No resource type matching '{typeof(TResource)}' found.");
-            }
+            TContainer container = Activator.CreateInstance(typeof(TContainer), ClientContext, myResource) as TContainer;
 
             return container.CreateAsync(name, model, token);
         }
