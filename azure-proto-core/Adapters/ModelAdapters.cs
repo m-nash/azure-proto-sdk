@@ -24,4 +24,22 @@ namespace azure_proto_core
             return other.Model;
         }
     }
+
+    //Or call generic resource, other resource??
+    public abstract class ChildResource<T> : Resource where T : class
+    {
+        public override ResourceIdentifier Id { get; protected set; }
+        protected ChildResource(ResourceIdentifier id, T data)
+        {
+            Id = id;
+            Model = data;
+        }
+
+        public virtual T Model { get; set; }
+
+        public static implicit operator T(ChildResource<T> other)
+        {
+            return other.Model;
+        }
+    }
 }
