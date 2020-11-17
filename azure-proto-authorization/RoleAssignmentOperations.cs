@@ -1,15 +1,13 @@
 ﻿using Azure;
 using Azure.ResourceManager.Authorization;
+using Azure.ResourceManager.Authorization.Models;
 using azure_proto_core;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace azure_proto_compute
 {
-    public class RoleAssignmentOperations : ImmutableResourceOperationsBase<PhRoleAssignment, RoleAssignmentOperations>
+    public class RoleAssignmentOperations : ImmutableResourceOperationsBase<RoleAssignmentOperations, PhRoleAssignment>
     {
         public RoleAssignmentOperations(ArmResourceOperations genericOperations) : this(genericOperations.ClientContext, genericOperations.Id) { }
 
@@ -21,22 +19,22 @@ namespace azure_proto_compute
 
         public override ArmOperation<Response> Delete()
         {
-            throw new NotImplementedException();
+            return new ArmVoidOperation(Operations.DeleteById(this.Id).GetRawResponse());
         }
 
-        public override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return new ArmVoidOperation((await Operations.DeleteByIdAsync(this.Id, cancellationToken)).GetRawResponse());
         }
 
         public override ArmResponse<RoleAssignmentOperations> Get()
         {
-            throw new NotImplementedException();
+            return new PhArmResponse<RoleAssignmentOperations, RoleAssignment>(Operations.GetById(this.Id), a => { Resource = new PhRoleAssignment(a); return this; });
         }
 
-        public override Task<ArmResponse<RoleAssignmentOperations>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<RoleAssignmentOperations>> GetAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return new PhArmResponse<RoleAssignmentOperations, RoleAssignment>(await Operations.GetByIdAsync(this.Id, cancellationToken), a => { Resource = new PhRoleAssignment(a); return this; });
         }
 
         internal RoleAssignmentsOperations Operations => GetClient<AuthorizationManagementClient>((baseUri, creds) => new AuthorizationManagementClient( Id.Subscription, baseUri, creds)).RoleAssignments;

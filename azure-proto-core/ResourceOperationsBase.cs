@@ -9,7 +9,7 @@ namespace azure_proto_core
     /// TODO: Split into ResourceOperations/TrackedResourceOperations
     /// </summary>
     /// <typeparam name="Model"></typeparam>
-    public abstract class ResourceOperationsBase<TOperations, TResource> : OperationsBase
+    public abstract class ResourceOperationsBase<TOperations, TResource> : ImmutableResourceOperationsBase<TOperations, TResource>
         where TResource : Resource
         where TOperations : ResourceOperationsBase<TOperations, TResource>
     {
@@ -52,11 +52,7 @@ namespace azure_proto_core
             return Get().Value.Model;
         }
 
-        public abstract ArmResponse<TOperations> Get();
-        public abstract Task<ArmResponse<TOperations>> GetAsync(CancellationToken cancellationToken = default);
         public abstract ArmOperation<TOperations> AddTag(string key, string value);
         public abstract Task<ArmOperation<TOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default);
-        public abstract ArmOperation<Response> Delete();
-        public abstract Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default);
     }
 }
