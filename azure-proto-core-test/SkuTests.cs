@@ -86,7 +86,7 @@ namespace azure_proto_core_test
             sku1.Family = "family";
             sku1.Size = "size";
             sku1.Tier = "tier";
-            Assert.IsFalse(sku1.Equals(sku2)); // sku1 != null && sku2 == null
+            Assert.IsFalse(sku1.Equals(sku2));
 
             sku2 = new Sku();
             sku2.Name = "name";
