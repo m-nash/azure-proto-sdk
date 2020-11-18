@@ -27,15 +27,6 @@ namespace azure_proto_core
 
         public override ResourceIdentifier Id => Resource.Id;
 
-        public virtual bool HasModel
-        {
-            get
-            {
-                var model = Resource as TResource;
-                return model != null;
-            }
-        }
-
         public TResource Model
         {
             get
