@@ -11,43 +11,43 @@ using azure_proto_core.Adapters;
 
 namespace azure_proto_network
 {
-    public class NetworkInterfaceContainer : ResourceContainerOperations<NetworkInterfaceOperations, PhNetworkInterface>
+    public class NetworkInterfaceContainer : ResourceContainerOperations<XNetworkInterface, PhNetworkInterface>
     {
         public NetworkInterfaceContainer(ArmClientContext context, PhResourceGroup resourceGroup) : base(context, resourceGroup) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 
-        public override ArmResponse<NetworkInterfaceOperations> Create(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<XNetworkInterface> Create(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
-            return new PhArmResponse<NetworkInterfaceOperations, NetworkInterface>(
+            return new PhArmResponse<XNetworkInterface, NetworkInterface>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new NetworkInterfaceOperations(ClientContext, new PhNetworkInterface(n)));
+                n => new XNetworkInterface(ClientContext, new PhNetworkInterface(n)));
         }
 
-        public async override Task<ArmResponse<NetworkInterfaceOperations>> CreateAsync(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<XNetworkInterface>> CreateAsync(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
-            return new PhArmResponse<NetworkInterfaceOperations, NetworkInterface>(
+            return new PhArmResponse<XNetworkInterface, NetworkInterface>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                n => new NetworkInterfaceOperations(ClientContext, new PhNetworkInterface(n)));
+                n => new XNetworkInterface(ClientContext, new PhNetworkInterface(n)));
         }
 
-        public override ArmOperation<NetworkInterfaceOperations> StartCreate(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmOperation<XNetworkInterface> StartCreate(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<NetworkInterfaceOperations, NetworkInterface>(
+            return new PhArmOperation<XNetworkInterface, NetworkInterface>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken),
-                n => new NetworkInterfaceOperations(ClientContext, new PhNetworkInterface(n)));
+                n => new XNetworkInterface(ClientContext, new PhNetworkInterface(n)));
         }
 
-        public async override Task<ArmOperation<NetworkInterfaceOperations>> StartCreateAsync(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<XNetworkInterface>> StartCreateAsync(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<NetworkInterfaceOperations, NetworkInterface>(
+            return new PhArmOperation<XNetworkInterface, NetworkInterface>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),
-                n => new NetworkInterfaceOperations(ClientContext, new PhNetworkInterface(n)));
+                n => new XNetworkInterface(ClientContext, new PhNetworkInterface(n)));
         }
 
-        public ArmBuilder<NetworkInterfaceOperations, PhNetworkInterface> Construct(PhPublicIPAddress ip, string subnetId, Location location = null)
+        public ArmBuilder<XNetworkInterface, PhNetworkInterface> Construct(PhPublicIPAddress ip, string subnetId, Location location = null)
         {
             var nic = new NetworkInterface()
             {
@@ -65,7 +65,7 @@ namespace azure_proto_network
                 }
             };
 
-            return new ArmBuilder<NetworkInterfaceOperations, PhNetworkInterface>(this, new PhNetworkInterface(nic));
+            return new ArmBuilder<XNetworkInterface, PhNetworkInterface>(this, new PhNetworkInterface(nic));
         }
 
         public Pageable<NetworkInterfaceOperations> List(CancellationToken cancellationToken = default)

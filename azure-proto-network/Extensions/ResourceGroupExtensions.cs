@@ -15,7 +15,7 @@ namespace azure_proto_network
             return new VirtualNetworkOperations(resourceGroup.ClientContext, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/virtualNetworks/{virtualNetwork}"));
         }
 
-        public static VirtualNetworkContainer VirtualNetworks(this ResourceGroupOperations resourceGroup)
+        public static VirtualNetworkContainer VirtualNetworks(this XResourceGroup resourceGroup)
         {
             return new VirtualNetworkContainer(resourceGroup.ClientContext, resourceGroup.Model);
         }

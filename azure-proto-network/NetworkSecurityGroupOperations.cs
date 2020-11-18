@@ -15,7 +15,7 @@ namespace azure_proto_network
     /// An operations + Model class for NSGs
     /// TODO: How does the operation signature change for resources that support Etags?
     /// </summary>
-    public class NetworkSecurityGroupOperations : ResourceOperationsBase<NetworkSecurityGroupOperations, PhNetworkSecurityGroup>
+    public class NetworkSecurityGroupOperations : ResourceOperationsBase<XNetworkSecurityGroup, PhNetworkSecurityGroup>
     {
         class RuleIdEqualityComparer : IEqualityComparer<SecurityRule>
         {
@@ -39,9 +39,8 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="rules">The new set of network security rules</param>
         /// <returns>A network security group with the given set of rules merged with thsi one</returns>
-        public ArmOperation<NetworkSecurityGroupOperations> UpdateRules(CancellationToken cancellationToken = default, params SecurityRule[] rules)
+        public ArmOperation<XNetworkSecurityGroup> UpdateRules(PhNetworkSecurityGroup model, CancellationToken cancellationToken = default, params SecurityRule[] rules)
         {
-            var model = Model;
             foreach (var rule in rules)
             {
                 // Note that this makes use of the 
@@ -68,36 +67,36 @@ namespace azure_proto_network
                 }
             }
 
-            return new PhArmOperation<NetworkSecurityGroupOperations, NetworkSecurityGroup>(Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, model.Model), 
-                n => { Resource = new PhNetworkSecurityGroup(n); return this;});
+            return new PhArmOperation<XNetworkSecurityGroup, NetworkSecurityGroup>(Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, model.Model), 
+                n => { Resource = new PhNetworkSecurityGroup(n); return new XNetworkSecurityGroup(ClientContext, Resource as PhNetworkSecurityGroup); });
         }
 
-        public override ArmResponse<NetworkSecurityGroupOperations> Get()
+        public override ArmResponse<XNetworkSecurityGroup> Get()
         {
-            return new PhArmResponse<NetworkSecurityGroupOperations, NetworkSecurityGroup>(Operations.Get(Id.ResourceGroup, Id.Name),
-                n => { Resource = new PhNetworkSecurityGroup(n); return this; });
+            return new PhArmResponse<XNetworkSecurityGroup, NetworkSecurityGroup>(Operations.Get(Id.ResourceGroup, Id.Name),
+                n => { Resource = new PhNetworkSecurityGroup(n); return new XNetworkSecurityGroup(ClientContext, Resource as PhNetworkSecurityGroup); });
         }
 
-        public async override Task<ArmResponse<NetworkSecurityGroupOperations>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<XNetworkSecurityGroup>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<NetworkSecurityGroupOperations, NetworkSecurityGroup>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
-                n => { Resource = new PhNetworkSecurityGroup(n); return this; });
+            return new PhArmResponse<XNetworkSecurityGroup, NetworkSecurityGroup>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
+                n => { Resource = new PhNetworkSecurityGroup(n); return new XNetworkSecurityGroup(ClientContext, Resource as PhNetworkSecurityGroup); });
         }
 
-        public override ArmOperation<NetworkSecurityGroupOperations> AddTag(string key, string value)
-        {
-            var patchable = new TagsObject();
-            patchable.Tags[key] = value;
-            return new PhArmOperation<NetworkSecurityGroupOperations, NetworkSecurityGroup>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
-                n => { Resource = new PhNetworkSecurityGroup(n); return this; });
-        }
-
-        public async override Task<ArmOperation<NetworkSecurityGroupOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public override ArmOperation<XNetworkSecurityGroup> AddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<NetworkSecurityGroupOperations, NetworkSecurityGroup>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
-                n => { Resource = new PhNetworkSecurityGroup(n); return this; });
+            return new PhArmOperation<XNetworkSecurityGroup, NetworkSecurityGroup>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => { Resource = new PhNetworkSecurityGroup(n); return new XNetworkSecurityGroup(ClientContext, Resource as PhNetworkSecurityGroup); });
+        }
+
+        public async override Task<ArmOperation<XNetworkSecurityGroup>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        {
+            var patchable = new TagsObject();
+            patchable.Tags[key] = value;
+            return new PhArmOperation<XNetworkSecurityGroup, NetworkSecurityGroup>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => { Resource = new PhNetworkSecurityGroup(n); return new XNetworkSecurityGroup(ClientContext, Resource as PhNetworkSecurityGroup); });
         }
 
         public override ArmOperation<Response> Delete()

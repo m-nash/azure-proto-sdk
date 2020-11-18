@@ -17,7 +17,7 @@ namespace client
 
             //retrieve from lowest level inside management package gives ability to walk up and down
             var rg = client.ResourceGroup(Context.SubscriptionId, Context.RgName);
-            var vm2 = rg.VirtualMachine(Context.VmName).GetModelIfNewer();
+            var vm2 = rg.VirtualMachine(Context.VmName).Get();
             Console.WriteLine($"Found VM {vm2.Id}");
         }
     }

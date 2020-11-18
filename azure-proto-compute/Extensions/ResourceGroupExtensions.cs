@@ -18,12 +18,12 @@ namespace azure_proto_compute
             return new VirtualMachineOperations(resourceGroup.ClientContext, vmId);
         }
 
-        public static VirtualMachineOperations VirtualMachine(this ResourceGroupOperations resourceGroup, TrackedResource vm)
+        public static XVirtualMachine VirtualMachine(this XResourceGroup resourceGroup, PhVirtualMachine vm)
         {
-            return new VirtualMachineOperations(resourceGroup.ClientContext, vm);
+            return new XVirtualMachine(resourceGroup.ClientContext, vm);
         }
 
-        public static VirtualMachineContainer VirtualMachines(this ResourceGroupOperations resourceGroup)
+        public static VirtualMachineContainer VirtualMachines(this XResourceGroup resourceGroup)
         {
             return new VirtualMachineContainer(resourceGroup.ClientContext, resourceGroup.Model);
         }
@@ -40,12 +40,12 @@ namespace azure_proto_compute
             return new AvailabilitySetOperations(resourceGroup.ClientContext, availabilitySetId);
         }
 
-        public static AvailabilitySetOperations AvailabilitySet(this ResourceGroupOperations resourceGroup, TrackedResource availabilitySet)
+        public static XAvailabilitySet AvailabilitySet(this XResourceGroup resourceGroup, PhAvailabilitySet availabilitySet)
         {
-            return new AvailabilitySetOperations(resourceGroup.ClientContext, availabilitySet);
+            return new XAvailabilitySet(resourceGroup.ClientContext, availabilitySet);
         }
 
-        public static AvailabilitySetContainer AvailabilitySets(this ResourceGroupOperations resourceGroup)
+        public static AvailabilitySetContainer AvailabilitySets(this XResourceGroup resourceGroup)
         {
             return new AvailabilitySetContainer(resourceGroup.ClientContext, resourceGroup.Model);
         }
