@@ -2,9 +2,7 @@
 using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,8 +29,6 @@ namespace azure_proto_network
         }
 
         public NetworkSecurityGroupOperations(ArmClientContext parent, ResourceIdentifier context) : base(parent, context) { }
-
-        public NetworkSecurityGroupOperations(ArmClientContext parent, TrackedResource context) : base(parent, context) { }
 
         /// <summary>
         /// TODO: GENERATOR Make use of the entity tags on the resource - we may need to add to the generated management client

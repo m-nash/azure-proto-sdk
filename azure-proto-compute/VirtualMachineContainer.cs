@@ -21,6 +21,8 @@ namespace azure_proto_compute
     {
         public VirtualMachineContainer(ArmClientContext context, PhResourceGroup resourceGroup) : base(context, resourceGroup) { }
 
+        internal VirtualMachineContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+
         public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 
         public override ArmResponse<XVirtualMachine> Create(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)

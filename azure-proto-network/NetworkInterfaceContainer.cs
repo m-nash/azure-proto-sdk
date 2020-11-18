@@ -15,6 +15,8 @@ namespace azure_proto_network
     {
         public NetworkInterfaceContainer(ArmClientContext context, PhResourceGroup resourceGroup) : base(context, resourceGroup) { }
 
+        internal NetworkInterfaceContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 
         public override ArmResponse<XNetworkInterface> Create(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
@@ -96,10 +98,11 @@ namespace azure_proto_network
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
-        private Func<NetworkInterface, NetworkInterfaceOperations> convertor()
+        private Func<NetworkInterface, XNetworkInterface> convertor()
         {
-            return s => new NetworkInterfaceOperations(ClientContext, new PhNetworkInterface(s));
+            return s => new XNetworkInterface(ClientContext, new PhNetworkInterface(s));
         }
+
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).NetworkInterfaces;
     }
 }

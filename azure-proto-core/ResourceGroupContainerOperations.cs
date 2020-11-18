@@ -15,9 +15,9 @@ namespace azure_proto_core
     {
         public override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
 
-        internal ResourceGroupContainerOperations(ArmClientContext context, SubscriptionOperations subscription) : base(context, subscription.Id)
-        {
-        }
+        internal ResourceGroupContainerOperations(ArmClientContext context, SubscriptionOperations subscription) : base(context, subscription.Id) { }
+
+        internal ResourceGroupContainerOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 
         public ArmOperation<XResourceGroup> Create(string name, Location location)
         {

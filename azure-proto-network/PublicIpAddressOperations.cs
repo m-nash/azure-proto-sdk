@@ -11,8 +11,6 @@ namespace azure_proto_network
     {
         public PublicIpAddressOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 
-        public PublicIpAddressOperations(ArmClientContext context, azure_proto_core.Resource resource) : base(context, resource) { }
-
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
         public override ArmOperation<Response> Delete()

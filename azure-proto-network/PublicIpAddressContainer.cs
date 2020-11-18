@@ -14,6 +14,8 @@ namespace azure_proto_network
     {
         public PublicIpAddressContainer(ArmClientContext context, PhResourceGroup resourceGroup) : base(context, resourceGroup) { }
 
+        internal PublicIpAddressContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
         public override ArmResponse<XPublicIpAddress> Create(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)

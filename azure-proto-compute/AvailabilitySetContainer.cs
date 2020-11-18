@@ -13,6 +13,8 @@ namespace azure_proto_compute
     {
         public AvailabilitySetContainer(ArmClientContext context, PhResourceGroup resourceGroup) : base(context, resourceGroup) { }
 
+        internal AvailabilitySetContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+
         public override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
 
         public override ArmResponse<XAvailabilitySet> Create(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)

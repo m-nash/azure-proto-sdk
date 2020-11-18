@@ -11,8 +11,8 @@ namespace client
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
 
-            var rg = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
-            foreach(var entity in rg.VirtualMachines().List())
+            var rgOp = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
+            foreach(var entity in rgOp.VirtualMachines().List())
             {
                 Console.WriteLine($"{entity.Id.Name}");
                 entity.AddTag("name", "Value");
