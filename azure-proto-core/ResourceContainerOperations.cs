@@ -17,13 +17,13 @@ namespace azure_proto_core
     {
         protected TrackedResource Parent { get; private set; }
 
-        protected ResourceContainerOperations(ArmClientContext parent, ResourceIdentifier contexts) : base(parent, contexts)
+        protected ResourceContainerOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id)
         {
         }
 
-        protected ResourceContainerOperations(ArmClientContext parent, TrackedResource contexts) : base(parent, contexts)
+        protected ResourceContainerOperations(ArmClientContext context, TrackedResource resource) : base(context, resource)
         {
-            Parent = contexts;
+            Parent = resource;
         }
 
         public override void Validate(ResourceIdentifier identifier)
