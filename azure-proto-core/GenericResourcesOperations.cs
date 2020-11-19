@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    /// <summary>
-    /// Implementation for resources that implement the immutable resource pattern
-    /// </summary>
     public abstract class GenericResourcesOperations<TOperations, TResource> : OperationsBase 
         where TResource:Resource 
         where TOperations: GenericResourcesOperations<TOperations, TResource>

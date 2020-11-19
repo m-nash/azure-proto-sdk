@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    /// <summary>
-    /// Implementation for resources that implement the immutable resource pattern
-    /// </summary>
     public interface IDeletableResource<TOperations, TResource> 
         where TResource:Resource 
         where TOperations: IDeletableResource<TOperations, TResource>
