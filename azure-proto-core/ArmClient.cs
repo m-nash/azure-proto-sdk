@@ -194,7 +194,7 @@ namespace azure_proto_core
 
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string subscription, string resourceGroup, string name, TResource model, azure_proto_core.Location location = default)
             where TResource : TrackedResource
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : GenericResourcesOperations<TOperations, TResource>
             where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             if (location == null)

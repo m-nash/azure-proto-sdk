@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class PublicIpAddressOperations : ResourceOperationsBase<PublicIpAddressOperations, PhPublicIPAddress>
+    public class PublicIpAddressOperations : GenericResourcesOperations<PublicIpAddressOperations, PhPublicIPAddress>, ITagable<PublicIpAddressOperations, PhPublicIPAddress>, IDeletableResource<PublicIpAddressOperations, PhPublicIPAddress>
     {
         public PublicIpAddressOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 
@@ -15,12 +15,12 @@ namespace azure_proto_network
 
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
-        public override ArmOperation<Response> Delete()
+        public ArmOperation<Response> Delete()
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name));
         }
 
-        public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync (Id.ResourceGroup, Id.Name, cancellationToken));
         }
@@ -37,7 +37,7 @@ namespace azure_proto_network
                n => { Resource = new PhPublicIPAddress(n); return this; });
         }
 
-        public override ArmOperation<PublicIpAddressOperations> AddTag(string key, string value)
+        public ArmOperation<PublicIpAddressOperations> AddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
@@ -45,7 +45,7 @@ namespace azure_proto_network
                 n => { Resource = new PhPublicIPAddress(n); return this; });
         }
 
-        public async override Task<ArmOperation<PublicIpAddressOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<PublicIpAddressOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;

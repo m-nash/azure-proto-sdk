@@ -16,7 +16,7 @@ namespace azure_proto_core.Internal
     /// <typeparam name="T"></typeparam>
     public class ArmResourceRegistration<TContainer, TContainerParent, TOperations, TResource>
         where TResource : TrackedResource
-        where TOperations : ResourceOperationsBase<TOperations, TResource>
+        where TOperations : GenericResourcesOperations<TOperations, TResource>
         where TContainer : ResourceContainerOperations<TOperations, TResource>
     {
         Func<ArmClientContext, TContainerParent, TContainer> _containerFactory;

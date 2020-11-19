@@ -12,7 +12,7 @@ namespace azure_proto_compute
     /// <summary>
     /// Operations over a single virtual machine
     /// </summary>
-    public class VirtualMachineOperations : ResourceOperationsBase<VirtualMachineOperations, PhVirtualMachine>
+    public class VirtualMachineOperations : GenericResourcesOperations<VirtualMachineOperations, PhVirtualMachine>, ITagable<VirtualMachineOperations, PhVirtualMachine>, IDeletableResource<VirtualMachineOperations, PhVirtualMachine>
     {
         public VirtualMachineOperations(ArmResourceOperations genericOperations) : base(genericOperations) { }
 
@@ -22,12 +22,12 @@ namespace azure_proto_compute
 
         public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 
-        public override ArmOperation<Response> Delete()
+        public  ArmOperation<Response> Delete()
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name));
         }
 
-        public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
@@ -100,14 +100,14 @@ namespace azure_proto_compute
             return new PhArmOperation<VirtualMachineOperations, VirtualMachine>(await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken), v => { Resource = new PhVirtualMachine(v); return this; });
         }
 
-        public override ArmOperation<VirtualMachineOperations> AddTag(string key, string value)
+        public ArmOperation<VirtualMachineOperations> AddTag(string key, string value)
         {
             var patchable = new VirtualMachineUpdate { Tags= new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)};
             patchable.Tags.Add(key, value);
             return new PhArmOperation<VirtualMachineOperations, VirtualMachine>(Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable), v => { Resource = new PhVirtualMachine(v); return this; });
         }
 
-        public override async Task<ArmOperation<VirtualMachineOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<VirtualMachineOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new VirtualMachineUpdate { Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) };
             patchable.Tags.Add(key, value);

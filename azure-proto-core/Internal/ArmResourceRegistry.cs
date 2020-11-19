@@ -11,7 +11,7 @@ namespace azure_proto_core
 
         public void Register<TContainer, TContainerParent, TOperations, TResource>(ArmResourceRegistration<TContainer, TContainerParent, TOperations, TResource> registration)
             where TResource : TrackedResource
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : GenericResourcesOperations<TOperations, TResource>
             where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             _registry[registration.ModelType] = registration;
@@ -27,7 +27,7 @@ namespace azure_proto_core
         /// <returns></returns>
         public bool TryGetOperations<TContainer, TContainerParent, TOperations, TResource>(ArmClientContext parent, TrackedResource context, out TOperations operations)
             where TResource : TrackedResource
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : GenericResourcesOperations<TOperations, TResource>
             where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             operations = null;
@@ -43,7 +43,7 @@ namespace azure_proto_core
 
         public bool TryGetContainer<TContainer, TContainerParent, TOperations, TResource>(ArmClientContext parent, TContainerParent parentContext, out TContainer container)
             where TResource : TrackedResource
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : GenericResourcesOperations<TOperations, TResource>
             where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             container = null;
@@ -59,7 +59,7 @@ namespace azure_proto_core
 
         public bool TryGetResourceType<TContainer, TContainerParent, TOperations, TResource>(out ResourceType type)
             where TResource : TrackedResource
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : GenericResourcesOperations<TOperations, TResource>
             where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             type = ResourceType.None;
@@ -75,7 +75,7 @@ namespace azure_proto_core
 
         internal bool TryGetRegistration<TContainer, TContainerParent, TOperations, TResource>(out ArmResourceRegistration<TContainer, TContainerParent, TOperations, TResource> registration)
             where TResource : TrackedResource
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : GenericResourcesOperations<TOperations, TResource>
             where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             registration = null;

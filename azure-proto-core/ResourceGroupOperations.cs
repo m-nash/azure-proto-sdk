@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    public class ResourceGroupOperations : ResourceOperationsBase<ResourceGroupOperations, PhResourceGroup>
+    public class ResourceGroupOperations : GenericResourcesOperations<ResourceGroupOperations, PhResourceGroup>, ITagable<ResourceGroupOperations, PhResourceGroup>, IDeletableResource<ResourceGroupOperations, PhResourceGroup>
     {
         public static readonly string AzureResourceType = "Microsoft.Resources/resourceGroups";
 
@@ -17,12 +17,12 @@ namespace azure_proto_core
 
         public override ResourceType ResourceType => AzureResourceType;
 
-        public override ArmOperation<Response> Delete()
+        public  ArmOperation<Response> Delete()
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.Name));
         }
 
-        public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.Name, cancellationToken));
         }
@@ -37,14 +37,14 @@ namespace azure_proto_core
             return new PhArmResponse<ResourceGroupOperations, ResourceGroup>(await Operations.GetAsync(Id.Name, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public override ArmOperation<ResourceGroupOperations> AddTag(string name, string value)
+        public ArmOperation<ResourceGroupOperations> AddTag(string name, string value)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;
             return new PhArmOperation<ResourceGroupOperations, ResourceGroup>(Operations.Update(Id.Name, patch), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public async override Task<ArmOperation<ResourceGroupOperations>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
+        public async  Task<ArmOperation<ResourceGroupOperations>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;
@@ -53,7 +53,7 @@ namespace azure_proto_core
 
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, azure_proto_core.Location location = default)
             where TResource : TrackedResource
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : GenericResourcesOperations<TOperations, TResource>
             where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             var myResource = Resource as TrackedResource;
@@ -79,7 +79,7 @@ namespace azure_proto_core
 
         public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, azure_proto_core.Location location = default, CancellationToken token = default)
             where TResource : TrackedResource
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : GenericResourcesOperations<TOperations, TResource>
             where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
 

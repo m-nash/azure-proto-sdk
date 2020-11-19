@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    public class ArmResourceOperations : ResourceOperationsBase<ArmResourceOperations, ArmResource>
+    public class ArmResourceOperations : GenericResourcesOperations<ArmResourceOperations, ArmResource>, ITagable<ArmResourceOperations, ArmResource>, IDeletableResource<ArmResourceOperations, ArmResource>
     {
         public ArmResourceOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 
@@ -15,22 +15,22 @@ namespace azure_proto_core
         }
 
         //TODO: Fill out the methods using ResourceManagementClient 
-        public override ArmOperation<ArmResourceOperations> AddTag(string key, string value)
+        public  ArmOperation<ArmResourceOperations> AddTag(string key, string value)
         {
             throw new NotImplementedException();
         }
 
-        public override Task<ArmOperation<ArmResourceOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public  Task<ArmOperation<ArmResourceOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public override ArmOperation<Response> Delete()
+        public  ArmOperation<Response> Delete()
         {
             throw new NotImplementedException();
         }
 
-        public override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

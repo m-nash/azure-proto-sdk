@@ -10,9 +10,9 @@ namespace azure_proto_core
     /// <summary>
     /// Implementation for resources that implement the immutable resource pattern
     /// </summary>
-    public abstract class GenericResourcesOperations<TResource, TOperations> : OperationsBase 
+    public abstract class GenericResourcesOperations<TOperations, TResource> : OperationsBase 
         where TResource:Resource 
-        where TOperations: GenericResourcesOperations<TResource, TOperations>
+        where TOperations: GenericResourcesOperations<TOperations, TResource>
     {
         public GenericResourcesOperations(ArmResourceOperations genericOperations) : this(genericOperations.ClientContext, genericOperations.Id) { }
 
