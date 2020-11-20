@@ -5,122 +5,222 @@ namespace azure_proto_core_test
 {
     class PlanTests
     {
-        [Test]
-        public void CompareToTests()
+        [TestCase(0, "name", "name")]
+        [TestCase(1, "Name", "name")]
+        [TestCase(0, null, null)]
+        [TestCase(1, "name", null)]
+        [TestCase(-1, null, "name")]
+        [TestCase(0, "${?/>._`", "${?/>._`")]
+        [TestCase(1, "${?/>._`", "")]
+        public void CompareToName(int expected, string name1, string name2)
         {
             Plan plan1 = new Plan();
-            Plan plan2 = null;
+            Plan plan2 = new Plan();
+            plan1.Name = name1;
+            plan2.Name = name2;
+            Assert.AreEqual(expected, plan1.CompareTo(plan2));
+        }
 
-            plan1.Name = "name";
-            plan1.Product = "product";
-            plan1.PromotionCode = "promotionCode";
-            plan1.Publisher = "publisher";
-            plan1.Version = "version";
-            Assert.AreEqual(1, plan1.CompareTo(plan2));
+        [TestCase(0, "product", "product")]
+        [TestCase(1, "Product", "product")]
+        [TestCase(0, null, null)]
+        [TestCase(1, "product", null)]
+        [TestCase(-1, null, "product")]
+        [TestCase(0, "${?/>._`", "${?/>._`")]
+        [TestCase(1, "${?/>._`", "")]
+        public void CompareToProduct(int expected, string product1, string product2)
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = new Plan();
+            plan1.Product = product1;
+            plan2.Product = product2;
+            Assert.AreEqual(expected, plan1.CompareTo(plan2));
+        }
 
-            plan2 = new Plan();
-            plan2.Name = "name";
-            plan2.Product = "product";
-            plan2.PromotionCode = "promotionCode";
-            plan2.Publisher = "publisher";
-            plan2.Version = "version";
-            Assert.AreEqual(0, plan1.CompareTo(plan2));
+        [TestCase(0, "promotionCode", "promotionCode")]
+        [TestCase(1, "PromotionCode", "promotionCode")]
+        [TestCase(0, null, null)]
+        [TestCase(1, "promotionCode", null)]
+        [TestCase(-1, null, "promotionCode")]
+        [TestCase(0, "${?/>._`", "${?/>._`")]
+        [TestCase(1, "${?/>._`", "")]
+        public void CompareToPromotionCode(int expected, string promotionCode1, string promotionCode2)
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = new Plan();
+            plan1.PromotionCode = promotionCode1;
+            plan2.PromotionCode = promotionCode2;
+            Assert.AreEqual(expected, plan1.CompareTo(plan2));
+        }
 
-            plan1.Version = "version1";
-            Assert.AreEqual(1, plan1.CompareTo(plan2));
+        [TestCase(0, "publisher", "publisher")]
+        [TestCase(1, "Publisher", "publisher")]
+        [TestCase(0, null, null)]
+        [TestCase(1, "publisher", null)]
+        [TestCase(-1, null, "publisher")]
+        [TestCase(0, "${?/>._`", "${?/>._`")]
+        [TestCase(1, "${?/>._`", "")]
+        public void CompareToPublisher(int expected, string publisher1, string publisher2)
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = new Plan();
+            plan1.Publisher = publisher1;
+            plan2.Publisher = publisher2;
+            Assert.AreEqual(expected, plan1.CompareTo(plan2));
+        }
 
-            plan2.Version = "version2";
-            Assert.AreEqual(-1, plan1.CompareTo(plan2));
-
-            plan2.Version = null;
-            Assert.AreEqual(1, plan1.CompareTo(plan2));
-
-            plan1.Publisher = "publisher1";
-            Assert.AreEqual(1, plan1.CompareTo(plan2));
-
-            plan2.Publisher = "publisher2";
-            Assert.AreEqual(-1, plan1.CompareTo(plan2));
-
-            plan2.Publisher = null;
-            Assert.AreEqual(1, plan1.CompareTo(plan2));
-
-            plan1.PromotionCode = "promotionCode1";
-            Assert.AreEqual(1, plan1.CompareTo(plan2));
-
-            plan2.PromotionCode = "promotionCode2";
-            Assert.AreEqual(-1, plan1.CompareTo(plan2));
-
-            plan2.PromotionCode = null;
-            Assert.AreEqual(1, plan1.CompareTo(plan2));
-
-            plan1.Product = "product1";
-            Assert.AreEqual(1, plan1.CompareTo(plan2));
-
-            plan2.Product = "product2";
-            Assert.AreEqual(-1, plan1.CompareTo(plan2));
-
-            plan2.Product = null;
-            Assert.AreEqual(1, plan1.CompareTo(plan2));
-
-            plan1.Name = "name1";
-            Assert.AreEqual(1, plan1.CompareTo(plan2));
-
-            plan2.Name = "name2";
-            Assert.AreEqual(-1, plan1.CompareTo(plan2));
-
-            plan2.Name = null;
-            Assert.AreEqual(1, plan1.CompareTo(plan2));
+        [TestCase(0, "version", "version")]
+        [TestCase(1, "Version", "version")]
+        [TestCase(0, null, null)]
+        [TestCase(1, "version", null)]
+        [TestCase(-1, null, "version")]
+        [TestCase(0, "${?/>._`", "${?/>._`")]
+        [TestCase(1, "${?/>._`", "")]
+        public void CompareToVersion(int expected, string version1, string version2)
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = new Plan();
+            plan1.Version = version1;
+            plan2.Version = version2;
+            Assert.AreEqual(expected, plan1.CompareTo(plan2));
         }
 
         [Test]
-        public void EqualsTests()
+        public void CompareToNullPlan()
         {
             Plan plan1 = new Plan();
             Plan plan2 = null;
+            Assert.AreEqual(1, plan1.CompareTo(plan2));
+        }
 
-            plan1.Name = "name";
-            plan1.Product = "product";
-            plan1.PromotionCode = "promotionCode";
-            plan1.Publisher = "publisher";
-            plan1.Version = "version";
+        [TestCase(true, "name", "name")]
+        [TestCase(false, "Name", "name")]
+        [TestCase(true, null, null)]
+        [TestCase(false, "name", null)]
+        [TestCase(false, null, "name")]
+        [TestCase(true, "${?/>._`", "${?/>._`")]
+        [TestCase(false, "${?/>._`", "")]
+        public void EqualsToName(bool expected, string name1, string name2)
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = new Plan();
+            plan1.Name = name1;
+            plan2.Name = name2;
+            if (expected)
+            {
+                Assert.IsTrue(plan1.Equals(plan2));
+            }
+            else
+            {
+                Assert.IsFalse(plan1.Equals(plan2));
+            }
+        }
+
+        [TestCase(true, "product", "product")]
+        [TestCase(false, "Product", "product")]
+        [TestCase(true, null, null)]
+        [TestCase(false, "product", null)]
+        [TestCase(false, null, "product")]
+        [TestCase(true, "${?/>._`", "${?/>._`")]
+        [TestCase(false, "${?/>._`", "")]
+        public void EqualsToProduct(bool expected, string product1, string product2)
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = new Plan();
+            plan1.Product = product1;
+            plan2.Product = product2;
+            if (expected)
+            {
+                Assert.IsTrue(plan1.Equals(plan2));
+            }
+            else
+            {
+                Assert.IsFalse(plan1.Equals(plan2));
+            }
+        }
+
+        [TestCase(true, "promotionCode", "promotionCode")]
+        [TestCase(false, "PromotionCode", "promotionCode")]
+        [TestCase(true, null, null)]
+        [TestCase(false, "promotionCode", null)]
+        [TestCase(false, null, "promotionCode")]
+        [TestCase(true, "${?/>._`", "${?/>._`")]
+        [TestCase(false, "${?/>._`", "")]
+        public void EqualsToPromotionCode(bool expected, string promotionCode1, string promotionCode2)
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = new Plan();
+            plan1.PromotionCode = promotionCode1;
+            plan2.PromotionCode = promotionCode2;
+            if (expected)
+            {
+                Assert.IsTrue(plan1.Equals(plan2));
+            }
+            else
+            {
+                Assert.IsFalse(plan1.Equals(plan2));
+            }
+        }
+
+        [TestCase(true, "publisher", "publisher")]
+        [TestCase(false, "Publisher", "publisher")]
+        [TestCase(true, null, null)]
+        [TestCase(false, "publisher", null)]
+        [TestCase(false, null, "publisher")]
+        [TestCase(true, "${?/>._`", "${?/>._`")]
+        [TestCase(false, "${?/>._`", "")]
+        public void EqualsToPublisher(bool expected, string publisher1, string publisher2)
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = new Plan();
+            plan1.Publisher = publisher1;
+            plan2.Publisher = publisher2;
+            if (expected)
+            {
+                Assert.IsTrue(plan1.Equals(plan2));
+            }
+            else
+            {
+                Assert.IsFalse(plan1.Equals(plan2));
+            }
+        }
+
+        [TestCase(true, "version", "version")]
+        [TestCase(false, "Version", "version")]
+        [TestCase(true, null, null)]
+        [TestCase(false, "version", null)]
+        [TestCase(false, null, "version")]
+        [TestCase(true, "${?/>._`", "${?/>._`")]
+        [TestCase(false, "${?/>._`", "")]
+        public void EqualsToVersion(bool expected, string version1, string version2)
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = new Plan();
+            plan1.Version = version1;
+            plan2.Version = version2;
+            if (expected)
+            {
+                Assert.IsTrue(plan1.Equals(plan2));
+            }
+            else
+            {
+                Assert.IsFalse(plan1.Equals(plan2));
+            }
+        }
+
+        [Test]
+        public void EqualsToNullPlan()
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = null;
             Assert.IsFalse(plan1.Equals(plan2));
+        }
 
-            plan2 = new Plan();
-            plan2.Name = "name";
-            plan2.Product = "product";
-            plan2.PromotionCode = "promotionCode";
-            plan2.Publisher = "publisher";
-            plan2.Version = "version";
-            Assert.IsTrue(plan1.Equals(plan2));
-
-            plan1.Version = "version1";
-            Assert.IsFalse(plan1.Equals(plan2));
-
-            plan2.Version = null;
-            Assert.IsFalse(plan1.Equals(plan2));
-
-            plan1.Publisher = "publisher1";
-            Assert.IsFalse(plan1.Equals(plan2));
-
-            plan2.Publisher = null;
-            Assert.IsFalse(plan1.Equals(plan2));
-
-            plan1.PromotionCode = "promotionCode1";
-            Assert.IsFalse(plan1.Equals(plan2));
-
-            plan2.PromotionCode = null;
-            Assert.IsFalse(plan1.Equals(plan2));
-
-            plan1.Product = "product1";
-            Assert.IsFalse(plan1.Equals(plan2));
-
-            plan2.Product = null;
-            Assert.IsFalse(plan1.Equals(plan2));
-
-            plan1.Name = "name1";
-            Assert.IsFalse(plan1.Equals(plan2));
-
-            plan2.Name = null;
+        [Test]
+        public void EqualsToObject()
+        {
+            Plan plan1 = new Plan();
+            object plan2 = "random";
             Assert.IsFalse(plan1.Equals(plan2));
         }
     }
