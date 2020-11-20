@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_compute
 {
-    public class AvailabilitySetOperations : GenericResourcesOperations<AvailabilitySetOperations, PhAvailabilitySet>, ITagable<AvailabilitySetOperations, PhAvailabilitySet>, IDeletableResource<AvailabilitySetOperations, PhAvailabilitySet>
+    public class AvailabilitySetOperations : ResourceOperations<AvailabilitySetOperations, PhAvailabilitySet>, ITaggable<AvailabilitySetOperations, PhAvailabilitySet>, IDeletableResource<AvailabilitySetOperations, PhAvailabilitySet>
     {
 
         public AvailabilitySetOperations(ArmClientContext context, TrackedResource resource) : base(context, resource) { }

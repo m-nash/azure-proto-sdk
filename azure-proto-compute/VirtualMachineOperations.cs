@@ -12,7 +12,7 @@ namespace azure_proto_compute
     /// <summary>
     /// Operations over a single virtual machine
     /// </summary>
-    public class VirtualMachineOperations : GenericResourcesOperations<VirtualMachineOperations, PhVirtualMachine>, ITagable<VirtualMachineOperations, PhVirtualMachine>, IDeletableResource<VirtualMachineOperations, PhVirtualMachine>
+    public class VirtualMachineOperations : ResourceOperations<VirtualMachineOperations, PhVirtualMachine>, ITaggable<VirtualMachineOperations, PhVirtualMachine>, IDeletableResource<VirtualMachineOperations, PhVirtualMachine>
     {
         public VirtualMachineOperations(ArmResourceOperations genericOperations) : base(genericOperations) { }
 

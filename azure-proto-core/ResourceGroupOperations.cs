@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    public class ResourceGroupOperations : GenericResourcesOperations<ResourceGroupOperations, PhResourceGroup>, ITagable<ResourceGroupOperations, PhResourceGroup>, IDeletableResource<ResourceGroupOperations, PhResourceGroup>
+    public class ResourceGroupOperations : ResourceOperations<ResourceGroupOperations, PhResourceGroup>, ITaggable<ResourceGroupOperations, PhResourceGroup>, IDeletableResource<ResourceGroupOperations, PhResourceGroup>
     {
         public static readonly string AzureResourceType = "Microsoft.Resources/resourceGroups";
 
@@ -53,7 +53,7 @@ namespace azure_proto_core
 
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, azure_proto_core.Location location = default)
             where TResource : TrackedResource
-            where TOperations : GenericResourcesOperations<TOperations, TResource>
+            where TOperations : ResourceOperations<TOperations, TResource>
             where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             var myResource = Resource as TrackedResource;
@@ -75,7 +75,7 @@ namespace azure_proto_core
 
         public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, azure_proto_core.Location location = default, CancellationToken token = default)
             where TResource : TrackedResource
-            where TOperations : GenericResourcesOperations<TOperations, TResource>
+            where TOperations : ResourceOperations<TOperations, TResource>
             where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
 

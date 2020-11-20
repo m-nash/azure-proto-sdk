@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class NetworkInterfaceOperations : GenericResourcesOperations<NetworkInterfaceOperations, PhNetworkInterface>, ITagable<NetworkInterfaceOperations, PhNetworkInterface>, IDeletableResource<NetworkInterfaceOperations, PhNetworkInterface>
+    public class NetworkInterfaceOperations : ResourceOperations<NetworkInterfaceOperations, PhNetworkInterface>, ITaggable<NetworkInterfaceOperations, PhNetworkInterface>, IDeletableResource<NetworkInterfaceOperations, PhNetworkInterface>
     {
         public NetworkInterfaceOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 

@@ -6,7 +6,7 @@ namespace azure_proto_core
 {
     public class ArmBuilder<TOperations, TResource>
         where TResource : Resource
-        where TOperations : GenericResourcesOperations<TOperations, TResource>
+        where TOperations : ResourceOperations<TOperations, TResource>
     {
         protected TResource _resource;
         protected ResourceContainerOperations<TOperations, TResource> _unTypedContainerOperations;
