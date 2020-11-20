@@ -21,7 +21,7 @@ namespace azure_proto_core
         }
 
         public static Pageable<TOperations> ListAtContext<TOperations, TResource>(ArmClientContext clientContext, ResourceIdentifier id, ArmFilterCollection resourceFilters = null, int? top = null, CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperations<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
             Validate(id);
@@ -31,7 +31,7 @@ namespace azure_proto_core
         }
 
         public static AsyncPageable<TOperations> ListAtContextAsync<TOperations, TResource>(ArmClientContext clientContext, ResourceIdentifier id, ArmFilterCollection resourceFilters = null, int? top = null, CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperations<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
             Validate(id);
@@ -41,21 +41,21 @@ namespace azure_proto_core
         }
 
         public static Pageable<TOperations> ListAtContext<TOperations, TResource>(SubscriptionOperations subscription, ArmFilterCollection resourceFilters = null, int? top = null, CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperations<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
             return _ListAtContext<TOperations, TResource>(subscription.ClientContext, subscription.Id, null, resourceFilters, top, cancellationToken);
         }
 
         public static AsyncPageable<TOperations> ListAtContextAsync<TOperations, TResource>(SubscriptionOperations subscription, ArmFilterCollection resourceFilters = null, int? top = null, CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperations<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
             return _ListAtContextAsync<TOperations, TResource>(subscription.ClientContext, subscription.Id, null, resourceFilters, top, cancellationToken);
         }
 
         private static AsyncPageable<TOperations> _ListAtContextAsync<TOperations, TResource>(ArmClientContext clientContext, ResourceIdentifier scopeId, string scopeFilter, ArmFilterCollection resourceFilters = null, int? top = null, CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperations<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
             var resourceOperations = GetResourcesClient(clientContext, scopeId.Subscription).Resources;
@@ -73,7 +73,7 @@ namespace azure_proto_core
         }
 
         private static Pageable<TOperations> _ListAtContext<TOperations, TResource>(ArmClientContext clientContext, ResourceIdentifier scopeId, string scopeFilter = null, ArmFilterCollection resourceFilters = null, int? top = null, CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperations<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
             var resourceOperations = GetResourcesClient(clientContext, scopeId.Subscription).Resources;
@@ -91,7 +91,7 @@ namespace azure_proto_core
         }
 
         private static Pageable<TOperations> ConvertResults<TOperations, TResource>(Pageable<GenericResourceExpanded> result, ArmClientContext clientContext)
-            where TOperations : ResourceOperations<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
             return new PhWrappingPageable<GenericResourceExpanded, TOperations>(
@@ -103,7 +103,7 @@ namespace azure_proto_core
         }
 
         private static AsyncPageable<TOperations> ConvertResultsAsync<TOperations, TResource>(AsyncPageable<GenericResourceExpanded> result, ArmClientContext clientContext)
-            where TOperations : ResourceOperations<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
             return new PhWrappingAsyncPageable<GenericResourceExpanded, TOperations>(

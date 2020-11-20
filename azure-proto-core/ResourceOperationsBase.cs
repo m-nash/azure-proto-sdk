@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    public abstract class ResourceOperations<TOperations, TResource> : OperationsBase 
+    public abstract class ResourceOperationsBase<TOperations, TResource> : OperationsBase 
         where TResource:Resource 
-        where TOperations: ResourceOperations<TOperations, TResource>
+        where TOperations: ResourceOperationsBase<TOperations, TResource>
     {
-        public ResourceOperations(ArmResourceOperations genericOperations) : this(genericOperations.ClientContext, genericOperations.Id) { }
+        public ResourceOperationsBase(ArmResourceOperations genericOperations) : this(genericOperations.ClientContext, genericOperations.Id) { }
 
-        public ResourceOperations(ArmClientContext context, ResourceIdentifier id) : this(context, new ArmResource(id)) { }
+        public ResourceOperationsBase(ArmClientContext context, ResourceIdentifier id) : this(context, new ArmResource(id)) { }
 
-        public ResourceOperations(ArmClientContext context, Resource resource) : base(context, resource)
+        public ResourceOperationsBase(ArmClientContext context, Resource resource) : base(context, resource)
         {
             Resource = resource;
         }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    public class ArmResourceOperations : ResourceOperations<ArmResourceOperations, ArmResource>, ITaggable<ArmResourceOperations, ArmResource>, IDeletableResource<ArmResourceOperations, ArmResource>
+    public class ArmResourceOperations : ResourceOperationsBase<ArmResourceOperations, ArmResource>, ITaggable<ArmResourceOperations, ArmResource>, IDeletableResource<ArmResourceOperations, ArmResource>
     {
         public ArmResourceOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 

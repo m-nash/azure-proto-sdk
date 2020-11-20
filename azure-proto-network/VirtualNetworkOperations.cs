@@ -10,7 +10,7 @@ namespace azure_proto_network
     /// <summary>
     /// Virtual Network Operations
     /// </summary>
-    public class VirtualNetworkOperations : ResourceOperations<VirtualNetworkOperations, PhVirtualNetwork>, ITaggable<VirtualNetworkOperations, PhVirtualNetwork>, IDeletableResource<VirtualNetworkOperations, PhVirtualNetwork>
+    public class VirtualNetworkOperations : ResourceOperationsBase<VirtualNetworkOperations, PhVirtualNetwork>, ITaggable<VirtualNetworkOperations, PhVirtualNetwork>, IDeletableResource<VirtualNetworkOperations, PhVirtualNetwork>
     {
         public VirtualNetworkOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 

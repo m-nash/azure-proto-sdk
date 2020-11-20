@@ -159,24 +159,24 @@ namespace azure_proto_core
             return new ResourceGroupOperations(this.ClientContext, resourceGroup.Id);
         }
 
-        public T GetResourceOperations<T>(TrackedResource resource) where T : TrackedResource
+        public T GetResourceOperationsBase<T>(TrackedResource resource) where T : TrackedResource
         {
             return Activator.CreateInstance(typeof(T), ClientContext, resource) as T;
         }
 
-        public T GetResourceOperations<T>(ResourceIdentifier resource) where T : OperationsBase
+        public T GetResourceOperationsBase<T>(ResourceIdentifier resource) where T : OperationsBase
         {
             return Activator.CreateInstance(typeof(T), ClientContext, resource) as T;
         }
 
-        public T GetResourceOperations<T>(string subscription, string resourceGroup, string name) where T : OperationsBase
+        public T GetResourceOperationsBase<T>(string subscription, string resourceGroup, string name) where T : OperationsBase
         {
             return null;
         }
 
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string subscription, string resourceGroup, string name, TResource model, azure_proto_core.Location location = default)
             where TResource : TrackedResource
-            where TOperations : ResourceOperations<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             if (location == null)

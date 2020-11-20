@@ -9,7 +9,7 @@ namespace azure_proto_network
 {
     /// <summary>
     /// </summary>
-    public class SubnetOperations : ResourceOperations<SubnetOperations, PhSubnet>, IDeletableResource<SubnetOperations, PhSubnet>
+    public class SubnetOperations : ResourceOperationsBase<SubnetOperations, PhSubnet>, IDeletableResource<SubnetOperations, PhSubnet>
     {
         public SubnetOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 
