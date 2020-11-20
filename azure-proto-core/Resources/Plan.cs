@@ -17,37 +17,41 @@ namespace azure_proto_core
         public int CompareTo(Plan other)
         {
             if (other == null) return 1;
-            if (this.Name.CompareTo(other.Name) == 0)
+            if (this.Name == null && other.Name == null || this.Name != null && this.Name.CompareTo(other.Name) == 0)
             {
-                if (this.Product.CompareTo(other.Product) == 0)
+                if (this.Product == null && other.Product == null || this.Product != null && this.Product.CompareTo(other.Product) == 0)
                 {
-                    if (this.PromotionCode.CompareTo(other.PromotionCode) == 0)
+                    if (this.PromotionCode == null && other.PromotionCode == null || this.PromotionCode != null && this.PromotionCode.CompareTo(other.PromotionCode) == 0)
                     {
-                        if (this.Publisher.CompareTo(other.Publisher) == 0)
+                        if (this.Publisher == null && other.Publisher == null || this.Publisher != null && this.Publisher.CompareTo(other.Publisher) == 0)
                         {
-                            return this.Version.CompareTo(other.Version);
+                            if (this.Version == null && other.Version == null) return 0;                   
+                            return this.Version == null ? -1 : this.Version.CompareTo(other.Version);
                         }
-                        return this.Publisher.CompareTo(other.Publisher);
+                        return this.Publisher == null ? -1 : this.Publisher.CompareTo(other.Publisher);
                     }
-                    return this.PromotionCode.CompareTo(other.PromotionCode);
+                    return this.PromotionCode == null ? -1 : this.PromotionCode.CompareTo(other.PromotionCode);
                 }
-                return this.Product.CompareTo(other.Product);
+                return this.Product == null ? -1 : this.Product.CompareTo(other.Product);
             }
-            return this.Name.CompareTo(other.Name);
+            return this.Name == null ? -1 : this.Name.CompareTo(other.Name);
         }
 
         public bool Equals(Plan other)
         {
             if (other == null) return false;
-            if (this.Name.Equals(other.Name))
+            if (this.Name == null && other.Name == null || this.Name != null && this.Name.Equals(other.Name))
             {
-                if (this.Product.Equals(other.Product))
+                if (this.Product == null && other.Product == null || this.Product != null && this.Product.Equals(other.Product))
                 {
-                    if (this.PromotionCode.Equals(other.PromotionCode))
+                    if (this.PromotionCode == null && other.PromotionCode == null || this.PromotionCode != null && this.PromotionCode.Equals(other.PromotionCode))
                     {
-                        if (this.Publisher.Equals(other.Publisher))
+                        if (this.Publisher == null && other.Publisher == null || this.Publisher != null && this.Publisher.Equals(other.Publisher))
                         {
-                            return this.Version.Equals(other.Version);
+                            if (this.Version == null && other.Version == null || this.Version != null && this.Version.Equals(other.Version))
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
