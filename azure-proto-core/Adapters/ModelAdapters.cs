@@ -26,10 +26,10 @@ namespace azure_proto_core
     }
 
     //Or call generic resource, other resource??
-    public abstract class ChildResource<T> : Resource where T : class
+    public abstract class ProxyResource<T> : Resource where T : class
     {
         public override ResourceIdentifier Id { get; protected set; }
-        protected ChildResource(ResourceIdentifier id, T data)
+        protected ProxyResource (ResourceIdentifier id, T data)
         {
             Id = id;
             Model = data;
@@ -37,7 +37,7 @@ namespace azure_proto_core
 
         public virtual T Model { get; set; }
 
-        public static implicit operator T(ChildResource<T> other)
+        public static implicit operator T(ProxyResource <T> other)
         {
             return other.Model;
         }
