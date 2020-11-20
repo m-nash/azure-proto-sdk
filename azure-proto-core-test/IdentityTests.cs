@@ -1,6 +1,8 @@
 using azure_proto_core;
 using NUnit.Framework;
 using System;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 
@@ -110,21 +112,38 @@ namespace azure_proto_core_test
         [TestCase]
         public void TestDeserializer()
         {
-            string systemAssigned = "{" +
-            "\"identity\":" +
-                "{" +
-                    "\"principalId\": \"de29bab1-49e1-4705-819b-4dfddceaaa98\"," +
-                    "\"tenantId\": \"72f988bf-86f1-41af-91ab-2d7cd011db47\"," +
-                    "\"type\": \"SystemAssigned\"," +
-                    "\"userAssignedIdentities\": null" +
-                "}" +
-            "}";
-            JsonDocument document = JsonDocument.Parse(systemAssigned);
+            string json = "";
+            using (StreamReader f = new StreamReader("./TestAssets/UserAssignedMultipleIdentities.json"))
+                json = f.ReadToEnd();
+            JsonDocument document = JsonDocument.Parse(json);
             JsonElement rootElement = document.RootElement;
             var identityJsonProperty = rootElement.EnumerateObject().First<JsonProperty>();
             Identity back = Identity.DeserializeIdentity(identityJsonProperty.Value);
             Console.WriteLine(back);
             Assert.IsNotNull(back);
+        }
+
+        [TestCase]
+        public void TestSerializer()
+        {
+            Identity identity1 = new Identity(); 
+            identity1.ResourceId = "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport";
+            identity1.ClientId = Guid.NewGuid();
+            identity1.TenantId = Guid.NewGuid();
+            identity1.PrincipalId = Guid.NewGuid();
+            identity1.Kind = new IdentityKind("SystemAssigned");
+            string value = "";
+            using (Stream stream = new MemoryStream())
+            {
+                using (StreamReader streamReader = new StreamReader(stream))
+                {
+                    var writer = new Utf8JsonWriter(stream);
+                    identity1.Write(writer);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    value = streamReader.ReadToEnd();
+                }                
+            }
+            Console.WriteLine(value);
         }
     }
 }

@@ -22,21 +22,21 @@ namespace azure_proto_core
 
         public IdentityKind Kind { get; set; }
 
-        public Dictionary<string, UserClientAndPrincipalIds> UserAssignedIdentities { get; set; }
+        public Dictionary<string, UserClientAndPrincipalId> UserAssignedIdentities { get; set; } //maintain structure of {id, (clientid, principal id)} in case of multiple UserIdentities
 
-        public struct UserClientAndPrincipalIds
+        public struct UserClientAndPrincipalId //make sure userIdentities are always populated
         {
             string clientId { get; set; }
             string principalId { get; set; }
 
-            public UserClientAndPrincipalIds (string clientId, string principalId)
+            public UserClientAndPrincipalId(string clientId, string principalId)
             {
                 this.clientId = clientId;
                 this.principalId = principalId;
             }
         }
 
-        internal Identity(Guid tenantId, Guid principalId, Guid? clientId, string resourceId, IdentityKind kind, Optional<Dictionary<string, UserClientAndPrincipalIds>> userAssignedIdentities)
+        internal Identity(Guid tenantId, Guid principalId, Guid? clientId, string resourceId, IdentityKind kind, Optional<Dictionary<string, UserClientAndPrincipalId>> userAssignedIdentities)
         {
             PrincipalId = principalId;
             TenantId = tenantId;
@@ -75,7 +75,7 @@ namespace azure_proto_core
                 this.ResourceId.Equals(other.ResourceId) && //can be null
                 this.Kind.Equals(other.Kind));
         }
-                
+
         public static Identity DeserializeIdentity(JsonElement element)
         {
             Optional<Guid> principalId = default;
@@ -83,26 +83,46 @@ namespace azure_proto_core
             Optional<Guid?> clientId = default;
             Optional<IdentityKind> type = default;
             Optional<string> resourceId = default;
-            Optional<Dictionary<string, UserClientAndPrincipalIds>> userAssignedIdentities = default;
+            Optional<Dictionary<string, UserClientAndPrincipalId>> userAssignedIdentities = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("principalId"))
                 {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        principalId = Guid.Empty;
+                        continue;
+                    }
                     principalId = Guid.Parse(property.Value.GetString());
                     continue;
                 }
                 if (property.NameEquals("tenantId"))
                 {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        tenantId = Guid.Empty;
+                        continue;
+                    }
                     tenantId = Guid.Parse(property.Value.GetString());
                     continue;
                 }
                 if (property.NameEquals("clientId"))
                 {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        clientId = Guid.Empty;
+                        continue;
+                    }
                     clientId = Guid.Parse(property.Value.GetString());
                     continue;
                 }
                 if (property.NameEquals("id"))
                 {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        resourceId = null;
+                        continue;
+                    }
                     resourceId = property.ToString();
                     continue;
                 }
@@ -120,19 +140,31 @@ namespace azure_proto_core
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
                     {
-                        property.ThrowNonNullablePropertyIsNull();
+                        userAssignedIdentities = null;
                         continue;
                     }
-                    Dictionary<string, UserClientAndPrincipalIds> dictionary = new Dictionary<string, UserClientAndPrincipalIds>();
-                    string[] ids = new string[2];
-                    int count = 0;
+                    Dictionary<string, UserClientAndPrincipalId> dictionary = new Dictionary<string, UserClientAndPrincipalId>(); //holds useridentities
+                    List<string> ids = new List<string>();
                     foreach (var property0 in property.Value.EnumerateObject())
                     {
-                        ids[count] = property0.ToString();
-                        count++;
+                        resourceId = property0.Name;
+                        foreach (var property1 in property0.Value.EnumerateObject())
+                        {
+                            if (property1.NameEquals("clientId"))
+                            {
+                                ids.Add(Guid.Parse(property1.Value.GetString()).ToString());
+                                continue;
+                            }
+                            if (property1.NameEquals("principalId"))
+                            {
+                                ids.Add(Guid.Parse(property1.Value.GetString()).ToString());
+                                continue;
+                            }
+                        }
+                        UserClientAndPrincipalId userIds = new UserClientAndPrincipalId(ids[0], ids[1]);
+                        ids.Clear();
+                        dictionary.Add(resourceId, userIds); //add resourceids and its corresponding struct each time we read one in 
                     }
-                    UserClientAndPrincipalIds userIds = new UserClientAndPrincipalIds(ids[0], ids[1]);
-                    dictionary.Add(resourceId, userIds);
                     userAssignedIdentities = dictionary;
                     continue;
                 }
@@ -168,17 +200,27 @@ namespace azure_proto_core
                 writer.WritePropertyName("Kind");
                 writer.WriteStringValue(Kind.ToString());
             }
-            if (Optional.IsCollectionDefined(UserAssignedIdentities.AsEnumerable()))
+            if (!Optional.IsDefined(UserAssignedIdentities))
             {
-                writer.WritePropertyName("userAssignedIdentities");
-                writer.WriteStartObject();
-                foreach (var item in UserAssignedIdentities)
-                {
-                    writer.WritePropertyName(item.Key);
-                    writer.WriteObjectValue(item.Value);
-                }
-                writer.WriteEndObject();
+                writer.WritePropertyName("UserAssignedIdentities");
+                writer.WriteStringValue("null");
             }
+            if (Optional.IsDefined(UserAssignedIdentities))
+            {
+                if (Optional.IsCollectionDefined(UserAssignedIdentities.AsEnumerable()))
+                {
+                    writer.WritePropertyName("userAssignedIdentities");
+                    writer.WriteStartObject();
+                    foreach (var item in UserAssignedIdentities)
+                    {
+                        writer.WritePropertyName(item.Key);
+                        writer.WriteObjectValue(item.Value);
+                    }
+                    writer.WriteEndObject();
+                }
+                writer.WriteEndObject();                
+            }
+            writer.Flush();
             writer.WriteEndObject();
         }
     }

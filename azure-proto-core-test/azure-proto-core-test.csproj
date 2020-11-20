@@ -18,12 +18,23 @@
   </ItemGroup>
   <Target Name="GenerateHtmlCoverageReport" AfterTargets="GenerateCoverageResultAfterTest">
     <ItemGroup>
-      <CoverageFiles Include="coverage.$(TargetFrameworks).cobertura.xml"/>
+      <CoverageFiles Include="coverage.$(TargetFrameworks).cobertura.xml" />
     </ItemGroup>
-    <Exec Command= "dotnet $(UserProfile)\.nuget\packages\reportgenerator\4.7.1\tools\$(TargetFrameworks)\ReportGenerator.dll -reports:@(CoverageFiles) -targetdir:coverage -reporttypes:Html"/>
+    <Exec Command="dotnet $(UserProfile)\.nuget\packages\reportgenerator\4.7.1\tools\$(TargetFrameworks)\ReportGenerator.dll -reports:@(CoverageFiles) -targetdir:coverage -reporttypes:Html" />
   </Target>
   <ItemGroup>
     <ProjectReference Include="..\azure-proto-core\azure-proto-core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="TestAssets\SystemAssigned.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\UserAssignedMultipleIdentities.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\UserAssigned.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

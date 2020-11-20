@@ -133,8 +133,8 @@ namespace azure_proto_compute
             userIdentity.Kind = new IdentityKind(vmIdentity.Type.Value.ToString());
             if (vmIdentity.UserAssignedIdentities != null)
             {
-                Dictionary<string, UserClientAndPrincipalIds> userIdentities = new Dictionary<string, UserClientAndPrincipalIds>();
-                UserClientAndPrincipalIds userIds = new UserClientAndPrincipalIds("clientId", vmIdentity.PrincipalId);
+                Dictionary<string, UserClientAndPrincipalId> userIdentities = new Dictionary<string, UserClientAndPrincipalId>();
+                UserClientAndPrincipalId userIds = new UserClientAndPrincipalId("clientId", vmIdentity.PrincipalId);
                 userIdentities.Add(Model.Id, userIds);
                 userIdentity.UserAssignedIdentities = userIdentities;
             }
