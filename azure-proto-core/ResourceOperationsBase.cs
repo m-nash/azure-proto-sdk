@@ -4,12 +4,23 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
+
+    public abstract class ResourceOperationsBase : OperationsBase
+    {
+        public ResourceOperationsBase(ArmResourceOperations genericOperations) : this(genericOperations.ClientContext, genericOperations.Id) { }
+
+        public ResourceOperationsBase(ArmClientContext context, ResourceIdentifier id) : this(context, new ArmResource(id)) { }
+
+        public ResourceOperationsBase(ArmClientContext context, Resource resource) : base(context, resource)
+        {
+        }
+    }
     /// <summary>
     /// Common base type for lifecycle operations over a resource
     /// TODO: Split into ResourceOperations/TrackedResourceOperations
     /// </summary>
     /// <typeparam name="Model"></typeparam>
-    public abstract class ResourceOperationsBase<TOperations, TResource> : ImmutableResourceOperationsBase<TOperations, TResource>
+    public abstract class ResourceOperationsBase<TOperations, TResource> : ResourceOperationsBase
         where TResource : Resource
         where TOperations : ResourceOperationsBase<TOperations, TResource>
     {
@@ -51,6 +62,11 @@ namespace azure_proto_core
 
             return Get().Value.Model;
         }
+
+        public abstract ArmResponse<TOperations> Get();
+        public abstract Task<ArmResponse<TOperations>> GetAsync(CancellationToken cancellationToken = default);
+        public abstract ArmOperation<Response> Delete();
+        public abstract Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default);
 
         public abstract ArmOperation<TOperations> AddTag(string key, string value);
         public abstract Task<ArmOperation<TOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default);

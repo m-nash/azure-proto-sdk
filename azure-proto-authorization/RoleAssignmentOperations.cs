@@ -5,9 +5,9 @@ using azure_proto_core;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace azure_proto_compute
+namespace azure_proto_authorization
 {
-    public class RoleAssignmentOperations : ImmutableResourceOperationsBase<RoleAssignmentOperations, PhRoleAssignment>
+    public class RoleAssignmentOperations : ExtensionResourceOperationsBase<RoleAssignmentOperations, PhRoleAssignment>
     {
         public RoleAssignmentOperations(ArmResourceOperations genericOperations) : this(genericOperations.ClientContext, genericOperations.Id) { }
 

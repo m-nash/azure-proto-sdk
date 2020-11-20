@@ -12,7 +12,7 @@ namespace azure_proto_core
     /// <typeparam name="T">The type of the resource model</typeparam>
     /// <typeparam name="U">The return type of the Creation methods, this can be Response<typeparamref name="T"/> or a long-running response</typeparam>
     public abstract class ResourceContainerOperations<TOperations, TResource> : OperationsBase
-        where TOperations : ImmutableResourceOperationsBase<TOperations, TResource>
+        where TOperations : ResourceOperationsBase<TOperations, TResource>
         where TResource : Resource
     {
         protected TrackedResource Parent { get; private set; }
