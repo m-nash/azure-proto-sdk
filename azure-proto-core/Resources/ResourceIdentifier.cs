@@ -104,17 +104,22 @@ namespace azure_proto_core
         /// <param name="id">A properly formed resource identity</param>
         protected virtual void Parse(string id)
         {
+            // Throw for null, empty, and string without the correct form
             if (string.IsNullOrWhiteSpace(id) || !id.Contains('/'))
             {
                 throw new ArgumentOutOfRangeException($"'{id}' is not a valid resource");
             }
 
+            // Resource ID paths consist mainly of name/value pairs. Split the uri so we have an array of name/value pairs
             var parts = id.Split(new char[] {'/'}, StringSplitOptions.RemoveEmptyEntries).ToList();
+            // There must be at least one name/value pair for the resource id to be valid
             if (parts.Count < 2)
             {
                 throw new ArgumentOutOfRangeException($"'{id}' is not a valid resource");
             }
 
+            //This is asserting that resources must start with '/subscriptions', /tenants, or /locations.
+            //TODO: we will need to update this code to accomodate tenant based resources (which start with /providers)
             if (!(KnownKeys.Subscription.Equals(parts[0], StringComparison.InvariantCultureIgnoreCase)
                || KnownKeys.Tenant.Equals(parts[0], StringComparison.InvariantCultureIgnoreCase)
                || KnownKeys.Location.Equals(parts[0], StringComparison.InvariantCultureIgnoreCase)))
@@ -124,13 +129,17 @@ namespace azure_proto_core
 
             Type = new ResourceType(id);
 
-
+            // In the case that this resource is a singleton proxy resource, the number of parts will be odd, 
+            // where the last part is the type name of the singleton
             if (parts.Count % 2 != 0)
             {
                 _partsDictionary.Add(KnownKeys.UntrackedSubResource, parts.Last());
                 parts.RemoveAt(parts.Count - 1);
             }
 
+            // This spplits into resource that come from a provider (which have the providers keyword) and 
+            // resources that are built in to ARM (e.g. /subscriptions/{sub}, /subscriptions/{sub}/resourceGroups/{rg})
+            // TODO: This code will need to be updates for extension resources, which have two providers
             if (id.ToLowerInvariant().Contains("providers"))
             {
                 ParseProviderResource(parts);
@@ -145,19 +154,24 @@ namespace azure_proto_core
         {
             Debug.Assert(parts != null);
             Debug.Assert(parts.Count > 1);
+            // The resource consists of well-known name-value pairs.  Make a resource dictionary
+            // using the names as keys, and the values as values
             for(int i = 0; i < parts.Count - 1; i += 2)
             {
                 _partsDictionary.Add(parts[i], parts[i + 1]);
             }
 
+            // resource name is always the last part
             Name = parts.Last();
             parts.RemoveAt(parts.Count-1);
             parts.RemoveAt(parts.Count-1);
+            // remove the last key/value pair to arrive at the parent (Count will be zero for /subscriptions/{foo})
             Parent = parts.Count > 1 ? new ResourceIdentifier($"/{string.Join("/", parts)}") : null;
         }
 
         protected virtual void ParseProviderResource(IList<string> parts)
         {
+            // The resource consists of name/value pairs, make a dictionary out of it
             for (int i = 0; i < parts.Count - 1; i += 2)
             {
                 _partsDictionary.Add(parts[i], parts[i + 1]);
@@ -165,16 +179,19 @@ namespace azure_proto_core
 
             Name = parts.Last();
             parts.RemoveAt(parts.Count-1);
+            // remove the type name (there will be no typename if this is a singleton sub resource)
             if (parts.Count % 2 == 1)
             {
                 parts.RemoveAt(parts.Count-1);
             }
+            //If this is a top-level resource, remove the providers/Namespace pair, otherwise continue
             if (parts.Count > 2 && string.Equals(parts[parts.Count - 2], KnownKeys.ProviderNamespace))
             {
                 parts.RemoveAt(parts.Count-1);
                 parts.RemoveAt(parts.Count-1);
             }
 
+            //If this is not a top-level resource, it will have a parent
             Parent = parts.Count > 1 ? new ResourceIdentifier($"/{string.Join("/", parts)}") : null;
         }
 

@@ -40,23 +40,29 @@ namespace azure_proto_core
 
         internal void Parse(string resourceIdOrType)
         {
+            // Note that this code will either parse a resource id to find the type, or a resource type
             resourceIdOrType = resourceIdOrType?.Trim('/');
+            // exclude null or empty strings
             if (string.IsNullOrWhiteSpace(resourceIdOrType))
             {
                 throw new ArgumentOutOfRangeException(nameof(resourceIdOrType));
             }
 
+            // split the path into segments
             var parts = resourceIdOrType.Split(new char[] {'/'}, StringSplitOptions.RemoveEmptyEntries).ToList();
+            // There must be at least a namespace and type name
             if (parts.Count < 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(resourceIdOrType));
             }
+            // if the type is just subscriptions, it is a built-in type in the Microsoft.Resources namespace
             if (parts.Count == 1)
             {
                 // Simple resource type
                 Type = parts[0];
                 Namespace = "Microsoft.Resources";
             }
+            //Handle resource identifiers from RPs (they have the /providers path segment)
             if (parts.Contains(ResourceIdentifier.KnownKeys.ProviderNamespace))
             {
                 // it is a resource id from a provider
@@ -79,12 +85,14 @@ namespace azure_proto_core
                 Namespace = parts[0];
                 Type = string.Join("/", type);
             }
+            // Handle resource types (Micsrsoft.Compute/virtualMachines, Microsoft.Network/virtualNetworks/subnets)
             else if (parts[0].Contains('.'))
             {
                 // it is a full type name
                 Namespace = parts[0];
                 Type = string.Join("/", parts.Skip(Math.Max(0, 1)).Take(parts.Count() - 1));
             }
+            // Handle built-in resource ids (e.g. /subscriptions/{sub}, /subscriptions/{sub}/resourceGroups/{rg})
             else if (parts.Count %2 == 0)
             {
                 // primitive resource manager resource id
