@@ -84,7 +84,7 @@ namespace azure_proto_core_test
         }
 
         [Test]
-        public void CompareToNullSkus()
+        public void CompareToNullSku()
         {
             Sku sku1 = new Sku();
             Sku sku2 = null;
@@ -205,7 +205,7 @@ namespace azure_proto_core_test
         }
 
         [Test]
-        public void EqualsToNullSkus()
+        public void EqualsToNullSku()
         {
             Sku sku1 = new Sku();
             Sku sku2 = null;
