@@ -15,7 +15,7 @@ namespace azure_proto_network
     /// An operations + Model class for NSGs
     /// TODO: How does the operation signature change for resources that support Etags?
     /// </summary>
-    public class NetworkSecurityGroupOperations : ResourceOperationsBase<NetworkSecurityGroupOperations, PhNetworkSecurityGroup>
+    public class NetworkSecurityGroupOperations : ResourceOperationsBase<NetworkSecurityGroupOperations, PhNetworkSecurityGroup>, ITaggable<NetworkSecurityGroupOperations, PhNetworkSecurityGroup>, IDeletableResource<NetworkSecurityGroupOperations, PhNetworkSecurityGroup>
     {
         class RuleIdEqualityComparer : IEqualityComparer<SecurityRule>
         {
@@ -84,7 +84,7 @@ namespace azure_proto_network
                 n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
-        public override ArmOperation<NetworkSecurityGroupOperations> AddTag(string key, string value)
+        public ArmOperation<NetworkSecurityGroupOperations> AddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
@@ -92,7 +92,7 @@ namespace azure_proto_network
                 n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
-        public async override Task<ArmOperation<NetworkSecurityGroupOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<NetworkSecurityGroupOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
@@ -100,12 +100,12 @@ namespace azure_proto_network
                 n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
-        public override ArmOperation<Response> Delete()
+        public ArmOperation<Response> Delete()
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name));
         }
 
-        public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }

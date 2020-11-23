@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_compute
 {
-    public class AvailabilitySetOperations : ResourceOperationsBase<AvailabilitySetOperations, PhAvailabilitySet>
+    public class AvailabilitySetOperations : ResourceOperationsBase<AvailabilitySetOperations, PhAvailabilitySet>, ITaggable<AvailabilitySetOperations, PhAvailabilitySet>, IDeletableResource<AvailabilitySetOperations, PhAvailabilitySet>
     {
 
         public AvailabilitySetOperations(ArmClientContext context, TrackedResource resource) : base(context, resource) { }
@@ -16,12 +16,12 @@ namespace azure_proto_compute
 
         public override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
 
-        public override ArmOperation<Response> Delete()
+        public ArmOperation<Response> Delete()
         {
             return new ArmVoidOperation(Operations.Delete(Id.ResourceGroup, Id.Name));
         }
 
-        public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async  Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.DeleteAsync(Id.ResourceGroup, Id.Name));
         }
@@ -46,14 +46,14 @@ namespace azure_proto_compute
             return new PhArmOperation<AvailabilitySetOperations, AvailabilitySet>(await Operations.UpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken), a => { Resource = new PhAvailabilitySet(a); return this; });
         }
 
-        public override ArmOperation<AvailabilitySetOperations> AddTag(string key, string value)
+        public ArmOperation<AvailabilitySetOperations> AddTag(string key, string value)
         {
             var patchable = new AvailabilitySetUpdate();
             patchable.Tags[key] = value;
             return Update(patchable);
         }
 
-        public override Task<ArmOperation<AvailabilitySetOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public Task<ArmOperation<AvailabilitySetOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new AvailabilitySetUpdate();
             patchable.Tags[key] = value;

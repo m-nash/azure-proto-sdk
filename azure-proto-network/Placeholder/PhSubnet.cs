@@ -7,9 +7,9 @@ namespace azure_proto_network
     /// <summary>
     /// TODO: Subnet is a proxy resource, not a TrackedResource - need to adapt to using Resource as the base class
     /// </summary>
-    public class PhSubnet : TrackedResource<Subnet>
+    public class PhSubnet : ProxyResource<Subnet>
     {
-        public PhSubnet(Subnet sub, string location) : base(sub.Id, location, sub)
+        public PhSubnet(Subnet sub, string location) : base(sub.Id, sub)
         {
         }
 
