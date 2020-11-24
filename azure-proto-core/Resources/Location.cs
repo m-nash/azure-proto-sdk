@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.RegularExpressions;
 
 namespace azure_proto_core
 {
@@ -18,11 +20,54 @@ namespace azure_proto_core
         {
         }
 
+        /* TO DO:
+         * Detect the type of name using an aux method
+         * Set the other names depending on the name given
+         * 
+         */
+
+
         public Location(string location)
         {
-            Name = GetDefaultName(location);
-            CanonicalName = GetCanonicalName(location);
-            DisplayName = GetDisplayName(location);
+            DetectNameType(location);
+        }
+
+        /// <summary>
+        /// Detects if the strin given matches either the Name, Canonical Name or Display Name.
+        /// </summary>
+        /// <param name="other"></param>
+        private void DetectNameType(string location) 
+        {   
+            string namePattern      = "^[A-Z][a-z]*([A-Z][A-z]*)*[1-9]?$";
+            string canonicalPattern = "^[a-z]+(-[a-z]+)*(-[1-9])?$";
+            string displayPattern   = "^[A-Z][a-z]*( [A-Z][A-z]*)*( [1-9])?$";
+
+            if (Regex.IsMatch(location, namePattern))
+            {
+                Name = location;
+                CanonicalName = GetCanonicalName(location);
+                DisplayName = GetDisplayName(location);
+            }
+            else if (Regex.IsMatch(location, canonicalPattern))
+            {
+                Name = GetDefaultName(location);
+                CanonicalName = location;
+                DisplayName = GetDisplayName(location);
+            }
+            else if (Regex.IsMatch(location, displayPattern))
+            {
+                Name = GetDefaultName(location);
+                CanonicalName = GetCanonicalName(location);
+                DisplayName = location;
+            }
+            else
+            {
+                // Default?
+                // TROW AN ARGUMENT EX
+                Name = GetDefaultName(location);
+                CanonicalName = GetCanonicalName(location);
+                DisplayName = GetDisplayName(location);
+            }
         }
 
         public bool Equals(Location other)
@@ -80,3 +125,4 @@ namespace azure_proto_core
         public static implicit operator Location(string other) => new Location( other);
     }
 }
+
