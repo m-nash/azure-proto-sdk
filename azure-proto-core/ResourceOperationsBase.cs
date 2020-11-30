@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    public abstract class ResourceOperationsBase<TOperations, TResource> : OperationsBase 
-        where TResource:Resource 
-        where TOperations: ResourceOperationsBase<TOperations, TResource>
+    public abstract class ResourceOperationsBase<TOperations, TResource> : OperationsBase
+        where TResource : Resource
+        where TOperations : ResourceOperationsBase<TOperations, TResource>
     {
         public ResourceOperationsBase(ArmResourceOperations genericOperations) : this(genericOperations.ClientContext, genericOperations.Id) { }
 
@@ -39,6 +39,15 @@ namespace azure_proto_core
             {
                 return Resource as TResource;
             }
+        }
+
+        public TResource GetModelIfNewer()
+        {
+            if (HasModel)
+            {
+                return Model;
+            }
+            return Get().Value.Model;
         }
 
 

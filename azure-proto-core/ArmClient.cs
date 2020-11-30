@@ -55,17 +55,12 @@ namespace azure_proto_core
         /// <returns></returns>
         public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(this.ClientContext, subscription);
 
+        public SubscriptionContainerOperations Subscriptions()
+        {
+            return new SubscriptionContainerOperations(this.ClientContext);
+        }
+
         public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(this.ClientContext, subscription);
-
-        public AsyncPageable<SubscriptionOperations> ListSubscriptionsAsync(CancellationToken token = default)
-        {
-            return new PhWrappingAsyncPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.ListAsync(token), s => new SubscriptionOperations(this.ClientContext, new PhSubscriptionModel(s)));
-        }
-
-        public Pageable<SubscriptionOperations> ListSubscriptions(CancellationToken token = default)
-        {
-            return new PhWrappingPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.List(token), s => new SubscriptionOperations(this.ClientContext, new PhSubscriptionModel(s)));
-        }
 
         public AsyncPageable<PhLocation> ListLocationsAsync(string subscriptionId = null, CancellationToken token = default(CancellationToken))
         {
@@ -199,14 +194,7 @@ namespace azure_proto_core
             string sub = DefaultSubscription?.Id?.Subscription;
             if (null == sub)
             {
-                var subs = ListSubscriptionsAsync(token).GetAsyncEnumerator();
-                if (await subs.MoveNextAsync())
-                {
-                    if (subs.Current != null)
-                    {
-                        sub = subs.Current.Id.Subscription;
-                    }
-                }
+               sub = await this.Subscriptions().GetDefaultSubscription();
             }
             return sub;
         }
