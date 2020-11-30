@@ -100,14 +100,14 @@ namespace azure_proto_compute
 
         public override ArmOperation<XVirtualMachine> AddTag(string key, string value)
         {
-            var patchable = new VirtualMachineUpdate { Tags= new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)};
+            var patchable = new VirtualMachineUpdate { Tags= new Dictionary<string, string>()};
             patchable.Tags.Add(key, value);
             return new PhArmOperation<XVirtualMachine, VirtualMachine>(Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable), v => { Resource = new PhVirtualMachine(v); return new XVirtualMachine(ClientContext, Resource as PhVirtualMachine); });
         }
 
         public override async Task<ArmOperation<XVirtualMachine>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
-            var patchable = new VirtualMachineUpdate { Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) };
+            var patchable = new VirtualMachineUpdate { Tags = new Dictionary<string, string>() };
             patchable.Tags.Add(key, value);
             return new PhArmOperation<XVirtualMachine, VirtualMachine>(await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken), v => { Resource = new PhVirtualMachine(v); return new XVirtualMachine(ClientContext, Resource as PhVirtualMachine); });
         }
