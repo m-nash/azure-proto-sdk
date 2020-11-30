@@ -1,4 +1,3 @@
-using Azure;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,9 +13,8 @@ namespace azure_proto_core
 
         public ResourceOperationsBase(ArmClientContext context, Resource resource) : base(context, resource) { }
 
-
-
         public abstract ArmResponse<TOperations> Get();
+
         public abstract Task<ArmResponse<TOperations>> GetAsync(CancellationToken cancellationToken = default);
     }
 }

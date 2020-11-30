@@ -45,7 +45,7 @@ namespace azure_proto_network
                 n => { Resource = new PhNetworkInterface(n); return new XNetworkInterface(ClientContext, Resource as PhNetworkInterface); });
         }
 
-        public async Task<ArmOperation<NetworkInXNetworkInterfaceterfaceOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<XNetworkInterface>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;

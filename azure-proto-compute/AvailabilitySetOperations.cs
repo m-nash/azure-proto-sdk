@@ -9,7 +9,6 @@ namespace azure_proto_compute
 {
     public class AvailabilitySetOperations : ResourceOperationsBase<XAvailabilitySet, PhAvailabilitySet>, ITaggable<XAvailabilitySet, PhAvailabilitySet>, IDeletableResource<XAvailabilitySet, PhAvailabilitySet>
     {
-
         public AvailabilitySetOperations(ArmClientContext context, TrackedResource resource) : base(context, resource) { }
 
         public AvailabilitySetOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
