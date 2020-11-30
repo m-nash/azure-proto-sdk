@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    public class ResourceGroupOperations : ResourceOperationsBase<XResourceGroup, PhResourceGroup>
+    public class ResourceGroupOperations : ResourceOperationsBase<XResourceGroup, PhResourceGroup>, ITaggable<XResourceGroup, PhResourceGroup>, IDeletableResource<XResourceGroup, PhResourceGroup>
     {
         public static readonly string AzureResourceType = "Microsoft.Resources/resourceGroups";
 
@@ -17,12 +17,12 @@ namespace azure_proto_core
 
         public override ResourceType ResourceType => AzureResourceType;
 
-        public override ArmOperation<Response> Delete()
+        public  ArmOperation<Response> Delete()
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.Name));
         }
 
-        public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.Name, cancellationToken));
         }
@@ -37,14 +37,14 @@ namespace azure_proto_core
             return new PhArmResponse<XResourceGroup, ResourceGroup>(await Operations.GetAsync(Id.Name, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return new XResourceGroup(ClientContext, Resource as PhResourceGroup); });
         }
 
-        public override ArmOperation<XResourceGroup> AddTag(string name, string value)
+        public ArmOperation<XResourceGroup> AddTag(string name, string value)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;
             return new PhArmOperation<XResourceGroup, ResourceGroup>(Operations.Update(Id.Name, patch), g => { this.Resource = new PhResourceGroup(g); return new XResourceGroup(ClientContext, Resource as PhResourceGroup); });
         }
 
-        public async override Task<ArmOperation<XResourceGroup>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<XResourceGroup>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;

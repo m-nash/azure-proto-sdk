@@ -13,12 +13,12 @@ namespace azure_proto_network
 
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
-        public override ArmOperation<Response> Delete()
+        public ArmOperation<Response> Delete()
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name));
         }
 
-        public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync (Id.ResourceGroup, Id.Name, cancellationToken));
         }
@@ -35,7 +35,7 @@ namespace azure_proto_network
                n => { Resource = new PhPublicIPAddress(n); return new XPublicIpAddress(ClientContext, Resource as PhPublicIPAddress); });
         }
 
-        public override ArmOperation<XPublicIpAddress> AddTag(string key, string value)
+        public ArmOperation<XPublicIpAddress> AddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
@@ -43,7 +43,7 @@ namespace azure_proto_network
                 n => { Resource = new PhPublicIPAddress(n); return new XPublicIpAddress(ClientContext, Resource as PhPublicIPAddress); });
         }
 
-        public async override Task<ArmOperation<XPublicIpAddress>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<XPublicIpAddress>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;

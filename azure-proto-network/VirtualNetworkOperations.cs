@@ -10,18 +10,18 @@ namespace azure_proto_network
     /// <summary>
     /// Virtual Network Operations
     /// </summary>
-    public class VirtualNetworkOperations : ResourceOperationsBase<XVirtualNetwork, PhVirtualNetwork>
+    public class VirtualNetworkOperations : ResourceOperationsBase<XVirtualNetwork, PhVirtualNetwork>, ITaggable<XVirtualNetwork, PhVirtualNetwork>, IDeletableResource<XVirtualNetwork, PhVirtualNetwork>
     {
         public VirtualNetworkOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
 
-        public override ArmOperation<Response> Delete()
+        public ArmOperation<Response> Delete()
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name));
         }
 
-        public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
@@ -38,7 +38,7 @@ namespace azure_proto_network
                 n => { Resource = new PhVirtualNetwork(n); return new XVirtualNetwork(ClientContext, Resource as PhVirtualNetwork); });
         }
 
-        public override ArmOperation<XVirtualNetwork> AddTag(string key, string value)
+        public ArmOperation<XVirtualNetwork> AddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
@@ -46,7 +46,7 @@ namespace azure_proto_network
                 n => { Resource = new PhVirtualNetwork(n); return new XVirtualNetwork(ClientContext, Resource as PhVirtualNetwork); });
         }
 
-        public async override Task<ArmOperation<XVirtualNetwork>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<XVirtualNetwork>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;

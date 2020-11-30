@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class NetworkInterfaceOperations : ResourceOperationsBase<XNetworkInterface, PhNetworkInterface>
+    public class NetworkInterfaceOperations : ResourceOperationsBase<XNetworkInterface, PhNetworkInterface>, ITaggable<XNetworkInterface, PhNetworkInterface>, IDeletableResource<XNetworkInterface, PhNetworkInterface>
     {
         public NetworkInterfaceOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 
-        public override ArmOperation<Response> Delete()
+        public ArmOperation<Response> Delete()
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name));
         }
 
-        public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
@@ -37,7 +37,7 @@ namespace azure_proto_network
                 n => { Resource = new PhNetworkInterface(n); return new XNetworkInterface(ClientContext, Resource as PhNetworkInterface); });
         }
 
-        public override ArmOperation<XNetworkInterface> AddTag(string key, string value)
+        public ArmOperation<XNetworkInterface> AddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
@@ -45,7 +45,7 @@ namespace azure_proto_network
                 n => { Resource = new PhNetworkInterface(n); return new XNetworkInterface(ClientContext, Resource as PhNetworkInterface); });
         }
 
-        public async override Task<ArmOperation<XNetworkInterface>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<NetworkInXNetworkInterfaceterfaceOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;

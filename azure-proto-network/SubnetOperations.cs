@@ -9,7 +9,7 @@ namespace azure_proto_network
 {
     /// <summary>
     /// </summary>
-    public class SubnetOperations : ResourceOperationsBase<XSubnet, PhSubnet>
+    public class SubnetOperations : ResourceOperationsBase<XSubnet, PhSubnet>, IDeletableResource<>, PhSubnet>
     {
         public SubnetOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 
@@ -17,12 +17,12 @@ namespace azure_proto_network
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
 
-        public override ArmOperation<Response> Delete()
+        public ArmOperation<Response> Delete()
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Parent.Name, Id.Name));
         }
 
-        public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, cancellationToken));
         }
@@ -39,19 +39,6 @@ namespace azure_proto_network
                 n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet); });
         }
 
-        public override ArmOperation<XSubnet> AddTag(string key, string value)
-        {
-            Subnet patchable = new Subnet();
-            return new PhArmOperation<XSubnet, Subnet>(Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Parent.Name, Id.Name, patchable),
-                n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet); });
-        }
-
-        public async override Task<ArmOperation<XSubnet>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
-        {
-            Subnet patchable = new Subnet();
-            return new PhArmOperation<XSubnet, Subnet>(await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, patchable, cancellationToken),
-                n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet); });
-        }
 
         internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).Subnets;
     }
