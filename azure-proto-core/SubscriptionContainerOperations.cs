@@ -4,6 +4,7 @@ using Azure.ResourceManager.Resources.Models;
 using azure_proto_core.Adapters;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
@@ -14,11 +15,7 @@ namespace azure_proto_core
     {
         public static readonly string AzureResourceType = "Microsoft.Resources/subscriptions";
 
-        public SubscriptionContainerOperations(ArmClientContext context, string defaultSubscription) : base(context, $"/subscriptions/{defaultSubscription}") { }
-
-        public SubscriptionContainerOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
-
-        public SubscriptionContainerOperations(ArmClientContext context, Resource subscription) : base(context, subscription) { }
+        public SubscriptionContainerOperations(ArmClientContext context) : base(context, ResourceIdentifier.KnownKeys.Subscription) { }
 
         public override ResourceType ResourceType => AzureResourceType;
 
@@ -39,6 +36,20 @@ namespace azure_proto_core
         private Func<Subscription, SubscriptionOperations> convertor()
         {
             return s => new SubscriptionOperations(ClientContext, new PhSubscriptionModel(s));
+        }
+
+        internal async Task<string> GetDefaultSubscription(CancellationToken token = default(CancellationToken))
+        {
+            var subs = ListAsync(token).GetAsyncEnumerator();
+            string sub = null;
+            if (await subs.MoveNextAsync())
+            {
+                if (subs.Current != null)
+                {
+                    sub = subs.Current.Id.Subscription;
+                }
+            }
+            return sub;
         }
 
         internal SubscriptionsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred)).Subscriptions;
