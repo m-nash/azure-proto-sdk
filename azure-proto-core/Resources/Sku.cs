@@ -18,13 +18,29 @@ namespace azure_proto_core
         {
             if (other == null) return 1;
             if (this.Name == null && other.Name != null) return -1;
-            if (this.Name != null && this.Name.CompareTo(other.Name) != 0) return this.Name.CompareTo(other.Name);
+            if (this.Name != null)
+            {
+                int compareNameResult = this.Name.CompareTo(other.Name);
+                if (compareNameResult != 0) return compareNameResult;
+            }
             if (this.Family == null && other.Family != null) return -1;
-            if (this.Family != null && this.Family.CompareTo(other.Family) != 0) return this.Family.CompareTo(other.Family);
+            if (this.Family != null)
+            {
+                int compareFamilyResult = this.Family.CompareTo(other.Family);
+                if (compareFamilyResult != 0) return compareFamilyResult;
+            }
             if (this.Size == null && other.Size != null) return -1;
-            if (this.Size != null && this.Size.CompareTo(other.Size) != 0) return this.Size.CompareTo(other.Size);
+            if (this.Size != null)
+            {
+                int compareSizeResult = this.Size.CompareTo(other.Size);
+                if (compareSizeResult != 0) return compareSizeResult;
+            }
             if (this.Tier == null && other.Tier != null) return -1;
-            if (this.Tier != null && this.Tier.CompareTo(other.Tier) != 0) return this.Tier.CompareTo(other.Tier);
+            if (this.Tier != null)
+            {
+                int compareTierResult = this.Tier.CompareTo(other.Tier);
+                if (compareTierResult != 0) return compareTierResult;
+            }
             if (this.Capacity == null && other.Capacity == null) return 0;
             if (this.Capacity == null) return -1;
             if (other.Capacity == null) return 1;
