@@ -18,15 +18,35 @@ namespace azure_proto_core
         {
             if (other == null) return 1;
             if (this.Name == null && other.Name != null) return -1;
-            if (this.Name != null && this.Name.CompareTo(other.Name) != 0) return this.Name.CompareTo(other.Name);
+            if (this.Name != null)
+            {
+                int compareNameResult = this.Name.CompareTo(other.Name);
+                if (compareNameResult != 0) return compareNameResult;
+            }
             if (this.Product == null && other.Product != null) return -1;
-            if (this.Product != null && this.Product.CompareTo(other.Product) != 0) return this.Product.CompareTo(other.Product);
+            if (this.Product != null)
+            {
+                int compareProductResult = this.Product.CompareTo(other.Product);
+                if (compareProductResult != 0) return compareProductResult;
+            }
             if (this.PromotionCode == null && other.PromotionCode != null) return -1;
-            if (this.PromotionCode != null && this.PromotionCode.CompareTo(other.PromotionCode) != 0) return this.PromotionCode.CompareTo(other.PromotionCode);
+            if (this.PromotionCode != null)
+            {
+                int comparePromotionCodeResult = this.PromotionCode.CompareTo(other.PromotionCode);
+                if (comparePromotionCodeResult != 0) return comparePromotionCodeResult;
+            }
             if (this.Publisher == null && other.Publisher != null) return -1;
-            if (this.Publisher != null && this.Publisher.CompareTo(other.Publisher) != 0) return this.Publisher.CompareTo(other.Publisher);
+            if (this.Publisher != null)
+            {
+                int comparePublisherResult = this.Publisher.CompareTo(other.Publisher);
+                if (comparePublisherResult != 0) return comparePublisherResult;
+            }
             if (this.Version == null && other.Version != null) return -1;
-            if (this.Version != null && this.Version.CompareTo(other.Version) != 0) return this.Version.CompareTo(other.Version);
+            if (this.Version != null)
+            {
+                int compareVersionResult = this.Version.CompareTo(other.Version);
+                if (compareVersionResult != 0) return compareVersionResult;
+            }
             return 0;
         }
 
