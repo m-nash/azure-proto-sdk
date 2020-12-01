@@ -9,6 +9,8 @@ namespace azure_proto_core
     {
         public ArmResourceOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 
+        public ArmResourceOperations(ArmClientContext context, ArmResource resource) : base(context, resource) { }
+
         public override void Validate(ResourceIdentifier identifier)
         {
             //the id can be of any type so do nothing
