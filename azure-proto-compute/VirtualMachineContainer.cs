@@ -6,7 +6,6 @@ using azure_proto_core;
 using azure_proto_core.Adapters;
 using azure_proto_core.Resources;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 

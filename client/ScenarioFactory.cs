@@ -13,7 +13,8 @@
         GenericEntityLoop,
         ShutdownVmsByLINQ,
         ShutdownVmsByNameAcrossResourceGroups,
-        ShutdownVmsByNameAcrossSubscriptions
+        ShutdownVmsByNameAcrossSubscriptions,
+        ListByNameExpanded
     }
 
     class ScenarioFactory
@@ -46,6 +47,8 @@
                     return new ShutdownVmsByNameAcrossResourceGroups();
                 case Scenarios.ShutdownVmsByNameAcrossSubscriptions:
                     return new ShutdownVmsByNameAcrossSubscriptions();
+                case Scenarios.ListByNameExpanded:
+                    return new ListByNameExpanded();
                 default:
                     return null;
             }
