@@ -1,9 +1,11 @@
 using azure_proto_core;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 
 namespace azure_proto_core_test
@@ -66,12 +68,9 @@ namespace azure_proto_core_test
             identity2.ResourceId = "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport";
 
             Guid tenantId = Guid.NewGuid();
-            Guid clientId = Guid.NewGuid();
             Guid principalId = Guid.NewGuid();
-            identity1.ClientId = clientId;
             identity1.TenantId = tenantId;
             identity1.PrincipalId = principalId;
-            identity2.ClientId = clientId;
             identity2.TenantId = tenantId;
             identity2.PrincipalId = principalId;
             identity1.Kind = new IdentityKind("test");
@@ -94,12 +93,9 @@ namespace azure_proto_core_test
             identity2.ResourceId = "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport";
 
             Guid tenantId = Guid.NewGuid();
-            Guid clientId = Guid.NewGuid();
             Guid principalId = Guid.NewGuid();
-            identity1.ClientId = clientId;
             identity1.TenantId = tenantId;
             identity1.PrincipalId = principalId;
-            identity2.ClientId = clientId;
             identity2.TenantId = tenantId;
             identity2.PrincipalId = Guid.NewGuid();
 
@@ -124,11 +120,9 @@ namespace azure_proto_core_test
         }
 
         [TestCase]
-        public void TestSerializer()
+        public void TestSerializerSystemAssigned()
         {
             Identity identity1 = new Identity(); 
-            identity1.ResourceId = "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport";
-            identity1.ClientId = Guid.NewGuid();
             identity1.TenantId = Guid.NewGuid();
             identity1.PrincipalId = Guid.NewGuid();
             identity1.Kind = new IdentityKind("SystemAssigned");
@@ -143,7 +137,68 @@ namespace azure_proto_core_test
                     value = streamReader.ReadToEnd();
                 }                
             }
-            Console.WriteLine(value);
+            string actual = "";
+            using (StreamReader f = new StreamReader("./TestAssets/SystemAssigned.json"))
+                actual = f.ReadToEnd();
+            actual = actual.Replace("\n", "").Replace("\r", "").Replace(" ", "");
+            Assert.AreEqual(value, actual);
+        }
+
+        [TestCase]
+        public void TestSerializerUserAssigned()
+        {
+            Identity identity1 = new Identity();
+            identity1.ResourceId = "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport";
+            identity1.Kind = new IdentityKind("UserAssigned");
+            Dictionary<string, azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId> dict = new Dictionary<string, azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId>();
+            var userClientAndPrincipalId = new azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId("test1", "test2");
+            dict.Add("/subscriptions/db1ab6f0-4769-4b27-930e-01e2ef9c123c/resourceGroups/nbhatia-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testidentity", userClientAndPrincipalId);
+            identity1.UserAssignedIdentities = dict;
+            string value = "";
+            using (Stream stream = new MemoryStream())
+            {
+                using (StreamReader streamReader = new StreamReader(stream))
+                {
+                    var writer = new Utf8JsonWriter(stream);
+                    identity1.Write(writer);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    value = streamReader.ReadToEnd();
+                }
+            }
+            string actual = "";
+            using (StreamReader f = new StreamReader("./TestAssets/UserAssigned.json"))
+                actual = f.ReadToEnd();
+            Assert.AreEqual(value, actual);
+        }
+
+        [TestCase]
+        public void TestSerializerUserAssignedMultipleIdentities()
+        {
+            Identity identity1 = new Identity();
+            identity1.ResourceId = "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport";
+            identity1.Kind = new IdentityKind("UserAssigned");
+            Dictionary<string, azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId> dict = new Dictionary<string, azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId>();
+            var userClientAndPrincipalId = new azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId("test1", "test2");
+            var userClientAndPrincipalId2 = new azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId("test3", "test4");
+            dict.Add("/subscriptions/db1ab6f0-4769-4b27-930e-01e2ef9c123c/resourceGroups/nbhatia-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testidentity", userClientAndPrincipalId);
+            dict.Add("/subscriptions/db1ab6f0-4769-4b27-930e-01e2ef9c123c/resourceGroups/nbhatia-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testidentity2", userClientAndPrincipalId2);
+
+            identity1.UserAssignedIdentities = dict;
+            string value = "";
+            using (Stream stream = new MemoryStream())
+            {
+                using (StreamReader streamReader = new StreamReader(stream))
+                {
+                    var writer = new Utf8JsonWriter(stream);
+                    identity1.Write(writer);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    value = streamReader.ReadToEnd();
+                }
+            }
+            string actual = "";
+            using (StreamReader f = new StreamReader("./TestAssets/UserAssignedMultipleIdentities.json"))
+                actual = f.ReadToEnd();
+            Assert.AreEqual(value, actual);
         }
     }
 }

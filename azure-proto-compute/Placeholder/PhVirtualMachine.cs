@@ -3,6 +3,7 @@ using azure_proto_core;
 using System;
 using System.Collections.Generic;
 using static azure_proto_core.Identity;
+using azure_proto_core.Resources;
 
 namespace azure_proto_compute
 {
@@ -128,14 +129,13 @@ namespace azure_proto_compute
         {
             Identity userIdentity = new Identity();
             userIdentity.TenantId = new Guid(vmIdentity.TenantId);
-            userIdentity.ResourceId = this.Model.Id;
             userIdentity.PrincipalId = new Guid(vmIdentity.PrincipalId);
             userIdentity.Kind = new IdentityKind(vmIdentity.Type.Value.ToString());
             if (vmIdentity.UserAssignedIdentities != null)
             {
-                Dictionary<string, UserClientAndPrincipalId> userIdentities = new Dictionary<string, UserClientAndPrincipalId>();
-                UserClientAndPrincipalId userIds = new UserClientAndPrincipalId("clientId", vmIdentity.PrincipalId);
-                userIdentities.Add(Model.Id, userIds);
+                Dictionary<ResourceIdentifier, azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId> userIdentities = new Dictionary<ResourceIdentifier, azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId>();
+                 azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId userIds = new azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId("clientId", vmIdentity.PrincipalId);
+                userIdentities.Add(new ResourceIdentifier(Model.Id), userIds);
                 userIdentity.UserAssignedIdentities = userIdentities;
             }
             return userIdentity;

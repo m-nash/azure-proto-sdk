@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Azure.Core;
+using Azure.ResourceManager.Resources.Models;
+using azure_proto_core.Resources;
+using UserAssignedIdentity = azure_proto_core.Resources.UserAssignedIdentity;
+using SystemAssignedIdentity = azure_proto_core.Resources.SystemAssignedIdentity;
 
 namespace azure_proto_core
 {
@@ -12,120 +16,75 @@ namespace azure_proto_core
     /// </summary>
     public class Identity : IEquatable<Identity>, IComparable<Identity>, IUtf8JsonSerializable
     {
-        public Guid TenantId { get; set; }
+        private const string SystemAssigned = "SystemAssigned";
+        private const string UserAssigned = "UserAssigned";
+        private const string SystemAndUserAssigned = "SystemAssigned, UserAssigned";
+        public SystemAssignedIdentity SystemAssignedIdentity { get; }  // Need to decide on setter
 
-        public Guid PrincipalId { get; set; }
+        public Dictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; set; } //maintain structure of {id, (clientid, principal id)} in case of multiple UserIdentities
 
-        public Guid? ClientId { get; set; }
+        public Identity() : this(null, false) { } //not system or user
 
-        public ResourceIdentifier ResourceId { get; set; }
-
-        public IdentityKind Kind { get; set; }
-
-        public Dictionary<string, UserClientAndPrincipalId> UserAssignedIdentities { get; set; } //maintain structure of {id, (clientid, principal id)} in case of multiple UserIdentities
-
-        public struct UserClientAndPrincipalId //make sure userIdentities are always populated
+        public Identity(Dictionary<ResourceIdentifier, UserAssignedIdentity> user, bool useSystemAssigned)
         {
-            string clientId { get; set; }
-            string principalId { get; set; }
-
-            public UserClientAndPrincipalId(string clientId, string principalId)
+            // check for combination of user and system on the impact to type value
+            this.SystemAssignedIdentity = useSystemAssigned ? new SystemAssignedIdentity() : null;
+            this.UserAssignedIdentities = new Dictionary<ResourceIdentifier, UserAssignedIdentity>();
+            if (user != null)
             {
-                this.clientId = clientId;
-                this.principalId = principalId;
-            }
-        }
-
-        internal Identity(Guid tenantId, Guid principalId, Guid? clientId, string resourceId, IdentityKind kind, Optional<Dictionary<string, UserClientAndPrincipalId>> userAssignedIdentities)
-        {
-            PrincipalId = principalId;
-            TenantId = tenantId;
-            ClientId = clientId;
-            ResourceId = resourceId;
-            Kind = kind;
-            UserAssignedIdentities = userAssignedIdentities;
-        }
-
-        public Identity()
-        {
+                foreach(KeyValuePair<ResourceIdentifier, UserAssignedIdentity> id in user)
+                {
+                    this.UserAssignedIdentities.Add(id.Key, id.Value);
+                }
+            }                
         }
 
         public int CompareTo(Identity other)
         {
-            if (Object.ReferenceEquals(null, other))
-                return 1;
-            return this.ResourceId.CompareTo(other.ResourceId);
+            if ((this.SystemAssignedIdentity == null && other.SystemAssignedIdentity == null) &&
+                (this.UserAssignedIdentities == null && other.UserAssignedIdentities == null))
+                return 0;
+            else if ((this.SystemAssignedIdentity != null && other.SystemAssignedIdentity != null) &&
+                (this.UserAssignedIdentities == null && other.UserAssignedIdentities == null))
+                return this.SystemAssignedIdentity.CompareTo(other.SystemAssignedIdentity);
+            else if ((this.SystemAssignedIdentity == null && other.SystemAssignedIdentity == null) &&
+                (this.UserAssignedIdentities != null && other.UserAssignedIdentities != null))
+                return UserAssignedIdentity.CompareToUserAssignedIdentities(this.UserAssignedIdentities, other.UserAssignedIdentities);
+            else
+            {
+                int systemCompare = this.SystemAssignedIdentity.CompareTo(other.SystemAssignedIdentity);
+                int userCompare = UserAssignedIdentity.CompareToUserAssignedIdentities(this.UserAssignedIdentities, other.UserAssignedIdentities);
+                if (userCompare == 1 && (systemCompare == 0 || systemCompare == -1))
+                    return 1;
+                else if (userCompare == 0 && systemCompare == 0)
+                    return 0;
+                else
+                    return -1;
+            }
         }
 
         public bool Equals(Identity other)
         {
-            if (Object.ReferenceEquals(null, other))
-                return false;
-            else if (this.ResourceId == null && other.ResourceId == null)
-                return (this.TenantId.Equals(other.TenantId) &&
-                this.PrincipalId.Equals(other.PrincipalId) &&
-                this.ClientId.Equals(other.ClientId) &&
-                this.Kind.Equals(other.Kind));
-            else if (other.ResourceId == null)
-                return false;
+            if ((this.SystemAssignedIdentity == null && other.SystemAssignedIdentity == null) &&
+                (this.UserAssignedIdentities == null && other.UserAssignedIdentities == null))
+                return true;
+            else if ((this.SystemAssignedIdentity != null && other.SystemAssignedIdentity != null) &&
+                (this.UserAssignedIdentities == null && other.UserAssignedIdentities == null))
+                return this.SystemAssignedIdentity.Equals(other.SystemAssignedIdentity);
+            else if ((this.SystemAssignedIdentity == null && other.SystemAssignedIdentity == null) &&
+                (this.UserAssignedIdentities != null && other.UserAssignedIdentities != null))
+                return UserAssignedIdentity.EqualsUserAssignedIdentities(this.UserAssignedIdentities, other.UserAssignedIdentities);
             else
-                return (this.TenantId.Equals(other.TenantId) &&
-                this.PrincipalId.Equals(other.PrincipalId) &&
-                this.ClientId.Equals(other.ClientId) &&
-                this.ResourceId.Equals(other.ResourceId) && //can be null
-                this.Kind.Equals(other.Kind));
+                return this.SystemAssignedIdentity.Equals(other.SystemAssignedIdentity) && UserAssignedIdentity.EqualsUserAssignedIdentities(this.UserAssignedIdentities, other.UserAssignedIdentities);
         }
 
         public static Identity DeserializeIdentity(JsonElement element)
         {
-            Optional<Guid> principalId = default;
-            Optional<Guid> tenantId = default;
-            Optional<Guid?> clientId = default;
-            Optional<IdentityKind> type = default;
-            Optional<string> resourceId = default;
-            Optional<Dictionary<string, UserClientAndPrincipalId>> userAssignedIdentities = default;
+            Optional<SystemAssignedIdentity> systemAssignedIdentity = default;
+            IdentityKind type = default;
+            Optional<Dictionary<ResourceIdentifier, UserAssignedIdentity>> userAssignedIdentities = default;
             foreach (var property in element.EnumerateObject())
             {
-                if (property.NameEquals("principalId"))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        principalId = Guid.Empty;
-                        continue;
-                    }
-                    principalId = Guid.Parse(property.Value.GetString());
-                    continue;
-                }
-                if (property.NameEquals("tenantId"))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        tenantId = Guid.Empty;
-                        continue;
-                    }
-                    tenantId = Guid.Parse(property.Value.GetString());
-                    continue;
-                }
-                if (property.NameEquals("clientId"))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        clientId = Guid.Empty;
-                        continue;
-                    }
-                    clientId = Guid.Parse(property.Value.GetString());
-                    continue;
-                }
-                if (property.NameEquals("id"))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        resourceId = null;
-                        continue;
-                    }
-                    resourceId = property.ToString();
-                    continue;
-                }
                 if (property.NameEquals("type"))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
@@ -143,85 +102,44 @@ namespace azure_proto_core
                         userAssignedIdentities = null;
                         continue;
                     }
-                    Dictionary<string, UserClientAndPrincipalId> dictionary = new Dictionary<string, UserClientAndPrincipalId>(); //holds useridentities
-                    List<string> ids = new List<string>();
-                    foreach (var property0 in property.Value.EnumerateObject())
-                    {
-                        resourceId = property0.Name;
-                        foreach (var property1 in property0.Value.EnumerateObject())
-                        {
-                            if (property1.NameEquals("clientId"))
-                            {
-                                ids.Add(Guid.Parse(property1.Value.GetString()).ToString());
-                                continue;
-                            }
-                            if (property1.NameEquals("principalId"))
-                            {
-                                ids.Add(Guid.Parse(property1.Value.GetString()).ToString());
-                                continue;
-                            }
-                        }
-                        UserClientAndPrincipalId userIds = new UserClientAndPrincipalId(ids[0], ids[1]);
-                        ids.Clear();
-                        dictionary.Add(resourceId, userIds); //add resourceids and its corresponding struct each time we read one in 
-                    }
-                    userAssignedIdentities = dictionary;
+                    userAssignedIdentities = UserAssignedIdentity.Deserialize(property);
                     continue;
                 }
+                if (type.Equals(SystemAssigned))
+                    systemAssignedIdentity = SystemAssignedIdentity.Deserialize(element);               
             }
-            return new Identity(tenantId.Value, principalId.Value, clientId.Value, resourceId.Value, type.Value, userAssignedIdentities);
+            return new Identity(userAssignedIdentities, true);
         }
 
         public void Write(Utf8JsonWriter writer)
         {
             writer.WriteStartObject();
-            if (Optional.IsDefined(PrincipalId))
+            writer.WritePropertyName("identity");
+            writer.WriteStartObject();
+            if (this.SystemAssignedIdentity != null && this.UserAssignedIdentities != null)
             {
-                writer.WritePropertyName("PrincipalId");
-                writer.WriteStringValue(PrincipalId.ToString());
+                writer.WritePropertyName("kind");
+                writer.WriteStringValue(SystemAndUserAssigned);
+                SystemAssignedIdentity.Serialize(writer, this.SystemAssignedIdentity);
+                UserAssignedIdentity.Serialize(writer, this.UserAssignedIdentities);
             }
-            if (Optional.IsDefined(TenantId))
+            else if (this.SystemAssignedIdentity != null)
             {
-                writer.WritePropertyName("TenantId");
-                writer.WriteStringValue(TenantId.ToString());
-            }
-            if (Optional.IsDefined(ClientId))
+                writer.WritePropertyName("kind");
+                writer.WriteStringValue(SystemAssigned);
+                SystemAssignedIdentity.Serialize(writer, this.SystemAssignedIdentity);
+            }                
+            else if (this.UserAssignedIdentities != null)
             {
-                writer.WritePropertyName("ClientId");
-                writer.WriteStringValue(ClientId.ToString());
+                writer.WritePropertyName("kind");
+                writer.WriteStringValue(UserAssigned);
+                UserAssignedIdentity.Serialize(writer, this.UserAssignedIdentities);
             }
-            if (Optional.IsDefined(ResourceId))
-            {
-                writer.WritePropertyName("ResourceId");
-                writer.WriteStringValue(ResourceId.ToString());
-            }
-            if (Optional.IsDefined(Kind))
-            {
-                writer.WritePropertyName("Kind");
-                writer.WriteStringValue(Kind.ToString());
-            }
-            if (!Optional.IsDefined(UserAssignedIdentities))
-            {
-                writer.WritePropertyName("UserAssignedIdentities");
-                writer.WriteStringValue("null");
-            }
-            if (Optional.IsDefined(UserAssignedIdentities))
-            {
-                if (Optional.IsCollectionDefined(UserAssignedIdentities.AsEnumerable()))
-                {
-                    writer.WritePropertyName("userAssignedIdentities");
-                    writer.WriteStartObject();
-                    foreach (var item in UserAssignedIdentities)
-                    {
-                        writer.WritePropertyName(item.Key);
-                        writer.WriteObjectValue(item.Value);
-                    }
-                    writer.WriteEndObject();
-                }
-                writer.WriteEndObject();                
-            }
+            else
+                writer.WriteStringValue("null"); //if identity is null
+            writer.WriteEndObject(); //close Identity               
+            writer.WriteEndObject(); //outermost }
             writer.Flush();
-            writer.WriteEndObject();
         }
     }
 }
