@@ -41,6 +41,14 @@ namespace azure_proto_core
             }
         }
 
+        public TResource GetModelIfNewer()
+        {
+            if (HasModel)
+            {
+                return Model;
+            }
+            return Get().Value.Model;
+        }
 
         public abstract ArmResponse<TOperations> Get();
         public abstract Task<ArmResponse<TOperations>> GetAsync(CancellationToken cancellationToken = default);
