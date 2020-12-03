@@ -10,7 +10,7 @@ using Azure.Core;
 namespace azure_proto_core
 {
     /// <summary>
-    /// Subscription Container Operations
+    /// Subscription Container Operationss
     /// </summary>
     public class SubscriptionContainerOperations : OperationsBase
     {

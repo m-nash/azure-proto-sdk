@@ -55,12 +55,12 @@ namespace azure_proto_core
         /// <returns></returns>
         public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(this.ClientContext, subscription);
 
+        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(this.ClientContext, subscription);
+
         public SubscriptionContainerOperations Subscriptions()
         {
             return new SubscriptionContainerOperations(this.ClientContext, this.ClientOptions);
         }
-
-        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(this.ClientContext, subscription);
 
         public AsyncPageable<PhLocation> ListLocationsAsync(string subscriptionId = null, CancellationToken token = default(CancellationToken))
         {
