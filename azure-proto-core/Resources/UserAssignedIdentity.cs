@@ -101,18 +101,7 @@ namespace azure_proto_core.Resources
                 return false;
             else
             {
-                foreach (KeyValuePair<ResourceIdentifier, UserAssignedIdentity> id in original)
-                {
-                    UserAssignedIdentity value;
-                    if (other.TryGetValue(id.Key, out value))
-                    {
-                        if (!id.Value.Equals(value))
-                            return false;
-                    }
-                    else
-                        return false;
-                }
-                return true;
+                return original.Equals(other);
             }
         }
 
@@ -127,21 +116,8 @@ namespace azure_proto_core.Resources
             else if (original.Count > other.Count)
                 return 1;
             else
-            {
-                foreach (KeyValuePair<ResourceIdentifier, UserAssignedIdentity> id in original)
-                {
-                    UserAssignedIdentity value;
-                    if (other.TryGetValue(id.Key, out value))
-                    {
-                        if (id.Value.CompareTo(value) == -1)
-                            return -1;
-                        if (id.Value.CompareTo(value) == 1)
-                            return 1;
-                    }
-                    else
-                        return 1;
-                }
-                return 0;
+            {     
+                return original.CompareTo(other);
             }
         }
     }
