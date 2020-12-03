@@ -8,9 +8,9 @@ namespace azure_proto_core
     /// </summary>
     public abstract class OperationsBase
     {
-        public OperationsBase(ArmClientContext context, ResourceIdentifier id, Location location = null) : this(context, new ArmResource(id, location ?? Location.Default)) { }
+        public OperationsBase(ArmClientContext context, ResourceIdentifier id, Location location = null, ArmClientOptions ClientOptions = null) : this(context, new ArmResource(id, location ?? Location.Default), ClientOptions) { }
 
-        public OperationsBase(ArmClientContext context, Resource resource)
+        public OperationsBase(ArmClientContext context, Resource resource, ArmClientOptions ClientOptions = null)
         {
             Validate(resource?.Id);
 
@@ -19,6 +19,7 @@ namespace azure_proto_core
             TrackedResource trackedResource = resource as TrackedResource;
             DefaultLocation = trackedResource?.Location ?? Location.Default;
             Resource = resource;
+            this.ClientOptions = ClientOptions;
         }
 
         public virtual ArmClientContext ClientContext { get; }
@@ -31,9 +32,11 @@ namespace azure_proto_core
 
         public virtual ResourceIdentifier Id { get; }
 
+        public virtual ArmClientOptions ClientOptions {get; protected set;}
+
         public virtual void Validate(ResourceIdentifier identifier)
         {
-            if (identifier?.Type != ResourceType)
+            if (SubscriptionContainerOperations.AzureResourceType != identifier && identifier?.Type != ResourceType)
             {
                 throw new InvalidOperationException($"{identifier} is not a valid resource of type {ResourceType}");
             }

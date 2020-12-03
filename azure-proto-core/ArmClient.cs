@@ -24,23 +24,23 @@ namespace azure_proto_core
 
         public Dictionary<string, string> ApiVersionOverrides { get; private set; }
 
-        public ArmClient() : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, new ArmClientOptions()) { }
+        public ArmClient(ArmClientOptions options = null) : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, options == null ? new ArmClientOptions() : options) { }
 
-        public ArmClient(string defaultSubscriptionId) : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId, new ArmClientOptions()) { }
+        public ArmClient(string defaultSubscriptionId, ArmClientOptions options = null) : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId, options == null ? new ArmClientOptions() : options) { }
 
-        public ArmClient(TokenCredential credential, string defaultSubscriptionId) : this(new Uri(DefaultUri), credential, defaultSubscriptionId, new ArmClientOptions()) { }
+        public ArmClient(TokenCredential credential, string defaultSubscriptionId, ArmClientOptions options = null) : this(new Uri(DefaultUri), credential, defaultSubscriptionId, options == null ? new ArmClientOptions() : options) { }
 
-        public ArmClient(Uri baseUri, TokenCredential credential) : this(baseUri, credential, null, new ArmClientOptions()) { }
+        public ArmClient(Uri baseUri, TokenCredential credential, ArmClientOptions options = null) : this(baseUri, credential, null, options == null ? new ArmClientOptions() : options) { }
 
         public ArmClientOptions ClientOptions { get; private set; }
 
         public ArmClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId, ArmClientOptions options)
         {
+            this.ClientOptions = options;
             ClientContext = new ArmClientContext(baseUri, credential);
             defaultSubscriptionId ??= GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult();
             DefaultSubscription = new SubscriptionOperations(ClientContext, new ResourceIdentifier($"/subscriptions/{defaultSubscriptionId}"));
             ApiVersionOverrides = new Dictionary<string, string>();
-            ClientOptions = options;
         }
 
         public SubscriptionOperations DefaultSubscription { get; private set; }
@@ -57,7 +57,7 @@ namespace azure_proto_core
 
         public SubscriptionContainerOperations Subscriptions()
         {
-            return new SubscriptionContainerOperations(this.ClientContext);
+            return new SubscriptionContainerOperations(this.ClientContext, this.ClientOptions);
         }
 
         public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(this.ClientContext, subscription);

@@ -5,6 +5,7 @@ using azure_proto_core.Adapters;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.Core;
 
 namespace azure_proto_core
 {
@@ -15,7 +16,7 @@ namespace azure_proto_core
     {
         public static readonly string AzureResourceType = "Microsoft.Resources/subscriptions";
 
-        public SubscriptionContainerOperations(ArmClientContext context) : base(context, ResourceIdentifier.KnownKeys.Subscription) { }
+        public SubscriptionContainerOperations(ArmClientContext context, ArmClientOptions options) : base(context, AzureResourceType, null, options) { }
 
         public override ResourceType ResourceType => AzureResourceType;
 
@@ -52,6 +53,22 @@ namespace azure_proto_core
             return sub;
         }
 
-        internal SubscriptionsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred)).Subscriptions;
+        private ResourcesManagementClientOptions covertToResourcesManagementClientOptions()
+        {
+            var options = new ResourcesManagementClientOptions();
+            options.Transport = this.ClientOptions.Transport;
+            foreach (var pol in this.ClientOptions.PerCallPolicies)
+            {
+                options.AddPolicy(pol, HttpPipelinePosition.PerCall);
+            }
+            foreach (var pol in this.ClientOptions.PerRetryPolicies)
+            {
+                options.AddPolicy(pol, HttpPipelinePosition.PerRetry);
+            }
+            return options;
+        }
+
+        internal SubscriptionsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) =>
+                    new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, this.covertToResourcesManagementClientOptions())).Subscriptions;
     }
 }

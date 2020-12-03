@@ -28,7 +28,7 @@ namespace azure_proto_core
         {
             Id = id;
             //TODO: Due to the implicit this is called for blank constructions such as new PhResourceGroup
-            if (id != null)
+            if (SubscriptionContainerOperations.AzureResourceType != id && id != null)
                 Parse(id);
         }
 
