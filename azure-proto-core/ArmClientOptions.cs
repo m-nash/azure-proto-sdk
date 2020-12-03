@@ -5,7 +5,7 @@ using Azure.Core;
 using Azure.Core.Pipeline;
 namespace azure_proto_core
 {
-    public partial class ArmClientOptions : ClientOptions
+    public class ArmClientOptions : ClientOptions
     {
         private Dictionary<Type, object> _overrides = new Dictionary<Type, object>();
         private static readonly object _overridesLock = new object();
