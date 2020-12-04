@@ -111,7 +111,7 @@ namespace azure_proto_core
             }
 
             // Resource ID paths consist mainly of name/value pairs. Split the uri so we have an array of name/value pairs
-            var parts = id.Split(new char[] {'/'}, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var parts = id.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             // There must be at least one name/value pair for the resource id to be valid
             if (parts.Count < 2)
             {
@@ -156,15 +156,15 @@ namespace azure_proto_core
             Debug.Assert(parts.Count > 1);
             // The resource consists of well-known name-value pairs.  Make a resource dictionary
             // using the names as keys, and the values as values
-            for(int i = 0; i < parts.Count - 1; i += 2)
+            for (int i = 0; i < parts.Count - 1; i += 2)
             {
                 _partsDictionary.Add(parts[i], parts[i + 1]);
             }
 
             // resource name is always the last part
             Name = parts.Last();
-            parts.RemoveAt(parts.Count-1);
-            parts.RemoveAt(parts.Count-1);
+            parts.RemoveAt(parts.Count - 1);
+            parts.RemoveAt(parts.Count - 1);
             // remove the last key/value pair to arrive at the parent (Count will be zero for /subscriptions/{foo})
             Parent = parts.Count > 1 ? new ResourceIdentifier($"/{string.Join("/", parts)}") : null;
         }
@@ -178,17 +178,17 @@ namespace azure_proto_core
             }
 
             Name = parts.Last();
-            parts.RemoveAt(parts.Count-1);
+            parts.RemoveAt(parts.Count - 1);
             // remove the type name (there will be no typename if this is a singleton sub resource)
             if (parts.Count % 2 == 1)
             {
-                parts.RemoveAt(parts.Count-1);
+                parts.RemoveAt(parts.Count - 1);
             }
             //If this is a top-level resource, remove the providers/Namespace pair, otherwise continue
             if (parts.Count > 2 && string.Equals(parts[parts.Count - 2], KnownKeys.ProviderNamespace))
             {
-                parts.RemoveAt(parts.Count-1);
-                parts.RemoveAt(parts.Count-1);
+                parts.RemoveAt(parts.Count - 1);
+                parts.RemoveAt(parts.Count - 1);
             }
 
             //If this is not a top-level resource, it will have a parent
@@ -196,6 +196,6 @@ namespace azure_proto_core
         }
 
         public static implicit operator string(ResourceIdentifier other) => other.Id;
-        public static implicit operator ResourceIdentifier(string other) => new ResourceIdentifier( other);
+        public static implicit operator ResourceIdentifier(string other) => new ResourceIdentifier(other);
     }
 }

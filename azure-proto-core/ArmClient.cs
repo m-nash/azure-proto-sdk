@@ -24,13 +24,13 @@ namespace azure_proto_core
 
         public Dictionary<string, string> ApiVersionOverrides { get; private set; }
 
-        public ArmClient(ArmClientOptions options = null) : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, options == null ? new ArmClientOptions() : options) { }
+        public ArmClient(ArmClientOptions options = null) : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, options ?? new ArmClientOptions()) { }
 
-        public ArmClient(string defaultSubscriptionId, ArmClientOptions options = null) : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId, options == null ? new ArmClientOptions() : options) { }
+        public ArmClient(string defaultSubscriptionId, ArmClientOptions options = null) : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId, options ?? new ArmClientOptions()) { }
 
-        public ArmClient(TokenCredential credential, string defaultSubscriptionId, ArmClientOptions options = null) : this(new Uri(DefaultUri), credential, defaultSubscriptionId, options == null ? new ArmClientOptions() : options) { }
+        public ArmClient(TokenCredential credential, string defaultSubscriptionId, ArmClientOptions options = null) : this(new Uri(DefaultUri), credential, defaultSubscriptionId, options ?? new ArmClientOptions()) { }
 
-        public ArmClient(Uri baseUri, TokenCredential credential, ArmClientOptions options = null) : this(baseUri, credential, null, options == null ? new ArmClientOptions() : options) { }
+        public ArmClient(Uri baseUri, TokenCredential credential, ArmClientOptions options = null) : this(baseUri, credential, null, options ?? new ArmClientOptions()) { }
 
         public ArmClientOptions ClientOptions { get; private set; }
 
