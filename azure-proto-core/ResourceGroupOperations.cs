@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    public class ResourceGroupOperations : ResourceOperationsBase<ResourceGroupOperations, PhResourceGroup>
+    public class ResourceGroupOperations : ResourceOperationsBase<ResourceGroupOperations, PhResourceGroup>, ITaggable<ResourceGroupOperations, PhResourceGroup>, IDeletableResource<ResourceGroupOperations, PhResourceGroup>
     {
         public static readonly string AzureResourceType = "Microsoft.Resources/resourceGroups";
 
@@ -17,12 +17,12 @@ namespace azure_proto_core
 
         public override ResourceType ResourceType => AzureResourceType;
 
-        public override ArmOperation<Response> Delete()
+        public  ArmOperation<Response> Delete()
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.Name));
         }
 
-        public async override Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.Name, cancellationToken));
         }
@@ -37,14 +37,14 @@ namespace azure_proto_core
             return new PhArmResponse<ResourceGroupOperations, ResourceGroup>(await Operations.GetAsync(Id.Name, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public override ArmOperation<ResourceGroupOperations> AddTag(string name, string value)
+        public ArmOperation<ResourceGroupOperations> AddTag(string name, string value)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;
             return new PhArmOperation<ResourceGroupOperations, ResourceGroup>(Operations.Update(Id.Name, patch), g => { this.Resource = new PhResourceGroup(g); return this; });
         }
 
-        public async override Task<ArmOperation<ResourceGroupOperations>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
+        public async  Task<ArmOperation<ResourceGroupOperations>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;
@@ -68,11 +68,7 @@ namespace azure_proto_core
                 myResource = new ArmResource(Id, location);
             }
 
-            TContainer container;
-            if (!ArmClient.Registry.TryGetContainer<TContainer, TrackedResource, TOperations, TResource>(this.ClientContext, myResource, out container))
-            {
-                throw new InvalidOperationException($"No resource type matching '{typeof(TResource)}' found.");
-            }
+            TContainer container = Activator.CreateInstance(typeof(TContainer), ClientContext, myResource) as TContainer;
 
             return container.Create(name, model);
         }
@@ -95,11 +91,7 @@ namespace azure_proto_core
                 myResource = new ArmResource(Id, location);
             }
 
-            TContainer container;
-            if (!ArmClient.Registry.TryGetContainer<TContainer, TrackedResource, TOperations, TResource>(this.ClientContext, myResource, out container))
-            {
-                throw new InvalidOperationException($"No resource type matching '{typeof(TResource)}' found.");
-            }
+            TContainer container = Activator.CreateInstance(typeof(TContainer), ClientContext, myResource) as TContainer;
 
             return container.CreateAsync(name, model, token);
         }

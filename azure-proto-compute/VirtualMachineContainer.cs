@@ -6,7 +6,6 @@ using azure_proto_core;
 using azure_proto_core.Adapters;
 using azure_proto_core.Resources;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -118,28 +117,18 @@ namespace azure_proto_compute
             return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
 
-        //TODO: See if we can turn this into pageable with a wrapper
-        //it would need to skip items that are filtered out and still return a normalized page size
-        public IEnumerable<VirtualMachineOperations> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public Pageable<VirtualMachineOperations> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByName(filter, top, cancellationToken);
-            foreach(var genericResource in results)
-            {
-                var vmOperations = new VirtualMachineOperations(genericResource);
-                yield return vmOperations.Get().Value;
-            }
+            return new PhWrappingPageable<ArmResourceOperations, VirtualMachineOperations>(results, s => new VirtualMachineOperations(s));
         }
 
-        public async IAsyncEnumerable<VirtualMachineOperations> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        public AsyncPageable<VirtualMachineOperations> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByNameAsync(filter, top, cancellationToken);
-            await foreach (var genericResource in results)
-            {
-                var vmOperations = new VirtualMachineOperations(genericResource);
-                yield return await vmOperations.GetAsync();
-            }
+            return new PhWrappingAsyncPageable<ArmResourceOperations, VirtualMachineOperations>(results, s => new VirtualMachineOperations(s));
         }
 
-        internal VirtualMachinesOperations Operations => this.GetClient((baseUri, cred) =>  new ComputeManagementClient(baseUri, Id.Subscription, cred)).VirtualMachines;
+        internal VirtualMachinesOperations Operations => this.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, Id.Subscription, cred)).VirtualMachines;
     }
 }
