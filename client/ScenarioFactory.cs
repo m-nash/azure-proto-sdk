@@ -21,7 +21,7 @@
     {
         public static Scenario GetScenario(Scenarios scenario)
         {
-            switch (scenario)
+            switch(scenario)
             {
                 case Scenarios.CreateSingleVmExample:
                     return new CreateSingleVmExample();
