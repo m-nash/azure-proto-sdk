@@ -2,7 +2,6 @@
 using azure_proto_core;
 using System;
 using System.Collections.Generic;
-using static azure_proto_core.Identity;
 using azure_proto_core.Resources;
 
 namespace azure_proto_compute
@@ -120,25 +119,39 @@ namespace azure_proto_compute
             get => Model.Zones;
             set => Model.Zones = value;
         }
+
         public Identity Identity {
-            get => phVmToIdentity(Model.Identity);
-            //set => phIdentityToVm(Model.Identity); 
+            get => PhVmToIdentity(Model.Identity);
         }
 
-        private Identity phVmToIdentity(VirtualMachineIdentity vmIdentity)
+        private Identity PhVmToIdentity(VirtualMachineIdentity vmIdentity)
         {
-            Identity userIdentity = new Identity();
-            userIdentity.TenantId = new Guid(vmIdentity.TenantId);
-            userIdentity.PrincipalId = new Guid(vmIdentity.PrincipalId);
-            userIdentity.Kind = new IdentityKind(vmIdentity.Type.Value.ToString());
-            if (vmIdentity.UserAssignedIdentities != null)
+            if (vmIdentity.Type == ResourceIdentityType.None)
+                return new Identity();
+            else if (vmIdentity.Type == ResourceIdentityType.SystemAssigned)
             {
-                Dictionary<ResourceIdentifier, azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId> userIdentities = new Dictionary<ResourceIdentifier, azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId>();
-                 azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId userIds = new azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId("clientId", vmIdentity.PrincipalId);
-                userIdentities.Add(new ResourceIdentifier(Model.Id), userIds);
-                userIdentity.UserAssignedIdentities = userIdentities;
+                Identity identity = new Identity
+                {
+                    SystemAssignedIdentity = new SystemAssignedIdentity(new Guid(vmIdentity.TenantId), new Guid(vmIdentity.PrincipalId)),
+                    UserAssignedIdentities = null,
+                };
+                return identity;
+            }              
+            else if (vmIdentity.Type == ResourceIdentityType.UserAssigned)
+            {
+                var userAssignedIdentities = new Dictionary<ResourceIdentifier, UserAssignedIdentity>(); //holds useridentities
+                foreach (var identity in vmIdentity.UserAssignedIdentities)
+                {
+                    ResourceIdentifier resourceId = new ResourceIdentifier(identity.Key);
+                    UserAssignedIdentity userAssignedIdentity = new UserAssignedIdentity(new Guid(identity.Value.ClientId), new Guid(identity.Value.PrincipalId));
+                    userAssignedIdentities.Add(resourceId, userAssignedIdentity);
+                }
+                return new Identity(null, userAssignedIdentities);
+            }                
+            else
+            {
+                return new Identity();
             }
-            return userIdentity;
         }
 
         public IList<VirtualMachineExtension> Resources => Model.Resources;

@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 
 namespace azure_proto_core.Resources
@@ -99,26 +98,23 @@ namespace azure_proto_core.Resources
                 return false;
             else if (original.Count != other.Count)
                 return false;
+            else if (Object.ReferenceEquals(original, other))
+                return true;
             else
             {
-                return original.Equals(other);
+                foreach (KeyValuePair<ResourceIdentifier, UserAssignedIdentity> id in original)
+                {
+                    UserAssignedIdentity value;
+                    if (other.TryGetValue(id.Key, out value))
+                    {
+                        if (!id.Value.Equals(value))
+                            return false;
+                    }
+                    else
+                        return false;
+                }
+                return true;
             }
-        }
-
-        public static int CompareToUserAssignedIdentities(Dictionary<ResourceIdentifier, UserAssignedIdentity> original, Dictionary<ResourceIdentifier, UserAssignedIdentity> other)
-        {
-            if (original == null && other == null)
-                return 0;
-            else if (original != null && other == null)
-                return 1;
-            else if (original.Count < other.Count)
-                return -1;
-            else if (original.Count > other.Count)
-                return 1;
-            else
-            {     
-                return original.CompareTo(other);
-            }
-        }
+        }        
     }
 }

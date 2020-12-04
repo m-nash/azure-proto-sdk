@@ -14,12 +14,13 @@ namespace azure_proto_core
     /// <summary>
     /// Represents a managed identity
     /// </summary>
-    public class Identity : IEquatable<Identity>, IComparable<Identity>, IUtf8JsonSerializable
+    public class Identity : IEquatable<Identity>, IUtf8JsonSerializable
     {
         private const string SystemAssigned = "SystemAssigned";
         private const string UserAssigned = "UserAssigned";
         private const string SystemAndUserAssigned = "SystemAssigned, UserAssigned";
-        public SystemAssignedIdentity SystemAssignedIdentity { get; }  // Need to decide on setter
+
+        public SystemAssignedIdentity SystemAssignedIdentity { get; set; }  // Need to decide on setter
 
         public Dictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; set; } //maintain structure of {id, (clientid, principal id)} in case of multiple UserIdentities
 
@@ -39,28 +40,10 @@ namespace azure_proto_core
             }                
         }
 
-        public int CompareTo(Identity other)
+        public Identity (SystemAssignedIdentity systemAssigned, Dictionary<ResourceIdentifier, UserAssignedIdentity> user)
         {
-            if ((this.SystemAssignedIdentity == null && other.SystemAssignedIdentity == null) &&
-                (this.UserAssignedIdentities == null && other.UserAssignedIdentities == null))
-                return 0;
-            else if ((this.SystemAssignedIdentity != null && other.SystemAssignedIdentity != null) &&
-                (this.UserAssignedIdentities == null && other.UserAssignedIdentities == null))
-                return this.SystemAssignedIdentity.CompareTo(other.SystemAssignedIdentity);
-            else if ((this.SystemAssignedIdentity == null && other.SystemAssignedIdentity == null) &&
-                (this.UserAssignedIdentities != null && other.UserAssignedIdentities != null))
-                return UserAssignedIdentity.CompareToUserAssignedIdentities(this.UserAssignedIdentities, other.UserAssignedIdentities);
-            else
-            {
-                int systemCompare = this.SystemAssignedIdentity.CompareTo(other.SystemAssignedIdentity);
-                int userCompare = UserAssignedIdentity.CompareToUserAssignedIdentities(this.UserAssignedIdentities, other.UserAssignedIdentities);
-                if (userCompare == 1 && (systemCompare == 0 || systemCompare == -1))
-                    return 1;
-                else if (userCompare == 0 && systemCompare == 0)
-                    return 0;
-                else
-                    return -1;
-            }
+            this.SystemAssignedIdentity = systemAssigned;
+            this.UserAssignedIdentities = user;
         }
 
         public bool Equals(Identity other)
@@ -108,7 +91,7 @@ namespace azure_proto_core
                 if (type.Equals(SystemAssigned))
                     systemAssignedIdentity = SystemAssignedIdentity.Deserialize(element);               
             }
-            return new Identity(userAssignedIdentities, true);
+            return new Identity(systemAssignedIdentity, userAssignedIdentities);
         }
 
         public void Write(Utf8JsonWriter writer)
