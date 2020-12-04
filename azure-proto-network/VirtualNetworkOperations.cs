@@ -10,11 +10,9 @@ namespace azure_proto_network
     /// <summary>
     /// Virtual Network Operations
     /// </summary>
-    public class VirtualNetworkOperations : ResourceOperationsBase<VirtualNetworkOperations, PhVirtualNetwork>, ITaggable<VirtualNetworkOperations, PhVirtualNetwork>, IDeletableResource<VirtualNetworkOperations, PhVirtualNetwork>
+    public class VirtualNetworkOperations : ResourceOperationsBase<XVirtualNetwork, PhVirtualNetwork>, ITaggable<XVirtualNetwork, PhVirtualNetwork>, IDeletableResource<XVirtualNetwork, PhVirtualNetwork>
     {
         public VirtualNetworkOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
-
-        public VirtualNetworkOperations(ArmClientContext context, azure_proto_core.Resource resource) : base(context, resource) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
 
@@ -28,37 +26,37 @@ namespace azure_proto_network
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
-        public override ArmResponse<VirtualNetworkOperations> Get()
+        public override ArmResponse<XVirtualNetwork> Get()
         {
-            return new PhArmResponse<VirtualNetworkOperations, VirtualNetwork>(Operations.Get(Id.ResourceGroup, Id.Name), 
-                n => { Resource = new PhVirtualNetwork(n); return this; });
+            return new PhArmResponse<XVirtualNetwork, VirtualNetwork>(Operations.Get(Id.ResourceGroup, Id.Name), 
+                n => { Resource = new PhVirtualNetwork(n); return new XVirtualNetwork(ClientContext, Resource as PhVirtualNetwork); });
         }
 
-        public async override Task<ArmResponse<VirtualNetworkOperations>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<XVirtualNetwork>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<VirtualNetworkOperations, VirtualNetwork>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
-                n => { Resource = new PhVirtualNetwork(n); return this;});
+            return new PhArmResponse<XVirtualNetwork, VirtualNetwork>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
+                n => { Resource = new PhVirtualNetwork(n); return new XVirtualNetwork(ClientContext, Resource as PhVirtualNetwork); });
         }
 
-        public ArmOperation<VirtualNetworkOperations> AddTag(string key, string value)
+        public ArmOperation<XVirtualNetwork> AddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<VirtualNetworkOperations, VirtualNetwork>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
-                n => { Resource = new PhVirtualNetwork(n); return this; });
+            return new PhArmOperation<XVirtualNetwork, VirtualNetwork>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => { Resource = new PhVirtualNetwork(n); return new XVirtualNetwork(ClientContext, Resource as PhVirtualNetwork); });
         }
 
-        public async Task<ArmOperation<VirtualNetworkOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<XVirtualNetwork>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<VirtualNetworkOperations, VirtualNetwork>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
-                n => { Resource = new PhVirtualNetwork(n); return this; });
+            return new PhArmOperation<XVirtualNetwork, VirtualNetwork>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => { Resource = new PhVirtualNetwork(n); return new XVirtualNetwork(ClientContext, Resource as PhVirtualNetwork); });
         }
 
-        public SubnetOperations Subnet(TrackedResource subnet)
+        public XSubnet Subnet(PhSubnet subnet)
         {
-            return new SubnetOperations(ClientContext, subnet);
+            return new XSubnet(ClientContext, subnet);
         }
 
         public SubnetOperations Subnet(ResourceIdentifier subnet)
@@ -71,9 +69,9 @@ namespace azure_proto_network
             return new SubnetOperations(ClientContext, $"{Id}/subnets/{subnet}");
         }
 
-        public SubnetContainer Subnets()
+        public virtual SubnetContainer Subnets()
         {
-            return new SubnetContainer(ClientContext, Model);
+            return new SubnetContainer(ClientContext, Id);
         }
 
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).VirtualNetworks;
