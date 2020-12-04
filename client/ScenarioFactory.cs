@@ -14,14 +14,14 @@
         ShutdownVmsByLINQ,
         ShutdownVmsByNameAcrossResourceGroups,
         ShutdownVmsByNameAcrossSubscriptions,
-        CreateVMForIdentity
+        ListByNameExpanded
     }
 
     class ScenarioFactory
     {
         public static Scenario GetScenario(Scenarios scenario)
         {
-            switch(scenario)
+            switch (scenario)
             {
                 case Scenarios.CreateSingleVmExample:
                     return new CreateSingleVmExample();
@@ -47,10 +47,10 @@
                     return new ShutdownVmsByNameAcrossResourceGroups();
                 case Scenarios.ShutdownVmsByNameAcrossSubscriptions:
                     return new ShutdownVmsByNameAcrossSubscriptions();
-                case Scenarios.CreateVMForIdentity:
-                    return new CreateVMForIdentity();
+                case Scenarios.ListByNameExpanded:
+                    return new ListByNameExpanded();
                 default:
-                    throw new System.ArgumentException("No scenario found to run for " + scenario.ToString());
+                    return null;
             }
         }
     }
