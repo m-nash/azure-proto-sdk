@@ -122,13 +122,13 @@ namespace azure_proto_compute
         public Pageable<XVirtualMachine> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByName(filter, top, cancellationToken);
-            return new PhWrappingPageable<ArmResourceOperations, XVirtualMachine>(results, s => new VirtualMachineOperations(s));
+            return new PhWrappingPageable<ArmResourceOperations, XVirtualMachine>(results, s => (new VirtualMachineOperations(s)).Get().Value);
         }
 
         public AsyncPageable<XVirtualMachine> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByNameAsync(filter, top, cancellationToken);
-            return new PhWrappingAsyncPageable<ArmResourceOperations, XVirtualMachine>(results, s => new VirtualMachineOperations(s));
+            return new PhWrappingAsyncPageable<ArmResourceOperations, XVirtualMachine>(results, s => (new VirtualMachineOperations(s)).Get());
         }
 
         internal VirtualMachinesOperations Operations => this.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, Id.Subscription, cred)).VirtualMachines;
