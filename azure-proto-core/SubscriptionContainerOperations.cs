@@ -16,7 +16,7 @@ namespace azure_proto_core
     {
         public static readonly string AzureResourceType = "Microsoft.Resources/subscriptions";
 
-        public SubscriptionContainerOperations(ArmClientContext context, ArmClientOptions options) : base(context, AzureResourceType, null, options) { }
+        public SubscriptionContainerOperations(ArmClientContext context, ArmClientOptions options) : base(context, AzureResourceType, options) { }
 
         public override ResourceType ResourceType => AzureResourceType;
 
@@ -36,7 +36,7 @@ namespace azure_proto_core
 
         private Func<Subscription, SubscriptionOperations> convertor()
         {
-            return s => new SubscriptionOperations(ClientContext, new PhSubscriptionModel(s));
+            return s => new SubscriptionOperations(ClientContext, new PhSubscriptionModel(s), this.ClientOptions);
         }
 
         internal async Task<string> GetDefaultSubscription(CancellationToken token = default(CancellationToken))
@@ -53,22 +53,7 @@ namespace azure_proto_core
             return sub;
         }
 
-        private ResourcesManagementClientOptions covertToResourcesManagementClientOptions()
-        {
-            var options = new ResourcesManagementClientOptions();
-            options.Transport = this.ClientOptions.Transport;
-            foreach (var pol in this.ClientOptions.PerCallPolicies)
-            {
-                options.AddPolicy(pol, HttpPipelinePosition.PerCall);
-            }
-            foreach (var pol in this.ClientOptions.PerRetryPolicies)
-            {
-                options.AddPolicy(pol, HttpPipelinePosition.PerRetry);
-            }
-            return options;
-        }
-
         internal SubscriptionsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) =>
-                    new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, this.covertToResourcesManagementClientOptions())).Subscriptions;
+                    new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.convert<ResourcesManagementClientOptions>(this.ClientOptions))).Subscriptions;
     }
 }

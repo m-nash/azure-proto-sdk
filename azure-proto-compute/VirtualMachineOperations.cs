@@ -14,11 +14,11 @@ namespace azure_proto_compute
     /// </summary>
     public class VirtualMachineOperations : ResourceOperationsBase<VirtualMachineOperations, PhVirtualMachine>, ITaggable<VirtualMachineOperations, PhVirtualMachine>, IDeletableResource<VirtualMachineOperations, PhVirtualMachine>
     {
-        public VirtualMachineOperations(ArmResourceOperations genericOperations) : base(genericOperations) { }
+        public VirtualMachineOperations(ArmResourceOperations genericOperations, ArmClientOptions clientOptions) : base(genericOperations, clientOptions) { }
 
-        public VirtualMachineOperations(ArmClientContext parent, TrackedResource context) : base(parent, context) { }
+        public VirtualMachineOperations(ArmClientContext parent, TrackedResource context, ArmClientOptions clientOptions) : base(parent, context, clientOptions) { }
 
-        public VirtualMachineOperations(ArmClientContext parent, ResourceIdentifier context) : base(parent, context) { }
+        public VirtualMachineOperations(ArmClientContext parent, ResourceIdentifier context, ArmClientOptions clientOptions) : base(parent, context, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 

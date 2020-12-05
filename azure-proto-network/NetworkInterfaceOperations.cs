@@ -9,9 +9,9 @@ namespace azure_proto_network
 {
     public class NetworkInterfaceOperations : ResourceOperationsBase<NetworkInterfaceOperations, PhNetworkInterface>, ITaggable<NetworkInterfaceOperations, PhNetworkInterface>, IDeletableResource<NetworkInterfaceOperations, PhNetworkInterface>
     {
-        public NetworkInterfaceOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        public NetworkInterfaceOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
-        public NetworkInterfaceOperations(ArmClientContext context, azure_proto_core.Resource resource) : base(context, resource) { }
+        public NetworkInterfaceOperations(ArmClientContext context, azure_proto_core.Resource resource, ArmClientOptions clientOptions) : base(context, resource, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 
@@ -56,6 +56,7 @@ namespace azure_proto_network
                 n => { Resource = new PhNetworkInterface(n); return this; });
         }
 
-        internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).NetworkInterfaces;
+        internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred, 
+                    ArmClientOptions.convert<NetworkManagementClientOptions>(this.ClientOptions))).NetworkInterfaces;
     }
 }

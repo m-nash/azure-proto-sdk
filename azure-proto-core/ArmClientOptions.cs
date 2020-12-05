@@ -7,6 +7,20 @@ namespace azure_proto_core
 {
     public class ArmClientOptions : ClientOptions
     {
+        public static T convert<T>(ArmClientOptions options) where T : ClientOptions, new()
+        {
+            var newOptions = new T();
+            newOptions.Transport = options.Transport;
+            foreach (var pol in options.PerCallPolicies)
+            {
+                newOptions.AddPolicy(pol, HttpPipelinePosition.PerCall);
+            }
+            foreach (var pol in options.PerRetryPolicies)
+            {
+                newOptions.AddPolicy(pol, HttpPipelinePosition.PerRetry);
+            }
+            return newOptions;
+        }
         private Dictionary<Type, object> _overrides = new Dictionary<Type, object>();
         private static readonly object _overridesLock = new object();
 

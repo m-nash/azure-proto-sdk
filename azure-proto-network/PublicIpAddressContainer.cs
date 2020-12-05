@@ -12,7 +12,7 @@ namespace azure_proto_network
 {
     public class PublicIpAddressContainer : ResourceContainerOperations<PublicIpAddressOperations, PhPublicIPAddress>
     {
-        public PublicIpAddressContainer(ArmClientContext context, PhResourceGroup resourceGroup) : base(context, resourceGroup) { }
+        public PublicIpAddressContainer(ArmClientContext context, PhResourceGroup resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
@@ -21,7 +21,7 @@ namespace azure_proto_network
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
             return new PhArmResponse<PublicIpAddressOperations, PublicIPAddress>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new PublicIpAddressOperations(ClientContext, new PhPublicIPAddress(n)));
+                n => new PublicIpAddressOperations(ClientContext, new PhPublicIPAddress(n), this.ClientOptions));
         }
 
         public async override Task<ArmResponse<PublicIpAddressOperations>> CreateAsync(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
@@ -29,21 +29,21 @@ namespace azure_proto_network
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<PublicIpAddressOperations, PublicIPAddress>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                n => new PublicIpAddressOperations(ClientContext, new PhPublicIPAddress(n)));
+                n => new PublicIpAddressOperations(ClientContext, new PhPublicIPAddress(n), this.ClientOptions));
         }
 
         public override ArmOperation<PublicIpAddressOperations> StartCreate(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<PublicIpAddressOperations, PublicIPAddress>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken),
-                n => new PublicIpAddressOperations(ClientContext, new PhPublicIPAddress(n)));
+                n => new PublicIpAddressOperations(ClientContext, new PhPublicIPAddress(n), this.ClientOptions));
         }
 
         public async override Task<ArmOperation<PublicIpAddressOperations>> StartCreateAsync(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<PublicIpAddressOperations, PublicIPAddress>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),
-                n => new PublicIpAddressOperations(ClientContext, new PhPublicIPAddress(n)));
+                n => new PublicIpAddressOperations(ClientContext, new PhPublicIPAddress(n), this.ClientOptions));
         }
 
         public ArmBuilder<PublicIpAddressOperations, PhPublicIPAddress> Construct(Location location = null)
@@ -87,9 +87,10 @@ namespace azure_proto_network
         }
         private Func<PublicIPAddress, PublicIpAddressOperations> convertor()
         {
-            return s => new PublicIpAddressOperations(ClientContext, new PhPublicIPAddress(s));
+            return s => new PublicIpAddressOperations(ClientContext, new PhPublicIPAddress(s), this.ClientOptions);
         }
 
-        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).PublicIPAddresses;
+        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+                    ArmClientOptions.convert<NetworkManagementClientOptions>(this.ClientOptions))).PublicIPAddresses;
     }
 }

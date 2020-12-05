@@ -9,9 +9,9 @@ namespace azure_proto_network
 {
     public class PublicIpAddressOperations : ResourceOperationsBase<PublicIpAddressOperations, PhPublicIPAddress>, ITaggable<PublicIpAddressOperations, PhPublicIPAddress>, IDeletableResource<PublicIpAddressOperations, PhPublicIPAddress>
     {
-        public PublicIpAddressOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        public PublicIpAddressOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
-        public PublicIpAddressOperations(ArmClientContext context, azure_proto_core.Resource resource) : base(context, resource) { }
+        public PublicIpAddressOperations(ArmClientContext context, azure_proto_core.Resource resource, ArmClientOptions clientOptions) : base(context, resource, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
@@ -53,6 +53,7 @@ namespace azure_proto_network
                 n => { Resource = new PhPublicIPAddress(n); return this; });
         }
 
-        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).PublicIPAddresses;
+        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,  
+                    ArmClientOptions.convert<NetworkManagementClientOptions>(this.ClientOptions))).PublicIPAddresses;
     }
 }

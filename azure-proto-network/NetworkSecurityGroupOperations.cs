@@ -30,9 +30,9 @@ namespace azure_proto_network
             }
         }
 
-        public NetworkSecurityGroupOperations(ArmClientContext parent, ResourceIdentifier context) : base(parent, context) { }
+        public NetworkSecurityGroupOperations(ArmClientContext parent, ResourceIdentifier context, ArmClientOptions clientOptions) : base(parent, context, clientOptions) { }
 
-        public NetworkSecurityGroupOperations(ArmClientContext parent, TrackedResource context) : base(parent, context) { }
+        public NetworkSecurityGroupOperations(ArmClientContext parent, TrackedResource context, ArmClientOptions clientOptions) : base(parent, context, clientOptions) { }
 
         /// <summary>
         /// TODO: GENERATOR Make use of the entity tags on the resource - we may need to add to the generated management client
@@ -68,8 +68,8 @@ namespace azure_proto_network
                 }
             }
 
-            return new PhArmOperation<NetworkSecurityGroupOperations, NetworkSecurityGroup>(Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, model.Model), 
-                n => { Resource = new PhNetworkSecurityGroup(n); return this;});
+            return new PhArmOperation<NetworkSecurityGroupOperations, NetworkSecurityGroup>(Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, model.Model),
+                n => { Resource = new PhNetworkSecurityGroup(n); return this; });
         }
 
         public override ArmResponse<NetworkSecurityGroupOperations> Get()
@@ -112,6 +112,7 @@ namespace azure_proto_network
 
         public override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
 
-        internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).NetworkSecurityGroups;
+        internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+                     ArmClientOptions.convert<NetworkManagementClientOptions>(this.ClientOptions))).NetworkSecurityGroups;
     }
 }

@@ -8,9 +8,9 @@ namespace azure_proto_core
     /// </summary>
     public abstract class OperationsBase
     {
-        public OperationsBase(ArmClientContext context, ResourceIdentifier id, Location location = null, ArmClientOptions ClientOptions = null) : this(context, new ArmResource(id, location ?? Location.Default), ClientOptions) { }
+        public OperationsBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions ClientOptions, Location location = null ) : this(context, new ArmResource(id, location ?? Location.Default), ClientOptions) { }
 
-        public OperationsBase(ArmClientContext context, Resource resource, ArmClientOptions ClientOptions = null)
+        public OperationsBase(ArmClientContext context, Resource resource, ArmClientOptions ClientOptions)
         {
             Validate(resource?.Id);
 
@@ -36,7 +36,7 @@ namespace azure_proto_core
 
         public virtual void Validate(ResourceIdentifier identifier)
         {
-            if (SubscriptionContainerOperations.AzureResourceType != identifier && identifier?.Type != ResourceType)
+            if ((SubscriptionContainerOperations.AzureResourceType != ResourceType && identifier == null))
             {
                 throw new InvalidOperationException($"{identifier} is not a valid resource of type {ResourceType}");
             }

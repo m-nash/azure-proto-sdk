@@ -10,9 +10,9 @@ namespace azure_proto_compute
     public class AvailabilitySetOperations : ResourceOperationsBase<AvailabilitySetOperations, PhAvailabilitySet>, ITaggable<AvailabilitySetOperations, PhAvailabilitySet>, IDeletableResource<AvailabilitySetOperations, PhAvailabilitySet>
     {
 
-        public AvailabilitySetOperations(ArmClientContext context, TrackedResource resource) : base(context, resource) { }
+        public AvailabilitySetOperations(ArmClientContext context, TrackedResource resource, ArmClientOptions clientOptions) : base(context, resource, clientOptions) { }
 
-        public AvailabilitySetOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        public AvailabilitySetOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
 
@@ -60,6 +60,7 @@ namespace azure_proto_compute
             return UpdateAsync(patchable);
         }
 
-        internal AvailabilitySetsOperations Operations => GetClient<ComputeManagementClient>((uri, cred) => new ComputeManagementClient(uri, Id.Subscription, cred)).AvailabilitySets;
+        internal AvailabilitySetsOperations Operations => GetClient<ComputeManagementClient>((uri, cred) => new ComputeManagementClient(uri, Id.Subscription, cred, 
+                    ArmClientOptions.convert<ComputeManagementClientOptions>(this.ClientOptions))).AvailabilitySets;
     }
 }

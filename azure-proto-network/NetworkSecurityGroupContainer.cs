@@ -13,7 +13,7 @@ namespace azure_proto_network
 {
     public class NetworkSecurityGroupContainer : ResourceContainerOperations<NetworkSecurityGroupOperations, PhNetworkSecurityGroup>
     {
-        public NetworkSecurityGroupContainer(ArmClientContext context, PhResourceGroup resourceGroup) : base(context, resourceGroup) { }
+        public NetworkSecurityGroupContainer(ArmClientContext context, PhResourceGroup resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
 
@@ -22,7 +22,7 @@ namespace azure_proto_network
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
             return new PhArmResponse<NetworkSecurityGroupOperations, NetworkSecurityGroup>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new NetworkSecurityGroupOperations(ClientContext, new PhNetworkSecurityGroup(n)));
+                n => new NetworkSecurityGroupOperations(ClientContext, new PhNetworkSecurityGroup(n), this.ClientOptions));
         }
 
         public async override Task<ArmResponse<NetworkSecurityGroupOperations>> CreateAsync(string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
@@ -30,21 +30,21 @@ namespace azure_proto_network
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<NetworkSecurityGroupOperations, NetworkSecurityGroup>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                n => new NetworkSecurityGroupOperations(ClientContext, new PhNetworkSecurityGroup(n)));
+                n => new NetworkSecurityGroupOperations(ClientContext, new PhNetworkSecurityGroup(n), this.ClientOptions));
         }
 
         public override ArmOperation<NetworkSecurityGroupOperations> StartCreate(string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<NetworkSecurityGroupOperations, NetworkSecurityGroup>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
-                n => new NetworkSecurityGroupOperations(ClientContext, new PhNetworkSecurityGroup(n)));
+                n => new NetworkSecurityGroupOperations(ClientContext, new PhNetworkSecurityGroup(n), this.ClientOptions));
         }
 
         public async override Task<ArmOperation<NetworkSecurityGroupOperations>> StartCreateAsync(string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<NetworkSecurityGroupOperations, NetworkSecurityGroup>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
-                n => new NetworkSecurityGroupOperations(ClientContext, new PhNetworkSecurityGroup(n)));
+                n => new NetworkSecurityGroupOperations(ClientContext, new PhNetworkSecurityGroup(n), this.ClientOptions));
         }
 
         public ArmBuilder<NetworkSecurityGroupOperations, PhNetworkSecurityGroup> Construct(string nsgName, Location location = null, params int[] openPorts)
@@ -116,10 +116,11 @@ namespace azure_proto_network
         }
         private Func<NetworkSecurityGroup, NetworkSecurityGroupOperations> convertor()
         {
-            return s => new NetworkSecurityGroupOperations(ClientContext, new PhNetworkSecurityGroup(s));
+            return s => new NetworkSecurityGroupOperations(ClientContext, new PhNetworkSecurityGroup(s), this.ClientOptions);
         }
 
 
-        internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).NetworkSecurityGroups;
+        internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+                    ArmClientOptions.convert<NetworkManagementClientOptions>(this.ClientOptions))).NetworkSecurityGroups;
     }
 }

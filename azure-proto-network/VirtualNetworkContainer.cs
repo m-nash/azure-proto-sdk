@@ -13,7 +13,7 @@ namespace azure_proto_network
 {
     public class VirtualNetworkContainer : ResourceContainerOperations<VirtualNetworkOperations, PhVirtualNetwork>
     {
-        public VirtualNetworkContainer(ArmClientContext context, PhResourceGroup resourceGroup) : base(context, resourceGroup) { }
+        public VirtualNetworkContainer(ArmClientContext context, PhResourceGroup resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
 
@@ -22,7 +22,7 @@ namespace azure_proto_network
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
             return new PhArmResponse<VirtualNetworkOperations, VirtualNetwork>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new VirtualNetworkOperations(ClientContext, new PhVirtualNetwork(n)));
+                n => new VirtualNetworkOperations(ClientContext, new PhVirtualNetwork(n), this.ClientOptions));
         }
 
         public async override Task<ArmResponse<VirtualNetworkOperations>> CreateAsync(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
@@ -30,21 +30,21 @@ namespace azure_proto_network
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<VirtualNetworkOperations, VirtualNetwork>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                n => new VirtualNetworkOperations(ClientContext, new PhVirtualNetwork(n)));
+                n => new VirtualNetworkOperations(ClientContext, new PhVirtualNetwork(n), this.ClientOptions));
         }
 
         public override ArmOperation<VirtualNetworkOperations> StartCreate(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<VirtualNetworkOperations, VirtualNetwork>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken),
-                n => new VirtualNetworkOperations(ClientContext, new PhVirtualNetwork(n)));
+                n => new VirtualNetworkOperations(ClientContext, new PhVirtualNetwork(n), this.ClientOptions));
         }
 
         public async override Task<ArmOperation<VirtualNetworkOperations>> StartCreateAsync(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<VirtualNetworkOperations, VirtualNetwork>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),
-                n => new VirtualNetworkOperations(ClientContext, new PhVirtualNetwork(n)));
+                n => new VirtualNetworkOperations(ClientContext, new PhVirtualNetwork(n), this.ClientOptions));
         }
 
         public ArmBuilder<VirtualNetworkOperations, PhVirtualNetwork> Construct(string vnetCidr, Location location = null)
@@ -84,10 +84,11 @@ namespace azure_proto_network
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
-        private  Func<VirtualNetwork, VirtualNetworkOperations> convertor()
+        private Func<VirtualNetwork, VirtualNetworkOperations> convertor()
         {
-            return s => new VirtualNetworkOperations(ClientContext, new PhVirtualNetwork(s));
+            return s => new VirtualNetworkOperations(ClientContext, new PhVirtualNetwork(s), this.ClientOptions);
         }
-        internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).VirtualNetworks;
+        internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+                    ArmClientOptions.convert<NetworkManagementClientOptions>(this.ClientOptions))).VirtualNetworks;
     }
 }

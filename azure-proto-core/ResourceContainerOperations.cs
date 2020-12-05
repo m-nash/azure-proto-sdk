@@ -17,11 +17,11 @@ namespace azure_proto_core
     {
         protected TrackedResource Parent { get; private set; }
 
-        protected ResourceContainerOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id)
+        protected ResourceContainerOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions)
         {
         }
 
-        protected ResourceContainerOperations(ArmClientContext context, TrackedResource resource) : base(context, resource)
+        protected ResourceContainerOperations(ArmClientContext context, TrackedResource resource, ArmClientOptions clientOptions) : base(context, resource, clientOptions)
         {
             Parent = resource;
         }

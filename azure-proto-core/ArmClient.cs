@@ -39,7 +39,7 @@ namespace azure_proto_core
             this.ClientOptions = options;
             ClientContext = new ArmClientContext(baseUri, credential);
             defaultSubscriptionId ??= GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult();
-            DefaultSubscription = new SubscriptionOperations(ClientContext, new ResourceIdentifier($"/subscriptions/{defaultSubscriptionId}"));
+            DefaultSubscription = new SubscriptionOperations(ClientContext, new ResourceIdentifier($"/subscriptions/{defaultSubscriptionId}"), options);
             ApiVersionOverrides = new Dictionary<string, string>();
         }
 
@@ -47,15 +47,15 @@ namespace azure_proto_core
 
         internal virtual ArmClientContext ClientContext { get; }
 
-        public SubscriptionOperations Subscription(PhSubscriptionModel subscription) => new SubscriptionOperations(this.ClientContext, subscription);
+        public SubscriptionOperations Subscription(PhSubscriptionModel subscription) => new SubscriptionOperations(this.ClientContext, subscription, this.ClientOptions);
 
         /// <summary>
         /// </summary>
         /// <param name="subscription"></param>
         /// <returns></returns>
-        public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(this.ClientContext, subscription);
+        public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(this.ClientContext, subscription, this.ClientOptions);
 
-        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(this.ClientContext, subscription);
+        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(this.ClientContext, subscription, this.ClientOptions);
 
         public SubscriptionContainerOperations Subscriptions()
         {
@@ -142,16 +142,16 @@ namespace azure_proto_core
 
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
         {
-            return new ResourceGroupOperations(this.ClientContext, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}");
+            return new ResourceGroupOperations(this.ClientContext, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", this.ClientOptions);
         }
 
         public ResourceGroupOperations ResourceGroup(ResourceIdentifier resourceGroup)
         {
-            return new ResourceGroupOperations(this.ClientContext, resourceGroup);
+            return new ResourceGroupOperations(this.ClientContext, resourceGroup, this.ClientOptions);
         }
         public ResourceGroupOperations ResourceGroup(PhResourceGroup resourceGroup)
         {
-            return new ResourceGroupOperations(this.ClientContext, resourceGroup.Id);
+            return new ResourceGroupOperations(this.ClientContext, resourceGroup.Id, this.ClientOptions);
         }
 
         public T GetResourceOperationsBase<T>(TrackedResource resource) where T : TrackedResource

@@ -12,9 +12,9 @@ namespace azure_proto_network
     /// </summary>
     public class VirtualNetworkOperations : ResourceOperationsBase<VirtualNetworkOperations, PhVirtualNetwork>, ITaggable<VirtualNetworkOperations, PhVirtualNetwork>, IDeletableResource<VirtualNetworkOperations, PhVirtualNetwork>
     {
-        public VirtualNetworkOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        public VirtualNetworkOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
-        public VirtualNetworkOperations(ArmClientContext context, azure_proto_core.Resource resource) : base(context, resource) { }
+        public VirtualNetworkOperations(ArmClientContext context, azure_proto_core.Resource resource, ArmClientOptions clientOptions) : base(context, resource, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
 
@@ -30,14 +30,14 @@ namespace azure_proto_network
 
         public override ArmResponse<VirtualNetworkOperations> Get()
         {
-            return new PhArmResponse<VirtualNetworkOperations, VirtualNetwork>(Operations.Get(Id.ResourceGroup, Id.Name), 
+            return new PhArmResponse<VirtualNetworkOperations, VirtualNetwork>(Operations.Get(Id.ResourceGroup, Id.Name),
                 n => { Resource = new PhVirtualNetwork(n); return this; });
         }
 
         public async override Task<ArmResponse<VirtualNetworkOperations>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<VirtualNetworkOperations, VirtualNetwork>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
-                n => { Resource = new PhVirtualNetwork(n); return this;});
+                n => { Resource = new PhVirtualNetwork(n); return this; });
         }
 
         public ArmOperation<VirtualNetworkOperations> AddTag(string key, string value)
@@ -58,24 +58,25 @@ namespace azure_proto_network
 
         public SubnetOperations Subnet(TrackedResource subnet)
         {
-            return new SubnetOperations(ClientContext, subnet);
+            return new SubnetOperations(ClientContext, subnet, this.ClientOptions);
         }
 
         public SubnetOperations Subnet(ResourceIdentifier subnet)
         {
-            return new SubnetOperations(ClientContext, subnet);
+            return new SubnetOperations(ClientContext, subnet, this.ClientOptions);
         }
 
         public SubnetOperations Subnet(string subnet)
         {
-            return new SubnetOperations(ClientContext, $"{Id}/subnets/{subnet}");
+            return new SubnetOperations(ClientContext, $"{Id}/subnets/{subnet}", this.ClientOptions);
         }
 
         public SubnetContainer Subnets()
         {
-            return new SubnetContainer(ClientContext, Model);
+            return new SubnetContainer(ClientContext, Model, this.ClientOptions);
         }
 
-        internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).VirtualNetworks;
+        internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+                    ArmClientOptions.convert<NetworkManagementClientOptions>(this.ClientOptions))).VirtualNetworks;
     }
 }

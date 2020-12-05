@@ -18,7 +18,7 @@ namespace client
             Random rand = new Random(Environment.TickCount);
             foreach (var generic in rg.VirtualMachines().ListByName(Environment.UserName))
             {
-                var vm = new VirtualMachineOperations(generic);
+                var vm = new VirtualMachineOperations(generic, new ArmClientOptions());
                 if (rand.NextDouble() > 0.5)
                 {
                     Console.WriteLine("adding tag to {0}", vm.Id.Name);

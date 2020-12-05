@@ -11,9 +11,9 @@ namespace azure_proto_core
     {
         public static readonly string AzureResourceType = "Microsoft.Resources/resourceGroups";
 
-        internal ResourceGroupOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal ResourceGroupOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
-        internal ResourceGroupOperations(ArmClientContext context, Resource resource) : base(context, resource) { }
+        internal ResourceGroupOperations(ArmClientContext context, Resource resource, ArmClientOptions clientOptions) : base(context, resource, clientOptions) { }
 
         public override ResourceType ResourceType => AzureResourceType;
 

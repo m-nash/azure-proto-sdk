@@ -7,9 +7,9 @@ namespace azure_proto_core
 {
     public class ArmResourceOperations : ResourceOperationsBase<ArmResourceOperations, ArmResource>, ITaggable<ArmResourceOperations, ArmResource>, IDeletableResource<ArmResourceOperations, ArmResource>
     {
-        public ArmResourceOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        public ArmResourceOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
-        public ArmResourceOperations(ArmClientContext context, ArmResource resource) : base(context, resource) { }
+        public ArmResourceOperations(ArmClientContext context, ArmResource resource, ArmClientOptions clientOptions) : base(context, resource, clientOptions) { }
 
         public override void Validate(ResourceIdentifier identifier)
         {
