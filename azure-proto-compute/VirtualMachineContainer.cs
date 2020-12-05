@@ -128,7 +128,7 @@ namespace azure_proto_compute
         public AsyncPageable<XVirtualMachine> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByNameAsync(filter, top, cancellationToken);
-            return new PhWrappingAsyncPageable<ArmResourceOperations, XVirtualMachine>(results, s => (new VirtualMachineOperations(s)).Get());
+            return new PhWrappingAsyncPageable<ArmResourceOperations, XVirtualMachine>(results, s => (new VirtualMachineOperations(s)).Get().Value);
         }
 
         internal VirtualMachinesOperations Operations => this.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, Id.Subscription, cred)).VirtualMachines;
