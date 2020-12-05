@@ -16,7 +16,7 @@ namespace azure_proto_core
     {
         public static readonly string AzureResourceType = "Microsoft.Resources/subscriptions";
 
-        public SubscriptionContainerOperations(ArmClientContext context, ArmClientOptions options) : base(context, AzureResourceType, options) { }
+        public SubscriptionContainerOperations(ArmClientContext context, ArmClientOptions options) : base(context, null, options, null) { }
 
         public override ResourceType ResourceType => AzureResourceType;
 
