@@ -14,7 +14,7 @@ namespace azure_proto_network
     {
         public PublicIpAddressContainer(ArmClientContext context, PhResourceGroup resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
 
-        internal PublicIpAddressContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal PublicIpAddressContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 

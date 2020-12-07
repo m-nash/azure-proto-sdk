@@ -15,7 +15,7 @@ namespace azure_proto_network
     {
         public NetworkSecurityGroupContainer(ArmClientContext context, PhResourceGroup resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
 
-        internal NetworkSecurityGroupContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal NetworkSecurityGroupContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
 

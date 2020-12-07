@@ -13,7 +13,7 @@ namespace azure_proto_network
     {
         public SubnetContainer(ArmClientContext context, PhVirtualNetwork virtualNetwork, ArmClientOptions clientOptions) : base(context, virtualNetwork, clientOptions) { }
 
-        internal SubnetContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal SubnetContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
 

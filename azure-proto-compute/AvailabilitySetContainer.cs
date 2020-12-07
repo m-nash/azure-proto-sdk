@@ -13,7 +13,7 @@ namespace azure_proto_compute
     {
         public AvailabilitySetContainer(ArmClientContext context, PhResourceGroup resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
 
-        internal AvailabilitySetContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal AvailabilitySetContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions):base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
 

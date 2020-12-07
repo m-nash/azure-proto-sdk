@@ -17,7 +17,7 @@ namespace azure_proto_core
 
         internal ResourceGroupContainerOperations(ArmClientContext context, SubscriptionOperations subscription, ArmClientOptions clientOptions) : base(context, subscription.Id, clientOptions) { }
 
-        internal ResourceGroupContainerOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal ResourceGroupContainerOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public ArmOperation<XResourceGroup> Create(string name, Location location)
         {

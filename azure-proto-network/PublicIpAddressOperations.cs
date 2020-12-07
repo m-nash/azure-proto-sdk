@@ -26,13 +26,13 @@ namespace azure_proto_network
         public override ArmResponse<XPublicIpAddress> Get()
         {
             return new PhArmResponse<XPublicIpAddress, PublicIPAddress>(Operations.Get(Id.ResourceGroup, Id.Name), 
-                n => { Resource = new PhPublicIPAddress(n); return new XPublicIpAddress(ClientContext, Resource as PhPublicIPAddress); });
+                n => { Resource = new PhPublicIPAddress(n); return new XPublicIpAddress(ClientContext, Resource as PhPublicIPAddress, this.ClientOptions); });
         }
 
         public async override Task<ArmResponse<XPublicIpAddress>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<XPublicIpAddress, PublicIPAddress>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
-               n => { Resource = new PhPublicIPAddress(n); return new XPublicIpAddress(ClientContext, Resource as PhPublicIPAddress); });
+               n => { Resource = new PhPublicIPAddress(n); return new XPublicIpAddress(ClientContext, Resource as PhPublicIPAddress, this.ClientOptions); });
         }
 
         public ArmOperation<XPublicIpAddress> AddTag(string key, string value)
@@ -40,7 +40,7 @@ namespace azure_proto_network
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
             return new PhArmOperation<XPublicIpAddress, PublicIPAddress>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
-                n => { Resource = new PhPublicIPAddress(n); return new XPublicIpAddress(ClientContext, Resource as PhPublicIPAddress); });
+                n => { Resource = new PhPublicIPAddress(n); return new XPublicIpAddress(ClientContext, Resource as PhPublicIPAddress, this.ClientOptions); });
         }
 
         public async Task<ArmOperation<XPublicIpAddress>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
@@ -48,7 +48,7 @@ namespace azure_proto_network
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
             return new PhArmOperation<XPublicIpAddress, PublicIPAddress>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
-                n => { Resource = new PhPublicIPAddress(n); return new XPublicIpAddress(ClientContext, Resource as PhPublicIPAddress); });
+                n => { Resource = new PhPublicIPAddress(n); return new XPublicIpAddress(ClientContext, Resource as PhPublicIPAddress, this.ClientOptions); });
         }
 
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,  

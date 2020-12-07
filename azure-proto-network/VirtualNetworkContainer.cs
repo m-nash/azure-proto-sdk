@@ -15,7 +15,7 @@ namespace azure_proto_network
     {
         public VirtualNetworkContainer(ArmClientContext context, PhResourceGroup resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
 
-        internal VirtualNetworkContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal VirtualNetworkContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
 

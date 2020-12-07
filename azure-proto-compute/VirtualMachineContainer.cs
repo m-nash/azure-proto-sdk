@@ -20,7 +20,7 @@ namespace azure_proto_compute
     {
         public VirtualMachineContainer(ArmClientContext context, PhResourceGroup resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
 
-        internal VirtualMachineContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal VirtualMachineContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions):base(context, id, clientOptions){ }
 
         public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 

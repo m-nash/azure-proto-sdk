@@ -22,14 +22,14 @@ namespace azure_proto_network
 
         public static VirtualNetworkContainer VirtualNetworks(this ResourceGroupOperations resourceGroup)
         {
-            return new VirtualNetworkContainer(resourceGroup.ClientContext, resourceGroup.Id);
+            return new VirtualNetworkContainer(resourceGroup.ClientContext, resourceGroup.Id, resourceGroup.ClientOptions);
         }
         #endregion
 
         #region Public IP Address Operations
         public static XPublicIpAddress PublicIpAddress(this ResourceGroupOperations resourceGroup, PhPublicIPAddress publicIpAddress)
         {
-            return new XVirtualNetwork(resourceGroup.ClientContext, publicIpAddress, resourceGroup.ClientOptions);
+            return new XPublicIpAddress(resourceGroup.ClientContext, publicIpAddress, resourceGroup.ClientOptions);
         }
 
         public static PublicIpAddressOperations PublicIpAddress(this ResourceGroupOperations resourceGroup, string publicIpAddress)
@@ -44,7 +44,7 @@ namespace azure_proto_network
 
         public static PublicIpAddressContainer PublicIpAddresses(this ResourceGroupOperations resourceGroup)
         {
-            return new PublicIpAddressContainer(resourceGroup.ClientContext, resourceGroup.Id);
+            return new PublicIpAddressContainer(resourceGroup.ClientContext, resourceGroup.Id, resourceGroup.ClientOptions);
         }
         #endregion
 
@@ -66,7 +66,7 @@ namespace azure_proto_network
 
         public static NetworkInterfaceContainer NetworkInterfaces(this ResourceGroupOperations resourceGroup)
         {
-            return new NetworkInterfaceContainer(resourceGroup.ClientContext, resourceGroup.Id);
+            return new NetworkInterfaceContainer(resourceGroup.ClientContext, resourceGroup.Id, resourceGroup.ClientOptions);
         }
         #endregion
 
@@ -93,7 +93,7 @@ namespace azure_proto_network
 
         public static NetworkSecurityGroupContainer NetworkSecurityGroups(this ResourceGroupOperations resourceGroup)
         {
-            return new NetworkSecurityGroupContainer(resourceGroup.ClientContext, resourceGroup.Id);
+            return new NetworkSecurityGroupContainer(resourceGroup.ClientContext, resourceGroup.Id, resourceGroup.ClientOptions);
         }
         #endregion
     }

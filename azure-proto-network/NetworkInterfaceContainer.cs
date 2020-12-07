@@ -15,7 +15,7 @@ namespace azure_proto_network
     {
         public NetworkInterfaceContainer(ArmClientContext context, PhResourceGroup resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
 
-        internal NetworkInterfaceContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal NetworkInterfaceContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 

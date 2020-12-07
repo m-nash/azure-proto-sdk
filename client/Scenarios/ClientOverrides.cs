@@ -29,6 +29,7 @@ namespace client
             }
             
             Debug.Assert(dummyPolicy1.numMsgGot != dummyPolicy2.numMsgGot);
+            Console.WriteLine("\nPASSED\n");
 
 
         }
