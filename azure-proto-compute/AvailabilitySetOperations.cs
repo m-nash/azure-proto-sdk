@@ -9,6 +9,8 @@ namespace azure_proto_compute
 {
     public class AvailabilitySetOperations : ResourceOperationsBase<XAvailabilitySet, PhAvailabilitySet>, ITaggable<XAvailabilitySet, PhAvailabilitySet>, IDeletableResource<XAvailabilitySet, PhAvailabilitySet>
     {
+        public AvailabilitySetOperations(ArmResourceOperations genericOperations) : base(genericOperations) { }
+
         public AvailabilitySetOperations(ArmClientContext context, TrackedResource resource) : base(context, resource) { }
 
         public AvailabilitySetOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
@@ -20,7 +22,7 @@ namespace azure_proto_compute
             return new ArmVoidOperation(Operations.Delete(Id.ResourceGroup, Id.Name));
         }
 
-        public async  Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.DeleteAsync(Id.ResourceGroup, Id.Name));
         }
