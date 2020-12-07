@@ -9,6 +9,7 @@ namespace azure_proto_core.Resources
     public class UserAssignedIdentity
     {
         public Guid ClientId { get; set; }
+
         public Guid PrincipalId { get; set; }
 
         public UserAssignedIdentity (Guid clientId, Guid principalId)
@@ -41,35 +42,39 @@ namespace azure_proto_core.Resources
                 return this.ClientId.Equals(other.ClientId) && this.PrincipalId.Equals(other.PrincipalId);
         }
 
-        public static Dictionary<ResourceIdentifier, UserAssignedIdentity> Deserialize(JsonProperty property)
+        public static UserAssignedIdentity Deserialize(JsonElement element)
         {
-            Dictionary<ResourceIdentifier, UserAssignedIdentity> dictionary = new Dictionary<ResourceIdentifier, UserAssignedIdentity>(); //holds useridentities
-            List<string> ids = new List<string>();
-            string resourceId = "";
-            foreach (var property0 in property.Value.EnumerateObject())
+            Optional<Guid> clientId = default;
+            Optional<Guid> principalId = default;
+            foreach (var property in element.EnumerateObject())
             {
-                resourceId = property0.Name;
-                foreach (var property1 in property0.Value.EnumerateObject())
+                if (property.NameEquals("clientId"))
                 {
-                    if (property1.NameEquals("clientId"))
+                    if (property.Value.ValueKind == JsonValueKind.Null)
                     {
-                        ids.Add(Guid.Parse(property1.Value.GetString()).ToString());
+                        principalId = Guid.Empty;
                         continue;
                     }
-                    if (property1.NameEquals("principalId"))
-                    {
-                        ids.Add(Guid.Parse(property1.Value.GetString()).ToString());
-                        continue;
-                    }
+                    principalId = Guid.Parse(property.Value.GetString());
+                    continue;
                 }
-                UserAssignedIdentity userIds = new UserAssignedIdentity(new Guid(ids[0]), new Guid(ids[1]));
-                ids.Clear();
-                dictionary.Add(resourceId, userIds); //add resourceids and its corresponding struct each time we read one in 
+                if (property.NameEquals("principalId"))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        principalId = Guid.Empty;
+                        continue;
+                    }
+
+                    principalId = Guid.Parse(property.Value.GetString());
+                    continue;
+                }
             }
-            return dictionary;
+
+            return new UserAssignedIdentity(clientId, principalId);
         }
 
-        public static void Serialize(Utf8JsonWriter writer, Dictionary<ResourceIdentifier, UserAssignedIdentity> userAssignedIdentities)
+        public static void Serialize(Utf8JsonWriter writer, IDictionary<ResourceIdentifier, UserAssignedIdentity> userAssignedIdentities)
         {
             if (Optional.IsCollectionDefined(userAssignedIdentities.AsEnumerable()))
             {
@@ -90,7 +95,7 @@ namespace azure_proto_core.Resources
             }
         }
 
-        public static bool EqualsUserAssignedIdentities(Dictionary<ResourceIdentifier, UserAssignedIdentity> original, Dictionary<ResourceIdentifier, UserAssignedIdentity> other)
+        public static bool EqualsUserAssignedIdentities(IDictionary<ResourceIdentifier, UserAssignedIdentity> original, IDictionary<ResourceIdentifier, UserAssignedIdentity> other)
         {
             if (original == null && other == null)
                 return true;
@@ -108,13 +113,18 @@ namespace azure_proto_core.Resources
                     if (other.TryGetValue(id.Key, out value))
                     {
                         if (!id.Value.Equals(value))
+                        {
                             return false;
+                        }
                     }
                     else
+                    {
                         return false;
+                    }
                 }
+
                 return true;
             }
-        }        
+        }
     }
 }

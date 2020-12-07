@@ -115,10 +115,12 @@ namespace azure_proto_compute
             get => PhVmToIdentity(Model.Identity);
         }
 
-        private Identity PhVmToIdentity(VirtualMachineIdentity vmIdentity)
+        public static Identity PhVmToIdentity(Azure.ResourceManager.Compute.Models.VirtualMachineIdentity vmIdentity)
         {
             if (vmIdentity.Type == ResourceIdentityType.None)
+            {
                 return new Identity();
+            }
             else if (vmIdentity.Type == ResourceIdentityType.SystemAssigned)
             {
                 Identity identity = new Identity
@@ -127,18 +129,19 @@ namespace azure_proto_compute
                     UserAssignedIdentities = null,
                 };
                 return identity;
-            }              
+            }
             else if (vmIdentity.Type == ResourceIdentityType.UserAssigned)
             {
-                var userAssignedIdentities = new Dictionary<ResourceIdentifier, UserAssignedIdentity>(); //holds useridentities
+                var userAssignedIdentities = new Dictionary<ResourceIdentifier, UserAssignedIdentity>(); // holds useridentities
                 foreach (var identity in vmIdentity.UserAssignedIdentities)
                 {
                     ResourceIdentifier resourceId = new ResourceIdentifier(identity.Key);
                     UserAssignedIdentity userAssignedIdentity = new UserAssignedIdentity(new Guid(identity.Value.ClientId), new Guid(identity.Value.PrincipalId));
                     userAssignedIdentities.Add(resourceId, userAssignedIdentity);
                 }
+
                 return new Identity(null, userAssignedIdentities);
-            }                
+            }
             else
             {
                 return new Identity();

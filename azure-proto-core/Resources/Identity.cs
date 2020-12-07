@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text.Json;
-using Azure.Core;
-using Azure.ResourceManager.Resources.Models;
-using azure_proto_core.Resources;
-using UserAssignedIdentity = azure_proto_core.Resources.UserAssignedIdentity;
-using SystemAssignedIdentity = azure_proto_core.Resources.SystemAssignedIdentity;
-
-namespace azure_proto_core
+﻿namespace azure_proto_core
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text.Json;
+    using Azure.Core;
+    using Azure.ResourceManager.Resources.Models;
+    using SystemAssignedIdentity = azure_proto_core.Resources.SystemAssignedIdentity;
+    using UserAssignedIdentity = azure_proto_core.Resources.UserAssignedIdentity;
+
     /// <summary>
     /// Represents a managed identity
     /// </summary>
@@ -20,9 +17,9 @@ namespace azure_proto_core
         private const string UserAssigned = "UserAssigned";
         private const string SystemAndUserAssigned = "SystemAssigned, UserAssigned";
 
-        public SystemAssignedIdentity SystemAssignedIdentity { get; set; }  // Need to decide on setter
+        public SystemAssignedIdentity SystemAssignedIdentity { get; set; } // Need to decide on setter
 
-        public Dictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; set; } //maintain structure of {id, (clientid, principal id)} in case of multiple UserIdentities
+        public IDictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; set; } // maintain structure of {id, (clientid, principal id)} in case of multiple UserIdentities
 
         public Identity() : this(null, false) { } //not system or user
 
@@ -33,14 +30,14 @@ namespace azure_proto_core
             this.UserAssignedIdentities = new Dictionary<ResourceIdentifier, UserAssignedIdentity>();
             if (user != null)
             {
-                foreach(KeyValuePair<ResourceIdentifier, UserAssignedIdentity> id in user)
+                foreach (KeyValuePair<ResourceIdentifier, UserAssignedIdentity> id in user)
                 {
                     this.UserAssignedIdentities.Add(id.Key, id.Value);
                 }
-            }                
+            }
         }
 
-        public Identity (SystemAssignedIdentity systemAssigned, Dictionary<ResourceIdentifier, UserAssignedIdentity> user)
+        public Identity (SystemAssignedIdentity systemAssigned, IDictionary<ResourceIdentifier, UserAssignedIdentity> user)
         {
             this.SystemAssignedIdentity = systemAssigned;
             this.UserAssignedIdentities = user;
@@ -50,7 +47,9 @@ namespace azure_proto_core
         {
             if ((this.SystemAssignedIdentity == null && other.SystemAssignedIdentity == null) &&
                 (this.UserAssignedIdentities == null && other.UserAssignedIdentities == null))
+            {
                 return true;
+            }
             else if ((this.SystemAssignedIdentity != null && other.SystemAssignedIdentity != null) &&
                 (this.UserAssignedIdentities == null && other.UserAssignedIdentities == null))
                 return this.SystemAssignedIdentity.Equals(other.SystemAssignedIdentity);
@@ -65,19 +64,9 @@ namespace azure_proto_core
         {
             Optional<SystemAssignedIdentity> systemAssignedIdentity = default;
             IdentityKind type = default;
-            Optional<Dictionary<ResourceIdentifier, UserAssignedIdentity>> userAssignedIdentities = default;
+            IDictionary<ResourceIdentifier, UserAssignedIdentity> userAssignedIdentities = new Dictionary<ResourceIdentifier, UserAssignedIdentity>();
             foreach (var property in element.EnumerateObject())
             {
-                if (property.NameEquals("type"))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        property.ThrowNonNullablePropertyIsNull();
-                        continue;
-                    }
-                    type = new IdentityKind(property.Value.GetString());
-                    continue;
-                }
                 if (property.NameEquals("userAssignedIdentities"))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
@@ -85,12 +74,36 @@ namespace azure_proto_core
                         userAssignedIdentities = null;
                         continue;
                     }
-                    userAssignedIdentities = UserAssignedIdentity.Deserialize(property);
+
+                    string resourceId = string.Empty;
+                    foreach (var keyValuePair in property.Value.EnumerateObject())
+                    {
+                        resourceId = keyValuePair.Name;
+                        var userAssignedIdentity = UserAssignedIdentity.Deserialize(keyValuePair.Value);
+                        userAssignedIdentities.Add(resourceId, userAssignedIdentity);
+                    }
+
                     continue;
                 }
+
+                if (property.NameEquals("type"))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        property.ThrowNonNullablePropertyIsNull();
+                        continue;
+                    }
+
+                    type = new IdentityKind(property.Value.GetString());
+                    continue;
+                }
+
                 if (type.Equals(SystemAssigned))
-                    systemAssignedIdentity = SystemAssignedIdentity.Deserialize(element);               
+                {
+                    systemAssignedIdentity = SystemAssignedIdentity.Deserialize(element);
+                }
             }
+
             return new Identity(systemAssignedIdentity, userAssignedIdentities);
         }
 
@@ -111,7 +124,7 @@ namespace azure_proto_core
                 writer.WritePropertyName("kind");
                 writer.WriteStringValue(SystemAssigned);
                 SystemAssignedIdentity.Serialize(writer, this.SystemAssignedIdentity);
-            }                
+            }
             else if (this.UserAssignedIdentities != null)
             {
                 writer.WritePropertyName("kind");
@@ -119,9 +132,12 @@ namespace azure_proto_core
                 UserAssignedIdentity.Serialize(writer, this.UserAssignedIdentities);
             }
             else
-                writer.WriteStringValue("null"); //if identity is null
-            writer.WriteEndObject(); //close Identity               
-            writer.WriteEndObject(); //outermost }
+            {
+                writer.WriteStringValue("null"); // if identity is null
+            }
+
+            writer.WriteEndObject(); // close Identity
+            writer.WriteEndObject(); // outermost }
             writer.Flush();
         }
     }
