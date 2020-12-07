@@ -10,7 +10,7 @@ namespace client
             Scenario scenario = null;
             try
             {
-                scenario = ScenarioFactory.GetScenario(Scenarios.ClientOptionsOverride);
+                scenario = ScenarioFactory.GetScenario(Scenarios.All);
                 scenario.Execute();
 
             }

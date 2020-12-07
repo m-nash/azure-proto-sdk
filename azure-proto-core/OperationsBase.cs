@@ -36,7 +36,7 @@ namespace azure_proto_core
 
         public virtual void Validate(ResourceIdentifier identifier)
         {
-            if ((SubscriptionContainerOperations.AzureResourceType != ResourceType && identifier == null) || identifier?.Type != ResourceType)
+            if ((SubscriptionContainerOperations.AzureResourceType != ResourceType && identifier == null))
             {
                 throw new InvalidOperationException($"{identifier} is not a valid resource of type {ResourceType}");
             }

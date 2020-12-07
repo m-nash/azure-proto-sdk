@@ -71,6 +71,6 @@ namespace azure_proto_core
                 s => new XResourceGroup(ClientContext, new PhResourceGroup(s), this.ClientOptions));
         }
 
-        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Id.Subscription, cred)).ResourceGroups;
+        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Id.Subscription, cred, ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
     }
 }

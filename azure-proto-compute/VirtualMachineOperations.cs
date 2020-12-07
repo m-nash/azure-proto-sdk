@@ -13,9 +13,9 @@ namespace azure_proto_compute
     /// </summary>
     public class VirtualMachineOperations : ResourceOperationsBase<XVirtualMachine, PhVirtualMachine>, ITaggable<XVirtualMachine, PhVirtualMachine>, IDeletableResource<XVirtualMachine, PhVirtualMachine>
     {
-        public VirtualMachineOperations(ArmResourceOperations genericOperations, ArmClientOptions clientOptions) : base(genericOperations, clientOptions) { }
+        internal VirtualMachineOperations(ArmResourceOperations genericOperations, ArmClientOptions clientOptions) : base(genericOperations, clientOptions) { }
 
-        public VirtualMachineOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
+        internal VirtualMachineOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 
@@ -119,6 +119,6 @@ namespace azure_proto_compute
             return new PhArmOperation<XVirtualMachine, VirtualMachine>(await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken), v => { Resource = new PhVirtualMachine(v); return new XVirtualMachine(ClientContext, Resource as PhVirtualMachine, this.ClientOptions); });
         }
 
-        internal VirtualMachinesOperations Operations => GetClient<ComputeManagementClient>((baseUri, creds) => new ComputeManagementClient(baseUri, Id.Subscription, creds)).VirtualMachines;
+        internal VirtualMachinesOperations Operations => GetClient<ComputeManagementClient>((baseUri, creds) => new ComputeManagementClient(baseUri, Id.Subscription, creds, ArmClientOptions.convert<ComputeManagementClientOptions>(ClientOptions))).VirtualMachines;
     }
 }
