@@ -1,5 +1,4 @@
-﻿using Azure;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace azure_proto_core

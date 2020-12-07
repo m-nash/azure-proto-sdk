@@ -14,11 +14,11 @@ namespace client
             var rg = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName).Get().Value;
             foreach (var vm in rg.VirtualMachines().ListByNameExpanded(Environment.UserName))
             {
-                Console.WriteLine($"--------VM id--------: {vm.Id}");
+                Console.WriteLine($"--------VM id--------: {vm.Model.Id}");
             }
             await foreach (var vm in rg.VirtualMachines().ListByNameExpandedAsync(Environment.UserName))
             {
-                Console.WriteLine($"--------VM id--------: {vm.Id}");
+                Console.WriteLine($"--------VM id--------: {vm.Model.Id}");
             }
         }
     }

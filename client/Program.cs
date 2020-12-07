@@ -21,10 +21,13 @@ namespace client
                     ResourceIdentifier id = new ResourceIdentifier(rgId);
                     var rg = new ArmClient().Subscription(id.Subscription).ResourceGroup(id);
                     Console.WriteLine($"--------Deleting {rg.Id.Name}--------");
-                    var rgModel = rg.GetModelIfNewer();
-                    if (rgModel != null)
+                    try
                     {
                         _ = rg.DeleteAsync();
+                    }
+                    catch
+                    {
+                        //ignore exceptions in case the rg doesn't exist
                     }
                 }
             }

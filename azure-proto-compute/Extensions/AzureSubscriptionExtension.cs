@@ -19,12 +19,12 @@ namespace azure_proto_compute
         /// <param name="top"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static Pageable<VirtualMachineOperations> ListVirtualMachines(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<XVirtualMachine> ListVirtualMachines(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             //TODO: consider ArmPageable<T> to introduce post network call filtering and avoid breaking changes
             ArmFilterCollection filters = new ArmFilterCollection(PhVirtualMachine.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<VirtualMachineOperations, PhVirtualMachine>(subscription, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<XVirtualMachine, PhVirtualMachine>(subscription, filters, top, cancellationToken);
         }
 
         /// <summary>
@@ -35,27 +35,27 @@ namespace azure_proto_compute
         /// <param name="top"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static AsyncPageable<VirtualMachineOperations> ListVirtualMachinesAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<XVirtualMachine> ListVirtualMachinesAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhVirtualMachine.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<VirtualMachineOperations, PhVirtualMachine>(subscription, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<XVirtualMachine, PhVirtualMachine>(subscription, filters, top, cancellationToken);
         }
         #endregion
 
         #region AvailabilitySet List Operations
-        public static Pageable<AvailabilitySetOperations> ListAvailabilitySets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<XAvailabilitySet> ListAvailabilitySets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhAvailabilitySet.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<AvailabilitySetOperations, PhAvailabilitySet>(subscription, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<XAvailabilitySet, PhAvailabilitySet>(subscription, filters, top, cancellationToken);
         }
 
-        public static AsyncPageable<AvailabilitySetOperations> ListAvailabilitySetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<XAvailabilitySet> ListAvailabilitySetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhAvailabilitySet.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<AvailabilitySetOperations, PhAvailabilitySet>(subscription, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<XAvailabilitySet, PhAvailabilitySet>(subscription, filters, top, cancellationToken);
         }
         #endregion
     }

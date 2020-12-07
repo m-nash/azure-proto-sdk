@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    public class ResourceGroupOperations : ResourceOperationsBase<ResourceGroupOperations, PhResourceGroup>, ITaggable<ResourceGroupOperations, PhResourceGroup>, IDeletableResource<ResourceGroupOperations, PhResourceGroup>
+    public class ResourceGroupOperations : ResourceOperationsBase<XResourceGroup, PhResourceGroup>, ITaggable<XResourceGroup, PhResourceGroup>, IDeletableResource<XResourceGroup, PhResourceGroup>
     {
         public static readonly string AzureResourceType = "Microsoft.Resources/resourceGroups";
 
@@ -27,28 +27,28 @@ namespace azure_proto_core
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.Name, cancellationToken));
         }
 
-        public override ArmResponse<ResourceGroupOperations> Get()
+        public override ArmResponse<XResourceGroup> Get()
         {
-            return new PhArmResponse<ResourceGroupOperations, ResourceGroup>(Operations.Get(Id.Name), g => { this.Resource = new PhResourceGroup(g); return this; });
+            return new PhArmResponse<XResourceGroup, ResourceGroup>(Operations.Get(Id.Name), g => { this.Resource = new PhResourceGroup(g); return new XResourceGroup(ClientContext, Resource as PhResourceGroup); });
         }
 
-        public async override Task<ArmResponse<ResourceGroupOperations>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<XResourceGroup>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<ResourceGroupOperations, ResourceGroup>(await Operations.GetAsync(Id.Name, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
+            return new PhArmResponse<XResourceGroup, ResourceGroup>(await Operations.GetAsync(Id.Name, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return new XResourceGroup(ClientContext, Resource as PhResourceGroup); });
         }
 
-        public ArmOperation<ResourceGroupOperations> AddTag(string name, string value)
+        public ArmOperation<XResourceGroup> AddTag(string name, string value)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;
-            return new PhArmOperation<ResourceGroupOperations, ResourceGroup>(Operations.Update(Id.Name, patch), g => { this.Resource = new PhResourceGroup(g); return this; });
+            return new PhArmOperation<XResourceGroup, ResourceGroup>(Operations.Update(Id.Name, patch), g => { this.Resource = new PhResourceGroup(g); return new XResourceGroup(ClientContext, Resource as PhResourceGroup); });
         }
 
-        public async  Task<ArmOperation<ResourceGroupOperations>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<XResourceGroup>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;
-            return new PhArmOperation<ResourceGroupOperations, ResourceGroup>(await Operations.UpdateAsync(Id.Name, patch, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return this; });
+            return new PhArmOperation<XResourceGroup, ResourceGroup>(await Operations.UpdateAsync(Id.Name, patch, cancellationToken), g => { this.Resource = new PhResourceGroup(g); return new XResourceGroup(ClientContext, Resource as PhResourceGroup); });
         }
 
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, azure_proto_core.Location location = default)

@@ -26,10 +26,14 @@ namespace client
                 {
                     ResourceIdentifier id = new ResourceIdentifier(rgId);
                     var rg = new ArmClient().ResourceGroup(rgId);
-                    if (rg.GetModelIfNewer() != null)
+                    Console.WriteLine($"--------Deleting {rg.Id.Name}--------");
+                    try
                     {
-                        Console.WriteLine($"--------Deleting {rg.Id.Name}--------");
                         _ = rg.DeleteAsync();
+                    }
+                    catch
+                    {
+                        //ignore exceptions in case rg doesn't exist
                     }
                 }
             }

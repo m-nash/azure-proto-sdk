@@ -9,7 +9,7 @@ namespace azure_proto_network
 {
     /// <summary>
     /// </summary>
-    public class SubnetOperations : ResourceOperationsBase<SubnetOperations, PhSubnet>, IDeletableResource<SubnetOperations, PhSubnet>
+    public class SubnetOperations : ResourceOperationsBase<XSubnet, PhSubnet>, IDeletableResource<XSubnet, PhSubnet>
     {
         public SubnetOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
@@ -27,16 +27,16 @@ namespace azure_proto_network
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, cancellationToken));
         }
 
-        public override ArmResponse<SubnetOperations> Get()
+        public override ArmResponse<XSubnet> Get()
         {
-            return new PhArmResponse<SubnetOperations, Subnet>(Operations.Get(Id.ResourceGroup, Id.Parent.Name, Id.Name),
-                n => { Resource = new PhSubnet(n, DefaultLocation); return this; });
+            return new PhArmResponse<XSubnet, Subnet>(Operations.Get(Id.ResourceGroup, Id.Parent.Name, Id.Name),
+                n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet); });
         }
 
-        public async override Task<ArmResponse<SubnetOperations>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<XSubnet>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<SubnetOperations, Subnet>(await Operations.GetAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, null, cancellationToken),
-                n => { Resource = new PhSubnet(n, DefaultLocation); return this; });
+            return new PhArmResponse<XSubnet, Subnet>(await Operations.GetAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, null, cancellationToken),
+                n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet); });
         }
 
 

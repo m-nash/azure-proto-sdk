@@ -7,11 +7,9 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class NetworkInterfaceOperations : ResourceOperationsBase<NetworkInterfaceOperations, PhNetworkInterface>, ITaggable<NetworkInterfaceOperations, PhNetworkInterface>, IDeletableResource<NetworkInterfaceOperations, PhNetworkInterface>
+    public class NetworkInterfaceOperations : ResourceOperationsBase<XNetworkInterface, PhNetworkInterface>, ITaggable<XNetworkInterface, PhNetworkInterface>, IDeletableResource<XNetworkInterface, PhNetworkInterface>
     {
         public NetworkInterfaceOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
-
-        public NetworkInterfaceOperations(ArmClientContext context, azure_proto_core.Resource resource, ArmClientOptions clientOptions) : base(context, resource, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 
@@ -25,35 +23,35 @@ namespace azure_proto_network
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
-        public override ArmResponse<NetworkInterfaceOperations> Get()
+        public override ArmResponse<XNetworkInterface> Get()
         {
-            return new PhArmResponse<NetworkInterfaceOperations, NetworkInterface>(
+            return new PhArmResponse<XNetworkInterface, NetworkInterface>(
                 Operations.Get(Id.ResourceGroup, Id.Name),
-                n => { Resource = new PhNetworkInterface(n); return this; });
+                n => { Resource = new PhNetworkInterface(n); return new XNetworkInterface(ClientContext, Resource as PhNetworkInterface); });
         }
 
-        public async override Task<ArmResponse<NetworkInterfaceOperations>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<XNetworkInterface>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<NetworkInterfaceOperations, NetworkInterface>(
+            return new PhArmResponse<XNetworkInterface, NetworkInterface>(
                 await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
-                n => { Resource = new PhNetworkInterface(n); return this; });
+                n => { Resource = new PhNetworkInterface(n); return new XNetworkInterface(ClientContext, Resource as PhNetworkInterface); });
         }
 
-        public ArmOperation<NetworkInterfaceOperations> AddTag(string key, string value)
+        public ArmOperation<XNetworkInterface> AddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<NetworkInterfaceOperations, NetworkInterface>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
-                n => { Resource = new PhNetworkInterface(n); return this; });
+            return new PhArmOperation<XNetworkInterface, NetworkInterface>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => { Resource = new PhNetworkInterface(n); return new XNetworkInterface(ClientContext, Resource as PhNetworkInterface); });
         }
 
-        public async Task<ArmOperation<NetworkInterfaceOperations>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<XNetworkInterface>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<NetworkInterfaceOperations, NetworkInterface>(
+            return new PhArmOperation<XNetworkInterface, NetworkInterface>(
                 await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken), 
-                n => { Resource = new PhNetworkInterface(n); return this; });
+                n => { Resource = new PhNetworkInterface(n); return new XNetworkInterface(ClientContext, Resource as PhNetworkInterface); });
         }
 
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred, 
