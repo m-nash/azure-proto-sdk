@@ -11,11 +11,14 @@ namespace azure_proto_network
     /// </summary>
     public class SubnetOperations : ResourceOperationsBase<Subnet, SubnetData>, IDeletableResource<Subnet, SubnetData>
     {
-        public SubnetOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        public SubnetOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
-        public SubnetOperations(ArmClientContext context, azure_proto_core.Resource resource) : base(context, resource) { }
+        public SubnetOperations(ArmClientContext context, azure_proto_core.Resource resource, ArmClientOptions clientOptions) : base(context, resource, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
+        
+        internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+                    ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).Subnets;
 
         public ArmOperation<Response> Delete()
         {
@@ -30,16 +33,13 @@ namespace azure_proto_network
         public override ArmResponse<Subnet> Get()
         {
             return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(Operations.Get(base.Id.ResourceGroup, base.Id.Parent.Name, base.Id.Name),
-                n => { base.Resource = new SubnetData(n, base.DefaultLocation); return new Subnet(base.ClientContext, base.Resource as SubnetData); });
+                n => { base.Resource = new SubnetData(n, base.DefaultLocation); return new Subnet(base.ClientContext, base.Resource as SubnetData, ClientOptions); });
         }
 
         public async override Task<ArmResponse<Subnet>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(await Operations.GetAsync(base.Id.ResourceGroup, base.Id.Parent.Name, base.Id.Name, null, cancellationToken),
-                n => { base.Resource = new SubnetData(n, base.DefaultLocation); return new Subnet(base.ClientContext, base.Resource as SubnetData); });
+                n => { base.Resource = new SubnetData(n, base.DefaultLocation); return new Subnet(base.ClientContext, base.Resource as SubnetData, ClientOptions); });
         }
-
-
-        internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).Subnets;
     }
 }

@@ -11,7 +11,7 @@ namespace azure_proto_network
 
         public override SubnetContainer Subnets()
         {
-            return new SubnetContainer(ClientContext, Model);
+            return new SubnetContainer(ClientContext, Model, ClientOptions);
         }
 
         public VirtualNetworkData Model { get; private set; }

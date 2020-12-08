@@ -15,11 +15,11 @@ namespace azure_proto_compute
     {
         public VirtualMachineOperations(ArmResourceOperations genericOperations) : base(genericOperations) { }
 
-        public VirtualMachineOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal VirtualMachineOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 
-        public  ArmOperation<Response> Delete()
+        public ArmOperation<Response> Delete()
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name));
         }
@@ -80,45 +80,46 @@ namespace azure_proto_compute
         public override ArmResponse<VirtualMachine> Get()
         {
             return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
-                Operations.Get(base.Id.ResourceGroup, base.Id.Name),
-                v => { base.Resource = new VirtualMachineData(v); return new VirtualMachine(base.ClientContext, base.Resource as VirtualMachineData); } );
+                Operations.Get(Id.ResourceGroup, Id.Name),
+                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions); });
         }
 
         public async override Task<ArmResponse<VirtualMachine>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
-                await Operations.GetAsync(base.Id.ResourceGroup, base.Id.Name, cancellationToken),
-                v => { base.Resource = new VirtualMachineData(v); return new VirtualMachine(base.ClientContext, base.Resource as VirtualMachineData); });
+                await Operations.GetAsync(Id.ResourceGroup, Id.Name, cancellationToken),
+                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions); });
         }
 
         public ArmOperation<VirtualMachine> Update(VirtualMachineUpdate patchable)
         {
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
-                Operations.StartUpdate(base.Id.ResourceGroup, base.Id.Name, patchable),
-                v => { base.Resource = new VirtualMachineData(v); return new VirtualMachine(base.ClientContext, base.Resource as VirtualMachineData); });
+                Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable),
+                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions); });
         }
 
         public async Task<ArmOperation<VirtualMachine>> UpdateAsync(VirtualMachineUpdate patchable, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
-                await Operations.StartUpdateAsync(base.Id.ResourceGroup, base.Id.Name, patchable, cancellationToken),
-                v => { base.Resource = new VirtualMachineData(v); return new VirtualMachine(base.ClientContext, base.Resource as VirtualMachineData); });
+                await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions); });
         }
 
         public ArmOperation<VirtualMachine> AddTag(string key, string value)
         {
-            var patchable = new VirtualMachineUpdate { Tags= new Dictionary<string, string>()};
+            var patchable = new VirtualMachineUpdate { Tags = new Dictionary<string, string>() };
             patchable.Tags.Add(key, value);
-            return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(Operations.StartUpdate(base.Id.ResourceGroup, base.Id.Name, patchable), v => { base.Resource = new VirtualMachineData(v); return new VirtualMachine(base.ClientContext, base.Resource as VirtualMachineData); });
+            return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable), v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions); });
         }
 
         public async Task<ArmOperation<VirtualMachine>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new VirtualMachineUpdate { Tags = new Dictionary<string, string>() };
             patchable.Tags.Add(key, value);
-            return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(await Operations.StartUpdateAsync(base.Id.ResourceGroup, base.Id.Name, patchable, cancellationToken), v => { base.Resource = new VirtualMachineData(v); return new VirtualMachine(base.ClientContext, base.Resource as VirtualMachineData); });
+            return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken), v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions); });
         }
 
-        internal VirtualMachinesOperations Operations => GetClient<ComputeManagementClient>((baseUri, creds) => new ComputeManagementClient(baseUri, Id.Subscription, creds)).VirtualMachines;
+        internal VirtualMachinesOperations Operations => GetClient<ComputeManagementClient>((baseUri, creds) => 
+            new ComputeManagementClient(baseUri, Id.Subscription, creds, ArmClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).VirtualMachines;
     }
 }

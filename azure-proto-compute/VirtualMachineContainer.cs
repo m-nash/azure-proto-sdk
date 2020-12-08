@@ -18,9 +18,9 @@ namespace azure_proto_compute
     /// Likewise we should not expose create when a subnet container is constructed at a resource group level
     public class VirtualMachineContainer : ResourceContainerOperations<VirtualMachine, VirtualMachineData>
     {
-        public VirtualMachineContainer(ArmClientContext context, ResourceGroupData resourceGroup) : base(context, resourceGroup) { }
+        public VirtualMachineContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
 
-        internal VirtualMachineContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal VirtualMachineContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions):base(context, id, clientOptions){ }
 
         public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 
@@ -29,7 +29,7 @@ namespace azure_proto_compute
             var operation = Operations.StartCreateOrUpdate(base.Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
             return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                v => new VirtualMachine(base.ClientContext, new VirtualMachineData(v)));
+                v => new VirtualMachine(ClientContext, new VirtualMachineData(v), ClientOptions));
         }
 
         public async override Task<ArmResponse<VirtualMachine>> CreateAsync(string name, VirtualMachineData resourceDetails, CancellationToken cancellationToken = default)
@@ -37,21 +37,21 @@ namespace azure_proto_compute
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                v => new VirtualMachine(base.ClientContext, new VirtualMachineData(v)));
+                v => new VirtualMachine(ClientContext, new VirtualMachineData(v), ClientOptions));
         }
 
         public override ArmOperation<VirtualMachine> StartCreate(string name, VirtualMachineData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
-                Operations.StartCreateOrUpdate(base.Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
-                v => new VirtualMachine(base.ClientContext, new VirtualMachineData(v)));
+                Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
+                v => new VirtualMachine(ClientContext, new VirtualMachineData(v), ClientOptions));
         }
 
         public async override Task<ArmOperation<VirtualMachine>> StartCreateAsync(string name, VirtualMachineData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
-                await Operations.StartCreateOrUpdateAsync(base.Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
-                v => new VirtualMachine(base.ClientContext, new VirtualMachineData(v)));
+                await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
+                v => new VirtualMachine(ClientContext, new VirtualMachineData(v), ClientOptions));
         }
 
         public VirtualMachineModelBuilder Construct(string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, AvailabilitySetData aset, Location location = null)
@@ -94,7 +94,7 @@ namespace azure_proto_compute
             var result = Operations.List(Id.Name, cancellationToken);
             return new PhWrappingPageable<Azure.ResourceManager.Compute.Models.VirtualMachine, VirtualMachine>(
                 result,
-                s => new VirtualMachine(base.ClientContext, new VirtualMachineData(s)));
+                s => new VirtualMachine(ClientContext, new VirtualMachineData(s), ClientOptions));
         }
 
         public AsyncPageable<VirtualMachine> ListAsync(CancellationToken cancellationToken = default)
@@ -102,21 +102,21 @@ namespace azure_proto_compute
             var result = Operations.ListAsync(Id.Name, cancellationToken);
             return new PhWrappingAsyncPageable<Azure.ResourceManager.Compute.Models.VirtualMachine, VirtualMachine>(
                 result,
-                s => new VirtualMachine(base.ClientContext, new VirtualMachineData(s)));
+                s => new VirtualMachine(ClientContext, new VirtualMachineData(s), ClientOptions));
         }
 
         public Pageable<ArmResourceOperations> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public AsyncPageable<ArmResourceOperations> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public Pageable<VirtualMachine> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
@@ -131,6 +131,7 @@ namespace azure_proto_compute
             return new PhWrappingAsyncPageable<ArmResourceOperations, VirtualMachine>(results, s => (new VirtualMachineOperations(s)).Get().Value);
         }
 
-        internal VirtualMachinesOperations Operations => this.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, Id.Subscription, cred)).VirtualMachines;
+        internal VirtualMachinesOperations Operations => this.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, Id.Subscription, cred, 
+                    ArmClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).VirtualMachines;
     }
 }

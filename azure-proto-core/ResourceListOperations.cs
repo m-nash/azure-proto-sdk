@@ -28,6 +28,7 @@ namespace azure_proto_core
 
         public static Pageable<TOperations> ListAtContext<TOperations, TResource>(
             ArmClientContext clientContext,
+            ArmClientOptions clientOptions,
             ResourceIdentifier id,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
@@ -41,6 +42,7 @@ namespace azure_proto_core
 
             return _ListAtContext<TOperations, TResource>(
                 clientContext,
+                clientOptions,
                 id,
                 scopeId,
                 resourceFilters,
@@ -50,6 +52,7 @@ namespace azure_proto_core
 
         public static AsyncPageable<TOperations> ListAtContextAsync<TOperations, TResource>(
             ArmClientContext clientContext,
+            ArmClientOptions clientOptions,
             ResourceIdentifier id,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
@@ -63,6 +66,7 @@ namespace azure_proto_core
 
             return _ListAtContextAsync<TOperations, TResource>(
                 clientContext,
+                clientOptions,
                 id,
                 scopeId,
                 resourceFilters,
@@ -80,6 +84,7 @@ namespace azure_proto_core
         {
             return _ListAtContext<TOperations, TResource>(
                 subscription.ClientContext,
+                subscription.ClientOptions,
                 subscription.Id,
                 null,
                 resourceFilters,
@@ -97,6 +102,7 @@ namespace azure_proto_core
         {
             return _ListAtContextAsync<TOperations, TResource>(
                 subscription.ClientContext,
+                subscription.ClientOptions,
                 subscription.Id,
                 null,
                 resourceFilters,
@@ -106,6 +112,7 @@ namespace azure_proto_core
 
         private static AsyncPageable<TOperations> _ListAtContextAsync<TOperations, TResource>(
             ArmClientContext clientContext,
+            ArmClientOptions clientOptions,
             ResourceIdentifier scopeId,
             string scopeFilter,
             ArmFilterCollection resourceFilters = null,
@@ -130,11 +137,12 @@ namespace azure_proto_core
                     cancellationToken);
             }
 
-            return ConvertResultsAsync<TOperations, TResource>(result, clientContext);
+            return ConvertResultsAsync<TOperations, TResource>(result, clientContext, clientOptions);
         }
 
         private static Pageable<TOperations> _ListAtContext<TOperations, TResource>(
             ArmClientContext clientContext,
+            ArmClientOptions clientOptions,
             ResourceIdentifier scopeId,
             string scopeFilter = null,
             ArmFilterCollection resourceFilters = null,
@@ -159,12 +167,13 @@ namespace azure_proto_core
                     cancellationToken);
             }
 
-            return ConvertResults<TOperations, TResource>(result, clientContext);
+            return ConvertResults<TOperations, TResource>(result, clientContext, clientOptions);
         }
 
         private static Pageable<TOperations> ConvertResults<TOperations, TResource>(
             Pageable<GenericResourceExpanded> result,
-            ArmClientContext clientContext)
+            ArmClientContext clientContext,
+            ArmClientOptions clientOptions)
             where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
@@ -175,12 +184,13 @@ namespace azure_proto_core
                     clientContext,
                     (Activator.CreateInstance(
                         typeof(TResource),
-                        s as Azure.ResourceManager.Resources.Models.Resource) as TResource).Id) as TOperations);
+                        s as Azure.ResourceManager.Resources.Models.Resource) as TResource), clientOptions) as TOperations);
         }
 
         private static AsyncPageable<TOperations> ConvertResultsAsync<TOperations, TResource>(
             AsyncPageable<GenericResourceExpanded> result,
-            ArmClientContext clientContext)
+            ArmClientContext clientContext,
+            ArmClientOptions clientOptions)
             where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
@@ -189,8 +199,7 @@ namespace azure_proto_core
                 s => Activator.CreateInstance(
                     typeof(TOperations),
                     clientContext,
-                    Activator.CreateInstance(typeof(TResource), s as Azure.ResourceManager.Resources.Models.Resource) as
-                        TResource) as TOperations);
+                    Activator.CreateInstance(typeof(TResource), s as Azure.ResourceManager.Resources.Models.Resource) as TResource, clientOptions) as TOperations);
         }
 
         //TODO: should be able to access context.GetClient() instead of needing this method

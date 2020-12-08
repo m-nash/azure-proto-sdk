@@ -12,6 +12,7 @@ namespace client
             {
                 scenario = ScenarioFactory.GetScenario(Scenarios.CreateSingleVmExample);
                 scenario.Execute();
+
             }
             finally
             {
