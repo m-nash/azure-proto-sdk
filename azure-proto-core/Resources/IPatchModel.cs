@@ -1,11 +1,12 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 using System.Collections.Generic;
-using System.Text;
 
 namespace azure_proto_core
 {
     /// <summary>
-    /// Placeholder for ARM Patch operations
+    ///     Placeholder for ARM Patch operations
     /// </summary>
     public interface IPatchModel
     {

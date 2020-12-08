@@ -1,13 +1,14 @@
-﻿namespace azure_proto_core
-{
-    using System;
-    using System.Collections.Generic;
-    using Azure.ResourceManager.Resources.Models;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
+using System.Collections.Generic;
+using Azure.ResourceManager.Resources.Models;
 
     public class ResourceGroupData : TrackedResource<Azure.ResourceManager.Resources.Models.ResourceGroup>, IManagedByResource
     {
 
-        public ResourceGroupData(Azure.ResourceManager.Resources.Models.ResourceGroup rg)
+        public ResourceGroupData(ResourceGroup rg)
             : base(rg.Id, rg.Location, rg)
         {
             if (rg.Tags == null)

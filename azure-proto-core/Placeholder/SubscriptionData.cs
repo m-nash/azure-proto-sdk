@@ -1,7 +1,10 @@
-﻿namespace azure_proto_core
-{
-    using Azure.ResourceManager.Resources.Models;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
 
+using Azure.ResourceManager.Resources.Models;
+
+namespace azure_proto_core
+{
     public class SubscriptionData : TrackedResource<Subscription>
     {
         public SubscriptionData(Subscription s)

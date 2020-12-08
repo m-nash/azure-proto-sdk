@@ -1,4 +1,7 @@
-﻿namespace azure_proto_core
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace azure_proto_core
 {
     // Update the signature for new library
     public class LocationData : TrackedResource<Azure.ResourceManager.Resources.Models.Location>
