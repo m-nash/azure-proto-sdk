@@ -40,12 +40,12 @@ namespace azure_proto_core
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.Name, cancellationToken));
         }
 
-        public ArmOperation<XResourceGroup> AddTag(string name, string value)
+        public ArmOperation<ResourceGroup> AddTag(string name, string value)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;
 
-            return new PhArmOperation<ResourceGroup, ResourceGroup>(
+            return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(
                 Operations.Update(Id.Name, patch),
                 g =>
                 {
@@ -55,7 +55,7 @@ namespace azure_proto_core
                 });
         }
 
-        public async Task<ArmOperation<XResourceGroup>> AddTagAsync(
+        public async Task<ArmOperation<ResourceGroup>> AddTagAsync(
             string name,
             string value,
             CancellationToken cancellationToken = default)
@@ -79,9 +79,9 @@ namespace azure_proto_core
                 Operations.Get(Id.Name),
                 g =>
                 {
-                    Resource = new PhResourceGroup(g);
+                    Resource = new ResourceGroupData(g);
 
-                    return new XResourceGroup(ClientContext, Resource as PhResourceGroup);
+                    return new ResourceGroup(ClientContext, Resource as ResourceGroupData);
                 });
         }
 

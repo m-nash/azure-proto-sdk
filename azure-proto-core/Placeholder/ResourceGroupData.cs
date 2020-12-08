@@ -5,10 +5,12 @@ using System;
 using System.Collections.Generic;
 using Azure.ResourceManager.Resources.Models;
 
+namespace azure_proto_core
+{
     public class ResourceGroupData : TrackedResource<Azure.ResourceManager.Resources.Models.ResourceGroup>, IManagedByResource
     {
 
-        public ResourceGroupData(ResourceGroup rg)
+        public ResourceGroupData(Azure.ResourceManager.Resources.Models.ResourceGroup rg)
             : base(rg.Id, rg.Location, rg)
         {
             if (rg.Tags == null)

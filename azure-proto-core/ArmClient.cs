@@ -14,6 +14,8 @@ using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using azure_proto_core.Adapters;
 
+namespace azure_proto_core
+{
     /// <summary>
     ///     The entry point for all ARM clients.  Note that, we may not want to take a dirrect dependency on Azure.Identity, so
     ///     we may make the

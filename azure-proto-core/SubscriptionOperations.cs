@@ -8,6 +8,8 @@ using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using azure_proto_core.Adapters;
 
+namespace azure_proto_core
+{
     /// <summary>
     ///     Subscription operations
     /// </summary>

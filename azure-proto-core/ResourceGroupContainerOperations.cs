@@ -5,9 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Azure;
 using Azure.ResourceManager.Resources;
-using Azure.ResourceManager.Resources.Models;
 using azure_proto_core.Adapters;
 
+namespace azure_proto_core
+{
     /// <summary>
     ///     Operations for the RespourceGroups container in the given subscription context.  Allows Creating and listign
     ///     respource groups
@@ -32,10 +33,11 @@ using azure_proto_core.Adapters;
 
         public ArmOperation<ResourceGroup> Create(string name, Location location)
         {
-            var model = new ResourceGroupData(new ResourceGroup(location));
+            var model = new ResourceGroupData(new Azure.ResourceManager.Resources.Models.ResourceGroup(location));
+            var response = Operations.CreateOrUpdate(name, model);
 
-            return new PhArmOperation<ResourceGroup, ResourceGroupData>(
-                Operations.CreateOrUpdate(name, model),
+            return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(
+                response,
                 g => new ResourceGroup(ClientContext, new ResourceGroupData(g)));
         }
 
@@ -46,12 +48,12 @@ using azure_proto_core.Adapters;
         {
             var response = Operations.CreateOrUpdate(name, resourceDetails, cancellationToken);
 
-            return new PhArmResponse<ResourceGroup, ResourceGroupData>(
+            return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(
                 response,
                 g => new ResourceGroup(ClientContext, new ResourceGroupData(g)));
         }
 
-        public override async Task<ArmResponse<XResourceGroup>> CreateAsync(
+        public override async Task<ArmResponse<ResourceGroup>> CreateAsync(
             string name,
             ResourceGroupData resourceDetails,
             CancellationToken cancellationToken = default)
@@ -59,7 +61,7 @@ using azure_proto_core.Adapters;
             var response = await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken)
                 .ConfigureAwait(false);
 
-            return new PhArmResponse<ResourceGroup, ResourceGroupData>(
+            return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(
                 response,
                 g => new ResourceGroup(ClientContext, new ResourceGroupData(g)));
         }
