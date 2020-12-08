@@ -20,7 +20,7 @@ namespace azure_proto_network
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-            ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).VirtualNetworks;
+            ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).VirtualNetworks;
 
         public override ArmResponse<XVirtualNetwork> Create(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
         {

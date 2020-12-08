@@ -119,6 +119,7 @@ namespace azure_proto_compute
             return new PhArmOperation<XVirtualMachine, VirtualMachine>(await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken), v => { Resource = new PhVirtualMachine(v); return new XVirtualMachine(ClientContext, Resource as PhVirtualMachine, ClientOptions); });
         }
 
-        internal VirtualMachinesOperations Operations => GetClient<ComputeManagementClient>((baseUri, creds) => new ComputeManagementClient(baseUri, Id.Subscription, creds, ArmClientOptions.convert<ComputeManagementClientOptions>(ClientOptions))).VirtualMachines;
+        internal VirtualMachinesOperations Operations => GetClient<ComputeManagementClient>((baseUri, creds) => 
+            new ComputeManagementClient(baseUri, Id.Subscription, creds, ArmClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).VirtualMachines;
     }
 }

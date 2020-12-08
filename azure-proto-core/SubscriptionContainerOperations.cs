@@ -16,12 +16,13 @@ namespace azure_proto_core
     {
         public static readonly string AzureResourceType = "Microsoft.Resources/subscriptions";
 
-        internal SubscriptionContainerOperations(ArmClientContext context, ArmClientOptions options) : base(context, null, options, null) { }
+        internal SubscriptionContainerOperations(ArmClientContext context, ArmClientOptions options)
+            : base(context, null, options, null) { }
 
         public override ResourceType ResourceType => AzureResourceType;
 
         internal SubscriptionsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) =>
-            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
+            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
 
         public Pageable<SubscriptionOperations> List(CancellationToken cancellationToken = default)
         {

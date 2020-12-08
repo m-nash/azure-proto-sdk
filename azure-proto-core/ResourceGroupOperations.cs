@@ -20,7 +20,7 @@ namespace azure_proto_core
         public override ResourceType ResourceType => AzureResourceType;
 
         internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(uri, Id.Subscription, creds,
-            ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions)))?.ResourceGroups;
+            ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions)))?.ResourceGroups;
 
         public ArmOperation<Response> Delete()
         {

@@ -13,9 +13,9 @@ namespace azure_proto_network
         internal NetworkInterfaceOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
-        
+
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred, 
-            ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).NetworkInterfaces;
+            ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).NetworkInterfaces;
 
         public ArmOperation<Response> Delete()
         {

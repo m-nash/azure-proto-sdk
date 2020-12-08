@@ -132,6 +132,6 @@ namespace azure_proto_compute
         }
 
         internal VirtualMachinesOperations Operations => this.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, Id.Subscription, cred, 
-                    ArmClientOptions.convert<ComputeManagementClientOptions>(ClientOptions))).VirtualMachines;
+                    ArmClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).VirtualMachines;
     }
 }

@@ -21,7 +21,7 @@ namespace azure_proto_network
         public override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
 
         internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-                    ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).NetworkSecurityGroups;
+                    ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).NetworkSecurityGroups;
 
         public override ArmResponse<XNetworkSecurityGroup> Create(string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
         {

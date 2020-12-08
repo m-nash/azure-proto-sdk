@@ -34,9 +34,9 @@ namespace azure_proto_core
 
         public override ResourceType ResourceType => AzureResourceType;
         internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) => 
-            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
+            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
         internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) => 
-            new ResourcesManagementClient(uri, Id.Subscription, cred, ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
+            new ResourcesManagementClient(uri, Id.Subscription, cred, ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
 
         public Pageable<ResourceGroupOperations> ListResourceGroups(CancellationToken cancellationToken = default)
         {

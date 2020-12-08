@@ -89,6 +89,6 @@ namespace azure_proto_compute
         }
 
         internal AvailabilitySetsOperations Operations => GetClient((uri, cred) => new ComputeManagementClient(uri, Id.Subscription, cred, 
-                    ArmClientOptions.convert<ComputeManagementClientOptions>(ClientOptions))).AvailabilitySets;
+                    ArmClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).AvailabilitySets;
     }
 }

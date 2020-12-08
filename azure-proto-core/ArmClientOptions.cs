@@ -7,7 +7,7 @@ namespace azure_proto_core
 {
     public class ArmClientOptions : ClientOptions
     {
-        public static T convert<T>(ArmClientOptions options) where T : ClientOptions, new()
+        public static T Convert<T>(ArmClientOptions options) where T : ClientOptions, new()
         {
             var newOptions = new T();
             newOptions.Transport = options.Transport;

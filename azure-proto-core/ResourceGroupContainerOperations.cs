@@ -21,7 +21,7 @@ namespace azure_proto_core
         public override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
 
         internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Id.Subscription, cred,
-            ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
+            ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
 
         public ArmOperation<XResourceGroup> Create(string name, Location location)
         {
