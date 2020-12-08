@@ -16,6 +16,9 @@ namespace azure_proto_network
         public SubnetOperations(ArmClientContext context, azure_proto_core.Resource resource, ArmClientOptions clientOptions) : base(context, resource, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
+        
+        internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+                    ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).Subnets;
 
         public ArmOperation<Response> Delete()
         {
@@ -38,9 +41,5 @@ namespace azure_proto_network
             return new PhArmResponse<XSubnet, Subnet>(await Operations.GetAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, null, cancellationToken),
                 n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet, ClientOptions); });
         }
-
-
-        internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-                    ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).Subnets;
     }
 }

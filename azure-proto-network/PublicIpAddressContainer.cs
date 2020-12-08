@@ -15,6 +15,9 @@ namespace azure_proto_network
         public PublicIpAddressContainer(ArmResourceOperations genericOperations) : base(genericOperations.ClientContext,genericOperations.Id, genericOperations.ClientOptions){ }
         internal PublicIpAddressContainer(ArmClientContext context, PhResourceGroup resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
         internal PublicIpAddressContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
+        
+        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+            ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).PublicIPAddresses;
 
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
@@ -91,8 +94,5 @@ namespace azure_proto_network
         {
             return s => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(s), ClientOptions);
         }
-
-        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-                    ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).PublicIPAddresses;
     }
 }

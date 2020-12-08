@@ -18,6 +18,9 @@ namespace azure_proto_network
         internal NetworkInterfaceContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
+        
+        internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred, 
+            ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).NetworkInterfaces;
 
         public override ArmResponse<XNetworkInterface> Create(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
         {
@@ -102,7 +105,5 @@ namespace azure_proto_network
         {
             return s => new XNetworkInterface(ClientContext, new PhNetworkInterface(s), ClientOptions);
         }
-        internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred, 
-                    ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).NetworkInterfaces;
     }
 }

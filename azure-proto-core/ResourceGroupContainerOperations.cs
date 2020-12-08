@@ -13,13 +13,15 @@ namespace azure_proto_core
     /// </summary>
     public class ResourceGroupContainerOperations : ResourceContainerOperations<XResourceGroup, PhResourceGroup>
     {
-        public override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
-
         internal ResourceGroupContainerOperations(ArmClientContext context, SubscriptionOperations subscription, ArmClientOptions clientOptions)
             : base(context, subscription.Id, clientOptions) { }
 
         internal ResourceGroupContainerOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
             : base(context, id, clientOptions) { }
+        public override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
+
+        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Id.Subscription, cred,
+            ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
 
         public ArmOperation<XResourceGroup> Create(string name, Location location)
         {
@@ -72,8 +74,5 @@ namespace azure_proto_core
                 Operations.ListAsync(null, null, cancellationToken),
                 s => new XResourceGroup(ClientContext, new PhResourceGroup(s), ClientOptions));
         }
-
-        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Id.Subscription, cred, 
-            ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
     }
 }

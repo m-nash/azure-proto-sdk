@@ -13,6 +13,9 @@ namespace azure_proto_network
         internal NetworkInterfaceOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
+        
+        internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred, 
+            ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).NetworkInterfaces;
 
         public ArmOperation<Response> Delete()
         {
@@ -54,8 +57,5 @@ namespace azure_proto_network
                 await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken), 
                 n => { Resource = new PhNetworkInterface(n); return new XNetworkInterface(ClientContext, Resource as PhNetworkInterface, ClientOptions); });
         }
-
-        internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred, 
-                    ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).NetworkInterfaces;
     }
 }

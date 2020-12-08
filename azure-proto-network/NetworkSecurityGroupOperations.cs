@@ -31,6 +31,12 @@ namespace azure_proto_network
         internal NetworkSecurityGroupOperations(ArmClientContext parent, ResourceIdentifier context, ArmClientOptions clientOptions) : base(parent, context, clientOptions) { }
 
         public NetworkSecurityGroupOperations(ArmClientContext parent, TrackedResource context, ArmClientOptions clientOptions) : base(parent, context, clientOptions) { }
+
+        public override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
+
+        internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+                     ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).NetworkSecurityGroups;
+
         /// <summary>
         /// TODO: GENERATOR Make use of the entity tags on the resource - we may need to add to the generated management client
         /// </summary>
@@ -105,10 +111,5 @@ namespace azure_proto_network
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
-
-        public override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
-
-        internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-                     ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).NetworkSecurityGroups;
     }
 }

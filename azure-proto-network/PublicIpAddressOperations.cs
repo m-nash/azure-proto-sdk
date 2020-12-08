@@ -13,6 +13,9 @@ namespace azure_proto_network
         internal PublicIpAddressOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
+        
+        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,  
+            ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).PublicIPAddresses;
 
         public ArmOperation<Response> Delete()
         {
@@ -51,8 +54,5 @@ namespace azure_proto_network
             return new PhArmOperation<XPublicIpAddress, PublicIPAddress>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
                 n => { Resource = new PhPublicIPAddress(n); return new XPublicIpAddress(ClientContext, Resource as PhPublicIPAddress, ClientOptions); });
         }
-
-        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,  
-                    ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).PublicIPAddresses;
     }
 }

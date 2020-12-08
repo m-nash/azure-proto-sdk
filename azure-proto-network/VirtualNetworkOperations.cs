@@ -16,6 +16,8 @@ namespace azure_proto_network
         internal VirtualNetworkOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
+        internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+            ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).VirtualNetworks;
 
         public ArmOperation<Response> Delete()
         {
@@ -74,8 +76,5 @@ namespace azure_proto_network
         {
             return new SubnetContainer(ClientContext, Id, ClientOptions);
         }
-
-        internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-                    ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).VirtualNetworks;
     }
 }

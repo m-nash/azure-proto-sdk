@@ -4,7 +4,8 @@ namespace azure_proto_network
 {
     public class XVirtualNetwork : VirtualNetworkOperations
     {
-        internal XVirtualNetwork(ArmClientContext context, PhVirtualNetwork resource, ArmClientOptions clientOptions) : base(context, resource.Id, clientOptions)
+        internal XVirtualNetwork(ArmClientContext context, PhVirtualNetwork resource, ArmClientOptions clientOptions)
+            : base(context, resource.Id, clientOptions)
         {
             Model = resource;
         }

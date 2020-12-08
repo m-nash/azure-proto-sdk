@@ -13,12 +13,14 @@ namespace azure_proto_network
 {
     public class VirtualNetworkContainer : ResourceContainerOperations<XVirtualNetwork, PhVirtualNetwork>
     {
-        public VirtualNetworkContainer(ArmResourceOperations genericOperations) : base(genericOperations.ClientContext,genericOperations.Id, genericOperations.ClientOptions){ }
+        public VirtualNetworkContainer(ArmResourceOperations genericOperations) : base(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions) { }
         internal VirtualNetworkContainer(ArmClientContext context, PhResourceGroup resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
 
         internal VirtualNetworkContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
+        internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+            ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).VirtualNetworks;
 
         public override ArmResponse<XVirtualNetwork> Create(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
         {
@@ -91,7 +93,5 @@ namespace azure_proto_network
         {
             return s => new XVirtualNetwork(ClientContext, new PhVirtualNetwork(s), ClientOptions);
         }
-        internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-                    ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).VirtualNetworks;
     }
 }

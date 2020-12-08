@@ -20,6 +20,9 @@ namespace azure_proto_core
 
         public override ResourceType ResourceType => AzureResourceType;
 
+        internal SubscriptionsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) =>
+            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
+
         public Pageable<SubscriptionOperations> List(CancellationToken cancellationToken = default)
         {
             return new PhWrappingPageable<Subscription, SubscriptionOperations>(
@@ -52,8 +55,5 @@ namespace azure_proto_core
             }
             return sub;
         }
-
-        internal SubscriptionsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) =>
-                    new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
     }
 }
