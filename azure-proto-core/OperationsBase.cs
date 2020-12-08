@@ -11,7 +11,7 @@ namespace azure_proto_core
     /// </summary>
     public abstract class OperationsBase
     {
-        public OperationsBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions ClientOptions, Location location = null)
+        public OperationsBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions, Location location = null)
             : this(context, new ArmResource(id, location ?? Location.Default), clientOptions)
         {
         }

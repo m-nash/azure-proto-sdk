@@ -28,17 +28,15 @@ namespace azure_proto_core
         }
 
         internal SubscriptionOperations(ArmClientContext context, Resource subscription, ArmClientOptions clientOptions)
-            : base(context, subscriptionm clientOptions)
+            : base(context, subscription, clientOptions)
         {
         }
 
         public override ResourceType ResourceType => AzureResourceType;
-
-        internal SubscriptionsOperations SubscriptionsClient =>
-            GetClient((uri, cred) => new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred)).Subscriptions;
-
-        internal ResourceGroupsOperations RgOperations =>
-            GetClient((uri, cred) => new ResourcesManagementClient(uri, Id.Subscription, cred)).ResourceGroups;
+        internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) => 
+            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
+        internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) => 
+            new ResourcesManagementClient(uri, Id.Subscription, cred, ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
 
         public Pageable<ResourceGroupOperations> ListResourceGroups(CancellationToken cancellationToken = default)
         {
@@ -74,9 +72,5 @@ namespace azure_proto_core
         {
             return new ResourceGroupContainerOperations(ClientContext, this, ClientOptions);
         }
-        internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, 
-                    ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
-        internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Id.Subscription, cred, 
-                    ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
     }
 }

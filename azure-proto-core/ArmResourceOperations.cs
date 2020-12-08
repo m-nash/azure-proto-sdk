@@ -16,8 +16,8 @@ namespace azure_proto_core
         {
         }
 
-        public ArmResourceOperations(ArmClientContext context, ArmResource resource)
-            : base(context, resource)
+        public ArmResourceOperations(ArmClientContext context, ArmResource resource, ArmClientOptions clientOption)
+            : base(context, resource, clientOption)
         {
         }
 
