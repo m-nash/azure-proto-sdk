@@ -11,10 +11,11 @@ namespace client
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
 
-            var rg = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
-            var vm = rg.VirtualMachine(Context.VmName);
+            var rgOp = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
+            var vmOp = rgOp.VirtualMachine(Context.VmName);
 
-            Console.WriteLine($"Adding tags to {vm.GetModelIfNewer().Name}");
+            var vm = vmOp.Get().Value;
+            Console.WriteLine($"Adding tags to {vm.Model.Name}");
             vm.AddTag("tagkey", "tagvalue");
         }
     }

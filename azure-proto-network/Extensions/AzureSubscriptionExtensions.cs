@@ -9,72 +9,72 @@ namespace azure_proto_network
     {
         #region Virtual Network Operations
 
-        public static Pageable<VirtualNetworkOperations> ListVnets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<XVirtualNetwork> ListVnets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhVirtualNetwork.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<VirtualNetworkOperations, PhVirtualNetwork>(subscription, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<XVirtualNetwork, PhVirtualNetwork>(subscription, filters, top, cancellationToken);
         }
 
-        public static AsyncPageable<VirtualNetworkOperations> ListVnetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<XVirtualNetwork> ListVnetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhVirtualNetwork.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<VirtualNetworkOperations, PhVirtualNetwork>(subscription, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<XVirtualNetwork, PhVirtualNetwork>(subscription, filters, top, cancellationToken);
         }
 
         #endregion
 
         #region Public IP Address Operations
 
-        public static Pageable<PublicIpAddressOperations> ListPublicIps(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<XPublicIpAddress> ListPublicIps(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhPublicIPAddress.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<PublicIpAddressOperations, PhPublicIPAddress>(subscription, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<XPublicIpAddress, PhPublicIPAddress>(subscription, filters, top, cancellationToken);
         }
 
-        public static AsyncPageable<PublicIpAddressOperations> ListPublicIpsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<XPublicIpAddress> ListPublicIpsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhPublicIPAddress.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<PublicIpAddressOperations, PhPublicIPAddress>(subscription, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<XPublicIpAddress, PhPublicIPAddress>(subscription, filters, top, cancellationToken);
         }
 
         #endregion
 
         #region Network Interface (NIC) operations
 
-        public static Pageable<NetworkInterfaceOperations> ListNics(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<XNetworkInterface> ListNics(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhNetworkInterface.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<NetworkInterfaceOperations, PhNetworkInterface>(subscription, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<XNetworkInterface, PhNetworkInterface>(subscription, filters, top, cancellationToken);
         }
 
-        public static AsyncPageable<NetworkInterfaceOperations> ListNicsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<XNetworkInterface> ListNicsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhNetworkInterface.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<NetworkInterfaceOperations, PhNetworkInterface>(subscription, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<XNetworkInterface, PhNetworkInterface>(subscription, filters, top, cancellationToken);
         }
 
         #endregion
 
         #region Network Security Group operations
 
-        public static Pageable<NetworkSecurityGroupOperations> ListNsgs(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<XNetworkSecurityGroup> ListNsgs(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhNetworkSecurityGroup.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<NetworkSecurityGroupOperations, PhNetworkSecurityGroup>(subscription, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<XNetworkSecurityGroup, PhNetworkSecurityGroup>(subscription, filters, top, cancellationToken);
         }
 
-        public static AsyncPageable<NetworkSecurityGroupOperations> ListNsgsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<XNetworkSecurityGroup> ListNsgsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhNetworkSecurityGroup.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<NetworkSecurityGroupOperations, PhNetworkSecurityGroup>(subscription, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<XNetworkSecurityGroup, PhNetworkSecurityGroup>(subscription, filters, top, cancellationToken);
         }
 
         #endregion

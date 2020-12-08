@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,6 +20,16 @@ namespace azure_proto_core
             _unTypedContainerOperations = containerOperations;
         }
 
+        public TResource Build()
+        {
+            ThrowIfNotValid();
+            OnBeforeBuild();
+            _Build();
+            OnAfterBuild();
+
+            return _resource;
+        }
+
         public ArmResponse<TOperations> Create(string name, CancellationToken cancellationToken = default)
         {
             _resource = Build();
@@ -24,7 +37,9 @@ namespace azure_proto_core
             return _unTypedContainerOperations.Create(name, _resource, cancellationToken);
         }
 
-        public async Task<ArmResponse<TOperations>> CreateAsync(string name, CancellationToken cancellationToken = default)
+        public async Task<ArmResponse<TOperations>> CreateAsync(
+            string name,
+            CancellationToken cancellationToken = default)
         {
             _resource = Build();
 
@@ -38,46 +53,42 @@ namespace azure_proto_core
             return _unTypedContainerOperations.StartCreate(name, _resource, cancellationToken);
         }
 
-        public async Task<ArmOperation<TOperations>> StartCreateAsync(string name, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<TOperations>> StartCreateAsync(
+            string name,
+            CancellationToken cancellationToken = default)
         {
             _resource = Build();
 
             return await _unTypedContainerOperations.StartCreateAsync(name, _resource, cancellationToken);
         }
 
-        private void ThrowIfNotValid()
-        {
-            string message;
-            if (!IsValid(out message))
-                throw new InvalidOperationException(message);
-        }
-
         protected virtual bool IsValid(out string message)
         {
-            message = String.Empty;
-            return true;
-        }
+            message = string.Empty;
 
-        protected virtual void OnBeforeBuild()
-        {
+            return true;
         }
 
         protected virtual void OnAfterBuild()
         {
         }
 
-        private void _Build()
+        protected virtual void OnBeforeBuild()
         {
-
         }
 
-        public TResource Build()
+        private void _Build()
         {
-            ThrowIfNotValid();
-            OnBeforeBuild();
-            _Build();
-            OnAfterBuild();
-            return _resource;
+        }
+
+        private void ThrowIfNotValid()
+        {
+            string message;
+
+            if (!IsValid(out message))
+            {
+                throw new InvalidOperationException(message);
+            }
         }
     }
 }
