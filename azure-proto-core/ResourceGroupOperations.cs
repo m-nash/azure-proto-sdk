@@ -96,6 +96,7 @@ namespace azure_proto_core
             return container.CreateAsync(name, model, token);
         }
 
-        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(uri, Id.Subscription, creds, ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions)))?.ResourceGroups;
+        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(uri, Id.Subscription, creds, 
+                    ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions)))?.ResourceGroups;
     }
 }
