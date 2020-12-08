@@ -1,15 +1,13 @@
-﻿using Azure.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-
-namespace azure_proto_core.Resources
+﻿namespace azure_proto_core.Resources
 {
+    using System;
+    using System.Text.Json;
+    using Azure.Core;
+
     public class SystemAssignedIdentity
     {
         public Guid? TenantId { get; set; }
+
         public Guid? PrincipalId { get; set; }
 
         public SystemAssignedIdentity() : this(Guid.Empty, Guid.Empty) { }
