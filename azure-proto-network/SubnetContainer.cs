@@ -11,21 +11,22 @@ namespace azure_proto_network
 {
     public class SubnetContainer : ResourceContainerOperations<XSubnet, PhSubnet>
     {
-        public SubnetContainer(ArmClientContext context, PhVirtualNetwork virtualNetwork) : base(context, virtualNetwork) { }
+        public SubnetContainer(ArmClientContext context, PhVirtualNetwork virtualNetwork, ArmClientOptions clientOptions) : base(context, virtualNetwork, clientOptions) { }
 
-        internal SubnetContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal SubnetContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
 
 
-        internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).Subnets;
+        internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+                    ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).Subnets;
 
         public override ArmResponse<XSubnet> Create(string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, name, resourceDetails.Model, cancellationToken);
             return new PhArmResponse<XSubnet, Subnet>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                s => new XSubnet(ClientContext, new PhSubnet(s, Location.Default)));
+                s => new XSubnet(ClientContext, new PhSubnet(s, Location.Default), ClientOptions));
         }
 
         public async override Task<ArmResponse<XSubnet>> CreateAsync(string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
@@ -33,21 +34,21 @@ namespace azure_proto_network
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<XSubnet, Subnet>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                s => new XSubnet(ClientContext, new PhSubnet(s, Location.Default)));
+                s => new XSubnet(ClientContext, new PhSubnet(s, Location.Default), ClientOptions));
         }
 
         public override ArmOperation<XSubnet> StartCreate(string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<XSubnet, Subnet>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, name, resourceDetails.Model, cancellationToken),
-                s => new XSubnet(ClientContext, new PhSubnet(s, Location.Default)));
+                s => new XSubnet(ClientContext, new PhSubnet(s, Location.Default), ClientOptions));
         }
 
         public async override Task<ArmOperation<XSubnet>> StartCreateAsync(string name, PhSubnet resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<XSubnet, Subnet>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, Id.Name, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
-                s => new XSubnet(ClientContext, new PhSubnet(s, Location.Default)));
+                s => new XSubnet(ClientContext, new PhSubnet(s, Location.Default), ClientOptions));
         }
 
         public ArmBuilder<XSubnet, PhSubnet> Construct(string name, string cidr, Location location = null, PhNetworkSecurityGroup group = null)
@@ -82,7 +83,7 @@ namespace azure_proto_network
         private Func<Subnet, XSubnet> convertor()
         {
             //TODO: Subnet will be a proxy resource and not a tracked resource ADO #4481
-            return s => new XSubnet(ClientContext, new PhSubnet(s, Location.Default));
+            return s => new XSubnet(ClientContext, new PhSubnet(s, Location.Default), ClientOptions);
         }
 
     }

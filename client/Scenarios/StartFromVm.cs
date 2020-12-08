@@ -11,7 +11,9 @@ namespace client
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
             var client = new ArmClient();
+            
             //retrieve from lowest level, doesn't give ability to walk up and down the container structure
+            //(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions
             var vm = client.GetResourceOperationsBase<VirtualMachineOperations>(Context.SubscriptionId, Context.RgName, Context.VmName).Get().Value.Model;
             Console.WriteLine($"Found VM {vm.Id}");
 

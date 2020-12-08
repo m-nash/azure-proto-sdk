@@ -11,11 +11,14 @@ namespace azure_proto_network
     /// </summary>
     public class SubnetOperations : ResourceOperationsBase<XSubnet, PhSubnet>, IDeletableResource<XSubnet, PhSubnet>
     {
-        public SubnetOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        public SubnetOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
-        public SubnetOperations(ArmClientContext context, azure_proto_core.Resource resource) : base(context, resource) { }
+        public SubnetOperations(ArmClientContext context, azure_proto_core.Resource resource, ArmClientOptions clientOptions) : base(context, resource, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
+        
+        internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+                    ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).Subnets;
 
         public ArmOperation<Response> Delete()
         {
@@ -30,16 +33,13 @@ namespace azure_proto_network
         public override ArmResponse<XSubnet> Get()
         {
             return new PhArmResponse<XSubnet, Subnet>(Operations.Get(Id.ResourceGroup, Id.Parent.Name, Id.Name),
-                n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet); });
+                n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet, ClientOptions); });
         }
 
         public async override Task<ArmResponse<XSubnet>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<XSubnet, Subnet>(await Operations.GetAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, null, cancellationToken),
-                n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet); });
+                n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet, ClientOptions); });
         }
-
-
-        internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).Subnets;
     }
 }

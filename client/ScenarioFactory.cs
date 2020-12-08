@@ -14,7 +14,8 @@
         ShutdownVmsByLINQ,
         ShutdownVmsByNameAcrossResourceGroups,
         ShutdownVmsByNameAcrossSubscriptions,
-        ListByNameExpanded
+        ListByNameExpanded,
+        ClientOptionsOverride
     }
 
     class ScenarioFactory
@@ -49,6 +50,8 @@
                     return new ShutdownVmsByNameAcrossSubscriptions();
                 case Scenarios.ListByNameExpanded:
                     return new ListByNameExpanded();
+                case Scenarios.ClientOptionsOverride:
+                    return new ClientOptionsOverride();
                 default:
                     return null;
             }

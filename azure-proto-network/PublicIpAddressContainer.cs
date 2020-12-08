@@ -12,9 +12,12 @@ namespace azure_proto_network
 {
     public class PublicIpAddressContainer : ResourceContainerOperations<XPublicIpAddress, PhPublicIPAddress>
     {
-        public PublicIpAddressContainer(ArmClientContext context, PhResourceGroup resourceGroup) : base(context, resourceGroup) { }
+        public PublicIpAddressContainer(ArmResourceOperations genericOperations) : base(genericOperations.ClientContext,genericOperations.Id, genericOperations.ClientOptions){ }
+        internal PublicIpAddressContainer(ArmClientContext context, PhResourceGroup resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
+        internal PublicIpAddressContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
-        internal PublicIpAddressContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+            ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).PublicIPAddresses;
 
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
@@ -23,7 +26,7 @@ namespace azure_proto_network
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
             return new PhArmResponse<XPublicIpAddress, PublicIPAddress>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(n)));
+                n => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(n), ClientOptions));
         }
 
         public async override Task<ArmResponse<XPublicIpAddress>> CreateAsync(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
@@ -31,21 +34,21 @@ namespace azure_proto_network
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<XPublicIpAddress, PublicIPAddress>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                n => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(n)));
+                n => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(n), ClientOptions));
         }
 
         public override ArmOperation<XPublicIpAddress> StartCreate(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<XPublicIpAddress, PublicIPAddress>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken),
-                n => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(n)));
+                n => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(n), ClientOptions));
         }
 
         public async override Task<ArmOperation<XPublicIpAddress>> StartCreateAsync(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<XPublicIpAddress, PublicIPAddress>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),
-                n => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(n)));
+                n => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(n), ClientOptions));
         }
 
         public ArmBuilder<XPublicIpAddress, PhPublicIPAddress> Construct(Location location = null)
@@ -78,20 +81,18 @@ namespace azure_proto_network
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhPublicIPAddress.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public AsyncPageable<ArmResourceOperations> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhPublicIPAddress.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
         }
         private Func<PublicIPAddress, XPublicIpAddress> convertor()
         {
-            return s => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(s));
+            return s => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(s), ClientOptions);
         }
-
-        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).PublicIPAddresses;
     }
 }
