@@ -67,7 +67,7 @@
         <Rule Id="SA1128"  Action="Warning" />          <!-- Put constructor initializers on their own line -->
         <Rule Id="SA1129"  Action="Warning" />          <!-- Do not use default value type constructor -->
         <Rule Id="SA1130"  Action="Warning" />          <!-- Use lambda syntax -->
-        <Rule Id="SA1131"  Action="Warning" />          <!-- Use readable conditions -->
+        <Rule Id="SA1131"  Action="None" />          <!-- Use readable conditions -->
         <Rule Id="SA1132"  Action="Warning" />          <!-- Do not combine fields -->
         <Rule Id="SA1133"  Action="Warning" />          <!-- Do not combine attributes -->
         <Rule Id="SA1134"  Action="Warning" />          <!-- Attributes should not share line -->
@@ -75,7 +75,7 @@
         <Rule Id="SA1136"  Action="Warning" />          <!-- Enum values should be on separate lines -->
         <Rule Id="SA1137"  Action="Warning" />          <!-- Elements should have the same indentation -->
         <Rule Id="SA1139"  Action="Warning" />          <!-- Use literal suffix notation instead of casting -->
-        <Rule Id="SX1101"  Action="None" />             <!-- Do not prefix local calls with 'this.' -->
+        <Rule Id="SX1101"  Action="Warning" />             <!-- Do not prefix local calls with 'this.' -->
     </Rules>
 	
     <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers.OrderingRules">
@@ -194,13 +194,13 @@
         <Rule Id="SA1630"  Action="None" />             <!-- Documentation text should contain whitespace -->
         <Rule Id="SA1631"  Action="None" />             <!-- Documentation should meet character percentage -->
         <Rule Id="SA1632"  Action="None" />             <!-- Documentation text should meet minimum character length -->
-        <Rule Id="SA1633"  Action="Warning" />          <!-- File should have header -->
+        <Rule Id="SA1633"  Action="None" />          <!-- File should have header -->
         <Rule Id="SA1634"  Action="Warning" />          <!-- File header should show copyright -->
         <Rule Id="SA1635"  Action="Warning" />          <!-- File header should have copyright text -->
         <Rule Id="SA1636"  Action="Warning" />          <!-- File header copyright text should match -->
-        <Rule Id="SA1637"  Action="Warning" />          <!-- File header should contain file name -->
-        <Rule Id="SA1638"  Action="Warning" />          <!-- File header file name documentation should match file name -->
-        <Rule Id="SA1639"  Action="Warning" />          <!-- File header should have summary -->
+        <Rule Id="SA1637"  Action="None" />          <!-- File header should contain file name -->
+        <Rule Id="SA1638"  Action="None" />          <!-- File header file name documentation should match file name -->
+        <Rule Id="SA1639"  Action="None" />          <!-- File header should have summary -->
         <Rule Id="SA1640"  Action="Warning" />          <!-- File header should have valid company text -->
         <Rule Id="SA1641"  Action="Warning" />          <!-- File header company name text should match -->
         <Rule Id="SA1642"  Action="Warning" />          <!-- Constructor summary documentation should begin with standard text -->
