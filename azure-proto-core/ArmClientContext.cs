@@ -1,10 +1,14 @@
-﻿using Azure.Core;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 using System;
+using Azure.Core;
 
 namespace azure_proto_core
 {
     /// <summary>
-    /// Base class tracking context information for clients - when we have changed client constructors, this should not be necessary
+    ///     Base class tracking context information for clients - when we have changed client constructors, this should not be
+    ///     necessary
     /// </summary>
     public class ArmClientContext
     {
@@ -14,7 +18,8 @@ namespace azure_proto_core
             Credential = credential;
         }
 
-        public ArmClientContext(ArmClientContext other) : this(other.BaseUri, other.Credential)
+        public ArmClientContext(ArmClientContext other)
+            : this(other.BaseUri, other.Credential)
         {
         }
 
@@ -33,7 +38,8 @@ namespace azure_proto_core
         internal Uri BaseUri { get; }
 
         /// <summary>
-        /// Note that this is currently adapting to underlying management clients - once generator changes are in, this would likely be unnecessary
+        ///     Note that this is currently adapting to underlying management clients - once generator changes are in, this would
+        ///     likely be unnecessary
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="creator"></param>

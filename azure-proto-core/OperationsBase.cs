@@ -1,14 +1,20 @@
-﻿using Azure.Core;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 using System;
+using Azure.Core;
 
 namespace azure_proto_core
 {
     /// <summary>
-    /// TODO: split this into a base class for all Operations, and a base class for specific operations
+    ///     TODO: split this into a base class for all Operations, and a base class for specific operations
     /// </summary>
     public abstract class OperationsBase
     {
-        public OperationsBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions ClientOptions, Location location = null ) : this(context, new ArmResource(id, location ?? Location.Default), ClientOptions) { }
+        public OperationsBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions ClientOptions, Location location = null)
+            : this(context, new ArmResource(id, location ?? Location.Default), clientOptions)
+        {
+        }
 
         public OperationsBase(ArmClientContext context, Resource resource, ArmClientOptions ClientOptions)
         {
@@ -16,7 +22,7 @@ namespace azure_proto_core
 
             ClientContext = context;
             Id = resource.Id;
-            TrackedResource trackedResource = resource as TrackedResource;
+            var trackedResource = resource as TrackedResource;
             DefaultLocation = trackedResource?.Location ?? Location.Default;
             Resource = resource;
             this.ClientOptions = ClientOptions;
@@ -43,14 +49,15 @@ namespace azure_proto_core
         }
 
         /// <summary>
-        /// Note that this is currently adapting to underlying management clients - once generator changes are in, this would likely be unnecessary
+        ///     Note that this is currently adapting to underlying management clients - once generator changes are in, this would
+        ///     likely be unnecessary
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="creator"></param>
         /// <returns></returns>
         protected T GetClient<T>(Func<Uri, TokenCredential, T> creator)
         {
-            return ClientContext.GetClient<T>(creator);
+            return ClientContext.GetClient(creator);
         }
     }
 }
