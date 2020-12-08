@@ -1,21 +1,21 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Collections.Generic;
 
 namespace azure_proto_core.Resources
 {
     /// <summary>
-    /// Syntactic sugar for creating ARM filters
+    ///     Syntactic sugar for creating ARM filters
     /// </summary>
     public abstract class ArmResourceFilter : IEquatable<string>, IEquatable<ArmResourceFilter>
     {
-        public ArmResourceFilter()
-        {
-        }
+        public abstract bool Equals(ArmResourceFilter other);
+
         public abstract bool Equals(string other);
 
         public abstract string GetFilterString();
-
-        public abstract bool Equals(ArmResourceFilter other);
 
         public override string ToString()
         {
@@ -28,6 +28,16 @@ namespace azure_proto_core.Resources
         public string Name { get; set; }
 
         public string ResourceGroup { get; set; }
+
+        /// <summary>
+        /// gfhgfhf hjgjhgjhg
+        /// </summary>
+        /// <param name="nameString">hgjhg hjhgjh</param>
+        public static implicit operator ArmSubstringFilter(string nameString)
+        {
+            return new ArmSubstringFilter { Name = nameString };
+        }
+
         public override bool Equals(string other)
         {
             throw new NotImplementedException();
@@ -53,8 +63,6 @@ namespace azure_proto_core.Resources
 
             return string.Join(" and ", builder);
         }
-
-        public static implicit operator ArmSubstringFilter(string nameString) => new ArmSubstringFilter { Name = nameString };
     }
 
     public class ArmResourceTypeFilter : ArmResourceFilter
@@ -84,10 +92,7 @@ namespace azure_proto_core.Resources
 
     public class ArmTagFilter : ArmResourceFilter
     {
-        Tuple<string, string> _tag;
-
-        public string Key { get; private set; }
-        public string Value { get; private set; }
+        private readonly Tuple<string, string> _tag;
 
         public ArmTagFilter(Tuple<string, string> tag)
         {
@@ -96,7 +101,14 @@ namespace azure_proto_core.Resources
             Value = _tag.Item2;
         }
 
-        public ArmTagFilter(string tagKey, string tagValue) : this(new Tuple<string, string>(tagKey, tagValue)) { }
+        public ArmTagFilter(string tagKey, string tagValue)
+            : this(new Tuple<string, string>(tagKey, tagValue))
+        {
+        }
+
+        public string Key { get; }
+
+        public string Value { get; }
 
         public override bool Equals(string other)
         {
@@ -116,7 +128,9 @@ namespace azure_proto_core.Resources
 
     public class ArmFilterCollection
     {
-        public ArmFilterCollection() { }
+        public ArmFilterCollection()
+        {
+        }
 
         public ArmFilterCollection(ResourceType type)
         {

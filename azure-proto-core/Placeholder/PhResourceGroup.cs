@@ -1,15 +1,16 @@
-﻿using azure_proto_core;
-using Azure.ResourceManager.Resources.Models;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 using System;
 using System.Collections.Generic;
-using System.Text;
+using Azure.ResourceManager.Resources.Models;
 
 namespace azure_proto_core
 {
     public class PhResourceGroup : TrackedResource<ResourceGroup>, IManagedByResource
     {
-
-        public PhResourceGroup(ResourceGroup rg) : base(rg.Id, rg.Location, rg)
+        public PhResourceGroup(ResourceGroup rg)
+            : base(rg.Id, rg.Location, rg)
         {
             if (null == rg.Tags)
             {
@@ -18,12 +19,15 @@ namespace azure_proto_core
         }
 
         public override IDictionary<string, string> Tags => Model.Tags;
+
         public override string Name => Model.Name;
+
         public ResourceGroupProperties Properties
         {
             get => Model.Properties;
             set => Model.Properties = value;
         }
+
         public string ManagedBy
         {
             get => Model.ManagedBy;
