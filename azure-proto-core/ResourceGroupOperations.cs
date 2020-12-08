@@ -23,7 +23,10 @@ namespace azure_proto_core
 
         public override ResourceType ResourceType => AzureResourceType;
 
-        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(uri, Id.Subscription, creds,
+        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(
+            uri,
+            Id.Subscription,
+            creds,
             ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions)))?.ResourceGroups;
 
         public ArmOperation<Response> Delete()
@@ -40,7 +43,8 @@ namespace azure_proto_core
         {
             return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Get(Id.Name), g =>
             {
-                this.Resource = new ResourceGroupData(g); return new ResourceGroup(ClientContext, Resource as (, ClientOptions);
+                Resource = new ResourceGroupData(g);
+                return new ResourceGroup(ClientContext, Resource as ResourceGroupData, ClientOptions);
             });
         }
 
@@ -48,7 +52,8 @@ namespace azure_proto_core
         {
             return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.GetAsync(Id.Name, cancellationToken), g =>
             {
-                this.Resource = new ResourceGroupData(g); return new ResourceGroup(ClientContext, Resource as ResourceGroupData, ClientOptions);
+                Resource = new ResourceGroupData(g);
+                return new ResourceGroup(ClientContext, Resource as ResourceGroupData, ClientOptions);
             });
         }
 
@@ -58,7 +63,8 @@ namespace azure_proto_core
             patch.Tags[name] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Update(Id.Name, patch), g =>
             {
-                this.Resource = new ResourceGroupData(g); return new ResourceGroup(ClientContext, Resource as ResourceGroupData, ClientOptions);
+                Resource = new ResourceGroupData(g);
+                return new ResourceGroup(ClientContext, Resource as ResourceGroupData, ClientOptions);
             });
         }
 
@@ -68,11 +74,12 @@ namespace azure_proto_core
             patch.Tags[name] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.UpdateAsync(Id.Name, patch, cancellationToken), g =>
             {
-                this.Resource = new ResourceGroupData(g); return new ResourceGroup(ClientContext, Resource as ResourceGroupData, ClientOptions);
+                Resource = new ResourceGroupData(g);
+                return new ResourceGroup(ClientContext, Resource as ResourceGroupData, ClientOptions);
             });
         }
 
-        public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, azure_proto_core.Location location = default)
+        public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, Location location = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TContainer : ResourceContainerOperations<TOperations, TResource>
@@ -94,15 +101,11 @@ namespace azure_proto_core
             return container.Create(name, model);
         }
 
-        public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(
-            string name, TResource model,
-            azure_proto_core.Location location = default,
-            CancellationToken token = default)
+        public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, Location location = default, CancellationToken token = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
-
             var myResource = Resource as TrackedResource;
 
             if (myResource == null)

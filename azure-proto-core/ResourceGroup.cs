@@ -2,8 +2,8 @@
 {
     public class ResourceGroup : ResourceGroupOperations
     {
-        public ResourceGroup(ArmClientContext context, ResourceGroupData resource)
-            : base(context, resource)
+        internal ResourceGroup(ArmClientContext context, ResourceGroupData resource, ArmClientOptions options)
+            : base(context, resource, options)
         {
             Model = resource;
         }

@@ -14,9 +14,15 @@ namespace azure_proto_compute
     /// </summary>
     public class AvailabilitySetContainer : ResourceContainerOperations<AvailabilitySet, AvailabilitySetData>
     {
-        public AvailabilitySetContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
+        internal AvailabilitySetContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions)
+            : base(context, resourceGroup, clientOptions)
+        {
+        }
 
-        internal AvailabilitySetContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions):base(context, id, clientOptions) { }
+        internal AvailabilitySetContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+            : base(context, id, clientOptions)
+        {
+        }
 
         public override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
 
@@ -52,7 +58,7 @@ namespace azure_proto_compute
 
         public ArmBuilder<AvailabilitySet, AvailabilitySetData> Construct(string skuName, Location location = null)
         {
-            var availabilitySet = new Azure.ResourceManager.Compute.Models.AvailabilitySet(location ?? base.DefaultLocation)
+            var availabilitySet = new Azure.ResourceManager.Compute.Models.AvailabilitySet(location ?? DefaultLocation)
             {
                 PlatformUpdateDomainCount = 5,
                 PlatformFaultDomainCount = 2,

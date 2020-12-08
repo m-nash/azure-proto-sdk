@@ -4,7 +4,8 @@ namespace azure_proto_network
 {
     public class VirtualNetwork : VirtualNetworkOperations
     {
-        public VirtualNetwork(ArmClientContext context, VirtualNetworkData resource) : base(context, resource.Id)
+        public VirtualNetwork(ArmClientContext context, VirtualNetworkData resource, ArmClientOptions options)
+            : base(context, resource.Id, options)
         {
             Model = resource;
         }

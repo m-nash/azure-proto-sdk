@@ -13,7 +13,7 @@ namespace azure_proto_network
 {
     public class NetworkInterfaceContainer : ResourceContainerOperations<NetworkInterface, NetworkInterfaceData>
     {
-        public NetworkInterfaceContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
+        internal NetworkInterfaceContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
 
         internal NetworkInterfaceContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
 
@@ -22,7 +22,7 @@ namespace azure_proto_network
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred, 
             ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).NetworkInterfaces;
 
-        public override ArmResponse<NetworkInterface> Create(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<NetworkInterface> Create(string name, NetworkInterfaceData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
             return new PhArmResponse<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
@@ -56,7 +56,7 @@ namespace azure_proto_network
         {
             var nic = new Azure.ResourceManager.Network.Models.NetworkInterface()
             {
-                Location = location ?? base.DefaultLocation,
+                Location = location ?? DefaultLocation,
                 IpConfigurations = new List<NetworkInterfaceIPConfiguration>()
                 {
                     new NetworkInterfaceIPConfiguration()
@@ -76,7 +76,7 @@ namespace azure_proto_network
         public Pageable<NetworkInterfaceOperations> List(CancellationToken cancellationToken = default)
         {
             return new PhWrappingPageable<Azure.ResourceManager.Network.Models.NetworkInterface, NetworkInterfaceOperations>(
-                Operations.List(base.Id.Name, cancellationToken),
+                Operations.List(Id.Name, cancellationToken),
                 this.convertor());
         }
 

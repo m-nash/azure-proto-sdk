@@ -13,11 +13,22 @@ namespace azure_proto_compute
     /// </summary>
     public class VirtualMachineOperations : ResourceOperationsBase<VirtualMachine, VirtualMachineData>, ITaggable<VirtualMachine, VirtualMachineData>, IDeletableResource<VirtualMachine, VirtualMachineData>
     {
-        public VirtualMachineOperations(ArmResourceOperations genericOperations) : base(genericOperations) { }
+        internal VirtualMachineOperations(ArmResourceOperations genericOperations)
+            : base(genericOperations)
+        {
+        }
 
-        internal VirtualMachineOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
+        internal VirtualMachineOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+            : base(context, id, clientOptions)
+        {
+        }
 
         public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
+
+        public static VirtualMachineOperations FromGeneric(ArmResourceOperations genericOperations)
+        {
+            return new VirtualMachineOperations(genericOperations);
+        }
 
         public ArmOperation<Response> Delete()
         {
@@ -109,14 +120,26 @@ namespace azure_proto_compute
         {
             var patchable = new VirtualMachineUpdate { Tags = new Dictionary<string, string>() };
             patchable.Tags.Add(key, value);
-            return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable), v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions); });
+            return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
+                Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable),
+                v =>
+                {
+                    Resource = new VirtualMachineData(v);
+                    return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions);
+                });
         }
 
         public async Task<ArmOperation<VirtualMachine>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new VirtualMachineUpdate { Tags = new Dictionary<string, string>() };
             patchable.Tags.Add(key, value);
-            return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken), v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions); });
+            return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
+                await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                v =>
+                {
+                    Resource = new VirtualMachineData(v);
+                    return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions);
+                });
         }
 
         internal VirtualMachinesOperations Operations => GetClient<ComputeManagementClient>((baseUri, creds) => 

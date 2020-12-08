@@ -12,11 +12,20 @@ namespace azure_proto_network
 {
     public class PublicIpAddressContainer : ResourceContainerOperations<PublicIpAddress, PublicIPAddressData>
     {
-        public PublicIpAddressContainer(ArmResourceOperations genericOperations) : base(genericOperations.ClientContext,genericOperations.Id, genericOperations.ClientOptions){ }
+        internal PublicIpAddressContainer(ArmResourceOperations genericOperations)
+            : base(genericOperations.ClientContext,genericOperations.Id, genericOperations.ClientOptions)
+        {
+        }
 
-        internal PublicIpAddressContainer(ArmClientContext context, PhResourceGroup resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
+        internal PublicIpAddressContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions)
+            : base(context, resourceGroup, clientOptions)
+        {
+        }
 
-        internal PublicIpAddressContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
+        internal PublicIpAddressContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+            : base(context, id, clientOptions)
+        {
+        }
 
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).PublicIPAddresses;
@@ -92,6 +101,7 @@ namespace azure_proto_network
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
         }
+
         private Func<PublicIPAddress, PublicIpAddress> convertor()
         {
             return s => new PublicIpAddress(ClientContext, new PublicIPAddressData(s), ClientOptions);

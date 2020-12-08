@@ -5,7 +5,6 @@ using System;
 using System.Threading;
 using Azure;
 using Azure.ResourceManager.Resources;
-using Azure.ResourceManager.Resources.Models;
 using azure_proto_core.Adapters;
 
 namespace azure_proto_core
@@ -33,9 +32,11 @@ namespace azure_proto_core
         }
 
         public override ResourceType ResourceType => AzureResourceType;
-        internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) => 
+
+        internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) =>
             new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
-        internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) => 
+
+        internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) =>
             new ResourcesManagementClient(uri, Id.Subscription, cred, ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
 
         public Pageable<ResourceGroupOperations> ListResourceGroups(CancellationToken cancellationToken = default)

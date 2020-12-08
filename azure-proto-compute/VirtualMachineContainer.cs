@@ -18,15 +18,21 @@ namespace azure_proto_compute
     /// Likewise we should not expose create when a subnet container is constructed at a resource group level
     public class VirtualMachineContainer : ResourceContainerOperations<VirtualMachine, VirtualMachineData>
     {
-        public VirtualMachineContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
+        internal VirtualMachineContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions)
+            : base(context, resourceGroup, clientOptions)
+        {
+        }
 
-        internal VirtualMachineContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions):base(context, id, clientOptions){ }
+        internal VirtualMachineContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+            : base(context, id, clientOptions)
+        {
+        }
 
         public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 
         public override ArmResponse<VirtualMachine> Create(string name, VirtualMachineData resourceDetails, CancellationToken cancellationToken = default)
         {
-            var operation = Operations.StartCreateOrUpdate(base.Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
+            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
             return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
                 v => new VirtualMachine(ClientContext, new VirtualMachineData(v), ClientOptions));
@@ -56,7 +62,7 @@ namespace azure_proto_compute
 
         public VirtualMachineModelBuilder Construct(string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, AvailabilitySetData aset, Location location = null)
         {
-            var vm = new Azure.ResourceManager.Compute.Models.VirtualMachine(location ?? base.DefaultLocation)
+            var vm = new Azure.ResourceManager.Compute.Models.VirtualMachine(location ?? DefaultLocation)
             {
                 NetworkProfile = new NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nicId } } },
                 OsProfile = new OSProfile

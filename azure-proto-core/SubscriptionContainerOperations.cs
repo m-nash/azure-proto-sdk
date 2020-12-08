@@ -5,7 +5,6 @@ using azure_proto_core.Adapters;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Azure.Core;
 
 namespace azure_proto_core
 {
@@ -17,7 +16,9 @@ namespace azure_proto_core
         public static readonly string AzureResourceType = "Microsoft.Resources/subscriptions";
 
         internal SubscriptionContainerOperations(ArmClientContext context, ArmClientOptions options)
-            : base(context, null, options, null) { }
+            : base(context, null, options, null)
+        {
+        }
 
         public override ResourceType ResourceType => AzureResourceType;
 
@@ -28,19 +29,19 @@ namespace azure_proto_core
         {
             return new PhWrappingPageable<Subscription, SubscriptionOperations>(
                 Operations.List(cancellationToken),
-                this.convertor());
+                Convertor());
         }
 
         public AsyncPageable<SubscriptionOperations> ListAsync(CancellationToken cancellationToken = default)
         {
             return new PhWrappingAsyncPageable<Subscription, SubscriptionOperations>(
                 Operations.ListAsync(cancellationToken),
-                this.convertor());
+                Convertor());
         }
 
-        private Func<Subscription, SubscriptionOperations> convertor()
+        private Func<Subscription, SubscriptionOperations> Convertor()
         {
-            return s => new SubscriptionOperations(ClientContext, new PhSubscriptionModel(s), ClientOptions);
+            return s => new SubscriptionOperations(ClientContext, new SubscriptionData(s), ClientOptions);
         }
 
         internal async Task<string> GetDefaultSubscription(CancellationToken token = default(CancellationToken))
@@ -54,6 +55,7 @@ namespace azure_proto_core
                     sub = subs.Current.Id.Subscription;
                 }
             }
+
             return sub;
         }
     }
