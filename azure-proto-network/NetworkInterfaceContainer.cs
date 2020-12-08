@@ -24,7 +24,7 @@ namespace azure_proto_network
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
             return new PhArmResponse<XNetworkInterface, NetworkInterface>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new XNetworkInterface(ClientContext, new PhNetworkInterface(n), this.ClientOptions));
+                n => new XNetworkInterface(ClientContext, new PhNetworkInterface(n), ClientOptions));
         }
 
         public async override Task<ArmResponse<XNetworkInterface>> CreateAsync(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
@@ -32,21 +32,21 @@ namespace azure_proto_network
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<XNetworkInterface, NetworkInterface>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                n => new XNetworkInterface(ClientContext, new PhNetworkInterface(n), this.ClientOptions));
+                n => new XNetworkInterface(ClientContext, new PhNetworkInterface(n), ClientOptions));
         }
 
         public override ArmOperation<XNetworkInterface> StartCreate(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<XNetworkInterface, NetworkInterface>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken),
-                n => new XNetworkInterface(ClientContext, new PhNetworkInterface(n), this.ClientOptions));
+                n => new XNetworkInterface(ClientContext, new PhNetworkInterface(n), ClientOptions));
         }
 
         public async override Task<ArmOperation<XNetworkInterface>> StartCreateAsync(string name, PhNetworkInterface resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<XNetworkInterface, NetworkInterface>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),
-                n => new XNetworkInterface(ClientContext, new PhNetworkInterface(n), this.ClientOptions));
+                n => new XNetworkInterface(ClientContext, new PhNetworkInterface(n), ClientOptions));
         }
 
         public ArmBuilder<XNetworkInterface, PhNetworkInterface> Construct(PhPublicIPAddress ip, string subnetId, Location location = null)
@@ -89,20 +89,20 @@ namespace azure_proto_network
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhNetworkInterface.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public AsyncPageable<ArmResourceOperations> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhNetworkInterface.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
         }
         private Func<NetworkInterface, XNetworkInterface> convertor()
         {
-            return s => new XNetworkInterface(ClientContext, new PhNetworkInterface(s), this.ClientOptions);
+            return s => new XNetworkInterface(ClientContext, new PhNetworkInterface(s), ClientOptions);
         }
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred, 
-                    ArmClientOptions.convert<NetworkManagementClientOptions>(this.ClientOptions))).NetworkInterfaces;
+                    ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).NetworkInterfaces;
     }
 }

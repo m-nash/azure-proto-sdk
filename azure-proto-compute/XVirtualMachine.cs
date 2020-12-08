@@ -4,7 +4,7 @@ namespace azure_proto_compute
 {
     public class XVirtualMachine : VirtualMachineOperations
     {
-        internal XVirtualMachine(ArmClientContext context, PhVirtualMachine resource, ArmClientOptions clientOptions) : base(context, resource.Id, clientOptions)
+        public XVirtualMachine(ArmClientContext context, PhVirtualMachine resource, ArmClientOptions clientOptions) : base(context, resource.Id, clientOptions)
         {
             Model = resource;
         }

@@ -29,7 +29,7 @@ namespace azure_proto_compute
             var operation = Operations.StartCreateOrUpdate(base.Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
             return new PhArmResponse<XVirtualMachine, VirtualMachine>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                v => new XVirtualMachine(ClientContext, new PhVirtualMachine(v), this.ClientOptions));
+                v => new XVirtualMachine(ClientContext, new PhVirtualMachine(v), ClientOptions));
         }
 
         public async override Task<ArmResponse<XVirtualMachine>> CreateAsync(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
@@ -37,21 +37,21 @@ namespace azure_proto_compute
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<XVirtualMachine, VirtualMachine>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                v => new XVirtualMachine(ClientContext, new PhVirtualMachine(v), this.ClientOptions));
+                v => new XVirtualMachine(ClientContext, new PhVirtualMachine(v), ClientOptions));
         }
 
         public override ArmOperation<XVirtualMachine> StartCreate(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<XVirtualMachine, VirtualMachine>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
-                v => new XVirtualMachine(ClientContext, new PhVirtualMachine(v), this.ClientOptions));
+                v => new XVirtualMachine(ClientContext, new PhVirtualMachine(v), ClientOptions));
         }
 
         public async override Task<ArmOperation<XVirtualMachine>> StartCreateAsync(string name, PhVirtualMachine resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<XVirtualMachine, VirtualMachine>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
-                v => new XVirtualMachine(ClientContext, new PhVirtualMachine(v), this.ClientOptions));
+                v => new XVirtualMachine(ClientContext, new PhVirtualMachine(v), ClientOptions));
         }
 
         public VirtualMachineModelBuilder Construct(string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, PhAvailabilitySet aset, Location location = null)
@@ -94,7 +94,7 @@ namespace azure_proto_compute
             var result = Operations.List(Id.Name, cancellationToken);
             return new PhWrappingPageable<VirtualMachine, XVirtualMachine>(
                 result,
-                s => new XVirtualMachine(ClientContext, new PhVirtualMachine(s), this.ClientOptions));
+                s => new XVirtualMachine(ClientContext, new PhVirtualMachine(s), ClientOptions));
         }
 
         public AsyncPageable<XVirtualMachine> ListAsync(CancellationToken cancellationToken = default)
@@ -102,36 +102,36 @@ namespace azure_proto_compute
             var result = Operations.ListAsync(Id.Name, cancellationToken);
             return new PhWrappingAsyncPageable<VirtualMachine, XVirtualMachine>(
                 result,
-                s => new XVirtualMachine(ClientContext, new PhVirtualMachine(s), this.ClientOptions));
+                s => new XVirtualMachine(ClientContext, new PhVirtualMachine(s), ClientOptions));
         }
 
         public Pageable<ArmResourceOperations> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhVirtualMachine.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public AsyncPageable<ArmResourceOperations> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PhVirtualMachine.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public Pageable<XVirtualMachine> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByName(filter, top, cancellationToken);
-            return new PhWrappingPageable<ArmResourceOperations, XVirtualMachine>(results, s => (new VirtualMachineOperations(s, this.ClientOptions)).Get().Value);
+            return new PhWrappingPageable<ArmResourceOperations, XVirtualMachine>(results, s => (new VirtualMachineOperations(s)).Get().Value);
         }
 
         public AsyncPageable<XVirtualMachine> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByNameAsync(filter, top, cancellationToken);
-            return new PhWrappingAsyncPageable<ArmResourceOperations, XVirtualMachine>(results, s => (new VirtualMachineOperations(s, this.ClientOptions)).Get());
+            return new PhWrappingAsyncPageable<ArmResourceOperations, XVirtualMachine>(results, s => (new VirtualMachineOperations(s)).Get());
         }
 
         internal VirtualMachinesOperations Operations => this.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, Id.Subscription, cred, 
-                    ArmClientOptions.convert<ComputeManagementClientOptions>(this.ClientOptions))).VirtualMachines;
+                    ArmClientOptions.convert<ComputeManagementClientOptions>(ClientOptions))).VirtualMachines;
     }
 }

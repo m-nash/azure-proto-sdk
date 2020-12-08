@@ -19,6 +19,7 @@ namespace azure_proto_compute
         /// <param name="top"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
+        
         public static Pageable<XVirtualMachine> ListVirtualMachines(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             //TODO: consider ArmPageable<T> to introduce post network call filtering and avoid breaking changes

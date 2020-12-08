@@ -30,17 +30,17 @@ namespace azure_proto_network
         public override ArmResponse<XSubnet> Get()
         {
             return new PhArmResponse<XSubnet, Subnet>(Operations.Get(Id.ResourceGroup, Id.Parent.Name, Id.Name),
-                n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet, this.ClientOptions); });
+                n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet, ClientOptions); });
         }
 
         public async override Task<ArmResponse<XSubnet>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<XSubnet, Subnet>(await Operations.GetAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, null, cancellationToken),
-                n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet, this.ClientOptions); });
+                n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet, ClientOptions); });
         }
 
 
         internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-                    ArmClientOptions.convert<NetworkManagementClientOptions>(this.ClientOptions))).Subnets;
+                    ArmClientOptions.convert<NetworkManagementClientOptions>(ClientOptions))).Subnets;
     }
 }

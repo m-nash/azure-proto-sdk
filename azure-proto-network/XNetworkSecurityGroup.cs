@@ -6,7 +6,7 @@ namespace azure_proto_network
 {
     public class XNetworkSecurityGroup : NetworkSecurityGroupOperations
     {
-        public XNetworkSecurityGroup(ArmClientContext context, PhNetworkSecurityGroup resource, ArmClientOptions clientOptions) : base(context, resource.Id, clientOptions)
+        internal XNetworkSecurityGroup(ArmClientContext context, PhNetworkSecurityGroup resource, ArmClientOptions clientOptions) : base(context, resource.Id, clientOptions)
         {
             Model = resource;
         }

@@ -6,7 +6,7 @@ namespace azure_proto_core
 {
     public class XResourceGroup : ResourceGroupOperations
     {
-        public XResourceGroup(ArmClientContext context, PhResourceGroup resource, ArmClientOptions clientOptions): base(context, resource, clientOptions)
+        internal XResourceGroup(ArmClientContext context, PhResourceGroup resource, ArmClientOptions clientOptions): base(context, resource, clientOptions)
         {
             Model = resource;
         }

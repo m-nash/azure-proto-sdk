@@ -36,7 +36,7 @@ namespace azure_proto_core
 
         public ArmClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId, ArmClientOptions options)
         {
-            this.ClientOptions = options;
+            ClientOptions = options;
             ClientContext = new ArmClientContext(baseUri, credential);
             defaultSubscriptionId ??= GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult();
             DefaultSubscription = new SubscriptionOperations(ClientContext, new ResourceIdentifier($"/subscriptions/{defaultSubscriptionId}"), options);
@@ -47,19 +47,19 @@ namespace azure_proto_core
 
         internal virtual ArmClientContext ClientContext { get; }
 
-        public SubscriptionOperations Subscription(PhSubscriptionModel subscription) => new SubscriptionOperations(this.ClientContext, subscription, this.ClientOptions);
+        public SubscriptionOperations Subscription(PhSubscriptionModel subscription) => new SubscriptionOperations(this.ClientContext, subscription, ClientOptions);
 
         /// <summary>
         /// </summary>
         /// <param name="subscription"></param>
         /// <returns></returns>
-        public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(this.ClientContext, subscription, this.ClientOptions);
+        public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(this.ClientContext, subscription, ClientOptions);
 
-        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(this.ClientContext, subscription, this.ClientOptions);
+        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(this.ClientContext, subscription, ClientOptions);
 
         public SubscriptionContainerOperations Subscriptions()
         {
-            return new SubscriptionContainerOperations(this.ClientContext, this.ClientOptions);
+            return new SubscriptionContainerOperations(this.ClientContext, ClientOptions);
         }
 
         public AsyncPageable<PhLocation> ListLocationsAsync(string subscriptionId = null, CancellationToken token = default(CancellationToken))
@@ -142,16 +142,16 @@ namespace azure_proto_core
 
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
         {
-            return new ResourceGroupOperations(this.ClientContext, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", this.ClientOptions);
+            return new ResourceGroupOperations(this.ClientContext, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", ClientOptions);
         }
 
         public ResourceGroupOperations ResourceGroup(ResourceIdentifier resourceGroup)
         {
-            return new ResourceGroupOperations(this.ClientContext, resourceGroup, this.ClientOptions);
+            return new ResourceGroupOperations(this.ClientContext, resourceGroup, ClientOptions);
         }
         public ResourceGroupOperations ResourceGroup(PhResourceGroup resourceGroup)
         {
-            return new ResourceGroupOperations(this.ClientContext, resourceGroup.Id, this.ClientOptions);
+            return new ResourceGroupOperations(this.ClientContext, resourceGroup.Id, ClientOptions);
         }
 
         public T GetResourceOperationsBase<T>(TrackedResource resource) where T : TrackedResource

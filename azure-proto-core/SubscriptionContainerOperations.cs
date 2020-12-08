@@ -16,7 +16,7 @@ namespace azure_proto_core
     {
         public static readonly string AzureResourceType = "Microsoft.Resources/subscriptions";
 
-        public SubscriptionContainerOperations(ArmClientContext context, ArmClientOptions options) : base(context, null, options, null) { }
+        internal SubscriptionContainerOperations(ArmClientContext context, ArmClientOptions options) : base(context, null, options, null) { }
 
         public override ResourceType ResourceType => AzureResourceType;
 
@@ -36,7 +36,7 @@ namespace azure_proto_core
 
         private Func<Subscription, SubscriptionOperations> convertor()
         {
-            return s => new SubscriptionOperations(ClientContext, new PhSubscriptionModel(s), this.ClientOptions);
+            return s => new SubscriptionOperations(ClientContext, new PhSubscriptionModel(s), ClientOptions);
         }
 
         internal async Task<string> GetDefaultSubscription(CancellationToken token = default(CancellationToken))
@@ -54,6 +54,6 @@ namespace azure_proto_core
         }
 
         internal SubscriptionsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) =>
-                    new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.convert<ResourcesManagementClientOptions>(this.ClientOptions))).Subscriptions;
+                    new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
     }
 }
