@@ -7,7 +7,7 @@ namespace azure_proto_core
         where TResource : Resource 
         where TOperations : ResourceOperationsBase<TOperations, TResource>
     {
-        public ResourceOperationsBase(ArmResourceOperations genericOperations, ArmClientOptions clientOptions) : this(genericOperations.ClientContext, genericOperations.Id, clientOptions) { }
+        public ResourceOperationsBase(ArmResourceOperations genericOperations) : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions) { }
 
         public ResourceOperationsBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : this(context, new ArmResource(id), clientOptions) { }
 

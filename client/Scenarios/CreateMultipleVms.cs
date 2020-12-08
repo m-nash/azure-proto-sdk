@@ -45,7 +45,7 @@ namespace client
         private void CreateVms(XResourceGroup resourceGroup, XAvailabilitySet aset, SubnetOperations subnet)
         {
             List<ArmOperation<XVirtualMachine>> operations = new List<ArmOperation<XVirtualMachine>>();
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 0; i++)
             {
                 // Create IP Address
                 Console.WriteLine("--------Start create IP Address--------");
