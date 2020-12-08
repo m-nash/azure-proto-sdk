@@ -5,9 +5,9 @@ namespace azure_proto_network
     public static class ResourceGroupExtensions
     {
         #region Virtual Network Operations
-        public static XVirtualNetwork VirtualNetwork(this XResourceGroup resourceGroup, PhVirtualNetwork virtualNetwork)
+        public static VirtualNetwork VirtualNetwork(this ResourceGroup resourceGroup, VirtualNetworkData virtualNetwork)
         {
-            return new XVirtualNetwork(resourceGroup.ClientContext, virtualNetwork);
+            return new VirtualNetwork(resourceGroup.ClientContext, virtualNetwork);
         }
 
         public static VirtualNetworkOperations VirtualNetwork(this ResourceGroupOperations resourceGroup, string virtualNetwork)
@@ -15,7 +15,7 @@ namespace azure_proto_network
             return new VirtualNetworkOperations(resourceGroup.ClientContext, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/virtualNetworks/{virtualNetwork}"));
         }
 
-        public static VirtualNetworkContainer VirtualNetworks(this XResourceGroup resourceGroup)
+        public static VirtualNetworkContainer VirtualNetworks(this ResourceGroup resourceGroup)
         {
             return new VirtualNetworkContainer(resourceGroup.ClientContext, resourceGroup.Model);
         }
@@ -27,9 +27,9 @@ namespace azure_proto_network
         #endregion
 
         #region Public IP Address Operations
-        public static XPublicIpAddress PublicIpAddress(this ResourceGroupOperations resourceGroup, PhPublicIPAddress publicIpAddress)
+        public static PublicIpAddress PublicIpAddress(this ResourceGroupOperations resourceGroup, PublicIPAddressData publicIpAddress)
         {
-            return new XPublicIpAddress(resourceGroup.ClientContext, publicIpAddress);
+            return new PublicIpAddress(resourceGroup.ClientContext, publicIpAddress);
         }
 
         public static PublicIpAddressOperations PublicIpAddress(this ResourceGroupOperations resourceGroup, string publicIpAddress)
@@ -37,7 +37,7 @@ namespace azure_proto_network
             return new PublicIpAddressOperations(resourceGroup.ClientContext, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/publicIpAddresses/{publicIpAddress}"));
         }
 
-        public static PublicIpAddressContainer PublicIpAddresses(this XResourceGroup resourceGroup)
+        public static PublicIpAddressContainer PublicIpAddresses(this ResourceGroup resourceGroup)
         {
             return new PublicIpAddressContainer(resourceGroup.ClientContext, resourceGroup.Model);
         }
@@ -49,9 +49,9 @@ namespace azure_proto_network
         #endregion
 
         #region Network Interface (NIC) operations
-        public static XNetworkInterface NetworkInterface(this ResourceGroupOperations resourceGroup, PhNetworkInterface networkInterface)
+        public static NetworkInterface NetworkInterface(this ResourceGroupOperations resourceGroup, NetworkInterfaceData networkInterface)
         {
-            return new XNetworkInterface(resourceGroup.ClientContext, networkInterface);
+            return new NetworkInterface(resourceGroup.ClientContext, networkInterface);
         }
 
         public static NetworkInterfaceOperations NetworkInterface(this ResourceGroupOperations resourceGroup, string networkInterface)
@@ -59,7 +59,7 @@ namespace azure_proto_network
             return new NetworkInterfaceOperations(resourceGroup.ClientContext, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/networkInterfaces/{networkInterface}"));
         }
 
-        public static NetworkInterfaceContainer NetworkInterfaces(this XResourceGroup resourceGroup)
+        public static NetworkInterfaceContainer NetworkInterfaces(this ResourceGroup resourceGroup)
         {
             return new NetworkInterfaceContainer(resourceGroup.ClientContext, resourceGroup.Model);
         }
@@ -76,9 +76,9 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="openPorts">The set of TCP ports to open</param>
         /// <returns>An NSG, with the given TCP ports open</returns>
-        public static XNetworkSecurityGroup NetworkSecurityGroup(this ResourceGroupOperations resourceGroup, PhNetworkSecurityGroup networkSecurityGroup)
+        public static NetworkSecurityGroup NetworkSecurityGroup(this ResourceGroupOperations resourceGroup, NetworkSecurityGroupData networkSecurityGroup)
         {
-            return new XNetworkSecurityGroup(resourceGroup.ClientContext, networkSecurityGroup);
+            return new NetworkSecurityGroup(resourceGroup.ClientContext, networkSecurityGroup);
         }
 
         public static NetworkSecurityGroupOperations NetworkSecurityGroup(this ResourceGroupOperations operations, string networkSecurityGroup)
@@ -86,7 +86,7 @@ namespace azure_proto_network
             return new NetworkSecurityGroupOperations(operations.ClientContext, new ResourceIdentifier($"{operations.Id}/providers/Microsoft.Network/networkSecurityGroups/{networkSecurityGroup}"));
         }
 
-        public static NetworkSecurityGroupContainer NetworkSecurityGroups(this XResourceGroup resourceGroup)
+        public static NetworkSecurityGroupContainer NetworkSecurityGroups(this ResourceGroup resourceGroup)
         {
             return new NetworkSecurityGroupContainer(resourceGroup.ClientContext, resourceGroup.Model);
         }

@@ -11,84 +11,84 @@ using azure_proto_core.Adapters;
 
 namespace azure_proto_network
 {
-    public class VirtualNetworkContainer : ResourceContainerOperations<XVirtualNetwork, PhVirtualNetwork>
+    public class VirtualNetworkContainer : ResourceContainerOperations<VirtualNetwork, VirtualNetworkData>
     {
-        public VirtualNetworkContainer(ArmClientContext context, PhResourceGroup resourceGroup) : base(context, resourceGroup) { }
+        public VirtualNetworkContainer(ArmClientContext context, ResourceGroupData resourceGroup) : base(context, resourceGroup) { }
 
         internal VirtualNetworkContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
 
-        public override ArmResponse<XVirtualNetwork> Create(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<VirtualNetwork> Create(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
-            return new PhArmResponse<XVirtualNetwork, VirtualNetwork>(
+            return new PhArmResponse<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new XVirtualNetwork(ClientContext, new PhVirtualNetwork(n)));
+                n => new VirtualNetwork(base.ClientContext, new VirtualNetworkData(n)));
         }
 
-        public async override Task<ArmResponse<XVirtualNetwork>> CreateAsync(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<VirtualNetwork>> CreateAsync(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
-            return new PhArmResponse<XVirtualNetwork, VirtualNetwork>(
+            return new PhArmResponse<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                n => new XVirtualNetwork(ClientContext, new PhVirtualNetwork(n)));
+                n => new VirtualNetwork(base.ClientContext, new VirtualNetworkData(n)));
         }
 
-        public override ArmOperation<XVirtualNetwork> StartCreate(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmOperation<VirtualNetwork> StartCreate(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<XVirtualNetwork, VirtualNetwork>(
-                Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken),
-                n => new XVirtualNetwork(ClientContext, new PhVirtualNetwork(n)));
+            return new PhArmOperation<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
+                Operations.StartCreateOrUpdate(base.Id.ResourceGroup, name, resourceDetails, cancellationToken),
+                n => new VirtualNetwork(base.ClientContext, new VirtualNetworkData(n)));
         }
 
-        public async override Task<ArmOperation<XVirtualNetwork>> StartCreateAsync(string name, PhVirtualNetwork resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<VirtualNetwork>> StartCreateAsync(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<XVirtualNetwork, VirtualNetwork>(
-                await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),
-                n => new XVirtualNetwork(ClientContext, new PhVirtualNetwork(n)));
+            return new PhArmOperation<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
+                await Operations.StartCreateOrUpdateAsync(base.Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),
+                n => new VirtualNetwork(base.ClientContext, new VirtualNetworkData(n)));
         }
 
-        public ArmBuilder<XVirtualNetwork, PhVirtualNetwork> Construct(string vnetCidr, Location location = null)
+        public ArmBuilder<VirtualNetwork, VirtualNetworkData> Construct(string vnetCidr, Location location = null)
         {
-            var vnet = new VirtualNetwork()
+            var vnet = new Azure.ResourceManager.Network.Models.VirtualNetwork()
             {
-                Location = location ?? DefaultLocation,
+                Location = location ?? base.DefaultLocation,
                 AddressSpace = new AddressSpace() { AddressPrefixes = new List<string>() { vnetCidr } },
             };
-            return new ArmBuilder<XVirtualNetwork, PhVirtualNetwork>(this, new PhVirtualNetwork(vnet));
+            return new ArmBuilder<VirtualNetwork, VirtualNetworkData>(this, new VirtualNetworkData(vnet));
         }
 
-        public Pageable<XVirtualNetwork> List(CancellationToken cancellationToken = default)
+        public Pageable<VirtualNetwork> List(CancellationToken cancellationToken = default)
         {
-            return new PhWrappingPageable<VirtualNetwork, XVirtualNetwork>(
-                Operations.List(Id.Name, cancellationToken),
+            return new PhWrappingPageable<Azure.ResourceManager.Network.Models.VirtualNetwork, VirtualNetwork>(
+                Operations.List(base.Id.Name, cancellationToken),
                 this.convertor());
         }
 
-        public AsyncPageable<XVirtualNetwork> ListAsync(CancellationToken cancellationToken = default)
+        public AsyncPageable<VirtualNetwork> ListAsync(CancellationToken cancellationToken = default)
         {
-            return new PhWrappingAsyncPageable<VirtualNetwork, XVirtualNetwork>(
-                Operations.ListAsync(Id.Name, cancellationToken),
+            return new PhWrappingAsyncPageable<Azure.ResourceManager.Network.Models.VirtualNetwork, VirtualNetwork>(
+                Operations.ListAsync(base.Id.Name, cancellationToken),
                 this.convertor());
         }
 
         public Pageable<ArmResourceOperations> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(PhVirtualNetwork.ResourceType);
+            ArmFilterCollection filters = new ArmFilterCollection(VirtualNetworkData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
 
         public AsyncPageable<ArmResourceOperations> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(PhVirtualNetwork.ResourceType);
+            ArmFilterCollection filters = new ArmFilterCollection(VirtualNetworkData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
-        private  Func<VirtualNetwork, XVirtualNetwork> convertor()
+        private  Func<Azure.ResourceManager.Network.Models.VirtualNetwork, VirtualNetwork> convertor()
         {
-            return s => new XVirtualNetwork(ClientContext, new PhVirtualNetwork(s));
+            return s => new VirtualNetwork(ClientContext, new VirtualNetworkData(s));
         }
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).VirtualNetworks;
     }

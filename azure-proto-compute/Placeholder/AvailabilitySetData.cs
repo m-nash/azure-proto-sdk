@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace azure_proto_compute
 {
-    public class PhAvailabilitySet : TrackedResource<AvailabilitySet>
+    public class AvailabilitySetData : TrackedResource<Azure.ResourceManager.Compute.Models.AvailabilitySet>
     {
         public static ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
 
-        public PhAvailabilitySet(AvailabilitySet aset) : base(aset.Id, aset.Location, aset)
+        public AvailabilitySetData(Azure.ResourceManager.Compute.Models.AvailabilitySet aset) : base(aset.Id, aset.Location, aset)
         {
             if (null == aset.Tags)
             {

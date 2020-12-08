@@ -32,7 +32,7 @@ namespace client
             ExecuteAsync(rg).GetAwaiter().GetResult();
         }
 
-        private async Task ExecuteAsync(XResourceGroup rg)
+        private async Task ExecuteAsync(ResourceGroup rg)
         {
             await foreach (var availabilitySet in rg.AvailabilitySets().ListByNameAsync(Environment.UserName))
             {

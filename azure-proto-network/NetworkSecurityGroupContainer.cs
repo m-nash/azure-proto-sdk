@@ -11,47 +11,47 @@ using azure_proto_core.Adapters;
 
 namespace azure_proto_network
 {
-    public class NetworkSecurityGroupContainer : ResourceContainerOperations<XNetworkSecurityGroup, PhNetworkSecurityGroup>
+    public class NetworkSecurityGroupContainer : ResourceContainerOperations<NetworkSecurityGroup, NetworkSecurityGroupData>
     {
-        public NetworkSecurityGroupContainer(ArmClientContext context, PhResourceGroup resourceGroup) : base(context, resourceGroup) { }
+        public NetworkSecurityGroupContainer(ArmClientContext context, ResourceGroupData resourceGroup) : base(context, resourceGroup) { }
 
         internal NetworkSecurityGroupContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
 
-        public override ArmResponse<XNetworkSecurityGroup> Create(string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<NetworkSecurityGroup> Create(string name, NetworkSecurityGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
-            return new PhArmResponse<XNetworkSecurityGroup, NetworkSecurityGroup>(
+            return new PhArmResponse<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new XNetworkSecurityGroup(ClientContext, new PhNetworkSecurityGroup(n)));
+                n => new NetworkSecurityGroup(base.ClientContext, new NetworkSecurityGroupData(n)));
         }
 
-        public async override Task<ArmResponse<XNetworkSecurityGroup>> CreateAsync(string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<NetworkSecurityGroup>> CreateAsync(string name, NetworkSecurityGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
-            return new PhArmResponse<XNetworkSecurityGroup, NetworkSecurityGroup>(
+            return new PhArmResponse<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                n => new XNetworkSecurityGroup(ClientContext, new PhNetworkSecurityGroup(n)));
+                n => new NetworkSecurityGroup(base.ClientContext, new NetworkSecurityGroupData(n)));
         }
 
-        public override ArmOperation<XNetworkSecurityGroup> StartCreate(string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmOperation<NetworkSecurityGroup> StartCreate(string name, NetworkSecurityGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<XNetworkSecurityGroup, NetworkSecurityGroup>(
-                Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
-                n => new XNetworkSecurityGroup(ClientContext, new PhNetworkSecurityGroup(n)));
+            return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
+                Operations.StartCreateOrUpdate(base.Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
+                n => new NetworkSecurityGroup(base.ClientContext, new NetworkSecurityGroupData(n)));
         }
 
-        public async override Task<ArmOperation<XNetworkSecurityGroup>> StartCreateAsync(string name, PhNetworkSecurityGroup resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<NetworkSecurityGroup>> StartCreateAsync(string name, NetworkSecurityGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<XNetworkSecurityGroup, NetworkSecurityGroup>(
-                await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
-                n => new XNetworkSecurityGroup(ClientContext, new PhNetworkSecurityGroup(n)));
+            return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
+                await Operations.StartCreateOrUpdateAsync(base.Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
+                n => new NetworkSecurityGroup(base.ClientContext, new NetworkSecurityGroupData(n)));
         }
 
-        public ArmBuilder<XNetworkSecurityGroup, PhNetworkSecurityGroup> Construct(string nsgName, Location location = null, params int[] openPorts)
+        public ArmBuilder<NetworkSecurityGroup, NetworkSecurityGroupData> Construct(string nsgName, Location location = null, params int[] openPorts)
         {
-            var nsg = new NetworkSecurityGroup { Location = location ?? DefaultLocation };
+            var nsg = new Azure.ResourceManager.Network.Models.NetworkSecurityGroup { Location = location ?? base.DefaultLocation };
             var index = 0;
             nsg.SecurityRules = openPorts.Select(openPort => new SecurityRule
             {
@@ -67,12 +67,12 @@ namespace azure_proto_network
                 Description = $"Port_{openPort}"
             }).ToList();
 
-            return new ArmBuilder<XNetworkSecurityGroup, PhNetworkSecurityGroup>(this, new PhNetworkSecurityGroup(nsg));
+            return new ArmBuilder<NetworkSecurityGroup, NetworkSecurityGroupData>(this, new NetworkSecurityGroupData(nsg));
         }
 
-        public ArmBuilder<XNetworkSecurityGroup, PhNetworkSecurityGroup> Construct(string nsgName, params int[] openPorts)
+        public ArmBuilder<NetworkSecurityGroup, NetworkSecurityGroupData> Construct(string nsgName, params int[] openPorts)
         {
-            var nsg = new NetworkSecurityGroup { Location = DefaultLocation };
+            var nsg = new Azure.ResourceManager.Network.Models.NetworkSecurityGroup { Location = base.DefaultLocation };
             var index = 0;
             nsg.SecurityRules = openPorts.Select(openPort => new SecurityRule
             {
@@ -88,37 +88,37 @@ namespace azure_proto_network
                 Description = $"Port_{openPort}"
             }).ToList();
 
-            return new ArmBuilder<XNetworkSecurityGroup, PhNetworkSecurityGroup>(this, new PhNetworkSecurityGroup(nsg));
+            return new ArmBuilder<NetworkSecurityGroup, NetworkSecurityGroupData>(this, new NetworkSecurityGroupData(nsg));
         }
-        public Pageable<XNetworkSecurityGroup> List(CancellationToken cancellationToken = default)
+        public Pageable<NetworkSecurityGroup> List(CancellationToken cancellationToken = default)
         {
-            return new PhWrappingPageable<NetworkSecurityGroup, XNetworkSecurityGroup>(
-                Operations.List(Id.Name, cancellationToken),
+            return new PhWrappingPageable<Azure.ResourceManager.Network.Models.NetworkSecurityGroup, NetworkSecurityGroup>(
+                Operations.List(base.Id.Name, cancellationToken),
                 this.convertor());
         }
-        public AsyncPageable<XNetworkSecurityGroup> ListAsync(CancellationToken cancellationToken = default)
+        public AsyncPageable<NetworkSecurityGroup> ListAsync(CancellationToken cancellationToken = default)
         {
-            return new PhWrappingAsyncPageable<NetworkSecurityGroup, XNetworkSecurityGroup>(
-                Operations.ListAsync(Id.Name, cancellationToken),
+            return new PhWrappingAsyncPageable<Azure.ResourceManager.Network.Models.NetworkSecurityGroup, NetworkSecurityGroup>(
+                Operations.ListAsync(base.Id.Name, cancellationToken),
                 this.convertor());
         }
 
         public Pageable<ArmResourceOperations> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(PhNetworkSecurityGroup.ResourceType);
+            ArmFilterCollection filters = new ArmFilterCollection(NetworkSecurityGroupData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
 
         public AsyncPageable<ArmResourceOperations> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(PhNetworkSecurityGroup.ResourceType);
+            ArmFilterCollection filters = new ArmFilterCollection(NetworkSecurityGroupData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
         }
-        private Func<NetworkSecurityGroup, XNetworkSecurityGroup> convertor()
+        private Func<Azure.ResourceManager.Network.Models.NetworkSecurityGroup, NetworkSecurityGroup> convertor()
         {
-            return s => new XNetworkSecurityGroup(ClientContext, new PhNetworkSecurityGroup(s));
+            return s => new NetworkSecurityGroup(ClientContext, new NetworkSecurityGroupData(s));
         }
 
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_compute
 {
-    public class AvailabilitySetOperations : ResourceOperationsBase<XAvailabilitySet, PhAvailabilitySet>, ITaggable<XAvailabilitySet, PhAvailabilitySet>, IDeletableResource<XAvailabilitySet, PhAvailabilitySet>
+    public class AvailabilitySetOperations : ResourceOperationsBase<AvailabilitySet, AvailabilitySetData>, ITaggable<AvailabilitySet, AvailabilitySetData>, IDeletableResource<AvailabilitySet, AvailabilitySetData>
     {
         public AvailabilitySetOperations(ArmResourceOperations genericOperations) : base(genericOperations) { }
 
@@ -27,34 +27,34 @@ namespace azure_proto_compute
             return new ArmVoidOperation(await Operations.DeleteAsync(Id.ResourceGroup, Id.Name));
         }
 
-        public override ArmResponse<XAvailabilitySet> Get()
+        public override ArmResponse<AvailabilitySet> Get()
         {
-            return new PhArmResponse<XAvailabilitySet, AvailabilitySet>(Operations.Get(Id.ResourceGroup, Id.Name), a => { Resource = new PhAvailabilitySet(a); return new XAvailabilitySet(ClientContext, Resource as PhAvailabilitySet); });
+            return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(Operations.Get(base.Id.ResourceGroup, base.Id.Name), a => { base.Resource = new AvailabilitySetData(a); return new AvailabilitySet(base.ClientContext, base.Resource as AvailabilitySetData); });
         }
 
-        public async override Task<ArmResponse<XAvailabilitySet>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<AvailabilitySet>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<XAvailabilitySet, AvailabilitySet>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, cancellationToken), a => { Resource = new PhAvailabilitySet(a); return new XAvailabilitySet(ClientContext, Resource as PhAvailabilitySet); });
+            return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(await Operations.GetAsync(base.Id.ResourceGroup, base.Id.Name, cancellationToken), a => { base.Resource = new AvailabilitySetData(a); return new AvailabilitySet(base.ClientContext, base.Resource as AvailabilitySetData); });
         }
 
-        public ArmOperation<XAvailabilitySet> Update(AvailabilitySetUpdate patchable)
+        public ArmOperation<AvailabilitySet> Update(AvailabilitySetUpdate patchable)
         {
-            return new PhArmOperation<XAvailabilitySet, AvailabilitySet>(Operations.Update(Id.ResourceGroup, Id.Name, patchable), a => { Resource = new PhAvailabilitySet(a); return new XAvailabilitySet(ClientContext, Resource as PhAvailabilitySet); });
+            return new PhArmOperation<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(Operations.Update(base.Id.ResourceGroup, base.Id.Name, patchable), a => { base.Resource = new AvailabilitySetData(a); return new AvailabilitySet(base.ClientContext, base.Resource as AvailabilitySetData); });
         }
 
-        public async Task<ArmOperation<XAvailabilitySet>> UpdateAsync(AvailabilitySetUpdate patchable, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<AvailabilitySet>> UpdateAsync(AvailabilitySetUpdate patchable, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<XAvailabilitySet, AvailabilitySet>(await Operations.UpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken), a => { Resource = new PhAvailabilitySet(a); return new XAvailabilitySet(ClientContext, Resource as PhAvailabilitySet); });
+            return new PhArmOperation<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(await Operations.UpdateAsync(base.Id.ResourceGroup, base.Id.Name, patchable, cancellationToken), a => { base.Resource = new AvailabilitySetData(a); return new AvailabilitySet(base.ClientContext, base.Resource as AvailabilitySetData); });
         }
 
-        public ArmOperation<XAvailabilitySet> AddTag(string key, string value)
+        public ArmOperation<AvailabilitySet> AddTag(string key, string value)
         {
             var patchable = new AvailabilitySetUpdate();
             patchable.Tags[key] = value;
             return Update(patchable);
         }
 
-        public Task<ArmOperation<XAvailabilitySet>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public Task<ArmOperation<AvailabilitySet>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new AvailabilitySetUpdate();
             patchable.Tags[key] = value;

@@ -42,9 +42,9 @@ namespace client
             CreateVms(resourceGroup, aset, subnet);
         }
 
-        private void CreateVms(XResourceGroup resourceGroup, XAvailabilitySet aset, SubnetOperations subnet)
+        private void CreateVms(ResourceGroup resourceGroup, AvailabilitySet aset, SubnetOperations subnet)
         {
-            List<ArmOperation<XVirtualMachine>> operations = new List<ArmOperation<XVirtualMachine>>();
+            List<ArmOperation<VirtualMachine>> operations = new List<ArmOperation<VirtualMachine>>();
             for (int i = 0; i < 10; i++)
             {
                 // Create IP Address

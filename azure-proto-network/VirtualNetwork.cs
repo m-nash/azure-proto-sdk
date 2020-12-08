@@ -2,9 +2,9 @@
 
 namespace azure_proto_network
 {
-    public class XVirtualNetwork : VirtualNetworkOperations
+    public class VirtualNetwork : VirtualNetworkOperations
     {
-        public XVirtualNetwork(ArmClientContext context, PhVirtualNetwork resource) : base(context, resource.Id)
+        public VirtualNetwork(ArmClientContext context, VirtualNetworkData resource) : base(context, resource.Id)
         {
             Model = resource;
         }
@@ -14,6 +14,6 @@ namespace azure_proto_network
             return new SubnetContainer(ClientContext, Model);
         }
 
-        public PhVirtualNetwork Model { get; private set; }
+        public VirtualNetworkData Model { get; private set; }
     }
 }

@@ -1,42 +1,44 @@
-﻿using Azure;
-using Azure.ResourceManager.Resources;
-using Azure.ResourceManager.Resources.Models;
-using azure_proto_core.Adapters;
-using System;
-using System.Threading;
-
-namespace azure_proto_core
+﻿namespace azure_proto_core
 {
+    using System;
+    using System.Threading;
+    using Azure;
+    using Azure.ResourceManager.Resources;
+    using azure_proto_core.Adapters;
+
     /// <summary>
-    /// Subscription operations
+    /// Subscription operations.
     /// </summary>
     public class SubscriptionOperations : OperationsBase
     {
         public static readonly string AzureResourceType = "Microsoft.Resources/subscriptions";
 
-        public SubscriptionOperations(ArmClientContext context, string defaultSubscription) : base(context, $"/subscriptions/{defaultSubscription}") { }
+        public SubscriptionOperations(ArmClientContext context, string defaultSubscription)
+            : base(context, $"/subscriptions/{defaultSubscription}") { }
 
-        public SubscriptionOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        public SubscriptionOperations(ArmClientContext context, ResourceIdentifier id)
+            : base(context, id) { }
 
-        public SubscriptionOperations(ArmClientContext context, Resource subscription) : base(context, subscription) { }
+        public SubscriptionOperations(ArmClientContext context, Resource subscription)
+            : base(context, subscription) { }
 
         public override ResourceType ResourceType => AzureResourceType;
 
         public Pageable<ResourceGroupOperations> ListResourceGroups(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return new PhWrappingPageable<ResourceGroup, ResourceGroupOperations>(
+            return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.ResourceGroup, ResourceGroupOperations>(
                 RgOperations.List(null, null, cancellationToken),
-                s => new ResourceGroupOperations(ClientContext, new PhResourceGroup(s)));
+                s => new ResourceGroupOperations(ClientContext, new ResourceGroupData(s)));
         }
 
         public AsyncPageable<ResourceGroupOperations> ListResourceGroupsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return new PhWrappingAsyncPageable<ResourceGroup, ResourceGroupOperations>(
+            return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.ResourceGroup, ResourceGroupOperations>(
                 RgOperations.ListAsync(null, null, cancellationToken),
-                s => new ResourceGroupOperations(ClientContext, new PhResourceGroup(s)));
+                s => new ResourceGroupOperations(ClientContext, new ResourceGroupData(s)));
         }
 
-        public ResourceGroupOperations ResourceGroup(PhResourceGroup resourceGroup)
+        public ResourceGroupOperations ResourceGroup(ResourceGroupData resourceGroup)
         {
             return new ResourceGroupOperations(ClientContext, resourceGroup);
         }
@@ -48,7 +50,7 @@ namespace azure_proto_core
 
         public ResourceGroupOperations ResourceGroup(string resourceGroup)
         {
-            return new ResourceGroupOperations(ClientContext, $"{Id}/resourceGroups/{resourceGroup}");
+            return new ResourceGroupOperations(this.ClientContext, $"{Id}/resourceGroups/{resourceGroup}");
         }
 
         public ResourceGroupContainerOperations ResourceGroups()

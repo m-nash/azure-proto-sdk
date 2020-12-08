@@ -1,18 +1,18 @@
-﻿using Azure;
-using Azure.Core;
-using Azure.Identity;
-using Azure.ResourceManager.Resources;
-using Azure.ResourceManager.Resources.Models;
-using azure_proto_core.Adapters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace azure_proto_core
+﻿namespace azure_proto_core
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Azure;
+    using Azure.Core;
+    using Azure.Identity;
+    using Azure.ResourceManager.Resources;
+    using Azure.ResourceManager.Resources.Models;
+    using azure_proto_core.Adapters;
+
     /// <summary>
     /// The entry point for all ARM clients.  Note that, we may not want to take a dirrect dependency on Azure.Identity, so we may make the
     /// credential required.
@@ -24,13 +24,17 @@ namespace azure_proto_core
 
         public Dictionary<string, string> ApiVersionOverrides { get; private set; }
 
-        public ArmClient() : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, new ArmClientOptions()) { }
+        public ArmClient()
+            : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, new ArmClientOptions()) { }
 
-        public ArmClient(string defaultSubscriptionId) : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId, new ArmClientOptions()) { }
+        public ArmClient(string defaultSubscriptionId)
+            : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId, new ArmClientOptions()) { }
 
-        public ArmClient(TokenCredential credential, string defaultSubscriptionId) : this(new Uri(DefaultUri), credential, defaultSubscriptionId, new ArmClientOptions()) { }
+        public ArmClient(TokenCredential credential, string defaultSubscriptionId)
+            : this(new Uri(DefaultUri), credential, defaultSubscriptionId, new ArmClientOptions()) { }
 
-        public ArmClient(Uri baseUri, TokenCredential credential) : this(baseUri, credential, null, new ArmClientOptions()) { }
+        public ArmClient(Uri baseUri, TokenCredential credential)
+            : this(baseUri, credential, null, new ArmClientOptions()) { }
 
         public ArmClientOptions ClientOptions { get; private set; }
 
@@ -47,7 +51,7 @@ namespace azure_proto_core
 
         internal virtual ArmClientContext ClientContext { get; }
 
-        public SubscriptionOperations Subscription(PhSubscriptionModel subscription) => new SubscriptionOperations(this.ClientContext, subscription);
+        public SubscriptionOperations Subscription(SubscriptionData subscription) => new SubscriptionOperations(this.ClientContext, subscription);
 
         /// <summary>
         /// </summary>
@@ -59,36 +63,34 @@ namespace azure_proto_core
 
         public AsyncPageable<SubscriptionOperations> ListSubscriptionsAsync(CancellationToken token = default)
         {
-            return new PhWrappingAsyncPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.ListAsync(token), s => new SubscriptionOperations(this.ClientContext, new PhSubscriptionModel(s)));
+            return new PhWrappingAsyncPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.ListAsync(token), s => new SubscriptionOperations(this.ClientContext, new SubscriptionData(s)));
         }
 
         public Pageable<SubscriptionOperations> ListSubscriptions(CancellationToken token = default)
         {
-            return new PhWrappingPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.List(token), s => new SubscriptionOperations(this.ClientContext, new PhSubscriptionModel(s)));
+            return new PhWrappingPageable<Subscription, SubscriptionOperations>(SubscriptionsClient.List(token), s => new SubscriptionOperations(this.ClientContext, new SubscriptionData(s)));
         }
 
-        public AsyncPageable<PhLocation> ListLocationsAsync(string subscriptionId = null, CancellationToken token = default(CancellationToken))
+        public AsyncPageable<LocationData> ListLocationsAsync(string subscriptionId = null, CancellationToken token = default(CancellationToken))
         {
-            async Task<AsyncPageable<PhLocation>> PageableFunc()
+            async Task<AsyncPageable<LocationData>> PageableFunc()
             {
                 if (string.IsNullOrWhiteSpace(subscriptionId))
                 {
-                    subscriptionId = (await GetDefaultSubscription(token));
+                    subscriptionId = await GetDefaultSubscription(token);
                     if (subscriptionId == null)
                     {
                         throw new InvalidOperationException("Please select a default subscription");
                     }
                 }
 
-                return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.Location, PhLocation>(SubscriptionsClient.ListLocationsAsync(subscriptionId, token), s => new PhLocation(s));
-
+                return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocationsAsync(subscriptionId, token), s => new LocationData(s));
             }
 
-            return new PhTaskDeferringAsyncPageable<PhLocation>(PageableFunc);
-
+            return new PhTaskDeferringAsyncPageable<LocationData>(PageableFunc);
         }
 
-        public Pageable<PhLocation> ListLocations(string subscriptionId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public Pageable<LocationData> ListLocations(string subscriptionId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrWhiteSpace(subscriptionId))
             {
@@ -99,12 +101,12 @@ namespace azure_proto_core
                 }
             }
 
-            return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Location, PhLocation>(SubscriptionsClient.ListLocations(subscriptionId, cancellationToken), s => new PhLocation(s));
+            return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocations(subscriptionId, cancellationToken), s => new LocationData(s));
         }
 
-        public async IAsyncEnumerable<azure_proto_core.Location> ListAvailableLocationsAsync(ResourceType resourceType, [EnumeratorCancellation] CancellationToken cancellationToken = default(CancellationToken))
+        public async IAsyncEnumerable<Location> ListAvailableLocationsAsync(ResourceType resourceType, [EnumeratorCancellation] CancellationToken cancellationToken = default(CancellationToken))
         {
-            var subscriptionId = (await GetDefaultSubscription(cancellationToken));
+            var subscriptionId = await GetDefaultSubscription(cancellationToken);
             if (subscriptionId == null)
             {
                 throw new InvalidOperationException("Please select a default subscription");
@@ -116,7 +118,7 @@ namespace azure_proto_core
             }
         }
 
-        public async IAsyncEnumerable<azure_proto_core.Location> ListAvailableLocationsAsync(string subscription, ResourceType resourceType, [EnumeratorCancellation] CancellationToken cancellationToken = default(CancellationToken))
+        public async IAsyncEnumerable<Location> ListAvailableLocationsAsync(string subscription, ResourceType resourceType, [EnumeratorCancellation] CancellationToken cancellationToken = default(CancellationToken))
         {
             await foreach (var provider in GetResourcesClient(subscription).Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken).WithCancellation(cancellationToken))
             {
@@ -125,24 +127,24 @@ namespace azure_proto_core
                     var foundResource = provider.ResourceTypes.FirstOrDefault(p => resourceType.Equals(p.ResourceType));
                     foreach (var location in foundResource.Locations)
                     {
-                        yield return new azure_proto_core.Location(location);
+                        yield return new Location(location);
                     }
                 }
             }
         }
 
-        public IEnumerable<azure_proto_core.Location> ListAvailableLocations(ResourceType resourceType, CancellationToken cancellationToken = default(CancellationToken))
+        public IEnumerable<Location> ListAvailableLocations(ResourceType resourceType, CancellationToken cancellationToken = default(CancellationToken))
         {
             var subscription = GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult();
             return ListAvailableLocations(subscription, resourceType, cancellationToken);
         }
 
-        public IEnumerable<azure_proto_core.Location> ListAvailableLocations(string subscription, ResourceType resourceType, CancellationToken cancellationToken = default(CancellationToken))
+        public IEnumerable<Location> ListAvailableLocations(string subscription, ResourceType resourceType, CancellationToken cancellationToken = default(CancellationToken))
         {
             return GetResourcesClient(subscription).Providers.List(expand: "metadata", cancellationToken: cancellationToken)
                 .FirstOrDefault(p => string.Equals(p.Namespace, resourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase))
                 .ResourceTypes.FirstOrDefault(r => resourceType.Equals(r.ResourceType))
-                .Locations.Select(l => new azure_proto_core.Location(l));
+                .Locations.Select(l => new Location(l));
         }
 
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
@@ -154,34 +156,38 @@ namespace azure_proto_core
         {
             return new ResourceGroupOperations(this.ClientContext, resourceGroup);
         }
-        public ResourceGroupOperations ResourceGroup(PhResourceGroup resourceGroup)
+
+        public ResourceGroupOperations ResourceGroup(ResourceGroupData resourceGroup)
         {
             return new ResourceGroupOperations(this.ClientContext, resourceGroup.Id);
         }
 
-        public T GetResourceOperationsBase<T>(TrackedResource resource) where T : TrackedResource
+        public T GetResourceOperationsBase<T>(TrackedResource resource)
+            where T : TrackedResource
         {
             return Activator.CreateInstance(typeof(T), ClientContext, resource) as T;
         }
 
-        public T GetResourceOperationsBase<T>(ResourceIdentifier resource) where T : OperationsBase
+        public T GetResourceOperationsBase<T>(ResourceIdentifier resource)
+            where T : OperationsBase
         {
             return Activator.CreateInstance(typeof(T), ClientContext, resource) as T;
         }
 
-        public T GetResourceOperationsBase<T>(string subscription, string resourceGroup, string name) where T : OperationsBase
+        public T GetResourceOperationsBase<T>(string subscription, string resourceGroup, string name)
+            where T : OperationsBase
         {
             return null;
         }
 
-        public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string subscription, string resourceGroup, string name, TResource model, azure_proto_core.Location location = default)
+        public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string subscription, string resourceGroup, string name, TResource model, Location location = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TContainer : ResourceContainerOperations<TOperations, TResource>
         {
             if (location == null)
             {
-                location = azure_proto_core.Location.Default;
+                location = Location.Default;
             }
 
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientContext, new ArmResource($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", location)) as TContainer;
@@ -197,7 +203,7 @@ namespace azure_proto_core
         internal async Task<string> GetDefaultSubscription(CancellationToken token = default(CancellationToken))
         {
             string sub = DefaultSubscription?.Id?.Subscription;
-            if (null == sub)
+            if (sub == null)
             {
                 var subs = ListSubscriptionsAsync(token).GetAsyncEnumerator();
                 if (await subs.MoveNextAsync())
@@ -208,6 +214,7 @@ namespace azure_proto_core
                     }
                 }
             }
+
             return sub;
         }
 

@@ -16,7 +16,7 @@ namespace client
             throw new NotImplementedException();
         }
 
-        private Task<XVirtualMachine> CreateVmWithBuilderAsync()
+        private Task<VirtualMachine> CreateVmWithBuilderAsync()
         {
             var client = new ArmClient();
             var subscription = client.Subscription(Context.SubscriptionId);

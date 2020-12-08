@@ -1,74 +1,75 @@
-﻿using Azure;
-using Azure.ResourceManager.Resources;
-using Azure.ResourceManager.Resources.Models;
-using azure_proto_core.Adapters;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace azure_proto_core
+﻿namespace azure_proto_core
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Azure;
+    using Azure.ResourceManager.Resources;
+    using azure_proto_core.Adapters;
+
     /// <summary>
     /// Operations for the RespourceGroups container in the given subscription context.  Allows Creating and listign respource groups
     /// and provides an attachment point for Collections of Tracked Resources.
     /// </summary>
-    public class ResourceGroupContainerOperations : ResourceContainerOperations<XResourceGroup, PhResourceGroup>
+    public class ResourceGroupContainerOperations : ResourceContainerOperations<ResourceGroup, ResourceGroupData>
     {
         public override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
 
-        internal ResourceGroupContainerOperations(ArmClientContext context, SubscriptionOperations subscription) : base(context, subscription.Id) { }
+        internal ResourceGroupContainerOperations(ArmClientContext context, SubscriptionOperations subscription)
+            : base(context, subscription.Id) { }
 
-        internal ResourceGroupContainerOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal ResourceGroupContainerOperations(ArmClientContext context, ResourceIdentifier id)
+            : base(context, id) { }
 
-        public ArmOperation<XResourceGroup> Create(string name, Location location)
+        public ArmOperation<ResourceGroup> Create(string name, Location location)
         {
-            var model = new PhResourceGroup(new ResourceGroup(location));
-            return new PhArmOperation<XResourceGroup, ResourceGroup>(
+            var model = new ResourceGroupData(new Azure.ResourceManager.Resources.Models.ResourceGroup(location));
+            return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(
                 Operations.CreateOrUpdate(name, model),
-                g => new XResourceGroup(ClientContext, new PhResourceGroup(g)));
+                g => new ResourceGroup(ClientContext, new ResourceGroupData(g)));
         }
 
-        public override ArmResponse<XResourceGroup> Create(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<ResourceGroup> Create(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
             var response = Operations.CreateOrUpdate(name, resourceDetails, cancellationToken);
-            return new PhArmResponse<XResourceGroup, ResourceGroup>(
+            return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(
                 response,
-                g => new XResourceGroup(ClientContext, new PhResourceGroup(g)));
+                g => new ResourceGroup(ClientContext, new ResourceGroupData(g)));
         }
 
-        public async override Task<ArmResponse<XResourceGroup>> CreateAsync(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ResourceGroup>> CreateAsync(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
             var response = await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken).ConfigureAwait(false);
-            return new PhArmResponse<XResourceGroup, ResourceGroup>(
+            return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(
                 response,
-                g => new XResourceGroup(ClientContext, new PhResourceGroup(g)));
+                g => new ResourceGroup(ClientContext, new ResourceGroupData(g)));
         }
 
-        public override ArmOperation<XResourceGroup> StartCreate(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmOperation<ResourceGroup> StartCreate(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<XResourceGroup, ResourceGroup>(
+            return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(
                 Operations.CreateOrUpdate(name, resourceDetails, cancellationToken),
-                g => new XResourceGroup(ClientContext, new PhResourceGroup(g)));
+                g => new ResourceGroup(ClientContext, new ResourceGroupData(g)));
         }
 
-        public async override Task<ArmOperation<XResourceGroup>> StartCreateAsync(string name, PhResourceGroup resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<ResourceGroup>> StartCreateAsync(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<XResourceGroup, ResourceGroup>(
+            return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(
                 await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken).ConfigureAwait(false),
-                g => new XResourceGroup(ClientContext, new PhResourceGroup(g)));
+                g => new ResourceGroup(ClientContext, new ResourceGroupData(g)));
         }
 
-        public Pageable<XResourceGroup> List(CancellationToken cancellationToken = default(CancellationToken))
+        public Pageable<ResourceGroup> List(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return new PhWrappingPageable<ResourceGroup, XResourceGroup>(
+            return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.ResourceGroup, ResourceGroup>(
                 Operations.List(null, null, cancellationToken),
-                s => new XResourceGroup(ClientContext, new PhResourceGroup(s)));
+                s => new ResourceGroup(ClientContext, new ResourceGroupData(s)));
         }
 
-        public AsyncPageable<XResourceGroup> ListAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public AsyncPageable<ResourceGroup> ListAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return new PhWrappingAsyncPageable<ResourceGroup, XResourceGroup>(
+            return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.ResourceGroup, ResourceGroup>(
                 Operations.ListAsync(null, null, cancellationToken),
-                s => new XResourceGroup(ClientContext, new PhResourceGroup(s)));
+                s => new ResourceGroup(ClientContext, new ResourceGroupData(s)));
         }
 
         internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Id.Subscription, cred)).ResourceGroups;
