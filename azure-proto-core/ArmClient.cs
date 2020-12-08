@@ -25,22 +25,22 @@ namespace azure_proto_core
         public Dictionary<string, string> ApiVersionOverrides { get; private set; }
 
         public ArmClient(ArmClientOptions options = null)
-            : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, options ?? new ArmClientOptions()) { }
+            : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, options) { }
 
         public ArmClient(string defaultSubscriptionId, ArmClientOptions options = null)
-            : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId, options ?? new ArmClientOptions()) { }
+            : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId, options) { }
 
         public ArmClient(TokenCredential credential, string defaultSubscriptionId, ArmClientOptions options = null)
-            : this(new Uri(DefaultUri), credential, defaultSubscriptionId, options ?? new ArmClientOptions()) { }
+            : this(new Uri(DefaultUri), credential, defaultSubscriptionId, options) { }
 
         public ArmClient(Uri baseUri, TokenCredential credential, ArmClientOptions options = null)
-            : this(baseUri, credential, null, options ?? new ArmClientOptions()) { }
+            : this(baseUri, credential, null, options) { }
 
         public ArmClientOptions ClientOptions { get; private set; }
 
         public ArmClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId, ArmClientOptions options)
         {
-            ClientOptions = options;
+            ClientOptions =  options ?? new ArmClientOptions();
             ClientContext = new ArmClientContext(baseUri, credential);
             defaultSubscriptionId ??= GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult();
             DefaultSubscription = new SubscriptionOperations(ClientContext, new ResourceIdentifier($"/subscriptions/{defaultSubscriptionId}"), options);
