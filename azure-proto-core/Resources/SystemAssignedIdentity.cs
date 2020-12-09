@@ -82,16 +82,19 @@
 
         public static void Serialize(Utf8JsonWriter writer, SystemAssignedIdentity systemAssignedIdentity)
         {
+            writer.WriteStartObject();
             writer.WritePropertyName("principalId");
             if (!Optional.IsDefined(systemAssignedIdentity.PrincipalId))
                 writer.WriteStringValue("null");
             else
-                writer.WriteStringValue(systemAssignedIdentity.ToString());
+                writer.WriteStringValue(systemAssignedIdentity.PrincipalId.ToString());
             writer.WritePropertyName("tenantId");
             if (!Optional.IsDefined(systemAssignedIdentity.TenantId))
                 writer.WriteStringValue("null");
             else
                 writer.WriteStringValue(systemAssignedIdentity.TenantId.ToString());
+            writer.WriteEndObject();
+            writer.Flush();
         }
     }
 }

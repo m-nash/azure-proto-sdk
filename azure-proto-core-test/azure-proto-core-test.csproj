@@ -25,16 +25,10 @@
   <ItemGroup>
     <ProjectReference Include="..\azure-proto-core\azure-proto-core.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Update="TestAssets\SystemAssigned.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestAssets\UserAssignedMultipleIdentities.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="TestAssets\UserAssigned.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>SourcePath</_Parameter1>
+      <_Parameter2>$(MSBuildProjectDirectory)</_Parameter2>
+    </AssemblyAttribute>
   </ItemGroup>
-
 </Project>

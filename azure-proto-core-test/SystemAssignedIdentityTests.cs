@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 
 namespace azure_proto_core_test
@@ -121,7 +122,8 @@ namespace azure_proto_core_test
         public void TestDeserializerValid()
         {
             string json = "";
-            using (StreamReader f = new StreamReader("C:/GitHub/me/azure-proto-sdk/azure-proto-core-test/TestAssets/SystemAssignedIdentity/SystemAssignedValid.json"))
+            string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
+            using (StreamReader f = new StreamReader(path + "/TestAssets/SystemAssignedIdentity/SystemAssignedValid.json"))
                 json = f.ReadToEnd();
             JsonDocument document = JsonDocument.Parse(json);
             JsonElement rootElement = document.RootElement;
@@ -135,7 +137,8 @@ namespace azure_proto_core_test
         public void TestDeserializerValidExtraField()
         {
             string json = "";
-            using (StreamReader f = new StreamReader("C:/GitHub/me/azure-proto-sdk/azure-proto-core-test/TestAssets/SystemAssignedIdentity/SystemAssignedValidExtraField.json"))
+            string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
+            using (StreamReader f = new StreamReader(path + "/TestAssets/SystemAssignedIdentity/SystemAssignedValidExtraField.json"))
                 json = f.ReadToEnd();
             JsonDocument document = JsonDocument.Parse(json);
             JsonElement rootElement = document.RootElement;
@@ -149,7 +152,8 @@ namespace azure_proto_core_test
         public void TestDeserializerBothValuesNull()
         {
             string json = "";
-            using (StreamReader f = new StreamReader("C:/GitHub/me/azure-proto-sdk/azure-proto-core-test/TestAssets/SystemAssignedIdentity/SystemAssignedBothValuesNull.json"))
+            string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
+            using (StreamReader f = new StreamReader(path + "/TestAssets/SystemAssignedIdentity/SystemAssignedBothValuesNull.json"))
                 json = f.ReadToEnd();
             JsonDocument document = JsonDocument.Parse(json);
             JsonElement rootElement = document.RootElement;
@@ -162,95 +166,72 @@ namespace azure_proto_core_test
         public void TestDeserializerBothEmptyString()
         {
             string json = "";
-            using (StreamReader f = new StreamReader("C:/GitHub/me/azure-proto-sdk/azure-proto-core-test/TestAssets/SystemAssignedIdentity/SystemAssignedBothEmptyString.json"))
+            string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
+            using (StreamReader f = new StreamReader(path + "/TestAssets/SystemAssignedIdentity/SystemAssignedBothEmptyString.json"))
                 json = f.ReadToEnd();
             JsonDocument document = JsonDocument.Parse(json);
             JsonElement rootElement = document.RootElement;
             var identityJsonProperty = rootElement.EnumerateObject().First<JsonProperty>();
-            Console.WriteLine(Directory.GetCurrentDirectory());
             Assert.Throws<FormatException>(delegate { SystemAssignedIdentity.Deserialize(identityJsonProperty.Value); });
         }
 
-        /*[TestCase]
-        public void TestSerializerSystemAssigned()
+        [TestCase]
+        public void TestDeserializerOneEmptyString()
         {
-            Identity identity1 = new Identity();
-            identity1.TenantId = Guid.NewGuid();
-            identity1.PrincipalId = Guid.NewGuid();
-            identity1.Kind = new IdentityKind("SystemAssigned");
-            string value = "";
-            using (Stream stream = new MemoryStream())
-            {
-                using (StreamReader streamReader = new StreamReader(stream))
-                {
-                    var writer = new Utf8JsonWriter(stream);
-                    identity1.Write(writer);
-                    stream.Seek(0, SeekOrigin.Begin);
-                    value = streamReader.ReadToEnd();
-                }
-            }
-            string actual = "";
-            using (StreamReader f = new StreamReader("./TestAssets/SystemAssigned.json"))
-                actual = f.ReadToEnd();
-            actual = actual.Replace("\n", "").Replace("\r", "").Replace(" ", "");
-            Assert.AreEqual(value, actual);
+            string json = "";
+            string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
+            using (StreamReader f = new StreamReader(path + "/TestAssets/SystemAssignedIdentity/SystemAssignedOneEmptyString.json"))
+                json = f.ReadToEnd();
+            JsonDocument document = JsonDocument.Parse(json);
+            JsonElement rootElement = document.RootElement;
+            var identityJsonProperty = rootElement.EnumerateObject().First<JsonProperty>();
+            Assert.Throws<FormatException>(delegate { SystemAssignedIdentity.Deserialize(identityJsonProperty.Value); });
         }
 
         [TestCase]
-        public void TestSerializerUserAssigned()
+        public void TestDeserializerOneNullString()
         {
-            Identity identity1 = new Identity();
-            identity1.ResourceId = "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport";
-            identity1.Kind = new IdentityKind("UserAssigned");
-            Dictionary<string, azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId> dict = new Dictionary<string, azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId>();
-            var userClientAndPrincipalId = new azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId("test1", "test2");
-            dict.Add("/subscriptions/db1ab6f0-4769-4b27-930e-01e2ef9c123c/resourceGroups/nbhatia-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testidentity", userClientAndPrincipalId);
-            identity1.UserAssignedIdentities = dict;
-            string value = "";
-            using (Stream stream = new MemoryStream())
-            {
-                using (StreamReader streamReader = new StreamReader(stream))
-                {
-                    var writer = new Utf8JsonWriter(stream);
-                    identity1.Write(writer);
-                    stream.Seek(0, SeekOrigin.Begin);
-                    value = streamReader.ReadToEnd();
-                }
-            }
-            string actual = "";
-            using (StreamReader f = new StreamReader("./TestAssets/UserAssigned.json"))
-                actual = f.ReadToEnd();
-            Assert.AreEqual(value, actual);
+            string json = "";
+            string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
+            using (StreamReader f = new StreamReader(path + "/TestAssets/SystemAssignedIdentity/SystemAssignedOneValueNull.json"))
+                json = f.ReadToEnd();
+            JsonDocument document = JsonDocument.Parse(json);
+            JsonElement rootElement = document.RootElement;
+            var identityJsonProperty = rootElement.EnumerateObject().First<JsonProperty>();
+            Assert.Throws<InvalidOperationException>(delegate { SystemAssignedIdentity.Deserialize(identityJsonProperty.Value); });
         }
 
         [TestCase]
-        public void TestSerializerUserAssignedMultipleIdentities()
+        public void TestDeserializerInvalid()
         {
-            Identity identity1 = new Identity();
-            identity1.ResourceId = "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport";
-            identity1.Kind = new IdentityKind("UserAssigned");
-            Dictionary<string, azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId> dict = new Dictionary<string, azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId>();
-            var userClientAndPrincipalId = new azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId("test1", "test2");
-            var userClientAndPrincipalId2 = new azure_proto_core.Resources.UserAssignedIdentity.ClientAndPrincipalId("test3", "test4");
-            dict.Add("/subscriptions/db1ab6f0-4769-4b27-930e-01e2ef9c123c/resourceGroups/nbhatia-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testidentity", userClientAndPrincipalId);
-            dict.Add("/subscriptions/db1ab6f0-4769-4b27-930e-01e2ef9c123c/resourceGroups/nbhatia-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testidentity2", userClientAndPrincipalId2);
+            string json = "";
+            string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
+            using (StreamReader f = new StreamReader(path + "/TestAssets/SystemAssignedIdentity/SystemAssignedInvalid.json"))
+                json = f.ReadToEnd();
+            JsonDocument document = JsonDocument.Parse(json);
+            JsonElement rootElement = document.RootElement;
+            var identityJsonProperty = rootElement.EnumerateObject().First<JsonProperty>();
+            Assert.Throws<InvalidOperationException>(delegate { SystemAssignedIdentity.Deserialize(identityJsonProperty.Value); });
+        }
 
-            identity1.UserAssignedIdentities = dict;
+        [TestCase]
+        public void TestSerializer()
+        {
+            SystemAssignedIdentity systemAssignedIdentity = new SystemAssignedIdentity(new Guid("72f988bf-86f1-41af-91ab-2d7cd011db47"), new Guid ("de29bab1-49e1-4705-819b-4dfddceaaa98"));
             string value = "";
             using (Stream stream = new MemoryStream())
             {
                 using (StreamReader streamReader = new StreamReader(stream))
                 {
                     var writer = new Utf8JsonWriter(stream);
-                    identity1.Write(writer);
+                    Serialize(writer, systemAssignedIdentity);
                     stream.Seek(0, SeekOrigin.Begin);
                     value = streamReader.ReadToEnd();
-                }
+                }                
             }
-            string actual = "";
-            using (StreamReader f = new StreamReader("./TestAssets/UserAssignedMultipleIdentities.json"))
-                actual = f.ReadToEnd();
-            Assert.AreEqual(value, actual);
-        }*/
+            string actual = "{\"principalId\":\"de29bab1-49e1-4705-819b-4dfddceaaa98\",\"tenantId\":\"72f988bf-86f1-41af-91ab-2d7cd011db47\"}";
+            Assert.AreEqual(actual, value);
+        }
+
     }
 }
