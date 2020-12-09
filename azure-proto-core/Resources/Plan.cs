@@ -27,12 +27,17 @@ namespace azure_proto_core
                 return 1;
             }
 
+            if (object.Equals(this, other))
+            {
+                return 0;
+            }
+
             int compareResult = 0;
-            if ((compareResult = string.Compare(Name, other.Name)) == 0 &&
-                (compareResult = string.Compare(Product, other.Product)) == 0 &&
-                (compareResult = string.Compare(PromotionCode, other.PromotionCode)) == 0 &&
-                (compareResult = string.Compare(Publisher, other.Publisher)) == 0 &&
-                (compareResult = string.Compare(Version, other.Version)) == 0)
+            if ((compareResult = string.Compare(Name, other.Name, StringComparison.InvariantCulture)) == 0 &&
+                (compareResult = string.Compare(Product, other.Product, StringComparison.InvariantCulture)) == 0 &&
+                (compareResult = string.Compare(PromotionCode, other.PromotionCode, StringComparison.InvariantCulture)) == 0 &&
+                (compareResult = string.Compare(Publisher, other.Publisher, StringComparison.InvariantCulture)) == 0 &&
+                (compareResult = string.Compare(Version, other.Version, StringComparison.InvariantCulture)) == 0)
             {
                 return 0;
             }
@@ -47,11 +52,16 @@ namespace azure_proto_core
                 return false;
             }
 
-            if (object.Equals(Name, other.Name) &&
-                object.Equals(Product, other.Product) &&
-                object.Equals(PromotionCode, other.PromotionCode) &&
-                object.Equals(Publisher, other.Publisher) &&
-                object.Equals(Version, other.Version))
+            if (object.Equals(this, other))
+            {
+                return true;
+            }
+
+            if (string.Equals(Name, other.Name, StringComparison.InvariantCulture) &&
+                string.Equals(Product, other.Product, StringComparison.InvariantCulture) &&
+                string.Equals(PromotionCode, other.PromotionCode, StringComparison.InvariantCulture) &&
+                string.Equals(Publisher, other.Publisher, StringComparison.InvariantCulture) &&
+                string.Equals(Version, other.Version, StringComparison.InvariantCulture))
             {
                 return true;
             }

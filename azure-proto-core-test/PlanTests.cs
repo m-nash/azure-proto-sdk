@@ -101,6 +101,20 @@ namespace azure_proto_core_test
             Assert.AreEqual(0, plan1.CompareTo(plan2));
         }
 
+        [TestCase(1, "Name", "name", "version", "Version")]
+        [TestCase(1, "Name", "name", "version", "version")]
+        [TestCase(-1, "name", "Name", "Version", "version")]
+        public void CompareToMore(int expected, string name1, string name2, string version1, string version2)
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = new Plan();
+            plan1.Name = name1;
+            plan2.Name = name2;
+            plan1.Version = version1;
+            plan2.Version = version2;
+            Assert.AreEqual(expected, plan1.CompareTo(plan2));
+        }
+
         [TestCase(true, "name", "name")]
         [TestCase(false, "Name", "name")]
         [TestCase(true, null, null)]
