@@ -177,14 +177,10 @@ namespace azure_proto_core
             where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
+            var xx =  CreateResourceConvertor<TOperations, TResource>(clientContext, clientOptions);
             return new PhWrappingPageable<GenericResourceExpanded, TOperations>(
                 result,
-                s => Activator.CreateInstance(
-                    typeof(TOperations),
-                    clientContext,
-                    (Activator.CreateInstance(
-                        typeof(TResource),
-                        s as Azure.ResourceManager.Resources.Models.Resource) as TResource), clientOptions) as TOperations);
+                CreateResourceConvertor<TOperations, TResource>(clientContext, clientOptions));
         }
 
         private static AsyncPageable<TOperations> ConvertResultsAsync<TOperations, TResource>(
@@ -196,10 +192,17 @@ namespace azure_proto_core
         {
             return new PhWrappingAsyncPageable<GenericResourceExpanded, TOperations>(
                 result,
-                s => Activator.CreateInstance(
+                CreateResourceConvertor<TOperations, TResource>(clientContext, clientOptions));
+        }
+
+        private static Func<GenericResourceExpanded, TOperations> CreateResourceConvertor<TOperations, TResource>(ArmClientContext clientContext, ArmClientOptions clientOptions)
+        where TOperations : ResourceOperationsBase<TOperations, TResource>
+        where TResource : TrackedResource
+        {
+             return s => Activator.CreateInstance(
                     typeof(TOperations),
                     clientContext,
-                    Activator.CreateInstance(typeof(TResource), s as Azure.ResourceManager.Resources.Models.Resource) as TResource, clientOptions) as TOperations);
+                    Activator.CreateInstance(typeof(TResource), s as Azure.ResourceManager.Resources.Models.Resource) as TResource, clientOptions) as TOperations;
         }
 
         //TODO: should be able to access context.GetClient() instead of needing this method
