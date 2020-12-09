@@ -7,9 +7,9 @@ namespace azure_proto_network
         public Subnet(ArmClientContext context, SubnetData resource, ArmClientOptions options)
             : base(context, resource.Id, options)
         {
-            Model = resource;
+            Data = resource;
         }
 
-        public SubnetData Model { get; private set; }
+        public SubnetData Data { get; private set; }
     }
 }

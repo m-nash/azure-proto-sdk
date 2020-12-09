@@ -17,7 +17,7 @@ namespace azure_proto_network
 
         public static VirtualNetworkContainer VirtualNetworks(this ResourceGroup resourceGroup)
         {
-            return new VirtualNetworkContainer(resourceGroup.ClientContext, resourceGroup.Model, resourceGroup.ClientOptions);
+            return new VirtualNetworkContainer(resourceGroup.ClientContext, resourceGroup.Data, resourceGroup.ClientOptions);
         }
 
         public static VirtualNetworkContainer VirtualNetworks(this ResourceGroupOperations resourceGroup)
@@ -39,7 +39,7 @@ namespace azure_proto_network
 
         public static PublicIpAddressContainer PublicIpAddresses(this ResourceGroup resourceGroup)
         {
-            return new PublicIpAddressContainer(resourceGroup.ClientContext, resourceGroup.Model, resourceGroup.ClientOptions);
+            return new PublicIpAddressContainer(resourceGroup.ClientContext, resourceGroup.Data, resourceGroup.ClientOptions);
         }
 
         public static PublicIpAddressContainer PublicIpAddresses(this ResourceGroupOperations resourceGroup)
@@ -61,7 +61,7 @@ namespace azure_proto_network
 
         public static NetworkInterfaceContainer NetworkInterfaces(this ResourceGroup resourceGroup)
         {
-            return new NetworkInterfaceContainer(resourceGroup.ClientContext, resourceGroup.Model, resourceGroup.ClientOptions);
+            return new NetworkInterfaceContainer(resourceGroup.ClientContext, resourceGroup.Data, resourceGroup.ClientOptions);
         }
 
         public static NetworkInterfaceContainer NetworkInterfaces(this ResourceGroupOperations resourceGroup)
@@ -88,7 +88,7 @@ namespace azure_proto_network
 
         public static NetworkSecurityGroupContainer NetworkSecurityGroups(this ResourceGroup resourceGroup)
         {
-            return new NetworkSecurityGroupContainer(resourceGroup.ClientContext, resourceGroup.Model, resourceGroup.ClientOptions);
+            return new NetworkSecurityGroupContainer(resourceGroup.ClientContext, resourceGroup.Data, resourceGroup.ClientOptions);
         }
 
         public static NetworkSecurityGroupContainer NetworkSecurityGroups(this ResourceGroupOperations resourceGroup)

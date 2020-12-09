@@ -7,9 +7,9 @@ namespace azure_proto_network
         internal NetworkInterface(ArmClientContext context, NetworkInterfaceData resource, ArmClientOptions options)
             : base(context, resource.Id, options)
         {
-            Model = resource;
+            Data = resource;
         }
 
-        public NetworkInterfaceData Model { get; private set; }
+        public NetworkInterfaceData Data { get; private set; }
     }
 }

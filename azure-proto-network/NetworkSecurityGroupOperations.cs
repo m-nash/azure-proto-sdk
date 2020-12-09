@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace azure_proto_network
 {
     /// <summary>
-    /// An operations + Model class for NSGs
+    /// An operations + Data class for NSGs
     /// TODO: How does the operation signature change for resources that support Etags?
     /// </summary>
     public class NetworkSecurityGroupOperations : ResourceOperationsBase<NetworkSecurityGroup, NetworkSecurityGroupData>, ITaggable<NetworkSecurityGroup, NetworkSecurityGroupData>, IDeletableResource<NetworkSecurityGroup, NetworkSecurityGroupData>

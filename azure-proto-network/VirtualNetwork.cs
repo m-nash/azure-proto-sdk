@@ -7,14 +7,14 @@ namespace azure_proto_network
         public VirtualNetwork(ArmClientContext context, VirtualNetworkData resource, ArmClientOptions options)
             : base(context, resource.Id, options)
         {
-            Model = resource;
+            Data = resource;
         }
 
         public override SubnetContainer Subnets()
         {
-            return new SubnetContainer(ClientContext, Model, ClientOptions);
+            return new SubnetContainer(ClientContext, Data, ClientOptions);
         }
 
-        public VirtualNetworkData Model { get; private set; }
+        public VirtualNetworkData Data { get; private set; }
     }
 }

@@ -9,14 +9,14 @@ namespace azure_proto_network
         public NetworkSecurityGroup(ArmClientContext context, NetworkSecurityGroupData resource, ArmClientOptions options)
             : base(context, resource.Id, options)
         {
-            Model = resource;
+            Data = resource;
         }
 
-        public NetworkSecurityGroupData Model { get; private set; }
+        public NetworkSecurityGroupData Data { get; private set; }
 
         public ArmOperation<NetworkSecurityGroup> UpdateRules(CancellationToken cancellationToken = default, params SecurityRule[] rules)
         {
-            return UpdateRules(Model, cancellationToken, rules);
+            return UpdateRules(Data, cancellationToken, rules);
         }
     }
 }

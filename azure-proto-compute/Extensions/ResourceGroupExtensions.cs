@@ -25,7 +25,7 @@ namespace azure_proto_compute
 
         public static VirtualMachineContainer VirtualMachines(this ResourceGroup resourceGroup)
         {
-            return new VirtualMachineContainer(resourceGroup.ClientContext, resourceGroup.Model, resourceGroup.ClientOptions);
+            return new VirtualMachineContainer(resourceGroup.ClientContext, resourceGroup.Data, resourceGroup.ClientOptions);
         }
 
         public static VirtualMachineContainer VirtualMachines(this ResourceGroupOperations resourceGroup)
@@ -52,7 +52,7 @@ namespace azure_proto_compute
 
         public static AvailabilitySetContainer AvailabilitySets(this ResourceGroup resourceGroup)
         {
-            return new AvailabilitySetContainer(resourceGroup.ClientContext, resourceGroup.Model, resourceGroup.ClientOptions);
+            return new AvailabilitySetContainer(resourceGroup.ClientContext, resourceGroup.Data, resourceGroup.ClientOptions);
         }
 
         public static AvailabilitySetContainer AvailabilitySets(this ResourceGroupOperations resourceGroup)

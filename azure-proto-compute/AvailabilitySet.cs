@@ -7,9 +7,9 @@ namespace azure_proto_compute
         public AvailabilitySet(ArmClientContext context, AvailabilitySetData resource, ArmClientOptions options)
             : base(context, resource.Id, options)
         {
-            Model = resource;
+            Data = resource;
         }
 
-        public AvailabilitySetData Model { get; private set; }
+        public AvailabilitySetData Data { get; private set; }
     }
 }

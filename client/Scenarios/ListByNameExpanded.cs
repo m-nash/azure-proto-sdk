@@ -19,7 +19,7 @@ namespace client
             }
             foreach (var availabilitySet in rg.AvailabilitySets().ListByNameExpanded(Environment.UserName))
             {
-                Console.WriteLine($"--------AvailabilitySet id--------: {availabilitySet.Model.Id}");
+                Console.WriteLine($"--------AvailabilitySet id--------: {availabilitySet.Data.Id}");
             }
             foreach (var vm in rg.VirtualMachines().ListByName(Environment.UserName))
             {
@@ -27,7 +27,7 @@ namespace client
             }
             foreach (var vm in rg.VirtualMachines().ListByNameExpanded(Environment.UserName))
             {
-                Console.WriteLine($"--------VM id--------: {vm.Model.Id}");
+                Console.WriteLine($"--------VM id--------: {vm.Data.Id}");
             }
             ExecuteAsync(rg).GetAwaiter().GetResult();
         }
@@ -40,7 +40,7 @@ namespace client
             }
             await foreach (var availabilitySet in rg.AvailabilitySets().ListByNameExpandedAsync(Environment.UserName))
             {
-                Console.WriteLine($"--------AvailabilitySet id--------: {availabilitySet.Model.Id}");
+                Console.WriteLine($"--------AvailabilitySet id--------: {availabilitySet.Data.Id}");
             }
             await foreach (var vm in rg.VirtualMachines().ListByNameAsync(Environment.UserName))
             {
@@ -48,7 +48,7 @@ namespace client
             }
             await foreach (var vm in rg.VirtualMachines().ListByNameExpandedAsync(Environment.UserName))
             {
-                Console.WriteLine($"--------VM id--------: {vm.Model.Id}");
+                Console.WriteLine($"--------VM id--------: {vm.Data.Id}");
             }
         }
     }

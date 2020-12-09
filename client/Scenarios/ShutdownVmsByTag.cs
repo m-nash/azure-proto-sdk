@@ -29,7 +29,7 @@ namespace client
             var filteredList = rg.VirtualMachines().List().Where(vm =>
             {
                 string value;
-                return (vm.Model.Tags.TryGetValue("tagkey", out value) && value == "tagvalue");
+                return (vm.Data.Tags.TryGetValue("tagkey", out value) && value == "tagvalue");
             });
 
             foreach (var vm in filteredList)

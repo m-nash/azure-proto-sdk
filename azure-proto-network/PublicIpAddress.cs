@@ -7,9 +7,9 @@ namespace azure_proto_network
         internal PublicIpAddress(ArmClientContext context, PublicIPAddressData resource, ArmClientOptions options)
             : base(context, resource.Id, options)
         {
-            Model = resource;
+            Data = resource;
         }
 
-        public PublicIPAddressData Model { get; private set; }
+        public PublicIPAddressData Data { get; private set; }
     }
 }

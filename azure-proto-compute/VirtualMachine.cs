@@ -7,9 +7,9 @@ namespace azure_proto_compute
         public VirtualMachine(ArmClientContext context, VirtualMachineData resource, ArmClientOptions options)
             : base(context, resource.Id, options)
         {
-            Model = resource;
+            Data = resource;
         }
 
-        public VirtualMachineData Model { get; private set; }
+        public VirtualMachineData Data { get; private set; }
     }
 }

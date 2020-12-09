@@ -53,13 +53,13 @@ namespace client
 
                 // Create Network Interface
                 Console.WriteLine("--------Start create Network Interface--------");
-                var nic = resourceGroup.NetworkInterfaces().Construct(ipAddress.Model, subnet.Id).Create($"{Context.VmName}_{i}_nic").Value;
+                var nic = resourceGroup.NetworkInterfaces().Construct(ipAddress.Data, subnet.Id).Create($"{Context.VmName}_{i}_nic").Value;
 
                 // Create VM
                 string num = i % 2 == 0 ? "even" : "odd";
                 string name = $"{Context.VmName}-{i}-{num}";
                 Console.WriteLine("--------Start create VM {0}--------", i);
-                var vmOp = resourceGroup.VirtualMachines().Construct(name, "admin-user", "!@#$%asdfA", nic.Id, aset.Model).StartCreate(name);
+                var vmOp = resourceGroup.VirtualMachines().Construct(name, "admin-user", "!@#$%asdfA", nic.Id, aset.Data).StartCreate(name);
                 operations.Add(vmOp);
             }
 
