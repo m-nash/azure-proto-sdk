@@ -7,7 +7,7 @@ namespace azure_proto_compute.Convenience
     {
         // TODO: GENERATOR Update Builder after models are incorporated in generated models
 
-        internal VirtualMachineModelBuilder(VirtualMachineContainer containerOperations, PhVirtualMachine vm): base(containerOperations, vm)
+        internal VirtualMachineModelBuilder(VirtualMachineContainer containerOperations, VirtualMachineData vm): base(containerOperations, vm)
         {
             // _model.Name = vmName;
             //_model = new VirtualMachine(location);

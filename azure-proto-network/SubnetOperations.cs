@@ -1,6 +1,5 @@
 ﻿using Azure;
 using Azure.ResourceManager.Network;
-using Azure.ResourceManager.Network.Models;
 using azure_proto_core;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,13 +8,22 @@ namespace azure_proto_network
 {
     /// <summary>
     /// </summary>
-    public class SubnetOperations : ResourceOperationsBase<XSubnet, PhSubnet>, IDeletableResource<XSubnet, PhSubnet>
+    public class SubnetOperations : ResourceOperationsBase<Subnet, SubnetData>, IDeletableResource<Subnet, SubnetData>
     {
-        public SubnetOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal SubnetOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+            : base(context, id, clientOptions)
+        {
+        }
 
-        public SubnetOperations(ArmClientContext context, azure_proto_core.Resource resource) : base(context, resource) { }
+        internal SubnetOperations(ArmClientContext context, azure_proto_core.Resource resource, ArmClientOptions clientOptions)
+            : base(context, resource, clientOptions)
+        {
+        }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
+        
+        internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+                    ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).Subnets;
 
         public ArmOperation<Response> Delete()
         {
@@ -27,19 +35,24 @@ namespace azure_proto_network
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, cancellationToken));
         }
 
-        public override ArmResponse<XSubnet> Get()
+        public override ArmResponse<Subnet> Get()
         {
-            return new PhArmResponse<XSubnet, Subnet>(Operations.Get(Id.ResourceGroup, Id.Parent.Name, Id.Name),
-                n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet); });
+            return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(Operations.Get(Id.ResourceGroup, Id.Parent.Name, Id.Name),
+                n =>
+                {
+                    Resource = new SubnetData(n, DefaultLocation);
+                    return new Subnet(ClientContext, Resource as SubnetData, ClientOptions);
+                });
         }
 
-        public async override Task<ArmResponse<XSubnet>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<Subnet>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<XSubnet, Subnet>(await Operations.GetAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, null, cancellationToken),
-                n => { Resource = new PhSubnet(n, DefaultLocation); return new XSubnet(ClientContext, Resource as PhSubnet); });
+            return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(await Operations.GetAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, null, cancellationToken),
+                n =>
+                {
+                    Resource = new SubnetData(n, DefaultLocation);
+                    return new Subnet(ClientContext, Resource as SubnetData, ClientOptions);
+                });
         }
-
-
-        internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred)).Subnets;
     }
 }

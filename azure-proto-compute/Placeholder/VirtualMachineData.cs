@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace azure_proto_compute
 {
-    public class PhVirtualMachine : TrackedResource<VirtualMachine>
+    public class VirtualMachineData : TrackedResource<Azure.ResourceManager.Compute.Models.VirtualMachine>
     {
         public static ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
 
-        public PhVirtualMachine(VirtualMachine vm) : base(vm.Id, vm.Location, vm)
+        public VirtualMachineData(Azure.ResourceManager.Compute.Models.VirtualMachine vm) : base(vm.Id, vm.Location, vm)
         {
             if (null == vm.Tags)
             {
@@ -17,10 +17,10 @@ namespace azure_proto_compute
             }
         }
 
-        public PhVirtualMachine(Azure.ResourceManager.Resources.Models.Resource vm) : base(
+        public VirtualMachineData(Azure.ResourceManager.Resources.Models.Resource vm) : base(
             vm.Id,
             vm.Location,
-            new VirtualMachine(vm.Location)
+            new Azure.ResourceManager.Compute.Models.VirtualMachine(vm.Location)
             {
                 Tags = vm.Tags == null ? new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) : vm.Tags
             })

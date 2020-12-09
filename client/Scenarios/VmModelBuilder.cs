@@ -16,7 +16,7 @@ namespace client
             throw new NotImplementedException();
         }
 
-        private Task<XVirtualMachine> CreateVmWithBuilderAsync()
+        private Task<VirtualMachine> CreateVmWithBuilderAsync()
         {
             var client = new ArmClient();
             var subscription = client.Subscription(Context.SubscriptionId);
@@ -45,7 +45,7 @@ namespace client
 
             // Create Network Interface
             Console.WriteLine("--------Start create Network Interface--------");
-            var nic = resourceGroup.NetworkInterfaces().Construct(ipAddress.Model, subnet.Id).Create($"{Context.VmName}_nic").Value;
+            var nic = resourceGroup.NetworkInterfaces().Construct(ipAddress.Data, subnet.Id).Create($"{Context.VmName}_nic").Value;
 
             // Options: required parameters on in the constructor
             var vm = resourceGroup.VirtualMachines().Construct(Context.VmName, Context.Loc)

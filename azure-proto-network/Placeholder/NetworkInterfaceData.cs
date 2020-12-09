@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace azure_proto_network
 {
-    public class PhNetworkInterface : TrackedResource<NetworkInterface>, IEntityResource
+    public class NetworkInterfaceData : TrackedResource<Azure.ResourceManager.Network.Models.NetworkInterface>, IEntityResource
     {
         public static ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 
-        public PhNetworkInterface(NetworkInterface nic) : base(nic.Id, nic.Location, nic)
+        public NetworkInterfaceData(Azure.ResourceManager.Network.Models.NetworkInterface nic) : base(nic.Id, nic.Location, nic)
         {
             if (null == nic.Tags)
             {
@@ -22,7 +22,7 @@ namespace azure_proto_network
         public override string Name => Model.Name;
         public string Etag => Model.Etag;
         public SubResource VirtualMachine => Model.VirtualMachine;
-        public NetworkSecurityGroup NetworkSecurityGroup
+        public Azure.ResourceManager.Network.Models.NetworkSecurityGroup NetworkSecurityGroup
         {
             get => Model.NetworkSecurityGroup;
             set => Model.NetworkSecurityGroup = value;

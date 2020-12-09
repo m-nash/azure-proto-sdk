@@ -2,9 +2,9 @@
 
 namespace azure_proto_compute.Convenience
 {
-    public abstract class VirtualMachineModelBuilderBase : ArmBuilder<XVirtualMachine, PhVirtualMachine>
+    public abstract class VirtualMachineModelBuilderBase : ArmBuilder<VirtualMachine, VirtualMachineData>
     {
-        protected VirtualMachineModelBuilderBase(VirtualMachineContainer containerOperations, PhVirtualMachine vm): base(containerOperations, vm){ }
+        protected VirtualMachineModelBuilderBase(VirtualMachineContainer containerOperations, VirtualMachineData vm): base(containerOperations, vm){ }
 
         public abstract VirtualMachineModelBuilderBase UseWindowsImage(string adminUser, string password);
 
