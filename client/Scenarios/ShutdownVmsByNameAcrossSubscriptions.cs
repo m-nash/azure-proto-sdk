@@ -11,7 +11,7 @@ namespace client
         {
             var client = new ArmClient();
 
-            await foreach (var subscription in client.ListSubscriptionsAsync())
+            await foreach (var subscription in client.Subscriptions().ListAsync())
             {
                 await foreach (var vm in subscription.ListVirtualMachinesAsync("even"))
                 {
@@ -39,7 +39,7 @@ namespace client
 
 
             var client = new ArmClient();
-            foreach (var sub in client.ListSubscriptions())
+            foreach (var sub in client.Subscriptions().List())
             {
                 await foreach (var vm in sub.ListVirtualMachinesAsync("even"))
                 {

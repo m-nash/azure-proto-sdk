@@ -11,13 +11,13 @@ namespace azure_proto_core
     public class ArmResourceOperations : ResourceOperationsBase<ArmResourceOperations, ArmResource>,
         ITaggable<ArmResourceOperations, ArmResource>, IDeletableResource<ArmResourceOperations, ArmResource>
     {
-        public ArmResourceOperations(ArmClientContext context, ResourceIdentifier id)
-            : base(context, id)
+        public ArmResourceOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOption)
+            : base(context, id, clientOption)
         {
         }
 
-        public ArmResourceOperations(ArmClientContext context, ArmResource resource)
-            : base(context, resource)
+        public ArmResourceOperations(ArmClientContext context, ArmResource resource, ArmClientOptions clientOption)
+            : base(context, resource, clientOption)
         {
         }
 

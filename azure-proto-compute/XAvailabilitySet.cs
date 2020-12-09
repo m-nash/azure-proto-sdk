@@ -4,7 +4,7 @@ namespace azure_proto_compute
 {
     public class XAvailabilitySet : AvailabilitySetOperations
     {
-        public XAvailabilitySet(ArmClientContext context, PhAvailabilitySet resource):base(context, resource)
+        internal XAvailabilitySet(ArmClientContext context, PhAvailabilitySet resource, ArmClientOptions clientOptions): base(context, resource, clientOptions)
         {
             Model = resource;
         }
