@@ -101,6 +101,19 @@ namespace azure_proto_network
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
         }
+
+        public Pageable<NetworkInterface> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var results = ListByName(filter, top, cancellationToken);
+            return new PhWrappingPageable<ArmResourceOperations, NetworkInterface>(results, s => new NetworkInterfaceOperations(s).Get().Value);
+        }
+
+        public AsyncPageable<NetworkInterface> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var results = ListByNameAsync(filter, top, cancellationToken);
+            return new PhWrappingAsyncPageable<ArmResourceOperations, NetworkInterface>(results, s => new NetworkInterfaceOperations(s).Get().Value);
+        }
+        
         private Func<Azure.ResourceManager.Network.Models.NetworkInterface, NetworkInterface> convertor()
         {
             return s => new NetworkInterface(ClientContext, new NetworkInterfaceData(s), ClientOptions);
