@@ -12,18 +12,18 @@ namespace azure_proto_core
     /// <typeparam name="T">The type of the resource model</typeparam>
     /// <typeparam name="U">The return type of the Creation methods, this can be Response<typeparamref name="T"/> or a long-running response</typeparam>
     public abstract class ResourceContainerOperations<TOperations, TResource> : OperationsBase
-        where TOperations : ResourceOperationsBase<TOperations, TResource>
+        where TOperations :  ResourceOperationsBase<TOperations, TResource>
         where TResource : Resource
     {
         protected TrackedResource Parent { get; private set; }
 
-        protected ResourceContainerOperations(ArmClientContext parent, ResourceIdentifier contexts) : base(parent, contexts)
+        protected ResourceContainerOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id)
         {
         }
 
-        protected ResourceContainerOperations(ArmClientContext parent, TrackedResource contexts) : base(parent, contexts)
+        protected ResourceContainerOperations(ArmClientContext context, TrackedResource resource) : base(context, resource)
         {
-            Parent = contexts;
+            Parent = resource;
         }
 
         public override void Validate(ResourceIdentifier identifier)

@@ -42,9 +42,9 @@ namespace client
             CreateVms(resourceGroup, aset, subnet);
         }
 
-        private void CreateVms(ResourceGroupOperations resourceGroup, AvailabilitySetOperations aset, SubnetOperations subnet)
+        private void CreateVms(XResourceGroup resourceGroup, XAvailabilitySet aset, SubnetOperations subnet)
         {
-            List<ArmOperation<VirtualMachineOperations>> operations = new List<ArmOperation<VirtualMachineOperations>>();
+            List<ArmOperation<XVirtualMachine>> operations = new List<ArmOperation<XVirtualMachine>>();
             for (int i = 0; i < 10; i++)
             {
                 // Create IP Address
@@ -53,7 +53,7 @@ namespace client
 
                 // Create Network Interface
                 Console.WriteLine("--------Start create Network Interface--------");
-                var nic = resourceGroup.NetworkInterfaces().Construct(ipAddress.GetModelIfNewer(), subnet.Id).Create($"{Context.VmName}_{i}_nic").Value;
+                var nic = resourceGroup.NetworkInterfaces().Construct(ipAddress.Model, subnet.Id).Create($"{Context.VmName}_{i}_nic").Value;
 
                 // Create VM
                 string num = i % 2 == 0 ? "even" : "odd";

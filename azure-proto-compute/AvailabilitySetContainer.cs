@@ -9,43 +9,45 @@ namespace azure_proto_compute
     /// <summary>
     /// Operatiosn class for Availability Set Contaienrs (resource groups)
     /// </summary>
-    public class AvailabilitySetContainer : ResourceContainerOperations<AvailabilitySetOperations, PhAvailabilitySet>
+    public class AvailabilitySetContainer : ResourceContainerOperations<XAvailabilitySet, PhAvailabilitySet>
     {
         public AvailabilitySetContainer(ArmClientContext context, PhResourceGroup resourceGroup) : base(context, resourceGroup) { }
 
+        internal AvailabilitySetContainer(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+
         public override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
 
-        public override ArmResponse<AvailabilitySetOperations> Create(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<XAvailabilitySet> Create(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
         {
             var response = Operations.CreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
-            return new PhArmResponse<AvailabilitySetOperations, AvailabilitySet>(
+            return new PhArmResponse<XAvailabilitySet, AvailabilitySet>(
                 response,
-                a => new AvailabilitySetOperations(ClientContext, new PhAvailabilitySet(a)));
+                a => new XAvailabilitySet(ClientContext, new PhAvailabilitySet(a)));
         }
 
-        public async override Task<ArmResponse<AvailabilitySetOperations>> CreateAsync(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<XAvailabilitySet>> CreateAsync(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
         {
             var response = await Operations.CreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
-            return new PhArmResponse<AvailabilitySetOperations, AvailabilitySet>(
+            return new PhArmResponse<XAvailabilitySet, AvailabilitySet>(
                 response,
-                a => new AvailabilitySetOperations(ClientContext, new PhAvailabilitySet(a)));
+                a => new XAvailabilitySet(ClientContext, new PhAvailabilitySet(a)));
         }
 
-        public override ArmOperation<AvailabilitySetOperations> StartCreate(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmOperation<XAvailabilitySet> StartCreate(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<AvailabilitySetOperations, AvailabilitySet>(
+            return new PhArmOperation<XAvailabilitySet, AvailabilitySet>(
                 Operations.CreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
-                a => new AvailabilitySetOperations(ClientContext, new PhAvailabilitySet(a)));
+                a => new XAvailabilitySet(ClientContext, new PhAvailabilitySet(a)));
         }
 
-        public async override Task<ArmOperation<AvailabilitySetOperations>> StartCreateAsync(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<XAvailabilitySet>> StartCreateAsync(string name, PhAvailabilitySet resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<AvailabilitySetOperations, AvailabilitySet>(
+            return new PhArmOperation<XAvailabilitySet, AvailabilitySet>(
                 await Operations.CreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
-                a => new AvailabilitySetOperations(ClientContext, new PhAvailabilitySet(a)));
+                a => new XAvailabilitySet(ClientContext, new PhAvailabilitySet(a)));
         }
 
-        public ArmBuilder<AvailabilitySetOperations, PhAvailabilitySet> Construct(string skuName, Location location = null)
+        public ArmBuilder<XAvailabilitySet, PhAvailabilitySet> Construct(string skuName, Location location = null)
         {
             var availabilitySet = new AvailabilitySet(location ?? DefaultLocation)
             {
@@ -54,7 +56,7 @@ namespace azure_proto_compute
                 Sku = new Azure.ResourceManager.Compute.Models.Sku() { Name = skuName }
             };
 
-            return new ArmBuilder<AvailabilitySetOperations, PhAvailabilitySet>(this, new PhAvailabilitySet(availabilitySet));
+            return new ArmBuilder<XAvailabilitySet, PhAvailabilitySet>(this, new PhAvailabilitySet(availabilitySet));
         }
 
         internal AvailabilitySetsOperations Operations => GetClient((uri, cred) => new ComputeManagementClient(uri, Id.Subscription, cred)).AvailabilitySets;

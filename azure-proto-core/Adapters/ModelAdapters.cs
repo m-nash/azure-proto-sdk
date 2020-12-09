@@ -24,4 +24,22 @@ namespace azure_proto_core
             return other.Model;
         }
     }
+
+    //Or call generic resource, other resource??
+    public abstract class ProxyResource<T> : Resource where T : class
+    {
+        public override ResourceIdentifier Id { get; protected set; }
+        protected ProxyResource (ResourceIdentifier id, T data)
+        {
+            Id = id;
+            Model = data;
+        }
+
+        public virtual T Model { get; set; }
+
+        public static implicit operator T(ProxyResource <T> other)
+        {
+            return other.Model;
+        }
+    }
 }
