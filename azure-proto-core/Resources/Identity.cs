@@ -1,4 +1,7 @@
-﻿namespace azure_proto_core
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+namespace azure_proto_core
 {
     using System;
     using System.Collections.Generic;
@@ -10,6 +13,7 @@
 
     /// <summary>
     /// Represents a managed identity
+    /// TODO: fill in properties, implement comparison and equality methods and operator overloads
     /// </summary>
     public class Identity : IEquatable<Identity>, IUtf8JsonSerializable
     {

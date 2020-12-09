@@ -1,14 +1,19 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 
 namespace azure_proto_core
 {
     /// <summary>
-    /// Base resource type: All resources have these properties. Proxy and other untracked resources should extend this class
-    /// TODO: Implement comparison, equality, and type coercion operator overloads
-    /// TODO: What to do with properties derived from ResourceId when object is created? Should we have a special factory for each?
+    ///     Base resource type: All resources have these properties. Proxy and other untracked resources should extend this
+    ///     class
+    ///     TODO: Implement comparison, equality, and type coercion operator overloads
+    ///     TODO: What to do with properties derived from ResourceId when object is created? Should we have a special factory
+    ///     for each?
     /// </summary>
-    public abstract class Resource : IEquatable<Resource>, IEquatable<string>, IComparable<Resource>, IComparable<string>
+    public abstract class Resource : IEquatable<Resource>, IEquatable<string>, IComparable<Resource>,
+        IComparable<string>
     {
         public abstract ResourceIdentifier Id { get; protected set; }
 
@@ -34,7 +39,7 @@ namespace azure_proto_core
                 return false;
             }
 
-            return (Id.Equals(other?.Id));
+            return Id.Equals(other?.Id);
         }
 
         public virtual bool Equals(string other)
@@ -44,7 +49,7 @@ namespace azure_proto_core
                 return false;
             }
 
-            return (Id.Equals(other));
+            return Id.Equals(other);
         }
     }
 }
