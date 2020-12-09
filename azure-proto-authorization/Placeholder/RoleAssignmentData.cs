@@ -6,12 +6,15 @@ using System.Text;
 
 namespace azure_proto_authorization
 {
-    public class PhRoleAssignment : Resource
+    /// <summary>
+    /// Placholder class containing Role assignment POCO properties
+    /// </summary>
+    public class RoleAssignmentData : Resource
     {
         public static azure_proto_core.ResourceType ResourceType => "Microsoft.Authorization/roleAssignments";
 
-        RoleAssignment _model;
-        public PhRoleAssignment(RoleAssignment assign)
+        Azure.ResourceManager.Authorization.Models.RoleAssignment _model;
+        public RoleAssignmentData(Azure.ResourceManager.Authorization.Models.RoleAssignment assign)
         {
             _model = assign;
             Id = assign.Id;
@@ -33,7 +36,7 @@ namespace azure_proto_authorization
         public bool? CanDelegate { get; }
         public override ResourceIdentifier Id { get ; protected set ; }
 
-        public RoleAssignment ToModel()
+        public Azure.ResourceManager.Authorization.Models.RoleAssignment ToModel()
         {
             return _model;
         }

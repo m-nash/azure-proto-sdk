@@ -6,7 +6,35 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    public abstract class ResourceOperationsBase<TOperations, TResource> : OperationsBase
+    /// <summary>
+    /// Base class for all operations over a resource.
+    /// </summary>
+    public abstract class ResourceOperationsBase : OperationsBase
+    {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceOperationsBase"/> class.
+        /// </summary>
+        /// <param name="context">The client parameters to use in these operations.</param>
+        /// <param name="id">The identifier of the resource that is the target of operations.</param>
+        public ResourceOperationsBase(ArmClientContext context, ResourceIdentifier id)
+            : this(context, new ArmResource(id))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceOperationsBase"/> class.
+        /// </summary>
+        /// <param name="context">The client parameters to use in these operations.</param>
+        /// <param name="resource">The resource that is the target of operations.</param>
+        public ResourceOperationsBase(ArmClientContext context, Resource resource)
+            : base(context, resource)
+        {
+        }
+
+    }
+
+    public abstract class ResourceOperationsBase<TOperations, TResource> : ResourceOperationsBase
         where TResource : Resource
         where TOperations : ResourceOperationsBase<TOperations, TResource>
     {

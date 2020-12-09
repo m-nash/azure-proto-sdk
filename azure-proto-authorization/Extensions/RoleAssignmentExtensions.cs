@@ -49,7 +49,7 @@ namespace azure_proto_authorization
             return new RoleAssignmentOperations(resource.ClientContext, resourceId);
         }
 
-        public static RoleAssignmentOperations RoleAssignmentAtScope(this SubscriptionOperations resource, PhRoleAssignment role)
+        public static RoleAssignmentOperations RoleAssignmentAtScope(this SubscriptionOperations resource, RoleAssignmentData role)
         {
             return new RoleAssignmentOperations(resource.ClientContext, role);
         }
