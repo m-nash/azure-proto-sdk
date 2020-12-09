@@ -91,6 +91,14 @@ namespace azure_proto_core_test
             Assert.AreEqual(1, sku1.CompareTo(sku2));
         }
 
+        [Test]
+        public void CompareToSameSkus()
+        {
+            Sku sku1 = new Sku();
+            Sku sku2 = sku1;
+            Assert.AreEqual(0, sku1.CompareTo(sku2));
+        }
+
         [TestCase(true, "name", "name")]
         [TestCase(false, "Name", "name")]
         [TestCase(true, null, null)]
@@ -218,6 +226,14 @@ namespace azure_proto_core_test
             Sku sku1 = new Sku();
             object sku2 = "random";
             Assert.IsFalse(sku1.Equals(sku2));
+        }
+
+        [Test]
+        public void EqualsToSameSkus()
+        {
+            Sku sku1 = new Sku();
+            Sku sku2 = sku1;
+            Assert.IsTrue(sku1.Equals(sku2));
         }
     }
 }
