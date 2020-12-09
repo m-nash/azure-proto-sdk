@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace azure_proto_network
 {
-    public class PhNetworkSecurityGroup : TrackedResource<NetworkSecurityGroup>, IEntityResource
+    public class NetworkSecurityGroupData : TrackedResource<Azure.ResourceManager.Network.Models.NetworkSecurityGroup>, IEntityResource
 
     {
         public static ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
 
-        public PhNetworkSecurityGroup(NetworkSecurityGroup nsg) : base(nsg.Id, nsg.Location, nsg) 
+        public NetworkSecurityGroupData(Azure.ResourceManager.Network.Models.NetworkSecurityGroup nsg) : base(nsg.Id, nsg.Location, nsg) 
         {
             if (null == nsg.Tags)
             {
@@ -27,15 +27,15 @@ namespace azure_proto_network
             set => Model.SecurityRules = value;
         }
         public IList<SecurityRule> DefaultSecurityRules => Model.DefaultSecurityRules;
-        public IList<NetworkInterface> NetworkInterfaces => Model.NetworkInterfaces;
-        public IList<Subnet> Subnets => Model.Subnets;
+        public IList<Azure.ResourceManager.Network.Models.NetworkInterface> NetworkInterfaces => Model.NetworkInterfaces;
+        public IList<Azure.ResourceManager.Network.Models.Subnet> Subnets => Model.Subnets;
         public IList<FlowLog> FlowLogs => Model.FlowLogs;
         public string ResourceGuid => Model.ResourceGuid;
         public ProvisioningState? ProvisioningState => Model.ProvisioningState;
 
-        public static implicit operator PhNetworkSecurityGroup(NetworkSecurityGroup nsg)
+        public static implicit operator NetworkSecurityGroupData(Azure.ResourceManager.Network.Models.NetworkSecurityGroup nsg)
         {
-            return new PhNetworkSecurityGroup(nsg);
+            return new NetworkSecurityGroupData(nsg);
         }
     }
 }

@@ -18,14 +18,14 @@ namespace azure_proto_compute
             return new VirtualMachineOperations(resourceGroup.ClientContext, vmId, resourceGroup.ClientOptions);
         }
 
-        public static XVirtualMachine VirtualMachine(this XResourceGroup resourceGroup, PhVirtualMachine vm)
+        public static VirtualMachine VirtualMachine(this ResourceGroup resourceGroup, VirtualMachineData vm)
         {
-            return new XVirtualMachine(resourceGroup.ClientContext, vm, resourceGroup.ClientOptions);
+            return new VirtualMachine(resourceGroup.ClientContext, vm, resourceGroup.ClientOptions);
         }
 
-        public static VirtualMachineContainer VirtualMachines(this XResourceGroup resourceGroup)
+        public static VirtualMachineContainer VirtualMachines(this ResourceGroup resourceGroup)
         {
-            return new VirtualMachineContainer(resourceGroup.ClientContext, resourceGroup.Model, resourceGroup.ClientOptions);
+            return new VirtualMachineContainer(resourceGroup.ClientContext, resourceGroup.Data, resourceGroup.ClientOptions);
         }
 
         public static VirtualMachineContainer VirtualMachines(this ResourceGroupOperations resourceGroup)
@@ -45,14 +45,14 @@ namespace azure_proto_compute
             return new AvailabilitySetOperations(resourceGroup.ClientContext, availabilitySetId, resourceGroup.ClientOptions);
         }
 
-        public static XAvailabilitySet AvailabilitySet(this XResourceGroup resourceGroup, PhAvailabilitySet availabilitySet)
+        public static AvailabilitySet AvailabilitySet(this ResourceGroup resourceGroup, AvailabilitySetData availabilitySet)
         {
-            return new XAvailabilitySet(resourceGroup.ClientContext, availabilitySet, resourceGroup.ClientOptions);
+            return new AvailabilitySet(resourceGroup.ClientContext, availabilitySet, resourceGroup.ClientOptions);
         }
 
-        public static AvailabilitySetContainer AvailabilitySets(this XResourceGroup resourceGroup)
+        public static AvailabilitySetContainer AvailabilitySets(this ResourceGroup resourceGroup)
         {
-            return new AvailabilitySetContainer(resourceGroup.ClientContext, resourceGroup.Model, resourceGroup.ClientOptions);
+            return new AvailabilitySetContainer(resourceGroup.ClientContext, resourceGroup.Data, resourceGroup.ClientOptions);
         }
 
         public static AvailabilitySetContainer AvailabilitySets(this ResourceGroupOperations resourceGroup)

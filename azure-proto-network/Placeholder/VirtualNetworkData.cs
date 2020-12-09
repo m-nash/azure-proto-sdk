@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace azure_proto_network
 {
-    public class PhVirtualNetwork : TrackedResource<VirtualNetwork>
+    public class VirtualNetworkData : TrackedResource<Azure.ResourceManager.Network.Models.VirtualNetwork>
     {
         public static ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
 
-        public PhVirtualNetwork(VirtualNetwork vnet) : base(vnet.Id, vnet.Location, vnet)
+        public VirtualNetworkData(Azure.ResourceManager.Network.Models.VirtualNetwork vnet) : base(vnet.Id, vnet.Location, vnet)
         {
             if (null == vnet.Tags)
             {
@@ -30,7 +30,7 @@ namespace azure_proto_network
             get => Model.DhcpOptions;
             set => Model.DhcpOptions = value;
         }
-        public IList<Subnet> Subnets
+        public IList<Azure.ResourceManager.Network.Models.Subnet> Subnets
         {
             get => Model.Subnets;
             set => Model.Subnets = value;

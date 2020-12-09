@@ -5,7 +5,6 @@ using System;
 using System.Threading;
 using Azure;
 using Azure.ResourceManager.Resources;
-using Azure.ResourceManager.Resources.Models;
 using azure_proto_core.Adapters;
 
 namespace azure_proto_core
@@ -33,27 +32,29 @@ namespace azure_proto_core
         }
 
         public override ResourceType ResourceType => AzureResourceType;
-        internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) => 
+
+        internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) =>
             new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
-        internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) => 
+
+        internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) =>
             new ResourcesManagementClient(uri, Id.Subscription, cred, ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
 
         public Pageable<ResourceGroupOperations> ListResourceGroups(CancellationToken cancellationToken = default)
         {
-            return new PhWrappingPageable<ResourceGroup, ResourceGroupOperations>(
+            return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.ResourceGroup, ResourceGroupOperations>(
                 RgOperations.List(null, null, cancellationToken),
-                s => new ResourceGroupOperations(ClientContext, new PhResourceGroup(s), ClientOptions));
+                s => new ResourceGroupOperations(ClientContext, new ResourceGroupData(s), ClientOptions));
         }
 
         public AsyncPageable<ResourceGroupOperations> ListResourceGroupsAsync(
             CancellationToken cancellationToken = default)
         {
-            return new PhWrappingAsyncPageable<ResourceGroup, ResourceGroupOperations>(
+            return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.ResourceGroup, ResourceGroupOperations>(
                 RgOperations.ListAsync(null, null, cancellationToken),
-                s => new ResourceGroupOperations(ClientContext, new PhResourceGroup(s), ClientOptions));
+                s => new ResourceGroupOperations(ClientContext, new ResourceGroupData(s), ClientOptions));
         }
 
-        public ResourceGroupOperations ResourceGroup(PhResourceGroup resourceGroup)
+        public ResourceGroupOperations ResourceGroup(ResourceGroupData resourceGroup)
         {
             return new ResourceGroupOperations(ClientContext, resourceGroup, ClientOptions);
         }
