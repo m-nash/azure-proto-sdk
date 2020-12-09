@@ -10,23 +10,23 @@
 
         public Guid? PrincipalId { get; set; }
 
-        public SystemAssignedIdentity() : this(Guid.Empty, Guid.Empty) { }
+        public SystemAssignedIdentity() { }
 
         public SystemAssignedIdentity(Guid tenantId, Guid principalId)
         {
-            this.TenantId = tenantId;
-            this.PrincipalId = principalId;
+            TenantId = tenantId;
+            PrincipalId = principalId;
         }
 
         public int CompareTo(SystemAssignedIdentity other)
         {
-            if ((this.TenantId.HasValue == false && this.PrincipalId.HasValue == false) && other == null)
+            if ((TenantId.HasValue == false && PrincipalId.HasValue == false) && other == null)
                 return 0;
-            else if (this.TenantId.HasValue == false && this.PrincipalId.HasValue == false)
+            else if (TenantId.HasValue == false && PrincipalId.HasValue == false)
                 return -1;
-            else if (this.TenantId.Value.CompareTo(other.TenantId.Value) == 1 && this.PrincipalId.Value.CompareTo(other.PrincipalId.Value) == 1)
+            else if (TenantId.Value.CompareTo(other.TenantId.Value) == 1 && PrincipalId.Value.CompareTo(other.PrincipalId.Value) == 1)
                 return 1;
-            else if (this.TenantId.Value.CompareTo(other.TenantId.Value) == 0 && this.PrincipalId.Value.CompareTo(other.PrincipalId.Value) == 0)
+            else if (TenantId.Value.CompareTo(other.TenantId.Value) == 0 && PrincipalId.Value.CompareTo(other.PrincipalId.Value) == 0)
                 return 0;
             else
                 return -1;
@@ -34,25 +34,27 @@
 
         public bool Equals(SystemAssignedIdentity other)
         {
-            if ((this.TenantId.HasValue == false && this.PrincipalId.HasValue == false) && other == null)
+            if ((TenantId.HasValue == false && PrincipalId.HasValue == false) && other == null)
                 return true;
-            else if (this.TenantId.HasValue == false && this.PrincipalId.HasValue == false)
+            else if (TenantId.HasValue == false && PrincipalId.HasValue == false)
                 return false;
             else
-                return (this.TenantId == other.TenantId) && (this.PrincipalId == other.PrincipalId.Value);
+                return (TenantId == other.TenantId) && (PrincipalId == other.PrincipalId.Value);
         }
 
         public static SystemAssignedIdentity Deserialize(JsonElement element)
         {
             Optional<Guid> principalId = default;
             Optional<Guid> tenantId = default;
+            bool isPrincipalIdNull = false;
+            bool isTenantIdNull = false;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("principalId"))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
                     {
-                        principalId = Guid.Empty;
+                        isPrincipalIdNull = true;
                         continue;
                     }
                     principalId = Guid.Parse(property.Value.GetString());
@@ -62,14 +64,20 @@
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
                     {
-                        tenantId = Guid.Empty;
+                        isTenantIdNull = true;
                         continue;
                     }
                     tenantId = Guid.Parse(property.Value.GetString());
                     continue;
                 }
             }
-            return new SystemAssignedIdentity(principalId, tenantId);
+
+            if (isPrincipalIdNull && isTenantIdNull)
+                return null;
+            else if ((isPrincipalIdNull && !isTenantIdNull) || (!isPrincipalIdNull && isTenantIdNull))
+                throw new InvalidOperationException("Either TenantId or PrincipalId were null");
+            else
+                return new SystemAssignedIdentity(tenantId, principalId);
         }
 
         public static void Serialize(Utf8JsonWriter writer, SystemAssignedIdentity systemAssignedIdentity)

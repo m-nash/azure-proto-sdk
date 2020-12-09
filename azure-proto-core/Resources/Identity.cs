@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
+using System.Text.Json;
+using Azure.Core;
+using SystemAssignedIdentity = azure_proto_core.Resources.SystemAssignedIdentity;
+using UserAssignedIdentity = azure_proto_core.Resources.UserAssignedIdentity;
 
 namespace azure_proto_core
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text.Json;
-    using Azure.Core;
-    using Azure.ResourceManager.Resources.Models;
-    using SystemAssignedIdentity = azure_proto_core.Resources.SystemAssignedIdentity;
-    using UserAssignedIdentity = azure_proto_core.Resources.UserAssignedIdentity;
-
     /// <summary>
     /// Represents a managed identity
     /// TODO: fill in properties, implement comparison and equality methods and operator overloads
@@ -30,38 +26,38 @@ namespace azure_proto_core
         public Identity(Dictionary<ResourceIdentifier, UserAssignedIdentity> user, bool useSystemAssigned)
         {
             // check for combination of user and system on the impact to type value
-            this.SystemAssignedIdentity = useSystemAssigned ? new SystemAssignedIdentity() : null;
-            this.UserAssignedIdentities = new Dictionary<ResourceIdentifier, UserAssignedIdentity>();
+            SystemAssignedIdentity = useSystemAssigned ? new SystemAssignedIdentity() : null;
+            UserAssignedIdentities = new Dictionary<ResourceIdentifier, UserAssignedIdentity>();
             if (user != null)
             {
                 foreach (KeyValuePair<ResourceIdentifier, UserAssignedIdentity> id in user)
                 {
-                    this.UserAssignedIdentities.Add(id.Key, id.Value);
+                    UserAssignedIdentities.Add(id.Key, id.Value);
                 }
             }
         }
 
         public Identity (SystemAssignedIdentity systemAssigned, IDictionary<ResourceIdentifier, UserAssignedIdentity> user)
         {
-            this.SystemAssignedIdentity = systemAssigned;
-            this.UserAssignedIdentities = user;
+            SystemAssignedIdentity = systemAssigned;
+            UserAssignedIdentities = user;
         }
 
         public bool Equals(Identity other)
         {
-            if ((this.SystemAssignedIdentity == null && other.SystemAssignedIdentity == null) &&
-                (this.UserAssignedIdentities == null && other.UserAssignedIdentities == null))
+            if ((SystemAssignedIdentity == null && other.SystemAssignedIdentity == null) &&
+                (UserAssignedIdentities == null && other.UserAssignedIdentities == null))
             {
                 return true;
             }
-            else if ((this.SystemAssignedIdentity != null && other.SystemAssignedIdentity != null) &&
-                (this.UserAssignedIdentities == null && other.UserAssignedIdentities == null))
-                return this.SystemAssignedIdentity.Equals(other.SystemAssignedIdentity);
-            else if ((this.SystemAssignedIdentity == null && other.SystemAssignedIdentity == null) &&
-                (this.UserAssignedIdentities != null && other.UserAssignedIdentities != null))
-                return UserAssignedIdentity.EqualsUserAssignedIdentities(this.UserAssignedIdentities, other.UserAssignedIdentities);
+            else if ((SystemAssignedIdentity != null && other.SystemAssignedIdentity != null) &&
+                (UserAssignedIdentities == null && other.UserAssignedIdentities == null))
+                return SystemAssignedIdentity.Equals(other.SystemAssignedIdentity);
+            else if ((SystemAssignedIdentity == null && other.SystemAssignedIdentity == null) &&
+                (UserAssignedIdentities != null && other.UserAssignedIdentities != null))
+                return UserAssignedIdentity.EqualsUserAssignedIdentities(UserAssignedIdentities, other.UserAssignedIdentities);
             else
-                return this.SystemAssignedIdentity.Equals(other.SystemAssignedIdentity) && UserAssignedIdentity.EqualsUserAssignedIdentities(this.UserAssignedIdentities, other.UserAssignedIdentities);
+                return SystemAssignedIdentity.Equals(other.SystemAssignedIdentity) && UserAssignedIdentity.EqualsUserAssignedIdentities(UserAssignedIdentities, other.UserAssignedIdentities);
         }
 
         public static Identity DeserializeIdentity(JsonElement element)
@@ -116,24 +112,24 @@ namespace azure_proto_core
             writer.WriteStartObject();
             writer.WritePropertyName("identity");
             writer.WriteStartObject();
-            if (this.SystemAssignedIdentity != null && this.UserAssignedIdentities != null)
+            if (SystemAssignedIdentity != null && UserAssignedIdentities != null)
             {
                 writer.WritePropertyName("kind");
                 writer.WriteStringValue(SystemAndUserAssigned);
-                SystemAssignedIdentity.Serialize(writer, this.SystemAssignedIdentity);
-                UserAssignedIdentity.Serialize(writer, this.UserAssignedIdentities);
+                SystemAssignedIdentity.Serialize(writer, SystemAssignedIdentity);
+                UserAssignedIdentity.Serialize(writer, UserAssignedIdentities);
             }
-            else if (this.SystemAssignedIdentity != null)
+            else if (SystemAssignedIdentity != null)
             {
                 writer.WritePropertyName("kind");
                 writer.WriteStringValue(SystemAssigned);
-                SystemAssignedIdentity.Serialize(writer, this.SystemAssignedIdentity);
+                SystemAssignedIdentity.Serialize(writer, SystemAssignedIdentity);
             }
-            else if (this.UserAssignedIdentities != null)
+            else if (UserAssignedIdentities != null)
             {
                 writer.WritePropertyName("kind");
                 writer.WriteStringValue(UserAssigned);
-                UserAssignedIdentity.Serialize(writer, this.UserAssignedIdentities);
+                UserAssignedIdentity.Serialize(writer, UserAssignedIdentities);
             }
             else
             {
