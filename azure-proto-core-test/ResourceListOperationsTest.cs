@@ -1,7 +1,6 @@
 using azure_proto_core;
 using NUnit.Framework;
 using System.Reflection;
-using azure_proto_compute;
 using Azure.Identity;
 using System;
 using Azure.ResourceManager.Resources.Models;
