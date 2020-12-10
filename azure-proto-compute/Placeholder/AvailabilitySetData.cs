@@ -17,6 +17,8 @@ namespace azure_proto_compute
             }
         }
 
+        
+
         public override IDictionary<string, string> Tags => Model.Tags;
         public override string Name => Model.Name;
         public Azure.ResourceManager.Compute.Models.Sku Sku
