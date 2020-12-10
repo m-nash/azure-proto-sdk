@@ -11,9 +11,9 @@ namespace azure_proto_core_test
     public class SystemAssignedIdentityTests : SystemAssignedIdentity
     {
 
-       [TestCase(null, null, null, null, true)] 
-       [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", false)] 
-       public void CompareToZero(string tenantId1, string principalId1, string tenantId2, string principalId2, bool isNull)
+        [TestCase(null, null, null, null, true)]
+        [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", false)]
+        public void CompareToZero(string tenantId1, string principalId1, string tenantId2, string principalId2, bool isNull)
         {
             SystemAssignedIdentity identity1;
             SystemAssignedIdentity identity2;
@@ -28,7 +28,7 @@ namespace azure_proto_core_test
                 identity1 = new SystemAssignedIdentity(new Guid(tenantId1), new Guid(principalId1));
                 identity2 = new SystemAssignedIdentity(new Guid(tenantId2), new Guid(principalId2));
             }
-            
+
             Assert.AreEqual(0, identity1.CompareTo(identity2));
         }
 
@@ -51,7 +51,7 @@ namespace azure_proto_core_test
             Assert.AreEqual(1, identity1.CompareTo(identity2));
         }
 
-        [TestCase(null, null, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98",  true)]
+        [TestCase(null, null, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", true)]
         [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db48", "de29bab1-49e1-4705-819b-4dfddceaaa99", false)]
         public void CompareToMinusOne(string tenantId1, string principalId1, string tenantId2, string principalId2, bool isNull)
         {
@@ -127,7 +127,7 @@ namespace azure_proto_core_test
                 json = f.ReadToEnd();
             JsonDocument document = JsonDocument.Parse(json);
             JsonElement rootElement = document.RootElement;
-            var identityJsonProperty = rootElement.EnumerateObject().First<JsonProperty>();
+            var identityJsonProperty = rootElement.EnumerateObject().First();
             SystemAssignedIdentity back = SystemAssignedIdentity.Deserialize(identityJsonProperty.Value);
             Assert.IsTrue("de29bab1-49e1-4705-819b-4dfddceaaa98".Equals(back.PrincipalId.ToString()));
             Assert.IsTrue("72f988bf-86f1-41af-91ab-2d7cd011db47".Equals(back.TenantId.ToString()));
@@ -142,7 +142,7 @@ namespace azure_proto_core_test
                 json = f.ReadToEnd();
             JsonDocument document = JsonDocument.Parse(json);
             JsonElement rootElement = document.RootElement;
-            var identityJsonProperty = rootElement.EnumerateObject().ElementAt<JsonProperty>(1);
+            var identityJsonProperty = rootElement.EnumerateObject().ElementAt(1);
             SystemAssignedIdentity back = SystemAssignedIdentity.Deserialize(identityJsonProperty.Value);
             Assert.IsTrue("de29bab1-49e1-4705-819b-4dfddceaaa98".Equals(back.PrincipalId.ToString()));
             Assert.IsTrue("72f988bf-86f1-41af-91ab-2d7cd011db47".Equals(back.TenantId.ToString()));
@@ -157,7 +157,7 @@ namespace azure_proto_core_test
                 json = f.ReadToEnd();
             JsonDocument document = JsonDocument.Parse(json);
             JsonElement rootElement = document.RootElement;
-            var identityJsonProperty = rootElement.EnumerateObject().First<JsonProperty>();
+            var identityJsonProperty = rootElement.EnumerateObject().First();
             var back = SystemAssignedIdentity.Deserialize(identityJsonProperty.Value);
             Assert.IsNull(back);
         }
@@ -171,8 +171,8 @@ namespace azure_proto_core_test
                 json = f.ReadToEnd();
             JsonDocument document = JsonDocument.Parse(json);
             JsonElement rootElement = document.RootElement;
-            var identityJsonProperty = rootElement.EnumerateObject().First<JsonProperty>();
-            Assert.Throws<FormatException>(delegate { SystemAssignedIdentity.Deserialize(identityJsonProperty.Value); });
+            var identityJsonProperty = rootElement.EnumerateObject().First();
+            Assert.Throws<FormatException>(delegate { Deserialize(identityJsonProperty.Value); });
         }
 
         [TestCase]
@@ -184,12 +184,12 @@ namespace azure_proto_core_test
                 json = f.ReadToEnd();
             JsonDocument document = JsonDocument.Parse(json);
             JsonElement rootElement = document.RootElement;
-            var identityJsonProperty = rootElement.EnumerateObject().First<JsonProperty>();
-            Assert.Throws<FormatException>(delegate { SystemAssignedIdentity.Deserialize(identityJsonProperty.Value); });
+            var identityJsonProperty = rootElement.EnumerateObject().First();
+            Assert.Throws<FormatException>(delegate { Deserialize(identityJsonProperty.Value); });
         }
 
         [TestCase]
-        public void TestDeserializerOneNullString()
+        public void TestDeserializerOneValueNull()
         {
             string json = "";
             string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
@@ -197,8 +197,8 @@ namespace azure_proto_core_test
                 json = f.ReadToEnd();
             JsonDocument document = JsonDocument.Parse(json);
             JsonElement rootElement = document.RootElement;
-            var identityJsonProperty = rootElement.EnumerateObject().First<JsonProperty>();
-            Assert.Throws<InvalidOperationException>(delegate { SystemAssignedIdentity.Deserialize(identityJsonProperty.Value); });
+            var identityJsonProperty = rootElement.EnumerateObject().First();
+            Assert.Throws<InvalidOperationException>(delegate { Deserialize(identityJsonProperty.Value); });
         }
 
         [TestCase]
@@ -210,14 +210,14 @@ namespace azure_proto_core_test
                 json = f.ReadToEnd();
             JsonDocument document = JsonDocument.Parse(json);
             JsonElement rootElement = document.RootElement;
-            var identityJsonProperty = rootElement.EnumerateObject().First<JsonProperty>();
-            Assert.Throws<InvalidOperationException>(delegate { SystemAssignedIdentity.Deserialize(identityJsonProperty.Value); });
+            var identityJsonProperty = rootElement.EnumerateObject().First();
+            Assert.Throws<InvalidOperationException>(delegate { Deserialize(identityJsonProperty.Value); });
         }
 
         [TestCase]
         public void TestSerializer()
         {
-            SystemAssignedIdentity systemAssignedIdentity = new SystemAssignedIdentity(new Guid("72f988bf-86f1-41af-91ab-2d7cd011db47"), new Guid ("de29bab1-49e1-4705-819b-4dfddceaaa98"));
+            SystemAssignedIdentity systemAssignedIdentity = new SystemAssignedIdentity(new Guid("72f988bf-86f1-41af-91ab-2d7cd011db47"), new Guid("de29bab1-49e1-4705-819b-4dfddceaaa98"));
             string value = "";
             using (Stream stream = new MemoryStream())
             {
@@ -227,7 +227,7 @@ namespace azure_proto_core_test
                     Serialize(writer, systemAssignedIdentity);
                     stream.Seek(0, SeekOrigin.Begin);
                     value = streamReader.ReadToEnd();
-                }                
+                }
             }
             string actual = "{\"principalId\":\"de29bab1-49e1-4705-819b-4dfddceaaa98\",\"tenantId\":\"72f988bf-86f1-41af-91ab-2d7cd011db47\"}";
             Assert.AreEqual(actual, value);

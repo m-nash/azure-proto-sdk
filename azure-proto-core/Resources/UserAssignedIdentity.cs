@@ -8,103 +8,140 @@ namespace azure_proto_core.Resources
 {
     public class UserAssignedIdentity
     {
-        public Guid ClientId { get; set; }
+        public Guid? ClientId { get; set; }
 
-        public Guid PrincipalId { get; set; }
+        public Guid? PrincipalId { get; set; }
 
-        public UserAssignedIdentity (Guid clientId, Guid principalId)
+        public UserAssignedIdentity() { }
+
+        public UserAssignedIdentity(Guid clientId, Guid principalId)
         {
-            this.ClientId = clientId;
-            this.PrincipalId = principalId;
+            ClientId = clientId;
+            PrincipalId = principalId;
         }
 
-        public int CompareTo (UserAssignedIdentity other)
+        public int CompareTo(UserAssignedIdentity other)
         {
-            if ((this.ClientId == Guid.Empty && this.PrincipalId == Guid.Empty) && other == null)
+            if ((ClientId.HasValue == false && PrincipalId.HasValue == false) && other == null)
+            {
                 return 0;
-            else if (this.ClientId == Guid.Empty && this.PrincipalId == Guid.Empty)
+            }
+            else if (ClientId.HasValue == false && PrincipalId.HasValue == false)
+            {
                 return -1;
-            else if (this.ClientId.CompareTo(other.ClientId) == 1 && this.PrincipalId.CompareTo(other.PrincipalId) == 1)
+            }
+            else if (ClientId.Value.CompareTo(other.ClientId.Value) == 1 && PrincipalId.Value.CompareTo(other.PrincipalId.Value) == 1)
+            {
                 return 1;
-            else if (this.ClientId.CompareTo(other.ClientId) == 0 && this.PrincipalId.CompareTo(other.PrincipalId) == 0)
+            }
+            else if (ClientId.Value.CompareTo(other.ClientId.Value) == 0 && PrincipalId.Value.CompareTo(other.PrincipalId.Value) == 0)
+            {
                 return 0;
+            }
             else
+            {
                 return -1;
+            }
         }
 
         public bool Equals(UserAssignedIdentity other)
         {
-            if ((this.ClientId == Guid.Empty && this.PrincipalId == Guid.Empty) && other == null)
+            if ((ClientId.HasValue == false && PrincipalId.HasValue == false) && other == null)
+            {
                 return true;
-            else if (this.ClientId == Guid.Empty && this.PrincipalId == Guid.Empty)
+            }
+            else if (ClientId.HasValue == false && PrincipalId.HasValue == false)
+            {
                 return false;
+            }
             else
-                return this.ClientId.Equals(other.ClientId) && this.PrincipalId.Equals(other.PrincipalId);
+            {
+                return (ClientId == other.ClientId) && (PrincipalId == other.PrincipalId.Value);
+            }
         }
 
         public static UserAssignedIdentity Deserialize(JsonElement element)
         {
             Optional<Guid> clientId = default;
             Optional<Guid> principalId = default;
+            bool isPrincipalIdNull = false;
+            bool isClientIdNull = false;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("clientId"))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
                     {
-                        principalId = Guid.Empty;
+                        isClientIdNull = true;
                         continue;
                     }
-                    principalId = Guid.Parse(property.Value.GetString());
+                    clientId = Guid.Parse(property.Value.GetString());
                     continue;
                 }
                 if (property.NameEquals("principalId"))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
                     {
-                        principalId = Guid.Empty;
+                        isPrincipalIdNull = true;
                         continue;
                     }
-
                     principalId = Guid.Parse(property.Value.GetString());
                     continue;
                 }
             }
 
-            return new UserAssignedIdentity(clientId, principalId);
+            if (isPrincipalIdNull && isClientIdNull)
+                return null;
+            else if ((isPrincipalIdNull && !isClientIdNull) || (!isPrincipalIdNull && isClientIdNull))
+                throw new InvalidOperationException("Either ClientId or PrincipalId were null");
+            else
+                return new UserAssignedIdentity(clientId, principalId);
         }
 
-        public static void Serialize(Utf8JsonWriter writer, IDictionary<ResourceIdentifier, UserAssignedIdentity> userAssignedIdentities)
+        public static void Serialize(Utf8JsonWriter writer, UserAssignedIdentity userAssignedIdentity)
         {
-            if (Optional.IsCollectionDefined(userAssignedIdentities.AsEnumerable()))
+            writer.WriteStartObject();
+            writer.WritePropertyName("clientId");
+            if (!Optional.IsDefined(userAssignedIdentity.ClientId))
             {
-                writer.WritePropertyName("userAssignedIdentities");
-                writer.WriteStartObject();
-                foreach (var item in userAssignedIdentities)
-                {
-                    writer.WritePropertyName(item.Key);
-                    writer.WriteStartObject();
-                    UserAssignedIdentity clientAndPrincipalId = item.Value;
-                    writer.WritePropertyName("clientId");
-                    writer.WriteStringValue(clientAndPrincipalId.ClientId);
-                    writer.WritePropertyName("principalId");
-                    writer.WriteStringValue(clientAndPrincipalId.PrincipalId);
-                    writer.WriteEndObject();
-                }
-                writer.WriteEndObject();
+                writer.WriteStringValue("null");
             }
+            else
+            {
+                writer.WriteStringValue(userAssignedIdentity.ClientId.ToString());
+            }
+            writer.WritePropertyName("principalId");
+            if (!Optional.IsDefined(userAssignedIdentity.PrincipalId))
+            {
+                writer.WriteStringValue("null");
+            }
+            else
+            {
+                writer.WriteStringValue(userAssignedIdentity.PrincipalId.ToString());
+            }
+
+            writer.WriteEndObject();
+            writer.Flush();
         }
 
         public static bool EqualsUserAssignedIdentities(IDictionary<ResourceIdentifier, UserAssignedIdentity> original, IDictionary<ResourceIdentifier, UserAssignedIdentity> other)
         {
             if (original == null && other == null)
+            {
                 return true;
+            }
             else if ((original == null && other != null) || (original != null && other == null))
+            {
                 return false;
+            }
             else if (original.Count != other.Count)
+            {
                 return false;
-            else if (Object.ReferenceEquals(original, other))
+            }
+            else if (ReferenceEquals(original, other))
+            {
                 return true;
+            }
             else
             {
                 foreach (KeyValuePair<ResourceIdentifier, UserAssignedIdentity> id in original)

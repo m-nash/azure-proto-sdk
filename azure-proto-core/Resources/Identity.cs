@@ -117,7 +117,17 @@ namespace azure_proto_core
                 writer.WritePropertyName("kind");
                 writer.WriteStringValue(SystemAndUserAssigned);
                 SystemAssignedIdentity.Serialize(writer, SystemAssignedIdentity);
-                UserAssignedIdentity.Serialize(writer, UserAssignedIdentities);
+                writer.WritePropertyName("userAssignedIdentities");
+                writer.WriteStartObject();
+                foreach (var keyValuePair in UserAssignedIdentities)
+                {
+                    writer.WriteStringValue(keyValuePair.Key);
+                    writer.WriteStartObject();
+                    UserAssignedIdentity.Serialize(writer, keyValuePair.Value);
+                    writer.WriteEndObject();
+                }
+
+                writer.WriteEndObject();
             }
             else if (SystemAssignedIdentity != null)
             {
@@ -129,7 +139,17 @@ namespace azure_proto_core
             {
                 writer.WritePropertyName("kind");
                 writer.WriteStringValue(UserAssigned);
-                UserAssignedIdentity.Serialize(writer, UserAssignedIdentities);
+                writer.WritePropertyName("userAssignedIdentities");
+                writer.WriteStartObject();
+                foreach (var keyValuePair in UserAssignedIdentities)
+                {
+                    writer.WriteStringValue(keyValuePair.Key);
+                    writer.WriteStartObject();
+                    UserAssignedIdentity.Serialize(writer, keyValuePair.Value);
+                    writer.WriteEndObject();
+                }
+
+                writer.WriteEndObject();
             }
             else
             {
