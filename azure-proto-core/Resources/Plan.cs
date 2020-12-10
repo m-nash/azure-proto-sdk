@@ -57,16 +57,11 @@ namespace azure_proto_core
                 return true;
             }
 
-            if (string.Equals(Name, other.Name, StringComparison.InvariantCulture) &&
+            return string.Equals(Name, other.Name, StringComparison.InvariantCulture) &&
                 string.Equals(Product, other.Product, StringComparison.InvariantCulture) &&
                 string.Equals(PromotionCode, other.PromotionCode, StringComparison.InvariantCulture) &&
                 string.Equals(Publisher, other.Publisher, StringComparison.InvariantCulture) &&
-                string.Equals(Version, other.Version, StringComparison.InvariantCulture))
-            {
-                return true;
-            }
-
-            return false;
+                string.Equals(Version, other.Version, StringComparison.InvariantCulture);
         }
     }
 }

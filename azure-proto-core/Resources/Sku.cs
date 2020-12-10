@@ -56,16 +56,11 @@ namespace azure_proto_core
                 return true;
             }
 
-            if (string.Equals(Name, other.Name, StringComparison.InvariantCulture) &&
+            return string.Equals(Name, other.Name, StringComparison.InvariantCulture) &&
                 string.Equals(Family, other.Family, StringComparison.InvariantCulture) &&
                 string.Equals(Size, other.Size, StringComparison.InvariantCulture) &&
                 string.Equals(Tier, other.Tier, StringComparison.InvariantCulture) &&
-                long.Equals(Capacity, other.Capacity))
-            {
-                return true;
-            }
-
-            return false;
+                long.Equals(Capacity, other.Capacity);
         }
     }
 }
