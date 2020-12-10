@@ -10,48 +10,59 @@ using azure_proto_core.Adapters;
 
 namespace azure_proto_network
 {
-    public class PublicIpAddressContainer : ResourceContainerOperations<XPublicIpAddress, PhPublicIPAddress>
+    public class PublicIpAddressContainer : ResourceContainerOperations<PublicIpAddress, PublicIPAddressData>
     {
-        public PublicIpAddressContainer(ArmResourceOperations genericOperations) : base(genericOperations.ClientContext,genericOperations.Id, genericOperations.ClientOptions){ }
-        internal PublicIpAddressContainer(ArmClientContext context, PhResourceGroup resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
-        internal PublicIpAddressContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions) : base(context, id, clientOptions) { }
+        internal PublicIpAddressContainer(ArmResourceOperations genericOperations)
+            : base(genericOperations.ClientContext,genericOperations.Id, genericOperations.ClientOptions)
+        {
+        }
+
+        internal PublicIpAddressContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions)
+            : base(context, resourceGroup, clientOptions)
+        {
+        }
+
+        internal PublicIpAddressContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+            : base(context, id, clientOptions)
+        {
+        }
 
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).PublicIPAddresses;
 
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
-        public override ArmResponse<XPublicIpAddress> Create(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<PublicIpAddress> Create(string name, PublicIPAddressData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
-            return new PhArmResponse<XPublicIpAddress, PublicIPAddress>(
+            return new PhArmResponse<PublicIpAddress, PublicIPAddress>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(n), ClientOptions));
+                n => new PublicIpAddress(ClientContext, new PublicIPAddressData(n), ClientOptions));
         }
 
-        public async override Task<ArmResponse<XPublicIpAddress>> CreateAsync(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<PublicIpAddress>> CreateAsync(string name, PublicIPAddressData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
-            return new PhArmResponse<XPublicIpAddress, PublicIPAddress>(
+            return new PhArmResponse<PublicIpAddress, PublicIPAddress>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                n => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(n), ClientOptions));
+                n => new PublicIpAddress(ClientContext, new PublicIPAddressData(n), ClientOptions));
         }
 
-        public override ArmOperation<XPublicIpAddress> StartCreate(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmOperation<PublicIpAddress> StartCreate(string name, PublicIPAddressData resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<XPublicIpAddress, PublicIPAddress>(
+            return new PhArmOperation<PublicIpAddress, PublicIPAddress>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken),
-                n => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(n), ClientOptions));
+                n => new PublicIpAddress(ClientContext, new PublicIPAddressData(n), ClientOptions));
         }
 
-        public async override Task<ArmOperation<XPublicIpAddress>> StartCreateAsync(string name, PhPublicIPAddress resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<PublicIpAddress>> StartCreateAsync(string name, PublicIPAddressData resourceDetails, CancellationToken cancellationToken = default)
         {
-            return new PhArmOperation<XPublicIpAddress, PublicIPAddress>(
+            return new PhArmOperation<PublicIpAddress, PublicIPAddress>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),
-                n => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(n), ClientOptions));
+                n => new PublicIpAddress(ClientContext, new PublicIPAddressData(n), ClientOptions));
         }
 
-        public ArmBuilder<XPublicIpAddress, PhPublicIPAddress> Construct(Location location = null)
+        public ArmBuilder<PublicIpAddress, PublicIPAddressData> Construct(Location location = null)
         {
             var ipAddress = new PublicIPAddress()
             {
@@ -60,39 +71,40 @@ namespace azure_proto_network
                 Location = location ?? DefaultLocation,
             };
 
-            return new ArmBuilder<XPublicIpAddress, PhPublicIPAddress>(this, new PhPublicIPAddress(ipAddress));
+            return new ArmBuilder<PublicIpAddress, PublicIPAddressData>(this, new PublicIPAddressData(ipAddress));
         }
 
-        public Pageable<XPublicIpAddress> List(CancellationToken cancellationToken = default)
+        public Pageable<PublicIpAddress> List(CancellationToken cancellationToken = default)
         {
-            return new PhWrappingPageable<PublicIPAddress, XPublicIpAddress>(
+            return new PhWrappingPageable<PublicIPAddress, PublicIpAddress>(
                 Operations.List(Id.Name, cancellationToken),
                 this.convertor());
         }
 
-        public AsyncPageable<XPublicIpAddress> ListAsync(CancellationToken cancellationToken = default)
+        public AsyncPageable<PublicIpAddress> ListAsync(CancellationToken cancellationToken = default)
         {
-            return new PhWrappingAsyncPageable<PublicIPAddress, XPublicIpAddress>(
+            return new PhWrappingAsyncPageable<PublicIPAddress, PublicIpAddress>(
                 Operations.ListAsync(Id.Name, cancellationToken),
                 this.convertor());
         }
 
         public Pageable<ArmResourceOperations> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(PhPublicIPAddress.ResourceType);
+            ArmFilterCollection filters = new ArmFilterCollection(PublicIPAddressData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public AsyncPageable<ArmResourceOperations> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(PhPublicIPAddress.ResourceType);
+            ArmFilterCollection filters = new ArmFilterCollection(PublicIPAddressData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
         }
-        private Func<PublicIPAddress, XPublicIpAddress> convertor()
+
+        private Func<PublicIPAddress, PublicIpAddress> convertor()
         {
-            return s => new XPublicIpAddress(ClientContext, new PhPublicIPAddress(s), ClientOptions);
+            return s => new PublicIpAddress(ClientContext, new PublicIPAddressData(s), ClientOptions);
         }
     }
 }

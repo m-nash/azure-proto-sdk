@@ -7,12 +7,13 @@ using Azure.ResourceManager.Resources.Models;
 
 namespace azure_proto_core
 {
-    public class PhResourceGroup : TrackedResource<ResourceGroup>, IManagedByResource
+    public class ResourceGroupData : TrackedResource<Azure.ResourceManager.Resources.Models.ResourceGroup>, IManagedByResource
     {
-        public PhResourceGroup(ResourceGroup rg)
+
+        public ResourceGroupData(Azure.ResourceManager.Resources.Models.ResourceGroup rg)
             : base(rg.Id, rg.Location, rg)
         {
-            if (null == rg.Tags)
+            if (rg.Tags == null)
             {
                 rg.Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
             }
