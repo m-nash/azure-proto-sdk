@@ -27,7 +27,7 @@ namespace azure_proto_core
                 return 1;
             }
 
-            if (object.Equals(this, other))
+            if (object.ReferenceEquals(this, other))
             {
                 return 0;
             }
@@ -51,7 +51,7 @@ namespace azure_proto_core
                 return false;
             }
 
-            if (object.Equals(this, other))
+            if (object.ReferenceEquals(this, other))
             {
                 return true;
             }
