@@ -210,7 +210,7 @@ namespace azure_proto_core
 
         public static bool operator !=(ResourceType source, ResourceType target)
         {
-            if (((object) source) == null)
+            if (object.ReferenceEquals(source, null))
                 return false;
             return !source.Equals(target);
         }
