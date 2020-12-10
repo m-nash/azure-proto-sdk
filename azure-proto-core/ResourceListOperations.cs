@@ -177,7 +177,6 @@ namespace azure_proto_core
             where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
-            var xx =  CreateResourceConvertor<TOperations, TResource>(clientContext, clientOptions);
             return new PhWrappingPageable<GenericResourceExpanded, TOperations>(
                 result,
                 CreateResourceConvertor<TOperations, TResource>(clientContext, clientOptions));
