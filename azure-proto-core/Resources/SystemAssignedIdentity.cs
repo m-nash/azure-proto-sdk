@@ -76,6 +76,11 @@
 
         public static SystemAssignedIdentity Deserialize(JsonElement element)
         {
+            if (element.ValueKind == JsonValueKind.Undefined)
+            {
+                throw new ArgumentNullException("JsonElement is undefined");
+            }
+
             Optional<Guid> principalId = default;
             Optional<Guid> tenantId = default;
             bool isPrincipalIdNull = false;
@@ -85,40 +90,36 @@
                 if (property.NameEquals("principalId"))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
                         isPrincipalIdNull = true;
-                        continue;
-                    }
 
-                    principalId = Guid.Parse(property.Value.GetString());
-                    continue;
+                    else
+                        principalId = Guid.Parse(property.Value.GetString());
                 }
 
                 if (property.NameEquals("tenantId"))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
                         isTenantIdNull = true;
-                        continue;
-                    }
 
-                    tenantId = Guid.Parse(property.Value.GetString());
-                    continue;
+                    else
+                        tenantId = Guid.Parse(property.Value.GetString());
                 }
             }
 
             if (isPrincipalIdNull && isTenantIdNull)
                 return null;
 
-            else if ((isPrincipalIdNull && !isTenantIdNull) || (!isPrincipalIdNull && isTenantIdNull))
+            if ((isPrincipalIdNull && !isTenantIdNull) || (!isPrincipalIdNull && isTenantIdNull))
                 throw new InvalidOperationException("Either TenantId or PrincipalId were null");
 
-            else
-                return new SystemAssignedIdentity(tenantId, principalId);
+            return new SystemAssignedIdentity(tenantId, principalId);
         }
 
         public static void Serialize(Utf8JsonWriter writer, SystemAssignedIdentity systemAssignedIdentity)
         {
+            if (systemAssignedIdentity == null)
+                throw new ArgumentNullException("SystemAssignedIdentity is null");
+
             writer.WriteStartObject();
             writer.WritePropertyName("principalId");
             if (!Optional.IsDefined(systemAssignedIdentity.PrincipalId))
@@ -142,12 +143,6 @@
         {
             if (original == null)
                 return other == null;
-
-            if (other == null)
-                return false;
-
-            if (ReferenceEquals(original, other))
-                return true;
 
             return original.Equals(other);
         }

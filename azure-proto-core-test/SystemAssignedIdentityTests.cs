@@ -3,117 +3,77 @@ using NUnit.Framework;
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.Json;
 
 namespace azure_proto_core_test
 {
     public class SystemAssignedIdentityTests : SystemAssignedIdentity
     {
-
-        [TestCase(null, null, null, null, true)]
-        [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", false)]
-        public void CompareToZero(string tenantId1, string principalId1, string tenantId2, string principalId2, bool isNull)
+        [TestCase(0, null, null, null, null)]
+        [TestCase(0, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
+        [TestCase(1, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", null, null)]
+        [TestCase(1, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db46", "de29bab1-49e1-4705-819b-4dfddceaaa97")]
+        [TestCase(-1, null, null, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
+        [TestCase(-1, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db48", "de29bab1-49e1-4705-819b-4dfddceaaa99")]
+        public void CompareTo(int answer, string tenantId1, string principalId1, string tenantId2, string principalId2)
         {
             SystemAssignedIdentity identity1;
             SystemAssignedIdentity identity2;
-            if (isNull)
-            {
+            if (tenantId1 == null)
                 identity1 = new SystemAssignedIdentity();
-                identity2 = new SystemAssignedIdentity();
-            }
 
             else
-            {
                 identity1 = new SystemAssignedIdentity(new Guid(tenantId1), new Guid(principalId1));
-                identity2 = new SystemAssignedIdentity(new Guid(tenantId2), new Guid(principalId2));
-            }
 
-            Assert.AreEqual(0, identity1.CompareTo(identity2));
-        }
-
-        [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", null, null, true)]
-        [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db46", "de29bab1-49e1-4705-819b-4dfddceaaa97", false)]
-        public void CompareToOne(string tenantId1, string principalId1, string tenantId2, string principalId2, bool isNull)
-        {
-            SystemAssignedIdentity identity1 = new SystemAssignedIdentity(new Guid(tenantId1), new Guid(principalId1));
-            SystemAssignedIdentity identity2;
-            if (isNull)
-            {
+            if (tenantId2 == null)
                 identity2 = new SystemAssignedIdentity();
-            }
 
             else
-            {
                 identity2 = new SystemAssignedIdentity(new Guid(tenantId2), new Guid(principalId2));
-            }
 
-            Assert.AreEqual(1, identity1.CompareTo(identity2));
+            Assert.AreEqual(answer, identity1.CompareTo(identity2));
         }
 
-        [TestCase(null, null, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", true)]
-        [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db48", "de29bab1-49e1-4705-819b-4dfddceaaa99", false)]
-        public void CompareToMinusOne(string tenantId1, string principalId1, string tenantId2, string principalId2, bool isNull)
-        {
-            SystemAssignedIdentity identity1;
-            SystemAssignedIdentity identity2 = new SystemAssignedIdentity(new Guid(tenantId2), new Guid(principalId2));
-            if (isNull)
-            {
-                identity1 = new SystemAssignedIdentity();
-            }
-
-            else
-            {
-                identity1 = new SystemAssignedIdentity(new Guid(tenantId1), new Guid(principalId1));
-            }
-
-            Assert.AreEqual(-1, identity1.CompareTo(identity2));
-        }
-
-        [TestCase(null, null, null, null, true)]
-        [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", false)]
-        public void EqualsMethodTrue(string tenantId1, string principalId1, string tenantId2, string principalId2, bool isNull)
+        [TestCase(null, null, null, null)]
+        [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
+        public void EqualsMethodTrue(string tenantId1, string principalId1, string tenantId2, string principalId2)
         {
             SystemAssignedIdentity identity1;
             SystemAssignedIdentity identity2;
-            if (isNull)
-            {
+            if (tenantId1 == null)
                 identity1 = new SystemAssignedIdentity();
-                identity2 = new SystemAssignedIdentity();
-            }
 
             else
-            {
                 identity1 = new SystemAssignedIdentity(new Guid(tenantId1), new Guid(principalId1));
+
+            if (tenantId2 == null)
+                identity2 = new SystemAssignedIdentity();
+
+            else
                 identity2 = new SystemAssignedIdentity(new Guid(tenantId2), new Guid(principalId2));
-            }
 
             Assert.IsTrue(identity1.Equals(identity2));
         }
 
-        [TestCase(null, null, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", true, false)]
-        [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db44", "de29bab1-49e1-4705-819b-4dfddceaaa94", false, false)]
-        [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", null, null, false, true)]
-        [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa93", "72f988bf-86f1-41af-91ab-2d7cd011db42", "de29bab1-49e1-4705-819b-4dfddceaaa91", false, false)]
-        public void EqualsMethodFalse(string tenantId1, string principalId1, string tenantId2, string principalId2, bool isNull1, bool isNull2)
+        [TestCase(null, null, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
+        [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db44", "de29bab1-49e1-4705-819b-4dfddceaaa94")]
+        [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", null, null)]
+        [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa93", "72f988bf-86f1-41af-91ab-2d7cd011db42", "de29bab1-49e1-4705-819b-4dfddceaaa91")]
+        public void EqualsMethodFalse(string tenantId1, string principalId1, string tenantId2, string principalId2)
         {
             SystemAssignedIdentity identity1;
             SystemAssignedIdentity identity2;
-            if (isNull1)
-            {
+            if (tenantId1 == null)
                 identity1 = new SystemAssignedIdentity();
-                identity2 = new SystemAssignedIdentity(new Guid(tenantId2), new Guid(principalId2));
-            }
-            else if (isNull2)
-            {
-                identity1 = new SystemAssignedIdentity(new Guid(tenantId1), new Guid(principalId1));
-                identity2 = new SystemAssignedIdentity();
-            }
+
             else
-            {
                 identity1 = new SystemAssignedIdentity(new Guid(tenantId1), new Guid(principalId1));
+
+            if (tenantId2 == null)
+                identity2 = new SystemAssignedIdentity();
+
+            else
                 identity2 = new SystemAssignedIdentity(new Guid(tenantId2), new Guid(principalId2));
-            }
 
             Assert.IsFalse(identity1.Equals(identity2));
         }
@@ -150,17 +110,26 @@ namespace azure_proto_core_test
             Assert.AreEqual(1, identity1.CompareTo(identity2));
         }
 
+        public JsonProperty DeseriazerHelper(string filename)
+        {
+            var json = File.ReadAllText("./TestAssets/SystemAssignedIdentity/" + filename);
+            JsonDocument document = JsonDocument.Parse(json);
+            JsonElement rootElement = document.RootElement;
+            return rootElement.EnumerateObject().First();
+        }
+
+        [TestCase]
+        public void TestDeserializerDefaultJson()
+        {
+            JsonElement invalid = default(JsonElement);
+            Assert.Throws<ArgumentNullException>(delegate { Deserialize(invalid); });
+        }
+
         [TestCase]
         public void TestDeserializerValid()
         {
-            string json = "";
-            string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
-            using (StreamReader f = new StreamReader(path + "/TestAssets/SystemAssignedIdentity/SystemAssignedValid.json"))
-                json = f.ReadToEnd();
-            JsonDocument document = JsonDocument.Parse(json);
-            JsonElement rootElement = document.RootElement;
-            var identityJsonProperty = rootElement.EnumerateObject().First();
-            SystemAssignedIdentity back = SystemAssignedIdentity.Deserialize(identityJsonProperty.Value);
+            var identityJsonProperty = DeseriazerHelper("SystemAssignedValid.json");
+            SystemAssignedIdentity back = Deserialize(identityJsonProperty.Value);
             Assert.IsTrue("de29bab1-49e1-4705-819b-4dfddceaaa98".Equals(back.PrincipalId.ToString()));
             Assert.IsTrue("72f988bf-86f1-41af-91ab-2d7cd011db47".Equals(back.TenantId.ToString()));
         }
@@ -168,14 +137,11 @@ namespace azure_proto_core_test
         [TestCase]
         public void TestDeserializerValidExtraField()
         {
-            string json = "";
-            string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
-            using (StreamReader f = new StreamReader(path + "/TestAssets/SystemAssignedIdentity/SystemAssignedValidExtraField.json"))
-                json = f.ReadToEnd();
+            var json = File.ReadAllText("./TestAssets/SystemAssignedIdentity/SystemAssignedValidExtraField.json");
             JsonDocument document = JsonDocument.Parse(json);
             JsonElement rootElement = document.RootElement;
             var identityJsonProperty = rootElement.EnumerateObject().ElementAt(1);
-            SystemAssignedIdentity back = SystemAssignedIdentity.Deserialize(identityJsonProperty.Value);
+            SystemAssignedIdentity back = Deserialize(identityJsonProperty.Value);
             Assert.IsTrue("de29bab1-49e1-4705-819b-4dfddceaaa98".Equals(back.PrincipalId.ToString()));
             Assert.IsTrue("72f988bf-86f1-41af-91ab-2d7cd011db47".Equals(back.TenantId.ToString()));
         }
@@ -183,79 +149,43 @@ namespace azure_proto_core_test
         [TestCase]
         public void TestDeserializerBothValuesNull()
         {
-            string json = "";
-            string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
-            using (StreamReader f = new StreamReader(path + "/TestAssets/SystemAssignedIdentity/SystemAssignedBothValuesNull.json"))
-                json = f.ReadToEnd();
-            JsonDocument document = JsonDocument.Parse(json);
-            JsonElement rootElement = document.RootElement;
-            var identityJsonProperty = rootElement.EnumerateObject().First();
-            var back = SystemAssignedIdentity.Deserialize(identityJsonProperty.Value);
+            var identityJsonProperty = DeseriazerHelper("SystemAssignedBothValuesNull.json");
+            var back = Deserialize(identityJsonProperty.Value);
             Assert.IsNull(back);
         }
 
         [TestCase]
         public void TestDeserializerBothEmptyString()
         {
-            string json = "";
-            string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
-            using (StreamReader f = new StreamReader(path + "/TestAssets/SystemAssignedIdentity/SystemAssignedBothEmptyString.json"))
-                json = f.ReadToEnd();
-            JsonDocument document = JsonDocument.Parse(json);
-            JsonElement rootElement = document.RootElement;
-            var identityJsonProperty = rootElement.EnumerateObject().First();
+            var identityJsonProperty = DeseriazerHelper("SystemAssignedBothEmptyString.json");
             Assert.Throws<FormatException>(delegate { Deserialize(identityJsonProperty.Value); });
         }
 
         [TestCase]
         public void TestDeserializerOneEmptyString()
         {
-            string json = "";
-            string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
-            using (StreamReader f = new StreamReader(path + "/TestAssets/SystemAssignedIdentity/SystemAssignedOneEmptyString.json"))
-                json = f.ReadToEnd();
-            JsonDocument document = JsonDocument.Parse(json);
-            JsonElement rootElement = document.RootElement;
-            var identityJsonProperty = rootElement.EnumerateObject().First();
+            var identityJsonProperty = DeseriazerHelper("SystemAssignedOneEmptyString.json");
             Assert.Throws<FormatException>(delegate { Deserialize(identityJsonProperty.Value); });
         }
 
         [TestCase]
         public void TestDeserializerTenantIdValueNull()
         {
-            string json = "";
-            string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
-            using (StreamReader f = new StreamReader(path + "/TestAssets/SystemAssignedIdentity/SystemAssignedOneValueNull.json"))
-                json = f.ReadToEnd();
-            JsonDocument document = JsonDocument.Parse(json);
-            JsonElement rootElement = document.RootElement;
-            var identityJsonProperty = rootElement.EnumerateObject().First();
+            var identityJsonProperty = DeseriazerHelper("SystemAssignedOneValueNull.json");
             Assert.Throws<InvalidOperationException>(delegate { Deserialize(identityJsonProperty.Value); });
         }
 
         [TestCase]
         public void TestDeserializerPrincipalIdValueNull()
         {
-            string json = "";
-            string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
-            using (StreamReader f = new StreamReader(path + "/TestAssets/SystemAssignedIdentity/SystemAssignedOneOtherValueNull.json"))
-                json = f.ReadToEnd();
-            JsonDocument document = JsonDocument.Parse(json);
-            JsonElement rootElement = document.RootElement;
-            var identityJsonProperty = rootElement.EnumerateObject().First();
+            var identityJsonProperty = DeseriazerHelper("SystemAssignedOneOtherValueNull.json");
             Assert.Throws<InvalidOperationException>(delegate { Deserialize(identityJsonProperty.Value); });
         }
 
         [TestCase]
         public void TestDeserializerTenantIdInvalid()
         {
-            string json = "";
-            string path = ((AssemblyMetadataAttribute)GetType().Assembly.GetCustomAttribute(typeof(AssemblyMetadataAttribute))).Value;
-            using (StreamReader f = new StreamReader(path + "/TestAssets/SystemAssignedIdentity/SystemAssignedInvalid.json"))
-                json = f.ReadToEnd();
-            JsonDocument document = JsonDocument.Parse(json);
-            JsonElement rootElement = document.RootElement;
-            var identityJsonProperty = rootElement.EnumerateObject().First();
+            var identityJsonProperty = DeseriazerHelper("SystemAssignedInvalid.json");
             Assert.Throws<InvalidOperationException>(delegate { Deserialize(identityJsonProperty.Value); });
         }
 
@@ -279,7 +209,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase]
-        public void TestSerializerNull()
+        public void TestSerializerEmptyIdentity()
         {
             SystemAssignedIdentity systemAssignedIdentity = new SystemAssignedIdentity();
             string value = "";
@@ -295,6 +225,17 @@ namespace azure_proto_core_test
             }
             string actual = "{\"principalId\":\"null\",\"tenantId\":\"null\"}";
             Assert.AreEqual(actual, value);
+        }
+
+        [TestCase]
+        public void TestSerializerNullIdentity()
+        {
+            SystemAssignedIdentity systemAssignedIdentity = null;
+            using (Stream stream = new MemoryStream())
+            {
+                var writer = new Utf8JsonWriter(stream);
+                Assert.Throws<ArgumentNullException>(delegate { Serialize(writer, systemAssignedIdentity); });
+            }
         }
 
         [TestCase]
