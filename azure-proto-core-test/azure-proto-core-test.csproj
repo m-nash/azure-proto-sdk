@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
@@ -25,7 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\azure-proto-core\azure-proto-core.csproj" />
   </ItemGroup>
-  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
+  <ItemGroup>
     <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
       <_Parameter1>SourcePath</_Parameter1>
       <_Parameter2>$(MSBuildProjectDirectory)</_Parameter2>

@@ -2,7 +2,6 @@
 using azure_proto_core;
 using System;
 using System.Collections.Generic;
-using azure_proto_core.Resources;
 
 namespace azure_proto_compute
 {
@@ -110,42 +109,10 @@ namespace azure_proto_compute
             get => Model.Zones;
             set => Model.Zones = value;
         }
-
-        public Identity Identity {
-            get => PhVmToIdentity(Model.Identity);
-        }
-
-        public static Identity PhVmToIdentity(Azure.ResourceManager.Compute.Models.VirtualMachineIdentity vmIdentity)
+        public VirtualMachineIdentity Identity
         {
-            if (vmIdentity.Type == ResourceIdentityType.None)
-            {
-                return new Identity();
-            }
-            else if (vmIdentity.Type == ResourceIdentityType.SystemAssigned)
-            {
-                Identity identity = new Identity
-                {
-                    SystemAssignedIdentity = new SystemAssignedIdentity(new Guid(vmIdentity.TenantId), new Guid(vmIdentity.PrincipalId)),
-                    UserAssignedIdentities = null,
-                };
-                return identity;
-            }
-            else if (vmIdentity.Type == ResourceIdentityType.UserAssigned)
-            {
-                var userAssignedIdentities = new Dictionary<ResourceIdentifier, UserAssignedIdentity>(); // holds useridentities
-                foreach (var identity in vmIdentity.UserAssignedIdentities)
-                {
-                    ResourceIdentifier resourceId = new ResourceIdentifier(identity.Key);
-                    UserAssignedIdentity userAssignedIdentity = new UserAssignedIdentity(new Guid(identity.Value.ClientId), new Guid(identity.Value.PrincipalId));
-                    userAssignedIdentities.Add(resourceId, userAssignedIdentity);
-                }
-
-                return new Identity(null, userAssignedIdentities);
-            }
-            else
-            {
-                return new Identity();
-            }
+            get => Model.Identity;
+            set => Model.Identity = value;
         }
 
         public IList<VirtualMachineExtension> Resources => Model.Resources;
