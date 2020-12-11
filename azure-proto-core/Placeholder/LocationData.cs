@@ -4,9 +4,9 @@
 namespace azure_proto_core
 {
     // Update the signature for new library
-    public class PhLocation : TrackedResource<Azure.ResourceManager.Resources.Models.Location>
+    public class LocationData : TrackedResource<Azure.ResourceManager.Resources.Models.Location>
     {
-        public PhLocation(Azure.ResourceManager.Resources.Models.Location loc)
+        public LocationData(Azure.ResourceManager.Resources.Models.Location loc)
             : base(loc.Id, loc.Name, loc)
         {
         }

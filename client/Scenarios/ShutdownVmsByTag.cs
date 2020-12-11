@@ -18,7 +18,7 @@ namespace client
             Random rand = new Random(Environment.TickCount);
             foreach (var generic in rg.VirtualMachines().ListByName(Environment.UserName))
             {
-                var vm = new VirtualMachineOperations(generic);
+                var vm = VirtualMachineOperations.FromGeneric(generic);
                 if (rand.NextDouble() > 0.5)
                 {
                     Console.WriteLine("adding tag to {0}", vm.Id.Name);
@@ -29,7 +29,7 @@ namespace client
             var filteredList = rg.VirtualMachines().List().Where(vm =>
             {
                 string value;
-                return (vm.Model.Tags.TryGetValue("tagkey", out value) && value == "tagvalue");
+                return (vm.Data.Tags.TryGetValue("tagkey", out value) && value == "tagvalue");
             });
 
             foreach (var vm in filteredList)

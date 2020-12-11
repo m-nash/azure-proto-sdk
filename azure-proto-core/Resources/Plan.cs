@@ -27,82 +27,22 @@ namespace azure_proto_core
                 return 1;
             }
 
-            if (Name == null && other.Name != null)
+            if (object.ReferenceEquals(this, other))
             {
-                return -1;
+                return 0;
             }
 
-            if (Name != null)
+            int compareResult = 0;
+            if ((compareResult = string.Compare(Name, other.Name, StringComparison.InvariantCulture)) == 0 &&
+                (compareResult = string.Compare(Product, other.Product, StringComparison.InvariantCulture)) == 0 &&
+                (compareResult = string.Compare(PromotionCode, other.PromotionCode, StringComparison.InvariantCulture)) == 0 &&
+                (compareResult = string.Compare(Publisher, other.Publisher, StringComparison.InvariantCulture)) == 0 &&
+                (compareResult = string.Compare(Version, other.Version, StringComparison.InvariantCulture)) == 0)
             {
-                var compareNameResult = Name.CompareTo(other.Name);
-
-                if (compareNameResult != 0)
-                {
-                    return compareNameResult;
-                }
+                return 0;
             }
 
-            if (Product == null && other.Product != null)
-            {
-                return -1;
-            }
-
-            if (Product != null)
-            {
-                var compareProductResult = Product.CompareTo(other.Product);
-
-                if (compareProductResult != 0)
-                {
-                    return compareProductResult;
-                }
-            }
-
-            if (PromotionCode == null && other.PromotionCode != null)
-            {
-                return -1;
-            }
-
-            if (PromotionCode != null)
-            {
-                var comparePromotionCodeResult = PromotionCode.CompareTo(other.PromotionCode);
-
-                if (comparePromotionCodeResult != 0)
-                {
-                    return comparePromotionCodeResult;
-                }
-            }
-
-            if (Publisher == null && other.Publisher != null)
-            {
-                return -1;
-            }
-
-            if (Publisher != null)
-            {
-                var comparePublisherResult = Publisher.CompareTo(other.Publisher);
-
-                if (comparePublisherResult != 0)
-                {
-                    return comparePublisherResult;
-                }
-            }
-
-            if (Version == null && other.Version != null)
-            {
-                return -1;
-            }
-
-            if (Version != null)
-            {
-                var compareVersionResult = Version.CompareTo(other.Version);
-
-                if (compareVersionResult != 0)
-                {
-                    return compareVersionResult;
-                }
-            }
-
-            return 0;
+            return compareResult;
         }
 
         public bool Equals(Plan other)
@@ -112,34 +52,16 @@ namespace azure_proto_core
                 return false;
             }
 
-            if (Name == null && other.Name != null || Name != null && !Name.Equals(other.Name))
+            if (object.ReferenceEquals(this, other))
             {
-                return false;
+                return true;
             }
 
-            if (Product == null && other.Product != null || Product != null && !Product.Equals(other.Product))
-            {
-                return false;
-            }
-
-            if (PromotionCode == null && other.PromotionCode != null ||
-                PromotionCode != null && !PromotionCode.Equals(other.PromotionCode))
-            {
-                return false;
-            }
-
-            if (Publisher == null && other.Publisher != null ||
-                Publisher != null && !Publisher.Equals(other.Publisher))
-            {
-                return false;
-            }
-
-            if (Version == null && other.Version != null || Version != null && !Version.Equals(other.Version))
-            {
-                return false;
-            }
-
-            return true;
+            return string.Equals(Name, other.Name, StringComparison.InvariantCulture) &&
+                string.Equals(Product, other.Product, StringComparison.InvariantCulture) &&
+                string.Equals(PromotionCode, other.PromotionCode, StringComparison.InvariantCulture) &&
+                string.Equals(Publisher, other.Publisher, StringComparison.InvariantCulture) &&
+                string.Equals(Version, other.Version, StringComparison.InvariantCulture);
         }
     }
 }

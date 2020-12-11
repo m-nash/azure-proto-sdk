@@ -27,82 +27,21 @@ namespace azure_proto_core
                 return 1;
             }
 
-            if (Name == null && other.Name != null)
-            {
-                return -1;
-            }
-
-            if (Name != null)
-            {
-                var compareNameResult = Name.CompareTo(other.Name);
-
-                if (compareNameResult != 0)
-                {
-                    return compareNameResult;
-                }
-            }
-
-            if (Family == null && other.Family != null)
-            {
-                return -1;
-            }
-
-            if (Family != null)
-            {
-                var compareFamilyResult = Family.CompareTo(other.Family);
-
-                if (compareFamilyResult != 0)
-                {
-                    return compareFamilyResult;
-                }
-            }
-
-            if (Size == null && other.Size != null)
-            {
-                return -1;
-            }
-
-            if (Size != null)
-            {
-                var compareSizeResult = Size.CompareTo(other.Size);
-
-                if (compareSizeResult != 0)
-                {
-                    return compareSizeResult;
-                }
-            }
-
-            if (Tier == null && other.Tier != null)
-            {
-                return -1;
-            }
-
-            if (Tier != null)
-            {
-                var compareTierResult = Tier.CompareTo(other.Tier);
-
-                if (compareTierResult != 0)
-                {
-                    return compareTierResult;
-                }
-            }
-
-            if (Capacity == null && other.Capacity == null)
+            if (object.ReferenceEquals(this, other))
             {
                 return 0;
             }
 
-            if (Capacity == null)
+            int compareResult = 0;
+            if ((compareResult = string.Compare(Name, other.Name, StringComparison.InvariantCulture)) == 0 &&
+                (compareResult = string.Compare(Family, other.Family, StringComparison.InvariantCulture)) == 0 &&
+                (compareResult = string.Compare(Size, other.Size, StringComparison.InvariantCulture)) == 0 &&
+                (compareResult = string.Compare(Tier, other.Tier, StringComparison.InvariantCulture)) == 0)
             {
-                return -1;
+                return Nullable.Compare<long>(Capacity, other.Capacity);
             }
 
-            if (other.Capacity == null)
-            {
-                return 1;
-            }
-
-            return Capacity.Value.CompareTo(other.Capacity.Value);
+            return compareResult;
         }
 
         public bool Equals(Sku other)
@@ -112,33 +51,16 @@ namespace azure_proto_core
                 return false;
             }
 
-            if (Name == null && other.Name != null || Name != null && !Name.Equals(other.Name))
+            if (object.ReferenceEquals(this, other))
             {
-                return false;
+                return true;
             }
 
-            if (Family == null && other.Family != null || Family != null && !Family.Equals(other.Family))
-            {
-                return false;
-            }
-
-            if (Size == null && other.Size != null || Size != null && !Size.Equals(other.Size))
-            {
-                return false;
-            }
-
-            if (Tier == null && other.Tier != null || Tier != null && !Tier.Equals(other.Tier))
-            {
-                return false;
-            }
-
-            if (Capacity == null && other.Capacity != null ||
-                Capacity != null && !Capacity.Equals(other.Capacity))
-            {
-                return false;
-            }
-
-            return true;
+            return string.Equals(Name, other.Name, StringComparison.InvariantCulture) &&
+                string.Equals(Family, other.Family, StringComparison.InvariantCulture) &&
+                string.Equals(Size, other.Size, StringComparison.InvariantCulture) &&
+                string.Equals(Tier, other.Tier, StringComparison.InvariantCulture) &&
+                long.Equals(Capacity, other.Capacity);
         }
     }
 }

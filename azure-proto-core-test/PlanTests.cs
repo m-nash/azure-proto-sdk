@@ -93,6 +93,28 @@ namespace azure_proto_core_test
             Assert.AreEqual(1, plan1.CompareTo(plan2));
         }
 
+        [Test]
+        public void CompareToSamePlans()
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = plan1;
+            Assert.AreEqual(0, plan1.CompareTo(plan2));
+        }
+
+        [TestCase(1, "Name", "name", "version", "Version")]
+        [TestCase(1, "Name", "name", "version", "version")]
+        [TestCase(-1, "name", "Name", "Version", "version")]
+        public void CompareToMore(int expected, string name1, string name2, string version1, string version2)
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = new Plan();
+            plan1.Name = name1;
+            plan2.Name = name2;
+            plan1.Version = version1;
+            plan2.Version = version2;
+            Assert.AreEqual(expected, plan1.CompareTo(plan2));
+        }
+
         [TestCase(true, "name", "name")]
         [TestCase(false, "Name", "name")]
         [TestCase(true, null, null)]
@@ -222,6 +244,14 @@ namespace azure_proto_core_test
             Plan plan1 = new Plan();
             object plan2 = "random";
             Assert.IsFalse(plan1.Equals(plan2));
+        }
+
+        [Test]
+        public void EqualsToSamePlans()
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = plan1;
+            Assert.IsTrue(plan1.Equals(plan2));
         }
     }
 }
