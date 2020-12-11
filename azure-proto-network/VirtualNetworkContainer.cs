@@ -11,7 +11,7 @@ using azure_proto_core.Adapters;
 
 namespace azure_proto_network
 {
-    public class VirtualNetworkContainer : ResourceContainerOperations<VirtualNetwork, VirtualNetworkData>
+    public class VirtualNetworkContainer : ResourceContainer<VirtualNetwork, VirtualNetworkData>
     {
         internal VirtualNetworkContainer(ArmResourceOperations genericOperations)
             : base(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)

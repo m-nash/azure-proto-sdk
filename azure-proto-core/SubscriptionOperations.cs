@@ -69,9 +69,9 @@ namespace azure_proto_core
             return new ResourceGroupOperations(ClientContext, $"{Id}/resourceGroups/{resourceGroup}", ClientOptions);
         }
 
-        public ResourceGroupContainerOperations ResourceGroups()
+        public ResourceGroupContainer ResourceGroups()
         {
-            return new ResourceGroupContainerOperations(ClientContext, this, ClientOptions);
+            return new ResourceGroupContainer(ClientContext, this, ClientOptions);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace azure_proto_compute
     /// </summary>
     /// We should not expose Create method when a container is constructed at a subscription level as an example for a virtual machine.
     /// Likewise we should not expose create when a subnet container is constructed at a resource group level
-    public class VirtualMachineContainer : ResourceContainerOperations<VirtualMachine, VirtualMachineData>
+    public class VirtualMachineContainer : ResourceContainer<VirtualMachine, VirtualMachineData>
     {
         internal VirtualMachineContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions)
             : base(context, resourceGroup, clientOptions)

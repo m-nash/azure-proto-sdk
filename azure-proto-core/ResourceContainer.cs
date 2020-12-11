@@ -19,16 +19,16 @@ namespace azure_proto_core
     ///     The return type of the Creation methods, this can be Response<typeparamref name="T" /> or a
     ///     long-running response
     /// </typeparam>
-    public abstract class ResourceContainerOperations<TOperations, TResource> : OperationsBase
+    public abstract class ResourceContainer<TOperations, TResource> : OperationsBase
         where TOperations : ResourceOperationsBase<TOperations, TResource>
         where TResource : Resource
     {
-        protected ResourceContainerOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        protected ResourceContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
             : base(context, id, clientOptions)
         {
         }
 
-        protected ResourceContainerOperations(ArmClientContext context, TrackedResource resource,  ArmClientOptions clientOptions)
+        protected ResourceContainer(ArmClientContext context, TrackedResource resource,  ArmClientOptions clientOptions)
             : base(context, resource, clientOptions)
         {
             Parent = resource;

@@ -82,7 +82,7 @@ namespace azure_proto_core
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, Location location = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations, TResource>
-            where TContainer : ResourceContainerOperations<TOperations, TResource>
+            where TContainer : ResourceContainer<TOperations, TResource>
         {
             var myResource = Resource as TrackedResource;
 
@@ -104,7 +104,7 @@ namespace azure_proto_core
         public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, Location location = default, CancellationToken token = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations, TResource>
-            where TContainer : ResourceContainerOperations<TOperations, TResource>
+            where TContainer : ResourceContainer<TOperations, TResource>
         {
             var myResource = Resource as TrackedResource;
 

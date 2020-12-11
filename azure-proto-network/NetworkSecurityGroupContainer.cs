@@ -11,7 +11,7 @@ using azure_proto_core.Adapters;
 
 namespace azure_proto_network
 {
-    public class NetworkSecurityGroupContainer : ResourceContainerOperations<NetworkSecurityGroup, NetworkSecurityGroupData>
+    public class NetworkSecurityGroupContainer : ResourceContainer<NetworkSecurityGroup, NetworkSecurityGroupData>
     {
         internal NetworkSecurityGroupContainer(ArmResourceOperations genericOperations)
             : base(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)

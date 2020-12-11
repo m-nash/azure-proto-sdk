@@ -12,7 +12,7 @@ namespace azure_proto_compute
     /// <summary>
     /// Operatiosn class for Availability Set Contaienrs (resource groups)
     /// </summary>
-    public class AvailabilitySetContainer : ResourceContainerOperations<AvailabilitySet, AvailabilitySetData>
+    public class AvailabilitySetContainer : ResourceContainer<AvailabilitySet, AvailabilitySetData>
     {
         internal AvailabilitySetContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions)
             : base(context, resourceGroup, clientOptions)
