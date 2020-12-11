@@ -65,13 +65,7 @@
             if (other.TenantId.HasValue == false && other.PrincipalId.HasValue == false)
                 return false;
 
-            if (TenantId.Value.CompareTo(other.TenantId.Value) == 1 && PrincipalId.Value.CompareTo(other.PrincipalId.Value) == 1)
-                return false;
-
-            if (TenantId.Value.CompareTo(other.TenantId.Value) == 0 && PrincipalId.Value.CompareTo(other.PrincipalId.Value) == 0)
-                return true;
-
-            return false;
+            return TenantId.Value.Equals(other.TenantId.Value) && PrincipalId.Value.Equals(other.PrincipalId.Value);
         }
 
         public static SystemAssignedIdentity Deserialize(JsonElement element)
@@ -109,7 +103,7 @@
             if (isPrincipalIdNull && isTenantIdNull)
                 return null;
 
-            if ((isPrincipalIdNull && !isTenantIdNull) || (!isPrincipalIdNull && isTenantIdNull))
+            if (isPrincipalIdNull != isTenantIdNull)
                 throw new InvalidOperationException("Either TenantId or PrincipalId were null");
 
             return new SystemAssignedIdentity(tenantId, principalId);

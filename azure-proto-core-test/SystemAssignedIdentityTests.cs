@@ -110,7 +110,7 @@ namespace azure_proto_core_test
             Assert.AreEqual(1, identity1.CompareTo(identity2));
         }
 
-        public JsonProperty DeseriazerHelper(string filename)
+        public JsonProperty DeserializerHelper(string filename)
         {
             var json = File.ReadAllText("./TestAssets/SystemAssignedIdentity/" + filename);
             JsonDocument document = JsonDocument.Parse(json);
@@ -128,7 +128,7 @@ namespace azure_proto_core_test
         [TestCase]
         public void TestDeserializerValid()
         {
-            var identityJsonProperty = DeseriazerHelper("SystemAssignedValid.json");
+            var identityJsonProperty = DeserializerHelper("SystemAssignedValid.json");
             SystemAssignedIdentity back = Deserialize(identityJsonProperty.Value);
             Assert.IsTrue("de29bab1-49e1-4705-819b-4dfddceaaa98".Equals(back.PrincipalId.ToString()));
             Assert.IsTrue("72f988bf-86f1-41af-91ab-2d7cd011db47".Equals(back.TenantId.ToString()));
@@ -149,7 +149,7 @@ namespace azure_proto_core_test
         [TestCase]
         public void TestDeserializerBothValuesNull()
         {
-            var identityJsonProperty = DeseriazerHelper("SystemAssignedBothValuesNull.json");
+            var identityJsonProperty = DeserializerHelper("SystemAssignedBothValuesNull.json");
             var back = Deserialize(identityJsonProperty.Value);
             Assert.IsNull(back);
         }
@@ -157,35 +157,35 @@ namespace azure_proto_core_test
         [TestCase]
         public void TestDeserializerBothEmptyString()
         {
-            var identityJsonProperty = DeseriazerHelper("SystemAssignedBothEmptyString.json");
+            var identityJsonProperty = DeserializerHelper("SystemAssignedBothEmptyString.json");
             Assert.Throws<FormatException>(delegate { Deserialize(identityJsonProperty.Value); });
         }
 
         [TestCase]
         public void TestDeserializerOneEmptyString()
         {
-            var identityJsonProperty = DeseriazerHelper("SystemAssignedOneEmptyString.json");
+            var identityJsonProperty = DeserializerHelper("SystemAssignedOneEmptyString.json");
             Assert.Throws<FormatException>(delegate { Deserialize(identityJsonProperty.Value); });
         }
 
         [TestCase]
         public void TestDeserializerTenantIdValueNull()
         {
-            var identityJsonProperty = DeseriazerHelper("SystemAssignedOneValueNull.json");
+            var identityJsonProperty = DeserializerHelper("SystemAssignedOneValueNull.json");
             Assert.Throws<InvalidOperationException>(delegate { Deserialize(identityJsonProperty.Value); });
         }
 
         [TestCase]
         public void TestDeserializerPrincipalIdValueNull()
         {
-            var identityJsonProperty = DeseriazerHelper("SystemAssignedOneOtherValueNull.json");
+            var identityJsonProperty = DeserializerHelper("SystemAssignedOneOtherValueNull.json");
             Assert.Throws<InvalidOperationException>(delegate { Deserialize(identityJsonProperty.Value); });
         }
 
         [TestCase]
         public void TestDeserializerTenantIdInvalid()
         {
-            var identityJsonProperty = DeseriazerHelper("SystemAssignedInvalid.json");
+            var identityJsonProperty = DeserializerHelper("SystemAssignedInvalid.json");
             Assert.Throws<InvalidOperationException>(delegate { Deserialize(identityJsonProperty.Value); });
         }
 
