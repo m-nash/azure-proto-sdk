@@ -13,18 +13,21 @@ namespace azure_proto_core_test
         [TestCase]
         public void TestArmResonseArmResource()
         {
-             TestListActivator<ArmResourceOperations, ArmResource>();
+            var testDic = new Dictionary<string, string> { { "tag1", "value1" } };
+            String loc = "Japan East";
+            var asArmOp = (ArmResourceOperations)TestListActivator<ArmResourceOperations, ArmResource>(testDic, loc);
+            Assert.IsTrue(loc == asArmOp.DefaultLocation);
         }
-        private static void TestListActivator<T, U>()
+        private static object TestListActivator<TOperation, TResource>(Dictionary<string, string> tags = null, string location = "East US")
         {
             var testMethod = typeof(azure_proto_core.ResourceListOperations).GetMethod("CreateResourceConvertor", BindingFlags.Static | BindingFlags.NonPublic);
-            var asGeneric = testMethod.MakeGenericMethod(new System.Type[] {typeof(T), typeof(U)});
+            var asGeneric = testMethod.MakeGenericMethod(new System.Type[] { typeof(TOperation), typeof(TResource) });
             var context = new ArmClientContext(new Uri("https://management.azure.com"), new DefaultAzureCredential());
-            var function =  (Func<GenericResourceExpanded, T>) asGeneric.Invoke(null, new object[] {context, new ArmClientOptions()} );
+            var function = (Func<GenericResourceExpanded, TOperation>)asGeneric.Invoke(null, new object[] { context, new ArmClientOptions() });
             var resource = new GenericResourceExpanded();
-            resource.Location = "East US";
-            resource.Tags =  new Dictionary<string, string>{ {"tag1", "value1"} };
-            function.DynamicInvoke(new object [] {resource});
+            resource.Location = location;
+            resource.Tags = tags ?? new Dictionary<string, string>();
+            return function.DynamicInvoke(new object[] { resource });
         }
     }
 }
