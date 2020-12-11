@@ -29,16 +29,25 @@ namespace azure_proto_core
             creds,
             ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions)))?.ResourceGroups;
 
-        public ArmOperation<Response> Delete()
+        public ArmResponse<Response> Delete()
         {
-            return new ArmVoidOperation(Operations.StartDelete(Id.Name));
+            return new ArmVoidResponse(Operations.StartDelete(Id.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
-        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        {
+            return new ArmVoidResponse(await Operations.StartDelete(Id.Name).WaitForCompletionAsync());
+        }
+
+        public ArmOperation<Response> StartDelete()
+        {
+            return new ArmVoidOperation( Operations.StartDelete(Id.Name));
+        }
+
+        public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.Name, cancellationToken));
         }
-
         public override ArmResponse<ResourceGroup> Get()
         {
             return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Get(Id.Name), g =>
