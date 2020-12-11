@@ -195,8 +195,8 @@ namespace azure_proto_core
         }
 
         private static Func<GenericResourceExpanded, TOperations> CreateResourceConvertor<TOperations, TResource>(ArmClientContext clientContext, ArmClientOptions clientOptions)
-        where TOperations : ResourceOperationsBase<TOperations, TResource>
-        where TResource : TrackedResource
+            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TResource : TrackedResource
         {
              return s => Activator.CreateInstance(
                     typeof(TOperations),
