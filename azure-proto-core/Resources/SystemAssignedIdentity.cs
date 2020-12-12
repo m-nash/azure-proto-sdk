@@ -23,18 +23,13 @@
             if (other == null)
                 return 1;
 
-            if (TenantId.HasValue == false &&
-                PrincipalId.HasValue == false &&
-                other.TenantId.HasValue == false &&
-                other.PrincipalId.HasValue == false)
-            {
+            if (TenantId.HasValue == false && other.TenantId.HasValue == false)
                 return 0;
-            }
 
-            if (!TenantId.HasValue && !PrincipalId.HasValue)
+            if (!TenantId.HasValue)
                 return -1;
 
-            if (!other.TenantId.HasValue && !other.PrincipalId.HasValue)
+            if (!other.TenantId.HasValue)
                 return 1;
 
             if (TenantId.Value.CompareTo(other.TenantId.Value) == 1 && PrincipalId.Value.CompareTo(other.PrincipalId.Value) == 1)
@@ -51,18 +46,10 @@
             if (other == null)
                 return false;
 
-            if (TenantId.HasValue == false &&
-                PrincipalId.HasValue == false &&
-                other.TenantId.HasValue == false &&
-                other.PrincipalId.HasValue == false)
-            {
+            if (TenantId.HasValue == false && other.TenantId.HasValue == false)
                 return true;
-            }
 
-            if (!TenantId.HasValue && !PrincipalId.HasValue)
-                return false;
-
-            if (!other.TenantId.HasValue && !other.PrincipalId.HasValue)
+            if (!TenantId.HasValue || !other.TenantId.HasValue)
                 return false;
 
             return TenantId.Value.Equals(other.TenantId.Value) && PrincipalId.Value.Equals(other.PrincipalId.Value);
