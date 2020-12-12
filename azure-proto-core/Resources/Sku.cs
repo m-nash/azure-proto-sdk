@@ -33,10 +33,10 @@ namespace azure_proto_core
             }
 
             int compareResult = 0;
-            if ((compareResult = string.Compare(Name, other.Name, StringComparison.InvariantCulture)) == 0 &&
-                (compareResult = string.Compare(Family, other.Family, StringComparison.InvariantCulture)) == 0 &&
-                (compareResult = string.Compare(Size, other.Size, StringComparison.InvariantCulture)) == 0 &&
-                (compareResult = string.Compare(Tier, other.Tier, StringComparison.InvariantCulture)) == 0)
+            if ((compareResult = string.Compare(Name, other.Name, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
+                (compareResult = string.Compare(Family, other.Family, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
+                (compareResult = string.Compare(Size, other.Size, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
+                (compareResult = string.Compare(Tier, other.Tier, StringComparison.InvariantCultureIgnoreCase)) == 0)
             {
                 return Nullable.Compare<long>(Capacity, other.Capacity);
             }
@@ -56,10 +56,10 @@ namespace azure_proto_core
                 return true;
             }
 
-            return string.Equals(Name, other.Name, StringComparison.InvariantCulture) &&
-                string.Equals(Family, other.Family, StringComparison.InvariantCulture) &&
-                string.Equals(Size, other.Size, StringComparison.InvariantCulture) &&
-                string.Equals(Tier, other.Tier, StringComparison.InvariantCulture) &&
+            return string.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase) &&
+                string.Equals(Family, other.Family, StringComparison.InvariantCultureIgnoreCase) &&
+                string.Equals(Size, other.Size, StringComparison.InvariantCultureIgnoreCase) &&
+                string.Equals(Tier, other.Tier, StringComparison.InvariantCultureIgnoreCase) &&
                 long.Equals(Capacity, other.Capacity);
         }
     }

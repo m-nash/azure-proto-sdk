@@ -33,11 +33,11 @@ namespace azure_proto_core
             }
 
             int compareResult = 0;
-            if ((compareResult = string.Compare(Name, other.Name, StringComparison.InvariantCulture)) == 0 &&
-                (compareResult = string.Compare(Product, other.Product, StringComparison.InvariantCulture)) == 0 &&
-                (compareResult = string.Compare(PromotionCode, other.PromotionCode, StringComparison.InvariantCulture)) == 0 &&
-                (compareResult = string.Compare(Publisher, other.Publisher, StringComparison.InvariantCulture)) == 0 &&
-                (compareResult = string.Compare(Version, other.Version, StringComparison.InvariantCulture)) == 0)
+            if ((compareResult = string.Compare(Name, other.Name, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
+                (compareResult = string.Compare(Product, other.Product, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
+                (compareResult = string.Compare(PromotionCode, other.PromotionCode, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
+                (compareResult = string.Compare(Publisher, other.Publisher, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
+                (compareResult = string.Compare(Version, other.Version, StringComparison.InvariantCultureIgnoreCase)) == 0)
             {
                 return 0;
             }
@@ -57,11 +57,11 @@ namespace azure_proto_core
                 return true;
             }
 
-            return string.Equals(Name, other.Name, StringComparison.InvariantCulture) &&
-                string.Equals(Product, other.Product, StringComparison.InvariantCulture) &&
-                string.Equals(PromotionCode, other.PromotionCode, StringComparison.InvariantCulture) &&
-                string.Equals(Publisher, other.Publisher, StringComparison.InvariantCulture) &&
-                string.Equals(Version, other.Version, StringComparison.InvariantCulture);
+            return string.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase) &&
+                string.Equals(Product, other.Product, StringComparison.InvariantCultureIgnoreCase) &&
+                string.Equals(PromotionCode, other.PromotionCode, StringComparison.InvariantCultureIgnoreCase) &&
+                string.Equals(Publisher, other.Publisher, StringComparison.InvariantCultureIgnoreCase) &&
+                string.Equals(Version, other.Version, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
