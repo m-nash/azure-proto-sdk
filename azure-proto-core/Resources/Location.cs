@@ -64,9 +64,10 @@ namespace azure_proto_core
 
         private enum NameType
         {
-            DisplayName,
-            CanonicalName,
+            Undefined,
             Name,
+            CanonicalName,
+            DisplayName,
         }
 
         private Dictionary<string, Location> publicCloudLocations = new Dictionary<string, Location>()
@@ -125,30 +126,30 @@ namespace azure_proto_core
                 throw new Exception();
             }
 
-            location = NormalizationUtility(location);
+            string normalizedLocation = NormalizationUtility(location);
 
-            if (this.publicCloudLocations.ContainsKey(location))
+            if (this.publicCloudLocations.ContainsKey(normalizedLocation))
             {
-                this.Name = this.publicCloudLocations[location].Name;
-                this.CanonicalName = this.publicCloudLocations[location].CanonicalName;
-                this.DisplayName = this.publicCloudLocations[location].DisplayName;
+                this.Name = this.publicCloudLocations[normalizedLocation].Name;
+                this.CanonicalName = this.publicCloudLocations[normalizedLocation].CanonicalName;
+                this.DisplayName = this.publicCloudLocations[normalizedLocation].DisplayName;
             }
             else
             {
                 switch (DetectNameType(location))
                 {
-                    case -1:
-                    case 0:
+                    case NameType.Undefined:
+                    case NameType.Name:
                         this.Name = location;
                         this.CanonicalName = location;
                         this.DisplayName = location;
                         break;
-                    case 1:
+                    case NameType.CanonicalName:
                         this.Name = GetDefaultName(location, 1);
                         this.CanonicalName = location;
                         this.DisplayName = GetDisplayName(location, 1);
                         break;
-                    case 2:
+                    case NameType.DisplayName:
                         this.Name = GetDefaultName(location, 2);
                         this.CanonicalName = GetCanonicalName(location, 2);
                         this.DisplayName = location;
@@ -181,10 +182,8 @@ namespace azure_proto_core
             return sb.ToString().ToUpperInvariant();
         }
 
-        private static int DetectNameType(string location)
+        private static NameType DetectNameType(string location)
         {
-            // private enum
-
             // string namePattern      = "^[A-Z][a-z]*([A-Z][A-z]*)*[1-9]?$";
             string namePattern = "^[a-z]*[1-9]?$";
             string canonicalPattern = "^[a-z]+(-[a-z]+)*(-[1-9])?$";
@@ -192,19 +191,19 @@ namespace azure_proto_core
 
             if (Regex.IsMatch(location, namePattern))
             {
-                return 0;
+                return NameType.Name;
             }
             else if (Regex.IsMatch(location, canonicalPattern))
             {
-                return 1;
+                return NameType.CanonicalName;
             }
             else if (Regex.IsMatch(location, displayPattern))
             {
-                return 2;
+                return NameType.DisplayName;
             }
             else
             {
-                return -1;
+                return NameType.Undefined;
             }
         }
 
