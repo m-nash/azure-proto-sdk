@@ -23,7 +23,7 @@
             if (other == null)
                 return 1;
 
-            if (TenantId.HasValue == false && other.TenantId.HasValue == false)
+            if (!TenantId.HasValue && !other.TenantId.HasValue)
                 return 0;
 
             if (!TenantId.HasValue)
@@ -46,7 +46,7 @@
             if (other == null)
                 return false;
 
-            if (TenantId.HasValue == false && other.TenantId.HasValue == false)
+            if (!TenantId.HasValue && !other.TenantId.HasValue)
                 return true;
 
             if (!TenantId.HasValue || !other.TenantId.HasValue)
