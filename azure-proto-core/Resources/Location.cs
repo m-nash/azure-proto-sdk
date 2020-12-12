@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace azure_proto_core
@@ -12,24 +10,17 @@ namespace azure_proto_core
     /// </summary>
     public class Location : IEquatable<Location>, IEquatable<string>, IComparable<Location>, IComparable<string>
     {
-        private enum NameType
-        {
-            DisplayName,
-            CanonicalName,
-            Name
-        }
 
         public static ref readonly Location Default => ref WestUS;
-        //public static readonly Location WestUS = new Location { Name = "WestUS", CanonicalName = "west-us", DisplayName = "West US" };
+
+        // public static readonly Location WestUS = new Location { Name = "WestUS", CanonicalName = "west-us", DisplayName = "West US" };
         public string Name { get; internal set; }
+
         public string CanonicalName { get; internal set; }
+
         public string DisplayName { get; internal set; }
 
-        internal Location()
-        {
-        }
-
-        //Public Azure Locations
+        // Public Azure Locations
         public static readonly Location EastAsia = new Location { Name = "eastasia", CanonicalName = "east-asia", DisplayName = "East Asia" };
         public static readonly Location SoutheastAsia = new Location { Name = "southeastasia", CanonicalName = "southeast-asia", DisplayName = "Southeast Asia" };
         public static readonly Location CentralUS = new Location { Name = "centralus", CanonicalName = "central-us", DisplayName = "Central US" };
@@ -71,136 +62,76 @@ namespace azure_proto_core
         public static readonly Location NorwayWest = new Location { Name = "norwaywest", CanonicalName = "norway-west", DisplayName = "Norway West" };
         public static readonly Location BrazilSoutheast = new Location { Name = "brazilsoutheast", CanonicalName = "brazil-southeast", DisplayName = "Brazil Southeast" };
 
-        private Dictionary<string, Location> globalPublicLocationsDict = new Dictionary<string, Location>(){
-            {"eastasia", EastAsia},
-            {"southeastasia", SoutheastAsia},
-            {"centralus", CentralUS},
-            {"eastus", EastUS},
-            {"eastus2", EastUS2},
-            {"westus", WestUS},
-            {"northcentralus", NorthCentralUS},
-            {"southcentralus", SouthCentralUS},
-            {"northeurope", NorthEurope},
-            {"westeurope", WestEurope},
-            {"japanwest", JapanWest},
-            {"japaneast", JapanEast},
-            {"brazilsouth", BrazilSouth},
-            {"australiaeast", AustraliaEast},
-            {"australiasoutheast", AustraliaSoutheast},
-            {"southindia", SouthIndia},
-            {"centralindia", CentralIndia},
-            {"westindia", WestIndia},
-            {"canadacentral", CanadaCentral},
-            {"canadaeast", CanadaEast},
-            {"uksouth", UKSouth},
-            {"ukwest", UKWest},
-            {"westcentralus", WestCentralUS},
-            {"westus2", WestUS2},
-            {"koreacentral", KoreaCentral},
-            {"koreasouth", KoreaSouth},
-            {"francecentral", FranceCentral},
-            {"francesouth", FranceSouth},
-            {"australiacentral", AustraliaCentral},
-            {"australiacentral2", AustraliaCentral2},
-            {"uaecentral", UAECentral},
-            {"uaenorth", UAENorth},
-            {"southafricanorth", SouthAfricaNorth},
-            {"southafricawest", SouthAfricaWest},
-            {"switzerlandnorth", SwitzerlandNorth},
-            {"switzerlandwest", SwitzerlandWest},
-            {"germanynorth", GermanyNorth},
-            {"germanywestcentral", GermanyWestCentral},
-            {"norwaywest", NorwayWest},
-            {"brazilsoutheast", BrazilSoutheast},
-            {"east-asia", EastAsia},
-            {"southeast-asia", SoutheastAsia},
-            {"central-us", CentralUS},
-            {"east-us", EastUS},
-            {"east-us-2", EastUS2},
-            {"west-us", WestUS},
-            {"north-central-us", NorthCentralUS},
-            {"south-central-us", SouthCentralUS},
-            {"north-europe", NorthEurope},
-            {"west-europe", WestEurope},
-            {"japan-west", JapanWest},
-            {"japan-east", JapanEast},
-            {"brazil-south", BrazilSouth},
-            {"australia-east", AustraliaEast},
-            {"australia-southeast", AustraliaSoutheast},
-            {"south-india", SouthIndia},
-            {"central-india", CentralIndia},
-            {"west-india", WestIndia},
-            {"canada-central", CanadaCentral},
-            {"canada-east", CanadaEast},
-            {"uk-south", UKSouth},
-            {"uk-west", UKWest},
-            {"west-central-us", WestCentralUS},
-            {"west-us-2", WestUS2},
-            {"korea-central", KoreaCentral},
-            {"korea-south", KoreaSouth},
-            {"france-central", FranceCentral},
-            {"france-south", FranceSouth},
-            {"australia-central", AustraliaCentral},
-            {"australia-central-2", AustraliaCentral2},
-            {"uae-central", UAECentral},
-            {"uae-north", UAENorth},
-            {"south-africa-north", SouthAfricaNorth},
-            {"south-africa-west", SouthAfricaWest},
-            {"switzerland-north", SwitzerlandNorth},
-            {"switzerland-west", SwitzerlandWest},
-            {"germany-north", GermanyNorth},
-            {"germany-west-central", GermanyWestCentral},
-            {"norway-west", NorwayWest},
-            {"brazil-southeast", BrazilSoutheast},
-            {"East Asia", EastAsia},
-            {"Southeast Asia", SoutheastAsia},
-            {"Central US", CentralUS},
-            {"East US", EastUS},
-            {"East US 2", EastUS2},
-            {"West US", WestUS},
-            {"North Central US", NorthCentralUS},
-            {"South Central US", SouthCentralUS},
-            {"North Europe", NorthEurope},
-            {"West Europe", WestEurope},
-            {"Japan West", JapanWest},
-            {"Japan East", JapanEast},
-            {"Brazil South", BrazilSouth},
-            {"Australia East", AustraliaEast},
-            {"Australia Southeast", AustraliaSoutheast},
-            {"South India", SouthIndia},
-            {"Central India", CentralIndia},
-            {"West India", WestIndia},
-            {"Canada Central", CanadaCentral},
-            {"Canada East", CanadaEast},
-            {"UK South", UKSouth},
-            {"UK West", UKWest},
-            {"West Central US", WestCentralUS},
-            {"West US 2", WestUS2},
-            {"Korea Central", KoreaCentral},
-            {"Korea South", KoreaSouth},
-            {"France Central", FranceCentral},
-            {"France South", FranceSouth},
-            {"Australia Central", AustraliaCentral},
-            {"Australia Central 2", AustraliaCentral2},
-            {"UAE Central", UAECentral},
-            {"UAE North", UAENorth},
-            {"South Africa North", SouthAfricaNorth},
-            {"South Africa West", SouthAfricaWest},
-            {"Switzerland North", SwitzerlandNorth},
-            {"Switzerland West", SwitzerlandWest},
-            {"Germany North", GermanyNorth},
-            {"Germany West Central", GermanyWestCentral},
-            {"Norway West", NorwayWest},
-            {"Brazil Southeast", BrazilSoutheast}
+        private enum NameType
+        {
+            DisplayName,
+            CanonicalName,
+            Name,
+        }
+
+        private Dictionary<string, Location> publicCloudLocations = new Dictionary<string, Location>() 
+        {
+            { "EASTASIA", EastAsia },
+            { "SOUTHEASTASIA", SoutheastAsia },
+            { "CENTRALUS", CentralUS },
+            { "EASTUS", EastUS },
+            { "EASTUS2", EastUS2 },
+            { "WESTUS", WestUS },
+            { "NORTHCENTRALUS", NorthCentralUS },
+            { "SOUTHCENTRALUS", SouthCentralUS },
+            { "NORTHEUROPE", NorthEurope },
+            { "WESTEUROPE", WestEurope },
+            { "JAPANWEST", JapanWest },
+            { "JAPANEAST", JapanEast },
+            { "BRAZILSOUTH", BrazilSouth },
+            { "AUSTRALIAEAST", AustraliaEast },
+            { "AUSTRALIASOUTHEAST", AustraliaSoutheast },
+            { "SOUTHINDIA", SouthIndia },
+            { "CENTRALINDIA", CentralIndia },
+            { "WESTINDIA", WestIndia },
+            { "CANADACENTRAL", CanadaCentral },
+            { "CANADAEAST", CanadaEast },
+            { "UKSOUTH", UKSouth },
+            { "UKWEST", UKWest },
+            { "WESTCENTRALUS", WestCentralUS },
+            { "WESTUS2", WestUS2 },
+            { "KOREACENTRAL", KoreaCentral },
+            { "KOREASOUTH", KoreaSouth },
+            { "FRANCECENTRAL", FranceCentral },
+            { "FRANCESOUTH", FranceSouth },
+            { "AUSTRALIACENTRAL", AustraliaCentral },
+            { "AUSTRALIACENTRAL2", AustraliaCentral2 },
+            { "UAECENTRAL", UAECentral },
+            { "UAENORTH", UAENorth },
+            { "SOUTHAFRICANORTH", SouthAfricaNorth },
+            { "SOUTHAFRICAWEST", SouthAfricaWest },
+            { "SWITZERLANDNORTH", SwitzerlandNorth },
+            { "SWITZERLANDWEST", SwitzerlandWest },
+            { "GERMANYNORTH", GermanyNorth },
+            { "GERMANYWESTCENTRAL", GermanyWestCentral },
+            { "NORWAYWEST", NorwayWest },
+            { "BRAZILSOUTHEAST", BrazilSoutheast },
         };
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Location"/> class.
+        /// </summary>
+        /// <param name="location">Plain, cannonical or display name of the Location.</param>
         public Location(string location)
         {
-            if (globalPublicLocationsDict.ContainsKey(location)){
-                //Normalize then lookup
-                Name = globalPublicLocationsDict[location].Name;
-                CanonicalName = globalPublicLocationsDict[location].CanonicalName;
-                DisplayName = globalPublicLocationsDict[location].DisplayName;
+            if (location == null)
+            {
+                // TO DO: EXCEPTION TYPE OR WHAT TO DO
+                throw new Exception();
+            }
+
+            location = NormalizationUtility(location);
+
+            if (this.publicCloudLocations.ContainsKey(location))
+            {
+                this.Name = this.publicCloudLocations[location].Name;
+                this.CanonicalName = this.publicCloudLocations[location].CanonicalName;
+                this.DisplayName = this.publicCloudLocations[location].DisplayName;
             }
             else
             {
@@ -208,34 +139,53 @@ namespace azure_proto_core
                 {
                     case -1:
                     case 0:
-                        Name = location;
-                        CanonicalName = location;
-                        DisplayName = location;
+                        this.Name = location;
+                        this.CanonicalName = location;
+                        this.DisplayName = location;
                         break;
                     case 1:
-                        Name = GetDefaultName(location, 1);
-                        CanonicalName = location;
-                        DisplayName = GetDisplayName(location, 1);
+                        this.Name = GetDefaultName(location, 1);
+                        this.CanonicalName = location;
+                        this.DisplayName = GetDisplayName(location, 1);
                         break;
                     case 2:
-                        Name = GetDefaultName(location,2);
-                        CanonicalName = GetCanonicalName(location,2);
-                        DisplayName = location;
+                        this.Name = GetDefaultName(location,2);
+                        this.CanonicalName = GetCanonicalName(location,2);
+                        this.DisplayName = location;
                         break;
                 }
             }
         }
 
-        /// <summary>
-        /// Detects if the strin given matches either the Name, Canonical Name or Display Name.
-        /// </summary>
-        /// <param name="location"></param>
-        /// <returns>0=Name | 1=CanonicalName | 2=DisplayName | -1=Not a match</returns>
-        private int DetectNameType(string location) 
-        {   
-            //private enum
+        internal Location()
+        {
+        }
 
-            //string namePattern      = "^[A-Z][a-z]*([A-Z][A-z]*)*[1-9]?$";
+        private static string NormalizationUtility(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return value;
+            }
+
+            var sb = new StringBuilder(value.Length);
+            for (var index = 0; index < value.Length; ++index)
+            {
+                var c = value[index];
+                if (char.IsLetterOrDigit(c))
+                {
+                    sb.Append(c);
+                }
+            }
+
+            return sb.ToString().ToUpperInvariant();
+        }
+
+        private static int DetectNameType(string location)
+        {
+            // private enum
+
+            // string namePattern      = "^[A-Z][a-z]*([A-Z][A-z]*)*[1-9]?$";
             string namePattern      = "^[a-z]*[1-9]?$";
             string canonicalPattern = "^[a-z]+(-[a-z]+)*(-[1-9])?$";
             string displayPattern   = "^[A-Z][a-z]*( [A-Z][A-z]*)*( [1-9])?$";
@@ -260,7 +210,7 @@ namespace azure_proto_core
 
         public bool Equals(Location other)
         {
-            return CanonicalName == other.CanonicalName;
+            return this.CanonicalName == other.CanonicalName;
         }
 
         public bool Equals(string other)
