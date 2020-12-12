@@ -64,33 +64,27 @@
 
             Optional<Guid> principalId = default;
             Optional<Guid> tenantId = default;
-            bool isPrincipalIdNull = false;
-            bool isTenantIdNull = false;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("principalId"))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                        isPrincipalIdNull = true;
-
-                    else
+                    if (property.Value.ValueKind != JsonValueKind.Null)
                         principalId = Guid.Parse(property.Value.GetString());
+
                 }
 
                 if (property.NameEquals("tenantId"))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                        isTenantIdNull = true;
-
-                    else
+                    if (property.Value.ValueKind != JsonValueKind.Null)
                         tenantId = Guid.Parse(property.Value.GetString());
+
                 }
             }
 
-            if (isPrincipalIdNull && isTenantIdNull)
+            if (principalId == default(Guid) && tenantId == default(Guid))
                 return null;
 
-            if (isPrincipalIdNull != isTenantIdNull)
+            if (principalId == default(Guid) || tenantId == default(Guid))
                 throw new InvalidOperationException("Either TenantId or PrincipalId were null");
 
             return new SystemAssignedIdentity(tenantId, principalId);
