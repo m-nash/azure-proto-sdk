@@ -69,7 +69,7 @@ namespace azure_proto_core
             Name,
         }
 
-        private Dictionary<string, Location> publicCloudLocations = new Dictionary<string, Location>() 
+        private Dictionary<string, Location> publicCloudLocations = new Dictionary<string, Location>()
         {
             { "EASTASIA", EastAsia },
             { "SOUTHEASTASIA", SoutheastAsia },
@@ -149,8 +149,8 @@ namespace azure_proto_core
                         this.DisplayName = GetDisplayName(location, 1);
                         break;
                     case 2:
-                        this.Name = GetDefaultName(location,2);
-                        this.CanonicalName = GetCanonicalName(location,2);
+                        this.Name = GetDefaultName(location, 2);
+                        this.CanonicalName = GetCanonicalName(location, 2);
                         this.DisplayName = location;
                         break;
                 }
@@ -186,9 +186,9 @@ namespace azure_proto_core
             // private enum
 
             // string namePattern      = "^[A-Z][a-z]*([A-Z][A-z]*)*[1-9]?$";
-            string namePattern      = "^[a-z]*[1-9]?$";
+            string namePattern = "^[a-z]*[1-9]?$";
             string canonicalPattern = "^[a-z]+(-[a-z]+)*(-[1-9])?$";
-            string displayPattern   = "^[A-Z][a-z]*( [A-Z][A-z]*)*( [1-9])?$";
+            string displayPattern = "^[A-Z][a-z]*( [A-Z][A-z]*)*( [1-9])?$";
 
             if (Regex.IsMatch(location, namePattern))
             {
@@ -229,7 +229,7 @@ namespace azure_proto_core
 
         public override string ToString()
         {
-            return DisplayName;
+            return this.DisplayName;
         }
 
         static string GetCanonicalName(string name, int patternType)
@@ -246,13 +246,13 @@ namespace azure_proto_core
         private static string ToTitleCase(string name)
         {
             char[] chName = name.ToCharArray();
-            chName[0] = Char.ToUpper(chName[0]);
+            chName[0] = char.ToUpper(chName[0]);
 
             for (int i = 0; i < chName.Length; i++)
             {
                 if (chName[i] == '-')
                 {
-                    chName[i + 1] = Char.ToUpper(chName[i + 1]);
+                    chName[i + 1] = char.ToUpper(chName[i + 1]);
                 }
             }
 
@@ -267,7 +267,7 @@ namespace azure_proto_core
                     return Regex.Replace(ToTitleCase(name), @"-", " ");
                 default:
                     return name;
-            }     
+            }
         }
 
         static string GetDefaultName(string name, int patternType)
@@ -285,27 +285,30 @@ namespace azure_proto_core
 
         public int CompareTo(Location other)
         {
-            if (ReferenceEquals(other,null))
+            if (ReferenceEquals(other, null))
             {
                 return 1;
             }
-            return Name.CompareTo(other.Name);
+            return this.Name.CompareTo(other.Name);
         }
 
         public int CompareTo(string other)
         {
-            if (ReferenceEquals(other,null))
+            if (ReferenceEquals(other, null))
             {
                 return 1;
             }
-            return Name.CompareTo(other);
+            return this.Name.CompareTo(other);
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="other"></param>
+        /// <param name="other">Location object to be assigned.</param>
         public static implicit operator string(Location other) => other.DisplayName;
-        public static implicit operator Location(string other) => new Location( other);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="other">Location object to be assigned.</param>
+        public static implicit operator Location(string other) => new Location(other);
     }
 }
-
