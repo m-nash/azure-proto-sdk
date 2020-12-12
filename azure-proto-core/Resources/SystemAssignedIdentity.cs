@@ -31,10 +31,10 @@
                 return 0;
             }
 
-            if (TenantId.HasValue == false && PrincipalId.HasValue == false)
+            if (!TenantId.HasValue && !PrincipalId.HasValue)
                 return -1;
 
-            if (other.TenantId.HasValue == false && other.PrincipalId.HasValue == false)
+            if (!other.TenantId.HasValue && !other.PrincipalId.HasValue)
                 return 1;
 
             if (TenantId.Value.CompareTo(other.TenantId.Value) == 1 && PrincipalId.Value.CompareTo(other.PrincipalId.Value) == 1)
@@ -59,10 +59,10 @@
                 return true;
             }
 
-            if (TenantId.HasValue == false && PrincipalId.HasValue == false)
+            if (!TenantId.HasValue && !PrincipalId.HasValue)
                 return false;
 
-            if (other.TenantId.HasValue == false && other.PrincipalId.HasValue == false)
+            if (!other.TenantId.HasValue && !other.PrincipalId.HasValue)
                 return false;
 
             return TenantId.Value.Equals(other.TenantId.Value) && PrincipalId.Value.Equals(other.PrincipalId.Value);
@@ -111,8 +111,8 @@
 
         public static void Serialize(Utf8JsonWriter writer, SystemAssignedIdentity systemAssignedIdentity)
         {
-            if (systemAssignedIdentity == null)
-                throw new ArgumentNullException("SystemAssignedIdentity is null");
+            if (systemAssignedIdentity == null || writer == null)
+                throw new ArgumentNullException("SystemAssignedIdentity or writer is null");
 
             writer.WriteStartObject();
             writer.WritePropertyName("principalId");

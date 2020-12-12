@@ -239,6 +239,16 @@ namespace azure_proto_core_test
         }
 
         [TestCase]
+        public void TestSerializerNullWriter()
+        {
+            SystemAssignedIdentity systemAssignedIdentity = new SystemAssignedIdentity();
+            using (Stream stream = new MemoryStream())
+            {
+                Assert.Throws<ArgumentNullException>(delegate { Serialize(null, systemAssignedIdentity); });
+            }
+        }
+
+        [TestCase]
         public void TestEqualsBothIdentitiesNull()
         {
             SystemAssignedIdentity identity1 = null;
