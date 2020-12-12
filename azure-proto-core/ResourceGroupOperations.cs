@@ -13,7 +13,7 @@ namespace azure_proto_core
     public class ResourceGroupOperations : ResourceOperationsBase<ResourceGroup, ResourceGroupData>,
         ITaggable<ResourceGroup, ResourceGroupData>, IDeletableResource<ResourceGroup, ResourceGroupData>
     {
-        public static readonly string AzureResourceType = "Microsoft.Resources/resourceGroups";
+        public static readonly ResourceType AzureResourceType = "Microsoft.Resources/resourceGroups";
 
         internal ResourceGroupOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
             : base(context, id, clientOptions) { }

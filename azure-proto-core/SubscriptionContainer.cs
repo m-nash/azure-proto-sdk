@@ -13,7 +13,7 @@ namespace azure_proto_core
     /// </summary>
     public class SubscriptionContainer : OperationsBase
     {
-        public static readonly string AzureResourceType = "Microsoft.Resources/subscriptions";
+        public static readonly ResourceType AzureResourceType = "Microsoft.Resources/subscriptions";
 
         internal SubscriptionContainer(ArmClientContext context, ArmClientOptions options)
             : base(context, null, options, null)

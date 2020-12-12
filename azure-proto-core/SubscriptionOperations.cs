@@ -14,7 +14,7 @@ namespace azure_proto_core
     /// </summary>
     public class SubscriptionOperations : OperationsBase
     {
-        public static readonly string AzureResourceType = "Microsoft.Resources/subscriptions";
+        public static readonly ResourceType AzureResourceType = "Microsoft.Resources/subscriptions";
 
         internal SubscriptionOperations(ArmClientContext context, string defaultSubscription, ArmClientOptions clientOptions)
             : base(context, $"/subscriptions/{defaultSubscription}", clientOptions)
