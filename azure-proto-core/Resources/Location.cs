@@ -215,22 +215,16 @@ namespace azure_proto_core
 
         public bool Equals(string other)
         {
-            switch (DetectNameType(other))
+            other = NormalizationUtility(other);
+            if (this.publicCloudLocations.ContainsKey(other))
             {
-                case 0:
-                    return Name == other;
-                case 1:
-                    return CanonicalName == other;
-                case 2:
-                    return DisplayName == other;
-                default:
-                    return Name == other;
+                return this == this.publicCloudLocations[other];
             }
-
-            //Look at the dict
-            //compare the 3 properties
-            //if not, use the implicit
-            
+            else
+            {
+                Location foo = other;
+                return this == foo;
+            }
         }
 
         public override string ToString()
