@@ -14,7 +14,7 @@ namespace azure_proto_core
     /// Operations for the RespourceGroups container in the given subscription context.  Allows Creating and listign respource groups
     /// and provides an attachment point for Collections of Tracked Resources.
     /// </summary>
-    public class ResourceGroupContainer : ResourceContainer<ResourceGroup, ResourceGroupData>
+    public class ResourceGroupContainer : ResourceContainerBase<ResourceGroup, ResourceGroupData>
     {
         internal ResourceGroupContainer(ArmClientContext context, SubscriptionOperations subscription, ArmClientOptions clientOptions)
             : base(context, subscription.Id, clientOptions) { }

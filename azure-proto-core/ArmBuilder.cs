@@ -12,9 +12,9 @@ namespace azure_proto_core
         where TOperations : ResourceOperationsBase<TOperations, TResource>
     {
         protected TResource _resource;
-        protected ResourceContainer<TOperations, TResource> _unTypedContainer;
+        protected ResourceContainerBase<TOperations, TResource> _unTypedContainer;
 
-        public ArmBuilder(ResourceContainer<TOperations, TResource> container, TResource resource)
+        public ArmBuilder(ResourceContainerBase<TOperations, TResource> container, TResource resource)
         {
             _resource = resource;
             _unTypedContainer = container;

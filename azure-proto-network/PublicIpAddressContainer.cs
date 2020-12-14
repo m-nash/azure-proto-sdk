@@ -10,7 +10,7 @@ using azure_proto_core.Adapters;
 
 namespace azure_proto_network
 {
-    public class PublicIpAddressContainer : ResourceContainer<PublicIpAddress, PublicIPAddressData>
+    public class PublicIpAddressContainer : ResourceContainerBase<PublicIpAddress, PublicIPAddressData>
     {
         internal PublicIpAddressContainer(ArmResourceOperations genericOperations)
             : base(genericOperations.ClientContext,genericOperations.Id, genericOperations.ClientOptions)

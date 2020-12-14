@@ -11,7 +11,7 @@ using azure_proto_core.Adapters;
 
 namespace azure_proto_network
 {
-    public class NetworkInterfaceContainer : ResourceContainer<NetworkInterface, NetworkInterfaceData>
+    public class NetworkInterfaceContainer : ResourceContainerBase<NetworkInterface, NetworkInterfaceData>
     {
         internal NetworkInterfaceContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
 
