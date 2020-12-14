@@ -26,9 +26,7 @@
             int compareResult = 0;
             if ((compareResult = PrincipalId.GetValueOrDefault().CompareTo(other.PrincipalId.GetValueOrDefault())) == 0 &&
                 (compareResult = TenantId.GetValueOrDefault().CompareTo(other.TenantId.GetValueOrDefault())) == 0)
-            {
                 return 0;
-            }
 
             return compareResult;
         }
@@ -56,14 +54,12 @@
                 {
                     if (property.Value.ValueKind != JsonValueKind.Null)
                         principalId = Guid.Parse(property.Value.GetString());
-
                 }
 
                 if (property.NameEquals("tenantId"))
                 {
                     if (property.Value.ValueKind != JsonValueKind.Null)
                         tenantId = Guid.Parse(property.Value.GetString());
-
                 }
             }
 
@@ -78,23 +74,32 @@
 
         public static void Serialize(Utf8JsonWriter writer, SystemAssignedIdentity systemAssignedIdentity)
         {
-            if (systemAssignedIdentity == null || writer == null)
-                throw new ArgumentNullException("SystemAssignedIdentity or writer is null");
+            if (systemAssignedIdentity == null)
+                throw new ArgumentNullException(nameof(systemAssignedIdentity));
+
+            if (writer == null)
+                throw new ArgumentNullException("Utf8JsonWriter writer is null");
 
             writer.WriteStartObject();
             writer.WritePropertyName("principalId");
             if (!Optional.IsDefined(systemAssignedIdentity.PrincipalId))
+            {
                 writer.WriteStringValue("null");
-
+            }
             else
+            {
                 writer.WriteStringValue(systemAssignedIdentity.PrincipalId.ToString());
+            }
 
             writer.WritePropertyName("tenantId");
             if (!Optional.IsDefined(systemAssignedIdentity.TenantId))
+            {
                 writer.WriteStringValue("null");
-
+            }
             else
+            {
                 writer.WriteStringValue(systemAssignedIdentity.TenantId.ToString());
+            }
 
             writer.WriteEndObject();
             writer.Flush();
