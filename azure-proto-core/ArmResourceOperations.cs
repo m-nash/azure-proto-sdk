@@ -8,15 +8,15 @@ using Azure;
 
 namespace azure_proto_core
 {
-    public class ArmResourceOperations : ResourceOperationsBase<ArmResourceOperations, ArmResource>,
-        ITaggable<ArmResourceOperations, ArmResource>, IDeletableResource<ArmResourceOperations, ArmResource>
+    public class ArmResourceOperations : ResourceOperationsBase<ArmResource>,
+        ITaggable<ArmResource>, IDeletable
     {
         public ArmResourceOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOption)
             : base(context, id, clientOption)
         {
         }
 
-        public ArmResourceOperations(ArmClientContext context, ArmResource resource, ArmClientOptions clientOption)
+        public ArmResourceOperations(ArmClientContext context, ArmResourceData resource, ArmClientOptions clientOption)
             : base(context, resource, clientOption)
         {
         }
@@ -32,12 +32,12 @@ namespace azure_proto_core
         }
 
         // TODO: Fill out the methods using ResourceManagementClient
-        public ArmOperation<ArmResourceOperations> AddTag(string key, string value)
+        public ArmOperation<ArmResource> AddTag(string key, string value)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ArmOperation<ArmResourceOperations>> AddTagAsync(
+        public Task<ArmOperation<ArmResource>> AddTagAsync(
             string key,
             string value,
             CancellationToken cancellationToken = default)
@@ -50,12 +50,12 @@ namespace azure_proto_core
             //the id can be of any type so do nothing
         }
 
-        public override ArmResponse<ArmResourceOperations> Get()
+        public override ArmResponse<ArmResource> Get()
         {
             throw new NotImplementedException();
         }
 
-        public override Task<ArmResponse<ArmResourceOperations>> GetAsync(CancellationToken cancellationToken = default)
+        public override Task<ArmResponse<ArmResource>> GetAsync(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

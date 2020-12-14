@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace azure_proto_core
 {
-    public interface ITaggable<TOperations, TResource>
-        where TResource : Resource
-        where TOperations : ITaggable<TOperations, TResource>
+    public interface ITaggable<TOperations>
+        where TOperations : ResourceOperationsBase<TOperations>
     {
         ArmOperation<TOperations> AddTag(string key, string value);
 

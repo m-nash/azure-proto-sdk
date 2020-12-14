@@ -13,7 +13,7 @@ namespace azure_proto_core
         /// </summary>
         /// <param name="genericOperations">Operations to create this operations class from</param>
         public ExtensionResourceOperationsBase(ExtensionResourceOperationsBase genericOperations)
-            : this(genericOperations.ClientContext, genericOperations.Id)
+            : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
         {
         }
 
@@ -22,7 +22,7 @@ namespace azure_proto_core
         /// </summary>
         /// <param name="genericOperations">Generic operations with the identifier for this extention resource</param>
         public ExtensionResourceOperationsBase(OperationsBase genericOperations)
-            : this(genericOperations.ClientContext, genericOperations.Id)
+            : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
         {
         }
 
@@ -31,8 +31,9 @@ namespace azure_proto_core
         /// </summary>
         /// <param name="context">Client configuration properties for these operations</param>
         /// <param name="id">The identifier of the extension resource</param>
-        public ExtensionResourceOperationsBase(ArmClientContext context, ResourceIdentifier id)
-            : this(context, new ArmResource(id))
+        /// <param name="options">The client options to sue with these operations.</param>
+        public ExtensionResourceOperationsBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions options = default)
+            : base(context, id, options)
         {
         }
 
@@ -41,15 +42,18 @@ namespace azure_proto_core
         /// </summary>
         /// <param name="context">Client configuration properties for these operations</param>
         /// <param name="resource">The extention resource for operatiosn to act upon</param>
-        public ExtensionResourceOperationsBase(ArmClientContext context, Resource resource)
-            : base(context, resource)
+        /// <param name="options">The client options to sue with these operations.</param>
+        public ExtensionResourceOperationsBase(ArmClientContext context, Resource resource, ArmClientOptions options = default)
+            : this(context, resource.Id, options)
         {
         }
     }
 
+
     /// <summary>
     /// Separate Extension resources from non-extension resources
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "Resource types that differ by Type arguments")]
     public abstract class ExtensionResourceOperationsBase<TOperations> : ExtensionResourceOperationsBase
         where TOperations : ExtensionResourceOperationsBase<TOperations>
     {
@@ -58,7 +62,7 @@ namespace azure_proto_core
         /// </summary>
         /// <param name="genericOperations">Operations to create this operations class from</param>
         public ExtensionResourceOperationsBase(ExtensionResourceOperationsBase genericOperations)
-            : this(genericOperations.ClientContext, genericOperations.Id)
+            : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
         {
         }
 
@@ -67,7 +71,7 @@ namespace azure_proto_core
         /// </summary>
         /// <param name="genericOperations">Operations to create this operations class from</param>
         public ExtensionResourceOperationsBase(OperationsBase genericOperations)
-            : this(genericOperations.ClientContext, genericOperations.Id)
+            : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
         {
         }
 
@@ -76,8 +80,9 @@ namespace azure_proto_core
         /// </summary>
         /// <param name="context">Client configuration properties for these operations</param>
         /// <param name="id">The identifier of the extension resource</param>
-        public ExtensionResourceOperationsBase(ArmClientContext context, ResourceIdentifier id)
-            : this(context, new ArmResource(id))
+        /// <param name="options">The client options to sue with these operations.</param>
+        public ExtensionResourceOperationsBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions options = default)
+            : base(context, id, options)
         {
         }
 
@@ -86,8 +91,9 @@ namespace azure_proto_core
         /// </summary>
         /// <param name="context">Client configuration properties for these operations</param>
         /// <param name="resource">The extention resource for operatiosn to act upon</param>
-        public ExtensionResourceOperationsBase(ArmClientContext context, Resource resource)
-            : base(context, resource)
+        /// <param name="options">The client options to sue with these operations.</param>
+        public ExtensionResourceOperationsBase(ArmClientContext context, Resource resource, ArmClientOptions options = default)
+            : this(context, resource.Id, options)
         {
         }
 

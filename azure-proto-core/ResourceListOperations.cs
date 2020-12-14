@@ -16,16 +16,6 @@ namespace azure_proto_core
     /// </summary>
     public class ResourceListOperations
     {
-        private static void Validate(ResourceIdentifier id)
-        {
-            if (id.Type != ResourceGroupOperations.AzureResourceType &&
-                id.Type != SubscriptionOperations.AzureResourceType)
-            {
-                throw new ArgumentException(
-                    $"{id.Type} is not valid to list at context must be {ResourceGroupOperations.AzureResourceType} or {SubscriptionOperations.AzureResourceType}");
-            }
-        }
-
         public static Pageable<TOperations> ListAtContext<TOperations, TResource>(
             ArmClientContext clientContext,
             ArmClientOptions clientOptions,
@@ -33,7 +23,7 @@ namespace azure_proto_core
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
             Validate(id);
@@ -57,7 +47,7 @@ namespace azure_proto_core
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
             Validate(id);
@@ -79,7 +69,7 @@ namespace azure_proto_core
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
             return _ListAtContext<TOperations, TResource>(
@@ -97,7 +87,7 @@ namespace azure_proto_core
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
             return _ListAtContextAsync<TOperations, TResource>(
@@ -118,7 +108,7 @@ namespace azure_proto_core
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
             var resourceOperations = GetResourcesClient(clientContext, scopeId.Subscription).Resources;
@@ -148,8 +138,9 @@ namespace azure_proto_core
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
+
         {
             var resourceOperations = GetResourcesClient(clientContext, scopeId.Subscription).Resources;
             Pageable<GenericResourceExpanded> result;
@@ -174,24 +165,23 @@ namespace azure_proto_core
             Pageable<GenericResourceExpanded> result,
             ArmClientContext clientContext,
             ArmClientOptions clientOptions)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
             return new PhWrappingPageable<GenericResourceExpanded, TOperations>(
                 result,
-                s => Activator.CreateInstance(
-                    typeof(TOperations),
-                    clientContext,
-                    (Activator.CreateInstance(
-                        typeof(TResource),
-                        s as Azure.ResourceManager.Resources.Models.Resource) as TResource), clientOptions) as TOperations);
+                s =>
+                {
+                    var data = Activator.CreateInstance(typeof(TResource), s as Azure.ResourceManager.Resources.Models.Resource) as TResource;
+                    return Activator.CreateInstance(typeof(TOperations), clientContext, data, clientOptions) as TOperations;
+                });
         }
 
         private static AsyncPageable<TOperations> ConvertResultsAsync<TOperations, TResource>(
             AsyncPageable<GenericResourceExpanded> result,
             ArmClientContext clientContext,
             ArmClientOptions clientOptions)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
             return new PhWrappingAsyncPageable<GenericResourceExpanded, TOperations>(
@@ -200,6 +190,16 @@ namespace azure_proto_core
                     typeof(TOperations),
                     clientContext,
                     Activator.CreateInstance(typeof(TResource), s as Azure.ResourceManager.Resources.Models.Resource) as TResource, clientOptions) as TOperations);
+        }
+
+        private static void Validate(ResourceIdentifier id)
+        {
+            if (id.Type != ResourceGroupOperations.AzureResourceType &&
+                id.Type != SubscriptionOperations.AzureResourceType)
+            {
+                throw new ArgumentException(
+                    $"{id.Type} is not valid to list at context must be {ResourceGroupOperations.AzureResourceType} or {SubscriptionOperations.AzureResourceType}");
+            }
         }
 
         //TODO: should be able to access context.GetClient() instead of needing this method

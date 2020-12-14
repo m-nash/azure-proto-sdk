@@ -7,9 +7,7 @@ using Azure;
 
 namespace azure_proto_core
 {
-    public interface IDeletableResource<TOperations, TResource>
-        where TResource : Resource
-        where TOperations : IDeletableResource<TOperations, TResource>
+    public interface IDeletable
     {
         ArmOperation<Response> Delete();
 

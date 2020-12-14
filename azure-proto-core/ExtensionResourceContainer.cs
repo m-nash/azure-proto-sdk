@@ -10,38 +10,36 @@ namespace azure_proto_core
     /// </summary>
     /// <typeparam name="TOperations">Operations class returned</typeparam>
     /// <typeparam name="TInput">Input Model</typeparam>
-    /// <typeparam name="TResource">Output Model</typeparam>
-    public abstract class ExtensionResourceContainer<TOperations, TInput, TResource> : ExtensionResourceOperationsBase
-        where TOperations : ExtensionResourceOperationsBase<TOperations, TResource>
-        where TResource : Resource
+    public abstract class ExtensionResourceContainer<TOperations, TInput> : ExtensionResourceOperationsBase
+        where TOperations : ExtensionResourceOperationsBase<TOperations>
         where TInput : class
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExtensionResourceContainer{TOperations, TInput, TResource}"/> class.
+        /// Initializes a new instance of the <see cref="ExtensionResourceContainer{TOperations, TInput}"/> class.
         /// Create an ResourceContainer from an operations class or client
         /// </summary>
         /// <param name="operations">The client or operations class to create this container from</param>
-        protected ExtensionResourceContainer(OperationsBase operations) 
+        protected ExtensionResourceContainer(OperationsBase operations)
             : this(operations.ClientContext, operations.Id)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExtensionResourceContainer{TOperations, TInput, TResource}"/> class.
+        /// Initializes a new instance of the <see cref="ExtensionResourceContainer{TOperations, TInput}"/> class.
         /// </summary>
         /// <param name="context">The client context with http client details for these operations</param>
         /// <param name="parentId">The resource Id of the parent resource</param>
-        protected ExtensionResourceContainer(ArmClientContext context, ResourceIdentifier parentId) 
+        protected ExtensionResourceContainer(ArmClientContext context, ResourceIdentifier parentId)
             : base(context, parentId)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExtensionResourceContainer{TOperations, TInput, TResource}"/> class.
+        /// Initializes a new instance of the <see cref="ExtensionResourceContainer{TOperations, TInput}"/> class.
         /// </summary>
         /// <param name="context">The client context with http client details for these operations</param>
         /// <param name="parent">The parent resource</param>
-        protected ExtensionResourceContainer(ArmClientContext context, TrackedResource parent) 
+        protected ExtensionResourceContainer(ArmClientContext context, TrackedResource parent)
             : base(context, parent.Id)
         {
         }
@@ -105,7 +103,7 @@ namespace azure_proto_core
         /// <param name="cancellationToken">The cancellation token clients can use to cancel any blocking HTTP requests made by this method, including 
         /// any Http requests that result from enumerating pages of results.</param>
         /// <returns>An instance of <see cref="Azure.Pageable{TResource}"/> allowing paged or unpaged enumeration of results</returns>
-        public abstract Pageable<TResource> ListAtScope(CancellationToken cancellationToken = default);
+        public abstract Pageable<TOperations> ListAtScope(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Lists the extension resources at the current scope asynchronously. The returned task completes when the first page of results is returrned.
@@ -113,7 +111,7 @@ namespace azure_proto_core
         /// <param name="cancellationToken">The cancellation token clients can use to cancel any blocking HTTP requests made by this method, including 
         /// any Http requests that result from enumerating pages of results.</param>
         /// <returns>An instance of <see cref="Azure.AsyncPageable{TResource}"/> allowing asynchronous paged or unpaged enumeration of results.</returns>
-        public abstract AsyncPageable<TResource> ListAtScopeAsync(CancellationToken cancellationToken = default);
+        public abstract AsyncPageable<TOperations> ListAtScopeAsync(CancellationToken cancellationToken = default);
 
     }
 }

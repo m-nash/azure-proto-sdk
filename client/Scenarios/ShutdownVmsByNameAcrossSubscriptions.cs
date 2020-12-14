@@ -50,7 +50,7 @@ namespace client
                        Console.WriteLine($"Stopping {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");
                        vm.PowerOff();
                     var newVm = vm.Get();
-                       var model = vm.Model;
+                       var model = vm.Data;
                        Console.WriteLine($"Starting {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");
                        vm.PowerOn();
                 }

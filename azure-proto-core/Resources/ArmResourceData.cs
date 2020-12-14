@@ -6,9 +6,9 @@ namespace azure_proto_core
     /// <summary>
     ///     Generic representation of an ARM resource.  Resources in the ARM RP should extend this resource.
     /// </summary>
-    public class ArmResource : TrackedResource, IManagedByResource, ISkuResource
+    public class ArmResourceData: TrackedResource, IManagedByResource, ISkuResource
     {
-        public ArmResource(Azure.ResourceManager.Resources.Models.Resource genericResource)
+        public ArmResourceData(Azure.ResourceManager.Resources.Models.Resource genericResource)
         {
             Id = genericResource.Id;
             Location = genericResource.Location;
@@ -19,13 +19,13 @@ namespace azure_proto_core
             }
         }
 
-        public ArmResource(ResourceIdentifier id)
+        public ArmResourceData(ResourceIdentifier id)
         {
             Id = id;
             Location = Location.Default;
         }
 
-        public ArmResource(ResourceIdentifier id, Location location)
+        public ArmResourceData(ResourceIdentifier id, Location location)
         {
             Id = id;
             Location = location;

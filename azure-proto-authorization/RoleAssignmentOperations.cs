@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace azure_proto_authorization
 {
-    public class RoleAssignmentOperations : ExtensionResourceOperationsBase<RoleAssignmentOperations, RoleAssignmentData>, IDeletableResource<RoleAssignmentOperations, RoleAssignmentData>
+    public class RoleAssignmentOperations : ExtensionResourceOperationsBase<RoleAssignment>, IDeletable
     {
         public RoleAssignmentOperations(ArmResourceOperations genericOperations) : this(genericOperations.ClientContext, genericOperations.Id) { }
 
-        public RoleAssignmentOperations(ArmClientContext context, ResourceIdentifier id) : this(context, new ArmResource(id)) { }
+        public RoleAssignmentOperations(ArmClientContext context, ResourceIdentifier id) : this(context, new ArmResourceData(id)) { }
 
         public RoleAssignmentOperations(ArmClientContext context, Resource resource) : base(context, resource)
         {
@@ -27,14 +27,14 @@ namespace azure_proto_authorization
             return new ArmVoidOperation((await Operations.DeleteByIdAsync(this.Id, cancellationToken)).GetRawResponse());
         }
 
-        public override ArmResponse<RoleAssignmentOperations> Get()
+        public override ArmResponse<RoleAssignment> Get()
         {
-            return new PhArmResponse<RoleAssignmentOperations, Azure.ResourceManager.Authorization.Models.RoleAssignment>(Operations.GetById(this.Id), a => { Resource = new RoleAssignmentData(a); return this; });
+            return new PhArmResponse<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(Operations.GetById(this.Id), a => new RoleAssignment(this.ClientContext, new RoleAssignmentData(a)));
         }
 
-        public async override Task<ArmResponse<RoleAssignmentOperations>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<RoleAssignment>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<RoleAssignmentOperations, Azure.ResourceManager.Authorization.Models.RoleAssignment>(await Operations.GetByIdAsync(this.Id, cancellationToken), a => { Resource = new RoleAssignmentData(a); return this; });
+            return new PhArmResponse<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(await Operations.GetByIdAsync(this.Id, cancellationToken), a => new RoleAssignment(this.ClientContext, new RoleAssignmentData(a)));
         }
 
         internal RoleAssignmentsOperations Operations => GetClient<AuthorizationManagementClient>((baseUri, creds) => new AuthorizationManagementClient( Id.Subscription, baseUri, creds)).RoleAssignments;
