@@ -13,7 +13,6 @@ namespace azure_proto_core
 
         public static ref readonly Location Default => ref WestUS;
 
-        // public static readonly Location WestUS = new Location { Name = "WestUS", CanonicalName = "west-us", DisplayName = "West US" };
         public string Name { get; internal set; }
 
         public string CanonicalName { get; internal set; }
@@ -114,16 +113,19 @@ namespace azure_proto_core
             { "BRAZILSOUTHEAST", BrazilSoutheast },
         };
 
+        private Location()
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Location"/> class.
         /// </summary>
         /// <param name="location">Plain, cannonical or display name of the Location.</param>
-        public Location(string location)
+        private Location(string location)
         {
             if (location == null)
             {
-                // TO DO: EXCEPTION TYPE OR WHAT TO DO
-                throw new Exception();
+                throw new ArgumentNullException(nameof(location));
             }
 
             string normalizedLocation = NormalizationUtility(location);
@@ -158,9 +160,15 @@ namespace azure_proto_core
             }
         }
 
-        internal Location()
-        {
-        }
+        /// <summary>
+        /// </summary>
+        /// <param name="other">Location object to be assigned.</param>
+        public static implicit operator Location(string other) => new Location(other);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="other">Location object to be assigned.</param>
+        public static implicit operator string(Location other) => other.DisplayName;
 
         private static string NormalizationUtility(string value)
         {
@@ -261,7 +269,7 @@ namespace azure_proto_core
             char[] chName = name.ToCharArray();
             chName[0] = char.ToUpper(chName[0]);
 
-            for (int i = 0; i < chName.Length; i++)
+            for (int i = 0; i < chName.Length-1; i++)
             {
                 if (chName[i] == '-')
                 {
@@ -313,15 +321,5 @@ namespace azure_proto_core
             }
             return this.Name.CompareTo(other);
         }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="other">Location object to be assigned.</param>
-        public static implicit operator string(Location other) => other.DisplayName;
-
-        /// <summary>
-        /// </summary>
-        /// <param name="other">Location object to be assigned.</param>
-        public static implicit operator Location(string other) => new Location(other);
     }
 }

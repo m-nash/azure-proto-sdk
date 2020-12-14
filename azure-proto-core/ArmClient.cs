@@ -125,7 +125,7 @@ namespace azure_proto_core
                     var foundResource = provider.ResourceTypes.FirstOrDefault(p => resourceType.Equals(p.ResourceType));
                     foreach (var location in foundResource.Locations)
                     {
-                        yield return new azure_proto_core.Location(location);
+                        yield return location;
                     }
                 }
             }
@@ -142,7 +142,7 @@ namespace azure_proto_core
             return GetResourcesClient(subscription).Providers.List(expand: "metadata", cancellationToken: cancellationToken)
                 .FirstOrDefault(p => string.Equals(p.Namespace, resourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase))
                 .ResourceTypes.FirstOrDefault(r => resourceType.Equals(r.ResourceType))
-                .Locations.Select(l => new azure_proto_core.Location(l));
+                .Locations.Cast<Location>();
         }
 
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
