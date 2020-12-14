@@ -269,6 +269,14 @@ namespace azure_proto_core_test
         }
 
         [TestCase]
+        public void TestEqualsOtherIdentityNull()
+        {
+            SystemAssignedIdentity identity1 = new SystemAssignedIdentity();
+            SystemAssignedIdentity identity2 = null;
+            Assert.IsFalse(SystemAssignedIdentity.Equals(identity1, identity2));
+        }
+
+        [TestCase]
         public void TestEqualsReference()
         {
             SystemAssignedIdentity identity1 = new SystemAssignedIdentity(new Guid("72f988bf-86f1-41af-91ab-2d7cd011db47"), new Guid("de29bab1-49e1-4705-819b-4dfddceaaa98"));
