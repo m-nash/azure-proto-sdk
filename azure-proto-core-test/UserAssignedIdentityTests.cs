@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace azure_proto_core_test
 {
-    public class UserAssignedIdentityTests : UserAssignedIdentity
+    public class UserAssignedIdentityTests
     {
         [TestCase(0, null, null, null, null)]
         [TestCase(0, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
@@ -133,14 +133,14 @@ namespace azure_proto_core_test
         public void TestDeserializerDefaultJson()
         {
             JsonElement invalid = default(JsonElement);
-            Assert.Throws<ArgumentNullException>(delegate { Deserialize(invalid); });
+            Assert.Throws<ArgumentNullException>(delegate { UserAssignedIdentity.Deserialize(invalid); });
         }
 
         [TestCase]
         public void TestDeserializerValid()
         {
             var identityJsonProperty = DeserializerHelper("UserAssignedValid.json");
-            UserAssignedIdentity back = Deserialize(identityJsonProperty);
+            UserAssignedIdentity back = UserAssignedIdentity.Deserialize(identityJsonProperty);
             Assert.IsTrue("3beb288c-c3f9-4300-896f-02fbf175b6be".Equals(back.ClientId.ToString()));
             Assert.IsTrue("d0416856-d6cf-466d-8d64-ddc8d7782096".Equals(back.PrincipalId.ToString()));
         }
@@ -149,7 +149,7 @@ namespace azure_proto_core_test
         public void TestDeserializerValidExtraField()
         {
             var identityJsonProperty = DeserializerHelper("UserAssignedExtraField.json");
-            UserAssignedIdentity back = Deserialize(identityJsonProperty);
+            UserAssignedIdentity back = UserAssignedIdentity.Deserialize(identityJsonProperty);
             Assert.IsTrue("3beb288c-c3f9-4300-896f-02fbf175b6be".Equals(back.ClientId.ToString()));
             Assert.IsTrue("d0416856-d6cf-466d-8d64-ddc8d7782096".Equals(back.PrincipalId.ToString()));
         }
@@ -158,7 +158,7 @@ namespace azure_proto_core_test
         public void TestDeserializerBothValuesNull()
         {
             var identityJsonProperty = DeserializerHelper("UserAssignedBothValuesNull.json");
-            var back = Deserialize(identityJsonProperty);
+            var back = UserAssignedIdentity.Deserialize(identityJsonProperty);
             Assert.IsNull(back);
         }
 
@@ -166,35 +166,35 @@ namespace azure_proto_core_test
         public void TestDeserializerBothEmptyString()
         {
             var identityJsonProperty = DeserializerHelper("UserAssignedBothEmptyString.json");
-            Assert.Throws<FormatException>(delegate { Deserialize(identityJsonProperty); });
+            Assert.Throws<FormatException>(delegate { UserAssignedIdentity.Deserialize(identityJsonProperty); });
         }
 
         [TestCase]
         public void TestDeserializerOneEmptyString()
         {
             var identityJsonProperty = DeserializerHelper("UserAssignedOneEmptyString.json");
-            Assert.Throws<FormatException>(delegate { Deserialize(identityJsonProperty); });
+            Assert.Throws<FormatException>(delegate { UserAssignedIdentity.Deserialize(identityJsonProperty); });
         }
 
         [TestCase]
         public void TestDeserializerClientIdValueNull()
         {
             var identityJsonProperty = DeserializerHelper("UserAssignedOneValueNull.json");
-            Assert.Throws<InvalidOperationException>(delegate { Deserialize(identityJsonProperty); });
+            Assert.Throws<InvalidOperationException>(delegate { UserAssignedIdentity.Deserialize(identityJsonProperty); });
         }
 
         [TestCase]
         public void TestDeserializerPrincipalIdValueNull()
         {
             var identityJsonProperty = DeserializerHelper("UserAssignedOneOtherValueNull.json");
-            Assert.Throws<InvalidOperationException>(delegate { Deserialize(identityJsonProperty); });
+            Assert.Throws<InvalidOperationException>(delegate { UserAssignedIdentity.Deserialize(identityJsonProperty); });
         }
 
         [TestCase]
         public void TestDeserializerClientIdInvalid()
         {
             var identityJsonProperty = DeserializerHelper("UserAssignedInvalid.json");
-            Assert.Throws<InvalidOperationException>(delegate { Deserialize(identityJsonProperty); });
+            Assert.Throws<InvalidOperationException>(delegate { UserAssignedIdentity.Deserialize(identityJsonProperty); });
         }
 
         [TestCase]
@@ -209,7 +209,7 @@ namespace azure_proto_core_test
                 {
                     foreach (var keyValuePair in property.Value.EnumerateObject())
                     {
-                        Assert.Throws<InvalidOperationException>(delegate { Deserialize(keyValuePair.Value); });
+                        Assert.Throws<InvalidOperationException>(delegate { UserAssignedIdentity.Deserialize(keyValuePair.Value); });
                     }
                 }
             }
@@ -229,7 +229,7 @@ namespace azure_proto_core_test
                 {
                     foreach (var keyValuePair in property.Value.EnumerateObject())
                     {
-                        identities[count] = Deserialize(keyValuePair.Value);
+                        identities[count] = UserAssignedIdentity.Deserialize(keyValuePair.Value);
                         count++;
                     }
                 }
@@ -241,7 +241,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase]
-        public void TestSerializer()
+        public void TestSerializerValidIdentity()
         {
             UserAssignedIdentity userAssignedIdentity = new UserAssignedIdentity(new Guid("72f988bf-86f1-41af-91ab-2d7cd011db47"), new Guid("de29bab1-49e1-4705-819b-4dfddceaaa98"));
             string value = "";
@@ -250,7 +250,7 @@ namespace azure_proto_core_test
                 using (StreamReader streamReader = new StreamReader(stream))
                 {
                     var writer = new Utf8JsonWriter(stream);
-                    Serialize(writer, userAssignedIdentity);
+                    UserAssignedIdentity.Serialize(writer, userAssignedIdentity);
                     stream.Seek(0, SeekOrigin.Begin);
                     value = streamReader.ReadToEnd();
                 }
