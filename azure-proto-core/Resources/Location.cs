@@ -206,7 +206,7 @@ namespace azure_proto_core
         private static NameType DetectNameType(string location)
         {
             string canonicalPattern = "^[a-z]+(-[a-z]+)+(-[1-9])?$";
-            string displayPattern = "^[A-Z]+[a-z]*( [A-Z]+[a-z]*)*( [1-9])?$";
+            string displayPattern = "^[A-Z]+[a-z]*( [A-Z]+[a-z]*)+( [1-9])?$";
 
             if (Regex.IsMatch(location, canonicalPattern))
             {
