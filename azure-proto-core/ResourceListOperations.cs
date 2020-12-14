@@ -179,7 +179,7 @@ namespace azure_proto_core
         {
             return new PhWrappingPageable<GenericResourceExpanded, TOperations>(
                 result,
-                CreateResourceConvertor<TOperations, TResource>(clientContext, clientOptions));
+                CreateResourceConverter<TOperations, TResource>(clientContext, clientOptions));
         }
 
         private static AsyncPageable<TOperations> ConvertResultsAsync<TOperations, TResource>(
@@ -191,10 +191,10 @@ namespace azure_proto_core
         {
             return new PhWrappingAsyncPageable<GenericResourceExpanded, TOperations>(
                 result,
-                CreateResourceConvertor<TOperations, TResource>(clientContext, clientOptions));
+                CreateResourceConverter<TOperations, TResource>(clientContext, clientOptions));
         }
 
-        private static Func<GenericResourceExpanded, TOperations> CreateResourceConvertor<TOperations, TResource>(ArmClientContext clientContext, ArmClientOptions clientOptions)
+        private static Func<GenericResourceExpanded, TOperations> CreateResourceConverter<TOperations, TResource>(ArmClientContext clientContext, ArmClientOptions clientOptions)
             where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
