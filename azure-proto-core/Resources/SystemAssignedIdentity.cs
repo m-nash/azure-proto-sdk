@@ -23,22 +23,14 @@
             if (other == null)
                 return 1;
 
-            if (!TenantId.HasValue && !other.TenantId.HasValue)
+            int compareResult = 0;
+            if ((compareResult = PrincipalId.GetValueOrDefault().CompareTo(other.PrincipalId.GetValueOrDefault())) == 0 &&
+                (compareResult = TenantId.GetValueOrDefault().CompareTo(other.TenantId.GetValueOrDefault())) == 0)
+            {
                 return 0;
+            }
 
-            if (!TenantId.HasValue)
-                return -1;
-
-            if (!other.TenantId.HasValue)
-                return 1;
-
-            if (TenantId.Value.CompareTo(other.TenantId.Value) == 1 && PrincipalId.Value.CompareTo(other.PrincipalId.Value) == 1)
-                return 1;
-
-            if (TenantId.Value.CompareTo(other.TenantId.Value) == 0 && PrincipalId.Value.CompareTo(other.PrincipalId.Value) == 0)
-                return 0;
-
-            return -1;
+            return compareResult;
         }
 
         public bool Equals(SystemAssignedIdentity other)
@@ -46,13 +38,7 @@
             if (other == null)
                 return false;
 
-            if (!TenantId.HasValue && !other.TenantId.HasValue)
-                return true;
-
-            if (!TenantId.HasValue || !other.TenantId.HasValue)
-                return false;
-
-            return TenantId.Value.Equals(other.TenantId.Value) && PrincipalId.Value.Equals(other.PrincipalId.Value);
+            return TenantId.Equals(other.TenantId) && PrincipalId.Equals(other.PrincipalId);
         }
 
         public static SystemAssignedIdentity Deserialize(JsonElement element)
