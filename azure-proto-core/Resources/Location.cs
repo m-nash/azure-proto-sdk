@@ -217,12 +217,26 @@ namespace azure_proto_core
             other = NormalizationUtility(other);
             if (this.publicCloudLocations.ContainsKey(other))
             {
-                return this == this.publicCloudLocations[other];
+                if (this.Name == this.publicCloudLocations[other].Name && this.CanonicalName == this.publicCloudLocations[other].CanonicalName && this.DisplayName == this.publicCloudLocations[other].DisplayName)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
                 Location foo = other;
-                return this == foo;
+                if (this.Name == foo.Name && this.CanonicalName == foo.CanonicalName && this.DisplayName == foo.DisplayName)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
 
