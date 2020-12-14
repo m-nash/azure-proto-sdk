@@ -103,7 +103,10 @@ namespace azure_proto_compute
             return UpdateAsync(patchable);
         }
 
-        internal AvailabilitySetsOperations Operations => GetClient<ComputeManagementClient>((uri, cred) => new ComputeManagementClient(uri, Id.Subscription, cred,
-                    ArmClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).AvailabilitySets;
+        internal AvailabilitySetsOperations Operations => GetClient<ComputeManagementClient>((uri, cred) => 
+            new ComputeManagementClient(uri, 
+                                        Id.Subscription, 
+                                        cred, 
+                                        ArmClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).AvailabilitySets;
     }
 }
