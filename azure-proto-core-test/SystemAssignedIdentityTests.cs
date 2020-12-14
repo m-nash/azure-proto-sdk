@@ -28,16 +28,22 @@ namespace azure_proto_core_test
             SystemAssignedIdentity identity1;
             SystemAssignedIdentity identity2;
             if (tenantId1 == null)
+            {
                 identity1 = new SystemAssignedIdentity();
-
+            }
             else
+            {
                 identity1 = new SystemAssignedIdentity(new Guid(tenantId1), new Guid(principalId1));
+            }
 
             if (tenantId2 == null)
+            {
                 identity2 = new SystemAssignedIdentity();
-
+            }
             else
+            {
                 identity2 = new SystemAssignedIdentity(new Guid(tenantId2), new Guid(principalId2));
+            }
 
             Assert.AreEqual(answer, identity1.CompareTo(identity2));
             Assert.AreEqual(answer * -1, identity2.CompareTo(identity1));
@@ -50,16 +56,22 @@ namespace azure_proto_core_test
             SystemAssignedIdentity identity1;
             SystemAssignedIdentity identity2;
             if (tenantId1 == null)
+            {
                 identity1 = new SystemAssignedIdentity();
-
+            }
             else
+            {
                 identity1 = new SystemAssignedIdentity(new Guid(tenantId1), new Guid(principalId1));
+            }
 
             if (tenantId2 == null)
+            {
                 identity2 = new SystemAssignedIdentity();
-
+            }
             else
+            {
                 identity2 = new SystemAssignedIdentity(new Guid(tenantId2), new Guid(principalId2));
+            }
 
             Assert.IsTrue(identity1.Equals(identity2));
         }
@@ -74,16 +86,22 @@ namespace azure_proto_core_test
             SystemAssignedIdentity identity1;
             SystemAssignedIdentity identity2;
             if (tenantId1 == null)
+            {
                 identity1 = new SystemAssignedIdentity();
-
+            }
             else
+            {
                 identity1 = new SystemAssignedIdentity(new Guid(tenantId1), new Guid(principalId1));
+            }
 
             if (tenantId2 == null)
+            {
                 identity2 = new SystemAssignedIdentity();
-
+            }
             else
+            {
                 identity2 = new SystemAssignedIdentity(new Guid(tenantId2), new Guid(principalId2));
+            }
 
             Assert.IsFalse(identity1.Equals(identity2));
         }
