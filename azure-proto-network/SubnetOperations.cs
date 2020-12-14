@@ -21,7 +21,7 @@ namespace azure_proto_network
         }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
-        
+
         internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
                     ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).Subnets;
 

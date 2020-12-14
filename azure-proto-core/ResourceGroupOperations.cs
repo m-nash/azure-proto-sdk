@@ -41,7 +41,7 @@ namespace azure_proto_core
 
         public ArmOperation<Response> StartDelete()
         {
-            return new ArmVoidOperation( Operations.StartDelete(Id.Name));
+            return new ArmVoidOperation(Operations.StartDelete(Id.Name));
         }
 
         public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)

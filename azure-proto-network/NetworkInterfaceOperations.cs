@@ -21,7 +21,7 @@ namespace azure_proto_network
 
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 
-        internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred, 
+        internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).NetworkInterfaces;
 
         public ArmResponse<Response> Delete()
@@ -83,7 +83,7 @@ namespace azure_proto_network
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
             return new PhArmOperation<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
-                await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken), 
+                await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
                 n =>
                 {
                     Resource = new NetworkInterfaceData(n);

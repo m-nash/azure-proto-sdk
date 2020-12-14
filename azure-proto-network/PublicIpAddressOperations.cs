@@ -10,7 +10,7 @@ namespace azure_proto_network
     public class PublicIpAddressOperations : ResourceOperationsBase<PublicIpAddress, PublicIPAddressData>, ITaggable<PublicIpAddress, PublicIPAddressData>, IDeletableResource<PublicIpAddress, PublicIPAddressData>
     {
         internal PublicIpAddressOperations(ArmResourceOperations genericOperations)
-            : base(genericOperations.ClientContext,genericOperations.Id, genericOperations.ClientOptions)
+            : base(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
         {
         }
 
@@ -21,7 +21,7 @@ namespace azure_proto_network
 
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
-        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,  
+        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).PublicIPAddresses;
 
         public ArmResponse<Response> Delete()
@@ -47,7 +47,7 @@ namespace azure_proto_network
 
         public override ArmResponse<PublicIpAddress> Get()
         {
-            return new PhArmResponse<PublicIpAddress, PublicIPAddress>(Operations.Get(Id.ResourceGroup, Id.Name), 
+            return new PhArmResponse<PublicIpAddress, PublicIPAddress>(Operations.Get(Id.ResourceGroup, Id.Name),
                 n =>
                 {
                     Resource = new PublicIPAddressData(n);

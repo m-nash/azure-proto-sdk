@@ -13,7 +13,7 @@ namespace azure_proto_network
     public class VirtualNetworkOperations : ResourceOperationsBase<VirtualNetwork, VirtualNetworkData>, ITaggable<VirtualNetwork, VirtualNetworkData>, IDeletableResource<VirtualNetwork, VirtualNetworkData>
     {
         internal VirtualNetworkOperations(ArmResourceOperations genericOperations)
-            : base(genericOperations.ClientContext,genericOperations.Id, genericOperations.ClientOptions)
+            : base(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
         {
         }
 
@@ -50,7 +50,7 @@ namespace azure_proto_network
 
         public override ArmResponse<VirtualNetwork> Get()
         {
-            return new PhArmResponse<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(Operations.Get(Id.ResourceGroup, Id.Name), 
+            return new PhArmResponse<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(Operations.Get(Id.ResourceGroup, Id.Name),
                 n =>
                 {
                     Resource = new VirtualNetworkData(n);
