@@ -15,7 +15,7 @@ namespace client
             var vmOp = rgOp.VirtualMachine(Context.VmName);
 
             var vm = vmOp.Get().Value;
-            Console.WriteLine($"Adding tags to {vm.Model.Name}");
+            Console.WriteLine($"Adding tags to {vm.Data.Name}");
             vm.AddTag("tagkey", "tagvalue");
         }
     }

@@ -1,63 +1,77 @@
-﻿using Azure;
-using Azure.ResourceManager.Resources;
-using Azure.ResourceManager.Resources.Models;
-using azure_proto_core.Adapters;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 using System;
 using System.Threading;
+using Azure;
+using Azure.ResourceManager.Resources;
+using azure_proto_core.Adapters;
 
 namespace azure_proto_core
 {
     /// <summary>
-    /// Subscription operations
+    ///     Subscription operations
     /// </summary>
     public class SubscriptionOperations : OperationsBase
     {
         public static readonly string AzureResourceType = "Microsoft.Resources/subscriptions";
 
-        public SubscriptionOperations(ArmClientContext context, string defaultSubscription) : base(context, $"/subscriptions/{defaultSubscription}") { }
+        internal SubscriptionOperations(ArmClientContext context, string defaultSubscription, ArmClientOptions clientOptions)
+            : base(context, $"/subscriptions/{defaultSubscription}", clientOptions)
+        {
+        }
 
-        public SubscriptionOperations(ArmClientContext context, ResourceIdentifier id) : base(context, id) { }
+        internal SubscriptionOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+            : base(context, id, clientOptions)
+        {
+        }
 
-        public SubscriptionOperations(ArmClientContext context, Resource subscription) : base(context, subscription) { }
+        internal SubscriptionOperations(ArmClientContext context, Resource subscription, ArmClientOptions clientOptions)
+            : base(context, subscription, clientOptions)
+        {
+        }
 
         public override ResourceType ResourceType => AzureResourceType;
 
-        public Pageable<ResourceGroupOperations> ListResourceGroups(CancellationToken cancellationToken = default(CancellationToken))
+        internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) =>
+            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
+
+        internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) =>
+            new ResourcesManagementClient(uri, Id.Subscription, cred, ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
+
+        public Pageable<ResourceGroupOperations> ListResourceGroups(CancellationToken cancellationToken = default)
         {
-            return new PhWrappingPageable<ResourceGroup, ResourceGroupOperations>(
+            return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.ResourceGroup, ResourceGroupOperations>(
                 RgOperations.List(null, null, cancellationToken),
-                s => new ResourceGroupOperations(ClientContext, new PhResourceGroup(s)));
+                s => new ResourceGroupOperations(ClientContext, new ResourceGroupData(s), ClientOptions));
         }
 
-        public AsyncPageable<ResourceGroupOperations> ListResourceGroupsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public AsyncPageable<ResourceGroupOperations> ListResourceGroupsAsync(
+            CancellationToken cancellationToken = default)
         {
-            return new PhWrappingAsyncPageable<ResourceGroup, ResourceGroupOperations>(
+            return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.ResourceGroup, ResourceGroupOperations>(
                 RgOperations.ListAsync(null, null, cancellationToken),
-                s => new ResourceGroupOperations(ClientContext, new PhResourceGroup(s)));
+                s => new ResourceGroupOperations(ClientContext, new ResourceGroupData(s), ClientOptions));
         }
 
-        public ResourceGroupOperations ResourceGroup(PhResourceGroup resourceGroup)
+        public ResourceGroupOperations ResourceGroup(ResourceGroupData resourceGroup)
         {
-            return new ResourceGroupOperations(ClientContext, resourceGroup);
+            return new ResourceGroupOperations(ClientContext, resourceGroup, ClientOptions);
         }
 
         public ResourceGroupOperations ResourceGroup(ResourceIdentifier resourceGroup)
         {
-            return new ResourceGroupOperations(ClientContext, resourceGroup);
+            return new ResourceGroupOperations(ClientContext, resourceGroup, ClientOptions);
         }
 
         public ResourceGroupOperations ResourceGroup(string resourceGroup)
         {
-            return new ResourceGroupOperations(ClientContext, $"{Id}/resourceGroups/{resourceGroup}");
+            return new ResourceGroupOperations(ClientContext, $"{Id}/resourceGroups/{resourceGroup}", ClientOptions);
         }
 
         public ResourceGroupContainerOperations ResourceGroups()
         {
-            return new ResourceGroupContainerOperations(this.ClientContext, this);
+            return new ResourceGroupContainerOperations(ClientContext, this, ClientOptions);
         }
-
-        internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred)).Subscriptions;
-
-        internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Id.Subscription, cred)).ResourceGroups;
     }
 }

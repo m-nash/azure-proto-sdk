@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -6,7 +9,7 @@ using System.Text.RegularExpressions;
 namespace azure_proto_core
 {
     /// <summary>
-    /// TODO: follow the full guidelines for these immutable types (IComparable, IEquatable, operator overloads, etc.)
+    ///     TODO: follow the full guidelines for these immutable types (IComparable, IEquatable, operator overloads, etc.)
     /// </summary>
     public class Location : IEquatable<Location>, IEquatable<string>, IComparable<Location>, IComparable<string>
     {

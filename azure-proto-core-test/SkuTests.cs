@@ -6,7 +6,7 @@ namespace azure_proto_core_test
     class SkuTests
     {
         [TestCase(0, "name", "name")]
-        [TestCase(1, "Name", "name")]
+        [TestCase(0, "Name", "name")]
         [TestCase(0, null, null)]
         [TestCase(1, "name", null)]
         [TestCase(-1, null, "name")]
@@ -22,7 +22,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase(0, "family", "family")]
-        [TestCase(1, "Family", "family")]
+        [TestCase(0, "Family", "family")]
         [TestCase(0, null, null)]
         [TestCase(1, "family", null)]
         [TestCase(-1, null, "family")]
@@ -38,7 +38,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase(0, "size", "size")]
-        [TestCase(1, "Size", "size")]
+        [TestCase(0, "Size", "size")]
         [TestCase(0, null, null)]
         [TestCase(1, "size", null)]
         [TestCase(-1, null, "size")]
@@ -54,7 +54,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase(0, "tier", "tier")]
-        [TestCase(1, "Tier", "tier")]
+        [TestCase(0, "Tier", "tier")]
         [TestCase(0, null, null)]
         [TestCase(1, "tier", null)]
         [TestCase(-1, null, "tier")]
@@ -91,8 +91,30 @@ namespace azure_proto_core_test
             Assert.AreEqual(1, sku1.CompareTo(sku2));
         }
 
+        [Test]
+        public void CompareToSameSkus()
+        {
+            Sku sku1 = new Sku();
+            Sku sku2 = sku1;
+            Assert.AreEqual(0, sku1.CompareTo(sku2));
+        }
+
+        [TestCase(1, "Nameb", "namea", "familya", "Familyb")]
+        [TestCase(1, "Nameb", "namea", "familya", "familya")]
+        [TestCase(-1, "namea", "Nameb", "Familyb", "familya")]
+        public void CompareToMore(int expected, string name1, string name2, string family1, string family2)
+        {
+            Sku sku1 = new Sku();
+            Sku sku2 = new Sku();
+            sku1.Name = name1;
+            sku2.Name = name2;
+            sku1.Family = family1;
+            sku2.Family = family2;
+            Assert.AreEqual(expected, sku1.CompareTo(sku2));
+        }
+
         [TestCase(true, "name", "name")]
-        [TestCase(false, "Name", "name")]
+        [TestCase(true, "Name", "name")]
         [TestCase(true, null, null)]
         [TestCase(false, "name", null)]
         [TestCase(false, null, "name")]
@@ -115,7 +137,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase(true, "family", "family")]
-        [TestCase(false, "Family", "family")]
+        [TestCase(true, "Family", "family")]
         [TestCase(true, null, null)]
         [TestCase(false, "family", null)]
         [TestCase(false, null, "family")]
@@ -138,7 +160,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase(true, "size", "size")]
-        [TestCase(false, "Size", "size")]
+        [TestCase(true, "Size", "size")]
         [TestCase(true, null, null)]
         [TestCase(false, "size", null)]
         [TestCase(false, null, "size")]
@@ -161,7 +183,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase(true, "tier", "tier")]
-        [TestCase(false, "Tier", "tier")]
+        [TestCase(true, "Tier", "tier")]
         [TestCase(true, null, null)]
         [TestCase(false, "tier", null)]
         [TestCase(false, null, "tier")]
@@ -218,6 +240,14 @@ namespace azure_proto_core_test
             Sku sku1 = new Sku();
             object sku2 = "random";
             Assert.IsFalse(sku1.Equals(sku2));
+        }
+
+        [Test]
+        public void EqualsToSameSkus()
+        {
+            Sku sku1 = new Sku();
+            Sku sku2 = sku1;
+            Assert.IsTrue(sku1.Equals(sku2));
         }
     }
 }

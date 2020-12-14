@@ -12,6 +12,7 @@ namespace client
             {
                 scenario = ScenarioFactory.GetScenario(Scenarios.ListByNameExpanded);
                 scenario.Execute();
+
             }
             finally
             {

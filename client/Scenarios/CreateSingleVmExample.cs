@@ -44,11 +44,11 @@ namespace client
 
             // Create Network Interface
             Console.WriteLine("--------Start create Network Interface--------");
-            var nic = resourceGroup.NetworkInterfaces().Construct(ipAddress.Model, subnet.Id).Create($"{Context.VmName}_nic").Value;
+            var nic = resourceGroup.NetworkInterfaces().Construct(ipAddress.Data, subnet.Id).Create($"{Context.VmName}_nic").Value;
 
             // Create VM
             Console.WriteLine("--------Start create VM--------");
-            var vm = resourceGroup.VirtualMachines().Construct(Context.VmName, "admin-user", "!@#$%asdfA", nic.Id, aset.Model).Create(Context.VmName).Value;
+            var vm = resourceGroup.VirtualMachines().Construct(Context.VmName, "admin-user", "!@#$%asdfA", nic.Id, aset.Data).Create(Context.VmName).Value;
 
             Console.WriteLine("VM ID: " + vm.Id);
             Console.WriteLine("--------Done create VM--------");

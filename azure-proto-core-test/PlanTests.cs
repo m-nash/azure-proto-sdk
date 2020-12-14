@@ -6,7 +6,7 @@ namespace azure_proto_core_test
     class PlanTests
     {
         [TestCase(0, "name", "name")]
-        [TestCase(1, "Name", "name")]
+        [TestCase(0, "Name", "name")]
         [TestCase(0, null, null)]
         [TestCase(1, "name", null)]
         [TestCase(-1, null, "name")]
@@ -22,7 +22,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase(0, "product", "product")]
-        [TestCase(1, "Product", "product")]
+        [TestCase(0, "Product", "product")]
         [TestCase(0, null, null)]
         [TestCase(1, "product", null)]
         [TestCase(-1, null, "product")]
@@ -38,7 +38,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase(0, "promotionCode", "promotionCode")]
-        [TestCase(1, "PromotionCode", "promotionCode")]
+        [TestCase(0, "PromotionCode", "promotionCode")]
         [TestCase(0, null, null)]
         [TestCase(1, "promotionCode", null)]
         [TestCase(-1, null, "promotionCode")]
@@ -54,7 +54,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase(0, "publisher", "publisher")]
-        [TestCase(1, "Publisher", "publisher")]
+        [TestCase(0, "Publisher", "publisher")]
         [TestCase(0, null, null)]
         [TestCase(1, "publisher", null)]
         [TestCase(-1, null, "publisher")]
@@ -70,7 +70,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase(0, "version", "version")]
-        [TestCase(1, "Version", "version")]
+        [TestCase(0, "Version", "version")]
         [TestCase(0, null, null)]
         [TestCase(1, "version", null)]
         [TestCase(-1, null, "version")]
@@ -93,8 +93,30 @@ namespace azure_proto_core_test
             Assert.AreEqual(1, plan1.CompareTo(plan2));
         }
 
+        [Test]
+        public void CompareToSamePlans()
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = plan1;
+            Assert.AreEqual(0, plan1.CompareTo(plan2));
+        }
+
+        [TestCase(1, "Nameb", "namea", "versiona", "Versionb")]
+        [TestCase(1, "Nameb", "namea", "versiona", "versiona")]
+        [TestCase(-1, "namea", "Nameb", "Versionb", "versiona")]
+        public void CompareToMore(int expected, string name1, string name2, string version1, string version2)
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = new Plan();
+            plan1.Name = name1;
+            plan2.Name = name2;
+            plan1.Version = version1;
+            plan2.Version = version2;
+            Assert.AreEqual(expected, plan1.CompareTo(plan2));
+        }
+
         [TestCase(true, "name", "name")]
-        [TestCase(false, "Name", "name")]
+        [TestCase(true, "Name", "name")]
         [TestCase(true, null, null)]
         [TestCase(false, "name", null)]
         [TestCase(false, null, "name")]
@@ -117,7 +139,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase(true, "product", "product")]
-        [TestCase(false, "Product", "product")]
+        [TestCase(true, "Product", "product")]
         [TestCase(true, null, null)]
         [TestCase(false, "product", null)]
         [TestCase(false, null, "product")]
@@ -140,7 +162,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase(true, "promotionCode", "promotionCode")]
-        [TestCase(false, "PromotionCode", "promotionCode")]
+        [TestCase(true, "PromotionCode", "promotionCode")]
         [TestCase(true, null, null)]
         [TestCase(false, "promotionCode", null)]
         [TestCase(false, null, "promotionCode")]
@@ -163,7 +185,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase(true, "publisher", "publisher")]
-        [TestCase(false, "Publisher", "publisher")]
+        [TestCase(true, "Publisher", "publisher")]
         [TestCase(true, null, null)]
         [TestCase(false, "publisher", null)]
         [TestCase(false, null, "publisher")]
@@ -186,7 +208,7 @@ namespace azure_proto_core_test
         }
 
         [TestCase(true, "version", "version")]
-        [TestCase(false, "Version", "version")]
+        [TestCase(true, "Version", "version")]
         [TestCase(true, null, null)]
         [TestCase(false, "version", null)]
         [TestCase(false, null, "version")]
@@ -222,6 +244,14 @@ namespace azure_proto_core_test
             Plan plan1 = new Plan();
             object plan2 = "random";
             Assert.IsFalse(plan1.Equals(plan2));
+        }
+
+        [Test]
+        public void EqualsToSamePlans()
+        {
+            Plan plan1 = new Plan();
+            Plan plan2 = plan1;
+            Assert.IsTrue(plan1.Equals(plan2));
         }
     }
 }
