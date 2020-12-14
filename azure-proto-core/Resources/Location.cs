@@ -11,16 +11,16 @@ namespace azure_proto_core
     /// <summary>
     ///     TODO: follow the full guidelines for these immutable types (IComparable, IEquatable, operator overloads, etc.)
     /// </summary>
-    public class Location : IEquatable<Location>, IEquatable<string>, IComparable<Location>, IComparable<string>
+    public class Location : IEquatable<Location>, IComparable<Location>
     {
 
         public static ref readonly Location Default => ref WestUS;
 
-        public string Name { get; internal set; }
+        public string Name { get; private set; }
 
-        public string CanonicalName { get; internal set; }
+        public string CanonicalName { get; private set; }
 
-        public string DisplayName { get; internal set; }
+        public string DisplayName { get; private set; }
 
         // Public Azure Locations
         public static readonly Location EastAsia = new Location { Name = "eastasia", CanonicalName = "east-asia", DisplayName = "East Asia" };
@@ -64,15 +64,7 @@ namespace azure_proto_core
         public static readonly Location NorwayWest = new Location { Name = "norwaywest", CanonicalName = "norway-west", DisplayName = "Norway West" };
         public static readonly Location BrazilSoutheast = new Location { Name = "brazilsoutheast", CanonicalName = "brazil-southeast", DisplayName = "Brazil Southeast" };
 
-        private enum NameType
-        {
-            Undefined,
-            Name,
-            CanonicalName,
-            DisplayName,
-        }
-
-        private Dictionary<string, Location> publicCloudLocations = new Dictionary<string, Location>()
+        private static Dictionary<string, Location> PublicCloudLocations = new Dictionary<string, Location>()
         {
             { "EASTASIA", EastAsia },
             { "SOUTHEASTASIA", SoutheastAsia },
@@ -133,40 +125,58 @@ namespace azure_proto_core
 
             string normalizedLocation = NormalizationUtility(location);
 
-            if (this.publicCloudLocations.ContainsKey(normalizedLocation))
+            Location value;
+
+            if (PublicCloudLocations.TryGetValue(normalizedLocation, out value))
             {
-                this.Name = this.publicCloudLocations[normalizedLocation].Name;
-                this.CanonicalName = this.publicCloudLocations[normalizedLocation].CanonicalName;
-                this.DisplayName = this.publicCloudLocations[normalizedLocation].DisplayName;
+                Name = value.Name;
+                CanonicalName = value.CanonicalName;
+                DisplayName = value.DisplayName;
             }
             else
             {
                 switch (DetectNameType(location))
                 {
-                    case NameType.Undefined:
                     case NameType.Name:
-                        this.Name = location;
-                        this.CanonicalName = location;
-                        this.DisplayName = location;
+                        Name = location;
+                        CanonicalName = location;
+                        DisplayName = location;
                         break;
                     case NameType.CanonicalName:
-                        this.Name = GetDefaultName(location, 1);
-                        this.CanonicalName = location;
-                        this.DisplayName = GetDisplayName(location, 1);
+                        Name = GetDefaultName(location, NameType.CanonicalName);
+                        CanonicalName = location;
+                        DisplayName = GetDisplayName(location, NameType.CanonicalName);
                         break;
                     case NameType.DisplayName:
-                        this.Name = GetDefaultName(location, 2);
-                        this.CanonicalName = GetCanonicalName(location, 2);
-                        this.DisplayName = location;
+                        Name = GetDefaultName(location, NameType.DisplayName);
+                        CanonicalName = GetCanonicalName(location, NameType.DisplayName);
+                        DisplayName = location;
                         break;
                 }
             }
         }
 
+        private enum NameType
+        {
+            Name,
+            CanonicalName,
+            DisplayName,
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="other">Location object to be assigned.</param>
-        public static implicit operator Location(string other) => new Location(other);
+        public static implicit operator Location(string other)
+        {
+            var normalizedName = NormalizationUtility(other);
+            Location value;
+            if (PublicCloudLocations.TryGetValue(normalizedName, out value))
+            {
+                return value;
+            }
+
+            return new Location(other);
+        }
 
         /// <summary>
         /// </summary>
@@ -195,16 +205,10 @@ namespace azure_proto_core
 
         private static NameType DetectNameType(string location)
         {
-            // string namePattern      = "^[A-Z][a-z]*([A-Z][A-z]*)*[1-9]?$";
-            string namePattern = "^[a-z]*[1-9]?$";
-            string canonicalPattern = "^[a-z]+(-[a-z]+)*(-[1-9])?$";
-            string displayPattern = "^[A-Z][a-z]*( [A-Z][A-z]*)*( [1-9])?$";
+            string canonicalPattern = "^[a-z]+(-[a-z]+)+(-[1-9])?$";
+            string displayPattern = "^[A-Z]+[a-z]*( [A-Z]+[a-z]*)*( [1-9])?$";
 
-            if (Regex.IsMatch(location, namePattern))
-            {
-                return NameType.Name;
-            }
-            else if (Regex.IsMatch(location, canonicalPattern))
+            if (Regex.IsMatch(location, canonicalPattern))
             {
                 return NameType.CanonicalName;
             }
@@ -214,21 +218,13 @@ namespace azure_proto_core
             }
             else
             {
-                return NameType.Undefined;
+                return NameType.Name;
             }
         }
 
         public bool Equals(Location other)
         {
-            return this.CanonicalName == other.CanonicalName;
-        }
-
-        public bool Equals(string other)
-        {
-            other = NormalizationUtility(other);
-            if (this.publicCloudLocations.ContainsKey(other))
-            {
-                if (this.Name == this.publicCloudLocations[other].Name && this.CanonicalName == this.publicCloudLocations[other].CanonicalName && this.DisplayName == this.publicCloudLocations[other].DisplayName)
+            if (Name == other.Name && CanonicalName == other.CanonicalName && DisplayName == other.DisplayName)
                 {
                     return true;
                 }
@@ -236,71 +232,54 @@ namespace azure_proto_core
                 {
                     return false;
                 }
-            }
-            else
-            {
-                Location foo = other;
-                if (this.Name == foo.Name && this.CanonicalName == foo.CanonicalName && this.DisplayName == foo.DisplayName)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
         }
 
         public override string ToString()
         {
-            return this.DisplayName;
+            return DisplayName;
         }
 
-        static string GetCanonicalName(string name, int patternType)
+        static string GetCanonicalName(string name, NameType patternType)
         {
             switch (patternType)
             {
-                case 2:
+                case NameType.DisplayName:
                     return Regex.Replace(name.ToLower(), @" ", "-");
                 default:
                     return name;
             }
         }
 
-        private static string ToTitleCase(string name)
-        {
-            char[] chName = name.ToCharArray();
-            chName[0] = char.ToUpper(chName[0]);
-
-            for (int i = 0; i < chName.Length-1; i++)
-            {
-                if (chName[i] == '-')
-                {
-                    chName[i + 1] = char.ToUpper(chName[i + 1]);
-                }
-            }
-
-            return new string(chName);
-        }
-
-        static string GetDisplayName(string name, int patternType)
+        static string GetDisplayName(string name, NameType patternType)
         {
             switch (patternType)
             {
-                case 1:
-                    return Regex.Replace(ToTitleCase(name), @"-", " ");
+                case NameType.CanonicalName:
+                    char[] chName = name.ToCharArray();
+                    chName[0] = char.ToUpper(chName[0]);
+
+                    for (int i = 0; i < chName.Length - 1; i++)
+                    {
+                        if (chName[i] == '-')
+                        {
+                            chName[i] = ' ';
+                            chName[i + 1] = char.ToUpper(chName[i + 1]);
+                        }
+                    }
+
+                    return chName.ToString();
                 default:
                     return name;
             }
         }
 
-        static string GetDefaultName(string name, int patternType)
+        static string GetDefaultName(string name, NameType patternType)
         {
             switch (patternType)
             {
-                case 1:
+                case NameType.CanonicalName:
                     return Regex.Replace(name, @"-", string.Empty);
-                case 2:
+                case NameType.DisplayName:
                     return Regex.Replace(name, @" ", string.Empty).ToLower();
                 default:
                     return name;
@@ -313,16 +292,7 @@ namespace azure_proto_core
             {
                 return 1;
             }
-            return this.Name.CompareTo(other.Name);
-        }
-
-        public int CompareTo(string other)
-        {
-            if (ReferenceEquals(other, null))
-            {
-                return 1;
-            }
-            return this.Name.CompareTo(other);
+            return Name.CompareTo(other.Name);
         }
     }
 }
