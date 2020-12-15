@@ -1,6 +1,6 @@
 ﻿using Azure;
-using azure_proto_core;
-using azure_proto_core.Resources;
+using Azure.ResourceManager.Core;
+using Azure.ResourceManager.Core.Resources;
 using System.Threading;
 
 namespace azure_proto_network

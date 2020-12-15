@@ -1,6 +1,6 @@
 ﻿using Azure;
 using Azure.ResourceManager.Network;
-using azure_proto_core;
+using Azure.ResourceManager.Core;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,7 +15,7 @@ namespace azure_proto_network
         {
         }
 
-        internal SubnetOperations(ArmClientContext context, azure_proto_core.Resource resource, ArmClientOptions clientOptions)
+        internal SubnetOperations(ArmClientContext context, Resource resource, ArmClientOptions clientOptions)
             : base(context, resource, clientOptions)
         {
         }
