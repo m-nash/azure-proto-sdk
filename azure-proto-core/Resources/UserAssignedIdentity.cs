@@ -26,22 +26,14 @@ namespace azure_proto_core.Resources
             if (other == null)
                 return 1;
 
-            if (!ClientId.HasValue && !other.ClientId.HasValue)
+            int compareResult = 0;
+            if ((compareResult = PrincipalId.GetValueOrDefault().CompareTo(other.PrincipalId.GetValueOrDefault())) == 0 &&
+                (compareResult = ClientId.GetValueOrDefault().CompareTo(other.ClientId.GetValueOrDefault())) == 0)
+            {
                 return 0;
+            }
 
-            if (!ClientId.HasValue)
-                return -1;
-
-            if (!other.ClientId.HasValue)
-                return 1;
-
-            if (ClientId.Value.CompareTo(other.ClientId.Value) == 1 && PrincipalId.Value.CompareTo(other.PrincipalId.Value) == 1)
-                return 1;
-
-            if (ClientId.Value.CompareTo(other.ClientId.Value) == 0 && PrincipalId.Value.CompareTo(other.PrincipalId.Value) == 0)
-                return 0;
-
-            return -1;
+            return compareResult;
         }
 
         public bool Equals(UserAssignedIdentity other)
@@ -49,13 +41,7 @@ namespace azure_proto_core.Resources
             if (other == null)
                 return false;
 
-            if (!ClientId.HasValue && !other.ClientId.HasValue)
-                return true;
-
-            if (!ClientId.HasValue || !other.ClientId.HasValue)
-                return false;
-
-            return ClientId.Value.Equals(other.ClientId.Value) && PrincipalId.Value.Equals(other.PrincipalId.Value);
+            return ClientId.Equals(other.ClientId) && PrincipalId.Equals(other.PrincipalId);
         }
 
         public static UserAssignedIdentity Deserialize(JsonElement element)
@@ -95,8 +81,11 @@ namespace azure_proto_core.Resources
 
         public static void Serialize(Utf8JsonWriter writer, UserAssignedIdentity userAssignedIdentity)
         {
-            if (userAssignedIdentity == null || writer == null)
-                throw new ArgumentNullException("UserAssignedIdentity or writer is null");
+            if (userAssignedIdentity == null)
+                throw new ArgumentNullException(nameof(userAssignedIdentity));
+
+            if (writer == null)
+                throw new ArgumentNullException("Utf8JsonWriter writer is null");
 
             writer.WriteStartObject();
 
