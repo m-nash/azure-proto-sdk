@@ -12,12 +12,12 @@ namespace azure_proto_core
         where TOperations : ResourceOperationsBase<TOperations, TResource>
     {
         protected TResource _resource;
-        protected ResourceContainerOperations<TOperations, TResource> _unTypedContainerOperations;
+        protected ResourceContainerBase<TOperations, TResource> _unTypedContainer;
 
-        public ArmBuilder(ResourceContainerOperations<TOperations, TResource> containerOperations, TResource resource)
+        public ArmBuilder(ResourceContainerBase<TOperations, TResource> container, TResource resource)
         {
             _resource = resource;
-            _unTypedContainerOperations = containerOperations;
+            _unTypedContainer = container;
         }
 
         public TResource Build()
@@ -34,7 +34,7 @@ namespace azure_proto_core
         {
             _resource = Build();
 
-            return _unTypedContainerOperations.Create(name, _resource, cancellationToken);
+            return _unTypedContainer.Create(name, _resource, cancellationToken);
         }
 
         public async Task<ArmResponse<TOperations>> CreateAsync(
@@ -43,14 +43,14 @@ namespace azure_proto_core
         {
             _resource = Build();
 
-            return await _unTypedContainerOperations.CreateAsync(name, _resource, cancellationToken);
+            return await _unTypedContainer.CreateAsync(name, _resource, cancellationToken);
         }
 
         public ArmOperation<TOperations> StartCreate(string name, CancellationToken cancellationToken = default)
         {
             _resource = Build();
 
-            return _unTypedContainerOperations.StartCreate(name, _resource, cancellationToken);
+            return _unTypedContainer.StartCreate(name, _resource, cancellationToken);
         }
 
         public async Task<ArmOperation<TOperations>> StartCreateAsync(
@@ -59,7 +59,7 @@ namespace azure_proto_core
         {
             _resource = Build();
 
-            return await _unTypedContainerOperations.StartCreateAsync(name, _resource, cancellationToken);
+            return await _unTypedContainer.StartCreateAsync(name, _resource, cancellationToken);
         }
 
         protected virtual bool IsValid(out string message)

@@ -26,16 +26,25 @@ namespace azure_proto_compute
 
         public override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
 
-        public ArmOperation<Response> Delete()
+        public ArmResponse<Response> Delete()
+        {
+            return new ArmVoidResponse(Operations.Delete(Id.ResourceGroup, Id.Name));
+        }
+
+        public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        {
+            return new ArmVoidResponse(await Operations.DeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
+        }
+
+        public ArmOperation<Response> StartDelete()
         {
             return new ArmVoidOperation(Operations.Delete(Id.ResourceGroup, Id.Name));
         }
 
-        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidOperation(await Operations.DeleteAsync(Id.ResourceGroup, Id.Name));
+            return new ArmVoidOperation(await Operations.DeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
-
         public override ArmResponse<AvailabilitySet> Get()
         {
             return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
@@ -94,7 +103,10 @@ namespace azure_proto_compute
             return UpdateAsync(patchable);
         }
 
-        internal AvailabilitySetsOperations Operations => GetClient<ComputeManagementClient>((uri, cred) => new ComputeManagementClient(uri, Id.Subscription, cred, 
-                    ArmClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).AvailabilitySets;
+        internal AvailabilitySetsOperations Operations => GetClient<ComputeManagementClient>((uri, cred) =>
+            new ComputeManagementClient(uri,
+                                        Id.Subscription,
+                                        cred,
+                                        ArmClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).AvailabilitySets;
     }
 }

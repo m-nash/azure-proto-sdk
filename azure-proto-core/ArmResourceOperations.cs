@@ -21,12 +21,22 @@ namespace azure_proto_core
         {
         }
 
-        public ArmOperation<Response> Delete()
+        public ArmResponse<Response> Delete()
         {
             throw new NotImplementedException();
         }
 
-        public Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ArmOperation<Response> StartDelete()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
