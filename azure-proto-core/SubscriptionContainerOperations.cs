@@ -29,17 +29,17 @@ namespace azure_proto_core
         {
             return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Subscription, SubscriptionOperations>(
                 Operations.List(cancellationToken),
-                Convertor());
+                Converter());
         }
 
         public AsyncPageable<SubscriptionOperations> ListAsync(CancellationToken cancellationToken = default)
         {
             return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.Subscription, SubscriptionOperations>(
                 Operations.ListAsync(cancellationToken),
-                Convertor());
+                Converter());
         }
 
-        private Func<Azure.ResourceManager.Resources.Models.Subscription, SubscriptionOperations> Convertor()
+        private Func<Azure.ResourceManager.Resources.Models.Subscription, SubscriptionOperations> Converter()
         {
             return s => new SubscriptionOperations(ClientContext, new SubscriptionData(s), ClientOptions);
         }
