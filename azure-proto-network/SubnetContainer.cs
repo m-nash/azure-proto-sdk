@@ -8,7 +8,7 @@ using System;
 
 namespace azure_proto_network
 {
-    public class SubnetContainer : ResourceContainerOperations<Subnet, SubnetData>
+    public class SubnetContainer : ResourceContainerBase<Subnet, SubnetData>
     {
         internal SubnetContainer(ArmClientContext context, VirtualNetworkData virtualNetwork, ArmClientOptions clientOptions)
             : base(context, virtualNetwork, clientOptions)
