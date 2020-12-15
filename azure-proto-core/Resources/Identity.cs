@@ -19,8 +19,6 @@ namespace azure_proto_core
 
         public ResourceIdentifier ResourceId { get; set; }
 
-        public IdentityKind Kind { get; set; }
-
         public int CompareTo(Identity other)
         {
             throw new NotImplementedException();
