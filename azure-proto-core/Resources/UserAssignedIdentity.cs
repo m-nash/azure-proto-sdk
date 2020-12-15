@@ -9,11 +9,9 @@ namespace azure_proto_core.Resources
 
     public class UserAssignedIdentity
     {
-        public Guid? ClientId { get; set; }
+        public Guid ClientId { get; set; }
 
-        public Guid? PrincipalId { get; set; }
-
-        public UserAssignedIdentity() { }
+        public Guid PrincipalId { get; set; }
 
         public UserAssignedIdentity(Guid clientId, Guid principalId)
         {
@@ -27,8 +25,8 @@ namespace azure_proto_core.Resources
                 return 1;
 
             int compareResult = 0;
-            if ((compareResult = PrincipalId.GetValueOrDefault().CompareTo(other.PrincipalId.GetValueOrDefault())) == 0 &&
-                (compareResult = ClientId.GetValueOrDefault().CompareTo(other.ClientId.GetValueOrDefault())) == 0)
+            if ((compareResult = ClientId.CompareTo(other.ClientId)) == 0 &&
+                (compareResult = PrincipalId.CompareTo(other.PrincipalId)) == 0)
             {
                 return 0;
             }
@@ -48,7 +46,7 @@ namespace azure_proto_core.Resources
         {
             if (element.ValueKind == JsonValueKind.Undefined)
             {
-                throw new ArgumentException("JsonElement is undefined" + nameof(element));
+                throw new ArgumentException("JsonElement is undefined " + nameof(element));
             }
 
             Optional<Guid> principalId = default;
@@ -90,18 +88,10 @@ namespace azure_proto_core.Resources
             writer.WriteStartObject();
 
             writer.WritePropertyName("clientId");
-            if (!Optional.IsDefined(userAssignedIdentity.ClientId))
-                writer.WriteStringValue("null");
-
-            else
-                writer.WriteStringValue(userAssignedIdentity.ClientId.ToString());
+            writer.WriteStringValue(userAssignedIdentity.ClientId.ToString());
 
             writer.WritePropertyName("principalId");
-            if (!Optional.IsDefined(userAssignedIdentity.PrincipalId))
-                writer.WriteStringValue("null");
-
-            else
-                writer.WriteStringValue(userAssignedIdentity.PrincipalId.ToString());
+            writer.WriteStringValue(userAssignedIdentity.PrincipalId.ToString());
 
             writer.WriteEndObject();
             writer.Flush();

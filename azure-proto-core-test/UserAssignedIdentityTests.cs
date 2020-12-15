@@ -9,131 +9,56 @@ namespace azure_proto_core_test
 {
     public class UserAssignedIdentityTests
     {
-        [TestCase(0, null, null, null, null)]
         [TestCase(0, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
 
-        [TestCase(1, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", null, null)]
-        [TestCase(1, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa99", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
-        [TestCase(1, "72f988bf-86f1-41af-91ab-2d7cd011db46", "de29bab1-49e1-4705-819b-4dfddceaaa99", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
-        [TestCase(1, "72f988bf-86f1-41af-91ab-2d7cd011db48", "de29bab1-49e1-4705-819b-4dfddceaaa99", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
         [TestCase(1, "72f988bf-86f1-41af-91ab-2d7cd011db48", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
+        [TestCase(1, "72f988bf-86f1-41af-91ab-2d7cd011db48", "de29bab1-49e1-4705-819b-4dfddceaaa97", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
+        [TestCase(1, "72f988bf-86f1-41af-91ab-2d7cd011db48", "de29bab1-49e1-4705-819b-4dfddceaaa99", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
+        [TestCase(1, "72f988bf-86f1-41af-91ab-2d7cd011eb47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
 
-        [TestCase(-1, null, null, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
         [TestCase(-1, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db48", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
-        [TestCase(-1, "72f988bf-86f1-41af-91ab-2d7cd011db49", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db48", "de29bab1-49e1-4705-819b-4dfddceaaa99")]
-        [TestCase(-1, "72f988bf-86f1-41af-91ab-2d7cd011db46", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db48", "de29bab1-49e1-4705-819b-4dfddceaaa99")]
-        [TestCase(-1, "72f988bf-86f1-41af-91ab-2d7cd011db46", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db46", "de29bab1-49e1-4705-819b-4dfddceaaa99")]
+        [TestCase(-1, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db48", "de29bab1-49e1-4705-819b-4dfddceaaa99")]
+        [TestCase(-1, "72f988bf-86f1-41af-91ab-2d7cd011db46", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db48", "de29bab1-49e1-4705-819b-4dfddceaaa97")]
+        [TestCase(-1, "72f988bf-86f1-41af-91ab-2d7cd011db46", "de29bab1-49e1-4705-819b-4dfdbceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db46", "de29bab1-49e1-4705-819b-4dfddceaaa99")]
         public void CompareTo(int answer, string clientId1, string principalId1, string clientId2, string principalId2)
         {
-            UserAssignedIdentity identity1;
-            UserAssignedIdentity identity2;
-            if (clientId1 == null)
-            {
-                identity1 = new UserAssignedIdentity();
-            }
-            else
-            {
-                identity1 = new UserAssignedIdentity(new Guid(clientId1), new Guid(principalId1));
-            }
-
-            if (clientId2 == null)
-            {
-                identity2 = new UserAssignedIdentity();
-            }
-            else
-            {
-                identity2 = new UserAssignedIdentity(new Guid(clientId2), new Guid(principalId2));
-            }
-
+            UserAssignedIdentity identity1 = new UserAssignedIdentity(new Guid(clientId1), new Guid(principalId1));
+            UserAssignedIdentity identity2 = new UserAssignedIdentity(new Guid(clientId2), new Guid(principalId2));
+            
             Assert.AreEqual(answer, identity1.CompareTo(identity2));
             Assert.AreEqual(answer * -1, identity2.CompareTo(identity1));
         }
 
-        [TestCase(null, null, null, null)]
         [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
         public void EqualsMethodTrue(string clientId1, string principalId1, string clientId2, string principalId2)
         {
-            UserAssignedIdentity identity1;
-            UserAssignedIdentity identity2;
-            if (clientId1 == null)
-            {
-                identity1 = new UserAssignedIdentity();
-            }
-            else
-            {
-                identity1 = new UserAssignedIdentity(new Guid(clientId1), new Guid(principalId1));
-            }
-
-            if (clientId2 == null)
-            {
-                identity2 = new UserAssignedIdentity();
-            }
-            else
-            {
-                identity2 = new UserAssignedIdentity(new Guid(clientId2), new Guid(principalId2));
-            }
-
+            UserAssignedIdentity identity1 = new UserAssignedIdentity(new Guid(clientId1), new Guid(principalId1));
+            UserAssignedIdentity identity2 = new UserAssignedIdentity(new Guid(clientId2), new Guid(principalId2));
             Assert.IsTrue(identity1.Equals(identity2));
         }
 
-        [TestCase(null, null, "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98")]
-        [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", null, null)]
         [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa98", "72f988bf-86f1-41af-91ab-2d7cd011db44", "de29bab1-49e1-4705-819b-4dfddceaaa94")]
         [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa93", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa91")]
         [TestCase("72f988bf-86f1-41af-91ab-2d7cd011db49", "de29bab1-49e1-4705-819b-4dfddceaaa91", "72f988bf-86f1-41af-91ab-2d7cd011db47", "de29bab1-49e1-4705-819b-4dfddceaaa91")]
         public void EqualsMethodFalse(string clientId1, string principalId1, string clientId2, string principalId2)
         {
-            UserAssignedIdentity identity1;
-            UserAssignedIdentity identity2;
-            if (clientId1 == null)
-            {
-                identity1 = new UserAssignedIdentity();
-            }
-            else
-            {
-                identity1 = new UserAssignedIdentity(new Guid(clientId1), new Guid(principalId1));
-            }
-
-            if (clientId2 == null)
-            {
-                identity2 = new UserAssignedIdentity();
-            }
-            else
-            {
-                identity2 = new UserAssignedIdentity(new Guid(clientId2), new Guid(principalId2));
-            }
-
+            UserAssignedIdentity identity1 = new UserAssignedIdentity(new Guid(clientId1), new Guid(principalId1));
+            UserAssignedIdentity identity2 = new UserAssignedIdentity(new Guid(clientId2), new Guid(principalId2));
             Assert.IsFalse(identity1.Equals(identity2));
-        }
-
-        [TestCase]
-        public void EqualsMethodBothIdentitiesEmpty()
-        {
-            UserAssignedIdentity identity1 = new UserAssignedIdentity();
-            UserAssignedIdentity identity2 = new UserAssignedIdentity();
-            Assert.IsTrue(identity1.Equals(identity2));
         }
 
         [TestCase]
         public void EqualsMethodOneIdentityNull()
         {
-            UserAssignedIdentity identity1 = new UserAssignedIdentity();
+            UserAssignedIdentity identity1 = new UserAssignedIdentity(Guid.Empty, Guid.Empty);
             UserAssignedIdentity identity2 = null;
             Assert.IsFalse(identity1.Equals(identity2));
         }
 
         [TestCase]
-        public void CompareToMethodBothIdentitiesEmpty()
-        {
-            UserAssignedIdentity identity1 = new UserAssignedIdentity();
-            UserAssignedIdentity identity2 = new UserAssignedIdentity();
-            Assert.AreEqual(0, identity1.CompareTo(identity2));
-        }
-
-        [TestCase]
         public void CompareToMethodOneIdentityNull()
         {
-            UserAssignedIdentity identity1 = new UserAssignedIdentity();
+            UserAssignedIdentity identity1 = new UserAssignedIdentity(Guid.Empty, Guid.Empty);
             UserAssignedIdentity identity2 = null;
             Assert.AreEqual(1, identity1.CompareTo(identity2));
         }
@@ -161,7 +86,7 @@ namespace azure_proto_core_test
         public void TestDeserializerDefaultJson()
         {
             JsonElement invalid = default(JsonElement);
-            Assert.Throws<ArgumentNullException>(delegate { UserAssignedIdentity.Deserialize(invalid); });
+            Assert.Throws<ArgumentException>(delegate { UserAssignedIdentity.Deserialize(invalid); });
         }
 
         [TestCase]
@@ -288,25 +213,6 @@ namespace azure_proto_core_test
         }
 
         [TestCase]
-        public void TestSerializerEmptyIdentity()
-        {
-            UserAssignedIdentity userAssignedIdentity = new UserAssignedIdentity();
-            string value = "";
-            using (Stream stream = new MemoryStream())
-            {
-                using (StreamReader streamReader = new StreamReader(stream))
-                {
-                    var writer = new Utf8JsonWriter(stream);
-                    UserAssignedIdentity.Serialize(writer, userAssignedIdentity);
-                    stream.Seek(0, SeekOrigin.Begin);
-                    value = streamReader.ReadToEnd();
-                }
-            }
-            string actual = "{\"clientId\":\"null\",\"principalId\":\"null\"}";
-            Assert.AreEqual(actual, value);
-        }
-
-        [TestCase]
         public void TestSerializerNullIdentity()
         {
             UserAssignedIdentity userAssignedIdentity = null;
@@ -320,7 +226,7 @@ namespace azure_proto_core_test
         [TestCase]
         public void TestSerializerNullWriter()
         {
-            UserAssignedIdentity userAssignedIdentity = new UserAssignedIdentity();
+            UserAssignedIdentity userAssignedIdentity = new UserAssignedIdentity(new Guid("72f988bf-86f1-41af-91ab-2d7cd011db47"), new Guid("de29bab1-49e1-4705-819b-4dfddceaaa98"));
             using (Stream stream = new MemoryStream())
             {
                 Assert.Throws<ArgumentNullException>(delegate { UserAssignedIdentity.Serialize(null, userAssignedIdentity); });
@@ -366,14 +272,14 @@ namespace azure_proto_core_test
         public void TestEqualsOneIdentityNull()
         {
             UserAssignedIdentity identity1 = null;
-            UserAssignedIdentity identity2 = new UserAssignedIdentity();
+            UserAssignedIdentity identity2 = new UserAssignedIdentity(new Guid("72f988bf-86f1-41af-91ab-2d7cd011db47"), new Guid("de29bab1-49e1-4705-819b-4dfddceaaa98"));
             Assert.IsFalse(UserAssignedIdentity.Equals(identity1, identity2));
         }
 
         [TestCase]
         public void TestEqualsOtherIdentityNull()
         {
-            UserAssignedIdentity identity1 = new UserAssignedIdentity();
+            UserAssignedIdentity identity1 = new UserAssignedIdentity(new Guid("72f988bf-86f1-41af-91ab-2d7cd011db47"), new Guid("de29bab1-49e1-4705-819b-4dfddceaaa98"));
             UserAssignedIdentity identity2 = null;
             Assert.IsFalse(UserAssignedIdentity.Equals(identity1, identity2));
         }
