@@ -48,7 +48,7 @@ namespace azure_proto_core.Resources
         {
             if (element.ValueKind == JsonValueKind.Undefined)
             {
-                throw new ArgumentNullException("JsonElement is undefined");
+                throw new ArgumentException("JsonElement is undefined" + nameof(element));
             }
 
             Optional<Guid> principalId = default;
@@ -85,7 +85,7 @@ namespace azure_proto_core.Resources
                 throw new ArgumentNullException(nameof(userAssignedIdentity));
 
             if (writer == null)
-                throw new ArgumentNullException("Utf8JsonWriter writer is null");
+                throw new ArgumentNullException(nameof(writer));
 
             writer.WriteStartObject();
 
