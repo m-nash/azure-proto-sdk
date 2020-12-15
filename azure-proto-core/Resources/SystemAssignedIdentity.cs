@@ -6,9 +6,9 @@
 
     public class SystemAssignedIdentity
     {
-        public Guid? TenantId { get; set; }
+        public Guid? TenantId { get; private set; }
 
-        public Guid? PrincipalId { get; set; }
+        public Guid? PrincipalId { get; private set; }
 
         public SystemAssignedIdentity() { }
 
@@ -24,8 +24,8 @@
                 return 1;
 
             int compareResult = 0;
-            if ((compareResult = PrincipalId.GetValueOrDefault().CompareTo(other.PrincipalId.GetValueOrDefault())) == 0 &&
-                (compareResult = TenantId.GetValueOrDefault().CompareTo(other.TenantId.GetValueOrDefault())) == 0)
+            if ((compareResult = TenantId.GetValueOrDefault().CompareTo(other.TenantId.GetValueOrDefault())) == 0 &&
+                (compareResult = PrincipalId.GetValueOrDefault().CompareTo(other.PrincipalId.GetValueOrDefault())) == 0)
                 return 0;
 
             return compareResult;
@@ -43,7 +43,7 @@
         {
             if (element.ValueKind == JsonValueKind.Undefined)
             {
-                throw new ArgumentNullException("JsonElement is undefined");
+                throw new ArgumentException("JsonElement cannot be undefined", nameof(element));
             }
 
             Optional<Guid> principalId = default;
@@ -78,7 +78,7 @@
                 throw new ArgumentNullException(nameof(systemAssignedIdentity));
 
             if (writer == null)
-                throw new ArgumentNullException("Utf8JsonWriter writer is null");
+                throw new ArgumentNullException(nameof(writer));
 
             writer.WriteStartObject();
             writer.WritePropertyName("principalId");
