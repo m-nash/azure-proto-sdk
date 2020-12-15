@@ -3,23 +3,24 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using Azure.ResourceManager.Core.Adapters;
+using Azure;
 using Azure.ResourceManager.Resources;
+using azure_proto_core.Adapters;
 
-namespace Azure.ResourceManager.Core
+
+namespace azure_proto_core
 {
     /// <summary>
     /// Operations for the RespourceGroups container in the given subscription context.  Allows Creating and listign respource groups
     /// and provides an attachment point for Collections of Tracked Resources.
     /// </summary>
-    public class ResourceGroupContainerOperations : ResourceContainerOperations<ResourceGroup, ResourceGroupData>
+    public class ResourceGroupContainer : ResourceContainerBase<ResourceGroup, ResourceGroupData>
     {
-        internal ResourceGroupContainerOperations(ArmClientContext context, SubscriptionOperations subscription, ArmClientOptions clientOptions)
+        internal ResourceGroupContainer(ArmClientContext context, SubscriptionOperations subscription, ArmClientOptions clientOptions)
             : base(context, subscription.Id, clientOptions) { }
 
-        internal ResourceGroupContainerOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        internal ResourceGroupContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
             : base(context, id, clientOptions) { }
-
         public override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
 
         internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Id.Subscription, cred,

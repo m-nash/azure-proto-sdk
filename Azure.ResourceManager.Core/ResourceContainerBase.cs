@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Azure.ResourceManager.Core
+namespace azure_proto_core
 {
     /// <summary>
     ///     Create known Container and Leaf scopes for ARM Containers
@@ -19,16 +19,16 @@ namespace Azure.ResourceManager.Core
     ///     The return type of the Creation methods, this can be Response<typeparamref name="T" /> or a
     ///     long-running response
     /// </typeparam>
-    public abstract class ResourceContainerOperations<TOperations, TResource> : OperationsBase
+    public abstract class ResourceContainerBase<TOperations, TResource> : OperationsBase
         where TOperations : ResourceOperationsBase<TOperations, TResource>
         where TResource : Resource
     {
-        protected ResourceContainerOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        protected ResourceContainerBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
             : base(context, id, clientOptions)
         {
         }
 
-        protected ResourceContainerOperations(ArmClientContext context, TrackedResource resource,  ArmClientOptions clientOptions)
+        protected ResourceContainerBase(ArmClientContext context, TrackedResource resource, ArmClientOptions clientOptions)
             : base(context, resource, clientOptions)
         {
             Parent = resource;

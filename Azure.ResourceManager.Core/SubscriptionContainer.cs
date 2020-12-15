@@ -1,20 +1,21 @@
-using Azure.ResourceManager.Core.Adapters;
+using Azure;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
+using azure_proto_core.Adapters;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Azure.ResourceManager.Core
+namespace azure_proto_core
 {
     /// <summary>
     /// Subscription Container Operationss
     /// </summary>
-    public class SubscriptionContainerOperations : OperationsBase
+    public class SubscriptionContainer : OperationsBase
     {
-        public static readonly string AzureResourceType = "Microsoft.Resources/subscriptions";
+        public static readonly ResourceType AzureResourceType = "Microsoft.Resources/subscriptions";
 
-        internal SubscriptionContainerOperations(ArmClientContext context, ArmClientOptions options)
+        internal SubscriptionContainer(ArmClientContext context, ArmClientOptions options)
             : base(context, null, options, null)
         {
         }

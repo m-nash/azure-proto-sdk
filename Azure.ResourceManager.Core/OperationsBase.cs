@@ -42,7 +42,7 @@ namespace Azure.ResourceManager.Core
 
         public virtual void Validate(ResourceIdentifier identifier)
         {
-            if ((SubscriptionContainerOperations.AzureResourceType != ResourceType && identifier == null) || (identifier != null && identifier?.Type != ResourceType))
+            if ((SubscriptionContainer.AzureResourceType != ResourceType && identifier == null) || (identifier != null && identifier?.Type != ResourceType))
             {
                 throw new InvalidOperationException($"{identifier} is not a valid resource of type {ResourceType}");
             }

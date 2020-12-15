@@ -13,7 +13,7 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class SubscriptionOperations : OperationsBase
     {
-        public static readonly string AzureResourceType = "Microsoft.Resources/subscriptions";
+        public static readonly ResourceType AzureResourceType = "Microsoft.Resources/subscriptions";
 
         internal SubscriptionOperations(ArmClientContext context, string defaultSubscription, ArmClientOptions clientOptions)
             : base(context, $"/subscriptions/{defaultSubscription}", clientOptions)
@@ -68,9 +68,9 @@ namespace Azure.ResourceManager.Core
             return new ResourceGroupOperations(ClientContext, $"{Id}/resourceGroups/{resourceGroup}", ClientOptions);
         }
 
-        public ResourceGroupContainerOperations ResourceGroups()
+        public ResourceGroupContainer ResourceGroups()
         {
-            return new ResourceGroupContainerOperations(ClientContext, this, ClientOptions);
+            return new ResourceGroupContainer(ClientContext, this, ClientOptions);
         }
     }
 }

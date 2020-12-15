@@ -13,7 +13,7 @@ namespace Azure.ResourceManager.Core
     public class ResourceGroupOperations : ResourceOperationsBase<ResourceGroup, ResourceGroupData>,
         ITaggable<ResourceGroup, ResourceGroupData>, IDeletableResource<ResourceGroup, ResourceGroupData>
     {
-        public static readonly string AzureResourceType = "Microsoft.Resources/resourceGroups";
+        public static readonly ResourceType AzureResourceType = "Microsoft.Resources/resourceGroups";
 
         internal ResourceGroupOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
             : base(context, id, clientOptions) { }
@@ -91,7 +91,7 @@ namespace Azure.ResourceManager.Core
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, Location location = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations, TResource>
-            where TContainer : ResourceContainerOperations<TOperations, TResource>
+            where TContainer : ResourceContainerBase<TOperations, TResource>
         {
             var myResource = Resource as TrackedResource;
 
@@ -113,7 +113,7 @@ namespace Azure.ResourceManager.Core
         public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, Location location = default, CancellationToken token = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations, TResource>
-            where TContainer : ResourceContainerOperations<TOperations, TResource>
+            where TContainer : ResourceContainerBase<TOperations, TResource>
         {
             var myResource = Resource as TrackedResource;
 

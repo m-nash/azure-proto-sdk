@@ -60,9 +60,9 @@ namespace Azure.ResourceManager.Core
 
         public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(ClientContext, subscription, ClientOptions);
 
-        public SubscriptionContainerOperations Subscriptions()
+        public SubscriptionContainer Subscriptions()
         {
-            return new SubscriptionContainerOperations(ClientContext, ClientOptions);
+            return new SubscriptionContainer(ClientContext, ClientOptions);
         }
 
         public AsyncPageable<LocationData> ListLocationsAsync(string subscriptionId = null, CancellationToken token = default(CancellationToken))
@@ -176,7 +176,7 @@ namespace Azure.ResourceManager.Core
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string subscription, string resourceGroup, string name, TResource model, Location location = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations, TResource>
-            where TContainer : ResourceContainerOperations<TOperations, TResource>
+            where TContainer : ResourceContainerBase<TOperations, TResource>
         {
             if (location == null)
             {

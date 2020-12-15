@@ -19,8 +19,6 @@ namespace Azure.ResourceManager.Core
 
         public ResourceIdentifier ResourceId { get; set; }
 
-        public IdentityKind Kind { get; set; }
-
         public int CompareTo(Identity other)
         {
             throw new NotImplementedException();
