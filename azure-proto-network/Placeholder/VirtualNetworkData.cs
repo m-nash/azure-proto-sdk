@@ -1,5 +1,5 @@
 ﻿using Azure.ResourceManager.Network.Models;
-using azure_proto_core;
+using Azure.ResourceManager.Core;
 using System;
 using System.Collections.Generic;
 

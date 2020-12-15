@@ -1,7 +1,7 @@
 ﻿using Azure;
 using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Compute.Models;
-using azure_proto_core;
+using Azure.ResourceManager.Core;
 using System.Threading;
 using System.Threading.Tasks;
 

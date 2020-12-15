@@ -4,7 +4,7 @@
 using System;
 using System.Threading.Tasks;
 using azure_proto_compute;
-using azure_proto_core;
+using Azure.ResourceManager.Core;
 using azure_proto_network;
 
 namespace client
