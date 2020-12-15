@@ -13,7 +13,7 @@ namespace azure_proto_core
     public class ResourceGroupOperations : ResourceOperationsBase<ResourceGroup, ResourceGroupData>,
         ITaggable<ResourceGroup, ResourceGroupData>, IDeletableResource<ResourceGroup, ResourceGroupData>
     {
-        public static readonly string AzureResourceType = "Microsoft.Resources/resourceGroups";
+        public static readonly ResourceType AzureResourceType = "Microsoft.Resources/resourceGroups";
 
         internal ResourceGroupOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
             : base(context, id, clientOptions) { }
@@ -29,16 +29,25 @@ namespace azure_proto_core
             creds,
             ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions)))?.ResourceGroups;
 
-        public ArmOperation<Response> Delete()
+        public ArmResponse<Response> Delete()
+        {
+            return new ArmVoidResponse(Operations.StartDelete(Id.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+        }
+
+        public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        {
+            return new ArmVoidResponse(await Operations.StartDelete(Id.Name).WaitForCompletionAsync());
+        }
+
+        public ArmOperation<Response> StartDelete()
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.Name));
         }
 
-        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.Name, cancellationToken));
         }
-
         public override ArmResponse<ResourceGroup> Get()
         {
             return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Get(Id.Name), g =>
@@ -82,7 +91,7 @@ namespace azure_proto_core
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, Location location = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations, TResource>
-            where TContainer : ResourceContainerOperations<TOperations, TResource>
+            where TContainer : ResourceContainerBase<TOperations, TResource>
         {
             var myResource = Resource as TrackedResource;
 
@@ -104,7 +113,7 @@ namespace azure_proto_core
         public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, Location location = default, CancellationToken token = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations, TResource>
-            where TContainer : ResourceContainerOperations<TOperations, TResource>
+            where TContainer : ResourceContainerBase<TOperations, TResource>
         {
             var myResource = Resource as TrackedResource;
 
