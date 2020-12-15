@@ -1,8 +1,6 @@
-using azure_proto_compute;
-using azure_proto_core;
+using Azure.ResourceManager.Core;
 using System;
 using Azure.Core;
-using Azure.ResourceManager.Resources;
 using Azure.Core.Pipeline;
 using System.Threading;
 using System.Diagnostics;
@@ -30,8 +28,6 @@ namespace client
             
             Debug.Assert(dummyPolicy1.numMsgGot != dummyPolicy2.numMsgGot);
             Console.WriteLine("\nPASSED\n");
-
-
         }
 
         private class dummyPolicy : HttpPipelineSynchronousPolicy
