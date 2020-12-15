@@ -70,13 +70,18 @@ namespace azure_proto_core
             return new ResourceGroupOperations(ClientContext, $"{Id}/resourceGroups/{resourceGroup}", ClientOptions);
         }
 
+        public ResourceGroupContainer ResourceGroups()
+        {
+            return new ResourceGroupContainer(ClientContext, this, ClientOptions);
+        }
+
         public override ArmResponse<Subscription> Get()
         {
             return new PhArmResponse<azure_proto_core.Subscription, Azure.ResourceManager.Resources.Models.Subscription>(
                 SubscriptionsClient.Get(Id.Name),
                 Converter());
         }
-        
+
         public async override Task<ArmResponse<Subscription>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<azure_proto_core.Subscription, Azure.ResourceManager.Resources.Models.Subscription>(
@@ -84,11 +89,7 @@ namespace azure_proto_core
                 Converter());
         }
 
-        public ResourceGroupContainer ResourceGroups()
-        {
-            return new ResourceGroupContainer(ClientContext, this, ClientOptions);
-        }
-        private Func< Azure.ResourceManager.Resources.Models.Subscription, azure_proto_core.Subscription> Converter()
+        private Func<Azure.ResourceManager.Resources.Models.Subscription, azure_proto_core.Subscription> Converter()
         {
             return s => new azure_proto_core.Subscription(ClientContext, new SubscriptionData(s), ClientOptions);
         }
