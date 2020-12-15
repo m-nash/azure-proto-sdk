@@ -11,8 +11,12 @@ namespace azure_proto_core
         where TResource : Resource
         where TOperations : IDeletableResource<TOperations, TResource>
     {
-        ArmOperation<Response> Delete();
+        ArmResponse<Response> Delete();
 
-        Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default);
+        Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default);
+
+        ArmOperation<Response> StartDelete();
+
+        Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default);
     }
 }
