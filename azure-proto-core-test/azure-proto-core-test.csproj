@@ -26,6 +26,38 @@
     <ProjectReference Include="..\azure-proto-core\azure-proto-core.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="TestAssets\UserAssignedIdentity\UserAssignedBothEmptyString.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\UserAssignedIdentity\UserAssignedBothValuesNull.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\UserAssignedIdentity\UserAssignedExtraField.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\UserAssignedIdentity\UserAssignedInvalid.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\UserAssignedIdentity\UserAssignedInvalidMultipleIdentities.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\UserAssignedIdentity\UserAssignedOneEmptyString.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\UserAssignedIdentity\UserAssignedOneOtherValueNull.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\UserAssignedIdentity\UserAssignedOneValueNull.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\UserAssignedIdentity\UserAssignedValid.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\UserAssignedIdentity\UserAssignedValidMultipleIdentities.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <None Update="TestAssets\SystemAssignedIdentity\SystemAssignedBothEmptyString.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
