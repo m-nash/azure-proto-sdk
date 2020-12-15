@@ -1,6 +1,4 @@
-﻿using Azure.ResourceManager.Core;
-
-namespace Azure.ResourceManager.Core.Tests
+﻿namespace Azure.ResourceManager.Core.Tests
 {
     public class FakeResourceApiVersions : ApiVersionsBase
     {

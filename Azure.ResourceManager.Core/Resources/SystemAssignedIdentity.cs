@@ -1,4 +1,4 @@
-﻿namespace azure_proto_core.Resources
+﻿namespace Azure.ResourceManager.Core
 {
     using System;
     using System.Text.Json;

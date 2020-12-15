@@ -1,11 +1,10 @@
-﻿using azure_proto_core.Resources;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 
-namespace azure_proto_core_test
+namespace Azure.ResourceManager.Core.Tests
 {
     public class UserAssignedIdentityTests
     {

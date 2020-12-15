@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace azure_proto_core.Resources
+namespace Azure.ResourceManager.Core
 {
     using System;
     using System.Text.Json;
