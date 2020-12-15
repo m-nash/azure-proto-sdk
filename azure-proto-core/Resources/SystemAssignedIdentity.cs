@@ -43,7 +43,7 @@
         {
             if (element.ValueKind == JsonValueKind.Undefined)
             {
-                throw new ArgumentException("JsonElement cannot be undefined", nameof(element));
+                throw new ArgumentException("JsonElement cannot be undefined ", nameof(element));
             }
 
             Optional<Guid> principalId = default;
