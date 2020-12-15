@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace azure_proto_core
+namespace Azure.ResourceManager.Core
 {
     /// <summary>
     ///     Create known Container and Leaf scopes for ARM Containers

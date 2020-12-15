@@ -3,12 +3,10 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using Azure;
+using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
-using azure_proto_core.Adapters;
 
-
-namespace azure_proto_core
+namespace Azure.ResourceManager.Core
 {
     /// <summary>
     /// Operations for the RespourceGroups container in the given subscription context.  Allows Creating and listign respource groups
@@ -21,9 +19,13 @@ namespace azure_proto_core
 
         internal ResourceGroupContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
             : base(context, id, clientOptions) { }
+
         public override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
 
-        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(uri, Id.Subscription, cred,
+        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(
+            uri,
+            Id.Subscription,
+            cred,
             ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
 
         public ArmOperation<ResourceGroup> Create(string name, Location location)

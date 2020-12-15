@@ -1,12 +1,11 @@
-using Azure;
+using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
-using azure_proto_core.Adapters;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace azure_proto_core
+namespace Azure.ResourceManager.Core
 {
     /// <summary>
     /// Subscription Container Operationss
