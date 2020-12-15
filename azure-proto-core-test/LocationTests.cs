@@ -1,5 +1,6 @@
 ﻿using azure_proto_core;
 using NUnit.Framework;
+using System;
 
 namespace azure_proto_core_test
 {
@@ -8,47 +9,87 @@ namespace azure_proto_core_test
         [Test]
         public void CanCreateLocation()
         {
-            Location tempLocation = new Location("West US");
-            Assert.AreEqual("West US", tempLocation.Name);
+            Location tempLocation = "West US";
+            Assert.AreEqual("westus", tempLocation.Name);
         }
 
-        [Test]
-        public void EqualsToObjectTrue()
+        [TestCase("USNorth")]
+        [TestCase("Us West 12")]
+        [TestCase("Us West 1a")]
+        [TestCase(" Us West 1")]
+        [TestCase("Us West 1 ")]
+        [TestCase("")]
+        [TestCase("*Us West")]
+        [TestCase("Us *West")]
+        [TestCase("Us West *")]
+        public void NameTypeIsName(string location)
         {
-            Location location1 = new Location("West US");
-            Location location2 = new Location("West US");
-
-            Assert.IsTrue(location1.Equals(location1));
-            Assert.IsTrue(location1.Equals(location2));
+            Location loc = location;
+            Assert.IsTrue(loc.Name == loc.DisplayName && loc.Name == loc.CanonicalName);
         }
 
-        [Test]
-        public void EqualsToStringTrue()
+        [TestCase("us-west")]
+        [TestCase("us-west-west")]
+        [TestCase("us-west-2")]
+        [TestCase("us-west-west-2")]
+        [TestCase("a-b-c-5")]
+        public void NameTypeIsCanonical(string location)
         {
-            Location location1 = new Location("West US");
-            Assert.IsTrue(location1.Equals("West US"));
+            Location loc = location;
+            Assert.IsTrue(loc.CanonicalName == location && loc.Name != location && loc.DisplayName != location);
         }
 
-        [Test]
-        public void EqualsToObjectFalse()
+        [TestCase("Us West")]
+        [TestCase("US West")]
+        [TestCase("USa West")]
+        [TestCase("West US")]
+        [TestCase("West USa")]
+        [TestCase("Us West West")]
+        [TestCase("Us West 2")]
+        [TestCase("Us West West 2")]
+        [TestCase("A B C 5")]
+        public void NameTypeIsDisplayName(string location)
         {
-            Location location1 = new Location("West US");
-            Location location2 = new Location("South US");
-
-            Assert.IsFalse(location1.Equals(location2));
+            Location loc = location;
+            Assert.IsTrue(loc.DisplayName == location && loc.Name != location && loc.CanonicalName != location);
         }
 
-        [Test]
-        public void EqualsToStringFalse()
+        [TestCase(true, "West Us", "West Us")]
+        [TestCase(true, "West Us", "WestUs")]
+        [TestCase(false, "West Us", "WestUs2")]
+        [TestCase(false, "West US", "")]
+        [TestCase(false, "West US", "!#()@(#@")]
+        [TestCase(false, "West US", "W3$t U$")]
+        public void EqualsToObject(bool expected, string left, string right)
         {
-            Location location1 = new Location("West US");
-            Assert.IsFalse(location1.Equals("WestUS"));
+            Location loc1 = left;
+            Location loc2 = right;
+            Assert.AreEqual(expected, loc1.Equals(loc2));
+        }
+
+        [TestCase(true, "West Us", "West Us")]
+        [TestCase(true, "West Us", "WestUs")]
+        [TestCase(false, "West Us", "WestUs2")]
+        [TestCase(false, "West Us", "")]
+        [TestCase(false, "West Us", "!#()@(#@")]
+        [TestCase(false, "West Us", "W3$t U$")]
+        public void EqualsToString(bool expected, string left, string right)
+        {
+            Location location = left;
+            Assert.AreEqual(expected, location.Equals(right));
+        }
+
+        [TestCase("West Us", null)]
+        public void EqualsToArgumentNull(string left, string right)
+        {
+            Location location1 = left;
+            Assert.Throws<ArgumentNullException>(() => location1.Equals(right));
         }
 
         [Test]
         public void CanParseToString()
         {
-            Location location1 = new Location("West US");
+            Location location1 = "West US";
             Assert.AreEqual("West US", location1.ToString());
             Assert.AreNotEqual("West Us", location1.ToString());
         }
@@ -56,22 +97,22 @@ namespace azure_proto_core_test
         [Test]
         public void CanCompareToLocationEquals()
         {
-            Location location1 = new Location("South US");
+            Location location1 = "South US";
             Assert.AreEqual(0, location1.CompareTo(location1));
         }
 
         [Test]
         public void CanCompareToStringEquals()
         {
-            Location location1 = new Location("South US");
+            Location location1 = "South US";
             Assert.AreEqual(0, location1.CompareTo("South US"));
         }
 
         [Test]
         public void CanCompareToLocationGreaterThan()
         {
-            Location location1 = new Location("South US");
-            Location location2 = new Location("East US");
+            Location location1 = "South US";
+            Location location2 = "East US";
 
             Assert.AreEqual(1, location1.CompareTo(location2));
         }
@@ -79,15 +120,15 @@ namespace azure_proto_core_test
         [Test]
         public void CanCompareToStringGreaterThan()
         {
-            Location location1 = new Location("South US");
+            Location location1 = "South US";
             Assert.AreEqual(1, location1.CompareTo("East US"));
         }
 
         [Test]
         public void CanCompareToLocationLessThan()
         {
-            Location location1 = new Location("South US");
-            Location location3 = new Location("West US");
+            Location location1 = "South US";
+            Location location3 = "West US";
 
             Assert.AreEqual(-1, location1.CompareTo(location3));
         }
@@ -95,7 +136,7 @@ namespace azure_proto_core_test
         [Test]
         public void CanCompareToStringLessThan()
         {
-            Location location1 = new Location("South US");
+            Location location1 = "South US";
             Assert.AreEqual(-1, location1.CompareTo("West US"));
         }
 
