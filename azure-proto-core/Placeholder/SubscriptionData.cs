@@ -5,9 +5,9 @@ using Azure.ResourceManager.Resources.Models;
 
 namespace azure_proto_core
 {
-    public class SubscriptionData : TrackedResource<Subscription>
+    public class SubscriptionData : TrackedResource<Azure.ResourceManager.Resources.Models.Subscription>
     {
-        public SubscriptionData(Subscription s)
+        public SubscriptionData(Azure.ResourceManager.Resources.Models.Subscription s)
             : base(s.Id, null, s)
         {
         }
