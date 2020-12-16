@@ -76,21 +76,21 @@ namespace Azure.ResourceManager.Core
 
         public override ArmResponse<Subscription> Get()
         {
-            return new PhArmResponse<azure_proto_core.Subscription, Azure.ResourceManager.Resources.Models.Subscription>(
+            return new PhArmResponse<Subscription, Azure.ResourceManager.Resources.Models.Subscription>(
                 SubscriptionsClient.Get(Id.Name),
                 Converter());
         }
 
         public async override Task<ArmResponse<Subscription>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<azure_proto_core.Subscription, Azure.ResourceManager.Resources.Models.Subscription>(
+            return new PhArmResponse<Subscription, Azure.ResourceManager.Resources.Models.Subscription>(
                 await SubscriptionsClient.GetAsync(Id.Name, cancellationToken),
                 Converter());
         }
 
-        private Func<Azure.ResourceManager.Resources.Models.Subscription, azure_proto_core.Subscription> Converter()
+        private Func<Azure.ResourceManager.Resources.Models.Subscription, Subscription> Converter()
         {
-            return s => new azure_proto_core.Subscription(ClientContext, new SubscriptionData(s), ClientOptions);
+            return s => new Subscription(ClientContext, new SubscriptionData(s), ClientOptions);
         }
     }
 }
