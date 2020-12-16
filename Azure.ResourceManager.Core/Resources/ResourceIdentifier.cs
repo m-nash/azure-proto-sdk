@@ -35,6 +35,11 @@ namespace Azure.ResourceManager.Core
 
         public ResourceType Type { get; protected set; }
 
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
         public string Subscription => _partsDictionary.ContainsKey(KnownKeys.Subscription)
             ? _partsDictionary[KnownKeys.Subscription]
             : null;
