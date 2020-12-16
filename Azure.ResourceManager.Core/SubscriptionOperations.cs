@@ -5,13 +5,14 @@ using System;
 using System.Threading;
 using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
+using System.Threading.Tasks;
 
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
     ///     Subscription operations
     /// </summary>
-    public class SubscriptionOperations : OperationsBase
+    public class SubscriptionOperations : ResourceOperationsBase<Subscription, SubscriptionData>
     {
         public static readonly ResourceType AzureResourceType = "Microsoft.Resources/subscriptions";
 
@@ -71,6 +72,25 @@ namespace Azure.ResourceManager.Core
         public ResourceGroupContainer ResourceGroups()
         {
             return new ResourceGroupContainer(ClientContext, this, ClientOptions);
+        }
+
+        public override ArmResponse<Subscription> Get()
+        {
+            return new PhArmResponse<Subscription, Azure.ResourceManager.Resources.Models.Subscription>(
+                SubscriptionsClient.Get(Id.Name),
+                Converter());
+        }
+
+        public async override Task<ArmResponse<Subscription>> GetAsync(CancellationToken cancellationToken = default)
+        {
+            return new PhArmResponse<Subscription, Azure.ResourceManager.Resources.Models.Subscription>(
+                await SubscriptionsClient.GetAsync(Id.Name, cancellationToken),
+                Converter());
+        }
+
+        private Func<Azure.ResourceManager.Resources.Models.Subscription, Subscription> Converter()
+        {
+            return s => new Subscription(ClientContext, new SubscriptionData(s), ClientOptions);
         }
     }
 }
