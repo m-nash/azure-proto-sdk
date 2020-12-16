@@ -1,17 +1,17 @@
 ﻿using Azure;
 using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Network.Models;
-using azure_proto_core;
-using azure_proto_core.Resources;
+using Azure.ResourceManager.Core;
+using Azure.ResourceManager.Core.Adapters;
+using Azure.ResourceManager.Core.Resources;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
-using azure_proto_core.Adapters;
 
 namespace azure_proto_network
 {
-    public class NetworkInterfaceContainer : ResourceContainerOperations<NetworkInterface, NetworkInterfaceData>
+    public class NetworkInterfaceContainer : ResourceContainerBase<NetworkInterface, NetworkInterfaceData>
     {
         internal NetworkInterfaceContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
 
@@ -101,6 +101,19 @@ namespace azure_proto_network
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
         }
+
+        public Pageable<NetworkInterface> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var results = ListByName(filter, top, cancellationToken);
+            return new PhWrappingPageable<ArmResourceOperations, NetworkInterface>(results, s => new NetworkInterfaceOperations(s).Get().Value);
+        }
+
+        public AsyncPageable<NetworkInterface> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var results = ListByNameAsync(filter, top, cancellationToken);
+            return new PhWrappingAsyncPageable<ArmResourceOperations, NetworkInterface>(results, s => new NetworkInterfaceOperations(s).Get().Value);
+        }
+        
         private Func<Azure.ResourceManager.Network.Models.NetworkInterface, NetworkInterface> convertor()
         {
             return s => new NetworkInterface(ClientContext, new NetworkInterfaceData(s), ClientOptions);

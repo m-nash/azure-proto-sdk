@@ -2,9 +2,9 @@
 using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Compute.Models;
 using azure_proto_compute.Convenience;
-using azure_proto_core;
-using azure_proto_core.Adapters;
-using azure_proto_core.Resources;
+using Azure.ResourceManager.Core;
+using Azure.ResourceManager.Core.Adapters;
+using Azure.ResourceManager.Core.Resources;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +16,7 @@ namespace azure_proto_compute
     /// </summary>
     /// We should not expose Create method when a container is constructed at a subscription level as an example for a virtual machine.
     /// Likewise we should not expose create when a subnet container is constructed at a resource group level
-    public class VirtualMachineContainer : ResourceContainerOperations<VirtualMachine, VirtualMachineData>
+    public class VirtualMachineContainer : ResourceContainerBase<VirtualMachine, VirtualMachineData>
     {
         internal VirtualMachineContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions)
             : base(context, resourceGroup, clientOptions)

@@ -1,7 +1,7 @@
 ﻿using Azure;
 using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Network.Models;
-using azure_proto_core;
+using Azure.ResourceManager.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -81,7 +81,7 @@ namespace azure_proto_network
                 }
             }
 
-            return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, model.Model), 
+            return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, model.Model),
                 n =>
                 {
                     Resource = new NetworkSecurityGroupData(n);
@@ -133,12 +133,22 @@ namespace azure_proto_network
                 });
         }
 
-        public ArmOperation<Response> Delete()
+        public ArmResponse<Response> Delete()
+        {
+            return new ArmVoidResponse(Operations.StartDelete(Id.ResourceGroup, Id.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+        }
+
+        public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        {
+            return new ArmVoidResponse((await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken)).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+        }
+
+        public ArmOperation<Response> StartDelete()
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name));
         }
 
-        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }

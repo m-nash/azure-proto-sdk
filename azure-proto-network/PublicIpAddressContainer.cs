@@ -1,16 +1,16 @@
 ﻿using Azure;
 using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Network.Models;
-using azure_proto_core;
-using azure_proto_core.Resources;
+using Azure.ResourceManager.Core;
+using Azure.ResourceManager.Core.Adapters;
+using Azure.ResourceManager.Core.Resources;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
-using azure_proto_core.Adapters;
 
 namespace azure_proto_network
 {
-    public class PublicIpAddressContainer : ResourceContainerOperations<PublicIpAddress, PublicIPAddressData>
+    public class PublicIpAddressContainer : ResourceContainerBase<PublicIpAddress, PublicIPAddressData>
     {
         internal PublicIpAddressContainer(ArmResourceOperations genericOperations)
             : base(genericOperations.ClientContext,genericOperations.Id, genericOperations.ClientOptions)
@@ -100,6 +100,18 @@ namespace azure_proto_network
             ArmFilterCollection filters = new ArmFilterCollection(PublicIPAddressData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
+        }
+
+        public Pageable<PublicIpAddress> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var results = ListByName(filter, top, cancellationToken);
+            return new PhWrappingPageable<ArmResourceOperations, PublicIpAddress>(results, s => new PublicIpAddressOperations(s).Get().Value);
+        }
+
+        public AsyncPageable<PublicIpAddress> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var results = ListByNameAsync(filter, top, cancellationToken);
+            return new PhWrappingAsyncPageable<ArmResourceOperations, PublicIpAddress>(results, s => new PublicIpAddressOperations(s).Get().Value);
         }
 
         private Func<PublicIPAddress, PublicIpAddress> convertor()

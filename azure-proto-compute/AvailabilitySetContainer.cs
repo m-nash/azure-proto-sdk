@@ -1,9 +1,8 @@
 ﻿using Azure;
 using Azure.ResourceManager.Compute;
-using Azure.ResourceManager.Compute.Models;
-using azure_proto_core;
-using azure_proto_core.Adapters;
-using azure_proto_core.Resources;
+using Azure.ResourceManager.Core;
+using Azure.ResourceManager.Core.Adapters;
+using Azure.ResourceManager.Core.Resources;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +11,7 @@ namespace azure_proto_compute
     /// <summary>
     /// Operatiosn class for Availability Set Contaienrs (resource groups)
     /// </summary>
-    public class AvailabilitySetContainer : ResourceContainerOperations<AvailabilitySet, AvailabilitySetData>
+    public class AvailabilitySetContainer : ResourceContainerBase<AvailabilitySet, AvailabilitySetData>
     {
         internal AvailabilitySetContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions)
             : base(context, resourceGroup, clientOptions)

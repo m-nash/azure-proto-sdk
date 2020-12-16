@@ -1,6 +1,6 @@
 ﻿using Azure.ResourceManager.Compute;
 using azure_proto_compute;
-using azure_proto_core;
+using Azure.ResourceManager.Core;
 using System;
 using System.Threading.Tasks;
 

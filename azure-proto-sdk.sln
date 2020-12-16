@@ -7,13 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "client", "client\client.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-compute", "azure-proto-compute\azure-proto-compute.csproj", "{FD280DA1-53BA-46BA-B705-890F42F704BB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-core", "azure-proto-core\azure-proto-core.csproj", "{450371DE-C9CF-4FCE-B106-822839F68F00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure.ResourceManager.Core", "Azure.ResourceManager.Core\Azure.ResourceManager.Core.csproj", "{450371DE-C9CF-4FCE-B106-822839F68F00}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-network", "azure-proto-network\azure-proto-network.csproj", "{23ECE624-2ECD-4C48-BFEA-7D613163394A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LegacyClient", "LegacyClient\LegacyClient.csproj", "{2361ABBC-0526-4920-A7F9-08E60BE6AF36}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "azure-proto-core-test", "azure-proto-core-test\azure-proto-core-test.csproj", "{5F200CAA-8A98-4A47-AD21-750C716E80DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure.ResourceManager.Core.Tests", "Azure.ResourceManager.Core.Tests\Azure.ResourceManager.Core.Tests.csproj", "{5F200CAA-8A98-4A47-AD21-750C716E80DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "azure-proto-authorization", "azure-proto-authorization\azure-proto-authorization.csproj", "{FF1BDD3B-22BF-4781-B2C5-2AD68A23EEC4}"
 EndProject

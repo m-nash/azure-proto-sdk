@@ -1,4 +1,4 @@
-﻿using azure_proto_core;
+﻿using Azure.ResourceManager.Core;
 
 namespace azure_proto_compute.Convenience
 {

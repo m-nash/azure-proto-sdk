@@ -1,17 +1,17 @@
 ﻿using Azure;
 using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Network.Models;
-using azure_proto_core;
-using azure_proto_core.Resources;
+using Azure.ResourceManager.Core;
+using Azure.ResourceManager.Core.Adapters;
+using Azure.ResourceManager.Core.Resources;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
-using azure_proto_core.Adapters;
 
 namespace azure_proto_network
 {
-    public class NetworkSecurityGroupContainer : ResourceContainerOperations<NetworkSecurityGroup, NetworkSecurityGroupData>
+    public class NetworkSecurityGroupContainer : ResourceContainerBase<NetworkSecurityGroup, NetworkSecurityGroupData>
     {
         internal NetworkSecurityGroupContainer(ArmResourceOperations genericOperations)
             : base(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
@@ -131,6 +131,18 @@ namespace azure_proto_network
             ArmFilterCollection filters = new ArmFilterCollection(NetworkSecurityGroupData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
+        }
+
+        public Pageable<NetworkSecurityGroup> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var results = ListByName(filter, top, cancellationToken);
+            return new PhWrappingPageable<ArmResourceOperations, NetworkSecurityGroup>(results, s => new NetworkSecurityGroupOperations(s).Get().Value);
+        }
+
+        public AsyncPageable<NetworkSecurityGroup> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            var results = ListByNameAsync(filter, top, cancellationToken);
+            return new PhWrappingAsyncPageable<ArmResourceOperations, NetworkSecurityGroup>(results, s => new NetworkSecurityGroupOperations(s).Get().Value);
         }
 
         private Func<Azure.ResourceManager.Network.Models.NetworkSecurityGroup, NetworkSecurityGroup> convertor()
