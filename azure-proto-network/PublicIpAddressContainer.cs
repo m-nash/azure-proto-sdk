@@ -105,13 +105,13 @@ namespace azure_proto_network
         public Pageable<PublicIpAddress> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByName(filter, top, cancellationToken);
-            return new PhWrappingPageable<ArmResourceOperations, PublicIpAddress>(results, s => new PublicIpAddressOperations(s).Get().Value);
+            return new PhWrappingPageable<ArmResource, PublicIpAddress>(results, s => new PublicIpAddressOperations(s).Get().Value);
         }
 
         public AsyncPageable<PublicIpAddress> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByNameAsync(filter, top, cancellationToken);
-            return new PhWrappingAsyncPageable<ArmResourceOperations, PublicIpAddress>(results, s => new PublicIpAddressOperations(s).Get().Value);
+            return new PhWrappingAsyncPageable<ArmResource, PublicIpAddress>(results, s => new PublicIpAddressOperations(s).Get().Value);
         }
 
         private Func<PublicIPAddress, PublicIpAddress> convertor()

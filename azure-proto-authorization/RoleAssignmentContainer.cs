@@ -1,6 +1,6 @@
 ﻿using Azure.ResourceManager.Authorization;
 using Azure.ResourceManager.Authorization.Models;
-using azure_proto_core;
+using Azure.ResourceManager.Core;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,7 +18,7 @@ namespace azure_proto_authorization
         public RoleAssignmentContainer(ArmClientContext context, TrackedResource scope) : base(context, scope) { }
         public RoleAssignmentContainer(ArmClientContext context, ResourceIdentifier scope) : base(context, scope) { }
 
-        public override azure_proto_core.ResourceType ResourceType => "Microsoft.Authorization/roleAssignments";
+        public override Azure.ResourceManager.Core.ResourceType ResourceType => "Microsoft.Authorization/roleAssignments";
 
         //Discussion Point: Are there other instances of Asynchrony between creation and return scenarios?
         public override ArmResponse<RoleAssignment> Create(string name, RoleAssignmentCreateParameters resourceDetails, CancellationToken cancellationToken = default)

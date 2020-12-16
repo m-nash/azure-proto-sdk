@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\azure-proto-core\azure-proto-core.csproj" />
+    <ProjectReference Include="..\Azure.ResourceManager.Core\Azure.ResourceManager.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

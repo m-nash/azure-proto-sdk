@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace azure_proto_core
+namespace Azure.ResourceManager.Core
 {
     /// <summary>
     /// Base class for all extensions

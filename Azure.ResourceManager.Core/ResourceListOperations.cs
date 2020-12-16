@@ -185,7 +185,7 @@ namespace Azure.ResourceManager.Core
         }
 
         private static Func<GenericResourceExpanded, TOperations> CreateResourceConverter<TOperations, TResource>(ArmClientContext clientContext, ArmClientOptions clientOptions)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
              return s => Activator.CreateInstance(

@@ -105,13 +105,13 @@ namespace azure_proto_network
         public Pageable<VirtualNetwork> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByName(filter, top, cancellationToken);
-            return new PhWrappingPageable<ArmResourceOperations, VirtualNetwork>(results, s => new VirtualNetworkOperations(s).Get().Value);
+            return new PhWrappingPageable<ArmResource, VirtualNetwork>(results, s => new VirtualNetworkOperations(s).Get().Value);
         }
 
         public AsyncPageable<VirtualNetwork> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByNameAsync(filter, top, cancellationToken);
-            return new PhWrappingAsyncPageable<ArmResourceOperations, VirtualNetwork>(results, s => new VirtualNetworkOperations(s).Get().Value);
+            return new PhWrappingAsyncPageable<ArmResource, VirtualNetwork>(results, s => new VirtualNetworkOperations(s).Get().Value);
         }
 
         private  Func<Azure.ResourceManager.Network.Models.VirtualNetwork, VirtualNetwork> convertor()

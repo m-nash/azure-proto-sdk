@@ -1,4 +1,4 @@
-﻿using azure_proto_core;
+﻿using Azure.ResourceManager.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;

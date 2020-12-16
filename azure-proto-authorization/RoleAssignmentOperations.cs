@@ -1,13 +1,13 @@
 ﻿using Azure;
 using Azure.ResourceManager.Authorization;
 using Azure.ResourceManager.Authorization.Models;
-using azure_proto_core;
+using Azure.ResourceManager.Core;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace azure_proto_authorization
 {
-    public class RoleAssignmentOperations : ExtensionResourceOperationsBase<RoleAssignment>, IDeletable
+    public class RoleAssignmentOperations : ExtensionResourceOperationsBase<RoleAssignment>, IDeletableResource
     {
         public RoleAssignmentOperations(ArmResourceOperations genericOperations) : this(genericOperations.ClientContext, genericOperations.Id) { }
 
@@ -17,12 +17,23 @@ namespace azure_proto_authorization
         {
         }
 
-        public ArmOperation<Response> Delete()
+        public ArmResponse<Response> Delete()
         {
-            return new ArmVoidOperation(Operations.DeleteById(this.Id).GetRawResponse());
+            return new ArmVoidResponse(Operations.DeleteById(Id).GetRawResponse());
         }
 
-        public async Task<ArmOperation<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        {
+            return new ArmVoidResponse((await Operations.DeleteByIdAsync(Id)).GetRawResponse());
+        }
+
+
+        public ArmOperation<Response> StartDelete()
+        {
+            return new ArmVoidOperation(Operations.DeleteById(Id).GetRawResponse());
+        }
+
+        public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation((await Operations.DeleteByIdAsync(this.Id, cancellationToken)).GetRawResponse());
         }

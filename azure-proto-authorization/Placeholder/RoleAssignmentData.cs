@@ -1,5 +1,5 @@
 ﻿using Azure.ResourceManager.Authorization.Models;
-using azure_proto_core;
+using Azure.ResourceManager.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,7 +11,7 @@ namespace azure_proto_authorization
     /// </summary>
     public class RoleAssignmentData : Resource
     {
-        public static azure_proto_core.ResourceType ResourceType => "Microsoft.Authorization/roleAssignments";
+        public static Azure.ResourceManager.Core.ResourceType ResourceType => "Microsoft.Authorization/roleAssignments";
 
         Azure.ResourceManager.Authorization.Models.RoleAssignment _model;
         public RoleAssignmentData(Azure.ResourceManager.Authorization.Models.RoleAssignment assign)

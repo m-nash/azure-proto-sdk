@@ -3,7 +3,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace azure_proto_core
+namespace Azure.ResourceManager.Core
 {
     /// <summary>
     /// Container for extension resources.  Because there is no CreateOrUpdate, there is a difference in the input and output model

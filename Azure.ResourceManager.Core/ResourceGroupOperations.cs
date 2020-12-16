@@ -11,7 +11,7 @@ using Azure.ResourceManager.Resources.Models;
 namespace Azure.ResourceManager.Core
 {
     public class ResourceGroupOperations : ResourceOperationsBase<ResourceGroup>,
-        ITaggable<ResourceGroup>, IDeletable
+        ITaggableResource<ResourceGroup>, IDeletableResource
     {
         public static readonly ResourceType AzureResourceType = "Microsoft.Resources/resourceGroups";
 

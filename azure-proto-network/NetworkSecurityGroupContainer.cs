@@ -136,13 +136,13 @@ namespace azure_proto_network
         public Pageable<NetworkSecurityGroup> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByName(filter, top, cancellationToken);
-            return new PhWrappingPageable<ArmResourceOperations, NetworkSecurityGroup>(results, s => new NetworkSecurityGroupOperations(s).Get().Value);
+            return new PhWrappingPageable<ArmResource, NetworkSecurityGroup>(results, s => new NetworkSecurityGroupOperations(s).Get().Value);
         }
 
         public AsyncPageable<NetworkSecurityGroup> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByNameAsync(filter, top, cancellationToken);
-            return new PhWrappingAsyncPageable<ArmResourceOperations, NetworkSecurityGroup>(results, s => new NetworkSecurityGroupOperations(s).Get().Value);
+            return new PhWrappingAsyncPageable<ArmResource, NetworkSecurityGroup>(results, s => new NetworkSecurityGroupOperations(s).Get().Value);
         }
 
         private Func<Azure.ResourceManager.Network.Models.NetworkSecurityGroup, NetworkSecurityGroup> convertor()

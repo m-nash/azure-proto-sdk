@@ -4,9 +4,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace azure_proto_core
+namespace Azure.ResourceManager.Core
 {
-    public interface ITaggable<TOperations>
+    public interface ITaggableResource<TOperations>
         where TOperations : ResourceOperationsBase<TOperations>
     {
         ArmOperation<TOperations> AddTag(string key, string value);

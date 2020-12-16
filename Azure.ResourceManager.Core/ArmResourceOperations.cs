@@ -9,7 +9,7 @@ using Azure;
 namespace Azure.ResourceManager.Core
 {
     public class ArmResourceOperations : ResourceOperationsBase<ArmResource>,
-        ITaggable<ArmResource>, IDeletable
+        ITaggableResource<ArmResource>, IDeletableResource
     {
         public ArmResourceOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOption)
             : base(context, id, clientOption)

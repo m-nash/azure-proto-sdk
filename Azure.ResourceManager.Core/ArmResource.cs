@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace azure_proto_core
+namespace Azure.ResourceManager.Core
 {
     public class ArmResource : ArmResourceOperations
     {

@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-namespace azure_proto_core
+namespace Azure.ResourceManager.Core
 {
     /// <summary>
     ///     Generic representation of an ARM resource.  Resources in the ARM RP should extend this resource.
     /// </summary>
-    public class ArmResourceData: TrackedResource, IManagedByResource, ISkuResource
+    public class ArmResourceData : TrackedResource, IManagedByResource, ISkuResource
     {
         public ArmResourceData(Azure.ResourceManager.Resources.Models.Resource genericResource)
         {

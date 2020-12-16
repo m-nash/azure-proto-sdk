@@ -16,28 +16,28 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     /// <typeparam name="TOperations">The class containing operations for the underlying resource</typeparam>
     /// <typeparam name="TData">The class containing properties for the underlying resource</typeparam>
-    public abstract class ResourceContainerOperations<TOperations, TData> : OperationsBase
+    public abstract class ResourceContainerBase<TOperations, TData> : OperationsBase
         where TOperations : ResourceOperationsBase<TOperations>
         where TData : Resource
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceContainerOperations{TOperations, TData}"/> class.
+        /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
         /// </summary>
         /// <param name="context">The http client context for these operations</param>
         /// <param name="id">The resource Id of the parent resource.</param>
         /// <param name="clientOptions">The http client options to use with these oeprations.</param>
-        protected ResourceContainerOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        protected ResourceContainerBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
             : base(context, id, clientOptions)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceContainerOperations{TOperations, TData}"/> class.
+        /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
         /// </summary>
         /// <param name="context">The http client context for these operations</param>
         /// <param name="resource">The resource representing the parent resource.</param>
         /// <param name="clientOptions">The http client options to use with these oeprations.</param>
-        protected ResourceContainerOperations(ArmClientContext context, TrackedResource resource,  ArmClientOptions clientOptions)
+        protected ResourceContainerBase(ArmClientContext context, TrackedResource resource,  ArmClientOptions clientOptions)
             : base(context, resource, clientOptions)
         {
             Parent = resource;
