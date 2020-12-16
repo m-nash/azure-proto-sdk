@@ -1,4 +1,4 @@
-﻿using azure_proto_core;
+﻿using Azure.ResourceManager.Core;
 using System;
 
 namespace client
@@ -10,7 +10,7 @@ namespace client
             Scenario scenario = null;
             try
             {
-                scenario = ScenarioFactory.GetScenario(Scenarios.ListByNameExpanded);
+                scenario = ScenarioFactory.GetScenario(Scenarios.GetSubscription);
                 scenario.Execute();
 
             }
