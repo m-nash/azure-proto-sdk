@@ -23,14 +23,10 @@ namespace Azure.ResourceManager.Core
         public int CompareTo(Sku other)
         {
             if (other == null)
-            {
                 return 1;
-            }
 
             if (object.ReferenceEquals(this, other))
-            {
                 return 0;
-            }
 
             int compareResult = 0;
             if ((compareResult = string.Compare(Name, other.Name, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
@@ -47,14 +43,10 @@ namespace Azure.ResourceManager.Core
         public bool Equals(Sku other)
         {
             if (other == null)
-            {
                 return false;
-            }
 
             if (object.ReferenceEquals(this, other))
-            {
                 return true;
-            }
 
             return string.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase) &&
                 string.Equals(Family, other.Family, StringComparison.InvariantCultureIgnoreCase) &&
