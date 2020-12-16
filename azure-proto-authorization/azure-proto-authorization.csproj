@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <Reference Include="Azure.ResourceManager.Authorization">
-      <HintPath>..\..\azure-sdk-for-net\artifacts\bin\Azure.ResourceManager.Authorization\Debug\netstandard2.0\Azure.ResourceManager.Authorization.dll</HintPath>
+      <HintPath>..\lib\Azure.ResourceManager.Authorization.dll</HintPath>
     </Reference>
   </ItemGroup>
 
