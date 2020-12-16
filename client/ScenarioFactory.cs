@@ -15,7 +15,8 @@
         ShutdownVmsByNameAcrossResourceGroups,
         ShutdownVmsByNameAcrossSubscriptions,
         ListByNameExpanded,
-        ClientOptionsOverride
+        ClientOptionsOverride,
+        GetSubscription
     }
 
     class ScenarioFactory
@@ -52,6 +53,8 @@
                     return new ListByNameExpanded();
                 case Scenarios.ClientOptionsOverride:
                     return new ClientOptionsOverride();
+                case Scenarios.GetSubscription:
+                    return new GetSubscription();
                 default:
                     return null;
             }
