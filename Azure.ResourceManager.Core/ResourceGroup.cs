@@ -2,7 +2,7 @@
 {
     public class ResourceGroup : ResourceGroupOperations
     {
-        internal ResourceGroup(ArmClientContext context, ResourceGroupData resource, ArmClientOptions options)
+        internal ResourceGroup(AzureResourceManagerClientContext context, ResourceGroupData resource, AzureResourceManagerClientOptions options)
             : base(context, resource, options)
         {
             Data = resource;

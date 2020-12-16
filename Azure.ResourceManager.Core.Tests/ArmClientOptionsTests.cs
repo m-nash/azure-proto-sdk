@@ -7,15 +7,15 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase]
         public void VersionIsDefault()
         {
-            ArmClientOptions options = new ArmClientOptions();
+            AzureResourceManagerClientOptions options = new AzureResourceManagerClientOptions();
             Assert.AreEqual(FakeResourceApiVersions.Default, options.FakeRpApiVersions().FakeResourceVersion);
         }
 
         [TestCase]
         public void MultiClientSeparateVersions()
         {
-            ArmClientOptions options1 = new ArmClientOptions();
-            ArmClientOptions options2 = new ArmClientOptions();
+            AzureResourceManagerClientOptions options1 = new AzureResourceManagerClientOptions();
+            AzureResourceManagerClientOptions options2 = new AzureResourceManagerClientOptions();
 
             options2.FakeRpApiVersions().FakeResourceVersion = FakeResourceApiVersions.V2019_12_01;
             Assert.AreEqual(FakeResourceApiVersions.Default, options1.FakeRpApiVersions().FakeResourceVersion);

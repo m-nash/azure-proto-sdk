@@ -14,7 +14,7 @@ namespace azure_proto_network
         {
         }
 
-        internal PublicIpAddressOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        internal PublicIpAddressOperations(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
             : base(context, id, clientOptions)
         {
         }
@@ -22,7 +22,7 @@ namespace azure_proto_network
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-            ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).PublicIPAddresses;
+            AzureResourceManagerClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).PublicIPAddresses;
 
         public ArmResponse<Response> Delete()
         {

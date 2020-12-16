@@ -10,7 +10,7 @@ namespace client
         {
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
-            var client = new ArmClient();
+            var client = new AzureResourceManagerClient();
             
             //retrieve from lowest level, doesn't give ability to walk up and down the container structure
             //(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions
