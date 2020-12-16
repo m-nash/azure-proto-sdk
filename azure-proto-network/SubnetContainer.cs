@@ -10,12 +10,12 @@ namespace azure_proto_network
 {
     public class SubnetContainer : ResourceContainerBase<Subnet, SubnetData>
     {
-        internal SubnetContainer(ArmClientContext context, VirtualNetworkData virtualNetwork, ArmClientOptions clientOptions)
+        internal SubnetContainer(AzureResourceManagerClientContext context, VirtualNetworkData virtualNetwork, AzureResourceManagerClientOptions clientOptions)
             : base(context, virtualNetwork, clientOptions)
         {
         }
 
-        internal SubnetContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        internal SubnetContainer(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
             : base(context, id, clientOptions)
         {
         }
@@ -23,7 +23,7 @@ namespace azure_proto_network
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
 
         internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-                    ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).Subnets;
+                    AzureResourceManagerClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).Subnets;
 
         public override ArmResponse<Subnet> Create(string name, SubnetData resourceDetails, CancellationToken cancellationToken = default)
         {

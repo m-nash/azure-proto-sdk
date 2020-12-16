@@ -15,12 +15,12 @@ namespace Azure.ResourceManager.Core
         {
         }
 
-        public ResourceOperationsBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        public ResourceOperationsBase(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
             : this(context, new ArmResource(id), clientOptions)
         {
         }
 
-        public ResourceOperationsBase(ArmClientContext context, Resource resource, ArmClientOptions clientOptions)
+        public ResourceOperationsBase(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions clientOptions)
             : base(context, resource, clientOptions)
         {
         }

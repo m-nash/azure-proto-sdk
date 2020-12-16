@@ -10,12 +10,12 @@ namespace azure_proto_network
     /// </summary>
     public class SubnetOperations : ResourceOperationsBase<Subnet, SubnetData>, IDeletableResource<Subnet, SubnetData>
     {
-        internal SubnetOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        internal SubnetOperations(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
             : base(context, id, clientOptions)
         {
         }
 
-        internal SubnetOperations(ArmClientContext context, Resource resource, ArmClientOptions clientOptions)
+        internal SubnetOperations(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions clientOptions)
             : base(context, resource, clientOptions)
         {
         }
@@ -23,7 +23,7 @@ namespace azure_proto_network
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
 
         internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-                    ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).Subnets;
+                    AzureResourceManagerClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).Subnets;
 
         public ArmResponse<Response> Delete()
         {
