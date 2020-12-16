@@ -39,15 +39,50 @@ namespace Azure.ResourceManager.Core
                 var parts = Type.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
                 if (parts.Length < 2)
-                {
                     return None;
-                }
 
                 var list = new List<string>(parts);
                 list.RemoveAt(list.Count - 1);
 
                 return new ResourceType($"{Namespace}/{string.Join("/", list.ToArray())}");
             }
+        }
+
+        public static implicit operator ResourceType(string other)
+        {
+            return new ResourceType(other);
+        }
+
+        public static bool operator ==(ResourceType source, string target)
+        {
+            return source.Equals(target);
+        }
+
+        public static bool operator ==(string source, ResourceType target)
+        {
+            return target.Equals(source);
+        }
+
+        public static bool operator ==(ResourceType source, ResourceType target)
+        {
+            return source.Equals(target);
+        }
+
+        public static bool operator !=(ResourceType source, string target)
+        {
+            return !source.Equals(target);
+        }
+
+        public static bool operator !=(string source, ResourceType target)
+        {
+            return !target.Equals(source);
+        }
+
+        public static bool operator !=(ResourceType source, ResourceType target)
+        {
+            if (object.ReferenceEquals(source, null))
+                return false;
+            return !source.Equals(target);
         }
 
         public int CompareTo(ResourceType other)
@@ -77,18 +112,14 @@ namespace Azure.ResourceManager.Core
 
             // exclude null or empty strings
             if (string.IsNullOrWhiteSpace(resourceIdOrType))
-            {
                 throw new ArgumentOutOfRangeException(nameof(resourceIdOrType));
-            }
 
             // split the path into segments
             var parts = resourceIdOrType.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             // There must be at least a namespace and type name
             if (parts.Count < 1)
-            {
                 throw new ArgumentOutOfRangeException(nameof(resourceIdOrType));
-            }
 
             // if the type is just subscriptions, it is a built-in type in the Microsoft.Resources namespace
             if (parts.Count == 1)
@@ -109,9 +140,7 @@ namespace Azure.ResourceManager.Core
                 }
 
                 if (parts.Count < 3)
-                {
                     throw new ArgumentOutOfRangeException(nameof(resourceIdOrType), "Invalid resource id.");
-                }
 
                 var type = new List<string>();
                 for (var i = 1; i < parts.Count; i += 2)
@@ -152,23 +181,17 @@ namespace Azure.ResourceManager.Core
         public override bool Equals(object obj)
         {
             if (obj == null)
-            {
                 return false;
-            }
 
             var resourceObj = obj as ResourceType;
 
             if (resourceObj != null)
-            {
                 return Equals(resourceObj);
-            }
 
             var stringObj = obj as string;
 
             if (stringObj != null)
-            {
                 return Equals(stringObj);
-            }
 
             return base.Equals(obj);
         }
@@ -176,43 +199,6 @@ namespace Azure.ResourceManager.Core
         public override int GetHashCode()
         {
             return ToString().GetHashCode();
-        }
-
-        public static implicit operator ResourceType(string other)
-        {
-            return new ResourceType(other);
-        }
-
-        public static bool operator ==(ResourceType source, string target)
-        {
-            return source.Equals(target);
-        }
-
-        public static bool operator ==(string source, ResourceType target)
-        {
-            return target.Equals(source);
-        }
-
-        public static bool operator ==(ResourceType source, ResourceType target)
-        {
-            return source.Equals(target);
-        }
-
-        public static bool operator !=(ResourceType source, string target)
-        {
-            return !source.Equals(target);
-        }
-
-        public static bool operator !=(string source, ResourceType target)
-        {
-            return !target.Equals(source);
-        }
-
-        public static bool operator !=(ResourceType source, ResourceType target)
-        {
-            if (object.ReferenceEquals(source, null))
-                return false;
-            return !source.Equals(target);
         }
     }
 }
