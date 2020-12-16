@@ -263,41 +263,23 @@ namespace Azure.ResourceManager.Core
 
         private Location(string location)
         {
-            if (location == null)
+            switch (DetectNameType(location))
             {
-                throw new ArgumentNullException(nameof(location));
-            }
-
-            string normalizedLocation = NormalizationUtility(location);
-
-            Location value;
-
-            if (PublicCloudLocations.TryGetValue(normalizedLocation, out value))
-            {
-                Name = value.Name;
-                CanonicalName = value.CanonicalName;
-                DisplayName = value.DisplayName;
-            }
-            else
-            {
-                switch (DetectNameType(location))
-                {
-                    case NameType.Name:
-                        Name = location;
-                        CanonicalName = location;
-                        DisplayName = location;
-                        break;
-                    case NameType.CanonicalName:
-                        Name = GetDefaultName(location, NameType.CanonicalName);
-                        CanonicalName = location;
-                        DisplayName = GetDisplayName(location, NameType.CanonicalName);
-                        break;
-                    case NameType.DisplayName:
-                        Name = GetDefaultName(location, NameType.DisplayName);
-                        CanonicalName = GetCanonicalName(location, NameType.DisplayName);
-                        DisplayName = location;
-                        break;
-                }
+                case NameType.Name:
+                    Name = location;
+                    CanonicalName = location;
+                    DisplayName = location;
+                    break;
+                case NameType.CanonicalName:
+                    Name = GetDefaultName(location, NameType.CanonicalName);
+                    CanonicalName = location;
+                    DisplayName = GetDisplayName(location, NameType.CanonicalName);
+                    break;
+                case NameType.DisplayName:
+                    Name = GetDefaultName(location, NameType.DisplayName);
+                    CanonicalName = GetCanonicalName(location, NameType.DisplayName);
+                    DisplayName = location;
+                    break;
             }
         }
 
