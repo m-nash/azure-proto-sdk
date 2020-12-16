@@ -5,7 +5,7 @@ namespace Azure.ResourceManager.Core
 {
     public class Subscription : SubscriptionOperations
     {
-        internal Subscription(ArmClientContext context, SubscriptionData resource, ArmClientOptions options)
+        internal Subscription(AzureResourceManagerClientContext context, SubscriptionData resource, AzureResourceManagerClientOptions options)
             : base(context, resource, options)
         {
             Data = resource;
