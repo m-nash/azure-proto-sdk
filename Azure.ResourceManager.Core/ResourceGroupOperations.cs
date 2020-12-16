@@ -15,10 +15,10 @@ namespace Azure.ResourceManager.Core
     {
         public static readonly ResourceType AzureResourceType = "Microsoft.Resources/resourceGroups";
 
-        internal ResourceGroupOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        internal ResourceGroupOperations(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
             : base(context, id, clientOptions) { }
 
-        internal ResourceGroupOperations(ArmClientContext context, Resource resource, ArmClientOptions clientOptions)
+        internal ResourceGroupOperations(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions clientOptions)
             : base(context, resource, clientOptions) { }
 
         public override ResourceType ResourceType => AzureResourceType;
@@ -27,7 +27,7 @@ namespace Azure.ResourceManager.Core
             uri,
             Id.Subscription,
             creds,
-            ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions)))?.ResourceGroups;
+            AzureResourceManagerClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions)))?.ResourceGroups;
 
         public ArmResponse<Response> Delete()
         {

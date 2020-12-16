@@ -11,12 +11,12 @@ namespace Azure.ResourceManager.Core
     public class ArmResourceOperations : ResourceOperationsBase<ArmResource>,
         ITaggableResource<ArmResource>, IDeletableResource
     {
-        public ArmResourceOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOption)
+        public ArmResourceOperations(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOption)
             : base(context, id, clientOption)
         {
         }
 
-        public ArmResourceOperations(ArmClientContext context, ArmResourceData resource, ArmClientOptions clientOption)
+        public ArmResourceOperations(AzureResourceManagerClientContext context, ArmResourceData resource, AzureResourceManagerClientOptions clientOption)
             : base(context, resource, clientOption)
         {
         }

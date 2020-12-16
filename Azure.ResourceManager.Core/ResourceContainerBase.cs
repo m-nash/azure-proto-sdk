@@ -26,7 +26,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="context">The http client context for these operations</param>
         /// <param name="id">The resource Id of the parent resource.</param>
         /// <param name="clientOptions">The http client options to use with these oeprations.</param>
-        protected ResourceContainerBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        protected ResourceContainerBase(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
             : base(context, id, clientOptions)
         {
         }
@@ -37,7 +37,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="context">The http client context for these operations</param>
         /// <param name="resource">The resource representing the parent resource.</param>
         /// <param name="clientOptions">The http client options to use with these oeprations.</param>
-        protected ResourceContainerBase(ArmClientContext context, TrackedResource resource,  ArmClientOptions clientOptions)
+        protected ResourceContainerBase(AzureResourceManagerClientContext context, TrackedResource resource,  AzureResourceManagerClientOptions clientOptions)
             : base(context, resource, clientOptions)
         {
             Parent = resource;

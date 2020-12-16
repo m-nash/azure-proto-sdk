@@ -11,7 +11,7 @@ namespace client
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
 
-            var rgOp = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
+            var rgOp = new AzureResourceManagerClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
             var vmOp = rgOp.VirtualMachine(Context.VmName);
 
             var vm = vmOp.Get().Value;

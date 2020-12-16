@@ -18,7 +18,7 @@ namespace azure_proto_compute
         {
         }
 
-        internal VirtualMachineOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        internal VirtualMachineOperations(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
             : base(context, id, clientOptions)
         {
         }
@@ -152,6 +152,6 @@ namespace azure_proto_compute
         }
 
         internal VirtualMachinesOperations Operations => GetClient<ComputeManagementClient>((baseUri, creds) =>
-            new ComputeManagementClient(baseUri, Id.Subscription, creds, ArmClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).VirtualMachines;
+            new ComputeManagementClient(baseUri, Id.Subscription, creds, AzureResourceManagerClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).VirtualMachines;
     }
 }

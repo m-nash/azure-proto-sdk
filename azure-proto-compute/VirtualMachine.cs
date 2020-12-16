@@ -4,7 +4,7 @@ namespace azure_proto_compute
 {
     public class VirtualMachine : VirtualMachineOperations
     {
-        public VirtualMachine(ArmClientContext context, VirtualMachineData resource, ArmClientOptions options)
+        public VirtualMachine(AzureResourceManagerClientContext context, VirtualMachineData resource, AzureResourceManagerClientOptions options)
             : base(context, resource.Id, options)
         {
             Data = resource;

@@ -14,10 +14,10 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class ResourceGroupContainer : ResourceContainerBase<ResourceGroup, ResourceGroupData>
     {
-        internal ResourceGroupContainer(ArmClientContext context, SubscriptionOperations subscription, ArmClientOptions clientOptions)
+        internal ResourceGroupContainer(AzureResourceManagerClientContext context, SubscriptionOperations subscription, AzureResourceManagerClientOptions clientOptions)
             : base(context, subscription.Id, clientOptions) { }
 
-        internal ResourceGroupContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        internal ResourceGroupContainer(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
             : base(context, id, clientOptions) { }
 
         public override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
@@ -26,7 +26,7 @@ namespace Azure.ResourceManager.Core
             uri,
             Id.Subscription,
             cred,
-            ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
+            AzureResourceManagerClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
 
         public ArmOperation<ResourceGroup> Create(string name, Location location)
         {

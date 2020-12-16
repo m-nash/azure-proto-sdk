@@ -14,12 +14,12 @@ namespace azure_proto_compute
         {
         }
 
-        internal AvailabilitySetOperations(ArmClientContext context, TrackedResource resource, ArmClientOptions clientOptions)
+        internal AvailabilitySetOperations(AzureResourceManagerClientContext context, TrackedResource resource, AzureResourceManagerClientOptions clientOptions)
             : base(context, resource, clientOptions)
         {
         }
 
-        internal AvailabilitySetOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        internal AvailabilitySetOperations(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
             : base(context, id, clientOptions)
         {
         }
@@ -107,6 +107,6 @@ namespace azure_proto_compute
             new ComputeManagementClient(uri,
                                         Id.Subscription,
                                         cred,
-                                        ArmClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).AvailabilitySets;
+                                        AzureResourceManagerClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).AvailabilitySets;
     }
 }

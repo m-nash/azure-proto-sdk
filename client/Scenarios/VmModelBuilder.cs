@@ -18,7 +18,7 @@ namespace client
 
         private Task<VirtualMachine> CreateVmWithBuilderAsync()
         {
-            var client = new ArmClient();
+            var client = new AzureResourceManagerClient();
             var subscription = client.Subscription(Context.SubscriptionId);
 
             // Create Resource Group

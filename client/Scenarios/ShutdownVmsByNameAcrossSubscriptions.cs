@@ -10,7 +10,7 @@ namespace client
     {
         public async void ShutdownAsync()
         {
-            var client = new ArmClient();
+            var client = new AzureResourceManagerClient();
 
             await foreach (var subscription in client.Subscriptions().ListAsync())
             {
@@ -39,7 +39,7 @@ namespace client
             #endregion
 
 
-            var client = new ArmClient();
+            var client = new AzureResourceManagerClient();
             foreach (var sub in client.Subscriptions().List())
             {
                 //sub.ListVirtualMachines("even").PowerOff

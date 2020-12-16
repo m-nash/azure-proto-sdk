@@ -10,7 +10,7 @@ namespace client
             Scenario scenario = null;
             try
             {
-                scenario = ScenarioFactory.GetScenario(Scenarios.ListByNameExpanded);
+                scenario = ScenarioFactory.GetScenario(Scenarios.GetSubscription);
                 scenario.Execute();
 
             }
@@ -19,7 +19,7 @@ namespace client
                 foreach (var rgId in Scenario.CleanUp)
                 {
                     ResourceIdentifier id = new ResourceIdentifier(rgId);
-                    var rg = new ArmClient().Subscription(id.Subscription).ResourceGroup(id);
+                    var rg = new AzureResourceManagerClient().Subscription(id.Subscription).ResourceGroup(id);
                     Console.WriteLine($"--------Deleting {rg.Id.Name}--------");
                     try
                     {

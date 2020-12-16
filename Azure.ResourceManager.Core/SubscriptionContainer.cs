@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Core
     {
         public static readonly ResourceType AzureResourceType = "Microsoft.Resources/subscriptions";
 
-        internal SubscriptionContainer(ArmClientContext context, ArmClientOptions options)
+        internal SubscriptionContainer(AzureResourceManagerClientContext context, AzureResourceManagerClientOptions options)
             : base(context, null, options, null)
         {
         }
@@ -22,23 +22,23 @@ namespace Azure.ResourceManager.Core
         public override ResourceType ResourceType => AzureResourceType;
 
         internal SubscriptionsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) =>
-            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
+            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, AzureResourceManagerClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
 
         public Pageable<SubscriptionOperations> List(CancellationToken cancellationToken = default)
         {
-            return new PhWrappingPageable<Subscription, SubscriptionOperations>(
+            return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Subscription, SubscriptionOperations>(
                 Operations.List(cancellationToken),
-                Convertor());
+                Converter());
         }
 
         public AsyncPageable<SubscriptionOperations> ListAsync(CancellationToken cancellationToken = default)
         {
-            return new PhWrappingAsyncPageable<Subscription, SubscriptionOperations>(
+            return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.Subscription, SubscriptionOperations>(
                 Operations.ListAsync(cancellationToken),
-                Convertor());
+                Converter());
         }
 
-        private Func<Subscription, SubscriptionOperations> Convertor()
+        private Func<Azure.ResourceManager.Resources.Models.Subscription, SubscriptionOperations> Converter()
         {
             return s => new SubscriptionOperations(ClientContext, new SubscriptionData(s), ClientOptions);
         }

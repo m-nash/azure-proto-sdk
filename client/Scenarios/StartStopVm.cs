@@ -11,7 +11,7 @@ namespace client
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
 
-            var client = new ArmClient();
+            var client = new AzureResourceManagerClient();
             var subscription = client.Subscription(Context.SubscriptionId);
             var resourceGroup = subscription.ResourceGroup(Context.RgName);
             var vm = resourceGroup.VirtualMachine(Context.VmName);

@@ -58,7 +58,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="context">The http client context for these operations</param>
         /// <param name="id">The resource Id of this resource</param>
         /// <param name="clientOptions">Client options that should apply to these operations</param>
-        public ResourceOperationsBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        public ResourceOperationsBase(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
             : this(context, new ArmResourceData(id), clientOptions)
         {
         }
@@ -69,7 +69,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="context">The http client context for these operations</param>
         /// <param name="resource">The object corresponding to this resource</param>
         /// <param name="clientOptions">Client options that should apply to these operations</param>
-        public ResourceOperationsBase(ArmClientContext context, Resource resource, ArmClientOptions clientOptions)
+        public ResourceOperationsBase(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions clientOptions)
             : base(context, resource, clientOptions)
         {
         }

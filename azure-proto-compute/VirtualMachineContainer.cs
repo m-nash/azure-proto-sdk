@@ -18,12 +18,12 @@ namespace azure_proto_compute
     /// Likewise we should not expose create when a subnet container is constructed at a resource group level
     public class VirtualMachineContainer : ResourceContainerBase<VirtualMachine, VirtualMachineData>
     {
-        internal VirtualMachineContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions)
+        internal VirtualMachineContainer(AzureResourceManagerClientContext context, ResourceGroupData resourceGroup, AzureResourceManagerClientOptions clientOptions)
             : base(context, resourceGroup, clientOptions)
         {
         }
 
-        internal VirtualMachineContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        internal VirtualMachineContainer(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
             : base(context, id, clientOptions)
         {
         }
@@ -138,6 +138,6 @@ namespace azure_proto_compute
         }
 
         internal VirtualMachinesOperations Operations => this.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, Id.Subscription, cred, 
-                    ArmClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).VirtualMachines;
+                    AzureResourceManagerClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).VirtualMachines;
     }
 }

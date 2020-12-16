@@ -4,7 +4,7 @@ namespace azure_proto_compute
 {
     public class AvailabilitySet : AvailabilitySetOperations
     {
-        public AvailabilitySet(ArmClientContext context, AvailabilitySetData resource, ArmClientOptions options)
+        public AvailabilitySet(AzureResourceManagerClientContext context, AvailabilitySetData resource, AzureResourceManagerClientOptions options)
             : base(context, resource.Id, options)
         {
             Data = resource;

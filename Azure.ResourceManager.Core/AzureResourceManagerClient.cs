@@ -1,5 +1,4 @@
-﻿using Azure;
-using Azure.Core;
+﻿using Azure.Core;
 using Azure.Identity;
 using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
@@ -17,30 +16,30 @@ namespace Azure.ResourceManager.Core
     /// credential required.
     /// TODO: What is appropriate naming for ArmClient , given that we would not liek to make distinctions between data and management.
     /// </summary>
-    public class ArmClient
+    public class AzureResourceManagerClient
     {
         internal static readonly string DefaultUri = "https://management.azure.com";
 
         public Dictionary<string, string> ApiVersionOverrides { get; private set; }
 
-        public ArmClient(ArmClientOptions options = null)
+        public AzureResourceManagerClient(AzureResourceManagerClientOptions options = null)
             : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, options) { }
 
-        public ArmClient(string defaultSubscriptionId, ArmClientOptions options = null)
+        public AzureResourceManagerClient(string defaultSubscriptionId, AzureResourceManagerClientOptions options = null)
             : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId, options) { }
 
-        public ArmClient(TokenCredential credential, string defaultSubscriptionId, ArmClientOptions options = null)
+        public AzureResourceManagerClient(TokenCredential credential, string defaultSubscriptionId, AzureResourceManagerClientOptions options = null)
             : this(new Uri(DefaultUri), credential, defaultSubscriptionId, options) { }
 
-        public ArmClient(Uri baseUri, TokenCredential credential, ArmClientOptions options = null)
+        public AzureResourceManagerClient(Uri baseUri, TokenCredential credential, AzureResourceManagerClientOptions options = null)
             : this(baseUri, credential, null, options) { }
 
-        public ArmClientOptions ClientOptions { get; private set; }
+        public AzureResourceManagerClientOptions ClientOptions { get; private set; }
 
-        public ArmClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId, ArmClientOptions options)
+        public AzureResourceManagerClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId, AzureResourceManagerClientOptions options)
         {
-            ClientOptions = options ?? new ArmClientOptions();
-            ClientContext = new ArmClientContext(baseUri, credential);
+            ClientOptions = options ?? new AzureResourceManagerClientOptions();
+            ClientContext = new AzureResourceManagerClientContext(baseUri, credential);
             defaultSubscriptionId ??= GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult();
             DefaultSubscription = new SubscriptionOperations(ClientContext, new ResourceIdentifier($"/subscriptions/{defaultSubscriptionId}"), options);
             ApiVersionOverrides = new Dictionary<string, string>();
@@ -48,7 +47,7 @@ namespace Azure.ResourceManager.Core
 
         public SubscriptionOperations DefaultSubscription { get; private set; }
 
-        internal virtual ArmClientContext ClientContext { get; }
+        internal virtual AzureResourceManagerClientContext ClientContext { get; }
 
         public SubscriptionOperations Subscription(SubscriptionData subscription) => new SubscriptionOperations(ClientContext, subscription, ClientOptions);
 
