@@ -13,13 +13,6 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class Location : IEquatable<Location>, IComparable<Location>
     {
-        private enum NameType
-        {
-            Name,
-            CanonicalName,
-            DisplayName,
-        }
-
         /// <summary>
         /// Public cloud location for East Asia.
         /// </summary>
@@ -308,6 +301,13 @@ namespace Azure.ResourceManager.Core
             }
         }
 
+        private enum NameType
+        {
+            Name,
+            CanonicalName,
+            DisplayName,
+        }
+
         /// <summary>
         /// Gets defaul Location object: West US.
         /// </summary>
@@ -329,8 +329,9 @@ namespace Azure.ResourceManager.Core
         public string DisplayName { get; private set; }
 
         /// <summary>
+        /// Creates a new location implicitly from a string.
         /// </summary>
-        /// <param name="other">Location object to be assigned.</param>
+        /// <param name="other">String to be assigned.</param>
         public static implicit operator Location(string other)
         {
             if (other == null)
@@ -347,9 +348,47 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
+        /// Creates a string implicitly from a Location object.
         /// </summary>
         /// <param name="other">Location object to be assigned.</param>
         public static implicit operator string(Location other) => other.DisplayName;
+
+        /// <summary>
+        /// Detects if a location object is equal to another location instance or a string representing the location name.
+        /// </summary>
+        /// <param name="other">Location object or name as a string.</param>
+        /// <returns>True or false.</returns>
+        public bool Equals(Location other)
+        {
+            if (other == null)
+                return false;
+
+            return Name == other.Name && CanonicalName == other.CanonicalName && DisplayName == other.DisplayName;
+        }
+
+        /// <summary>
+        /// Gets the display name of a location object.
+        /// </summary>
+        /// <returns>Display name.</returns>
+        public override string ToString()
+        {
+            return DisplayName;
+        }
+
+        /// <summary>
+        /// Compares this Location name to another Location to expose if it is greater, less or equal than this one.
+        /// </summary>
+        /// <param name="other">Location object or name as a string.</param>
+        /// <returns>-1 for less than, 0 for equals, 1 for greater than.</returns>
+        public int CompareTo(Location other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return 1;
+            }
+
+            return Name.CompareTo(other.Name);
+        }
 
         private static string NormalizationUtility(string value)
         {
@@ -388,19 +427,6 @@ namespace Azure.ResourceManager.Core
             {
                 return NameType.Name;
             }
-        }
-
-        public bool Equals(Location other)
-        {
-            if (other == null)
-                return false;
-
-            return Name == other.Name && CanonicalName == other.CanonicalName && DisplayName == other.DisplayName;
-        }
-
-        public override string ToString()
-        {
-            return DisplayName;
         }
 
         private static string GetCanonicalName(string name, NameType patternType)
@@ -448,20 +474,6 @@ namespace Azure.ResourceManager.Core
                 default:
                     return name;
             }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public int CompareTo(Location other)
-        {
-            if (ReferenceEquals(other, null))
-            {
-                return 1;
-            }
-            return Name.CompareTo(other.Name);
         }
     }
 }
