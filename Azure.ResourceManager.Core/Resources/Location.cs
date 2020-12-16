@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    ///     TODO: follow the full guidelines for these immutable types (IComparable, IEquatable, operator overloads, etc.)
+    /// Represents an Azure geography region where supported resource providers live.
     /// </summary>
     public class Location : IEquatable<Location>, IComparable<Location>
     {
@@ -271,13 +271,13 @@ namespace Azure.ResourceManager.Core
                     DisplayName = location;
                     break;
                 case NameType.CanonicalName:
-                    Name = GetDefaultName(location, NameType.CanonicalName);
+                    Name = GetDefaultNameFromCanonicalName(location);
                     CanonicalName = location;
-                    DisplayName = GetDisplayName(location, NameType.CanonicalName);
+                    DisplayName = GetDisplayNameFromCanonicalName(location);
                     break;
                 case NameType.DisplayName:
-                    Name = GetDefaultName(location, NameType.DisplayName);
-                    CanonicalName = GetCanonicalName(location, NameType.DisplayName);
+                    Name = GetDefaultNameFromDisplayName(location);
+                    CanonicalName = GetCanonicalNameFromDisplayName(location);
                     DisplayName = location;
                     break;
             }
@@ -411,51 +411,36 @@ namespace Azure.ResourceManager.Core
             }
         }
 
-        private static string GetCanonicalName(string name, NameType patternType)
+        private static string GetCanonicalNameFromDisplayName(string name)
         {
-            switch (patternType)
-            {
-                case NameType.DisplayName:
-                    return Regex.Replace(name.ToLower(), @" ", "-");
-                default:
-                    return name;
-            }
+            return Regex.Replace(name.ToLower(), @" ", "-");
         }
 
-        private static string GetDisplayName(string name, NameType patternType)
+        private static string GetDisplayNameFromCanonicalName(string name)
         {
-            switch (patternType)
+            char[] chName = name.ToCharArray();
+            chName[0] = char.ToUpper(chName[0]);
+
+            for (int i = 0; i < chName.Length - 1; i++)
             {
-                case NameType.CanonicalName:
-                    char[] chName = name.ToCharArray();
-                    chName[0] = char.ToUpper(chName[0]);
-
-                    for (int i = 0; i < chName.Length - 1; i++)
-                    {
-                        if (chName[i] == '-')
-                        {
-                            chName[i] = ' ';
-                            chName[i + 1] = char.ToUpper(chName[i + 1]);
-                        }
-                    }
-
-                    return new string(chName);
-                default:
-                    return name;
+                if (chName[i] == '-')
+                {
+                    chName[i] = ' ';
+                    chName[i + 1] = char.ToUpper(chName[i + 1]);
+                }
             }
+
+            return new string(chName);
         }
 
-        private static string GetDefaultName(string name, NameType patternType)
+        private static string GetDefaultNameFromCanonicalName(string name)
         {
-            switch (patternType)
-            {
-                case NameType.CanonicalName:
-                    return Regex.Replace(name, @"-", string.Empty);
-                case NameType.DisplayName:
-                    return Regex.Replace(name, @" ", string.Empty).ToLower();
-                default:
-                    return name;
-            }
+            return Regex.Replace(name, @"-", string.Empty);
+        }
+
+        private static string GetDefaultNameFromDisplayName(string name)
+        {
+            return Regex.Replace(name, @" ", string.Empty).ToLower();
         }
     }
 }
