@@ -12,14 +12,14 @@ namespace client
         public override void Execute()
         {
 
-            ArmClientOptions options1 = new ArmClientOptions();
-            ArmClientOptions options2 = new ArmClientOptions();
+            AzureResourceManagerClientOptions options1 = new AzureResourceManagerClientOptions();
+            AzureResourceManagerClientOptions options2 = new AzureResourceManagerClientOptions();
             var dummyPolicy1 = new dummyPolicy();
             var dummyPolicy2 = new dummyPolicy();
             options1.AddPolicy(dummyPolicy1, HttpPipelinePosition.PerCall);
             options2.AddPolicy(dummyPolicy2, HttpPipelinePosition.PerCall);
-            var client1 = new ArmClient(options1);
-            var client2 = new ArmClient(options2);
+            var client1 = new AzureResourceManagerClient(options1);
+            var client2 = new AzureResourceManagerClient(options2);
 
             foreach (var sub in client1.Subscriptions().List())
             {

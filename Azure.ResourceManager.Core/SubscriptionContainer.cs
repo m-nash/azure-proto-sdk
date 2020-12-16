@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Core
     {
         public static readonly ResourceType AzureResourceType = "Microsoft.Resources/subscriptions";
 
-        internal SubscriptionContainer(ArmClientContext context, ArmClientOptions options)
+        internal SubscriptionContainer(AzureResourceManagerClientContext context, AzureResourceManagerClientOptions options)
             : base(context, null, options, null)
         {
         }
@@ -22,7 +22,7 @@ namespace Azure.ResourceManager.Core
         public override ResourceType ResourceType => AzureResourceType;
 
         internal SubscriptionsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) =>
-            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
+            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, AzureResourceManagerClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
 
         public Pageable<SubscriptionOperations> List(CancellationToken cancellationToken = default)
         {

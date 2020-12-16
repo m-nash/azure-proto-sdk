@@ -15,17 +15,17 @@ namespace Azure.ResourceManager.Core
     {
         public static readonly ResourceType AzureResourceType = "Microsoft.Resources/subscriptions";
 
-        internal SubscriptionOperations(ArmClientContext context, string defaultSubscription, ArmClientOptions clientOptions)
+        internal SubscriptionOperations(AzureResourceManagerClientContext context, string defaultSubscription, AzureResourceManagerClientOptions clientOptions)
             : base(context, $"/subscriptions/{defaultSubscription}", clientOptions)
         {
         }
 
-        internal SubscriptionOperations(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        internal SubscriptionOperations(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
             : base(context, id, clientOptions)
         {
         }
 
-        internal SubscriptionOperations(ArmClientContext context, Resource subscription, ArmClientOptions clientOptions)
+        internal SubscriptionOperations(AzureResourceManagerClientContext context, Resource subscription, AzureResourceManagerClientOptions clientOptions)
             : base(context, subscription, clientOptions)
         {
         }
@@ -33,10 +33,10 @@ namespace Azure.ResourceManager.Core
         public override ResourceType ResourceType => AzureResourceType;
 
         internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) =>
-            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
+            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, AzureResourceManagerClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
 
         internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) =>
-            new ResourcesManagementClient(uri, Id.Subscription, cred, ArmClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
+            new ResourcesManagementClient(uri, Id.Subscription, cred, AzureResourceManagerClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
 
         public Pageable<ResourceGroupOperations> ListResourceGroups(CancellationToken cancellationToken = default)
         {
