@@ -260,6 +260,11 @@ namespace Azure.ResourceManager.Core
             { "BRAZILSOUTHEAST", BrazilSoutheast },
         };
 
+        private static readonly string CanonicalPattern = "^[a-z]+(-[a-z]+)+(-[1-9])?$";
+        private static readonly string DisplayPattern = "^[A-Z]+[a-z]*( [A-Z]+[a-z]*)+( [1-9])?$";
+        private static readonly string RegexDash = @"-";
+        private static readonly string RegexWhitespace = @" ";
+
         private Location()
         {
         }
@@ -405,14 +410,11 @@ namespace Azure.ResourceManager.Core
 
         private static NameType DetectNameType(string location)
         {
-            string canonicalPattern = "^[a-z]+(-[a-z]+)+(-[1-9])?$";
-            string displayPattern = "^[A-Z]+[a-z]*( [A-Z]+[a-z]*)+( [1-9])?$";
-
-            if (Regex.IsMatch(location, canonicalPattern))
+            if (Regex.IsMatch(location, CanonicalPattern))
             {
                 return NameType.CanonicalName;
             }
-            else if (Regex.IsMatch(location, displayPattern))
+            else if (Regex.IsMatch(location, DisplayPattern))
             {
                 return NameType.DisplayName;
             }
@@ -446,12 +448,12 @@ namespace Azure.ResourceManager.Core
 
         private static string GetDefaultNameFromCanonicalName(string name)
         {
-            return Regex.Replace(name, @"-", string.Empty);
+            return Regex.Replace(name, RegexDash, string.Empty);
         }
 
         private static string GetDefaultNameFromDisplayName(string name)
         {
-            return Regex.Replace(name, @" ", string.Empty).ToLower();
+            return Regex.Replace(name, RegexWhitespace, string.Empty).ToLower();
         }
     }
 }
