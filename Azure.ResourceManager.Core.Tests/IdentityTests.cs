@@ -163,7 +163,33 @@ namespace Azure.ResourceManager.Core.Tests
         }
 
         [TestCase]
-        public void TestDeserializerOuterExtraField()
+        public void TestDeserializerValidInnerExtraField()
+        {
+            var identityJsonProperty = DeserializerHelper("SystemAndUserAssignedInnerExtraField.json");
+            Identity back = Identity.Deserialize(identityJsonProperty.Value);
+            Assert.IsTrue("22fddec1-8b9f-49dc-bd72-ddaf8f215577".Equals(back.SystemAssignedIdentity.PrincipalId.ToString()));
+            Assert.IsTrue("72f988bf-86f1-41af-91ab-2d7cd011db47".Equals(back.SystemAssignedIdentity.TenantId.ToString()));
+            var user = back.UserAssignedIdentities;
+            Assert.AreEqual("/subscriptions/db1ab6f0-4769-4b27-9dde-01e2ef9c123c/resourceGroups/tester/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testidentity", user.Keys.First().ToString());
+            Assert.AreEqual("9a9eaa6a-b49c-4c63-afb5-3b72e3e65422", user.Values.First().ClientId.ToString());
+            Assert.AreEqual("77563a98-c9d9-407b-a7af-592d21fa2153", user.Values.First().PrincipalId.ToString());
+        }
+
+        [TestCase]
+        public void TestDeserializerValidMiddleExtraField()
+        {
+            var identityJsonProperty = DeserializerHelper("SystemAndUserAssignedMiddleExtraField.json");
+            Identity back = Identity.Deserialize(identityJsonProperty.Value);
+            Assert.IsTrue("22fddec1-8b9f-49dc-bd72-ddaf8f215577".Equals(back.SystemAssignedIdentity.PrincipalId.ToString()));
+            Assert.IsTrue("72f988bf-86f1-41af-91ab-2d7cd011db47".Equals(back.SystemAssignedIdentity.TenantId.ToString()));
+            var user = back.UserAssignedIdentities;
+            Assert.AreEqual("/subscriptions/db1ab6f0-4769-4b27-9dde-01e2ef9c123c/resourceGroups/tester/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testidentity", user.Keys.First().ToString());
+            Assert.AreEqual("9a9eaa6a-b49c-4c63-afb5-3b72e3e65422", user.Values.First().ClientId.ToString());
+            Assert.AreEqual("77563a98-c9d9-407b-a7af-592d21fa2153", user.Values.First().PrincipalId.ToString());
+        }
+
+        [TestCase]
+        public void TestDeserializerValidOuterExtraField()
         {
             var json = File.ReadAllText("./TestAssets/Identity/SystemAndUserAssignedOuterExtraField.json");
             JsonDocument document = JsonDocument.Parse(json);

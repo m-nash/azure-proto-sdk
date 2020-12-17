@@ -1,5 +1,6 @@
 ﻿using Azure.ResourceManager.Compute.Models;
 using Azure.ResourceManager.Core;
+using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Collections.Generic;
 
@@ -109,10 +110,27 @@ namespace azure_proto_compute
             get => Model.Zones;
             set => Model.Zones = value;
         }
-        public VirtualMachineIdentity Identity
+
+        public Azure.ResourceManager.Core.Identity Identity
         {
-            get => Model.Identity;
-            set => Model.Identity = value;
+            get => VmIdentityToIdentity(Model.Identity);
+        }
+
+        private Azure.ResourceManager.Core.Identity VmIdentityToIdentity(VirtualMachineIdentity vmIdentity)
+        {
+            SystemAssignedIdentity systemAssignedIdentity = new SystemAssignedIdentity(new Guid(vmIdentity.TenantId), new Guid(vmIdentity.PrincipalId));
+            var userAssignedIdentities = new Dictionary<ResourceIdentifier, Azure.ResourceManager.Core.UserAssignedIdentity>();
+            if (vmIdentity.UserAssignedIdentities != null)
+            {
+                foreach (var entry in vmIdentity.UserAssignedIdentities)
+                {
+                    ResourceIdentifier resourceId = new ResourceIdentifier(entry.Key);
+                    var userAssignedIdentity = new Azure.ResourceManager.Core.UserAssignedIdentity(new Guid(entry.Value.ClientId), new Guid(entry.Value.PrincipalId));
+                    userAssignedIdentities[resourceId] = userAssignedIdentity;
+                }
+            }
+
+            return new Azure.ResourceManager.Core.Identity(systemAssignedIdentity, userAssignedIdentities);
         }
 
         public IList<VirtualMachineExtension> Resources => Model.Resources;

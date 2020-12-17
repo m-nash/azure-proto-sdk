@@ -32,6 +32,9 @@
     <None Update="TestAssets\Identity\InvalidType.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="TestAssets\Identity\SystemAndUserAssignedMiddleExtraField.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestAssets\Identity\SystemAndUserAssignedInnerExtraField.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

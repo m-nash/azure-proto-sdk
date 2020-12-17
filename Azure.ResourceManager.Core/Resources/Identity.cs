@@ -10,17 +10,16 @@ namespace Azure.ResourceManager.Core
 {
     /// <summary>
     ///     Represents a managed identity
-    ///     TODO: fill in properties, implement comparison and equality methods and operator overloads
     /// </summary>
-    public class Identity
+    public class Identity : IEquatable<Identity>
     {
         private const string SystemAssigned = "SystemAssigned";
         private const string UserAssigned = "UserAssigned";
         private const string SystemAndUserAssigned = "SystemAssigned, UserAssigned";
 
-        public SystemAssignedIdentity SystemAssignedIdentity { get; set; } // Need to decide on setter
+        public SystemAssignedIdentity SystemAssignedIdentity { get; private set; }
 
-        public IDictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; set; } // maintain structure of {id, (clientid, principal id)} in case of multiple UserIdentities
+        public IDictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; private set; } // maintain structure of {id, (clientid, principal id)} in case of multiple UserIdentities
 
         public Identity() : this(null, false) { } //not system or user
 
@@ -38,7 +37,7 @@ namespace Azure.ResourceManager.Core
             }
         }
 
-        public Identity(SystemAssignedIdentity systemAssigned, IDictionary<ResourceIdentifier, UserAssignedIdentity> user)
+        public Identity(SystemAssignedIdentity systemAssigned, IDictionary<ResourceIdentifier, UserAssignedIdentity> user) // TODO: remove this constructor later
         {
             SystemAssignedIdentity = systemAssigned;
             if (user == null)
@@ -56,7 +55,6 @@ namespace Azure.ResourceManager.Core
             if (other == null)
                 return false;
 
-            bool isUserAssignedEqual = true;
             if (UserAssignedIdentities.Count == other.UserAssignedIdentities.Count)
             {
                 foreach (var identity in UserAssignedIdentities)
@@ -66,20 +64,17 @@ namespace Azure.ResourceManager.Core
                     {
                         if (!UserAssignedIdentity.Equals(identity.Value, value))
                         {
-                            isUserAssignedEqual = false;
-                            break;
+                            return false;
                         }
                     }
                     else
                     {
-                        isUserAssignedEqual = false;
-                        break;
+                        return false;
                     }
                 }
             }
 
-            return SystemAssignedIdentity.Equals(SystemAssignedIdentity, other.SystemAssignedIdentity) &&
-                isUserAssignedEqual;
+            return SystemAssignedIdentity.Equals(SystemAssignedIdentity, other.SystemAssignedIdentity);
         }
 
         public static Identity Deserialize(JsonElement element)
