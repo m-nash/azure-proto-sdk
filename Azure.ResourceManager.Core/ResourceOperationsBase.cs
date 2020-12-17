@@ -11,17 +11,17 @@ namespace Azure.ResourceManager.Core
         where TOperations : ResourceOperationsBase<TOperations, TResource>
     {
         public ResourceOperationsBase(ArmResourceOperations genericOperations)
-            : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
+            : this(genericOperations.ClientContext, genericOperations.Id)
         {
         }
 
-        public ResourceOperationsBase(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
-            : this(context, new ArmResource(id), clientOptions)
+        public ResourceOperationsBase(AzureResourceManagerClientContext context, ResourceIdentifier id)
+            : this(context, new ArmResource(id))
         {
         }
 
-        public ResourceOperationsBase(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions clientOptions)
-            : base(context, resource, clientOptions)
+        public ResourceOperationsBase(AzureResourceManagerClientContext context, Resource resource)
+            : base(context, resource)
         {
         }
 

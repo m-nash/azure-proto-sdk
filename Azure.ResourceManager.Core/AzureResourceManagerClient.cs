@@ -34,14 +34,11 @@ namespace Azure.ResourceManager.Core
         public AzureResourceManagerClient(Uri baseUri, TokenCredential credential, AzureResourceManagerClientOptions options = null)
             : this(baseUri, credential, null, options) { }
 
-        public AzureResourceManagerClientOptions ClientOptions { get; private set; }
-
         public AzureResourceManagerClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId, AzureResourceManagerClientOptions options)
         {
-            ClientOptions = options ?? new AzureResourceManagerClientOptions();
-            ClientContext = new AzureResourceManagerClientContext(baseUri, credential);
+            ClientContext = new AzureResourceManagerClientContext(baseUri, credential, options ?? new AzureResourceManagerClientOptions());
             defaultSubscriptionId ??= GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult();
-            DefaultSubscription = new SubscriptionOperations(ClientContext, new ResourceIdentifier($"/subscriptions/{defaultSubscriptionId}"), options);
+            DefaultSubscription = new SubscriptionOperations(ClientContext, new ResourceIdentifier($"/subscriptions/{defaultSubscriptionId}"));
             ApiVersionOverrides = new Dictionary<string, string>();
         }
 
@@ -49,19 +46,19 @@ namespace Azure.ResourceManager.Core
 
         internal virtual AzureResourceManagerClientContext ClientContext { get; }
 
-        public SubscriptionOperations Subscription(SubscriptionData subscription) => new SubscriptionOperations(ClientContext, subscription, ClientOptions);
+        public SubscriptionOperations Subscription(SubscriptionData subscription) => new SubscriptionOperations(ClientContext, subscription);
 
         /// <summary>
         /// </summary>
         /// <param name="subscription"></param>
         /// <returns></returns>
-        public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(ClientContext, subscription, ClientOptions);
+        public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(ClientContext, subscription);
 
-        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(ClientContext, subscription, ClientOptions);
+        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(ClientContext, subscription);
 
         public SubscriptionContainer Subscriptions()
         {
-            return new SubscriptionContainer(ClientContext, ClientOptions);
+            return new SubscriptionContainer(ClientContext, ClientContext.Options);
         }
 
         public AsyncPageable<LocationData> ListLocationsAsync(string subscriptionId = null, CancellationToken token = default(CancellationToken))
@@ -144,17 +141,17 @@ namespace Azure.ResourceManager.Core
 
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
         {
-            return new ResourceGroupOperations(this.ClientContext, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", ClientOptions);
+            return new ResourceGroupOperations(this.ClientContext, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}");
         }
 
         public ResourceGroupOperations ResourceGroup(ResourceIdentifier resourceGroup)
         {
-            return new ResourceGroupOperations(this.ClientContext, resourceGroup, ClientOptions);
+            return new ResourceGroupOperations(this.ClientContext, resourceGroup);
         }
 
         public ResourceGroupOperations ResourceGroup(ResourceGroupData resourceGroup)
         {
-            return new ResourceGroupOperations(this.ClientContext, resourceGroup.Id, ClientOptions);
+            return new ResourceGroupOperations(this.ClientContext, resourceGroup.Id);
         }
 
         public T GetResourceOperationsBase<T>(TrackedResource resource) where T : TrackedResource

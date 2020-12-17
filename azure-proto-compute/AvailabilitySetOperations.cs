@@ -14,13 +14,13 @@ namespace azure_proto_compute
         {
         }
 
-        internal AvailabilitySetOperations(AzureResourceManagerClientContext context, TrackedResource resource, AzureResourceManagerClientOptions clientOptions)
-            : base(context, resource, clientOptions)
+        internal AvailabilitySetOperations(AzureResourceManagerClientContext context, TrackedResource resource)
+            : base(context, resource)
         {
         }
 
-        internal AvailabilitySetOperations(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
-            : base(context, id, clientOptions)
+        internal AvailabilitySetOperations(AzureResourceManagerClientContext context, ResourceIdentifier id)
+            : base(context, id)
         {
         }
 
@@ -52,7 +52,7 @@ namespace azure_proto_compute
                 a =>
                 {
                     Resource = new AvailabilitySetData(a);
-                    return new AvailabilitySet(ClientContext, Resource as AvailabilitySetData, ClientOptions);
+                    return new AvailabilitySet(ClientContext, Resource as AvailabilitySetData);
                 });
         }
 
@@ -63,7 +63,7 @@ namespace azure_proto_compute
                 a =>
                 {
                     Resource = new AvailabilitySetData(a);
-                    return new AvailabilitySet(ClientContext, Resource as AvailabilitySetData, ClientOptions);
+                    return new AvailabilitySet(ClientContext, Resource as AvailabilitySetData);
                 });
         }
 
@@ -74,7 +74,7 @@ namespace azure_proto_compute
                 a =>
                 {
                     Resource = new AvailabilitySetData(a);
-                    return new AvailabilitySet(ClientContext, Resource as AvailabilitySetData, ClientOptions);
+                    return new AvailabilitySet(ClientContext, Resource as AvailabilitySetData);
                 });
         }
 
@@ -85,7 +85,7 @@ namespace azure_proto_compute
                 a =>
                 {
                     Resource = new AvailabilitySetData(a);
-                    return new AvailabilitySet(ClientContext, Resource as AvailabilitySetData, ClientOptions);
+                    return new AvailabilitySet(ClientContext, Resource as AvailabilitySetData);
                 });
         }
 
@@ -107,6 +107,6 @@ namespace azure_proto_compute
             new ComputeManagementClient(uri,
                                         Id.Subscription,
                                         cred,
-                                        AzureResourceManagerClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).AvailabilitySets;
+                                        AzureResourceManagerClientOptions.Convert<ComputeManagementClientOptions>(ClientContext.Options))).AvailabilitySets;
     }
 }

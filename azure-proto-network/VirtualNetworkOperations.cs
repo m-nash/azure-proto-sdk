@@ -13,19 +13,19 @@ namespace azure_proto_network
     public class VirtualNetworkOperations : ResourceOperationsBase<VirtualNetwork, VirtualNetworkData>, ITaggable<VirtualNetwork, VirtualNetworkData>, IDeletableResource<VirtualNetwork, VirtualNetworkData>
     {
         internal VirtualNetworkOperations(ArmResourceOperations genericOperations)
-            : base(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
+            : base(genericOperations.ClientContext, genericOperations.Id)
         {
         }
 
-        internal VirtualNetworkOperations(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
-            : base(context, id, clientOptions)
+        internal VirtualNetworkOperations(AzureResourceManagerClientContext context, ResourceIdentifier id)
+            : base(context, id)
         {
         }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
 
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-            AzureResourceManagerClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).VirtualNetworks;
+            AzureResourceManagerClientOptions.Convert<NetworkManagementClientOptions>(ClientContext.Options))).VirtualNetworks;
 
         public ArmResponse<Response> Delete()
         {
@@ -54,7 +54,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new VirtualNetworkData(n);
-                    return new VirtualNetwork(ClientContext, Resource as VirtualNetworkData, ClientOptions);
+                    return new VirtualNetwork(ClientContext, Resource as VirtualNetworkData);
                 });
         }
 
@@ -64,7 +64,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new VirtualNetworkData(n);
-                    return new VirtualNetwork(ClientContext, Resource as VirtualNetworkData, ClientOptions);
+                    return new VirtualNetwork(ClientContext, Resource as VirtualNetworkData);
                 });
         }
 
@@ -76,7 +76,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new VirtualNetworkData(n);
-                    return new VirtualNetwork(ClientContext, Resource as VirtualNetworkData, ClientOptions);
+                    return new VirtualNetwork(ClientContext, Resource as VirtualNetworkData);
                 });
         }
 
@@ -88,28 +88,28 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new VirtualNetworkData(n);
-                    return new VirtualNetwork(ClientContext, Resource as VirtualNetworkData, ClientOptions);
+                    return new VirtualNetwork(ClientContext, Resource as VirtualNetworkData);
                 });
         }
 
         public Subnet Subnet(SubnetData subnet)
         {
-            return new Subnet(ClientContext, subnet, ClientOptions);
+            return new Subnet(ClientContext, subnet);
         }
 
         public SubnetOperations Subnet(ResourceIdentifier subnet)
         {
-            return new SubnetOperations(ClientContext, subnet, ClientOptions);
+            return new SubnetOperations(ClientContext, subnet);
         }
 
         public SubnetOperations Subnet(string subnet)
         {
-            return new SubnetOperations(ClientContext, $"{Id}/subnets/{subnet}", ClientOptions);
+            return new SubnetOperations(ClientContext, $"{Id}/subnets/{subnet}");
         }
 
         public virtual SubnetContainer Subnets()
         {
-            return new SubnetContainer(ClientContext, Id, ClientOptions);
+            return new SubnetContainer(ClientContext, Id);
         }
     }
 }

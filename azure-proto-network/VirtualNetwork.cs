@@ -4,15 +4,15 @@ namespace azure_proto_network
 {
     public class VirtualNetwork : VirtualNetworkOperations
     {
-        public VirtualNetwork(AzureResourceManagerClientContext context, VirtualNetworkData resource, AzureResourceManagerClientOptions options)
-            : base(context, resource.Id, options)
+        public VirtualNetwork(AzureResourceManagerClientContext context, VirtualNetworkData resource)
+            : base(context, resource.Id)
         {
             Data = resource;
         }
 
         public override SubnetContainer Subnets()
         {
-            return new SubnetContainer(ClientContext, Data, ClientOptions);
+            return new SubnetContainer(ClientContext, Data);
         }
 
         public VirtualNetworkData Data { get; private set; }

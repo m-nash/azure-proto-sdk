@@ -27,7 +27,6 @@ namespace Azure.ResourceManager.Core
 
         public static Pageable<TOperations> ListAtContext<TOperations, TResource>(
             AzureResourceManagerClientContext clientContext,
-            AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier id,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
@@ -41,7 +40,6 @@ namespace Azure.ResourceManager.Core
 
             return _ListAtContext<TOperations, TResource>(
                 clientContext,
-                clientOptions,
                 id,
                 scopeId,
                 resourceFilters,
@@ -51,7 +49,6 @@ namespace Azure.ResourceManager.Core
 
         public static AsyncPageable<TOperations> ListAtContextAsync<TOperations, TResource>(
             AzureResourceManagerClientContext clientContext,
-            AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier id,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
@@ -65,7 +62,6 @@ namespace Azure.ResourceManager.Core
 
             return _ListAtContextAsync<TOperations, TResource>(
                 clientContext,
-                clientOptions,
                 id,
                 scopeId,
                 resourceFilters,
@@ -83,7 +79,6 @@ namespace Azure.ResourceManager.Core
         {
             return _ListAtContext<TOperations, TResource>(
                 subscription.ClientContext,
-                subscription.ClientOptions,
                 subscription.Id,
                 null,
                 resourceFilters,
@@ -101,7 +96,6 @@ namespace Azure.ResourceManager.Core
         {
             return _ListAtContextAsync<TOperations, TResource>(
                 subscription.ClientContext,
-                subscription.ClientOptions,
                 subscription.Id,
                 null,
                 resourceFilters,
@@ -111,7 +105,6 @@ namespace Azure.ResourceManager.Core
 
         private static AsyncPageable<TOperations> _ListAtContextAsync<TOperations, TResource>(
             AzureResourceManagerClientContext clientContext,
-            AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier scopeId,
             string scopeFilter,
             ArmFilterCollection resourceFilters = null,
@@ -136,12 +129,11 @@ namespace Azure.ResourceManager.Core
                     cancellationToken);
             }
 
-            return ConvertResultsAsync<TOperations, TResource>(result, clientContext, clientOptions);
+            return ConvertResultsAsync<TOperations, TResource>(result, clientContext);
         }
 
         private static Pageable<TOperations> _ListAtContext<TOperations, TResource>(
             AzureResourceManagerClientContext clientContext,
-            AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier scopeId,
             string scopeFilter = null,
             ArmFilterCollection resourceFilters = null,
@@ -166,41 +158,39 @@ namespace Azure.ResourceManager.Core
                     cancellationToken);
             }
 
-            return ConvertResults<TOperations, TResource>(result, clientContext, clientOptions);
+            return ConvertResults<TOperations, TResource>(result, clientContext);
         }
 
         private static Pageable<TOperations> ConvertResults<TOperations, TResource>(
             Pageable<GenericResourceExpanded> result,
-            AzureResourceManagerClientContext clientContext,
-            AzureResourceManagerClientOptions clientOptions)
+            AzureResourceManagerClientContext clientContext)
             where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
             return new PhWrappingPageable<GenericResourceExpanded, TOperations>(
                 result,
-                CreateResourceConverter<TOperations, TResource>(clientContext, clientOptions));
+                CreateResourceConverter<TOperations, TResource>(clientContext));
         }
 
         private static AsyncPageable<TOperations> ConvertResultsAsync<TOperations, TResource>(
             AsyncPageable<GenericResourceExpanded> result,
-            AzureResourceManagerClientContext clientContext,
-            AzureResourceManagerClientOptions clientOptions)
+            AzureResourceManagerClientContext clientContext)
             where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
             return new PhWrappingAsyncPageable<GenericResourceExpanded, TOperations>(
                 result,
-                CreateResourceConverter<TOperations, TResource>(clientContext, clientOptions));
+                CreateResourceConverter<TOperations, TResource>(clientContext));
         }
 
-        private static Func<GenericResourceExpanded, TOperations> CreateResourceConverter<TOperations, TResource>(AzureResourceManagerClientContext clientContext, AzureResourceManagerClientOptions clientOptions)
+        private static Func<GenericResourceExpanded, TOperations> CreateResourceConverter<TOperations, TResource>(AzureResourceManagerClientContext clientContext)
             where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
              return s => Activator.CreateInstance(
                     typeof(TOperations),
                     clientContext,
-                    Activator.CreateInstance(typeof(TResource), s as Azure.ResourceManager.Resources.Models.Resource) as TResource, clientOptions) as TOperations;
+                    Activator.CreateInstance(typeof(TResource), s as Azure.ResourceManager.Resources.Models.Resource) as TResource) as TOperations;
         }
 
         //TODO: should be able to access context.GetClient() instead of needing this method

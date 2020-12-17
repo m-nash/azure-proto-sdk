@@ -18,8 +18,8 @@ namespace azure_proto_compute
         {
         }
 
-        internal VirtualMachineOperations(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
-            : base(context, id, clientOptions)
+        internal VirtualMachineOperations(AzureResourceManagerClientContext context, ResourceIdentifier id)
+            : base(context, id)
         {
         }
 
@@ -101,28 +101,28 @@ namespace azure_proto_compute
         {
             return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 Operations.Get(Id.ResourceGroup, Id.Name),
-                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions); });
+                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData); });
         }
 
         public async override Task<ArmResponse<VirtualMachine>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 await Operations.GetAsync(Id.ResourceGroup, Id.Name, cancellationToken),
-                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions); });
+                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData); });
         }
 
         public ArmOperation<VirtualMachine> Update(VirtualMachineUpdate patchable)
         {
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable),
-                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions); });
+                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData); });
         }
 
         public async Task<ArmOperation<VirtualMachine>> UpdateAsync(VirtualMachineUpdate patchable, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
-                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions); });
+                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientContext, Resource as VirtualMachineData); });
         }
 
         public ArmOperation<VirtualMachine> AddTag(string key, string value)
@@ -134,7 +134,7 @@ namespace azure_proto_compute
                 v =>
                 {
                     Resource = new VirtualMachineData(v);
-                    return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions);
+                    return new VirtualMachine(ClientContext, Resource as VirtualMachineData);
                 });
         }
 
@@ -147,11 +147,11 @@ namespace azure_proto_compute
                 v =>
                 {
                     Resource = new VirtualMachineData(v);
-                    return new VirtualMachine(ClientContext, Resource as VirtualMachineData, ClientOptions);
+                    return new VirtualMachine(ClientContext, Resource as VirtualMachineData);
                 });
         }
 
         internal VirtualMachinesOperations Operations => GetClient<ComputeManagementClient>((baseUri, creds) =>
-            new ComputeManagementClient(baseUri, Id.Subscription, creds, AzureResourceManagerClientOptions.Convert<ComputeManagementClientOptions>(ClientOptions))).VirtualMachines;
+            new ComputeManagementClient(baseUri, Id.Subscription, creds, AzureResourceManagerClientOptions.Convert<ComputeManagementClientOptions>(ClientContext.Options))).VirtualMachines;
     }
 }

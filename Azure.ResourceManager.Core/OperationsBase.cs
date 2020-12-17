@@ -11,12 +11,12 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public abstract class OperationsBase
     {
-        public OperationsBase(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions, Location location = null)
-            : this(context, new ArmResource(id, location ?? Location.Default), clientOptions)
+        public OperationsBase(AzureResourceManagerClientContext context, ResourceIdentifier id, Location location = null)
+            : this(context, new ArmResource(id, location ?? Location.Default))
         {
         }
 
-        public OperationsBase(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions ClientOptions)
+        public OperationsBase(AzureResourceManagerClientContext context, Resource resource)
         {
             Validate(resource?.Id);
 
@@ -25,7 +25,6 @@ namespace Azure.ResourceManager.Core
             var trackedResource = resource as TrackedResource;
             DefaultLocation = trackedResource?.Location ?? Location.Default;
             Resource = resource;
-            this.ClientOptions = ClientOptions;
         }
 
         public virtual AzureResourceManagerClientContext ClientContext { get; }
@@ -37,8 +36,6 @@ namespace Azure.ResourceManager.Core
         public virtual Location DefaultLocation { get; }
 
         public virtual ResourceIdentifier Id { get; }
-
-        public virtual AzureResourceManagerClientOptions ClientOptions {get; protected set;}
 
         public virtual void Validate(ResourceIdentifier identifier)
         {

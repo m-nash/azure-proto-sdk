@@ -7,66 +7,66 @@ namespace azure_proto_network
         #region Virtual Network Operations
         public static VirtualNetwork VirtualNetwork(this ResourceGroup resourceGroup, VirtualNetworkData virtualNetwork)
         {
-            return new VirtualNetwork(resourceGroup.ClientContext, virtualNetwork, resourceGroup.ClientOptions);
+            return new VirtualNetwork(resourceGroup.ClientContext, virtualNetwork);
         }
 
         public static VirtualNetworkOperations VirtualNetwork(this ResourceGroupOperations resourceGroup, string virtualNetwork)
         {
-            return new VirtualNetworkOperations(resourceGroup.ClientContext, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/virtualNetworks/{virtualNetwork}"), resourceGroup.ClientOptions);
+            return new VirtualNetworkOperations(resourceGroup.ClientContext, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/virtualNetworks/{virtualNetwork}"));
         }
 
         public static VirtualNetworkContainer VirtualNetworks(this ResourceGroup resourceGroup)
         {
-            return new VirtualNetworkContainer(resourceGroup.ClientContext, resourceGroup.Data, resourceGroup.ClientOptions);
+            return new VirtualNetworkContainer(resourceGroup.ClientContext, resourceGroup.Data);
         }
 
         public static VirtualNetworkContainer VirtualNetworks(this ResourceGroupOperations resourceGroup)
         {
-            return new VirtualNetworkContainer(resourceGroup.ClientContext, resourceGroup.Id, resourceGroup.ClientOptions);
+            return new VirtualNetworkContainer(resourceGroup.ClientContext, resourceGroup.Id);
         }
         #endregion
 
         #region Public IP Address Operations
         public static PublicIpAddress PublicIpAddress(this ResourceGroupOperations resourceGroup, PublicIPAddressData publicIpAddress)
         {
-            return new PublicIpAddress(resourceGroup.ClientContext, publicIpAddress, resourceGroup.ClientOptions);
+            return new PublicIpAddress(resourceGroup.ClientContext, publicIpAddress);
         }
 
         public static PublicIpAddressOperations PublicIpAddress(this ResourceGroupOperations resourceGroup, string publicIpAddress)
         {
-            return new PublicIpAddressOperations(resourceGroup.ClientContext, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/publicIpAddresses/{publicIpAddress}"), resourceGroup.ClientOptions);
+            return new PublicIpAddressOperations(resourceGroup.ClientContext, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/publicIpAddresses/{publicIpAddress}"));
         }
 
         public static PublicIpAddressContainer PublicIpAddresses(this ResourceGroup resourceGroup)
         {
-            return new PublicIpAddressContainer(resourceGroup.ClientContext, resourceGroup.Data, resourceGroup.ClientOptions);
+            return new PublicIpAddressContainer(resourceGroup.ClientContext, resourceGroup.Data);
         }
 
         public static PublicIpAddressContainer PublicIpAddresses(this ResourceGroupOperations resourceGroup)
         {
-            return new PublicIpAddressContainer(resourceGroup.ClientContext, resourceGroup.Id, resourceGroup.ClientOptions);
+            return new PublicIpAddressContainer(resourceGroup.ClientContext, resourceGroup.Id);
         }
         #endregion
 
         #region Network Interface (NIC) operations
         public static NetworkInterface NetworkInterface(this ResourceGroupOperations resourceGroup, NetworkInterfaceData networkInterface)
         {
-            return new NetworkInterface(resourceGroup.ClientContext, networkInterface, resourceGroup.ClientOptions);
+            return new NetworkInterface(resourceGroup.ClientContext, networkInterface);
         }
 
         public static NetworkInterfaceOperations NetworkInterface(this ResourceGroupOperations resourceGroup, string networkInterface)
         {
-            return new NetworkInterfaceOperations(resourceGroup.ClientContext, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/networkInterfaces/{networkInterface}"), resourceGroup.ClientOptions);
+            return new NetworkInterfaceOperations(resourceGroup.ClientContext, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/networkInterfaces/{networkInterface}"));
         }
 
         public static NetworkInterfaceContainer NetworkInterfaces(this ResourceGroup resourceGroup)
         {
-            return new NetworkInterfaceContainer(resourceGroup.ClientContext, resourceGroup.Data, resourceGroup.ClientOptions);
+            return new NetworkInterfaceContainer(resourceGroup.ClientContext, resourceGroup.Data, resourceGroup.ClientContext.Options);
         }
 
         public static NetworkInterfaceContainer NetworkInterfaces(this ResourceGroupOperations resourceGroup)
         {
-            return new NetworkInterfaceContainer(resourceGroup.ClientContext, resourceGroup.Id, resourceGroup.ClientOptions);
+            return new NetworkInterfaceContainer(resourceGroup.ClientContext, resourceGroup.Id, resourceGroup.ClientContext.Options);
         }
         #endregion
 
@@ -78,22 +78,22 @@ namespace azure_proto_network
         /// <returns>An NSG, with the given TCP ports open</returns>
         public static NetworkSecurityGroup NetworkSecurityGroup(this ResourceGroupOperations resourceGroup, NetworkSecurityGroupData networkSecurityGroup)
         {
-            return new NetworkSecurityGroup(resourceGroup.ClientContext, networkSecurityGroup, resourceGroup.ClientOptions);
+            return new NetworkSecurityGroup(resourceGroup.ClientContext, networkSecurityGroup);
         }
 
         public static NetworkSecurityGroupOperations NetworkSecurityGroup(this ResourceGroupOperations operations, string networkSecurityGroup)
         {
-            return new NetworkSecurityGroupOperations(operations.ClientContext, new ResourceIdentifier($"{operations.Id}/providers/Microsoft.Network/networkSecurityGroups/{networkSecurityGroup}"), operations.ClientOptions);
+            return new NetworkSecurityGroupOperations(operations.ClientContext, new ResourceIdentifier($"{operations.Id}/providers/Microsoft.Network/networkSecurityGroups/{networkSecurityGroup}"));
         }
 
         public static NetworkSecurityGroupContainer NetworkSecurityGroups(this ResourceGroup resourceGroup)
         {
-            return new NetworkSecurityGroupContainer(resourceGroup.ClientContext, resourceGroup.Data, resourceGroup.ClientOptions);
+            return new NetworkSecurityGroupContainer(resourceGroup.ClientContext, resourceGroup.Data);
         }
 
         public static NetworkSecurityGroupContainer NetworkSecurityGroups(this ResourceGroupOperations resourceGroup)
         {
-            return new NetworkSecurityGroupContainer(resourceGroup.ClientContext, resourceGroup.Id, resourceGroup.ClientOptions);
+            return new NetworkSecurityGroupContainer(resourceGroup.ClientContext, resourceGroup.Id);
         }
         #endregion
     }

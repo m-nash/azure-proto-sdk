@@ -10,20 +10,20 @@ namespace azure_proto_network
     /// </summary>
     public class SubnetOperations : ResourceOperationsBase<Subnet, SubnetData>, IDeletableResource<Subnet, SubnetData>
     {
-        internal SubnetOperations(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
-            : base(context, id, clientOptions)
+        internal SubnetOperations(AzureResourceManagerClientContext context, ResourceIdentifier id)
+            : base(context, id)
         {
         }
 
-        internal SubnetOperations(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions clientOptions)
-            : base(context, resource, clientOptions)
+        internal SubnetOperations(AzureResourceManagerClientContext context, Resource resource)
+            : base(context, resource)
         {
         }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
 
         internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-                    AzureResourceManagerClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).Subnets;
+                    AzureResourceManagerClientOptions.Convert<NetworkManagementClientOptions>(ClientContext.Options))).Subnets;
 
         public ArmResponse<Response> Delete()
         {
@@ -51,7 +51,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new SubnetData(n, DefaultLocation);
-                    return new Subnet(ClientContext, Resource as SubnetData, ClientOptions);
+                    return new Subnet(ClientContext, Resource as SubnetData);
                 });
         }
 
@@ -61,7 +61,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new SubnetData(n, DefaultLocation);
-                    return new Subnet(ClientContext, Resource as SubnetData, ClientOptions);
+                    return new Subnet(ClientContext, Resource as SubnetData);
                 });
         }
     }
