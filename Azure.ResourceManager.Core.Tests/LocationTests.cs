@@ -213,5 +213,13 @@ namespace Azure.ResourceManager.Core.Tests
             else
                 Assert.AreEqual(expected, location1.DisplayName);  
         }
+
+        [Test]
+        public void CanAccessDefaultLocation()
+        {
+            Assert.IsNotNull(Location.Default);
+            Location location = Location.Default;
+            Assert.IsTrue(location.Equals(Location.Default));
+        }
     }
 }
