@@ -52,10 +52,6 @@ namespace Azure.ResourceManager.Core
         /// <param name="identifier">The resource Id of the parent resource</param>
         public override void Validate(ResourceIdentifier identifier)
         {
-            if (identifier.Type != ResourceGroupOperations.AzureResourceType && identifier.Type != SubscriptionOperations.AzureResourceType && identifier.Type != ResourceType.Parent)
-            {
-                throw new InvalidOperationException($"{identifier.Type} is not a valid container for {ResourceType}");
-            }
         }
 
         /// <summary>

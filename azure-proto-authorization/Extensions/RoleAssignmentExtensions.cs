@@ -1,7 +1,4 @@
 ﻿using Azure.ResourceManager.Core;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace azure_proto_authorization
 {
