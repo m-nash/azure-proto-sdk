@@ -29,8 +29,9 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="context">The client context with http client details for these operations</param>
         /// <param name="parentId">The resource Id of the parent resource</param>
-        protected ExtensionResourceContainer(ArmClientContext context, ResourceIdentifier parentId)
-            : base(context, parentId)
+        /// <param name="options">Client optiosn to use in these operations.</param>
+        protected ExtensionResourceContainer(AzureResourceManagerClientContext context, ResourceIdentifier parentId, AzureResourceManagerClientOptions options = default)
+            : base(context, parentId, options)
         {
         }
 
@@ -39,8 +40,9 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="context">The client context with http client details for these operations</param>
         /// <param name="parent">The parent resource</param>
-        protected ExtensionResourceContainer(ArmClientContext context, TrackedResource parent)
-            : base(context, parent.Id)
+        /// <param name="options">Client options to use in these operations</param>
+        protected ExtensionResourceContainer(AzureResourceManagerClientContext context, Resource parent, AzureResourceManagerClientOptions options = default)
+            : this(context, parent.Id, options)
         {
         }
 

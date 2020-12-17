@@ -7,7 +7,7 @@ namespace azure_proto_authorization
 {
     public class RoleAssignment : RoleAssignmentOperations
     {
-        public RoleAssignment(ArmClientContext context, RoleAssignmentData data)
+        public RoleAssignment(AzureResourceManagerClientContext context, RoleAssignmentData data)
             : base(context, data?.Id)
         {
             Data = data;

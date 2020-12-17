@@ -17,7 +17,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="context">The client parameters to use in these operations.</param>
         /// <param name="id">The identifier of the resource that is the target of operations.</param>
         /// <param name="options">Client options to be used for these operations.</param>
-        public ResourceOperationsBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions options = default)
+        public ResourceOperationsBase(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions options = default)
             : base(context, id, options)
         {
         }
@@ -28,7 +28,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="context">The client parameters to use in these operations.</param>
         /// <param name="resource">The resource that is the target of operations.</param>
         /// <param name="options">Client options to be used for these operations.</param>
-        public ResourceOperationsBase(ArmClientContext context, Resource resource, ArmClientOptions options = default)
+        public ResourceOperationsBase(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions options = default)
             : this(context, resource.Id, options)
         {
         }

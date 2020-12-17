@@ -15,10 +15,10 @@ namespace Azure.ResourceManager.Core
     ///     also allows you to attach at that scope? [AttachDatabase]
     /// </summary>
     /// <typeparam name="TOperations">The class containing operations for the underlying resource</typeparam>
-    /// <typeparam name="TData">The class containing properties for the underlying resource</typeparam>
-    public abstract class ResourceContainerBase<TOperations, TData> : OperationsBase
+    /// <typeparam name="TResource">The class containing properties for the underlying resource</typeparam>
+    public abstract class ResourceContainerBase<TOperations, TResource> : OperationsBase
         where TOperations : ResourceOperationsBase<TOperations>
-        where TData : Resource
+        where TResource : Resource
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
@@ -73,7 +73,7 @@ namespace Azure.ResourceManager.Core
         /// <returns>An http response containing the operations over the newly created resource.</returns>
         public abstract ArmResponse<TOperations> Create(
             string name,
-            TData resourceDetails,
+            TResource resourceDetails,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Azure.ResourceManager.Core
         /// to control when or if to wait for completion of the Create operation.</returns>
         public abstract Task<ArmResponse<TOperations>> CreateAsync(
             string name,
-            TData resourceDetails,
+            TResource resourceDetails,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace Azure.ResourceManager.Core
         /// of the Create operation.</returns>
         public abstract ArmOperation<TOperations> StartCreate(
             string name,
-            TData resourceDetails,
+            TResource resourceDetails,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Azure.ResourceManager.Core
         /// <returns></returns>
         public abstract Task<ArmOperation<TOperations>> StartCreateAsync(
             string name,
-            TData resourceDetails,
+            TResource resourceDetails,
             CancellationToken cancellationToken = default);
     }
 }

@@ -12,7 +12,7 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase"/> class.
         /// </summary>
         /// <param name="genericOperations">Operations to create this operations class from</param>
-        public ExtensionResourceOperationsBase(ExtensionResourceOperationsBase genericOperations)
+        protected ExtensionResourceOperationsBase(ExtensionResourceOperationsBase genericOperations)
             : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
         {
         }
@@ -21,7 +21,7 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase"/> class.
         /// </summary>
         /// <param name="genericOperations">Generic operations with the identifier for this extention resource</param>
-        public ExtensionResourceOperationsBase(OperationsBase genericOperations)
+        protected ExtensionResourceOperationsBase(OperationsBase genericOperations)
             : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
         {
         }
@@ -32,7 +32,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="context">Client configuration properties for these operations</param>
         /// <param name="id">The identifier of the extension resource</param>
         /// <param name="options">The client options to sue with these operations.</param>
-        public ExtensionResourceOperationsBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions options = default)
+        protected ExtensionResourceOperationsBase(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions options = default)
             : base(context, id, options)
         {
         }
@@ -43,16 +43,16 @@ namespace Azure.ResourceManager.Core
         /// <param name="context">Client configuration properties for these operations</param>
         /// <param name="resource">The extention resource for operatiosn to act upon</param>
         /// <param name="options">The client options to sue with these operations.</param>
-        public ExtensionResourceOperationsBase(ArmClientContext context, Resource resource, ArmClientOptions options = default)
+        protected ExtensionResourceOperationsBase(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions options = default)
             : this(context, resource.Id, options)
         {
         }
     }
 
-
     /// <summary>
     /// Separate Extension resources from non-extension resources
     /// </summary>
+    /// <typeparam name="TOperations">The typed operatiosn class for a specific resource.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "Resource types that differ by Type arguments")]
     public abstract class ExtensionResourceOperationsBase<TOperations> : ExtensionResourceOperationsBase
         where TOperations : ExtensionResourceOperationsBase<TOperations>
@@ -61,7 +61,7 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase{TOperations}"/> class.
         /// </summary>
         /// <param name="genericOperations">Operations to create this operations class from</param>
-        public ExtensionResourceOperationsBase(ExtensionResourceOperationsBase genericOperations)
+        protected ExtensionResourceOperationsBase(ExtensionResourceOperationsBase genericOperations)
             : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
         {
         }
@@ -70,7 +70,7 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase{TOperations}"/> class.
         /// </summary>
         /// <param name="genericOperations">Operations to create this operations class from</param>
-        public ExtensionResourceOperationsBase(OperationsBase genericOperations)
+        protected ExtensionResourceOperationsBase(OperationsBase genericOperations)
             : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
         {
         }
@@ -81,22 +81,21 @@ namespace Azure.ResourceManager.Core
         /// <param name="context">Client configuration properties for these operations</param>
         /// <param name="id">The identifier of the extension resource</param>
         /// <param name="options">The client options to sue with these operations.</param>
-        public ExtensionResourceOperationsBase(ArmClientContext context, ResourceIdentifier id, ArmClientOptions options = default)
+        protected ExtensionResourceOperationsBase(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions options = default)
             : base(context, id, options)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase{TOperations, TResource}"/> class.
+        /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase{TOperations}"/> class.
         /// </summary>
         /// <param name="context">Client configuration properties for these operations</param>
         /// <param name="resource">The extention resource for operatiosn to act upon</param>
         /// <param name="options">The client options to sue with these operations.</param>
-        public ExtensionResourceOperationsBase(ArmClientContext context, Resource resource, ArmClientOptions options = default)
+        protected ExtensionResourceOperationsBase(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions options = default)
             : this(context, resource.Id, options)
         {
         }
-
 
         /// <summary>
         /// Get details and operations for this extension resource.  This call will block the thread until details are returned from the service.
