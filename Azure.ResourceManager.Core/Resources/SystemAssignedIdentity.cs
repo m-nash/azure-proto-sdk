@@ -80,7 +80,6 @@
             if (writer == null)
                 throw new ArgumentNullException(nameof(writer));
 
-            writer.WriteStartObject();
             writer.WritePropertyName("principalId");
             if (!Optional.IsDefined(systemAssignedIdentity.PrincipalId))
             {
@@ -101,7 +100,6 @@
                 writer.WriteStringValue(systemAssignedIdentity.TenantId.ToString());
             }
 
-            writer.WriteEndObject();
             writer.Flush();
         }
 

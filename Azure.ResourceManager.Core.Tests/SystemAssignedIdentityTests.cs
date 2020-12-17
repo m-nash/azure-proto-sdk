@@ -220,38 +220,44 @@ namespace Azure.ResourceManager.Core.Tests
         public void TestSerializerValidIdentity()
         {
             SystemAssignedIdentity systemAssignedIdentity = new SystemAssignedIdentity(new Guid("72f988bf-86f1-41af-91ab-2d7cd011db47"), new Guid("de29bab1-49e1-4705-819b-4dfddceaaa98"));
-            string value = "";
+            string actual = "";
             using (Stream stream = new MemoryStream())
             {
                 using (StreamReader streamReader = new StreamReader(stream))
                 {
                     var writer = new Utf8JsonWriter(stream);
+                    writer.WriteStartObject();
                     SystemAssignedIdentity.Serialize(writer, systemAssignedIdentity);
+                    writer.WriteEndObject();
+                    writer.Flush();
                     stream.Seek(0, SeekOrigin.Begin);
-                    value = streamReader.ReadToEnd();
+                    actual = streamReader.ReadToEnd();
                 }
             }
-            string actual = "{\"principalId\":\"de29bab1-49e1-4705-819b-4dfddceaaa98\",\"tenantId\":\"72f988bf-86f1-41af-91ab-2d7cd011db47\"}";
-            Assert.AreEqual(actual, value);
+            string expected = "{\"principalId\":\"de29bab1-49e1-4705-819b-4dfddceaaa98\",\"tenantId\":\"72f988bf-86f1-41af-91ab-2d7cd011db47\"}";
+            Assert.AreEqual(expected, actual);
         }
 
         [TestCase]
         public void TestSerializerEmptyIdentity()
         {
             SystemAssignedIdentity systemAssignedIdentity = new SystemAssignedIdentity();
-            string value = "";
+            string actual = "";
             using (Stream stream = new MemoryStream())
             {
                 using (StreamReader streamReader = new StreamReader(stream))
                 {
                     var writer = new Utf8JsonWriter(stream);
+                    writer.WriteStartObject();
                     SystemAssignedIdentity.Serialize(writer, systemAssignedIdentity);
+                    writer.WriteEndObject();
+                    writer.Flush();
                     stream.Seek(0, SeekOrigin.Begin);
-                    value = streamReader.ReadToEnd();
+                    actual = streamReader.ReadToEnd();
                 }
             }
-            string actual = "{\"principalId\":\"null\",\"tenantId\":\"null\"}";
-            Assert.AreEqual(actual, value);
+            string expected = "{\"principalId\":\"null\",\"tenantId\":\"null\"}";
+            Assert.AreEqual(expected, actual);
         }
 
         [TestCase]
@@ -261,6 +267,7 @@ namespace Azure.ResourceManager.Core.Tests
             using (Stream stream = new MemoryStream())
             {
                 var writer = new Utf8JsonWriter(stream);
+                writer.WriteStartObject();
                 Assert.Throws<ArgumentNullException>(delegate { SystemAssignedIdentity.Serialize(writer, systemAssignedIdentity); });
             }
         }
