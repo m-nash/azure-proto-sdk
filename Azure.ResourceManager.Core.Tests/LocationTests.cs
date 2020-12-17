@@ -21,9 +21,7 @@ namespace Azure.ResourceManager.Core.Tests
             Location location = name;
             if (name == null)
             {
-                Assert.Throws<System.NullReferenceException>(() => { string x = location.Name; });
-                Assert.Throws<System.NullReferenceException>(() => { string x = location.CanonicalName; });
-                Assert.Throws<System.NullReferenceException>(() => { string x = location.DisplayName; });
+                Assert.IsNull(location);
             }
             else
             {
@@ -76,6 +74,9 @@ namespace Azure.ResourceManager.Core.Tests
 
         [TestCase(true, "West Us", "West Us")]
         [TestCase(true, "West Us", "WestUs")]
+        [TestCase(true, "!#()@(#@", "!#()@(#@")]
+        [TestCase(true, "W3$t U$", "W3$t U$")]
+        [TestCase(true, "1234567890", "1234567890")]
         [TestCase(false, "West Us", "WestUs2")]
         [TestCase(false, "West US", "")]
         [TestCase(false, "West US", "!#()@(#@")]
@@ -99,6 +100,9 @@ namespace Azure.ResourceManager.Core.Tests
 
         [TestCase(true, "West Us", "West Us")]
         [TestCase(true, "West Us", "WestUs")]
+        [TestCase(true, "!#()@(#@", "!#()@(#@")]
+        [TestCase(true, "W3$t U$", "W3$t U$")]
+        [TestCase(true, "1234567890", "1234567890")]
         [TestCase(false, "West Us", "WestUs2")]
         [TestCase(false, "West Us", "")]
         [TestCase(false, "West Us", "!#()@(#@")]
@@ -146,6 +150,10 @@ namespace Azure.ResourceManager.Core.Tests
             Location location1 = left;
             Location location2 = right;
             Assert.AreEqual(expected, location1.CompareTo(location2));
+            if (right != null)
+            {
+                Assert.AreEqual(expected * -1, location2.CompareTo(location1));
+            }
         }
 
         [TestCase("West US", "West US", 0)]
@@ -170,11 +178,21 @@ namespace Azure.ResourceManager.Core.Tests
             }
         }
 
-        [Test]
-        public void CanCastLocationToString()
+        [TestCase("West US", "West US")]
+        [TestCase("west-us", "West US")]
+        [TestCase("westus", "West US")]
+        [TestCase("Private Cloud", "Private Cloud")]
+        [TestCase("private-cloud", "Private Cloud")]
+        [TestCase("privatecloud", "privatecloud")]
+        [TestCase("1$S#@$%^", "1$S#@$%^")]
+        [TestCase("", "")]
+        [TestCase(" ", " ")]
+        [TestCase(null, null)]
+        public void CanCastLocationToString(string name, string expected)
         {
-            string x = Location.Default;
-            Assert.AreEqual(Location.Default.DisplayName, x);
+            Location location = name;
+            string strLocation = location;
+            Assert.AreEqual(expected, strLocation);
         }
 
         [TestCase ("West US", "West US")]

@@ -13,6 +13,8 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class Location : IEquatable<Location>, IComparable<Location>
     {
+        #region Public Cloud Locations
+
         /// <summary>
         /// Public cloud location for East Asia.
         /// </summary>
@@ -213,6 +215,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         public static readonly Location BrazilSoutheast = new Location { Name = "brazilsoutheast", CanonicalName = "brazil-southeast", DisplayName = "Brazil Southeast" };
 
+        #endregion
         private static readonly Dictionary<string, Location> PublicCloudLocations = new Dictionary<string, Location>()
         {
             { "EASTASIA", EastAsia },
@@ -291,7 +294,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Gets defaul Location object: West US.
+        /// Gets default Location object: West US.
         /// </summary>
         public static ref readonly Location Default => ref WestUS;
 
@@ -313,7 +316,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Creates a new location implicitly from a string.
         /// </summary>
-        /// <param name="other">String to be assigned.</param>
+        /// <param name="other">String to be assigned in the Name, CanonicalName or DisplayName form.</param>
         public static implicit operator Location(string other)
         {
             if (other == null)
@@ -333,7 +336,15 @@ namespace Azure.ResourceManager.Core
         /// Creates a string implicitly from a Location object.
         /// </summary>
         /// <param name="other">Location object to be assigned.</param>
-        public static implicit operator string(Location other) => other.DisplayName;
+        public static implicit operator string(Location other)
+        {
+            if (other == null)
+            {
+                return null;
+            }
+
+            return other.ToString();
+        }
 
         /// <summary>
         /// Detects if a location object is equal to another location instance or a string representing the location name.
