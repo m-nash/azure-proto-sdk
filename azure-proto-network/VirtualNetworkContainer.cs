@@ -18,12 +18,12 @@ namespace azure_proto_network
         {
         }
 
-        internal VirtualNetworkContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions)
+        internal VirtualNetworkContainer(AzureResourceManagerClientContext context, ResourceGroupData resourceGroup, AzureResourceManagerClientOptions clientOptions)
             : base(context, resourceGroup, clientOptions)
         {
         }
 
-        internal VirtualNetworkContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        internal VirtualNetworkContainer(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
             : base(context, id, clientOptions)
         {
         }
@@ -31,7 +31,7 @@ namespace azure_proto_network
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
 
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-            ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).VirtualNetworks;
+            AzureResourceManagerClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).VirtualNetworks;
 
         public override ArmResponse<VirtualNetwork> Create(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
         {

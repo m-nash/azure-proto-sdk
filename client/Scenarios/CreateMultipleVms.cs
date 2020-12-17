@@ -14,7 +14,7 @@ namespace client
 
         public override void Execute()
         {
-            var client = new ArmClient();
+            var client = new AzureResourceManagerClient();
             var subscription = client.Subscription(Context.SubscriptionId);
 
             // Create Resource Group

@@ -24,9 +24,7 @@ namespace Azure.ResourceManager.Core
 
             //TODO: Due to the implicit this is called for blank constructions such as new PhResourceGroup
             if (id != null)
-            {
                 Parse(id);
-            }
         }
 
         public string Id { get; protected set; }
@@ -54,6 +52,16 @@ namespace Azure.ResourceManager.Core
         ///     or the tenant that is the logical parent of this resource
         /// </summary>
         public ResourceIdentifier Parent { get; protected set; }
+
+        public static implicit operator string(ResourceIdentifier other)
+        {
+            return other.Id;
+        }
+
+        public static implicit operator ResourceIdentifier(string other)
+        {
+            return new ResourceIdentifier(other);
+        }
 
         public virtual int CompareTo(ResourceIdentifier other)
         {
@@ -96,14 +104,10 @@ namespace Azure.ResourceManager.Core
         public static bool Equals(ResourceIdentifier x, ResourceIdentifier y)
         {
             if (null == x && null == y)
-            {
                 return true;
-            }
 
             if (null == x || null == y)
-            {
                 return false;
-            }
 
             return x.Equals(y);
         }
@@ -117,19 +121,13 @@ namespace Azure.ResourceManager.Core
         public static int CompareTo(ResourceIdentifier x, ResourceIdentifier y)
         {
             if (null == x && null == y)
-            {
                 return 0;
-            }
 
             if (null == x)
-            {
                 return -1;
-            }
 
             if (null == y)
-            {
                 return 1;
-            }
 
             return x.CompareTo(y);
         }
@@ -147,18 +145,14 @@ namespace Azure.ResourceManager.Core
         {
             // Throw for null, empty, and string without the correct form
             if (string.IsNullOrWhiteSpace(id) || !id.Contains('/'))
-            {
                 throw new ArgumentOutOfRangeException($"'{id}' is not a valid resource");
-            }
 
             // Resource ID paths consist mainly of name/value pairs. Split the uri so we have an array of name/value pairs
             var parts = id.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             // There must be at least one name/value pair for the resource id to be valid
             if (parts.Count < 2)
-            {
                 throw new ArgumentOutOfRangeException($"'{id}' is not a valid resource");
-            }
 
             //This is asserting that resources must start with '/subscriptions', /tenants, or /locations.
             //TODO: we will need to update this code to accomodate tenant based resources (which start with /providers)
@@ -226,9 +220,7 @@ namespace Azure.ResourceManager.Core
 
             // remove the type name (there will be no typename if this is a singleton sub resource)
             if (parts.Count % 2 == 1)
-            {
                 parts.RemoveAt(parts.Count - 1);
-            }
 
             //If this is a top-level resource, remove the providers/Namespace pair, otherwise continue
             if (parts.Count > 2 && string.Equals(parts[parts.Count - 2], KnownKeys.ProviderNamespace))
@@ -239,16 +231,6 @@ namespace Azure.ResourceManager.Core
 
             //If this is not a top-level resource, it will have a parent
             Parent = parts.Count > 1 ? new ResourceIdentifier($"/{string.Join("/", parts)}") : null;
-        }
-
-        public static implicit operator string(ResourceIdentifier other)
-        {
-            return other.Id;
-        }
-
-        public static implicit operator ResourceIdentifier(string other)
-        {
-            return new ResourceIdentifier(other);
         }
 
         public static class KnownKeys

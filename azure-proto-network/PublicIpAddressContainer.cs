@@ -17,18 +17,18 @@ namespace azure_proto_network
         {
         }
 
-        internal PublicIpAddressContainer(ArmClientContext context, ResourceGroupData resourceGroup, ArmClientOptions clientOptions)
+        internal PublicIpAddressContainer(AzureResourceManagerClientContext context, ResourceGroupData resourceGroup, AzureResourceManagerClientOptions clientOptions)
             : base(context, resourceGroup, clientOptions)
         {
         }
 
-        internal PublicIpAddressContainer(ArmClientContext context, ResourceIdentifier id, ArmClientOptions clientOptions)
+        internal PublicIpAddressContainer(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
             : base(context, id, clientOptions)
         {
         }
 
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-            ArmClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).PublicIPAddresses;
+            AzureResourceManagerClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).PublicIPAddresses;
 
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 

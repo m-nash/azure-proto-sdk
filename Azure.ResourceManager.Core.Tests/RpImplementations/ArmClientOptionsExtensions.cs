@@ -2,7 +2,7 @@
 {
     public static class ArmClientOptionsExtensions
     {
-        public static FakeRpApiVersions FakeRpApiVersions(this ArmClientOptions armClientOptions)
+        public static FakeRpApiVersions FakeRpApiVersions(this AzureResourceManagerClientOptions armClientOptions)
         {
             return armClientOptions.GetOverrideObject<FakeRpApiVersions>(() => new FakeRpApiVersions()) as FakeRpApiVersions;
         }

@@ -13,7 +13,7 @@ namespace client
             var createMultipleVms = new CreateMultipleVms(Context);
             createMultipleVms.Execute();
 
-            var rg = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName).Get().Value;
+            var rg = new AzureResourceManagerClient().ResourceGroup(Context.SubscriptionId, Context.RgName).Get().Value;
             foreach (var availabilitySet in rg.AvailabilitySets().ListByName(Environment.UserName))
             {
                 Console.WriteLine($"--------AvailabilitySet operation id--------: {availabilitySet.Id}");

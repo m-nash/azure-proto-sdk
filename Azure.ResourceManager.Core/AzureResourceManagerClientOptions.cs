@@ -6,13 +6,13 @@ using Azure.Core.Pipeline;
 
 namespace Azure.ResourceManager.Core
 {
-    public class ArmClientOptions : ClientOptions
+    public class AzureResourceManagerClientOptions : ClientOptions
     {
         private Dictionary<Type, object> _overrides = new Dictionary<Type, object>();
 
         private static readonly object _overridesLock = new object();
 
-        public static T Convert<T>(ArmClientOptions options)
+        public static T Convert<T>(AzureResourceManagerClientOptions options)
             where T : ClientOptions, new()
         {
             var newOptions = new T();

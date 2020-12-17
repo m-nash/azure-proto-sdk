@@ -99,6 +99,7 @@
             {
                 writer.WriteStringValue(systemAssignedIdentity.TenantId.ToString());
             }
+
             writer.Flush();
         }
 

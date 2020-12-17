@@ -10,15 +10,15 @@ namespace Azure.ResourceManager.Core
     ///     Base class tracking context information for clients - when we have changed client constructors, this should not be
     ///     necessary
     /// </summary>
-    public class ArmClientContext
+    public class AzureResourceManagerClientContext
     {
-        public ArmClientContext(Uri baseUri, TokenCredential credential)
+        public AzureResourceManagerClientContext(Uri baseUri, TokenCredential credential)
         {
             BaseUri = baseUri;
             Credential = credential;
         }
 
-        public ArmClientContext(ArmClientContext other)
+        public AzureResourceManagerClientContext(AzureResourceManagerClientContext other)
             : this(other.BaseUri, other.Credential)
         {
         }

@@ -12,7 +12,7 @@ namespace client
             var createMultipleVms = new CreateMultipleVms(Context);
             createMultipleVms.Execute();
 
-            var rg = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName).Get().Value;
+            var rg = new AzureResourceManagerClient().ResourceGroup(Context.SubscriptionId, Context.RgName).Get().Value;
 
             //set tags on random vms
             Random rand = new Random(Environment.TickCount);

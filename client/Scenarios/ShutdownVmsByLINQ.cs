@@ -12,7 +12,7 @@ namespace client
             var createMultipleVms = new CreateMultipleVms(Context);
             createMultipleVms.Execute();
 
-            var client = new ArmClient();
+            var client = new AzureResourceManagerClient();
             foreach (var sub in client.Subscriptions().List())
             {
                 foreach (var vm in sub.ListVirtualMachines("mc").Where(vm => vm.Data.Name.Contains("foo")))
@@ -21,7 +21,7 @@ namespace client
                 }
             }
 
-            var resourceGroup = new ArmClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
+            var resourceGroup = new AzureResourceManagerClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
 
             resourceGroup.VirtualMachines().List().Select(vm =>
             {

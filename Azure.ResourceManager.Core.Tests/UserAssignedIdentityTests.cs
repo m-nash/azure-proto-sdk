@@ -196,7 +196,7 @@ namespace Azure.ResourceManager.Core.Tests
         public void TestSerializerValidIdentity()
         {
             UserAssignedIdentity userAssignedIdentity = new UserAssignedIdentity(new Guid("72f988bf-86f1-41af-91ab-2d7cd011db47"), new Guid("de29bab1-49e1-4705-819b-4dfddceaaa98"));
-            string value = "";
+            string actual = "";
             using (Stream stream = new MemoryStream())
             {
                 using (StreamReader streamReader = new StreamReader(stream))
@@ -204,11 +204,11 @@ namespace Azure.ResourceManager.Core.Tests
                     var writer = new Utf8JsonWriter(stream);
                     UserAssignedIdentity.Serialize(writer, userAssignedIdentity);
                     stream.Seek(0, SeekOrigin.Begin);
-                    value = streamReader.ReadToEnd();
+                    actual = streamReader.ReadToEnd();
                 }
             }
-            string actual = "{\"clientId\":\"72f988bf-86f1-41af-91ab-2d7cd011db47\",\"principalId\":\"de29bab1-49e1-4705-819b-4dfddceaaa98\"}";
-            Assert.AreEqual(actual, value);
+            string expected = "{\"clientId\":\"72f988bf-86f1-41af-91ab-2d7cd011db47\",\"principalId\":\"de29bab1-49e1-4705-819b-4dfddceaaa98\"}";
+            Assert.AreEqual(expected, actual);
         }
 
         [TestCase]
@@ -237,7 +237,7 @@ namespace Azure.ResourceManager.Core.Tests
         {
             UserAssignedIdentity userAssignedIdentity1 = new UserAssignedIdentity(new Guid("3beb288c-c3f9-4300-896f-02fbf175b6be"), new Guid("d0416856-d6cf-466d-8d64-ddc8d7782096"));
             UserAssignedIdentity userAssignedIdentity2 = new UserAssignedIdentity(new Guid("fbb39377-ff46-4a82-8c47-42d573180482"), new Guid("6d63ce43-c3ac-4b03-933d-4bc31eae50b2"));
-            string value = "";
+            string actual = "";
             UserAssignedIdentity[] identities = { userAssignedIdentity1, userAssignedIdentity2 };
             using (Stream stream = new MemoryStream())
             {
@@ -248,15 +248,15 @@ namespace Azure.ResourceManager.Core.Tests
                         var writer = new Utf8JsonWriter(stream);
                         UserAssignedIdentity.Serialize(writer, identity);
                         stream.Seek(0, SeekOrigin.Begin);
-                        value = streamReader.ReadToEnd();
+                        actual = streamReader.ReadToEnd();
                     }
                 }
             }
-            string actual = "{\"clientId\":\"3beb288c-c3f9-4300-896f-02fbf175b6be\"," +
+            string expected = "{\"clientId\":\"3beb288c-c3f9-4300-896f-02fbf175b6be\"," +
                 "\"principalId\":\"d0416856-d6cf-466d-8d64-ddc8d7782096\"}" +
                 "{\"clientId\":\"fbb39377-ff46-4a82-8c47-42d573180482\"," +
                 "\"principalId\":\"6d63ce43-c3ac-4b03-933d-4bc31eae50b2\"}";
-            Assert.AreEqual(actual, value);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestCase]
