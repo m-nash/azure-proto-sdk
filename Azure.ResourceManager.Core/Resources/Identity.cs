@@ -84,6 +84,11 @@ namespace Azure.ResourceManager.Core
 
         public static Identity Deserialize(JsonElement element)
         {
+            if (element.ValueKind == JsonValueKind.Undefined)
+            {
+                throw new ArgumentException("JsonElement cannot be undefined ", nameof(element));
+            }
+
             Optional<SystemAssignedIdentity> systemAssignedIdentity = default;
             IDictionary<ResourceIdentifier, UserAssignedIdentity> userAssignedIdentities = new Dictionary<ResourceIdentifier, UserAssignedIdentity>();
             string type = string.Empty;
@@ -112,17 +117,22 @@ namespace Azure.ResourceManager.Core
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
                     {
-                        property.ThrowNonNullablePropertyIsNull();
-                        continue;
+                        throw new ArgumentNullException(nameof(property));
                     }
 
                     type = property.Value.GetString();
-                    continue;
                 }
 
                 if (type.Equals(SystemAssigned))
                 {
                     systemAssignedIdentity = SystemAssignedIdentity.Deserialize(element);
+                    continue;
+                }
+
+                if (type.Equals(SystemAndUserAssigned))
+                {
+                    systemAssignedIdentity = SystemAssignedIdentity.Deserialize(element);
+                    continue;
                 }
             }
 
@@ -131,14 +141,29 @@ namespace Azure.ResourceManager.Core
 
         public static void Serialize(Utf8JsonWriter writer, Identity identity)
         {
+            if (writer == null)
+                throw new ArgumentNullException(nameof(writer));
+
+            if (identity == null)
+                throw new ArgumentNullException(nameof(identity));
+
             writer.WriteStartObject();
             writer.WritePropertyName("identity");
+
+            if (identity.SystemAssignedIdentity == null && identity.UserAssignedIdentities.Count == 0)
+            {
+                writer.WriteStringValue("null");
+                writer.WriteEndObject();
+                writer.Flush();
+                return;
+            }
+
             writer.WriteStartObject();
             if (identity.SystemAssignedIdentity != null && identity.UserAssignedIdentities.Count != 0)
             {
+                SystemAssignedIdentity.Serialize(writer, identity.SystemAssignedIdentity);
                 writer.WritePropertyName("kind");
                 writer.WriteStringValue(SystemAndUserAssigned);
-                SystemAssignedIdentity.Serialize(writer, identity.SystemAssignedIdentity);
                 writer.WritePropertyName("userAssignedIdentities");
                 writer.WriteStartObject();
                 foreach (var keyValuePair in identity.UserAssignedIdentities)
@@ -151,9 +176,9 @@ namespace Azure.ResourceManager.Core
             }
             else if (identity.SystemAssignedIdentity != null)
             {
+                SystemAssignedIdentity.Serialize(writer, identity.SystemAssignedIdentity);
                 writer.WritePropertyName("kind");
                 writer.WriteStringValue(SystemAssigned);
-                SystemAssignedIdentity.Serialize(writer, identity.SystemAssignedIdentity);
             }
             else if (identity.UserAssignedIdentities.Count != 0)
             {
@@ -166,11 +191,8 @@ namespace Azure.ResourceManager.Core
                     writer.WritePropertyName(keyValuePair.Key);
                     UserAssignedIdentity.Serialize(writer, keyValuePair.Value);
                 }
+
                 writer.WriteEndObject();
-            }
-            else
-            {
-                writer.WriteStringValue("null"); // if identity is null
             }
 
             writer.WriteEndObject();
