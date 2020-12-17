@@ -67,30 +67,30 @@ namespace azure_proto_compute
             return new ArmBuilder<AvailabilitySet, AvailabilitySetData>(this, new AvailabilitySetData(availabilitySet));
         }
 
-        public Pageable<ArmResourceOperations> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public Pageable<ArmResource> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(AvailabilitySetData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<ArmResource, ArmResourceData>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
         }
 
-        public AsyncPageable<ArmResourceOperations> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<ArmResource> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(AvailabilitySetData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public Pageable<AvailabilitySet> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByName(filter, top, cancellationToken);
-            return new PhWrappingPageable<ArmResourceOperations, AvailabilitySet>(results, s => new AvailabilitySetOperations(s).Get().Value);
+            return new PhWrappingPageable<ArmResource, AvailabilitySet>(results, s => new AvailabilitySetOperations(s).Get().Value);
         }
 
         public AsyncPageable<AvailabilitySet> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByNameAsync(filter, top, cancellationToken);
-            return new PhWrappingAsyncPageable<ArmResourceOperations, AvailabilitySet>(results, s => new AvailabilitySetOperations(s).Get().Value);
+            return new PhWrappingAsyncPageable<ArmResource, AvailabilitySet>(results, s => new AvailabilitySetOperations(s).Get().Value);
         }
 
         internal AvailabilitySetsOperations Operations => GetClient((uri, cred) => new ComputeManagementClient(uri, Id.Subscription, cred, 

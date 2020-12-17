@@ -5,6 +5,14 @@ namespace Azure.ResourceManager.Core.Tests
 {
     public class ResourceIdentifierTests
     {
+        const string TrackedResourceId =
+            "/subscriptions/0c2f6471-1bf0-4dda-aec3-cb9272f09575/resourceGroups/myRg/providers/Microsoft.Compute/virtualMachines/myVm";
+        const string ChildResourceId =
+            "/subscriptions/0c2f6471-1bf0-4dda-aec3-cb9272f09575/resourceGroups/myRg/providers/Microsoft.Network/vortualNetworks/myNet/subnets/mySubnet";
+        const string ResourceGroupResourceId = "/subscriptions/0c2f6471-1bf0-4dda-aec3-cb9272f09575/resourceGroups/myRg";
+        const string LocationResourceId = "/subscriptions/0c2f6471-1bf0-4dda-aec3-cb9272f09575/locations/MyLocation";
+        const string SubscriptionResourceId = "/subscriptions/0c2f6471-1bf0-4dda-aec3-cb9272f09575";
+
         [SetUp]
         public void Setup()
         {
@@ -23,6 +31,22 @@ namespace Azure.ResourceManager.Core.Tests
             Assert.AreEqual(subject.Type.Namespace, provider);
             Assert.AreEqual(subject.Type.Type, type);
             Assert.AreEqual(Uri.UnescapeDataString(subject.Name), name);
+        }
+
+        [TestCase(TrackedResourceId, "Microsoft.Authorization", "roleAssignments", "myRa")]
+        [TestCase(ChildResourceId, "Microsoft.Authorization", "roleAssignments", "myRa")]
+        [TestCase(ResourceGroupResourceId, "Microsoft.Authorization", "roleAssignments", "myRa")]
+        [TestCase(LocationResourceId, "Microsoft.Authorization", "roleAssignments", "myRa")]
+        [TestCase(SubscriptionResourceId, "Microsoft.Authorization", "roleAssignments", "myRa")]
+        public void CanParseExtensionResourceIds(string baseId, string extensionNamespace, string extensionType, string extensionName)
+        {
+            ResourceIdentifier targetResourceId = baseId;
+            ResourceIdentifier subject = $"{baseId}/providers/{extensionNamespace}/{extensionType}/{extensionName}";
+            ResourceType expectedType = $"{extensionNamespace}/{extensionType}";
+            Assert.AreNotEqual(targetResourceId.Type, subject.Type);
+            Assert.AreEqual(expectedType, subject.Type);
+            Assert.NotNull(subject.Parent);
+            Assert.AreEqual(targetResourceId, subject.Parent);
         }
 
         [Test]

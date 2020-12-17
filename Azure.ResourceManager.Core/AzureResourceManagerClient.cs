@@ -174,7 +174,7 @@ namespace Azure.ResourceManager.Core
 
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string subscription, string resourceGroup, string name, TResource model, Location location = default)
             where TResource : TrackedResource
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TContainer : ResourceContainerBase<TOperations, TResource>
         {
             if (location == null)
@@ -182,7 +182,7 @@ namespace Azure.ResourceManager.Core
                 location = Location.Default;
             }
 
-            TContainer container = Activator.CreateInstance(typeof(TContainer), ClientContext, new ArmResource($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", location)) as TContainer;
+            TContainer container = Activator.CreateInstance(typeof(TContainer), ClientContext, new ArmResourceData($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", location)) as TContainer;
 
             return container.Create(name, model);
         }

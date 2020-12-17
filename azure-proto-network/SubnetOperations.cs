@@ -8,7 +8,7 @@ namespace azure_proto_network
 {
     /// <summary>
     /// </summary>
-    public class SubnetOperations : ResourceOperationsBase<Subnet, SubnetData>, IDeletableResource<Subnet, SubnetData>
+    public class SubnetOperations : ResourceOperationsBase<Subnet>, IDeletableResource
     {
         internal SubnetOperations(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
             : base(context, id, clientOptions)

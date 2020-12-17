@@ -2,11 +2,11 @@
 
 namespace azure_proto_compute.Extensions
 {
-    public static class ArmClientOptionsExtensions
+    public static class AzureResourceManagerClientOptionsExtensions
     {
-        public static ComputeRestApiVersions ComputeRestVersions(this AzureResourceManagerClientOptions armClientOptions)
+        public static ComputeRestApiVersions ComputeRestVersions(this AzureResourceManagerClientOptions AzureResourceManagerClientOptions)
         {
-            return armClientOptions.GetOverrideObject<ComputeRestApiVersions>(() => new ComputeRestApiVersions()) as ComputeRestApiVersions;
+            return AzureResourceManagerClientOptions.GetOverrideObject<ComputeRestApiVersions>(() => new ComputeRestApiVersions()) as ComputeRestApiVersions;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace azure_proto_network
     /// An operations + Data class for NSGs
     /// TODO: How does the operation signature change for resources that support Etags?
     /// </summary>
-    public class NetworkSecurityGroupOperations : ResourceOperationsBase<NetworkSecurityGroup, NetworkSecurityGroupData>, ITaggable<NetworkSecurityGroup, NetworkSecurityGroupData>, IDeletableResource<NetworkSecurityGroup, NetworkSecurityGroupData>
+    public class NetworkSecurityGroupOperations : ResourceOperationsBase<NetworkSecurityGroup>, ITaggableResource<NetworkSecurityGroup>, IDeletableResource
     {
         class RuleIdEqualityComparer : IEqualityComparer<SecurityRule>
         {
