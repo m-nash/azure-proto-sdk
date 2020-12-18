@@ -10,8 +10,8 @@ using Azure.ResourceManager.Resources.Models;
 
 namespace Azure.ResourceManager.Core
 {
-    public class ResourceGroupOperations : ResourceOperationsBase<ResourceGroup, ResourceGroupData>,
-        ITaggable<ResourceGroup, ResourceGroupData>, IDeletableResource<ResourceGroup, ResourceGroupData>
+    public class ResourceGroupOperations : ResourceOperationsBase<ResourceGroup>,
+        ITaggableResource<ResourceGroup>, IDeletableResource
     {
         public static readonly ResourceType AzureResourceType = "Microsoft.Resources/resourceGroups";
 
@@ -90,19 +90,19 @@ namespace Azure.ResourceManager.Core
 
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, Location location = default)
             where TResource : TrackedResource
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TContainer : ResourceContainerBase<TOperations, TResource>
         {
             var myResource = Resource as TrackedResource;
 
             if (myResource == null)
             {
-                myResource = new ArmResource(Id);
+                myResource = new ArmResourceData(Id);
             }
 
             if (location != null)
             {
-                myResource = new ArmResource(Id, location);
+                myResource = new ArmResourceData(Id, location);
             }
 
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;
@@ -112,19 +112,19 @@ namespace Azure.ResourceManager.Core
 
         public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, Location location = default, CancellationToken token = default)
             where TResource : TrackedResource
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TContainer : ResourceContainerBase<TOperations, TResource>
         {
             var myResource = Resource as TrackedResource;
 
             if (myResource == null)
             {
-                myResource = new ArmResource(Id);
+                myResource = new ArmResourceData(Id);
             }
 
             if (location != null)
             {
-                myResource = new ArmResource(Id, location);
+                myResource = new ArmResourceData(Id, location);
             }
 
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;

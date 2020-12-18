@@ -9,7 +9,7 @@ namespace Azure.ResourceManager.Core
 {
     public class ArmBuilder<TOperations, TResource>
         where TResource : Resource
-        where TOperations : ResourceOperationsBase<TOperations, TResource>
+        where TOperations : ResourceOperationsBase<TOperations>
     {
         protected TResource _resource;
         protected ResourceContainerBase<TOperations, TResource> _unTypedContainer;

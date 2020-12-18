@@ -12,7 +12,7 @@ namespace Azure.ResourceManager.Core
     public abstract class OperationsBase
     {
         public OperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id, Location location = null)
-            : this(options, new ArmResource(id, location ?? Location.Default))
+            : this(options, new ArmResourceData(id, location ?? Location.Default))
         {
         }
 

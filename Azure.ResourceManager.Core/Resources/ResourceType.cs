@@ -133,7 +133,7 @@ namespace Azure.ResourceManager.Core
             if (parts.Contains(ResourceIdentifier.KnownKeys.ProviderNamespace))
             {
                 // it is a resource id from a provider
-                var index = parts.IndexOf(ResourceIdentifier.KnownKeys.ProviderNamespace);
+                var index = parts.LastIndexOf(ResourceIdentifier.KnownKeys.ProviderNamespace);
                 for (var i = index; i >= 0; --i)
                 {
                     parts.RemoveAt(i);

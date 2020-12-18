@@ -33,6 +33,11 @@ namespace Azure.ResourceManager.Core
 
         public ResourceType Type { get; protected set; }
 
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
         public string Subscription => _partsDictionary.ContainsKey(KnownKeys.Subscription)
             ? _partsDictionary[KnownKeys.Subscription]
             : null;
@@ -207,7 +212,7 @@ namespace Azure.ResourceManager.Core
             // The resource consists of name/value pairs, make a dictionary out of it
             for (var i = 0; i < parts.Count - 1; i += 2)
             {
-                _partsDictionary.Add(parts[i], parts[i + 1]);
+                _partsDictionary[parts[i]] = parts[i + 1];
             }
 
             Name = parts.Last();

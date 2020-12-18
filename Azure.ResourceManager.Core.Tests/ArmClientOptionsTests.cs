@@ -2,7 +2,7 @@
 
 namespace Azure.ResourceManager.Core.Tests
 {
-    public class ArmClientOptionsTests
+    public class AzureResourceManagerClientOptionsTests
     {
         [TestCase]
         public void VersionIsDefault()

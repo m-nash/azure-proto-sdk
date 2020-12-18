@@ -8,15 +8,15 @@ using Azure;
 
 namespace Azure.ResourceManager.Core
 {
-    public class ArmResourceOperations : ResourceOperationsBase<ArmResourceOperations, ArmResource>,
-        ITaggable<ArmResourceOperations, ArmResource>, IDeletableResource<ArmResourceOperations, ArmResource>
+    public class ArmResourceOperations : ResourceOperationsBase<ArmResource>,
+        ITaggableResource<ArmResource>, IDeletableResource
     {
         public ArmResourceOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
             : base(options, id)
         {
         }
 
-        public ArmResourceOperations(AzureResourceManagerClientOptions options, ArmResource resource )
+        public ArmResourceOperations(AzureResourceManagerClientOptions options, ArmResourceData resource, AzureResourceManagerClientOptions clientOption)
             : base(options, resource)
         {
         }
@@ -42,12 +42,12 @@ namespace Azure.ResourceManager.Core
         }
 
         // TODO: Fill out the methods using ResourceManagementClient
-        public ArmOperation<ArmResourceOperations> AddTag(string key, string value)
+        public ArmOperation<ArmResource> AddTag(string key, string value)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ArmOperation<ArmResourceOperations>> AddTagAsync(
+        public Task<ArmOperation<ArmResource>> AddTagAsync(
             string key,
             string value,
             CancellationToken cancellationToken = default)
@@ -60,12 +60,12 @@ namespace Azure.ResourceManager.Core
             //the id can be of any type so do nothing
         }
 
-        public override ArmResponse<ArmResourceOperations> Get()
+        public override ArmResponse<ArmResource> Get()
         {
             throw new NotImplementedException();
         }
 
-        public override Task<ArmResponse<ArmResourceOperations>> GetAsync(CancellationToken cancellationToken = default)
+        public override Task<ArmResponse<ArmResource>> GetAsync(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

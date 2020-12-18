@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
-    public class PublicIpAddressOperations : ResourceOperationsBase<PublicIpAddress, PublicIPAddressData>, ITaggable<PublicIpAddress, PublicIPAddressData>, IDeletableResource<PublicIpAddress, PublicIPAddressData>
+    public class PublicIpAddressOperations : ResourceOperationsBase<PublicIpAddress>, ITaggableResource<PublicIpAddress>, IDeletableResource
     {
         internal PublicIpAddressOperations(ArmResourceOperations genericOperations)
             : base(genericOperations.ClientOptions, genericOperations.Id)
