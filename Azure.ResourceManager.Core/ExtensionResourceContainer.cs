@@ -20,7 +20,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="operations">The client or operations class to create this container from</param>
         protected ExtensionResourceContainer(OperationsBase operations)
-            : this(operations.ClientContext, operations.Id)
+            : this(operations.ClientOptions, operations.Id)
         {
         }
 
@@ -30,8 +30,8 @@ namespace Azure.ResourceManager.Core
         /// <param name="context">The client context with http client details for these operations</param>
         /// <param name="parentId">The resource Id of the parent resource</param>
         /// <param name="options">Client optiosn to use in these operations.</param>
-        protected ExtensionResourceContainer(AzureResourceManagerClientContext context, ResourceIdentifier parentId, AzureResourceManagerClientOptions options = default)
-            : base(context, parentId, options)
+        protected ExtensionResourceContainer(AzureResourceManagerClientOptions options, ResourceIdentifier parentId)
+            : base(options, parentId)
         {
         }
 
@@ -41,8 +41,8 @@ namespace Azure.ResourceManager.Core
         /// <param name="context">The client context with http client details for these operations</param>
         /// <param name="parent">The parent resource</param>
         /// <param name="options">Client options to use in these operations</param>
-        protected ExtensionResourceContainer(AzureResourceManagerClientContext context, Resource parent, AzureResourceManagerClientOptions options = default)
-            : this(context, parent.Id, options)
+        protected ExtensionResourceContainer(AzureResourceManagerClientOptions options, Resource parent)
+            : this(options, parent.Id)
         {
         }
 

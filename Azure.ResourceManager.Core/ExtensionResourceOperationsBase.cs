@@ -13,7 +13,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="genericOperations">Operations to create this operations class from</param>
         protected ExtensionResourceOperationsBase(ExtensionResourceOperationsBase genericOperations)
-            : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
+            : this(genericOperations.ClientOptions, genericOperations.Id)
         {
         }
 
@@ -22,7 +22,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="genericOperations">Generic operations with the identifier for this extention resource</param>
         protected ExtensionResourceOperationsBase(OperationsBase genericOperations)
-            : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
+            : this(genericOperations.ClientOptions, genericOperations.Id)
         {
         }
 
@@ -32,8 +32,8 @@ namespace Azure.ResourceManager.Core
         /// <param name="context">Client configuration properties for these operations</param>
         /// <param name="id">The identifier of the extension resource</param>
         /// <param name="options">The client options to sue with these operations.</param>
-        protected ExtensionResourceOperationsBase(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions options = default)
-            : base(context, id, options)
+        protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
@@ -43,8 +43,8 @@ namespace Azure.ResourceManager.Core
         /// <param name="context">Client configuration properties for these operations</param>
         /// <param name="resource">The extention resource for operatiosn to act upon</param>
         /// <param name="options">The client options to sue with these operations.</param>
-        protected ExtensionResourceOperationsBase(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions options = default)
-            : this(context, resource.Id, options)
+        protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
+            : this(options, resource.Id)
         {
         }
     }
@@ -62,7 +62,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="genericOperations">Operations to create this operations class from</param>
         protected ExtensionResourceOperationsBase(ExtensionResourceOperationsBase genericOperations)
-            : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
+            : this(genericOperations.ClientOptions, genericOperations.Id)
         {
         }
 
@@ -71,7 +71,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="genericOperations">Operations to create this operations class from</param>
         protected ExtensionResourceOperationsBase(OperationsBase genericOperations)
-            : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
+            : this(genericOperations.ClientOptions, genericOperations.Id)
         {
         }
 
@@ -81,8 +81,8 @@ namespace Azure.ResourceManager.Core
         /// <param name="context">Client configuration properties for these operations</param>
         /// <param name="id">The identifier of the extension resource</param>
         /// <param name="options">The client options to sue with these operations.</param>
-        protected ExtensionResourceOperationsBase(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions options = default)
-            : base(context, id, options)
+        protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
@@ -92,8 +92,8 @@ namespace Azure.ResourceManager.Core
         /// <param name="context">Client configuration properties for these operations</param>
         /// <param name="resource">The extention resource for operatiosn to act upon</param>
         /// <param name="options">The client options to sue with these operations.</param>
-        protected ExtensionResourceOperationsBase(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions options = default)
-            : this(context, resource.Id, options)
+        protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
+            : this(options, resource.Id)
         {
         }
 

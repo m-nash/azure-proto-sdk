@@ -17,7 +17,7 @@ namespace azure_proto_authorization
         /// </summary>
         /// <param name="genericOperations">A generic operations class corresponding to a Role Assignment</param>
         internal RoleAssignmentOperations(ArmResourceOperations genericOperations)
-            : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
+            : this(genericOperations.ClientOptions, genericOperations.Id)
         {
         }
 
@@ -26,9 +26,9 @@ namespace azure_proto_authorization
         /// </summary>
         /// <param name="context">The http settings to use with these operations</param>
         /// <param name="id">The resource identifier for the RoleAssignment to operate on.</param>
-        /// <param name="options">The resource manager options to use with these operations.</param>
-        internal RoleAssignmentOperations(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions options = default)
-            : base(context, id, options)
+        /// <param name="options,">The resource manager options, to use with these operations.</param>
+        internal RoleAssignmentOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
@@ -37,9 +37,9 @@ namespace azure_proto_authorization
         /// </summary>
         /// <param name="context">The http settings to use with these operations</param>
         /// <param name="resource">The resource object for the RoleAssignment to operate on.</param>
-        /// <param name="options">The resource manager options to use with these operations.</param>
-        internal RoleAssignmentOperations(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions options)
-            : this(context, resource.Id, options)
+        /// <param name="options,">The resource manager options, to use with these operations.</param>
+        internal RoleAssignmentOperations(AzureResourceManagerClientOptions options, Resource resource)
+            : this(options, resource.Id)
         {
         }
 
@@ -102,7 +102,7 @@ namespace azure_proto_authorization
         public override ArmResponse<RoleAssignment> Get()
         {
             return new PhArmResponse<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(
-                Operations.GetById(Id), a => new RoleAssignment(ClientContext, new RoleAssignmentData(a)));
+                Operations.GetById(Id), a => new RoleAssignment(ClientOptions, new RoleAssignmentData(a)));
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace azure_proto_authorization
         {
             return new PhArmResponse<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(
                 await Operations.GetByIdAsync(Id, cancellationToken),
-                a => new RoleAssignment(ClientContext, new RoleAssignmentData(a)));
+                a => new RoleAssignment(ClientOptions, new RoleAssignmentData(a)));
         }
     }
 }
