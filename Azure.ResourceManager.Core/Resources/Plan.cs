@@ -10,15 +10,24 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class Plan : IEquatable<Plan>, IComparable<Plan>
     {
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
-        public string Publisher { get; set; }
+        public string Publisher { get; private set; }
 
-        public string Product { get; set; }
+        public string Product { get; private set; }
 
-        public string PromotionCode { get; set; }
+        public string PromotionCode { get; private set; }
 
-        public string Version { get; set; }
+        public string Version { get; private set; }
+
+        internal Plan(string name, string publisher, string product, string promotionCode, string version)
+        {
+            Name = name;
+            Publisher = publisher;
+            Product = product;
+            PromotionCode = promotionCode;
+            Version = version;
+        }
 
         public int CompareTo(Plan other)
         {
