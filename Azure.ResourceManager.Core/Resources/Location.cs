@@ -426,7 +426,7 @@ namespace Azure.ResourceManager.Core
 
         private static string GetCanonicalNameFromDisplayName(string name)
         {
-            return Regex.Replace(name.ToLower(), @" ", "-");
+            return name.Replace(RegexWhitespace, RegexDash).ToLower();
         }
 
         private static string GetDisplayNameFromCanonicalName(string name)
@@ -448,12 +448,12 @@ namespace Azure.ResourceManager.Core
 
         private static string GetDefaultNameFromCanonicalName(string name)
         {
-            return Regex.Replace(name, RegexDash, string.Empty);
+            return name.Replace(RegexDash, string.Empty);
         }
 
         private static string GetDefaultNameFromDisplayName(string name)
         {
-            return Regex.Replace(name, RegexWhitespace, string.Empty).ToLower();
+            return name.Replace(RegexWhitespace, string.Empty).ToLower();
         }
     }
 }
