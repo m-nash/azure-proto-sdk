@@ -109,5 +109,15 @@ namespace Azure.ResourceManager.Core.Tests
             ResourceIdentifier subject = resourceId;
             return subject;
         }
+
+        [TestCase(true, "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport", "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport")]
+        [TestCase(false, "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport2", "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport")]
+        [TestCase(false, "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test/providers/Microsoft.Web/sites/autoreport", "/subscriptions/6b085460-5f21-477e-ba44-1035046e9101/resourceGroups/nbhatia_test")]        
+        public void CheckHashCode(bool expected, string resourceId1, string resourceId2)
+        {
+            ResourceIdentifier resourceIdentifier1 = new ResourceIdentifier(resourceId1);
+            ResourceIdentifier resourceIdentifier2 = new ResourceIdentifier(resourceId2);
+            Assert.AreEqual(expected, resourceIdentifier1.GetHashCode() == resourceIdentifier2.GetHashCode());
+        }
     }
 }

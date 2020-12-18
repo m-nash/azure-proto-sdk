@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
@@ -26,6 +26,33 @@
     <ProjectReference Include="..\Azure.ResourceManager.Core\Azure.ResourceManager.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="TestAssets\Identity\InvalidTypeIsNull.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\Identity\InvalidType.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\Identity\SystemAndUserAssignedMiddleExtraField.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\Identity\SystemAndUserAssignedInnerExtraField.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\Identity\SystemAndUserAssignedOuterExtraField.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\Identity\SystemAndUserAssignedValid.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\Identity\SystemAndUserAssignedValidMultIdentities.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\Identity\SystemAssigned.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestAssets\Identity\UserAssigned.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestAssets\UserAssignedIdentity\UserAssignedBothEmptyString.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
