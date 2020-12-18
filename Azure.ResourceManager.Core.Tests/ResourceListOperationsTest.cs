@@ -14,11 +14,11 @@ namespace Azure.ResourceManager.Core.Tests
         {
             var testDic = new Dictionary<string, string> { { "tag1", "value1" } };
             String loc = "Japan East";
-            var asArmOp = (ArmResourceOperations)TestListActivater<ArmResourceOperations, ArmResource>(testDic, loc);
+            var asArmOp = (ArmResource)TestListActivator<ArmResource, ArmResourceData>(testDic, loc);
             Assert.IsTrue(loc == asArmOp.DefaultLocation);
         }
 
-        private static object TestListActivater<TOperation, TResource>(Dictionary<string, string> tags = null, string location = "East US")
+        private static object TestListActivator<TOperation, TResource>(Dictionary<string, string> tags = null, string location = "East US")
         {
             var testMethod = typeof(ResourceListOperations).GetMethod("CreateResourceConverter", BindingFlags.Static | BindingFlags.NonPublic);
             var asGeneric = testMethod.MakeGenericMethod(new Type[] { typeof(TOperation), typeof(TResource) });

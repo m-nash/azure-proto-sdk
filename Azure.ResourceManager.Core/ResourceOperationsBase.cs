@@ -29,7 +29,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="resource">The resource that is the target of operations.</param>
         /// <param name="options">Client options to be used for these operations.</param>
         public ResourceOperationsBase(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions options = default)
-            : this(context, resource.Id, options)
+            : base(context, resource, options)
         {
         }
     }
