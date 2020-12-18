@@ -13,22 +13,22 @@ namespace azure_proto_network
     public class PublicIpAddressContainer : ResourceContainerBase<PublicIpAddress, PublicIPAddressData>
     {
         internal PublicIpAddressContainer(ArmResourceOperations genericOperations)
-            : base(genericOperations.ClientContext,genericOperations.Id)
+            : base(genericOperations.ClientOptions,genericOperations.Id)
         {
         }
 
-        internal PublicIpAddressContainer(AzureResourceManagerClientContext context, ResourceGroupData resourceGroup)
-            : base(context, resourceGroup)
+        internal PublicIpAddressContainer(AzureResourceManagerClientOptions options, ResourceGroupData resourceGroup)
+            : base(options, resourceGroup)
         {
         }
 
-        internal PublicIpAddressContainer(AzureResourceManagerClientContext context, ResourceIdentifier id)
-            : base(context, id)
+        internal PublicIpAddressContainer(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-            AzureResourceManagerClientOptions.Convert<NetworkManagementClientOptions>(ClientContext.Options))).PublicIPAddresses;
+            ClientOptions.Convert<NetworkManagementClientOptions>())).PublicIPAddresses;
 
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
@@ -37,7 +37,7 @@ namespace azure_proto_network
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
             return new PhArmResponse<PublicIpAddress, PublicIPAddress>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new PublicIpAddress(ClientContext, new PublicIPAddressData(n)));
+                n => new PublicIpAddress(ClientOptions, new PublicIPAddressData(n)));
         }
 
         public async override Task<ArmResponse<PublicIpAddress>> CreateAsync(string name, PublicIPAddressData resourceDetails, CancellationToken cancellationToken = default)
@@ -45,21 +45,21 @@ namespace azure_proto_network
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<PublicIpAddress, PublicIPAddress>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                n => new PublicIpAddress(ClientContext, new PublicIPAddressData(n)));
+                n => new PublicIpAddress(ClientOptions, new PublicIPAddressData(n)));
         }
 
         public override ArmOperation<PublicIpAddress> StartCreate(string name, PublicIPAddressData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<PublicIpAddress, PublicIPAddress>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken),
-                n => new PublicIpAddress(ClientContext, new PublicIPAddressData(n)));
+                n => new PublicIpAddress(ClientOptions, new PublicIPAddressData(n)));
         }
 
         public async override Task<ArmOperation<PublicIpAddress>> StartCreateAsync(string name, PublicIPAddressData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<PublicIpAddress, PublicIPAddress>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),
-                n => new PublicIpAddress(ClientContext, new PublicIPAddressData(n)));
+                n => new PublicIpAddress(ClientOptions, new PublicIPAddressData(n)));
         }
 
         public ArmBuilder<PublicIpAddress, PublicIPAddressData> Construct(Location location = null)
@@ -92,14 +92,14 @@ namespace azure_proto_network
         {
             ArmFilterCollection filters = new ArmFilterCollection(PublicIPAddressData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public AsyncPageable<ArmResourceOperations> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PublicIPAddressData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public Pageable<PublicIpAddress> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
@@ -116,7 +116,7 @@ namespace azure_proto_network
 
         private Func<PublicIPAddress, PublicIpAddress> convertor()
         {
-            return s => new PublicIpAddress(ClientContext, new PublicIPAddressData(s));
+            return s => new PublicIpAddress(ClientOptions, new PublicIPAddressData(s));
         }
     }
 }

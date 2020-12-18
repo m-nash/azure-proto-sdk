@@ -13,13 +13,13 @@ namespace azure_proto_compute
     /// </summary>
     public class AvailabilitySetContainer : ResourceContainerBase<AvailabilitySet, AvailabilitySetData>
     {
-        internal AvailabilitySetContainer(AzureResourceManagerClientContext context, ResourceGroupData resourceGroup)
-            : base(context, resourceGroup)
+        internal AvailabilitySetContainer(AzureResourceManagerClientOptions options, ResourceGroupData resourceGroup)
+            : base(options, resourceGroup)
         {
         }
 
-        internal AvailabilitySetContainer(AzureResourceManagerClientContext context, ResourceIdentifier id)
-            : base(context, id)
+        internal AvailabilitySetContainer(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
@@ -30,7 +30,7 @@ namespace azure_proto_compute
             var response = Operations.CreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
             return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 response,
-                a => new AvailabilitySet(ClientContext, new AvailabilitySetData(a)));
+                a => new AvailabilitySet(ClientOptions, new AvailabilitySetData(a)));
         }
 
         public async override Task<ArmResponse<AvailabilitySet>> CreateAsync(string name, AvailabilitySetData resourceDetails, CancellationToken cancellationToken = default)
@@ -38,21 +38,21 @@ namespace azure_proto_compute
             var response = await Operations.CreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 response,
-                a => new AvailabilitySet(ClientContext, new AvailabilitySetData(a)));
+                a => new AvailabilitySet(ClientOptions, new AvailabilitySetData(a)));
         }
 
         public override ArmOperation<AvailabilitySet> StartCreate(string name, AvailabilitySetData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 Operations.CreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
-                a => new AvailabilitySet(ClientContext, new AvailabilitySetData(a)));
+                a => new AvailabilitySet(ClientOptions, new AvailabilitySetData(a)));
         }
 
         public async override Task<ArmOperation<AvailabilitySet>> StartCreateAsync(string name, AvailabilitySetData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 await Operations.CreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
-                a => new AvailabilitySet(ClientContext, new AvailabilitySetData(a)));
+                a => new AvailabilitySet(ClientOptions, new AvailabilitySetData(a)));
         }
 
         public ArmBuilder<AvailabilitySet, AvailabilitySetData> Construct(string skuName, Location location = null)
@@ -71,14 +71,14 @@ namespace azure_proto_compute
         {
             ArmFilterCollection filters = new ArmFilterCollection(AvailabilitySetData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<ArmResourceOperations, ArmResource>(ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public AsyncPageable<ArmResourceOperations> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(AvailabilitySetData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientContext, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<ArmResourceOperations, ArmResource>(ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public Pageable<AvailabilitySet> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
@@ -94,6 +94,6 @@ namespace azure_proto_compute
         }
 
         internal AvailabilitySetsOperations Operations => GetClient((uri, cred) => new ComputeManagementClient(uri, Id.Subscription, cred, 
-                    AzureResourceManagerClientOptions.Convert<ComputeManagementClientOptions>(ClientContext.Options))).AvailabilitySets;
+                    ClientOptions.Convert<ComputeManagementClientOptions>())).AvailabilitySets;
     }
 }

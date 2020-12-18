@@ -11,23 +11,23 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public abstract class OperationsBase
     {
-        public OperationsBase(AzureResourceManagerClientContext context, ResourceIdentifier id, Location location = null)
-            : this(context, new ArmResource(id, location ?? Location.Default))
+        public OperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id, Location location = null)
+            : this(options, new ArmResource(id, location ?? Location.Default))
         {
         }
 
-        public OperationsBase(AzureResourceManagerClientContext context, Resource resource)
+        public OperationsBase(AzureResourceManagerClientOptions options, Resource resource)
         {
             Validate(resource?.Id);
 
-            ClientContext = context;
+            ClientOptions = options;
             Id = resource.Id;
             var trackedResource = resource as TrackedResource;
             DefaultLocation = trackedResource?.Location ?? Location.Default;
             Resource = resource;
         }
 
-        public virtual AzureResourceManagerClientContext ClientContext { get; }
+        public virtual AzureResourceManagerClientOptions ClientOptions { get; }
 
         protected virtual Resource Resource { get; set; }
 
@@ -54,7 +54,7 @@ namespace Azure.ResourceManager.Core
         /// <returns></returns>
         protected T GetClient<T>(Func<Uri, TokenCredential, T> creator)
         {
-            return ClientContext.GetClient(creator);
+            return ClientOptions.GetClient(creator);
         }
     }
 }

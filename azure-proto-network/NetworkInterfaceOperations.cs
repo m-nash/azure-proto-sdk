@@ -10,19 +10,19 @@ namespace azure_proto_network
     public class NetworkInterfaceOperations : ResourceOperationsBase<NetworkInterface, NetworkInterfaceData>, ITaggable<NetworkInterface, NetworkInterfaceData>, IDeletableResource<NetworkInterface, NetworkInterfaceData>
     {
         internal NetworkInterfaceOperations(ArmResourceOperations genericOperations)
-            : base(genericOperations.ClientContext, genericOperations.Id)
+            : base(genericOperations.ClientOptions, genericOperations.Id)
         {
         }
 
-        internal NetworkInterfaceOperations(AzureResourceManagerClientContext context, ResourceIdentifier id)
-            : base(context, id)
+        internal NetworkInterfaceOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-            AzureResourceManagerClientOptions.Convert<NetworkManagementClientOptions>(ClientContext.Options))).NetworkInterfaces;
+            ClientOptions.Convert<NetworkManagementClientOptions>())).NetworkInterfaces;
 
         public ArmResponse<Response> Delete()
         {
@@ -51,7 +51,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new NetworkInterfaceData(n);
-                    return new NetworkInterface(ClientContext, Resource as NetworkInterfaceData);
+                    return new NetworkInterface(ClientOptions, Resource as NetworkInterfaceData);
                 });
         }
 
@@ -62,7 +62,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new NetworkInterfaceData(n);
-                    return new NetworkInterface(ClientContext, Resource as NetworkInterfaceData);
+                    return new NetworkInterface(ClientOptions, Resource as NetworkInterfaceData);
                 });
         }
 
@@ -74,7 +74,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new NetworkInterfaceData(n);
-                    return new NetworkInterface(ClientContext, Resource as NetworkInterfaceData);
+                    return new NetworkInterface(ClientOptions, Resource as NetworkInterfaceData);
                 });
         }
 
@@ -87,7 +87,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new NetworkInterfaceData(n);
-                    return new NetworkInterface(ClientContext, Resource as NetworkInterfaceData);
+                    return new NetworkInterface(ClientOptions, Resource as NetworkInterfaceData);
                 });
         }
     }

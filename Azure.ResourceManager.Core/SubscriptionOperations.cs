@@ -16,34 +16,34 @@ namespace Azure.ResourceManager.Core
     {
         public static readonly ResourceType AzureResourceType = "Microsoft.Resources/subscriptions";
 
-        internal SubscriptionOperations(AzureResourceManagerClientContext context, string defaultSubscription)
-            : base(context, $"/subscriptions/{defaultSubscription}")
+        internal SubscriptionOperations(AzureResourceManagerClientOptions options, string defaultSubscription)
+            : base(options, $"/subscriptions/{defaultSubscription}")
         {
         }
 
-        internal SubscriptionOperations(AzureResourceManagerClientContext context, ResourceIdentifier id)
-            : base(context, id)
+        internal SubscriptionOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
-        internal SubscriptionOperations(AzureResourceManagerClientContext context, Resource subscription )
-            : base(context, subscription)
+        internal SubscriptionOperations(AzureResourceManagerClientOptions options, Resource subscription )
+            : base(options, subscription)
         {
         }
 
         public override ResourceType ResourceType => AzureResourceType;
 
         internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) =>
-            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, AzureResourceManagerClientOptions.Convert<ResourcesManagementClientOptions>(ClientContext.Options))).Subscriptions;
+            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ClientOptions.Convert<ResourcesManagementClientOptions>())).Subscriptions;
 
         internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) =>
-            new ResourcesManagementClient(uri, Id.Subscription, cred, AzureResourceManagerClientOptions.Convert<ResourcesManagementClientOptions>(ClientContext.Options))).ResourceGroups;
+            new ResourcesManagementClient(uri, Id.Subscription, cred, ClientOptions.Convert<ResourcesManagementClientOptions>())).ResourceGroups;
 
         public Pageable<ResourceGroupOperations> ListResourceGroups(CancellationToken cancellationToken = default)
         {
             return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.ResourceGroup, ResourceGroupOperations>(
                 RgOperations.List(null, null, cancellationToken),
-                s => new ResourceGroupOperations(ClientContext, new ResourceGroupData(s)));
+                s => new ResourceGroupOperations(ClientOptions, new ResourceGroupData(s)));
         }
 
         public AsyncPageable<ResourceGroupOperations> ListResourceGroupsAsync(
@@ -51,27 +51,27 @@ namespace Azure.ResourceManager.Core
         {
             return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.ResourceGroup, ResourceGroupOperations>(
                 RgOperations.ListAsync(null, null, cancellationToken),
-                s => new ResourceGroupOperations(ClientContext, new ResourceGroupData(s)));
+                s => new ResourceGroupOperations(ClientOptions, new ResourceGroupData(s)));
         }
 
         public ResourceGroupOperations ResourceGroup(ResourceGroupData resourceGroup)
         {
-            return new ResourceGroupOperations(ClientContext, resourceGroup);
+            return new ResourceGroupOperations(ClientOptions, resourceGroup);
         }
 
         public ResourceGroupOperations ResourceGroup(ResourceIdentifier resourceGroup)
         {
-            return new ResourceGroupOperations(ClientContext, resourceGroup);
+            return new ResourceGroupOperations(ClientOptions, resourceGroup);
         }
 
         public ResourceGroupOperations ResourceGroup(string resourceGroup)
         {
-            return new ResourceGroupOperations(ClientContext, $"{Id}/resourceGroups/{resourceGroup}");
+            return new ResourceGroupOperations(ClientOptions, $"{Id}/resourceGroups/{resourceGroup}");
         }
 
         public ResourceGroupContainer ResourceGroups()
         {
-            return new ResourceGroupContainer(ClientContext, this);
+            return new ResourceGroupContainer(ClientOptions, this);
         }
 
         public override ArmResponse<Subscription> Get()
@@ -90,7 +90,7 @@ namespace Azure.ResourceManager.Core
 
         private Func<Azure.ResourceManager.Resources.Models.Subscription, Subscription> Converter()
         {
-            return s => new Subscription(ClientContext, new SubscriptionData(s));
+            return s => new Subscription(ClientOptions, new SubscriptionData(s));
         }
     }
 }

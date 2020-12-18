@@ -26,7 +26,7 @@ namespace Azure.ResourceManager.Core
         }
 
         public static Pageable<TOperations> ListAtContext<TOperations, TResource>(
-            AzureResourceManagerClientContext clientContext,
+            AzureResourceManagerClientOptions clientContext,
             ResourceIdentifier id,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
@@ -48,7 +48,7 @@ namespace Azure.ResourceManager.Core
         }
 
         public static AsyncPageable<TOperations> ListAtContextAsync<TOperations, TResource>(
-            AzureResourceManagerClientContext clientContext,
+            AzureResourceManagerClientOptions clientContext,
             ResourceIdentifier id,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
@@ -78,7 +78,7 @@ namespace Azure.ResourceManager.Core
             where TResource : TrackedResource
         {
             return _ListAtContext<TOperations, TResource>(
-                subscription.ClientContext,
+                subscription.ClientOptions,
                 subscription.Id,
                 null,
                 resourceFilters,
@@ -95,7 +95,7 @@ namespace Azure.ResourceManager.Core
             where TResource : TrackedResource
         {
             return _ListAtContextAsync<TOperations, TResource>(
-                subscription.ClientContext,
+                subscription.ClientOptions,
                 subscription.Id,
                 null,
                 resourceFilters,
@@ -104,7 +104,7 @@ namespace Azure.ResourceManager.Core
         }
 
         private static AsyncPageable<TOperations> _ListAtContextAsync<TOperations, TResource>(
-            AzureResourceManagerClientContext clientContext,
+            AzureResourceManagerClientOptions clientContext,
             ResourceIdentifier scopeId,
             string scopeFilter,
             ArmFilterCollection resourceFilters = null,
@@ -133,7 +133,7 @@ namespace Azure.ResourceManager.Core
         }
 
         private static Pageable<TOperations> _ListAtContext<TOperations, TResource>(
-            AzureResourceManagerClientContext clientContext,
+            AzureResourceManagerClientOptions clientContext,
             ResourceIdentifier scopeId,
             string scopeFilter = null,
             ArmFilterCollection resourceFilters = null,
@@ -163,7 +163,7 @@ namespace Azure.ResourceManager.Core
 
         private static Pageable<TOperations> ConvertResults<TOperations, TResource>(
             Pageable<GenericResourceExpanded> result,
-            AzureResourceManagerClientContext clientContext)
+            AzureResourceManagerClientOptions clientContext)
             where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
@@ -174,7 +174,7 @@ namespace Azure.ResourceManager.Core
 
         private static AsyncPageable<TOperations> ConvertResultsAsync<TOperations, TResource>(
             AsyncPageable<GenericResourceExpanded> result,
-            AzureResourceManagerClientContext clientContext)
+            AzureResourceManagerClientOptions clientContext)
             where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
@@ -183,7 +183,7 @@ namespace Azure.ResourceManager.Core
                 CreateResourceConverter<TOperations, TResource>(clientContext));
         }
 
-        private static Func<GenericResourceExpanded, TOperations> CreateResourceConverter<TOperations, TResource>(AzureResourceManagerClientContext clientContext)
+        private static Func<GenericResourceExpanded, TOperations> CreateResourceConverter<TOperations, TResource>(AzureResourceManagerClientOptions clientContext)
             where TOperations : ResourceOperationsBase<TOperations, TResource>
             where TResource : TrackedResource
         {
@@ -194,9 +194,9 @@ namespace Azure.ResourceManager.Core
         }
 
         //TODO: should be able to access context.GetClient() instead of needing this method
-        protected static ResourcesManagementClient GetResourcesClient(AzureResourceManagerClientContext context, string id)
+        protected static ResourcesManagementClient GetResourcesClient(AzureResourceManagerClientOptions options, string id)
         {
-            return new ResourcesManagementClient(context.BaseUri, id, context.Credential);
+            return new ResourcesManagementClient(options.BaseUri, id, options.Credential);
         }
     }
 }

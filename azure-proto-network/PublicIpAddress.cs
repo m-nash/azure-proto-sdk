@@ -4,8 +4,8 @@ namespace azure_proto_network
 {
     public class PublicIpAddress : PublicIpAddressOperations
     {
-        internal PublicIpAddress(AzureResourceManagerClientContext context, PublicIPAddressData resource)
-            : base(context, resource.Id)
+        internal PublicIpAddress(AzureResourceManagerClientOptions options, PublicIPAddressData resource)
+            : base(options, resource.Id)
         {
             Data = resource;
         }

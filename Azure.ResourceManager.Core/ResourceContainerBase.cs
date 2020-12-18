@@ -23,13 +23,13 @@ namespace Azure.ResourceManager.Core
         where TOperations : ResourceOperationsBase<TOperations, TResource>
         where TResource : Resource
     {
-        protected ResourceContainerBase(AzureResourceManagerClientContext context, ResourceIdentifier id)
-            : base(context, id)
+        protected ResourceContainerBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
-        protected ResourceContainerBase(AzureResourceManagerClientContext context, TrackedResource resource)
-            : base(context, resource)
+        protected ResourceContainerBase(AzureResourceManagerClientOptions options, TrackedResource resource)
+            : base(options, resource)
         {
             Parent = resource;
         }
