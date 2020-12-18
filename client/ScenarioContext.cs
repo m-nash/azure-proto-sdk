@@ -13,6 +13,10 @@ namespace client
         public string Loc => "westus2";
         public string SubnetName => $"{Environment.UserName}-subnet";
 
+        public string PrincipalId => "4c5ce728-7350-4ae5-bcf1-42e8e33b00fe";
+
+        public string RoleId => "acdd72a7-3385-48ef-bd42-f606fba81ae7";
+
         public ScenarioContext() : this(AzureSdkSandboxId) { }
 
         public ScenarioContext(string subscriptionId)

@@ -12,7 +12,7 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     ///     Subscription operations
     /// </summary>
-    public class SubscriptionOperations : ResourceOperationsBase<Subscription, SubscriptionData>
+    public class SubscriptionOperations : ResourceOperationsBase<Subscription>
     {
         public static readonly ResourceType AzureResourceType = "Microsoft.Resources/subscriptions";
 

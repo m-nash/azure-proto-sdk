@@ -35,9 +35,7 @@ namespace Azure.ResourceManager.Core
         public virtual bool Equals(Resource other)
         {
             if (Id == null)
-            {
                 return false;
-            }
 
             return Id.Equals(other?.Id);
         }
@@ -45,9 +43,7 @@ namespace Azure.ResourceManager.Core
         public virtual bool Equals(string other)
         {
             if (Id == null)
-            {
                 return false;
-            }
 
             return Id.Equals(other);
         }

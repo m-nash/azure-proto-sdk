@@ -1,4 +1,5 @@
-﻿using azure_proto_compute;
+﻿using Azure.ResourceManager.Compute;
+using azure_proto_compute;
 using Azure.ResourceManager.Core;
 using System;
 using System.Threading.Tasks;
@@ -41,10 +42,15 @@ namespace client
             var client = new AzureResourceManagerClient();
             foreach (var sub in client.Subscriptions().List())
             {
+                //sub.ListVirtualMachines("even").PowerOff
                 await foreach (var vm in sub.ListVirtualMachinesAsync("even"))
                 {
+                       // client.ResourceOperations<VirtualMachine>(vm).PowerOff()
+                       //vmOps.PowerOff(vm.Id)
                        Console.WriteLine($"Stopping {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");
                        vm.PowerOff();
+                    var newVm = vm.Get();
+                       var model = vm.Data;
                        Console.WriteLine($"Starting {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");
                        vm.PowerOn();
                 }

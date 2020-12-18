@@ -15,16 +15,6 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class ResourceListOperations
     {
-        private static void Validate(ResourceIdentifier id)
-        {
-            if (id.Type != ResourceGroupOperations.AzureResourceType &&
-                id.Type != SubscriptionOperations.AzureResourceType)
-            {
-                throw new ArgumentException(
-                    $"{id.Type} is not valid to list at context must be {ResourceGroupOperations.AzureResourceType} or {SubscriptionOperations.AzureResourceType}");
-            }
-        }
-
         public static Pageable<TOperations> ListAtContext<TOperations, TResource>(
             AzureResourceManagerClientContext clientContext,
             AzureResourceManagerClientOptions clientOptions,
@@ -32,7 +22,7 @@ namespace Azure.ResourceManager.Core
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
             Validate(id);
@@ -56,7 +46,7 @@ namespace Azure.ResourceManager.Core
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
             Validate(id);
@@ -78,7 +68,7 @@ namespace Azure.ResourceManager.Core
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
             return _ListAtContext<TOperations, TResource>(
@@ -96,7 +86,7 @@ namespace Azure.ResourceManager.Core
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
             return _ListAtContextAsync<TOperations, TResource>(
@@ -117,7 +107,7 @@ namespace Azure.ResourceManager.Core
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
             var resourceOperations = GetResourcesClient(clientContext, scopeId.Subscription).Resources;
@@ -147,8 +137,9 @@ namespace Azure.ResourceManager.Core
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
+
         {
             var resourceOperations = GetResourcesClient(clientContext, scopeId.Subscription).Resources;
             Pageable<GenericResourceExpanded> result;
@@ -173,7 +164,7 @@ namespace Azure.ResourceManager.Core
             Pageable<GenericResourceExpanded> result,
             AzureResourceManagerClientContext clientContext,
             AzureResourceManagerClientOptions clientOptions)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
             return new PhWrappingPageable<GenericResourceExpanded, TOperations>(
@@ -185,7 +176,7 @@ namespace Azure.ResourceManager.Core
             AsyncPageable<GenericResourceExpanded> result,
             AzureResourceManagerClientContext clientContext,
             AzureResourceManagerClientOptions clientOptions)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
             return new PhWrappingAsyncPageable<GenericResourceExpanded, TOperations>(
@@ -194,13 +185,23 @@ namespace Azure.ResourceManager.Core
         }
 
         private static Func<GenericResourceExpanded, TOperations> CreateResourceConverter<TOperations, TResource>(AzureResourceManagerClientContext clientContext, AzureResourceManagerClientOptions clientOptions)
-            where TOperations : ResourceOperationsBase<TOperations, TResource>
+            where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
         {
              return s => Activator.CreateInstance(
                     typeof(TOperations),
                     clientContext,
                     Activator.CreateInstance(typeof(TResource), s as Azure.ResourceManager.Resources.Models.Resource) as TResource, clientOptions) as TOperations;
+        }
+
+        private static void Validate(ResourceIdentifier id)
+        {
+            if (id.Type != ResourceGroupOperations.AzureResourceType &&
+                id.Type != SubscriptionOperations.AzureResourceType)
+            {
+                throw new ArgumentException(
+                    $"{id.Type} is not valid to list at context must be {ResourceGroupOperations.AzureResourceType} or {SubscriptionOperations.AzureResourceType}");
+            }
         }
 
         //TODO: should be able to access context.GetClient() instead of needing this method
