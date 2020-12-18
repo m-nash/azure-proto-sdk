@@ -10,15 +10,24 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class Sku : IEquatable<Sku>, IComparable<Sku>
     {
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
-        public string Tier { get; set; }
+        public string Tier { get; private set; }
 
-        public string Family { get; set; }
+        public string Family { get; private set; }
 
-        public string Size { get; set; }
+        public string Size { get; private set; }
 
-        public long? Capacity { get; set; }
+        public long? Capacity { get; private set; }
+
+        public Sku(string name, string tier, string family, string size, long? capacity = null)
+        {
+            Name = name;
+            Tier = tier;
+            Family = family;
+            Size = size;
+            Capacity = capacity;
+        }
 
         public int CompareTo(Sku other)
         {
