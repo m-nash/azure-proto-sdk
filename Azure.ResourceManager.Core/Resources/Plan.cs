@@ -20,7 +20,7 @@ namespace Azure.ResourceManager.Core
 
         public string Version { get; private set; }
 
-        public Plan(string name, string publisher, string product, string promotionCode, string version)
+        internal Plan(string name, string publisher, string product, string promotionCode, string version)
         {
             Name = name;
             Publisher = publisher;

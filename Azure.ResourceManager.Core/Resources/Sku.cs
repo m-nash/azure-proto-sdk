@@ -20,7 +20,7 @@ namespace Azure.ResourceManager.Core
 
         public long? Capacity { get; private set; }
 
-        public Sku(string name, string tier, string family, string size, long? capacity = null)
+        internal Sku(string name, string tier, string family, string size, long? capacity = null)
         {
             Name = name;
             Tier = tier;
