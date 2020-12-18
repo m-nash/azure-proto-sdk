@@ -13,10 +13,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(1, "${?/>._`", "")]
         public void CompareToName(int expected, string name1, string name2)
         {
-            Sku sku1 = new Sku();
-            Sku sku2 = new Sku();
-            sku1.Name = name1;
-            sku2.Name = name2;
+            Sku sku1 = new Sku(name1, null, null, null);
+            Sku sku2 = new Sku(name2, null, null, null);
             Assert.AreEqual(expected, sku1.CompareTo(sku2));
         }
 
@@ -29,10 +27,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(1, "${?/>._`", "")]
         public void CompareToFamily(int expected, string family1, string family2)
         {
-            Sku sku1 = new Sku();
-            Sku sku2 = new Sku();
-            sku1.Family = family1;
-            sku2.Family = family2;
+            Sku sku1 = new Sku(null, null, family1, null);
+            Sku sku2 = new Sku(null, null, family2, null);
             Assert.AreEqual(expected, sku1.CompareTo(sku2));
         }
 
@@ -45,10 +41,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(1, "${?/>._`", "")]
         public void CompareToSize(int expected, string size1, string size2)
         {
-            Sku sku1 = new Sku();
-            Sku sku2 = new Sku();
-            sku1.Size = size1;
-            sku2.Size = size2;
+            Sku sku1 = new Sku(null, null, null, size1);
+            Sku sku2 = new Sku(null, null, null, size2);
             Assert.AreEqual(expected, sku1.CompareTo(sku2));
         }
 
@@ -61,10 +55,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(1, "${?/>._`", "")]
         public void CompareToTier(int expected, string tier1, string tier2)
         {
-            Sku sku1 = new Sku();
-            Sku sku2 = new Sku();
-            sku1.Tier = tier1;
-            sku2.Tier = tier2;
+            Sku sku1 = new Sku(null, tier1, null, null);
+            Sku sku2 = new Sku(null, tier2, null, null);
             Assert.AreEqual(expected, sku1.CompareTo(sku2));
         }
 
@@ -75,17 +67,15 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(-1, null, 1)]
         public void CompareToCapacity(int expected, long? capacity1, long? capacity2)
         {
-            Sku sku1 = new Sku();
-            Sku sku2 = new Sku();
-            sku1.Capacity = capacity1;
-            sku2.Capacity = capacity2;
+            Sku sku1 = capacity1 == null ? new Sku(null, null, null, null) : new Sku(null, null, null, null, capacity1);
+            Sku sku2 = capacity2 == null ? new Sku(null, null, null, null) : new Sku(null, null, null, null, capacity2);
             Assert.AreEqual(expected, sku1.CompareTo(sku2));
         }
 
         [Test]
         public void CompareToNullSku()
         {
-            Sku sku1 = new Sku();
+            Sku sku1 = new Sku(null, null, null, null);
             Sku sku2 = null;
             Assert.AreEqual(1, sku1.CompareTo(sku2));
         }
@@ -93,7 +83,7 @@ namespace Azure.ResourceManager.Core.Tests
         [Test]
         public void CompareToSameSkus()
         {
-            Sku sku1 = new Sku();
+            Sku sku1 = new Sku(null, null, null, null);
             Sku sku2 = sku1;
             Assert.AreEqual(0, sku1.CompareTo(sku2));
         }
@@ -103,12 +93,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(-1, "namea", "Nameb", "Familyb", "familya")]
         public void CompareToMore(int expected, string name1, string name2, string family1, string family2)
         {
-            Sku sku1 = new Sku();
-            Sku sku2 = new Sku();
-            sku1.Name = name1;
-            sku2.Name = name2;
-            sku1.Family = family1;
-            sku2.Family = family2;
+            Sku sku1 = new Sku(name1, null, family1, null);
+            Sku sku2 = new Sku(name2, null, family2, null);
             Assert.AreEqual(expected, sku1.CompareTo(sku2));
         }
 
@@ -121,10 +107,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(false, "${?/>._`", "")]
         public void EqualsToName(bool expected, string name1, string name2)
         {
-            Sku sku1 = new Sku();
-            Sku sku2 = new Sku();
-            sku1.Name = name1;
-            sku2.Name = name2;
+            Sku sku1 = new Sku(name1, null, null, null);
+            Sku sku2 = new Sku(name2, null, null, null);
             if (expected)
             {
                 Assert.IsTrue(sku1.Equals(sku2));
@@ -144,10 +128,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(false, "${?/>._`", "")]
         public void EqualsToFamily(bool expected, string family1, string family2)
         {
-            Sku sku1 = new Sku();
-            Sku sku2 = new Sku();
-            sku1.Family = family1;
-            sku2.Family = family2;
+            Sku sku1 = new Sku(null, null, family1, null);
+            Sku sku2 = new Sku(null, null, family2, null);
             if (expected)
             {
                 Assert.IsTrue(sku1.Equals(sku2));
@@ -167,10 +149,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(false, "${?/>._`", "")]
         public void EqualsToSize(bool expected, string size1, string size2)
         {
-            Sku sku1 = new Sku();
-            Sku sku2 = new Sku();
-            sku1.Size = size1;
-            sku2.Size = size2;
+            Sku sku1 = new Sku(null, null, null, size1);
+            Sku sku2 = new Sku(null, null, null, size2);
             if (expected)
             {
                 Assert.IsTrue(sku1.Equals(sku2));
@@ -190,10 +170,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(false, "${?/>._`", "")]
         public void EqualsToTier(bool expected, string tier1, string tier2)
         {
-            Sku sku1 = new Sku();
-            Sku sku2 = new Sku();
-            sku1.Tier = tier1;
-            sku2.Tier = tier2;
+            Sku sku1 = new Sku(null, tier1, null, null);
+            Sku sku2 = new Sku(null, tier2, null, null);
             if (expected)
             {
                 Assert.IsTrue(sku1.Equals(sku2));
@@ -211,10 +189,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(false, null, 1)]
         public void EqualsToCapacity(bool expected, long? capacity1, long? capacity2)
         {
-            Sku sku1 = new Sku();
-            Sku sku2 = new Sku();
-            sku1.Capacity = capacity1;
-            sku2.Capacity = capacity2;
+            Sku sku1 = capacity1 == null ? new Sku(null, null, null, null) : new Sku(null, null, null, null, capacity1);
+            Sku sku2 = capacity2 == null ? new Sku(null, null, null, null) : new Sku(null, null, null, null, capacity2);
             if (expected)
             {
                 Assert.IsTrue(sku1.Equals(sku2));
@@ -228,7 +204,7 @@ namespace Azure.ResourceManager.Core.Tests
         [Test]
         public void EqualsToNullSku()
         {
-            Sku sku1 = new Sku();
+            Sku sku1 = new Sku(null, null, null, null);
             Sku sku2 = null;
             Assert.IsFalse(sku1.Equals(sku2));
         }
@@ -236,7 +212,7 @@ namespace Azure.ResourceManager.Core.Tests
         [Test]
         public void EqualsToObject()
         {
-            Sku sku1 = new Sku();
+            Sku sku1 = new Sku(null, null, null, null);
             object sku2 = "random";
             Assert.IsFalse(sku1.Equals(sku2));
         }
@@ -244,7 +220,7 @@ namespace Azure.ResourceManager.Core.Tests
         [Test]
         public void EqualsToSameSkus()
         {
-            Sku sku1 = new Sku();
+            Sku sku1 = new Sku(null, null, null, null);
             Sku sku2 = sku1;
             Assert.IsTrue(sku1.Equals(sku2));
         }

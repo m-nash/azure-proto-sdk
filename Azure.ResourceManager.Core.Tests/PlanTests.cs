@@ -13,10 +13,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(1, "${?/>._`", "")]
         public void CompareToName(int expected, string name1, string name2)
         {
-            Plan plan1 = new Plan();
-            Plan plan2 = new Plan();
-            plan1.Name = name1;
-            plan2.Name = name2;
+            Plan plan1 = new Plan(name1, null, null, null, null);
+            Plan plan2 = new Plan(name2, null, null, null, null);
             Assert.AreEqual(expected, plan1.CompareTo(plan2));
         }
 
@@ -29,10 +27,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(1, "${?/>._`", "")]
         public void CompareToProduct(int expected, string product1, string product2)
         {
-            Plan plan1 = new Plan();
-            Plan plan2 = new Plan();
-            plan1.Product = product1;
-            plan2.Product = product2;
+            Plan plan1 = new Plan(null, null, product1, null, null);
+            Plan plan2 = new Plan(null, null, product2, null, null);
             Assert.AreEqual(expected, plan1.CompareTo(plan2));
         }
 
@@ -45,10 +41,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(1, "${?/>._`", "")]
         public void CompareToPromotionCode(int expected, string promotionCode1, string promotionCode2)
         {
-            Plan plan1 = new Plan();
-            Plan plan2 = new Plan();
-            plan1.PromotionCode = promotionCode1;
-            plan2.PromotionCode = promotionCode2;
+            Plan plan1 = new Plan(null, null, null, promotionCode1, null);
+            Plan plan2 = new Plan(null, null, null, promotionCode2, null);
             Assert.AreEqual(expected, plan1.CompareTo(plan2));
         }
 
@@ -61,10 +55,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(1, "${?/>._`", "")]
         public void CompareToPublisher(int expected, string publisher1, string publisher2)
         {
-            Plan plan1 = new Plan();
-            Plan plan2 = new Plan();
-            plan1.Publisher = publisher1;
-            plan2.Publisher = publisher2;
+            Plan plan1 = new Plan(null, publisher1, null, null, null);
+            Plan plan2 = new Plan(null, publisher2, null, null, null);
             Assert.AreEqual(expected, plan1.CompareTo(plan2));
         }
 
@@ -77,17 +69,15 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(1, "${?/>._`", "")]
         public void CompareToVersion(int expected, string version1, string version2)
         {
-            Plan plan1 = new Plan();
-            Plan plan2 = new Plan();
-            plan1.Version = version1;
-            plan2.Version = version2;
+            Plan plan1 = new Plan(null, null, null, null, version1);
+            Plan plan2 = new Plan(null, null, null, null, version2);
             Assert.AreEqual(expected, plan1.CompareTo(plan2));
         }
 
         [Test]
         public void CompareToNullPlan()
         {
-            Plan plan1 = new Plan();
+            Plan plan1 = new Plan(null, null, null, null, null);
             Plan plan2 = null;
             Assert.AreEqual(1, plan1.CompareTo(plan2));
         }
@@ -95,7 +85,7 @@ namespace Azure.ResourceManager.Core.Tests
         [Test]
         public void CompareToSamePlans()
         {
-            Plan plan1 = new Plan();
+            Plan plan1 = new Plan(null, null, null, null, null);
             Plan plan2 = plan1;
             Assert.AreEqual(0, plan1.CompareTo(plan2));
         }
@@ -105,12 +95,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(-1, "namea", "Nameb", "Versionb", "versiona")]
         public void CompareToMore(int expected, string name1, string name2, string version1, string version2)
         {
-            Plan plan1 = new Plan();
-            Plan plan2 = new Plan();
-            plan1.Name = name1;
-            plan2.Name = name2;
-            plan1.Version = version1;
-            plan2.Version = version2;
+            Plan plan1 = new Plan(name1, null, null, null, version1);
+            Plan plan2 = new Plan(name2, null, null, null, version2);
             Assert.AreEqual(expected, plan1.CompareTo(plan2));
         }
 
@@ -123,10 +109,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(false, "${?/>._`", "")]
         public void EqualsToName(bool expected, string name1, string name2)
         {
-            Plan plan1 = new Plan();
-            Plan plan2 = new Plan();
-            plan1.Name = name1;
-            plan2.Name = name2;
+            Plan plan1 = new Plan(name1, null, null, null, null);
+            Plan plan2 = new Plan(name2, null, null, null, null);
             if (expected)
             {
                 Assert.IsTrue(plan1.Equals(plan2));
@@ -146,10 +130,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(false, "${?/>._`", "")]
         public void EqualsToProduct(bool expected, string product1, string product2)
         {
-            Plan plan1 = new Plan();
-            Plan plan2 = new Plan();
-            plan1.Product = product1;
-            plan2.Product = product2;
+            Plan plan1 = new Plan(null, null, product1, null, null);
+            Plan plan2 = new Plan(null, null, product2, null, null);
             if (expected)
             {
                 Assert.IsTrue(plan1.Equals(plan2));
@@ -169,10 +151,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(false, "${?/>._`", "")]
         public void EqualsToPromotionCode(bool expected, string promotionCode1, string promotionCode2)
         {
-            Plan plan1 = new Plan();
-            Plan plan2 = new Plan();
-            plan1.PromotionCode = promotionCode1;
-            plan2.PromotionCode = promotionCode2;
+            Plan plan1 = new Plan(null, null, null, promotionCode1, null);
+            Plan plan2 = new Plan(null, null, null, promotionCode2, null);
             if (expected)
             {
                 Assert.IsTrue(plan1.Equals(plan2));
@@ -192,10 +172,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(false, "${?/>._`", "")]
         public void EqualsToPublisher(bool expected, string publisher1, string publisher2)
         {
-            Plan plan1 = new Plan();
-            Plan plan2 = new Plan();
-            plan1.Publisher = publisher1;
-            plan2.Publisher = publisher2;
+            Plan plan1 = new Plan(null, publisher1, null, null, null);
+            Plan plan2 = new Plan(null, publisher2, null, null, null);
             if (expected)
             {
                 Assert.IsTrue(plan1.Equals(plan2));
@@ -215,10 +193,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(false, "${?/>._`", "")]
         public void EqualsToVersion(bool expected, string version1, string version2)
         {
-            Plan plan1 = new Plan();
-            Plan plan2 = new Plan();
-            plan1.Version = version1;
-            plan2.Version = version2;
+            Plan plan1 = new Plan(null, null, null, null, version1);
+            Plan plan2 = new Plan(null, null, null, null, version2);
             if (expected)
             {
                 Assert.IsTrue(plan1.Equals(plan2));
@@ -232,7 +208,7 @@ namespace Azure.ResourceManager.Core.Tests
         [Test]
         public void EqualsToNullPlan()
         {
-            Plan plan1 = new Plan();
+            Plan plan1 = new Plan(null, null, null, null, null);
             Plan plan2 = null;
             Assert.IsFalse(plan1.Equals(plan2));
         }
@@ -240,7 +216,7 @@ namespace Azure.ResourceManager.Core.Tests
         [Test]
         public void EqualsToObject()
         {
-            Plan plan1 = new Plan();
+            Plan plan1 = new Plan(null, null, null, null, null);
             object plan2 = "random";
             Assert.IsFalse(plan1.Equals(plan2));
         }
@@ -248,7 +224,7 @@ namespace Azure.ResourceManager.Core.Tests
         [Test]
         public void EqualsToSamePlans()
         {
-            Plan plan1 = new Plan();
+            Plan plan1 = new Plan(null, null, null, null, null);
             Plan plan2 = plan1;
             Assert.IsTrue(plan1.Equals(plan2));
         }
