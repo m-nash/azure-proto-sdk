@@ -22,8 +22,8 @@ namespace Azure.ResourceManager.Core.Tests
         {
             var testMethod = typeof(ResourceListOperations).GetMethod("CreateResourceConverter", BindingFlags.Static | BindingFlags.NonPublic);
             var asGeneric = testMethod.MakeGenericMethod(new Type[] { typeof(TOperation), typeof(TResource) });
-            var context = new AzureResourceManagerClientOptions(new Uri("https://management.azure.com"), new DefaultAzureCredential());
-            var function = (Func<GenericResourceExpanded, TOperation>)asGeneric.Invoke(null, new object[] { context });
+            var options = new AzureResourceManagerClientOptions(new Uri("https://management.azure.com"), new DefaultAzureCredential());
+            var function = (Func<GenericResourceExpanded, TOperation>)asGeneric.Invoke(null, new object[] { options });
             var resource = new GenericResourceExpanded();
             resource.Location = location;
             resource.Tags = tags ?? new Dictionary<string, string>();

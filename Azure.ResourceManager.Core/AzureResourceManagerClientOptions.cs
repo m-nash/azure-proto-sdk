@@ -24,12 +24,7 @@ namespace Azure.ResourceManager.Core
             Credential = credential;
             //Will go away when moved into core since we will have directy acces the policies and transport, so just need to set those
             if (!Object.ReferenceEquals(other, null))
-                copy(other);
-        }
-
-        public AzureResourceManagerClientOptions(AzureResourceManagerClientOptions other)
-            : this(other.BaseUri, other.Credential, other)
-        {
+                Copy(other);
         }
 
         public T Convert<T>()
@@ -51,7 +46,7 @@ namespace Azure.ResourceManager.Core
         }
 
         // Will be removed like AddPolicy when we move to azure core
-        private void copy(AzureResourceManagerClientOptions other)
+        private void Copy(AzureResourceManagerClientOptions other)
         {
             this.Transport = other.Transport;
             foreach (var pol in other.PerCallPolicies)

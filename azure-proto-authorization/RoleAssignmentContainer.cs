@@ -22,7 +22,7 @@ namespace azure_proto_authorization
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleAssignmentContainer"/> class.
         /// </summary>
-        /// <param name="context">The client context with http client details for these operations</param>
+        /// <param name="options">The client options with http client details for these operations</param>
         /// <param name="scope">The resource object of the target resource, resource group, or subscription for this role assignment</param>
         /// <param name="options,">Client optiosn to use in these operations.</param>
         internal RoleAssignmentContainer(AzureResourceManagerClientOptions options, Resource scope)
@@ -33,7 +33,7 @@ namespace azure_proto_authorization
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleAssignmentContainer"/> class.
         /// </summary>
-        /// <param name="context">The client context with http client details for these operations</param>
+        /// <param name="options">The client options with http client details for these operations</param>
         /// <param name="scope">The resource id of the target resource, resource group, or subscription for this role assignment</param>
         /// <param name="options,">Client optiosn to use in these operations.</param>
         internal RoleAssignmentContainer(AzureResourceManagerClientOptions options, ResourceIdentifier scope)

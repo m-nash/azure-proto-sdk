@@ -16,7 +16,7 @@ namespace Azure.ResourceManager.Core
         {
         }
 
-        public ArmResourceOperations(AzureResourceManagerClientOptions options, ArmResourceData resource, AzureResourceManagerClientOptions clientOption)
+        public ArmResourceOperations(AzureResourceManagerClientOptions options, ArmResourceData resource)
             : base(options, resource)
         {
         }

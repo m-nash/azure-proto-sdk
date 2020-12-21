@@ -29,13 +29,16 @@ namespace Azure.ResourceManager.Core
             : this(options.BaseUri, options.Credential, null, options) { }
         public AzureResourceManagerClient(string defaultSubscriptionId)
             : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId, null) { }
+
         public AzureResourceManagerClient(string defaultSubscriptionId, AzureResourceManagerClientOptions options)
             : this(options.BaseUri, options.Credential, defaultSubscriptionId, null) { }
 
         public AzureResourceManagerClient(TokenCredential credential, string defaultSubscriptionId)
             : this(new Uri(DefaultUri), credential, defaultSubscriptionId, null) { }
+
         public AzureResourceManagerClient(TokenCredential credential, string defaultSubscriptionId, AzureResourceManagerClientOptions options)
             : this(options.BaseUri, credential, defaultSubscriptionId, options) { }
+
         public AzureResourceManagerClient(Uri baseUri, TokenCredential credential, AzureResourceManagerClientOptions options = null)
             : this(baseUri, credential, null, options) { }
 
@@ -146,17 +149,17 @@ namespace Azure.ResourceManager.Core
 
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
         {
-            return new ResourceGroupOperations(this.ClientOptions, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}");
+            return new ResourceGroupOperations(ClientOptions, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}");
         }
 
         public ResourceGroupOperations ResourceGroup(ResourceIdentifier resourceGroup)
         {
-            return new ResourceGroupOperations(this.ClientOptions, resourceGroup);
+            return new ResourceGroupOperations(ClientOptions, resourceGroup);
         }
 
         public ResourceGroupOperations ResourceGroup(ResourceGroupData resourceGroup)
         {
-            return new ResourceGroupOperations(this.ClientOptions, resourceGroup.Id);
+            return new ResourceGroupOperations(ClientOptions, resourceGroup.Id);
         }
 
         public T GetResourceOperationsBase<T>(TrackedResource resource) where T : TrackedResource

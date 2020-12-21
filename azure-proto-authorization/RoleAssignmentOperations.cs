@@ -24,7 +24,7 @@ namespace azure_proto_authorization
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleAssignmentOperations"/> class.
         /// </summary>
-        /// <param name="context">The http settings to use with these operations</param>
+        /// <param name="options">The http settings to use with these operations</param>
         /// <param name="id">The resource identifier for the RoleAssignment to operate on.</param>
         /// <param name="options,">The resource manager options, to use with these operations.</param>
         internal RoleAssignmentOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
@@ -35,7 +35,7 @@ namespace azure_proto_authorization
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleAssignmentOperations"/> class.
         /// </summary>
-        /// <param name="context">The http settings to use with these operations</param>
+        /// <param name="options">The http settings to use with these operations</param>
         /// <param name="resource">The resource object for the RoleAssignment to operate on.</param>
         /// <param name="options,">The resource manager options, to use with these operations.</param>
         internal RoleAssignmentOperations(AzureResourceManagerClientOptions options, Resource resource)

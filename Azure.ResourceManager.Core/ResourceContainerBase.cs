@@ -24,9 +24,8 @@ namespace Azure.ResourceManager.Core
             : base(options, id)
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
-        /// <param name="context">The http client context for these operations</param>
+        /// <param name="options">The http client options for these operations</param>
         /// <param name="id">The resource Id of the parent resource.</param>
-        /// <param name="clientOptions">The http client options to use with these oeprations.</param>
         {
         }
 
@@ -34,9 +33,8 @@ namespace Azure.ResourceManager.Core
             : base(options, resource)
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
-        /// <param name="context">The http client context for these operations</param>
+        /// <param name="options">The http client options for these operations</param>
         /// <param name="resource">The resource representing the parent resource.</param>
-        /// <param name="clientOptions">The http client options to use with these oeprations.</param>
         {
             Parent = resource;
         }

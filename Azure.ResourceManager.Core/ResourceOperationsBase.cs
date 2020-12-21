@@ -14,9 +14,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOperationsBase"/> class.
         /// </summary>
-        /// <param name="context">The client parameters to use in these operations.</param>
+        /// <param name="options">The client parameters to use in these operations.</param>
         /// <param name="id">The identifier of the resource that is the target of operations.</param>
-        /// <param name="options,">Client options, to be used for these operations.</param>
         public ResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
             : base(options, id)
         {
@@ -25,11 +24,10 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOperationsBase"/> class.
         /// </summary>
-        /// <param name="context">The client parameters to use in these operations.</param>
+        /// <param name="options">The client parameters to use in these operations.</param>
         /// <param name="resource">The resource that is the target of operations.</param>
-        /// <param name="options,">Client options, to be used for these operations.</param>
         public ResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
-            : this(options, resource)
+            : base(options, resource)
         {
         }
     }
@@ -56,9 +54,8 @@ namespace Azure.ResourceManager.Core
             : this(options, new ArmResourceData(id))
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOperationsBase{TOperations}"/> class.
-        /// <param name="context">The http client context for these operations</param>
+        /// <param name="options">The http client options for these operations</param>
         /// <param name="id">The resource Id of this resource</param>
-        /// <param name="clientOptions">Client options, that should apply to these operations</param>
         {
         }
 
@@ -66,9 +63,8 @@ namespace Azure.ResourceManager.Core
             : base(options, resource)
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOperationsBase{TOperations}"/> class.
-        /// <param name="context">The http client context for these operations</param>
+        /// <param name="options">The http client options for these operations</param>
         /// <param name="resource">The object corresponding to this resource</param>
-        /// <param name="clientOptions">Client options, that should apply to these operations</param>
         {
         }
 

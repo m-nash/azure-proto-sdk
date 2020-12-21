@@ -27,7 +27,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionResourceContainer{TOperations, TInput}"/> class.
         /// </summary>
-        /// <param name="context">The client context with http client details for these operations</param>
+        /// <param name="options">The client options with http client details for these operations</param>
         /// <param name="parentId">The resource Id of the parent resource</param>
         /// <param name="options">Client optiosn to use in these operations.</param>
         protected ExtensionResourceContainer(AzureResourceManagerClientOptions options, ResourceIdentifier parentId)
@@ -38,7 +38,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionResourceContainer{TOperations, TInput}"/> class.
         /// </summary>
-        /// <param name="context">The client context with http client details for these operations</param>
+        /// <param name="options">The client options with http client details for these operations</param>
         /// <param name="parent">The parent resource</param>
         /// <param name="options">Client options to use in these operations</param>
         protected ExtensionResourceContainer(AzureResourceManagerClientOptions options, Resource parent)

@@ -33,13 +33,13 @@ namespace azure_proto_network
         {
         }
 
-        internal NetworkSecurityGroupOperations(AzureResourceManagerClientOptions parent, ResourceIdentifier context)
-            : base(parent, context)
+        internal NetworkSecurityGroupOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
-        public NetworkSecurityGroupOperations(AzureResourceManagerClientOptions parent, TrackedResource context)
-            : base(parent, context)
+        public NetworkSecurityGroupOperations(AzureResourceManagerClientOptions options, TrackedResource id)
+            : base(options, id)
         {
         }
 
