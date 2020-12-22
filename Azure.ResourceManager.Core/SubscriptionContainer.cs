@@ -26,19 +26,19 @@ namespace Azure.ResourceManager.Core
 
         public Pageable<SubscriptionOperations> List(CancellationToken cancellationToken = default)
         {
-            return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Subscription, SubscriptionOperations>(
+            return new PhWrappingPageable<ResourceManager.Resources.Models.Subscription, SubscriptionOperations>(
                 Operations.List(cancellationToken),
                 Converter());
         }
 
         public AsyncPageable<SubscriptionOperations> ListAsync(CancellationToken cancellationToken = default)
         {
-            return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.Subscription, SubscriptionOperations>(
+            return new PhWrappingAsyncPageable<ResourceManager.Resources.Models.Subscription, SubscriptionOperations>(
                 Operations.ListAsync(cancellationToken),
                 Converter());
         }
 
-        private Func<Azure.ResourceManager.Resources.Models.Subscription, SubscriptionOperations> Converter()
+        private Func<ResourceManager.Resources.Models.Subscription, SubscriptionOperations> Converter()
         {
             return s => new SubscriptionOperations(ClientContext, new SubscriptionData(s), ClientOptions);
         }
