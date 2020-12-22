@@ -14,22 +14,20 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOperationsBase"/> class.
         /// </summary>
-        /// <param name="context">The client parameters to use in these operations.</param>
+        /// <param name="options">The client parameters to use in these operations.</param>
         /// <param name="id">The identifier of the resource that is the target of operations.</param>
-        /// <param name="options">Client options to be used for these operations.</param>
-        public ResourceOperationsBase(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions options = default)
-            : base(context, id, options)
+        public ResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOperationsBase"/> class.
         /// </summary>
-        /// <param name="context">The client parameters to use in these operations.</param>
+        /// <param name="options">The client parameters to use in these operations.</param>
         /// <param name="resource">The resource that is the target of operations.</param>
-        /// <param name="options">Client options to be used for these operations.</param>
-        public ResourceOperationsBase(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions options = default)
-            : base(context, resource, options)
+        public ResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
+            : base(options, resource)
         {
         }
     }
@@ -48,29 +46,25 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="genericOperations">Generic ARMResourceOperations for this resource type</param>
         public ResourceOperationsBase(ArmResourceOperations genericOperations)
-            : this(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
+            : this(genericOperations.ClientOptions, genericOperations.Id)
         {
         }
 
+        public ResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : this(options, new ArmResourceData(id))
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOperationsBase{TOperations}"/> class.
-        /// </summary>
-        /// <param name="context">The http client context for these operations</param>
+        /// <param name="options">The http client options for these operations</param>
         /// <param name="id">The resource Id of this resource</param>
-        /// <param name="clientOptions">Client options that should apply to these operations</param>
-        public ResourceOperationsBase(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
-            : this(context, new ArmResourceData(id), clientOptions)
         {
         }
 
+        public ResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
+            : base(options, resource)
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOperationsBase{TOperations}"/> class.
-        /// </summary>
-        /// <param name="context">The http client context for these operations</param>
+        /// <param name="options">The http client options for these operations</param>
         /// <param name="resource">The object corresponding to this resource</param>
-        /// <param name="clientOptions">Client options that should apply to these operations</param>
-        public ResourceOperationsBase(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions clientOptions)
-            : base(context, resource, clientOptions)
         {
         }
 

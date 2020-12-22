@@ -14,31 +14,31 @@ namespace azure_proto_network
     public class VirtualNetworkContainer : ResourceContainerBase<VirtualNetwork, VirtualNetworkData>
     {
         internal VirtualNetworkContainer(ArmResourceOperations genericOperations)
-            : base(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
+            : base(genericOperations.ClientOptions, genericOperations.Id)
         {
         }
 
-        internal VirtualNetworkContainer(AzureResourceManagerClientContext context, ResourceGroupData resourceGroup, AzureResourceManagerClientOptions clientOptions)
-            : base(context, resourceGroup, clientOptions)
+        internal VirtualNetworkContainer(AzureResourceManagerClientOptions options, ResourceGroupData resourceGroup)
+            : base(options, resourceGroup)
         {
         }
 
-        internal VirtualNetworkContainer(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
-            : base(context, id, clientOptions)
+        internal VirtualNetworkContainer(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
         public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks";
 
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-            AzureResourceManagerClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).VirtualNetworks;
+            ClientOptions.Convert<NetworkManagementClientOptions>())).VirtualNetworks;
 
         public override ArmResponse<VirtualNetwork> Create(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
             return new PhArmResponse<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new VirtualNetwork(ClientContext, new VirtualNetworkData(n), ClientOptions));
+                n => new VirtualNetwork(ClientOptions, new VirtualNetworkData(n)));
         }
 
         public async override Task<ArmResponse<VirtualNetwork>> CreateAsync(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
@@ -46,21 +46,21 @@ namespace azure_proto_network
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                n => new VirtualNetwork(ClientContext, new VirtualNetworkData(n), ClientOptions));
+                n => new VirtualNetwork(ClientOptions, new VirtualNetworkData(n)));
         }
 
         public override ArmOperation<VirtualNetwork> StartCreate(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken),
-                n => new VirtualNetwork(ClientContext, new VirtualNetworkData(n), ClientOptions));
+                n => new VirtualNetwork(ClientOptions, new VirtualNetworkData(n)));
         }
 
         public async override Task<ArmOperation<VirtualNetwork>> StartCreateAsync(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),
-                n => new VirtualNetwork(ClientContext, new VirtualNetworkData(n), ClientOptions));
+                n => new VirtualNetwork(ClientOptions, new VirtualNetworkData(n)));
         }
 
         public ArmBuilder<VirtualNetwork, VirtualNetworkData> Construct(string vnetCidr, Location location = null)
@@ -92,14 +92,14 @@ namespace azure_proto_network
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualNetworkData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<ArmResource, ArmResourceData>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<ArmResource, ArmResourceData>(ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public AsyncPageable<ArmResource> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualNetworkData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public Pageable<VirtualNetwork> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
@@ -116,7 +116,7 @@ namespace azure_proto_network
 
         private  Func<Azure.ResourceManager.Network.Models.VirtualNetwork, VirtualNetwork> convertor()
         {
-            return s => new VirtualNetwork(ClientContext, new VirtualNetworkData(s), ClientOptions);
+            return s => new VirtualNetwork(ClientOptions, new VirtualNetworkData(s));
         }
     }
 }

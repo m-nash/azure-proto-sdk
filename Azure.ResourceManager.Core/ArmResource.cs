@@ -6,8 +6,8 @@ namespace Azure.ResourceManager.Core
 {
     public class ArmResource : ArmResourceOperations
     {
-        public ArmResource(AzureResourceManagerClientContext context, ArmResourceData resource, AzureResourceManagerClientOptions clientOption)
-            : base(context, resource, clientOption)
+        public ArmResource(AzureResourceManagerClientOptions options, ArmResourceData resource)
+            : base(options, resource)
         {
             Data = resource;
         }

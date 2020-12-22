@@ -22,22 +22,22 @@ namespace azure_proto_authorization
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleAssignmentContainer"/> class.
         /// </summary>
-        /// <param name="context">The client context with http client details for these operations</param>
+        /// <param name="options">The client options with http client details for these operations</param>
         /// <param name="scope">The resource object of the target resource, resource group, or subscription for this role assignment</param>
-        /// <param name="options">Client optiosn to use in these operations.</param>
-        internal RoleAssignmentContainer(AzureResourceManagerClientContext context, Resource scope, AzureResourceManagerClientOptions options = default)
-            : this(context, scope.Id, options)
+        /// <param name="options,">Client optiosn to use in these operations.</param>
+        internal RoleAssignmentContainer(AzureResourceManagerClientOptions options, Resource scope)
+            : this(options, scope.Id)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleAssignmentContainer"/> class.
         /// </summary>
-        /// <param name="context">The client context with http client details for these operations</param>
+        /// <param name="options">The client options with http client details for these operations</param>
         /// <param name="scope">The resource id of the target resource, resource group, or subscription for this role assignment</param>
-        /// <param name="options">Client optiosn to use in these operations.</param>
-        internal RoleAssignmentContainer(AzureResourceManagerClientContext context, ResourceIdentifier scope, AzureResourceManagerClientOptions options)
-            : base(context, scope, options)
+        /// <param name="options,">Client optiosn to use in these operations.</param>
+        internal RoleAssignmentContainer(AzureResourceManagerClientOptions options, ResourceIdentifier scope)
+            : base(options, scope)
         {
         }
 
@@ -60,7 +60,7 @@ namespace azure_proto_authorization
             var response = Operations.Create(Id, name, resourceDetails.ToModel(), cancellationToken);
             return new PhArmResponse<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(
                 response,
-                a => new RoleAssignment(ClientContext, new RoleAssignmentData(a)));
+                a => new RoleAssignment(ClientOptions, new RoleAssignmentData(a)));
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace azure_proto_authorization
             var response = await Operations.CreateAsync(Id, name, resourceDetails.ToModel(), cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(
                 response,
-                a => new RoleAssignment(ClientContext, new RoleAssignmentData(a)));
+                a => new RoleAssignment(ClientOptions, new RoleAssignmentData(a)));
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace azure_proto_authorization
         {
             return new PhArmOperation<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(
                 Operations.Create(Id, name, resourceDetails.ToModel(), cancellationToken),
-                a => new RoleAssignment(ClientContext, new RoleAssignmentData(a)));
+                a => new RoleAssignment(ClientOptions, new RoleAssignmentData(a)));
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace azure_proto_authorization
         {
             return new PhArmOperation<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(
                 await Operations.CreateAsync(Id, name, resourceDetails.ToModel(), cancellationToken).ConfigureAwait(false),
-                a => new RoleAssignment(ClientContext, new RoleAssignmentData(a)));
+                a => new RoleAssignment(ClientOptions, new RoleAssignmentData(a)));
         }
 
         /// <summary>

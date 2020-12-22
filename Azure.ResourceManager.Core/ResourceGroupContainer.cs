@@ -14,11 +14,11 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class ResourceGroupContainer : ResourceContainerBase<ResourceGroup, ResourceGroupData>
     {
-        internal ResourceGroupContainer(AzureResourceManagerClientContext context, SubscriptionOperations subscription, AzureResourceManagerClientOptions clientOptions)
-            : base(context, subscription.Id, clientOptions) { }
+        internal ResourceGroupContainer(AzureResourceManagerClientOptions options, SubscriptionOperations subscription)
+            : base(options, subscription.Id) { }
 
-        internal ResourceGroupContainer(AzureResourceManagerClientContext context, ResourceIdentifier parentId, AzureResourceManagerClientOptions clientOptions)
-            : base(context, parentId, clientOptions) { }
+        internal ResourceGroupContainer(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : base(options, id) { }
 
         public override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
 
@@ -26,14 +26,14 @@ namespace Azure.ResourceManager.Core
             uri,
             Id.Subscription,
             cred,
-            AzureResourceManagerClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).ResourceGroups;
+            ClientOptions.Convert<ResourcesManagementClientOptions>())).ResourceGroups;
 
         public ArmOperation<ResourceGroup> Create(string name, Location location)
         {
             var model = new ResourceGroupData(new ResourceManager.Resources.Models.ResourceGroup(location));
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(
                 Operations.CreateOrUpdate(name, model),
-                g => new ResourceGroup(ClientContext, new ResourceGroupData(g), ClientOptions));
+                g => new ResourceGroup(ClientOptions, new ResourceGroupData(g)));
         }
 
         public override ArmResponse<ResourceGroup> Create(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
@@ -41,7 +41,7 @@ namespace Azure.ResourceManager.Core
             var response = Operations.CreateOrUpdate(name, resourceDetails, cancellationToken);
             return new PhArmResponse<ResourceGroup, ResourceManager.Resources.Models.ResourceGroup>(
                 response,
-                g => new ResourceGroup(ClientContext, new ResourceGroupData(g), ClientOptions));
+                g => new ResourceGroup(ClientOptions, new ResourceGroupData(g)));
         }
 
         public async override Task<ArmResponse<ResourceGroup>> CreateAsync(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
@@ -49,35 +49,35 @@ namespace Azure.ResourceManager.Core
             var response = await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<ResourceGroup, ResourceManager.Resources.Models.ResourceGroup>(
                 response,
-                g => new ResourceGroup(ClientContext, new ResourceGroupData(g), ClientOptions));
+                g => new ResourceGroup(ClientOptions, new ResourceGroupData(g)));
         }
 
         public override ArmOperation<ResourceGroup> StartCreate(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<ResourceGroup, ResourceManager.Resources.Models.ResourceGroup>(
                 Operations.CreateOrUpdate(name, resourceDetails, cancellationToken),
-                g => new ResourceGroup(ClientContext, new ResourceGroupData(g), ClientOptions));
+                g => new ResourceGroup(ClientOptions, new ResourceGroupData(g)));
         }
 
         public async override Task<ArmOperation<ResourceGroup>> StartCreateAsync(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<ResourceGroup, ResourceManager.Resources.Models.ResourceGroup>(
                 await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken).ConfigureAwait(false),
-                g => new ResourceGroup(ClientContext, new ResourceGroupData(g), ClientOptions));
+                g => new ResourceGroup(ClientOptions, new ResourceGroupData(g)));
         }
 
         public Pageable<ResourceGroup> List(CancellationToken cancellationToken = default)
         {
             return new PhWrappingPageable<ResourceManager.Resources.Models.ResourceGroup, ResourceGroup>(
                 Operations.List(null, null, cancellationToken),
-                s => new ResourceGroup(ClientContext, new ResourceGroupData(s), ClientOptions));
+                s => new ResourceGroup(ClientOptions, new ResourceGroupData(s)));
         }
 
         public AsyncPageable<ResourceGroup> ListAsync(CancellationToken cancellationToken = default)
         {
             return new PhWrappingAsyncPageable<ResourceManager.Resources.Models.ResourceGroup, ResourceGroup>(
                 Operations.ListAsync(null, null, cancellationToken),
-                s => new ResourceGroup(ClientContext, new ResourceGroupData(s), ClientOptions));
+                s => new ResourceGroup(ClientOptions, new ResourceGroupData(s)));
         }
     }
 }

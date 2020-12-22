@@ -13,21 +13,21 @@ namespace azure_proto_network
 {
     public class NetworkInterfaceContainer : ResourceContainerBase<NetworkInterface, NetworkInterfaceData>
     {
-        internal NetworkInterfaceContainer(AzureResourceManagerClientContext context, ResourceGroupData resourceGroup, AzureResourceManagerClientOptions clientOptions) : base(context, resourceGroup, clientOptions) { }
+        internal NetworkInterfaceContainer(AzureResourceManagerClientOptions options, ResourceGroupData resourceGroup) : base(options, resourceGroup) { }
 
-        internal NetworkInterfaceContainer(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions) : base(context, id, clientOptions) { }
+        internal NetworkInterfaceContainer(AzureResourceManagerClientOptions options, ResourceIdentifier id) : base(options, id) { }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred, 
-            AzureResourceManagerClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).NetworkInterfaces;
+            ClientOptions.Convert<NetworkManagementClientOptions>())).NetworkInterfaces;
 
         public override ArmResponse<NetworkInterface> Create(string name, NetworkInterfaceData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
             return new PhArmResponse<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
                 operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new NetworkInterface(ClientContext, new NetworkInterfaceData(n), ClientOptions));
+                n => new NetworkInterface(ClientOptions, new NetworkInterfaceData(n)));
         }
 
         public async override Task<ArmResponse<NetworkInterface>> CreateAsync(string name, NetworkInterfaceData resourceDetails, CancellationToken cancellationToken = default)
@@ -35,21 +35,21 @@ namespace azure_proto_network
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                n => new NetworkInterface(ClientContext, new NetworkInterfaceData(n), ClientOptions));
+                n => new NetworkInterface(ClientOptions, new NetworkInterfaceData(n)));
         }
 
         public override ArmOperation<NetworkInterface> StartCreate(string name, NetworkInterfaceData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken),
-                n => new NetworkInterface(ClientContext, new NetworkInterfaceData(n), ClientOptions));
+                n => new NetworkInterface(ClientOptions, new NetworkInterfaceData(n)));
         }
 
         public async override Task<ArmOperation<NetworkInterface>> StartCreateAsync(string name, NetworkInterfaceData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),
-                n => new NetworkInterface(ClientContext, new NetworkInterfaceData(n), ClientOptions));
+                n => new NetworkInterface(ClientOptions, new NetworkInterfaceData(n)));
         }
 
         public ArmBuilder<NetworkInterface, NetworkInterfaceData> Construct(PublicIPAddressData ip, string subnetId, Location location = null)
@@ -92,14 +92,14 @@ namespace azure_proto_network
         {
             ArmFilterCollection filters = new ArmFilterCollection(NetworkInterfaceData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<ArmResource, ArmResourceData>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<ArmResource, ArmResourceData>(ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public AsyncPageable<ArmResource> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(NetworkInterfaceData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(ClientContext, ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public Pageable<NetworkInterface> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
@@ -116,7 +116,7 @@ namespace azure_proto_network
         
         private Func<Azure.ResourceManager.Network.Models.NetworkInterface, NetworkInterface> convertor()
         {
-            return s => new NetworkInterface(ClientContext, new NetworkInterfaceData(s), ClientOptions);
+            return s => new NetworkInterface(ClientOptions, new NetworkInterfaceData(s));
         }
     }
 }

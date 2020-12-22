@@ -10,19 +10,19 @@ namespace azure_proto_network
     public class PublicIpAddressOperations : ResourceOperationsBase<PublicIpAddress>, ITaggableResource<PublicIpAddress>, IDeletableResource
     {
         internal PublicIpAddressOperations(ArmResourceOperations genericOperations)
-            : base(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
+            : base(genericOperations.ClientOptions, genericOperations.Id)
         {
         }
 
-        internal PublicIpAddressOperations(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
-            : base(context, id, clientOptions)
+        internal PublicIpAddressOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
         public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
 
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-            AzureResourceManagerClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).PublicIPAddresses;
+            ClientOptions.Convert<NetworkManagementClientOptions>())).PublicIPAddresses;
 
         public ArmResponse<Response> Delete()
         {
@@ -51,7 +51,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new PublicIPAddressData(n);
-                    return new PublicIpAddress(ClientContext, Resource as PublicIPAddressData, ClientOptions);
+                    return new PublicIpAddress(ClientOptions, Resource as PublicIPAddressData);
                 });
         }
 
@@ -61,7 +61,7 @@ namespace azure_proto_network
                n =>
                {
                    Resource = new PublicIPAddressData(n);
-                   return new PublicIpAddress(ClientContext, Resource as PublicIPAddressData, ClientOptions);
+                   return new PublicIpAddress(ClientOptions, Resource as PublicIPAddressData);
                });
         }
 
@@ -73,7 +73,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new PublicIPAddressData(n);
-                    return new PublicIpAddress(ClientContext, Resource as PublicIPAddressData, ClientOptions);
+                    return new PublicIpAddress(ClientOptions, Resource as PublicIPAddressData);
                 });
         }
 
@@ -85,7 +85,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new PublicIPAddressData(n);
-                    return new PublicIpAddress(ClientContext, Resource as PublicIPAddressData, ClientOptions);
+                    return new PublicIpAddress(ClientOptions, Resource as PublicIPAddressData);
                 });
         }
     }

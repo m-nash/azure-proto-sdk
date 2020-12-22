@@ -15,11 +15,11 @@ namespace Azure.ResourceManager.Core
     {
         public static readonly ResourceType AzureResourceType = "Microsoft.Resources/resourceGroups";
 
-        internal ResourceGroupOperations(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions)
-            : base(context, id, clientOptions) { }
+        internal ResourceGroupOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : base(options, id) { }
 
-        internal ResourceGroupOperations(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions clientOptions)
-            : base(context, resource, clientOptions) { }
+        internal ResourceGroupOperations(AzureResourceManagerClientOptions options, Resource resource)
+            : base(options, resource) { }
 
         public override ResourceType ResourceType => AzureResourceType;
 
@@ -27,7 +27,7 @@ namespace Azure.ResourceManager.Core
             uri,
             Id.Subscription,
             creds,
-            AzureResourceManagerClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions)))?.ResourceGroups;
+            ClientOptions.Convert<ResourcesManagementClientOptions>()))?.ResourceGroups;
 
         public ArmResponse<Response> Delete()
         {
@@ -53,7 +53,7 @@ namespace Azure.ResourceManager.Core
             return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Get(Id.Name), g =>
             {
                 Resource = new ResourceGroupData(g);
-                return new ResourceGroup(ClientContext, Resource as ResourceGroupData, ClientOptions);
+                return new ResourceGroup(ClientOptions, Resource as ResourceGroupData);
             });
         }
 
@@ -62,7 +62,7 @@ namespace Azure.ResourceManager.Core
             return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.GetAsync(Id.Name, cancellationToken), g =>
             {
                 Resource = new ResourceGroupData(g);
-                return new ResourceGroup(ClientContext, Resource as ResourceGroupData, ClientOptions);
+                return new ResourceGroup(ClientOptions, Resource as ResourceGroupData);
             });
         }
 
@@ -73,7 +73,7 @@ namespace Azure.ResourceManager.Core
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Update(Id.Name, patch), g =>
             {
                 Resource = new ResourceGroupData(g);
-                return new ResourceGroup(ClientContext, Resource as ResourceGroupData, ClientOptions);
+                return new ResourceGroup(ClientOptions, Resource as ResourceGroupData);
             });
         }
 
@@ -84,7 +84,7 @@ namespace Azure.ResourceManager.Core
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.UpdateAsync(Id.Name, patch, cancellationToken), g =>
             {
                 Resource = new ResourceGroupData(g);
-                return new ResourceGroup(ClientContext, Resource as ResourceGroupData, ClientOptions);
+                return new ResourceGroup(ClientOptions, Resource as ResourceGroupData);
             });
         }
 
@@ -105,7 +105,7 @@ namespace Azure.ResourceManager.Core
                 myResource = new ArmResourceData(Id, location);
             }
 
-            TContainer container = Activator.CreateInstance(typeof(TContainer), ClientContext, myResource) as TContainer;
+            TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;
 
             return container.Create(name, model);
         }
@@ -127,7 +127,7 @@ namespace Azure.ResourceManager.Core
                 myResource = new ArmResourceData(Id, location);
             }
 
-            TContainer container = Activator.CreateInstance(typeof(TContainer), ClientContext, myResource) as TContainer;
+            TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;
 
             return container.CreateAsync(name, model, token);
         }

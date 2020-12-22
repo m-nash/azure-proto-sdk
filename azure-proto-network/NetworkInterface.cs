@@ -4,8 +4,8 @@ namespace azure_proto_network
 {
     public class NetworkInterface : NetworkInterfaceOperations
     {
-        internal NetworkInterface(AzureResourceManagerClientContext context, NetworkInterfaceData resource, AzureResourceManagerClientOptions options)
-            : base(context, resource.Id, options)
+        internal NetworkInterface(AzureResourceManagerClientOptions options, NetworkInterfaceData resource)
+            : base(options, resource.Id)
         {
             Data = resource;
         }

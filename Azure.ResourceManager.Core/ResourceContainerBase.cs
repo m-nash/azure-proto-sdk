@@ -20,25 +20,22 @@ namespace Azure.ResourceManager.Core
         where TOperations : ResourceOperationsBase<TOperations>
         where TResource : Resource
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
-        /// </summary>
-        /// <param name="context">The http client context for these operations</param>
-        /// <param name="parentId">The resource Id of the parent resource.</param>
-        /// <param name="clientOptions">The http client options to use with these oeprations.</param>
-        protected ResourceContainerBase(AzureResourceManagerClientContext context, ResourceIdentifier parentId, AzureResourceManagerClientOptions clientOptions)
-            : base(context, parentId, clientOptions)
-        {
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
-        /// </summary>
-        /// <param name="context">The http client context for these operations</param>
+        /// <param name="options">The http client options for these operations</param>
+        /// <param name="parentId">The resource Id of the parent resource.</param>
+        protected ResourceContainerBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+           : base(options, id)
+        {
+        }
+
+        protected ResourceContainerBase(AzureResourceManagerClientOptions options, TrackedResource resource)
+            : base(options, resource)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
+        /// <param name="options">The http client options for these operations</param>
         /// <param name="resource">The resource representing the parent resource.</param>
-        /// <param name="clientOptions">The http client options to use with these oeprations.</param>
-        protected ResourceContainerBase(AzureResourceManagerClientContext context, TrackedResource resource,  AzureResourceManagerClientOptions clientOptions)
-            : base(context, resource, clientOptions)
         {
             Parent = resource;
         }

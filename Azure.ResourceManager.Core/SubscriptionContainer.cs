@@ -14,15 +14,15 @@ namespace Azure.ResourceManager.Core
     {
         public static readonly ResourceType AzureResourceType = "Microsoft.Resources/subscriptions";
 
-        internal SubscriptionContainer(AzureResourceManagerClientContext context, AzureResourceManagerClientOptions options)
-            : base(context, null, options, null)
+        internal SubscriptionContainer(AzureResourceManagerClientOptions options)
+            : base(options, null, null)
         {
         }
 
         public override ResourceType ResourceType => AzureResourceType;
 
         internal SubscriptionsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) =>
-            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, AzureResourceManagerClientOptions.Convert<ResourcesManagementClientOptions>(ClientOptions))).Subscriptions;
+            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ClientOptions.Convert<ResourcesManagementClientOptions>())).Subscriptions;
 
         public Pageable<SubscriptionOperations> List(CancellationToken cancellationToken = default)
         {
@@ -40,7 +40,7 @@ namespace Azure.ResourceManager.Core
 
         private Func<ResourceManager.Resources.Models.Subscription, SubscriptionOperations> Converter()
         {
-            return s => new SubscriptionOperations(ClientContext, new SubscriptionData(s), ClientOptions);
+            return s => new SubscriptionOperations(ClientOptions, new SubscriptionData(s));
         }
 
         internal async Task<string> GetDefaultSubscription(CancellationToken token = default(CancellationToken))

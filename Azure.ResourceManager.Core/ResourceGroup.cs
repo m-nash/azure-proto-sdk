@@ -2,8 +2,8 @@
 {
     public class ResourceGroup : ResourceGroupOperations
     {
-        internal ResourceGroup(AzureResourceManagerClientContext context, ResourceGroupData resource, AzureResourceManagerClientOptions options)
-            : base(context, resource, options)
+        internal ResourceGroup(AzureResourceManagerClientOptions options, ResourceGroupData resource)
+            : base(options, resource)
         {
             Data = resource;
         }

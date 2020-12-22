@@ -29,24 +29,24 @@ namespace azure_proto_network
         }
 
         internal NetworkSecurityGroupOperations(ArmResourceOperations genericOperations)
-            : base(genericOperations.ClientContext, genericOperations.Id, genericOperations.ClientOptions)
+            : base(genericOperations.ClientOptions, genericOperations.Id)
         {
         }
 
-        internal NetworkSecurityGroupOperations(AzureResourceManagerClientContext parent, ResourceIdentifier context, AzureResourceManagerClientOptions clientOptions)
-            : base(parent, context, clientOptions)
+        internal NetworkSecurityGroupOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
-        public NetworkSecurityGroupOperations(AzureResourceManagerClientContext parent, TrackedResource context, AzureResourceManagerClientOptions clientOptions)
-            : base(parent, context, clientOptions)
+        public NetworkSecurityGroupOperations(AzureResourceManagerClientOptions options, TrackedResource id)
+            : base(options, id)
         {
         }
 
         public override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
 
         internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-                     AzureResourceManagerClientOptions.Convert<NetworkManagementClientOptions>(ClientOptions))).NetworkSecurityGroups;
+                     ClientOptions.Convert<NetworkManagementClientOptions>())).NetworkSecurityGroups;
 
         /// <summary>
         /// TODO: GENERATOR Make use of the entity tags on the resource - we may need to add to the generated management client
@@ -85,7 +85,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new NetworkSecurityGroupData(n);
-                    return new NetworkSecurityGroup(ClientContext, Resource as NetworkSecurityGroupData, ClientOptions);
+                    return new NetworkSecurityGroup(ClientOptions, Resource as NetworkSecurityGroupData);
                 });
         }
 
@@ -95,7 +95,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new NetworkSecurityGroupData(n);
-                    return new NetworkSecurityGroup(ClientContext, Resource as NetworkSecurityGroupData, ClientOptions);
+                    return new NetworkSecurityGroup(ClientOptions, Resource as NetworkSecurityGroupData);
                 });
         }
 
@@ -105,7 +105,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new NetworkSecurityGroupData(n);
-                    return new NetworkSecurityGroup(ClientContext, Resource as NetworkSecurityGroupData, ClientOptions);
+                    return new NetworkSecurityGroup(ClientOptions, Resource as NetworkSecurityGroupData);
                 });
         }
 
@@ -117,7 +117,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new NetworkSecurityGroupData(n);
-                    return new NetworkSecurityGroup(ClientContext, Resource as NetworkSecurityGroupData, ClientOptions);
+                    return new NetworkSecurityGroup(ClientOptions, Resource as NetworkSecurityGroupData);
                 });
         }
 
@@ -129,7 +129,7 @@ namespace azure_proto_network
                 n =>
                 {
                     Resource = new NetworkSecurityGroupData(n);
-                    return new NetworkSecurityGroup(ClientContext, Resource as NetworkSecurityGroupData, ClientOptions);
+                    return new NetworkSecurityGroup(ClientOptions, Resource as NetworkSecurityGroupData);
                 });
         }
 

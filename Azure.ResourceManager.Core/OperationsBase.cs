@@ -11,24 +11,23 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public abstract class OperationsBase
     {
-        public OperationsBase(AzureResourceManagerClientContext context, ResourceIdentifier id, AzureResourceManagerClientOptions clientOptions, Location location = null)
-            : this(context, new ArmResourceData(id, location ?? Location.Default), clientOptions)
+        public OperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id, Location location = null)
+            : this(options, new ArmResourceData(id, location ?? Location.Default))
         {
         }
 
-        public OperationsBase(AzureResourceManagerClientContext context, Resource resource, AzureResourceManagerClientOptions ClientOptions)
+        public OperationsBase(AzureResourceManagerClientOptions options, Resource resource)
         {
             Validate(resource?.Id);
 
-            ClientContext = context;
+            ClientOptions = options;
             Id = resource.Id;
             var trackedResource = resource as TrackedResource;
             DefaultLocation = trackedResource?.Location ?? Location.Default;
             Resource = resource;
-            this.ClientOptions = ClientOptions;
         }
 
-        public virtual AzureResourceManagerClientContext ClientContext { get; }
+        public virtual AzureResourceManagerClientOptions ClientOptions { get; }
 
         protected virtual Resource Resource { get; set; }
 
@@ -37,8 +36,6 @@ namespace Azure.ResourceManager.Core
         public virtual Location DefaultLocation { get; }
 
         public virtual ResourceIdentifier Id { get; }
-
-        public virtual AzureResourceManagerClientOptions ClientOptions {get; protected set;}
 
         public virtual void Validate(ResourceIdentifier identifier)
         {
@@ -57,7 +54,7 @@ namespace Azure.ResourceManager.Core
         /// <returns></returns>
         protected T GetClient<T>(Func<Uri, TokenCredential, T> creator)
         {
-            return ClientContext.GetClient(creator);
+            return ClientOptions.GetClient(creator);
         }
     }
 }

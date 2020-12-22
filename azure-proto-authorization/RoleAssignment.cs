@@ -10,11 +10,10 @@ namespace azure_proto_authorization
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleAssignment"/> class.
         /// </summary>
-        /// <param name="context">The http settings for the operations over this resource</param>
+        /// <param name="options">The http settings for the operations over this resource</param>
         /// <param name="data">The properties of the resource</param>
-        /// <param name="options">The client options to use wioth operations over this RoleAssignment</param>
-        public RoleAssignment(AzureResourceManagerClientContext context, RoleAssignmentData data, AzureResourceManagerClientOptions options = default)
-            : base(context, data?.Id, options)
+        public RoleAssignment(AzureResourceManagerClientOptions options, RoleAssignmentData data)
+            : base(options, data?.Id)
         {
             Data = data;
         }
