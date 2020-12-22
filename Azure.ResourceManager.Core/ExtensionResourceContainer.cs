@@ -1,6 +1,4 @@
-﻿using Azure;
-using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace Azure.ResourceManager.Core
@@ -90,15 +88,15 @@ namespace Azure.ResourceManager.Core
         /// <param name="name">The name of the created extention resource</param>
         /// <param name="resourceDetails">The properties of the extension resource</param>
         /// <param name="cancellationToken">The cancellation token clients can use to cancel any blocking calls made by this method</param>
-        /// <returns>A <see cref="System.Threading.Tasks.Task<typeparamref name="TInput"/>"/>  that starts creation of an extension resource.
-        /// Once creation has completed, the Task yields an instance of <see cref="ArmOperation{TOperation}"/>, allowing fine grained control 
+        /// <returns>A <see cref="Task<typeparamref name="TInput"/>"/>  that starts creation of an extension resource.
+        /// Once creation has completed, the Task yields an instance of <see cref="ArmOperation{TOperation}"/>, allowing fine grained control
         /// over waiting for creation to complete.</returns>
         public abstract Task<ArmOperation<TOperations>> StartCreateAsync(string name, TInput resourceDetails, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Lists the extension resources at the current scope. Blocks until the first page of results is returned.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token clients can use to cancel any blocking HTTP requests made by this method, including 
+        /// <param name="cancellationToken">The cancellation token clients can use to cancel any blocking HTTP requests made by this method, including
         /// any Http requests that result from enumerating pages of results.</param>
         /// <returns>An instance of <see cref="Azure.Pageable{TResource}"/> allowing paged or unpaged enumeration of results</returns>
         public abstract Pageable<TOperations> ListAtScope(CancellationToken cancellationToken = default);
@@ -106,10 +104,9 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Lists the extension resources at the current scope asynchronously. The returned task completes when the first page of results is returrned.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token clients can use to cancel any blocking HTTP requests made by this method, including 
+        /// <param name="cancellationToken">The cancellation token clients can use to cancel any blocking HTTP requests made by this method, including
         /// any Http requests that result from enumerating pages of results.</param>
         /// <returns>An instance of <see cref="Azure.AsyncPageable{TResource}"/> allowing asynchronous paged or unpaged enumeration of results.</returns>
         public abstract AsyncPageable<TOperations> ListAtScopeAsync(CancellationToken cancellationToken = default);
-
     }
 }
