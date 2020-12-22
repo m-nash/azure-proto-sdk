@@ -26,7 +26,6 @@ namespace azure_proto_authorization
         /// </summary>
         /// <param name="options">The http settings to use with these operations</param>
         /// <param name="id">The resource identifier for the RoleAssignment to operate on.</param>
-        /// <param name="options,">The resource manager options, to use with these operations.</param>
         internal RoleAssignmentOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
             : base(options, id)
         {
@@ -37,7 +36,6 @@ namespace azure_proto_authorization
         /// </summary>
         /// <param name="options">The http settings to use with these operations</param>
         /// <param name="resource">The resource object for the RoleAssignment to operate on.</param>
-        /// <param name="options,">The resource manager options, to use with these operations.</param>
         internal RoleAssignmentOperations(AzureResourceManagerClientOptions options, Resource resource)
             : this(options, resource.Id)
         {

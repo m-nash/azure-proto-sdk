@@ -31,7 +31,6 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="options">Client configuration properties for these operations</param>
         /// <param name="id">The identifier of the extension resource</param>
-        /// <param name="options">The client options to sue with these operations.</param>
         protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
             : base(options, id)
         {
@@ -42,7 +41,6 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="options">Client configuration properties for these operations</param>
         /// <param name="resource">The extention resource for operatiosn to act upon</param>
-        /// <param name="options">The client options to sue with these operations.</param>
         protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
             : this(options, resource.Id)
         {
@@ -80,7 +78,6 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="options">Client configuration properties for these operations</param>
         /// <param name="id">The identifier of the extension resource</param>
-        /// <param name="options">The client options to sue with these operations.</param>
         protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
             : base(options, id)
         {
@@ -91,7 +88,6 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="options">Client configuration properties for these operations</param>
         /// <param name="resource">The extention resource for operatiosn to act upon</param>
-        /// <param name="options">The client options to sue with these operations.</param>
         protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
             : this(options, resource.Id)
         {
