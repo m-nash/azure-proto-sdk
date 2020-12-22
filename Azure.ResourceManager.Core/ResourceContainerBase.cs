@@ -20,12 +20,13 @@ namespace Azure.ResourceManager.Core
         where TOperations : ResourceOperationsBase<TOperations>
         where TResource : Resource
     {
-        protected ResourceContainerBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id)
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
         /// <param name="options">The http client options for these operations</param>
-        /// <param name="id">The resource Id of the parent resource.</param>
+        /// <param name="parentId">The resource Id of the parent resource.</param>
+        protected ResourceContainerBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+           : base(options, id)
         {
         }
 
