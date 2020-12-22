@@ -29,9 +29,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase"/> class.
         /// </summary>
-        /// <param name="options">Client configuration properties for these operations</param>
+        /// <param name="options">Client HTTP configuration options for these operations</param>
         /// <param name="id">The identifier of the extension resource</param>
-        /// <param name="options">The client options to sue with these operations.</param>
         protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
             : base(options, id)
         {
@@ -40,9 +39,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase"/> class.
         /// </summary>
-        /// <param name="options">Client configuration properties for these operations</param>
+        /// <param name="options">Client HTTP configuration options for these operations</param>
         /// <param name="resource">The extention resource for operatiosn to act upon</param>
-        /// <param name="options">The client options to sue with these operations.</param>
         protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
             : this(options, resource.Id)
         {
@@ -78,9 +76,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase{TOperations}"/> class.
         /// </summary>
-        /// <param name="options">Client configuration properties for these operations</param>
+        /// <param name="options">Client HTTP configuration options for these operations</param>
         /// <param name="id">The identifier of the extension resource</param>
-        /// <param name="options">The client options to sue with these operations.</param>
         protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
             : base(options, id)
         {
@@ -89,9 +86,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase{TOperations}"/> class.
         /// </summary>
-        /// <param name="options">Client configuration properties for these operations</param>
+        /// <param name="options">Client HTTP configuration options for these operations</param>
         /// <param name="resource">The extention resource for operatiosn to act upon</param>
-        /// <param name="options">The client options to sue with these operations.</param>
         protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
             : this(options, resource.Id)
         {
