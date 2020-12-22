@@ -4,55 +4,45 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Azure;
+using System.Collections;
+using Azure.ResourceManager.Resources;
+using Azure.ResourceManager.Resources.Models;
 
 namespace Azure.ResourceManager.Core
 {
-    public class ArmResourceOperations : ResourceOperationsBase<ArmResource>,
-        ITaggableResource<ArmResource>, IDeletableResource
+    public class ArmResourceOperations : ResourceOperationsBase<ArmResource>, IDeletableResource
     {
-        public ArmResourceOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+        public ArmResourceOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id, ApiVersionsBase apiVersion)
             : base(options, id)
         {
+            ApiVersion = apiVersion;
         }
 
-        public ArmResourceOperations(AzureResourceManagerClientOptions options, ArmResourceData resource)
+        public ArmResourceOperations(AzureResourceManagerClientOptions options, ArmResourceData resource, ApiVersionsBase apiVersion)
             : base(options, resource)
         {
+            ApiVersion = apiVersion;
         }
+        private ApiVersionsBase ApiVersion;
 
         public ArmResponse<Response> Delete()
         {
-            throw new NotImplementedException();
+            return new ArmVoidResponse(Operations.StartDelete(Id.ResourceGroup, Id.Type.Namespace, Id.Parent, Id.Type.Type, Id.Name, ApiVersion).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
-        public Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return new ArmVoidResponse(await Operations.StartDelete(Id.ResourceGroup, Id.Type.Namespace, Id.Parent, Id.Type.Type, Id.Name, ApiVersion).WaitForCompletionAsync());
         }
 
         public ArmOperation<Response> StartDelete()
         {
-            throw new NotImplementedException();
+            return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Type.Namespace, Id.Parent, Id.Type.Type, Id.Name, ApiVersion));
         }
 
         public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
-        }
-
-        // TODO: Fill out the methods using ResourceManagementClient
-        public ArmOperation<ArmResource> AddTag(string key, string value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ArmOperation<ArmResource>> AddTagAsync(
-            string key,
-            string value,
-            CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
+            return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Type.Namespace, Id.Parent, Id.Type.Type, Id.Name, ApiVersion));
         }
 
         public override void Validate(ResourceIdentifier identifier)
@@ -62,12 +52,23 @@ namespace Azure.ResourceManager.Core
 
         public override ArmResponse<ArmResource> Get()
         {
-            throw new NotImplementedException();
+            return new PhArmResponse<ArmResource, GenericResource>(
+                Operations.Get(Id.ResourceGroup, Id.Type.Namespace, Id.Parent, Id.Type.Type, Id.Name, ApiVersion),
+                a => new ArmResource(ClientOptions, new ArmResourceData(a), ApiVersion)); ;
         }
 
-        public override Task<ArmResponse<ArmResource>> GetAsync(CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<ArmResource>> GetAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return new PhArmResponse<ArmResource, GenericResource>(
+                await Operations.GetAsync(Id.ResourceGroup, Id.Type.Namespace, Id.Parent, Id.Type.Type, Id.Name, ApiVersion, cancellationToken),
+                a => new ArmResource(ClientOptions, new ArmResourceData(a), ApiVersion)); ;
         }
+
+        internal ResourcesOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(
+            uri,
+            Id.Subscription,
+            creds,
+            ClientOptions.Convert<ResourcesManagementClientOptions>()))?.Resources;
+
     }
 }
