@@ -19,12 +19,12 @@ namespace azure_proto_compute
         /// <param name="top"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static Pageable<VirtualMachine> ListVirtualMachines(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<ArmResource> ListVirtualMachines(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             //TODO: consider ArmPageable<T> to introduce post network call filtering and avoid breaking changes
             ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<VirtualMachine, VirtualMachineData>(subscription, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext<ArmResource, ArmResourceData>(subscription, filters, top, cancellationToken);
         }
 
         /// <summary>
@@ -35,11 +35,11 @@ namespace azure_proto_compute
         /// <param name="top"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static AsyncPageable<VirtualMachine> ListVirtualMachinesAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<ArmResource> ListVirtualMachinesAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<VirtualMachine, VirtualMachineData>(subscription, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(subscription, filters, top, cancellationToken);
         }
         #endregion
 
