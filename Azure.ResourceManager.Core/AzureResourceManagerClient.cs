@@ -127,7 +127,7 @@ namespace Azure.ResourceManager.Core
                     var foundResource = provider.ResourceTypes.FirstOrDefault(p => resourceType.Equals(p.ResourceType));
                     foreach (var location in foundResource.Locations)
                     {
-                        yield return new Location(location);
+                        yield return location;
                     }
                 }
             }
@@ -144,7 +144,7 @@ namespace Azure.ResourceManager.Core
             return GetResourcesClient(subscription).Providers.List(expand: "metadata", cancellationToken: cancellationToken)
                 .FirstOrDefault(p => string.Equals(p.Namespace, resourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase))
                 .ResourceTypes.FirstOrDefault(r => resourceType.Equals(r.ResourceType))
-                .Locations.Select(l => new Location(l));
+                .Locations.Cast<Location>();
         }
 
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
