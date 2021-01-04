@@ -99,7 +99,7 @@ namespace azure_proto_network
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualNetworkData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync(ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public Pageable<VirtualNetwork> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)

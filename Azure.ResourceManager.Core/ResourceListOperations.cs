@@ -15,20 +15,18 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class ResourceListOperations
     {
-        public static Pageable<ArmResourceOperations> ListAtContext<ArmResourceOperations, ArmResource>(
+        public static Pageable<ArmResourceOperations> ListAtContext(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier id,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where ArmResourceOperations : ResourceOperationsBase<ArmResourceOperations>
-            where ArmResource : TrackedResource
         {
             Validate(id);
 
             var scopeId = id.Type == ResourceGroupOperations.AzureResourceType ? id.Name : null;
 
-            return _ListAtContext<ArmResourceOperations, ArmResource>(
+            return _ListAtContext(
                 clientOptions,
                 id,
                 scopeId,
@@ -37,20 +35,18 @@ namespace Azure.ResourceManager.Core
                 cancellationToken);
         }
 
-        public static AsyncPageable<ArmResourceOperations> ListAtContextAsync<ArmResourceOperations, ArmResource>(
+        public static AsyncPageable<ArmResourceOperations> ListAtContextAsync(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier id,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where ArmResourceOperations : ResourceOperationsBase<ArmResourceOperations>
-            where ArmResource : TrackedResource
         {
             Validate(id);
 
             var scopeId = id.Type == ResourceGroupOperations.AzureResourceType ? id.Name : null;
 
-            return _ListAtContextAsync<ArmResourceOperations, ArmResource>(
+            return _ListAtContextAsync(
                 clientOptions,
                 id,
                 scopeId,
@@ -59,15 +55,13 @@ namespace Azure.ResourceManager.Core
                 cancellationToken);
         }
 
-        public static Pageable<ArmResourceOperations> ListAtContext<ArmResourceOperations, ArmResource>(
+        public static Pageable<ArmResourceOperations> ListAtContext(
             SubscriptionOperations subscription,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where ArmResourceOperations : ResourceOperationsBase<ArmResourceOperations>
-            where ArmResource : TrackedResource
         {
-            return _ListAtContext<ArmResourceOperations, ArmResource>(
+            return _ListAtContext(
                 subscription.ClientOptions,
                 subscription.Id,
                 null,
@@ -76,15 +70,13 @@ namespace Azure.ResourceManager.Core
                 cancellationToken);
         }
 
-        public static AsyncPageable<ArmResourceOperations> ListAtContextAsync<ArmResourceOperations, ArmResource>(
+        public static AsyncPageable<ArmResourceOperations> ListAtContextAsync(
             SubscriptionOperations subscription,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where ArmResourceOperations : ResourceOperationsBase<ArmResourceOperations>
-            where ArmResource : TrackedResource
         {
-            return _ListAtContextAsync<ArmResourceOperations, ArmResource>(
+            return _ListAtContextAsync(
                 subscription.ClientOptions,
                 subscription.Id,
                 null,
@@ -93,15 +85,13 @@ namespace Azure.ResourceManager.Core
                 cancellationToken);
         }
 
-        private static AsyncPageable<ArmResourceOperations> _ListAtContextAsync<ArmResourceOperations, ArmResource>(
+        private static AsyncPageable<ArmResourceOperations> _ListAtContextAsync(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier scopeId,
             string scopeFilter,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where ArmResourceOperations : ResourceOperationsBase<ArmResourceOperations>
-            where ArmResource : TrackedResource
         {
             var resourceOperations = GetResourcesClient(clientOptions, scopeId.Subscription).Resources;
             AsyncPageable<GenericResourceExpanded> result;
@@ -119,19 +109,16 @@ namespace Azure.ResourceManager.Core
                     cancellationToken);
             }
 
-            return ConvertResultsAsync<ArmResourceOperations, ArmResource>(result, clientOptions);
+            return ConvertResultsAsync(result, clientOptions);
         }
 
-        private static Pageable<ArmResourceOperations> _ListAtContext<ArmResourceOperations, ArmResource>(
+        private static Pageable<ArmResourceOperations> _ListAtContext(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier scopeId,
             string scopeFilter = null,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where ArmResourceOperations : ResourceOperationsBase<ArmResourceOperations>
-            where ArmResource : TrackedResource
-
         {
             var resourceOperations = GetResourcesClient(clientOptions, scopeId.Subscription).Resources;
             Pageable<GenericResourceExpanded> result;
@@ -149,34 +136,28 @@ namespace Azure.ResourceManager.Core
                     cancellationToken);
             }
 
-            return ConvertResults<ArmResourceOperations, ArmResource>(result, clientOptions);
+            return ConvertResults(result, clientOptions);
         }
 
-        private static Pageable<ArmResourceOperations> ConvertResults<ArmResourceOperations, ArmResource>(
+        private static Pageable<ArmResourceOperations> ConvertResults(
             Pageable<GenericResourceExpanded> result,
             AzureResourceManagerClientOptions clientOptions)
-            where ArmResourceOperations : ResourceOperationsBase<ArmResourceOperations>
-            where ArmResource : TrackedResource
         {
             return new PhWrappingPageable<GenericResourceExpanded, ArmResourceOperations>(
                 result,
-                CreateResourceConverter<ArmResourceOperations, ArmResource>(clientOptions));
+                CreateResourceConverter(clientOptions));
         }
 
-        private static AsyncPageable<ArmResourceOperations> ConvertResultsAsync<ArmResourceOperations, ArmResource>(
+        private static AsyncPageable<ArmResourceOperations> ConvertResultsAsync(
             AsyncPageable<GenericResourceExpanded> result,
             AzureResourceManagerClientOptions clientOptions)
-            where ArmResourceOperations : ResourceOperationsBase<ArmResourceOperations>
-            where ArmResource : TrackedResource
         {
             return new PhWrappingAsyncPageable<GenericResourceExpanded, ArmResourceOperations>(
                 result,
-                CreateResourceConverter<ArmResourceOperations, ArmResource>(clientOptions));
+                CreateResourceConverter(clientOptions));
         }
 
-        private static Func<GenericResourceExpanded, ArmResourceOperations> CreateResourceConverter<ArmResourceOperations, ArmResource>(AzureResourceManagerClientOptions clientOptions)
-            where ArmResourceOperations : ResourceOperationsBase<ArmResourceOperations>
-            where ArmResource : TrackedResource
+        private static Func<GenericResourceExpanded, ArmResourceOperations> CreateResourceConverter(AzureResourceManagerClientOptions clientOptions)
         {
              return s => Activator.CreateInstance(
                     typeof(ArmResourceOperations),
