@@ -44,7 +44,6 @@ namespace azure_proto_authorization
         /// <summary>
         /// Gets the resource type of the resource being created.
         /// </summary>
-        public static readonly ResourceType ResourceType = "Microsoft.Authorization/roleAssignments";
 
         private RoleAssignmentsOperations Operations => GetClient<AuthorizationManagementClient>((baseUri, creds) => new AuthorizationManagementClient(Id.Subscription, baseUri, creds)).RoleAssignments;
 

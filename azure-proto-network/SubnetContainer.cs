@@ -20,8 +20,6 @@ namespace azure_proto_network
         {
         }
 
-        public static readonly ResourceType ResourceType = "Microsoft.Network/virtualNetworks/subnets";
-
         internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
                     ClientOptions.Convert<NetworkManagementClientOptions>())).Subnets;
 

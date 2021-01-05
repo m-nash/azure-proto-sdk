@@ -28,8 +28,6 @@ namespace azure_proto_compute
         {
         }
 
-        public static readonly ResourceType ResourceType = "Microsoft.Compute/virtualMachines";
-
         public override ArmResponse<VirtualMachine> Create(string name, VirtualMachineData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);

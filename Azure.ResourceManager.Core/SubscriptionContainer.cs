@@ -12,8 +12,6 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class SubscriptionContainer : OperationsBase
     {
-        public static readonly ResourceType ResourceType = "Microsoft.Resources/subscriptions";
-
         internal SubscriptionContainer(AzureResourceManagerClientOptions options)
             : base(options, null, null)
         {
