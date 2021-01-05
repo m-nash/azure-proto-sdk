@@ -51,11 +51,11 @@ namespace Azure.ResourceManager.Core
         /// <param name="identifier">The input resource Id to check.</param>
         public override void Validate(ResourceIdentifier identifier)
         {
-            if (identifier.Type != ResourceGroupOperations.AzureResourceType &&
-                identifier.Type != SubscriptionOperations.AzureResourceType &&
-                identifier.Type != ResourceType.Parent)
+            if (identifier.Type != ResourceGroupOperations.ResourceType &&
+                identifier.Type != SubscriptionOperations.ResourceType &&
+                identifier.Type != Id.Type.Parent)
             {
-                throw new InvalidOperationException($"{identifier.Type} is not a valid container for {ResourceType}");
+                throw new InvalidOperationException($"{identifier.Type} is not a valid container for {Id.Type}");
             }
         }
 

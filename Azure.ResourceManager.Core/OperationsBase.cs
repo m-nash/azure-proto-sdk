@@ -31,17 +31,15 @@ namespace Azure.ResourceManager.Core
 
         protected virtual Resource Resource { get; set; }
 
-        public virtual ResourceType ResourceType { get; }
-
         public virtual Location DefaultLocation { get; }
 
         public virtual ResourceIdentifier Id { get; }
 
         public virtual void Validate(ResourceIdentifier identifier)
         {
-            if ((SubscriptionContainer.AzureResourceType != ResourceType && identifier == null) || (identifier != null && identifier?.Type != ResourceType))
+            if ((SubscriptionOperations.ResourceType != Id.Type && identifier == null) || (identifier != null && identifier?.Type != Id.Type))
             {
-                throw new InvalidOperationException($"{identifier} is not a valid resource of type {ResourceType}");
+                throw new InvalidOperationException($"{identifier} is not a valid resource of type {Id.Type}");
             }
         }
 

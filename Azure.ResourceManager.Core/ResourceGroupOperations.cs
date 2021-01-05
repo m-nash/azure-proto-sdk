@@ -13,15 +13,13 @@ namespace Azure.ResourceManager.Core
     public class ResourceGroupOperations : ResourceOperationsBase<ResourceGroup>,
         ITaggableResource<ResourceGroup>, IDeletableResource
     {
-        public static readonly ResourceType AzureResourceType = "Microsoft.Resources/resourceGroups";
+        public static readonly ResourceType ResourceType = "Microsoft.Resources/resourceGroups";
 
         internal ResourceGroupOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
             : base(options, id) { }
 
         internal ResourceGroupOperations(AzureResourceManagerClientOptions options, Resource resource)
             : base(options, resource) { }
-
-        public override ResourceType ResourceType => AzureResourceType;
 
         internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(
             uri,

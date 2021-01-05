@@ -19,7 +19,7 @@ namespace azure_proto_network
         {
         }
 
-        public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
+        public static readonly ResourceType ResourceType = "Microsoft.Network/networkInterfaces";
 
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ClientOptions.Convert<NetworkManagementClientOptions>())).NetworkInterfaces;

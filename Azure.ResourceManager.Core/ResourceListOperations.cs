@@ -26,7 +26,7 @@ namespace Azure.ResourceManager.Core
         {
             Validate(id);
 
-            var scopeId = id.Type == ResourceGroupOperations.AzureResourceType ? id.Name : null;
+            var scopeId = id.Type == ResourceGroupOperations.ResourceType ? id.Name : null;
 
             return _ListAtContext<TOperations, TResource>(
                 clientOptions,
@@ -48,7 +48,7 @@ namespace Azure.ResourceManager.Core
         {
             Validate(id);
 
-            var scopeId = id.Type == ResourceGroupOperations.AzureResourceType ? id.Name : null;
+            var scopeId = id.Type == ResourceGroupOperations.ResourceType ? id.Name : null;
 
             return _ListAtContextAsync<TOperations, TResource>(
                 clientOptions,
@@ -186,11 +186,11 @@ namespace Azure.ResourceManager.Core
 
         private static void Validate(ResourceIdentifier id)
         {
-            if (id.Type != ResourceGroupOperations.AzureResourceType &&
-                id.Type != SubscriptionOperations.AzureResourceType)
+            if (id.Type != ResourceGroupOperations.ResourceType &&
+                id.Type != SubscriptionOperations.ResourceType)
             {
                 throw new ArgumentException(
-                    $"{id.Type} is not valid to list at context must be {ResourceGroupOperations.AzureResourceType} or {SubscriptionOperations.AzureResourceType}");
+                    $"{id.Type} is not valid to list at context must be {ResourceGroupOperations.ResourceType} or {SubscriptionOperations.ResourceType}");
             }
         }
 
