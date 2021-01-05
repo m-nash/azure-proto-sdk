@@ -43,12 +43,12 @@ namespace azure_proto_compute
                 s => new VirtualMachine(subscription.ClientOptions, new VirtualMachineData(s)));
         }
 
-        //public static Pageable<ArmResource> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
-        //{
-        //    ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
-        //    filters.SubstringFilter = filter;
-        //    return ResourceListOperations.ListAtContext<ArmResource, ArmResourceData>(ClientOptions, Id, filters, top, cancellationToken);
-        //}
+        public static Pageable<ArmResource> ListVirtualMachinesByName(this SubscriptionOperations subscription, ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        {
+            ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
+            filters.SubstringFilter = filter;
+            return ResourceListOperations.ListAtContext<ArmResource, ArmResourceData>(subscription.ClientOptions, subscription.Id, filters, top, cancellationToken);
+        }
 
         //public static AsyncPageable<ArmResource> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         //{
