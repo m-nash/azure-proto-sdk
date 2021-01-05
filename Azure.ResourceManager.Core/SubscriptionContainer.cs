@@ -12,14 +12,12 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class SubscriptionContainer : OperationsBase
     {
-        public static readonly ResourceType AzureResourceType = "Microsoft.Resources/subscriptions";
+        public static readonly ResourceType ResourceType = "Microsoft.Resources/subscriptions";
 
         internal SubscriptionContainer(AzureResourceManagerClientOptions options)
             : base(options, null, null)
         {
         }
-
-        public override ResourceType ResourceType => AzureResourceType;
 
         internal SubscriptionsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) =>
             new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ClientOptions.Convert<ResourcesManagementClientOptions>())).Subscriptions;

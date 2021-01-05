@@ -23,7 +23,7 @@ namespace azure_proto_compute
         {
         }
 
-        public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
+        public static readonly ResourceType ResourceType = "Microsoft.Compute/virtualMachines";
 
         public static VirtualMachineOperations FromGeneric(ArmResourceOperations genericOperations)
         {

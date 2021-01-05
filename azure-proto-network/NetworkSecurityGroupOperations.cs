@@ -43,7 +43,7 @@ namespace azure_proto_network
         {
         }
 
-        public override ResourceType ResourceType => "Microsoft.Network/networkSecurityGroups";
+        public static readonly ResourceType ResourceType = "Microsoft.Network/networkSecurityGroups";
 
         internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
                      ClientOptions.Convert<NetworkManagementClientOptions>())).NetworkSecurityGroups;

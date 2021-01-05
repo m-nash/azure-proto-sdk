@@ -30,7 +30,7 @@ namespace azure_proto_network
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ClientOptions.Convert<NetworkManagementClientOptions>())).PublicIPAddresses;
 
-        public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
+        public static readonly ResourceType ResourceType = "Microsoft.Network/publicIpAddresses";
 
         public override ArmResponse<PublicIpAddress> Create(string name, PublicIPAddressData resourceDetails, CancellationToken cancellationToken = default)
         {

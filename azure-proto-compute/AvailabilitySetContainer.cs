@@ -23,7 +23,7 @@ namespace azure_proto_compute
         {
         }
 
-        public override ResourceType ResourceType => "Microsoft.Compute/availabilitySets";
+        public static readonly ResourceType ResourceType = "Microsoft.Compute/availabilitySets";
 
         public override ArmResponse<AvailabilitySet> Create(string name, AvailabilitySetData resourceDetails, CancellationToken cancellationToken = default)
         {

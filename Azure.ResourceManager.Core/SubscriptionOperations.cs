@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class SubscriptionOperations : ResourceOperationsBase<Subscription>
     {
-        public static readonly ResourceType AzureResourceType = "Microsoft.Resources/subscriptions";
+        public static readonly ResourceType ResourceType = "Microsoft.Resources/subscriptions";
 
         internal SubscriptionOperations(AzureResourceManagerClientOptions options, string defaultSubscription)
             : base(options, $"/subscriptions/{defaultSubscription}")
@@ -30,8 +30,6 @@ namespace Azure.ResourceManager.Core
             : base(options, subscription)
         {
         }
-
-        public override ResourceType ResourceType => AzureResourceType;
 
         internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) =>
             new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ClientOptions.Convert<ResourcesManagementClientOptions>())).Subscriptions;

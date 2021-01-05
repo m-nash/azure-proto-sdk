@@ -19,7 +19,7 @@ namespace azure_proto_network
         {
         }
 
-        public override ResourceType ResourceType => "Microsoft.Network/publicIpAddresses";
+        public static readonly ResourceType ResourceType = "Microsoft.Network/publicIpAddresses";
 
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ClientOptions.Convert<NetworkManagementClientOptions>())).PublicIPAddresses;
