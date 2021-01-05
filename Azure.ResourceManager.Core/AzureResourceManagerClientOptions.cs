@@ -123,5 +123,10 @@ namespace Azure.ResourceManager.Core
         {
             return creator(BaseUri, Credential);
         }
+
+        public T GetClient<T>(Func<AzureResourceManagerClientOptions, T> creator)
+        {
+            return creator(BaseUri, Credential);
+        }
     }
 }

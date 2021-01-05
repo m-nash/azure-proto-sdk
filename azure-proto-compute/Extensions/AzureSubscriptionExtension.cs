@@ -1,5 +1,7 @@
 ﻿using Azure;
+using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Core;
+using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Core.Resources;
 using System.Threading;
 
@@ -15,32 +17,45 @@ namespace azure_proto_compute
         /// List vms at the given subscription context
         /// </summary>
         /// <param name="subscription"></param>
-        /// <param name="filter"></param>
-        /// <param name="top"></param>
-        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static Pageable<VirtualMachine> ListVirtualMachines(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<VirtualMachine> ListVirtualMachines(this SubscriptionOperations subscription)
         {
-            //TODO: consider ArmPageable<T> to introduce post network call filtering and avoid breaking changes
-            ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
-            filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<ArmResource, ArmResourceData>(subscription, filters, top, cancellationToken);
+            var instance = subscription.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, subscription.Id.Subscription, cred,
+                    subscription.ClientOptions.Convert<ComputeManagementClientOptions>())).VirtualMachines;
+            var result = instance.ListAll();
+            return new PhWrappingPageable<Azure.ResourceManager.Compute.Models.VirtualMachine, VirtualMachine>(
+                result,
+                s => new VirtualMachine(subscription.ClientOptions, new VirtualMachineData(s)));
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="subscription"></param>
-        /// <param name="filter"></param>
-        /// <param name="top"></param>
-        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static AsyncPageable<ArmResource> ListVirtualMachinesAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<VirtualMachine> ListVirtualMachinesAsync(this SubscriptionOperations subscription)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
-            filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(subscription, filters, top, cancellationToken);
+            var instance = subscription.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, subscription.Id.Subscription, cred,
+                    subscription.ClientOptions.Convert<ComputeManagementClientOptions>())).VirtualMachines;
+            var result = instance.ListAllAsync();
+            return new PhWrappingAsyncPageable<Azure.ResourceManager.Compute.Models.VirtualMachine, VirtualMachine>(
+                result,
+                s => new VirtualMachine(subscription.ClientOptions, new VirtualMachineData(s)));
         }
+
+        //public static Pageable<ArmResource> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        //{
+        //    ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
+        //    filters.SubstringFilter = filter;
+        //    return ResourceListOperations.ListAtContext<ArmResource, ArmResourceData>(ClientOptions, Id, filters, top, cancellationToken);
+        //}
+
+        //public static AsyncPageable<ArmResource> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        //{
+        //    ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
+        //    filters.SubstringFilter = filter;
+        //    return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(ClientOptions, Id, filters, top, cancellationToken);
+        //}
         #endregion
 
         #region AvailabilitySet List Operations
