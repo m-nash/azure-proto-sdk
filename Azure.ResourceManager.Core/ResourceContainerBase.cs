@@ -30,12 +30,12 @@ namespace Azure.ResourceManager.Core
         {
         }
 
-        protected ResourceContainerBase(AzureResourceManagerClientOptions options, TrackedResource resource)
-            : base(options, resource)
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
         /// <param name="options">The http client options for these operations</param>
         /// <param name="resource">The resource representing the parent resource.</param>
+        protected ResourceContainerBase(AzureResourceManagerClientOptions options, TrackedResource resource)
+            : base(options, resource)
         {
             Parent = resource;
         }
@@ -51,12 +51,8 @@ namespace Azure.ResourceManager.Core
         /// <param name="identifier">The input resource Id to check.</param>
         public override void Validate(ResourceIdentifier identifier)
         {
-            if (identifier.Type != ResourceGroupOperations.ResourceType &&
-                identifier.Type != SubscriptionOperations.ResourceType &&
-                identifier.Type != Id.Type.Parent)
-            {
+            if (identifier.Type != GetValidResourceType())
                 throw new InvalidOperationException($"{identifier.Type} is not a valid container for {Id.Type}");
-            }
         }
 
         /// <summary>

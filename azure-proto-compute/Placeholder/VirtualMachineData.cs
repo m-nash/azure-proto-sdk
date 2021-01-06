@@ -1,6 +1,5 @@
 ﻿using Azure.ResourceManager.Compute.Models;
 using Azure.ResourceManager.Core;
-using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Collections.Generic;
 
@@ -18,7 +17,7 @@ namespace azure_proto_compute
             }
         }
 
-        public VirtualMachineData(Azure.ResourceManager.Resources.Models.Resource vm) : base(
+        public VirtualMachineData(Azure.ResourceManager.Resources.Models.GenericResource vm) : base(
             vm.Id,
             vm.Location,
             new Azure.ResourceManager.Compute.Models.VirtualMachine(vm.Location)

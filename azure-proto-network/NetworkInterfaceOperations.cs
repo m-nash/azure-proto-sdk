@@ -34,9 +34,9 @@ namespace azure_proto_network
             return new ArmVoidResponse((await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken)).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
-        public ArmOperation<Response> StartDelete()
+        public ArmOperation<Response> StartDelete(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name));
+            return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
         public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)
@@ -89,6 +89,11 @@ namespace azure_proto_network
                     Resource = new NetworkInterfaceData(n);
                     return new NetworkInterface(ClientOptions, Resource as NetworkInterfaceData);
                 });
+        }
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return ResourceType;
         }
     }
 }
