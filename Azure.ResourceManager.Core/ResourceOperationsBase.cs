@@ -55,7 +55,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="options">The http client options for these operations</param>
         /// <param name="id">The resource Id of this resource</param>
         public ResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : this(options, new ArmResourceData(id))
+            : base(options, id)
         {
         }
 

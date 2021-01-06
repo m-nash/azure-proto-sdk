@@ -13,7 +13,7 @@ namespace azure_proto_compute
     /// </summary>
     public class VirtualMachineOperations : ResourceOperationsBase<VirtualMachine>, ITaggableResource<VirtualMachine>, IDeletableResource
     {
-        internal VirtualMachineOperations(ArmResourceOperations genericOperations)
+        public VirtualMachineOperations(ArmResourceOperations genericOperations)
             : base(genericOperations)
         {
         }

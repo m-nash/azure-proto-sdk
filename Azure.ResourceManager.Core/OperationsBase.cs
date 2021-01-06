@@ -49,7 +49,7 @@ namespace Azure.ResourceManager.Core
         /// <typeparam name="T"></typeparam>
         /// <param name="creator"></param>
         /// <returns></returns>
-        protected T GetClient<T>(Func<Uri, TokenCredential, T> creator)
+        public T GetClient<T>(Func<Uri, TokenCredential, T> creator)
         {
             return ClientOptions.GetClient(creator);
         }
