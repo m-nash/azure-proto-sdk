@@ -123,6 +123,5 @@ namespace Azure.ResourceManager.Core
         {
             return creator(BaseUri, Credential);
         }
-
     }
 }
