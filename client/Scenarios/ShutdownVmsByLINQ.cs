@@ -15,10 +15,10 @@ namespace client
             var client = new AzureResourceManagerClient();
             foreach (var sub in client.Subscriptions().List())
             {
-                foreach (var vm in sub.ListVirtualMachinesByName("mc").Where(vm => vm.Data.Name.Contains("foo")))
+                foreach (var armResource in sub.ListVirtualMachinesByName("mc").Where(armResource => armResource.Data.Name.Contains("foo")))
                 {
-                    var instance = new VirtualMachineOperations(vm);
-                    instance.PowerOff();
+                    var vmOperations = new VirtualMachineOperations(armResource);
+                    vmOperations.PowerOff();
                 }
             }
 

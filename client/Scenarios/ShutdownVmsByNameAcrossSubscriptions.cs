@@ -16,9 +16,9 @@ namespace client
             {
                 await foreach (var vm in subscription.ListVirtualMachinesByNameAsync("even"))
                 {
-                    var instance = new VirtualMachineOperations(vm);
-                    await instance.PowerOffAsync();
-                    await instance.PowerOnAsync();
+                    var vmOperations = new VirtualMachineOperations(vm);
+                    await vmOperations.PowerOffAsync();
+                    await vmOperations.PowerOnAsync();
                 }
             }
         }

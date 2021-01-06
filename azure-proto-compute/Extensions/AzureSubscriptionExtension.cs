@@ -20,9 +20,9 @@ namespace azure_proto_compute
         /// <returns></returns>
         public static Pageable<VirtualMachine> ListVirtualMachines(this SubscriptionOperations subscription)
         {
-            var instance = subscription.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, subscription.Id.Subscription, cred,
+            var vmOperations = subscription.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, subscription.Id.Subscription, cred,
                     subscription.ClientOptions.Convert<ComputeManagementClientOptions>())).VirtualMachines;
-            var result = instance.ListAll();
+            var result = vmOperations.ListAll();
             return new PhWrappingPageable<Azure.ResourceManager.Compute.Models.VirtualMachine, VirtualMachine>(
                 result,
                 s => new VirtualMachine(subscription.ClientOptions, new VirtualMachineData(s)));
@@ -35,9 +35,9 @@ namespace azure_proto_compute
         /// <returns></returns>
         public static AsyncPageable<VirtualMachine> ListVirtualMachinesAsync(this SubscriptionOperations subscription)
         {
-            var instance = subscription.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, subscription.Id.Subscription, cred,
+            var vmOperations = subscription.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, subscription.Id.Subscription, cred,
                     subscription.ClientOptions.Convert<ComputeManagementClientOptions>())).VirtualMachines;
-            var result = instance.ListAllAsync();
+            var result = vmOperations.ListAllAsync();
             return new PhWrappingAsyncPageable<Azure.ResourceManager.Compute.Models.VirtualMachine, VirtualMachine>(
                 result,
                 s => new VirtualMachine(subscription.ClientOptions, new VirtualMachineData(s)));

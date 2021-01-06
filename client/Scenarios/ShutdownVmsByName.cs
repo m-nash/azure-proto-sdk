@@ -15,11 +15,11 @@ namespace client
 
             foreach(var vm in sub.ListVirtualMachinesByName("even"))
             {
-                var instance = new VirtualMachineOperations(vm);
+                var vmOperations = new VirtualMachineOperations(vm);
                 Console.WriteLine($"Stopping {vm.Id.Name}");
-                instance.PowerOff();
+                vmOperations.PowerOff();
                 Console.WriteLine($"Starting {vm.Id.Name}");
-                instance.PowerOn();
+                vmOperations.PowerOn();
             }
         }
     }
