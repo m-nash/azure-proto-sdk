@@ -15,10 +15,13 @@ namespace client
             var client = new AzureResourceManagerClient();
             foreach (var sub in client.Subscriptions().List())
             {
-                foreach (var armResource in sub.ListVirtualMachinesByName("mc").Where(armResource => armResource.Data.Name.Contains("foo")))
+                var vmList = sub.ListVirtualMachines();
+                foreach (var vm in vmList.Where(armResource => armResource.Data.Name.Contains("odd")))
                 {
-                    var vmOperations = new VirtualMachineOperations(armResource);
-                    vmOperations.PowerOff();
+                    Console.WriteLine($"In subscription list: Stopping {vm.Id}");
+                    vm.PowerOff();
+                    Console.WriteLine($"In subscription list: Starting {vm.Id}");
+                    vm.PowerOn();
                 }
             }
 
@@ -34,9 +37,9 @@ namespace client
                 .ToList()
                 .ForEach(tuple =>
                 {
-                    Console.WriteLine($"Stopping {tuple.vm.Id.Name}");
+                    Console.WriteLine($"In resource group list: Stopping {tuple.vm.Id.Name}");
                     tuple.vm.PowerOff();
-                    Console.WriteLine($"Starting {tuple.vm.Id.Name}");
+                    Console.WriteLine($"In resource group list: Starting {tuple.vm.Id.Name}");
                     tuple.vm.PowerOn();
                 });
         }

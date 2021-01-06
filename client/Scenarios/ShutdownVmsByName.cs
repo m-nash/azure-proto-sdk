@@ -13,12 +13,12 @@ namespace client
 
             var sub = new AzureResourceManagerClient().Subscription(Context.SubscriptionId);
 
-            foreach(var vm in sub.ListVirtualMachinesByName("even"))
+            foreach(var armResource in sub.ListVirtualMachinesByName("even"))
             {
-                var vmOperations = new VirtualMachineOperations(vm);
-                Console.WriteLine($"Stopping {vm.Id.Name}");
+                var vmOperations = new VirtualMachineOperations(armResource);
+                Console.WriteLine($"Stopping {armResource.Id.Name}");
                 vmOperations.PowerOff();
-                Console.WriteLine($"Starting {vm.Id.Name}");
+                Console.WriteLine($"Starting {armResource.Id.Name}");
                 vmOperations.PowerOn();
             }
         }

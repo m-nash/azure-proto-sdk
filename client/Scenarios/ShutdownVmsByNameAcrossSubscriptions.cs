@@ -43,18 +43,13 @@ namespace client
             var client = new AzureResourceManagerClient();
             foreach (var sub in client.Subscriptions().List())
             {
-                //sub.ListVirtualMachines("even").PowerOff
-                await foreach (var vm in sub.ListVirtualMachinesByNameAsync("even"))
+                await foreach (var armResource in sub.ListVirtualMachinesByNameAsync("even"))
                 {
-                    // client.ResourceOperations<VirtualMachine>(vm).PowerOff()
-                    //vmOps.PowerOff(vm.Id)
-                    var instance = new VirtualMachineOperations(vm);
-                    Console.WriteLine($"Stopping {instance.Id.Subscription} {instance.Id.ResourceGroup} {instance.Id.Name}");
-                    instance.PowerOff();
-                    var newVm = vm.Get();
-                    var model = vm.Data;
-                    Console.WriteLine($"Starting {instance.Id.Subscription} {instance.Id.ResourceGroup} {instance.Id.Name}");
-                    instance.PowerOn();
+                    var vmOperations = new VirtualMachineOperations(armResource);
+                    Console.WriteLine($"Stopping {vmOperations.Id.Subscription} {vmOperations.Id.ResourceGroup} {vmOperations.Id.Name}");
+                    vmOperations.PowerOff();
+                    Console.WriteLine($"Starting {vmOperations.Id.Subscription} {vmOperations.Id.ResourceGroup} {vmOperations.Id.Name}");
+                    vmOperations.PowerOn();
                 }
             }
         }
