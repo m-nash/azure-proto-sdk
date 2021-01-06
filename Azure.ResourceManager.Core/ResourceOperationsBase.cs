@@ -50,14 +50,12 @@ namespace Azure.ResourceManager.Core
         {
         }
 
-        public ResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id)
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOperationsBase{TOperations}"/> class.
         /// <param name="options">The http client options for these operations</param>
         /// <param name="id">The resource Id of this resource</param>
         public ResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : this(options, new ArmResourceData(id))
+            : base(options, id)
         {
         }
 
