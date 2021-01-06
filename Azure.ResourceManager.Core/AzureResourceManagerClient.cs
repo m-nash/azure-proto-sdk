@@ -4,6 +4,7 @@ using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -24,23 +25,39 @@ namespace Azure.ResourceManager.Core
 
 
         public AzureResourceManagerClient()
-            : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, null) { }
+            : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, null)
+        {
+        }
+
         public AzureResourceManagerClient(AzureResourceManagerClientOptions options)
-            : this(options.BaseUri, options.Credential, null, options) { }
+            : this(options.BaseUri, options.Credential, null, options)
+        {
+        }
+
         public AzureResourceManagerClient(string defaultSubscriptionId)
-            : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId, null) { }
+            : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId, null)
+        {
+        }
 
         public AzureResourceManagerClient(string defaultSubscriptionId, AzureResourceManagerClientOptions options)
-            : this(options.BaseUri, options.Credential, defaultSubscriptionId, null) { }
+            : this(options.BaseUri, options.Credential, defaultSubscriptionId, null)
+        {
+        }
 
         public AzureResourceManagerClient(TokenCredential credential, string defaultSubscriptionId)
-            : this(new Uri(DefaultUri), credential, defaultSubscriptionId, null) { }
+            : this(new Uri(DefaultUri), credential, defaultSubscriptionId, null)
+        {
+        }
 
         public AzureResourceManagerClient(TokenCredential credential, string defaultSubscriptionId, AzureResourceManagerClientOptions options)
-            : this(options.BaseUri, credential, defaultSubscriptionId, options) { }
+            : this(options.BaseUri, credential, defaultSubscriptionId, options)
+        {
+        }
 
         public AzureResourceManagerClient(Uri baseUri, TokenCredential credential, AzureResourceManagerClientOptions options = null)
-            : this(baseUri, credential, null, options) { }
+            : this(baseUri, credential, null, options)
+        {
+        }
 
         public AzureResourceManagerClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId, AzureResourceManagerClientOptions options)
         {
@@ -127,7 +144,7 @@ namespace Azure.ResourceManager.Core
                     var foundResource = provider.ResourceTypes.FirstOrDefault(p => resourceType.Equals(p.ResourceType));
                     foreach (var location in foundResource.Locations)
                     {
-                        yield return new Location(location);
+                        yield return location;
                     }
                 }
             }
@@ -144,7 +161,7 @@ namespace Azure.ResourceManager.Core
             return GetResourcesClient(subscription).Providers.List(expand: "metadata", cancellationToken: cancellationToken)
                 .FirstOrDefault(p => string.Equals(p.Namespace, resourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase))
                 .ResourceTypes.FirstOrDefault(r => resourceType.Equals(r.ResourceType))
-                .Locations.Select(l => new Location(l));
+                .Locations.Cast<Location>();
         }
 
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
@@ -162,19 +179,29 @@ namespace Azure.ResourceManager.Core
             return new ResourceGroupOperations(ClientOptions, resourceGroup.Id);
         }
 
-        public T GetResourceOperationsBase<T>(TrackedResource resource) where T : TrackedResource
+        public T GetResourceOperationsBase<T>(TrackedResource resource)
+            where T : TrackedResource
         {
             return Activator.CreateInstance(typeof(T), ClientOptions, resource) as T;
         }
 
-        public T GetResourceOperationsBase<T>(ResourceIdentifier resource) where T : OperationsBase
+        public T GetResourceOperationsBase<T>(ResourceIdentifier resource)
+            where T : OperationsBase
         {
             return Activator.CreateInstance(typeof(T), ClientOptions, resource) as T;
         }
 
-        public T GetResourceOperationsBase<T>(string subscription, string resourceGroup, string name) where T : OperationsBase
+        public T GetResourceOperationsBase<T>(string subscription, string resourceGroup, string name)
+            where T : OperationsBase
         {
-            return null;
+            string resourceType = typeof(T).GetField("ResourceType", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetValue(null).ToString();
+            ResourceIdentifier id = $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/{resourceType}/{name}";
+            return Activator.CreateInstance(
+                typeof(T),
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
+                null,
+                new object[] { ClientOptions, id },
+                CultureInfo.InvariantCulture) as T;
         }
 
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string subscription, string resourceGroup, string name, TResource model, Location location = default)
@@ -195,15 +222,16 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Fill in the default subscription in the simple case (passed in, or only one subscription available)
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        internal async Task<string> GetDefaultSubscription(CancellationToken token = default(CancellationToken))
+        internal async Task<string> GetDefaultSubscription(CancellationToken cancellationToken = default)
         {
             string sub = DefaultSubscription?.Id?.Subscription;
             if (null == sub)
             {
-                sub = await this.Subscriptions().GetDefaultSubscription();
+                sub = await Subscriptions().GetDefaultSubscription(cancellationToken);
             }
+
             return sub;
         }
 

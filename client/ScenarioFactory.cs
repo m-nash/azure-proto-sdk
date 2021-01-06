@@ -13,10 +13,13 @@
         GenericEntityLoop,
         ShutdownVmsByLINQ,
         ShutdownVmsByNameAcrossResourceGroups,
-        ShutdownVmsByNameAcrossSubscriptions,
+        //ShutdownVmsByNameAcrossSubscriptions,
         ListByNameExpanded,
         ClientOptionsOverride,
-        GetSubscription
+        GetSubscription,
+        //RoleAssignment,
+        //DeleteGeneric,
+        //AddTagToGeneric
     }
 
     class ScenarioFactory
@@ -47,14 +50,20 @@
                     return new All();
                 case Scenarios.ShutdownVmsByNameAcrossResourceGroups:
                     return new ShutdownVmsByNameAcrossResourceGroups();
-                case Scenarios.ShutdownVmsByNameAcrossSubscriptions:
-                    return new ShutdownVmsByNameAcrossSubscriptions();
+                //case Scenarios.ShutdownVmsByNameAcrossSubscriptions:
+                //    return new ShutdownVmsByNameAcrossSubscriptions();
                 case Scenarios.ListByNameExpanded:
                     return new ListByNameExpanded();
                 case Scenarios.ClientOptionsOverride:
                     return new ClientOptionsOverride();
                 case Scenarios.GetSubscription:
                     return new GetSubscription();
+                //case Scenarios.RoleAssignment:
+                //    return new RoleAssignment();
+                //case Scenarios.DeleteGeneric:
+                //    return new DeleteGeneric();
+                //case Scenarios.AddTagToGeneric:
+                //    return new AddTagToGeneric();
                 default:
                     return null;
             }

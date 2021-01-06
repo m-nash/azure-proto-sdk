@@ -1,27 +1,24 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using Azure.ResourceManager.Resources;
+using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Azure;
-using Azure.ResourceManager.Resources;
-using Azure.ResourceManager.Resources.Models;
 
 namespace Azure.ResourceManager.Core
 {
     public class ResourceGroupOperations : ResourceOperationsBase<ResourceGroup>,
         ITaggableResource<ResourceGroup>, IDeletableResource
     {
-        public static readonly ResourceType AzureResourceType = "Microsoft.Resources/resourceGroups";
+        public static readonly ResourceType ResourceType = "Microsoft.Resources/resourceGroups";
 
         internal ResourceGroupOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
             : base(options, id) { }
 
         internal ResourceGroupOperations(AzureResourceManagerClientOptions options, Resource resource)
             : base(options, resource) { }
-
-        public override ResourceType ResourceType => AzureResourceType;
 
         internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(
             uri,
@@ -31,23 +28,24 @@ namespace Azure.ResourceManager.Core
 
         public ArmResponse<Response> Delete()
         {
-            return new ArmVoidResponse(Operations.StartDelete(Id.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+            return new ArmResponse(Operations.StartDelete(Id.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
         public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidResponse(await Operations.StartDelete(Id.Name).WaitForCompletionAsync());
+            return new ArmResponse(await Operations.StartDelete(Id.Name).WaitForCompletionAsync());
         }
 
-        public ArmOperation<Response> StartDelete()
+        public ArmOperation<Response> StartDelete(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidOperation(Operations.StartDelete(Id.Name));
+            return new ArmVoidOperation(Operations.StartDelete(Id.Name, cancellationToken));
         }
 
         public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.Name, cancellationToken));
         }
+
         public override ArmResponse<ResourceGroup> Get()
         {
             return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Get(Id.Name), g =>
@@ -130,6 +128,11 @@ namespace Azure.ResourceManager.Core
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;
 
             return container.CreateAsync(name, model, token);
+        }
+
+        protected internal override ResourceType GetValidResourceType()
+        {
+            return ResourceType;
         }
     }
 }

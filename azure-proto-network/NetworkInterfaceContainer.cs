@@ -17,8 +17,6 @@ namespace azure_proto_network
 
         internal NetworkInterfaceContainer(AzureResourceManagerClientOptions options, ResourceIdentifier id) : base(options, id) { }
 
-        public override ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
-
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred, 
             ClientOptions.Convert<NetworkManagementClientOptions>())).NetworkInterfaces;
 
@@ -117,6 +115,11 @@ namespace azure_proto_network
         private Func<Azure.ResourceManager.Network.Models.NetworkInterface, NetworkInterface> convertor()
         {
             return s => new NetworkInterface(ClientOptions, new NetworkInterfaceData(s));
+        }
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return ResourceGroupOperations.ResourceType;
         }
     }
 }

@@ -1,6 +1,5 @@
 using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
-using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,14 +11,10 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class SubscriptionContainer : OperationsBase
     {
-        public static readonly ResourceType AzureResourceType = "Microsoft.Resources/subscriptions";
-
         internal SubscriptionContainer(AzureResourceManagerClientOptions options)
             : base(options, null, null)
         {
         }
-
-        public override ResourceType ResourceType => AzureResourceType;
 
         internal SubscriptionsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) =>
             new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ClientOptions.Convert<ResourcesManagementClientOptions>())).Subscriptions;
@@ -56,6 +51,17 @@ namespace Azure.ResourceManager.Core
             }
 
             return sub;
+        }
+
+        public override void Validate(ResourceIdentifier identifier)
+        {
+            if (identifier != null)
+                throw new ArgumentException("Invalid parent for subscription container");
+        }
+
+        protected internal override ResourceType GetValidResourceType()
+        {
+            return SubscriptionOperations.ResourceType;
         }
     }
 }

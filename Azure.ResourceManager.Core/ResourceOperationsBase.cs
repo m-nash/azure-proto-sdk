@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,7 +33,6 @@ namespace Azure.ResourceManager.Core
         }
     }
 
-
     /// <summary>
     /// Base class for all operations over a resource
     /// </summary>
@@ -56,16 +56,36 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ResourceOperationsBase{TOperations}"/> class.
         /// <param name="options">The http client options for these operations</param>
         /// <param name="id">The resource Id of this resource</param>
+        public ResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+            : this(options, new ArmResourceData(id))
         {
         }
 
-        public ResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
-            : base(options, resource)
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOperationsBase{TOperations}"/> class.
         /// <param name="options">The http client options for these operations</param>
         /// <param name="resource">The object corresponding to this resource</param>
+        public ResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
+            : base(options, resource)
         {
+        }
+
+        /// <summary>
+        /// Gets new dictionary of tags after adding the key value pair or updating the existing key value pair
+        /// </summary>
+        /// <param name="key"> The key to update. </param>
+        /// <param name="value"> The value to update. </param>
+        /// <param name="existingTags"> Existing tag dictionary to update. </param>
+        protected void UpdateTags(string key, string value, IDictionary<string, string> existingTags)
+        {
+            if (existingTags.ContainsKey(key))
+            {
+                existingTags[key] = value;
+            }
+            else
+            {
+                existingTags.Add(key, value);
+            }
         }
 
         /// <summary>

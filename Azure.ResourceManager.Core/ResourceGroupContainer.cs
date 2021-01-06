@@ -20,8 +20,6 @@ namespace Azure.ResourceManager.Core
         internal ResourceGroupContainer(AzureResourceManagerClientOptions options, ResourceIdentifier id)
             : base(options, id) { }
 
-        public override ResourceType ResourceType => "Microsoft.Resources/resourceGroups";
-
         internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(
             uri,
             Id.Subscription,
@@ -78,6 +76,11 @@ namespace Azure.ResourceManager.Core
             return new PhWrappingAsyncPageable<ResourceManager.Resources.Models.ResourceGroup, ResourceGroup>(
                 Operations.ListAsync(null, null, cancellationToken),
                 s => new ResourceGroup(ClientOptions, new ResourceGroupData(s)));
+        }
+
+        protected internal override ResourceType GetValidResourceType()
+        {
+            return SubscriptionOperations.ResourceType;
         }
     }
 }

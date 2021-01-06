@@ -20,8 +20,6 @@ namespace azure_proto_network
         {
         }
 
-        public override ResourceType ResourceType => "Microsoft.Network/virtualNetworks/subnets";
-
         internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
                     ClientOptions.Convert<NetworkManagementClientOptions>())).Subnets;
 
@@ -89,6 +87,11 @@ namespace azure_proto_network
         {
             //TODO: Subnet will be a proxy resource and not a tracked resource ADO #4481
             return s => new Subnet(ClientOptions, new SubnetData(s, Location.Default));
+        }
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return VirtualNetworkOperations.ResourceType;
         }
     }
 }

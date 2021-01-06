@@ -15,8 +15,10 @@ namespace client
                 {
                     if (scenario != Scenarios.All)
                     {
+                        Console.WriteLine($"########## Starting Scenario {scenario} ##########");
                         var executable = ScenarioFactory.GetScenario(scenario);
                         executable.Execute();
+                        Console.WriteLine($"########## Finished Scenario {scenario} ##########");
                     }
                 }
             }

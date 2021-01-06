@@ -3,7 +3,6 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using Azure;
 
 namespace Azure.ResourceManager.Core
 {
@@ -29,9 +28,10 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Delete the resource.  This call blocks until the delete operation is accepted on the service.
         /// </summary>
+        /// <param name="cancellationToken">A token allowing immediate cancellation of any blocking call performed during the deletion.</param>
         /// <returns>An <see cref="ArmResponse{Response}"/> which allows the caller to control polling and waiting for resource deletion.
         /// The operation yields the final http response to the delete request when complete.</returns>
-        ArmOperation<Response> StartDelete();
+        ArmOperation<Response> StartDelete(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete the resource.  This call returns a Task that blocks until the delete operation is accepted on the service.

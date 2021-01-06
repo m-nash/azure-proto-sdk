@@ -26,7 +26,7 @@ namespace Azure.ResourceManager.Core
         {
             Validate(id);
 
-            var scopeId = id.Type == ResourceGroupOperations.AzureResourceType ? id.Name : null;
+            var scopeId = id.Type == ResourceGroupOperations.ResourceType ? id.Name : null;
 
             return _ListAtContext<TOperations, TResource>(
                 clientOptions,
@@ -48,7 +48,7 @@ namespace Azure.ResourceManager.Core
         {
             Validate(id);
 
-            var scopeId = id.Type == ResourceGroupOperations.AzureResourceType ? id.Name : null;
+            var scopeId = id.Type == ResourceGroupOperations.ResourceType ? id.Name : null;
 
             return _ListAtContextAsync<TOperations, TResource>(
                 clientOptions,
@@ -181,20 +181,19 @@ namespace Azure.ResourceManager.Core
              return s => Activator.CreateInstance(
                     typeof(TOperations),
                     clientOptions,
-                    Activator.CreateInstance(typeof(TResource), s as Azure.ResourceManager.Resources.Models.Resource) as TResource) as TOperations;
+                    Activator.CreateInstance(typeof(TResource), s as GenericResource) as TResource) as TOperations;
         }
 
         private static void Validate(ResourceIdentifier id)
         {
-            if (id.Type != ResourceGroupOperations.AzureResourceType &&
-                id.Type != SubscriptionOperations.AzureResourceType)
+            if (id.Type != ResourceGroupOperations.ResourceType &&
+                id.Type != SubscriptionOperations.ResourceType)
             {
                 throw new ArgumentException(
-                    $"{id.Type} is not valid to list at context must be {ResourceGroupOperations.AzureResourceType} or {SubscriptionOperations.AzureResourceType}");
+                    $"{id.Type} is not valid to list at context must be {ResourceGroupOperations.ResourceType} or {SubscriptionOperations.ResourceType}");
             }
         }
 
-        //TODO: should be able to access options.GetClient() instead of needing this method
         protected static ResourcesManagementClient GetResourcesClient(AzureResourceManagerClientOptions options, string id)
         {
             return new ResourcesManagementClient(options.BaseUri, id, options.Credential);

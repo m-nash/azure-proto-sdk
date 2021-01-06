@@ -1,6 +1,5 @@
 ﻿using Azure.ResourceManager.Compute.Models;
 using Azure.ResourceManager.Core;
-using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Collections.Generic;
 
