@@ -147,5 +147,10 @@ namespace azure_proto_network
         {
             return s => new NetworkSecurityGroup(ClientOptions, new NetworkSecurityGroupData(s));
         }
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return ResourceGroupOperations.ResourceType;
+        }
     }
 }

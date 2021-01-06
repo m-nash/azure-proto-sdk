@@ -127,5 +127,15 @@ namespace azure_proto_authorization
         {
             throw new System.NotImplementedException();
         }
+
+        public override void Validate(ResourceIdentifier identifier)
+        {
+            return;
+        }
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return RoleAssignment.ResourceType;
+        }
     }
 }

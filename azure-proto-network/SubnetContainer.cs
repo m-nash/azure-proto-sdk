@@ -88,5 +88,10 @@ namespace azure_proto_network
             //TODO: Subnet will be a proxy resource and not a tracked resource ADO #4481
             return s => new Subnet(ClientOptions, new SubnetData(s, Location.Default));
         }
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return VirtualNetworkOperations.ResourceType;
+        }
     }
 }

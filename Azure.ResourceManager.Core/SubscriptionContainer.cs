@@ -1,6 +1,5 @@
 using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
-using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,6 +51,17 @@ namespace Azure.ResourceManager.Core
             }
 
             return sub;
+        }
+
+        public override void Validate(ResourceIdentifier identifier)
+        {
+            if (identifier != null)
+                throw new ArgumentException("Invalid parent for subscription container");
+        }
+
+        protected internal override ResourceType GetValidResourceType()
+        {
+            return SubscriptionOperations.ResourceType;
         }
     }
 }

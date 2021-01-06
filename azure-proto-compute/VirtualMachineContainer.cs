@@ -137,5 +137,10 @@ namespace azure_proto_compute
 
         internal VirtualMachinesOperations Operations => this.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, Id.Subscription, cred, 
                     ClientOptions.Convert<ComputeManagementClientOptions>())).VirtualMachines;
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return ResourceGroupOperations.ResourceType;
+        }
     }
 }

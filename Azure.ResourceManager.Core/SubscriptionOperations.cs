@@ -1,10 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using Azure.ResourceManager.Resources;
 using System;
 using System.Threading;
-using Azure.ResourceManager.Core.Adapters;
-using Azure.ResourceManager.Resources;
 using System.Threading.Tasks;
 
 namespace Azure.ResourceManager.Core
@@ -36,21 +35,6 @@ namespace Azure.ResourceManager.Core
 
         internal ResourceGroupsOperations RgOperations => GetClient<ResourcesManagementClient>((uri, cred) =>
             new ResourcesManagementClient(uri, Id.Subscription, cred, ClientOptions.Convert<ResourcesManagementClientOptions>())).ResourceGroups;
-
-        public Pageable<ResourceGroupOperations> ListResourceGroups(CancellationToken cancellationToken = default)
-        {
-            return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.ResourceGroup, ResourceGroupOperations>(
-                RgOperations.List(null, null, cancellationToken),
-                s => new ResourceGroupOperations(ClientOptions, new ResourceGroupData(s)));
-        }
-
-        public AsyncPageable<ResourceGroupOperations> ListResourceGroupsAsync(
-            CancellationToken cancellationToken = default)
-        {
-            return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.ResourceGroup, ResourceGroupOperations>(
-                RgOperations.ListAsync(null, null, cancellationToken),
-                s => new ResourceGroupOperations(ClientOptions, new ResourceGroupData(s)));
-        }
 
         public ResourceGroupOperations ResourceGroup(ResourceGroupData resourceGroup)
         {
@@ -89,6 +73,11 @@ namespace Azure.ResourceManager.Core
         private Func<Azure.ResourceManager.Resources.Models.Subscription, Subscription> Converter()
         {
             return s => new Subscription(ClientOptions, new SubscriptionData(s));
+        }
+
+        protected internal override ResourceType GetValidResourceType()
+        {
+            return ResourceType;
         }
     }
 }

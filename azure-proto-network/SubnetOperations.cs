@@ -27,15 +27,15 @@ namespace azure_proto_network
 
         public ArmResponse<Response> Delete()
         {
-            return new ArmVoidResponse(Operations.StartDelete(Id.ResourceGroup, Id.Parent.Name, Id.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+            return new ArmResponse(Operations.StartDelete(Id.ResourceGroup, Id.Parent.Name, Id.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
         public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidResponse((await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name)).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+            return new ArmResponse((await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name)).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
-        public ArmOperation<Response> StartDelete()
+        public ArmOperation<Response> StartDelete(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Parent.Name, Id.Name));
         }
@@ -63,6 +63,11 @@ namespace azure_proto_network
                     Resource = new SubnetData(n, DefaultLocation);
                     return new Subnet(ClientOptions, Resource as SubnetData);
                 });
+        }
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return ResourceType;
         }
     }
 }

@@ -116,5 +116,10 @@ namespace azure_proto_network
         {
             return s => new PublicIpAddress(ClientOptions, new PublicIPAddressData(s));
         }
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return ResourceGroupOperations.ResourceType;
+        }
     }
 }

@@ -28,17 +28,17 @@ namespace azure_proto_compute
 
         public ArmResponse<Response> Delete()
         {
-            return new ArmVoidResponse(Operations.Delete(Id.ResourceGroup, Id.Name));
+            return new ArmResponse(Operations.Delete(Id.ResourceGroup, Id.Name));
         }
 
         public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidResponse(await Operations.DeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
+            return new ArmResponse(await Operations.DeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
-        public ArmOperation<Response> StartDelete()
+        public ArmOperation<Response> StartDelete(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidOperation(Operations.Delete(Id.ResourceGroup, Id.Name));
+            return new ArmVoidOperation(Operations.Delete(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
         public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)
@@ -108,5 +108,10 @@ namespace azure_proto_compute
                                         Id.Subscription,
                                         cred,
                                         ClientOptions.Convert<ComputeManagementClientOptions>())).AvailabilitySets;
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return ResourceType;
+        }
     }
 }
