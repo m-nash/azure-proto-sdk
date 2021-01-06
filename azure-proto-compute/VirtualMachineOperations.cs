@@ -32,12 +32,12 @@ namespace azure_proto_compute
 
         public ArmResponse<Response> Delete()
         {
-            return new ArmVoidResponse(Operations.StartDelete(Id.ResourceGroup, Id.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+            return new ArmResponse(Operations.StartDelete(Id.ResourceGroup, Id.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
         public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidResponse((await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name)).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+            return new ArmResponse((await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name)).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
         }
         public ArmOperation<Response> StartDelete(CancellationToken cancellationToken = default)
         {
@@ -53,13 +53,13 @@ namespace azure_proto_compute
         public ArmResponse<Response> PowerOn(CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartStart(Id.ResourceGroup, Id.Name, cancellationToken);
-            return new ArmVoidResponse(operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult());
+            return new ArmResponse(operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
         public async Task<ArmResponse<Response>> PowerOnAsync(CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartStartAsync(Id.ResourceGroup, Id.Name, cancellationToken).ConfigureAwait(false);
-            return new ArmVoidResponse(await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false));
+            return new ArmResponse(await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false));
         }
 
         public ArmOperation<Response> StartPowerOn(CancellationToken cancellationToken = default)
@@ -77,13 +77,13 @@ namespace azure_proto_compute
         public ArmResponse<Response> PowerOff(bool? skipShutdown = null, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartPowerOff(Id.ResourceGroup, Id.Name, skipShutdown, cancellationToken);
-            return new ArmVoidResponse(operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult());
+            return new ArmResponse(operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
         public async Task<ArmResponse<Response>> PowerOffAsync(bool? skipShutdown = null, CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartPowerOffAsync(Id.ResourceGroup, Id.Name, skipShutdown, cancellationToken).ConfigureAwait(false);
-            return new ArmVoidResponse(await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false));
+            return new ArmResponse(await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false));
         }
 
         public ArmOperation<Response> StartPowerOff(bool? skipShutdown = null, CancellationToken cancellationToken = default)

@@ -18,8 +18,8 @@
         ClientOptionsOverride,
         GetSubscription,
         //RoleAssignment,
-        DeleteGeneric,
-        AddTagToGeneric
+        //DeleteGeneric,
+        //AddTagToGeneric
     }
 
     class ScenarioFactory
@@ -60,10 +60,10 @@
                     return new GetSubscription();
                 //case Scenarios.RoleAssignment:
                 //    return new RoleAssignment();
-                case Scenarios.DeleteGeneric:
-                    return new DeleteGeneric();
-                case Scenarios.AddTagToGeneric:
-                    return new AddTagToGeneric();
+                //case Scenarios.DeleteGeneric:
+                //    return new DeleteGeneric();
+                //case Scenarios.AddTagToGeneric:
+                //    return new AddTagToGeneric();
                 default:
                     return null;
             }

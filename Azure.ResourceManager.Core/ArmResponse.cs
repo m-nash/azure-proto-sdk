@@ -1,19 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Azure;
-
 namespace Azure.ResourceManager.Core
 {
-    public abstract class ArmResponse<TOperations> : Response<TOperations>
-    {
-    }
-
-    public class ArmVoidResponse : ArmResponse<Response>
+    public class ArmResponse : ArmResponse<Response>
     {
         private readonly Response _response;
 
-        public ArmVoidResponse(Response response)
+        public ArmResponse(Response response)
         {
             _response = response;
         }
@@ -24,5 +18,9 @@ namespace Azure.ResourceManager.Core
         {
             return _response;
         }
+    }
+
+    public abstract class ArmResponse<TOperations> : Response<TOperations>
+    {
     }
 }

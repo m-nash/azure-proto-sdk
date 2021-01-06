@@ -55,7 +55,7 @@ namespace azure_proto_authorization
         /// <returns>The http response returned from the server.</returns>
         public ArmResponse<Response> Delete()
         {
-            return new ArmVoidResponse(Operations.DeleteById(Id).GetRawResponse());
+            return new ArmResponse(Operations.DeleteById(Id).GetRawResponse());
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace azure_proto_authorization
         /// <returns>A Task that will yield the http response from the server to the delete request once the Task is completed.</returns>
         public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidResponse((await Operations.DeleteByIdAsync(Id)).GetRawResponse());
+            return new ArmResponse((await Operations.DeleteByIdAsync(Id)).GetRawResponse());
         }
 
         /// <summary>

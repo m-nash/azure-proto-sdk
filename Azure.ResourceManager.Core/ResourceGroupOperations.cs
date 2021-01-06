@@ -28,12 +28,12 @@ namespace Azure.ResourceManager.Core
 
         public ArmResponse<Response> Delete()
         {
-            return new ArmVoidResponse(Operations.StartDelete(Id.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+            return new ArmResponse(Operations.StartDelete(Id.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
         public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidResponse(await Operations.StartDelete(Id.Name).WaitForCompletionAsync());
+            return new ArmResponse(await Operations.StartDelete(Id.Name).WaitForCompletionAsync());
         }
 
         public ArmOperation<Response> StartDelete(CancellationToken cancellationToken = default)

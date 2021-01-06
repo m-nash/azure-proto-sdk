@@ -28,12 +28,12 @@ namespace azure_proto_compute
 
         public ArmResponse<Response> Delete()
         {
-            return new ArmVoidResponse(Operations.Delete(Id.ResourceGroup, Id.Name));
+            return new ArmResponse(Operations.Delete(Id.ResourceGroup, Id.Name));
         }
 
         public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidResponse(await Operations.DeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
+            return new ArmResponse(await Operations.DeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
         public ArmOperation<Response> StartDelete(CancellationToken cancellationToken = default)
