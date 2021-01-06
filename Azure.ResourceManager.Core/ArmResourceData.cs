@@ -1,14 +1,16 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using Azure.ResourceManager.Resources.Models;
+
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
     ///     Generic representation of an ARM resource.  Resources in the ARM RP should extend this resource.
     /// </summary>
-    public class ArmResourceData : TrackedResource<ResourceManager.Resources.Models.GenericResource>, IManagedByResource, ISkuResource
+    public class ArmResourceData : TrackedResource<GenericResource>, IManagedByResource, ISkuResource
     {
-        public ArmResourceData(ResourceManager.Resources.Models.GenericResource genericResource)
+        public ArmResourceData(GenericResource genericResource)
             : base(genericResource.Id, genericResource.Location, genericResource)
         {
             Tags.Clear();
