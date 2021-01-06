@@ -14,10 +14,11 @@ namespace client
 
             await foreach (var subscription in client.Subscriptions().ListAsync())
             {
-                await foreach (var vm in subscription.ListVirtualMachinesAsync("even"))
+                await foreach (var vm in subscription.ListVirtualMachinesByNameAsync("even"))
                 {
-                    await vm.PowerOffAsync();
-                    await vm.PowerOnAsync();
+                    var instance = new VirtualMachineOperations(vm);
+                    await instance.PowerOffAsync();
+                    await instance.PowerOnAsync();
                 }
             }
         }
@@ -43,16 +44,17 @@ namespace client
             foreach (var sub in client.Subscriptions().List())
             {
                 //sub.ListVirtualMachines("even").PowerOff
-                await foreach (var vm in sub.ListVirtualMachinesAsync("even"))
+                await foreach (var vm in sub.ListVirtualMachinesByNameAsync("even"))
                 {
-                       // client.ResourceOperations<VirtualMachine>(vm).PowerOff()
-                       //vmOps.PowerOff(vm.Id)
-                       Console.WriteLine($"Stopping {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");
-                       vm.PowerOff();
+                    // client.ResourceOperations<VirtualMachine>(vm).PowerOff()
+                    //vmOps.PowerOff(vm.Id)
+                    var instance = new VirtualMachineOperations(vm);
+                    Console.WriteLine($"Stopping {instance.Id.Subscription} {instance.Id.ResourceGroup} {instance.Id.Name}");
+                    instance.PowerOff();
                     var newVm = vm.Get();
-                       var model = vm.Data;
-                       Console.WriteLine($"Starting {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");
-                       vm.PowerOn();
+                    var model = vm.Data;
+                    Console.WriteLine($"Starting {instance.Id.Subscription} {instance.Id.ResourceGroup} {instance.Id.Name}");
+                    instance.PowerOn();
                 }
             }
         }
