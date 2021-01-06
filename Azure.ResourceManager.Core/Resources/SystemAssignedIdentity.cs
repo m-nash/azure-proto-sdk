@@ -46,8 +46,8 @@
                 throw new ArgumentException("JsonElement cannot be undefined ", nameof(element));
             }
 
-            Optional<Guid> principalId = default;
-            Optional<Guid> tenantId = default;
+            Guid principalId = default;
+            Guid tenantId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("principalId"))
