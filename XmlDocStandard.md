@@ -29,17 +29,17 @@ xxxContainer.cs
 
 xxx.cs
     /// <summary>
-    /// A class representing a XXX along with the instance operations that can be performed on it.A
+    /// A class representing a XXX along with the instance operations that can be performed on it.
     /// </summary>
 
 xxxOperations.cs
     /// <summary>
-    /// A class representing the operations that can be performed over a specific XXX
+    /// A class representing the operations that can be performed over a specific XXX.
     /// </summary>
 
 xxxData.cs
     /// <summary>
-    /// A class representing the operations that can be performed over a specific XXX
+    /// A class representing the xxx data model.
     /// </summary>
 ```
 
