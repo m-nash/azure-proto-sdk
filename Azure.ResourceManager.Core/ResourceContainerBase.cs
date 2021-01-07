@@ -60,14 +60,12 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="name">The name of the resource.</param>
         /// <param name="resourceDetails">The desired resource configuration.</param>
-        /// <param name="cancellationToken">A token that allows the caller to cancel the call before
         /// it is completed. Note that cancellation cancels requests, but does not cancel the operation
         /// on the client side.</param>
         /// <returns>An http response containing the operations over the newly created resource.</returns>
         public abstract ArmResponse<TOperations> Create(
             string name,
-            TResource resourceDetails,
-            CancellationToken cancellationToken = default);
+            TResource resourceDetails);
 
         /// <summary>
         /// Creates a new resource. This method returns a Taks which will complete when the resource is created.

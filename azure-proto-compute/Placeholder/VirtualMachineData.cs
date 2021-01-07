@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace azure_proto_compute
 {
+    /// <summary>
+    /// Describes a VirtualMachine.
+    /// </summary>
     public class VirtualMachineData : TrackedResource<Azure.ResourceManager.Compute.Models.VirtualMachine>
     {
         public static ResourceType ResourceType => "Microsoft.Compute/virtualMachines";

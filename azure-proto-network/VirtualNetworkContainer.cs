@@ -31,11 +31,11 @@ namespace azure_proto_network
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ClientOptions.Convert<NetworkManagementClientOptions>())).VirtualNetworks;
 
-        public override ArmResponse<VirtualNetwork> Create(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<VirtualNetwork> Create(string name, VirtualNetworkData resourceDetails)
         {
-            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
+            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails);
             return new PhArmResponse<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
-                operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
+                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
                 n => new VirtualNetwork(ClientOptions, new VirtualNetworkData(n)));
         }
 

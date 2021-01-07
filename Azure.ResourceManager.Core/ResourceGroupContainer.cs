@@ -34,9 +34,9 @@ namespace Azure.ResourceManager.Core
                 g => new ResourceGroup(ClientOptions, new ResourceGroupData(g)));
         }
 
-        public override ArmResponse<ResourceGroup> Create(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<ResourceGroup> Create(string name, ResourceGroupData resourceDetails)
         {
-            var response = Operations.CreateOrUpdate(name, resourceDetails, cancellationToken);
+            var response = Operations.CreateOrUpdate(name, resourceDetails);
             return new PhArmResponse<ResourceGroup, ResourceManager.Resources.Models.ResourceGroup>(
                 response,
                 g => new ResourceGroup(ClientOptions, new ResourceGroupData(g)));

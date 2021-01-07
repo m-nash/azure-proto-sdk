@@ -23,9 +23,9 @@ namespace azure_proto_compute
         {
         }
 
-        public override ArmResponse<AvailabilitySet> Create(string name, AvailabilitySetData resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<AvailabilitySet> Create(string name, AvailabilitySetData resourceDetails)
         {
-            var response = Operations.CreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
+            var response = Operations.CreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model);
             return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 response,
                 a => new AvailabilitySet(ClientOptions, new AvailabilitySetData(a)));

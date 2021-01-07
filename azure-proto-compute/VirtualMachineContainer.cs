@@ -12,30 +12,51 @@ using System.Threading.Tasks;
 namespace azure_proto_compute
 {
     /// <summary>
-    /// Vm Operations over a resource group
+    /// A container representing the VirtualMachines and their operations over a ResourceGroup
     /// </summary>
-    /// We should not expose Create method when a container is constructed at a subscription level as an example for a virtual machine.
-    /// Likewise we should not expose create when a subnet container is constructed at a resource group level
     public class VirtualMachineContainer : ResourceContainerBase<VirtualMachine, VirtualMachineData>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VirtualMachineContainer"/> class.
+        /// </summary>
+        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="resourceGroup"> The ResourceGroup that is the parent of the VirtualMachines. </param>
         internal VirtualMachineContainer(AzureResourceManagerClientOptions options, ResourceGroupData resourceGroup)
             : base(options, resourceGroup)
         {
         }
 
-        internal VirtualMachineContainer(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VirtualMachineContainer"/> class.
+        /// </summary>
+        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="parentId"> The identifier of the ResourceGroup that is the parent of the VirtualMachines. </param>
+        internal VirtualMachineContainer(AzureResourceManagerClientOptions options, ResourceIdentifier parentId)
+            : base(options, parentId)
         {
         }
 
-        public override ArmResponse<VirtualMachine> Create(string name, VirtualMachineData resourceDetails, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// The operation to create a virtual machine.
+        /// </summary>
+        /// <param name="name"> The name of the virtual machine. </param>
+        /// <param name="resourceDetails"> Parameters supplied to the Create Virtual Machine operation. </param>
+        /// <returns> The HTTP response from the service. </returns>
+        public override ArmResponse<VirtualMachine> Create(string name, VirtualMachineData resourceDetails)
         {
-            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
+            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model);
             return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
-                operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
+                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
                 v => new VirtualMachine(ClientOptions, new VirtualMachineData(v)));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="resourceDetails"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async override Task<ArmResponse<VirtualMachine>> CreateAsync(string name, VirtualMachineData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);

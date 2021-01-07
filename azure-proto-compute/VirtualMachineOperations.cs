@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace azure_proto_compute
 {
     /// <summary>
-    /// Operations over a single virtual machine
+    /// A class representing the operations that can be performed over a specific VirtualMachine
     /// </summary>
     public class VirtualMachineOperations : ResourceOperationsBase<VirtualMachine>, ITaggableResource<VirtualMachine>, IDeletableResource
     {
