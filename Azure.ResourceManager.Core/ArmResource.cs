@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Azure.ResourceManager.Core
+﻿namespace Azure.ResourceManager.Core
 {
     public class ArmResource : ArmResourceOperations
     {
@@ -13,5 +9,10 @@ namespace Azure.ResourceManager.Core
         }
 
         public ArmResourceData Data { get; }
+
+        private protected override ArmResource GetResource()
+        {
+            return this;
+        }
     }
 }

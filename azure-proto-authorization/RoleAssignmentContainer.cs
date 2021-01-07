@@ -44,7 +44,6 @@ namespace azure_proto_authorization
         /// <summary>
         /// Gets the resource type of the resource being created.
         /// </summary>
-        public override ResourceType ResourceType => "Microsoft.Authorization/roleAssignments";
 
         private RoleAssignmentsOperations Operations => GetClient<AuthorizationManagementClient>((baseUri, creds) => new AuthorizationManagementClient(Id.Subscription, baseUri, creds)).RoleAssignments;
 
@@ -127,6 +126,16 @@ namespace azure_proto_authorization
         public override Azure.AsyncPageable<RoleAssignment> ListAtScopeAsync(CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
+        }
+
+        public override void Validate(ResourceIdentifier identifier)
+        {
+            return;
+        }
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return RoleAssignment.ResourceType;
         }
     }
 }

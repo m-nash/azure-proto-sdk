@@ -44,7 +44,7 @@ namespace azure_proto_authorization
         /// <summary>
         /// Gets the resource type for Role Assignments
         /// </summary>
-        public override ResourceType ResourceType => "Microsoft.Authorization/roleAssignments";
+        public static readonly ResourceType ResourceType = "Microsoft.Authorization/roleAssignments";
 
         private RoleAssignmentsOperations Operations => GetClient<AuthorizationManagementClient>((baseUri, creds) => new AuthorizationManagementClient(Id.Subscription, baseUri, creds)).RoleAssignments;
 
@@ -55,7 +55,7 @@ namespace azure_proto_authorization
         /// <returns>The http response returned from the server.</returns>
         public ArmResponse<Response> Delete()
         {
-            return new ArmVoidResponse(Operations.DeleteById(Id).GetRawResponse());
+            return new ArmResponse(Operations.DeleteById(Id).GetRawResponse());
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace azure_proto_authorization
         /// <returns>A Task that will yield the http response from the server to the delete request once the Task is completed.</returns>
         public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidResponse((await Operations.DeleteByIdAsync(Id)).GetRawResponse());
+            return new ArmResponse((await Operations.DeleteByIdAsync(Id)).GetRawResponse());
         }
 
         /// <summary>
@@ -75,9 +75,9 @@ namespace azure_proto_authorization
         /// </summary>
         /// <returns>An <see cref="ArmOperation{Response}"/> that allows the user to control how to wait and poll
         /// for the delete operation to complete.</returns>
-        public ArmOperation<Response> StartDelete()
+        public ArmOperation<Response> StartDelete(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidOperation(Operations.DeleteById(Id).GetRawResponse());
+            return new ArmVoidOperation(Operations.DeleteById(Id, cancellationToken).GetRawResponse());
         }
 
         /// <summary>
@@ -114,6 +114,11 @@ namespace azure_proto_authorization
             return new PhArmResponse<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(
                 await Operations.GetByIdAsync(Id, cancellationToken),
                 a => new RoleAssignment(ClientOptions, new RoleAssignmentData(a)));
+        }
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return ResourceType;
         }
     }
 }

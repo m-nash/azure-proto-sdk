@@ -13,7 +13,7 @@ namespace azure_proto_compute
     /// </summary>
     public class VirtualMachineOperations : ResourceOperationsBase<VirtualMachine>, ITaggableResource<VirtualMachine>, IDeletableResource
     {
-        internal VirtualMachineOperations(ArmResourceOperations genericOperations)
+        public VirtualMachineOperations(ArmResourceOperations genericOperations)
             : base(genericOperations)
         {
         }
@@ -23,7 +23,7 @@ namespace azure_proto_compute
         {
         }
 
-        public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
+        public static readonly ResourceType ResourceType = "Microsoft.Compute/virtualMachines";
 
         public static VirtualMachineOperations FromGeneric(ArmResourceOperations genericOperations)
         {
@@ -32,16 +32,16 @@ namespace azure_proto_compute
 
         public ArmResponse<Response> Delete()
         {
-            return new ArmVoidResponse(Operations.StartDelete(Id.ResourceGroup, Id.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+            return new ArmResponse(Operations.StartDelete(Id.ResourceGroup, Id.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
         public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidResponse((await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name)).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+            return new ArmResponse((await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name)).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
         }
-        public ArmOperation<Response> StartDelete()
+        public ArmOperation<Response> StartDelete(CancellationToken cancellationToken = default)
         {
-            return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name));
+            return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
         public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)
@@ -53,13 +53,13 @@ namespace azure_proto_compute
         public ArmResponse<Response> PowerOn(CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartStart(Id.ResourceGroup, Id.Name, cancellationToken);
-            return new ArmVoidResponse(operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult());
+            return new ArmResponse(operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
         public async Task<ArmResponse<Response>> PowerOnAsync(CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartStartAsync(Id.ResourceGroup, Id.Name, cancellationToken).ConfigureAwait(false);
-            return new ArmVoidResponse(await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false));
+            return new ArmResponse(await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false));
         }
 
         public ArmOperation<Response> StartPowerOn(CancellationToken cancellationToken = default)
@@ -77,13 +77,13 @@ namespace azure_proto_compute
         public ArmResponse<Response> PowerOff(bool? skipShutdown = null, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartPowerOff(Id.ResourceGroup, Id.Name, skipShutdown, cancellationToken);
-            return new ArmVoidResponse(operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult());
+            return new ArmResponse(operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
         public async Task<ArmResponse<Response>> PowerOffAsync(bool? skipShutdown = null, CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartPowerOffAsync(Id.ResourceGroup, Id.Name, skipShutdown, cancellationToken).ConfigureAwait(false);
-            return new ArmVoidResponse(await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false));
+            return new ArmResponse(await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false));
         }
 
         public ArmOperation<Response> StartPowerOff(bool? skipShutdown = null, CancellationToken cancellationToken = default)
@@ -101,28 +101,44 @@ namespace azure_proto_compute
         {
             return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 Operations.Get(Id.ResourceGroup, Id.Name),
-                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientOptions, Resource as VirtualMachineData); });
+                v =>
+                {
+                    Resource = new VirtualMachineData(v);
+                    return new VirtualMachine(ClientOptions, Resource as VirtualMachineData);
+                });
         }
 
         public async override Task<ArmResponse<VirtualMachine>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 await Operations.GetAsync(Id.ResourceGroup, Id.Name, cancellationToken),
-                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientOptions, Resource as VirtualMachineData); });
+                v =>
+                {
+                    Resource = new VirtualMachineData(v);
+                    return new VirtualMachine(ClientOptions, Resource as VirtualMachineData);
+                });
         }
 
         public ArmOperation<VirtualMachine> Update(VirtualMachineUpdate patchable)
         {
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable),
-                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientOptions, Resource as VirtualMachineData); });
+                v =>
+                {
+                    Resource = new VirtualMachineData(v);
+                    return new VirtualMachine(ClientOptions, Resource as VirtualMachineData);
+                });
         }
 
         public async Task<ArmOperation<VirtualMachine>> UpdateAsync(VirtualMachineUpdate patchable, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
-                v => { Resource = new VirtualMachineData(v); return new VirtualMachine(ClientOptions, Resource as VirtualMachineData); });
+                v =>
+                {
+                    Resource = new VirtualMachineData(v);
+                    return new VirtualMachine(ClientOptions, Resource as VirtualMachineData);
+                });
         }
 
         public ArmOperation<VirtualMachine> AddTag(string key, string value)
@@ -153,5 +169,10 @@ namespace azure_proto_compute
 
         internal VirtualMachinesOperations Operations => GetClient<ComputeManagementClient>((baseUri, creds) =>
             new ComputeManagementClient(baseUri, Id.Subscription, creds, ClientOptions.Convert<ComputeManagementClientOptions>())).VirtualMachines;
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return ResourceType;
+        }
     }
 }

@@ -28,8 +28,6 @@ namespace azure_proto_compute
         {
         }
 
-        public override ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
-
         public override ArmResponse<VirtualMachine> Create(string name, VirtualMachineData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
@@ -139,5 +137,10 @@ namespace azure_proto_compute
 
         internal VirtualMachinesOperations Operations => this.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, Id.Subscription, cred, 
                     ClientOptions.Convert<ComputeManagementClientOptions>())).VirtualMachines;
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return ResourceGroupOperations.ResourceType;
+        }
     }
 }

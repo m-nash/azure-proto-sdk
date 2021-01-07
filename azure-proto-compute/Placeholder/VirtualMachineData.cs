@@ -1,6 +1,5 @@
 ﻿using Azure.ResourceManager.Compute.Models;
 using Azure.ResourceManager.Core;
-using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Collections.Generic;
 
@@ -16,16 +15,6 @@ namespace azure_proto_compute
             {
                 vm.Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
             }
-        }
-
-        public VirtualMachineData(Azure.ResourceManager.Resources.Models.Resource vm) : base(
-            vm.Id,
-            vm.Location,
-            new Azure.ResourceManager.Compute.Models.VirtualMachine(vm.Location)
-            {
-                Tags = vm.Tags == null ? new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase) : vm.Tags
-            })
-        {
         }
 
         public override IDictionary<string, string> Tags => Model.Tags;
