@@ -77,5 +77,10 @@ namespace Azure.ResourceManager.Core
                 Operations.ListAsync(null, null, cancellationToken),
                 s => new ResourceGroup(ClientOptions, new ResourceGroupData(s)));
         }
+
+        protected internal override ResourceType GetValidResourceType()
+        {
+            return SubscriptionOperations.ResourceType;
+        }
     }
 }

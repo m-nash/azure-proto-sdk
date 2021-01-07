@@ -14,10 +14,11 @@ namespace client
 
             await foreach (var subscription in client.Subscriptions().ListAsync())
             {
-                await foreach (var vm in subscription.ListVirtualMachinesAsync("even"))
+                await foreach (var armResource in subscription.ListVirtualMachinesByNameAsync("even"))
                 {
-                    await vm.PowerOffAsync();
-                    await vm.PowerOnAsync();
+                    var vmOperations = new VirtualMachineOperations(armResource);
+                    await vmOperations.PowerOffAsync();
+                    await vmOperations.PowerOnAsync();
                 }
             }
         }
@@ -42,17 +43,13 @@ namespace client
             var client = new AzureResourceManagerClient();
             foreach (var sub in client.Subscriptions().List())
             {
-                //sub.ListVirtualMachines("even").PowerOff
-                await foreach (var vm in sub.ListVirtualMachinesAsync("even"))
+                await foreach (var armResource in sub.ListVirtualMachinesByNameAsync("even"))
                 {
-                       // client.ResourceOperations<VirtualMachine>(vm).PowerOff()
-                       //vmOps.PowerOff(vm.Id)
-                       Console.WriteLine($"Stopping {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");
-                       vm.PowerOff();
-                    var newVm = vm.Get();
-                       var model = vm.Data;
-                       Console.WriteLine($"Starting {vm.Id.Subscription} {vm.Id.ResourceGroup} {vm.Id.Name}");
-                       vm.PowerOn();
+                    var vmOperations = new VirtualMachineOperations(armResource);
+                    Console.WriteLine($"Stopping {vmOperations.Id.Subscription} {vmOperations.Id.ResourceGroup} {vmOperations.Id.Name}");
+                    vmOperations.PowerOff();
+                    Console.WriteLine($"Starting {vmOperations.Id.Subscription} {vmOperations.Id.ResourceGroup} {vmOperations.Id.Name}");
+                    vmOperations.PowerOn();
                 }
             }
         }

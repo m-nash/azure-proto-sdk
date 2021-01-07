@@ -12,18 +12,17 @@ namespace Azure.ResourceManager.Core
     public abstract class OperationsBase
     {
         public OperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id, Location location = null)
-            : this(options, new ArmResourceData(id, location ?? Location.Default))
         {
+            ClientOptions = options;
+            Id = id;
+            DefaultLocation = location ?? Location.Default;
+
+            Validate(id);
         }
 
         public OperationsBase(AzureResourceManagerClientOptions options, Resource resource)
+            : this(options, resource?.Id, (resource as TrackedResource)?.Location)
         {
-            Validate(resource?.Id);
-
-            ClientOptions = options;
-            Id = resource.Id;
-            var trackedResource = resource as TrackedResource;
-            DefaultLocation = trackedResource?.Location ?? Location.Default;
             Resource = resource;
         }
 
@@ -37,11 +36,11 @@ namespace Azure.ResourceManager.Core
 
         public virtual void Validate(ResourceIdentifier identifier)
         {
-            if ((SubscriptionOperations.ResourceType != Id.Type && identifier == null) || (identifier != null && identifier?.Type != Id.Type))
-            {
-                throw new InvalidOperationException($"{identifier} is not a valid resource of type {Id.Type}");
-            }
+            if (identifier?.Type != GetValidResourceType())
+                throw new InvalidOperationException($"Invalid resource type {identifier?.Type} expected {GetValidResourceType()}");
         }
+
+        protected internal abstract ResourceType GetValidResourceType();
 
         /// <summary>
         ///     Note that this is currently adapting to underlying management clients - once generator changes are in, this would
@@ -50,7 +49,7 @@ namespace Azure.ResourceManager.Core
         /// <typeparam name="T"></typeparam>
         /// <param name="creator"></param>
         /// <returns></returns>
-        protected T GetClient<T>(Func<Uri, TokenCredential, T> creator)
+        public T GetClient<T>(Func<Uri, TokenCredential, T> creator)
         {
             return ClientOptions.GetClient(creator);
         }

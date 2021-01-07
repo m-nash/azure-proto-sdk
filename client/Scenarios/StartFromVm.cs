@@ -11,9 +11,10 @@ namespace client
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
             var client = new AzureResourceManagerClient();
-            
+
             //retrieve from lowest level, doesn't give ability to walk up and down the container structure
-            var vm = client.GetResourceOperationsBase<VirtualMachineOperations>(Context.SubscriptionId, Context.RgName, Context.VmName).Get().Value.Data;
+            var vmOp = client.GetResourceOperationsBase<VirtualMachineOperations>(Context.SubscriptionId, Context.RgName, Context.VmName);
+            var vm = vmOp.Get().Value.Data;
             Console.WriteLine($"Found VM {vm.Id}");
 
             //retrieve from lowest level inside management package gives ability to walk up and down

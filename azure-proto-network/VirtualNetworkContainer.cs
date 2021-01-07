@@ -76,14 +76,14 @@ namespace azure_proto_network
         {
             return new PhWrappingPageable<Azure.ResourceManager.Network.Models.VirtualNetwork, VirtualNetwork>(
                 Operations.List(Id.Name, cancellationToken),
-                this.convertor());
+                Convertor());
         }
 
         public AsyncPageable<VirtualNetwork> ListAsync(CancellationToken cancellationToken = default)
         {
             return new PhWrappingAsyncPageable<Azure.ResourceManager.Network.Models.VirtualNetwork, VirtualNetwork>(
                 Operations.ListAsync(Id.Name, cancellationToken),
-                this.convertor());
+                Convertor());
         }
 
         public Pageable<ArmResource> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
@@ -112,9 +112,14 @@ namespace azure_proto_network
             return new PhWrappingAsyncPageable<ArmResource, VirtualNetwork>(results, s => new VirtualNetworkOperations(s).Get().Value);
         }
 
-        private  Func<Azure.ResourceManager.Network.Models.VirtualNetwork, VirtualNetwork> convertor()
+        private  Func<Azure.ResourceManager.Network.Models.VirtualNetwork, VirtualNetwork> Convertor()
         {
             return s => new VirtualNetwork(ClientOptions, new VirtualNetworkData(s));
+        }
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return ResourceGroupOperations.ResourceType;
         }
     }
 }

@@ -1,16 +1,13 @@
 ﻿using Azure.ResourceManager.Core;
+using azure_proto_authorization;
 using azure_proto_compute;
 using azure_proto_network;
 using System;
 
 namespace client
 {
-    class CreateSingleVmExample : Scenario
+    class RoleAssignment : Scenario
     {
-        public CreateSingleVmExample() : base() { }
-
-        public CreateSingleVmExample(ScenarioContext context) : base(context) { }
-
         public override void Execute()
         {
             var client = new AzureResourceManagerClient();
@@ -20,6 +17,13 @@ namespace client
             Console.WriteLine($"--------Start create group {Context.RgName}--------");
             var resourceGroup = subscription.ResourceGroups().Create(Context.RgName, Context.Loc).Value;
             CleanUp.Add(resourceGroup.Id);
+
+            Console.WriteLine("--------Start create Assignment--------");
+            var input = new RoleAssignmentCreateParameters($"/subscriptions/{Context.SubscriptionId}/resourceGroups/{Context.RgName}/providers/Microsoft.Authorization/roleDefinitions/{Context.RoleId}", Context.PrincipalId);
+            var assign = resourceGroup.RoleAssignments().Create(Guid.NewGuid().ToString(), input).Value;
+            Console.WriteLine("--------Done create Assignment--------");
+
+            assign = assign.Get().Value;
 
             // Create AvailabilitySet
             Console.WriteLine("--------Start create AvailabilitySet--------");
@@ -52,6 +56,15 @@ namespace client
 
             Console.WriteLine("VM ID: " + vm.Id);
             Console.WriteLine("--------Done create VM--------");
+
+
+            Console.WriteLine("--------Start create Assignment--------");
+            var input2 = new RoleAssignmentCreateParameters($"{vm.Id}/providers/Microsoft.Authorization/roleDefinitions/{Context.RoleId}", Context.PrincipalId);
+            var assign2 = vm.RoleAssignments().Create(Guid.NewGuid().ToString(), input2).Value;
+            Console.WriteLine("--------Done create Assignment--------");
+
+            assign2 = assign2.Get().Value;
+            Console.WriteLine($"Created assignment: '{assign.Data.Id}'");
         }
     }
 }

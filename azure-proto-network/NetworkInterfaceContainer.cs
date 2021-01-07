@@ -116,5 +116,10 @@ namespace azure_proto_network
         {
             return s => new NetworkInterface(ClientOptions, new NetworkInterfaceData(s));
         }
+
+        protected override ResourceType GetValidResourceType()
+        {
+            return ResourceGroupOperations.ResourceType;
+        }
     }
 }

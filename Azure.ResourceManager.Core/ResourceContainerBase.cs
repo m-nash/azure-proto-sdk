@@ -54,12 +54,8 @@ namespace Azure.ResourceManager.Core
         /// <exception cref="InvalidOperationException">Resource identifier is not a valid type for this container.</exception>
         public override void Validate(ResourceIdentifier identifier)
         {
-            if (identifier.Type != ResourceGroupOperations.ResourceType &&
-                identifier.Type != SubscriptionOperations.ResourceType &&
-                identifier.Type != Id.Type.Parent)
-            {
+            if (identifier.Type != GetValidResourceType())
                 throw new InvalidOperationException($"{identifier.Type} is not a valid container for {Id.Type}");
-            }
         }
 
         /// <summary>

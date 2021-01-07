@@ -235,7 +235,7 @@ namespace Azure.ResourceManager.Core
              return s => Activator.CreateInstance(
                     typeof(TOperations),
                     clientOptions,
-                    Activator.CreateInstance(typeof(TResource), s as Azure.ResourceManager.Resources.Models.Resource) as TResource) as TOperations;
+                    Activator.CreateInstance(typeof(TResource), s as GenericResource) as TResource) as TOperations;
         }
 
         private static void Validate(ResourceIdentifier id)
