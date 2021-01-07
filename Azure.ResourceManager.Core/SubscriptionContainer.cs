@@ -7,18 +7,35 @@ using System.Threading.Tasks;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// Subscription Container Operationss
+    /// A class representing collection of Subscription and their operations
     /// </summary>
     public class SubscriptionContainer : OperationsBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscriptionContainer"/> class.
+        /// </summary>
+        /// <param name="options">The client parameters to use in these operations.</param>
         internal SubscriptionContainer(AzureResourceManagerClientOptions options)
             : base(options, null, null)
         {
         }
 
-        internal SubscriptionsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) =>
-            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ClientOptions.Convert<ResourcesManagementClientOptions>())).Subscriptions;
+        /// <summary>
+        /// Gets the operations that can be performed on the container.
+        /// </summary>
+        internal SubscriptionsOperations Operations => GetClient((uri, cred) =>
+            new ResourcesManagementClient(
+                uri,
+                Guid.NewGuid().ToString(),
+                cred,
+                ClientOptions.Convert<ResourcesManagementClientOptions>())).Subscriptions;
 
+        /// <summary>
+        /// List all subscriptions in the current container.
+        /// </summary>
+        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service.
+        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+        /// <returns>A collection of resource operations that may take multiple service requests to iterate over.</returns>
         public Pageable<SubscriptionOperations> List(CancellationToken cancellationToken = default)
         {
             return new PhWrappingPageable<ResourceManager.Resources.Models.Subscription, SubscriptionOperations>(
@@ -26,6 +43,12 @@ namespace Azure.ResourceManager.Core
                 Converter());
         }
 
+        /// <summary>
+        /// List all subscriptions in the current container.
+        /// </summary>
+        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service.
+        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+        /// <returns>An async collection of resource operations that may take multiple service requests to iterate over.</returns>
         public AsyncPageable<SubscriptionOperations> ListAsync(CancellationToken cancellationToken = default)
         {
             return new PhWrappingAsyncPageable<ResourceManager.Resources.Models.Subscription, SubscriptionOperations>(
@@ -33,14 +56,25 @@ namespace Azure.ResourceManager.Core
                 Converter());
         }
 
-        private Func<ResourceManager.Resources.Models.Subscription, SubscriptionOperations> Converter()
+        /// <summary>
+        /// Validate the resource identifier is supported in the current container.
+        /// </summary>
+        /// <param name="identifier">The identifier of the resource.</param>
+        public override void Validate(ResourceIdentifier identifier)
         {
-            return s => new SubscriptionOperations(ClientOptions, new SubscriptionData(s));
+            if (identifier != null)
+                throw new ArgumentException("Invalid parent for subscription container");
         }
 
-        internal async Task<string> GetDefaultSubscription(CancellationToken token = default(CancellationToken))
+        /// <summary>
+        /// Get the default subscription associated with the current credential.
+        /// </summary>
+        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service.
+        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
+        /// <returns>A <see cref="Task"/> that on completion returns the subscription id.</returns>
+        internal async Task<string> GetDefaultSubscriptionAsync(CancellationToken cancellationToken = default)
         {
-            var subs = ListAsync(token).GetAsyncEnumerator();
+            var subs = ListAsync(cancellationToken).GetAsyncEnumerator();
             string sub = null;
             if (await subs.MoveNextAsync())
             {
@@ -53,15 +87,18 @@ namespace Azure.ResourceManager.Core
             return sub;
         }
 
-        public override void Validate(ResourceIdentifier identifier)
-        {
-            if (identifier != null)
-                throw new ArgumentException("Invalid parent for subscription container");
-        }
-
+        /// <summary>
+        /// Gets the valid resource type associated with the container.
+        /// </summary>
+        /// <returns>A valid Azure resource type</returns>
         protected internal override ResourceType GetValidResourceType()
         {
             return SubscriptionOperations.ResourceType;
+        }
+
+        private Func<ResourceManager.Resources.Models.Subscription, SubscriptionOperations> Converter()
+        {
+            return s => new SubscriptionOperations(ClientOptions, new SubscriptionData(s));
         }
     }
 }
