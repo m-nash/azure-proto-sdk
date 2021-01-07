@@ -49,8 +49,8 @@ namespace Azure.ResourceManager.Core
                 throw new ArgumentException("JsonElement is undefined " + nameof(element));
             }
 
-            Optional<Guid> principalId = default;
-            Optional<Guid> clientId = default;
+            Guid principalId = default;
+            Guid clientId = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("principalId"))
