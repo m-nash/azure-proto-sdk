@@ -18,16 +18,16 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// List resources under the a resource context
         /// </summary>
-        /// <typeparam name="TOperations">The type of the class containing operations for the underlying resource</typeparam>
-        /// <typeparam name="TResource">The type of the class containing properties for the underlying resource</typeparam>
-        /// <param name="clientOptions">The client parameters to use in these operations.</param>
-        /// <param name="id">The identifier of the resource that is the target of operations.</param>
-        /// <param name="resourceFilters">Optional filters for results</param>
-        /// <param name="top">The number of results to return.</param>
-        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
-        /// <returns>A collection of resource operations that may take multiple service requests to iterate over.</returns>
-        /// <exception cref="ArgumentException"><paramref name="id"/> is not valid to list at context.</exception>
+        /// <typeparam name="TOperations"> The type of the class containing operations for the underlying resource. </typeparam>
+        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
+        /// <param name="clientOptions"> The client parameters to use in these operations. </param>
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
+        /// <param name="resourceFilters"> Optional filters for results. </param>
+        /// <param name="top"> The number of results to return. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
+        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="ArgumentException"> <paramref name="id"/> is not valid to list at context. </exception>
         public static Pageable<TOperations> ListAtContext<TOperations, TResource>(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier id,
@@ -53,16 +53,16 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// List resources under the a resource context
         /// </summary>
-        /// <typeparam name="TOperations">The type of the class containing operations for the underlying resource</typeparam>
-        /// <typeparam name="TResource">The type of the class containing properties for the underlying resource</typeparam>
-        /// <param name="clientOptions">The client parameters to use in these operations.</param>
-        /// <param name="id">The identifier of the resource that is the target of operations.</param>
-        /// <param name="resourceFilters">Optional filters for results</param>
-        /// <param name="top">The number of results to return.</param>
-        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
-        /// <returns>An async collection of resource operations that may take multiple service requests to iterate over.</returns>
-        /// <exception cref="ArgumentException"><paramref name="id"/> is not valid to list at context.</exception>
+        /// <typeparam name="TOperations"> The type of the class containing operations for the underlying resource. </typeparam>
+        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
+        /// <param name="clientOptions"> The client parameters to use in these operations. </param>
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
+        /// <param name="resourceFilters"> Optional filters for results. </param>
+        /// <param name="top"> The number of results to return. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
+        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns>An async collection of resource operations that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="ArgumentException"> <paramref name="id"/> is not valid to list at context. </exception>
         public static AsyncPageable<TOperations> ListAtContextAsync<TOperations, TResource>(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier id,
@@ -88,14 +88,14 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// List resources under a subscription
         /// </summary>
-        /// <typeparam name="TOperations">The type of the class containing operations for the underlying resource</typeparam>
-        /// <typeparam name="TResource">The type of the class containing properties for the underlying resource</typeparam>
-        /// <param name="subscription">The id of the Azure subscription.</param>
-        /// <param name="resourceFilters">Optional filters for results</param>
-        /// <param name="top">The number of results to return.</param>
-        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
-        /// <returns>A collection of resource operations that may take multiple service requests to iterate over.</returns>
+        /// <typeparam name="TOperations"> The type of the class containing operations for the underlying resource. </typeparam>
+        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
+        /// <param name="subscription"> The id of the Azure subscription. </param>
+        /// <param name="resourceFilters"> Optional filters for results. </param>
+        /// <param name="top"> The number of results to return. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
+        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
         public static Pageable<TOperations> ListAtContext<TOperations, TResource>(
             SubscriptionOperations subscription,
             ArmFilterCollection resourceFilters = null,
@@ -116,14 +116,14 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// List resources under the a resource context
         /// </summary>
-        /// <typeparam name="TOperations">The type of the class containing operations for the underlying resource</typeparam>
-        /// <typeparam name="TResource">The type of the class containing properties for the underlying resource</typeparam>
-        /// <param name="subscription">The id of the Azure subscription.</param>
-        /// <param name="resourceFilters">Optional filters for results</param>
-        /// <param name="top">The number of results to return.</param>
-        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
-        /// <returns>An async collection of resource operations that may take multiple service requests to iterate over.</returns>
+        /// <typeparam name="TOperations"> The type of the class containing operations for the underlying resource. </typeparam>
+        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
+        /// <param name="subscription"> The id of the Azure subscription. </param>
+        /// <param name="resourceFilters"> Optional filters for results. </param>
+        /// <param name="top"> The number of results to return. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
+        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
         public static AsyncPageable<TOperations> ListAtContextAsync<TOperations, TResource>(
             SubscriptionOperations subscription,
             ArmFilterCollection resourceFilters = null,
