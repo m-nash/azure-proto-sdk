@@ -36,12 +36,14 @@ namespace azure_proto_compute
         {
         }
 
+        protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
+
         /// <summary>
         /// The operation to create a virtual machine.
         /// </summary>
         /// <param name="name"> The name of the virtual machine. </param>
         /// <param name="resourceDetails"> Parameters supplied to the Create Virtual Machine operation. </param>
-        /// <returns> The HTTP response from the service. </returns>
+        /// <returns> A response with the operations for this resource. </returns>
         public override ArmResponse<VirtualMachine> Create(string name, VirtualMachineData resourceDetails)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model);
@@ -51,12 +53,12 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// 
+        /// The operation to create a virtual machine.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="resourceDetails"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="name"> The name of the virtual machine. </param>
+        /// <param name="resourceDetails"> Parameters supplied to the Create Virtual Machine operation. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns response with the operations for this resource. </returns>
         public async override Task<ArmResponse<VirtualMachine>> CreateAsync(string name, VirtualMachineData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
@@ -65,6 +67,13 @@ namespace azure_proto_compute
                 v => new VirtualMachine(ClientOptions, new VirtualMachineData(v)));
         }
 
+        /// <summary>
+        /// The operation to create a virtual machine.
+        /// </summary>
+        /// <param name="name"> The name of the virtual machine. </param>
+        /// <param name="resourceDetails"> Parameters supplied to the Create Virtual Machine operation. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A long running operation object [See here for details](https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning) which on completion returns a response with the operations for this resource. </returns>
         public override ArmOperation<VirtualMachine> StartCreate(string name, VirtualMachineData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
@@ -72,6 +81,13 @@ namespace azure_proto_compute
                 v => new VirtualMachine(ClientOptions, new VirtualMachineData(v)));
         }
 
+        /// <summary>
+        /// The operation to create a virtual machine.
+        /// </summary>
+        /// <param name="name"> The name of the virtual machine. </param>
+        /// <param name="resourceDetails"> Parameters supplied to the Create Virtual Machine operation. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns long running operation object [See here for details](https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning) which on completion returns a response with the operations for this resource. </returns>
         public async override Task<ArmOperation<VirtualMachine>> StartCreateAsync(string name, VirtualMachineData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
@@ -132,14 +148,14 @@ namespace azure_proto_compute
 
         public Pageable<ArmResource> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
+            ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineOperations.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContext<ArmResource, ArmResourceData>(ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public AsyncPageable<ArmResource> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
+            ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineOperations.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(ClientOptions, Id, filters, top, cancellationToken);
         }
@@ -158,10 +174,5 @@ namespace azure_proto_compute
 
         internal VirtualMachinesOperations Operations => this.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, Id.Subscription, cred, 
                     ClientOptions.Convert<ComputeManagementClientOptions>())).VirtualMachines;
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceGroupOperations.ResourceType;
-        }
     }
 }

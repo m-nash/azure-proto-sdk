@@ -23,6 +23,8 @@ namespace azure_proto_compute
         {
         }
 
+        protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
+
         public override ArmResponse<AvailabilitySet> Create(string name, AvailabilitySetData resourceDetails)
         {
             var response = Operations.CreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model);
@@ -93,10 +95,5 @@ namespace azure_proto_compute
 
         internal AvailabilitySetsOperations Operations => GetClient((uri, cred) => new ComputeManagementClient(uri, Id.Subscription, cred, 
                     ClientOptions.Convert<ComputeManagementClientOptions>())).AvailabilitySets;
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceGroupOperations.ResourceType;
-        }
     }
 }

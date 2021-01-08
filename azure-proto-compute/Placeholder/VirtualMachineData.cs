@@ -10,8 +10,6 @@ namespace azure_proto_compute
     /// </summary>
     public class VirtualMachineData : TrackedResource<Azure.ResourceManager.Compute.Models.VirtualMachine>
     {
-        public static ResourceType ResourceType => "Microsoft.Compute/virtualMachines";
-
         public VirtualMachineData(Azure.ResourceManager.Compute.Models.VirtualMachine vm) : base(vm.Id, vm.Location, vm)
         {
             if (null == vm.Tags)

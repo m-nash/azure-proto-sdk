@@ -27,6 +27,8 @@ namespace azure_proto_network
         {
         }
 
+        protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
+
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ClientOptions.Convert<NetworkManagementClientOptions>())).PublicIPAddresses;
 
@@ -115,11 +117,6 @@ namespace azure_proto_network
         private Func<PublicIPAddress, PublicIpAddress> convertor()
         {
             return s => new PublicIpAddress(ClientOptions, new PublicIPAddressData(s));
-        }
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceGroupOperations.ResourceType;
         }
     }
 }

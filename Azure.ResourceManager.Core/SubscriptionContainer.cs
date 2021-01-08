@@ -19,6 +19,8 @@ namespace Azure.ResourceManager.Core
         internal SubscriptionsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) =>
             new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ClientOptions.Convert<ResourcesManagementClientOptions>())).Subscriptions;
 
+        protected override ResourceType ValidResourceType => SubscriptionOperations.ResourceType;
+
         public Pageable<SubscriptionOperations> List(CancellationToken cancellationToken = default)
         {
             return new PhWrappingPageable<ResourceManager.Resources.Models.Subscription, SubscriptionOperations>(
@@ -57,11 +59,6 @@ namespace Azure.ResourceManager.Core
         {
             if (identifier != null)
                 throw new ArgumentException("Invalid parent for subscription container");
-        }
-
-        protected internal override ResourceType GetValidResourceType()
-        {
-            return SubscriptionOperations.ResourceType;
         }
     }
 }

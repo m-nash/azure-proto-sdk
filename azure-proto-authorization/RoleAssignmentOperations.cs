@@ -48,6 +48,8 @@ namespace azure_proto_authorization
 
         private RoleAssignmentsOperations Operations => GetClient<AuthorizationManagementClient>((baseUri, creds) => new AuthorizationManagementClient(Id.Subscription, baseUri, creds)).RoleAssignments;
 
+        protected override ResourceType ValidResourceType => ResourceType;
+
         /// <summary>
         /// Delete a role assignment. This operation may involve multiple blocking calls to the service.
         /// The operation returns when deletion is complete on the service.
@@ -114,11 +116,6 @@ namespace azure_proto_authorization
             return new PhArmResponse<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(
                 await Operations.GetByIdAsync(Id, cancellationToken),
                 a => new RoleAssignment(ClientOptions, new RoleAssignmentData(a)));
-        }
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
         }
     }
 }

@@ -20,6 +20,8 @@ namespace azure_proto_network
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred, 
             ClientOptions.Convert<NetworkManagementClientOptions>())).NetworkInterfaces;
 
+        protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
+
         public override ArmResponse<NetworkInterface> Create(string name, NetworkInterfaceData resourceDetails)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails);
@@ -115,11 +117,6 @@ namespace azure_proto_network
         private Func<Azure.ResourceManager.Network.Models.NetworkInterface, NetworkInterface> convertor()
         {
             return s => new NetworkInterface(ClientOptions, new NetworkInterfaceData(s));
-        }
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceGroupOperations.ResourceType;
         }
     }
 }

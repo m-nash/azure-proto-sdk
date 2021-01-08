@@ -45,14 +45,14 @@ namespace azure_proto_compute
 
         public static Pageable<ArmResource> ListVirtualMachinesByName(this SubscriptionOperations subscription, ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
+            ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineOperations.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContext<ArmResource, ArmResourceData>(subscription.ClientOptions, subscription.Id, filters, top, cancellationToken);
         }
 
         public static AsyncPageable<ArmResource> ListVirtualMachinesByNameAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
+            ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineOperations.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(subscription.ClientOptions, subscription.Id, filters, top, cancellationToken);
         }

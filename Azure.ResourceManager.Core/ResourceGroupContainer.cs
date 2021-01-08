@@ -26,6 +26,8 @@ namespace Azure.ResourceManager.Core
             cred,
             ClientOptions.Convert<ResourcesManagementClientOptions>())).ResourceGroups;
 
+        protected override ResourceType ValidResourceType => SubscriptionOperations.ResourceType;
+
         public ArmOperation<ResourceGroup> Create(string name, Location location)
         {
             var model = new ResourceGroupData(new ResourceManager.Resources.Models.ResourceGroup(location));
@@ -76,11 +78,6 @@ namespace Azure.ResourceManager.Core
             return new PhWrappingAsyncPageable<ResourceManager.Resources.Models.ResourceGroup, ResourceGroup>(
                 Operations.ListAsync(null, null, cancellationToken),
                 s => new ResourceGroup(ClientOptions, new ResourceGroupData(s)));
-        }
-
-        protected internal override ResourceType GetValidResourceType()
-        {
-            return SubscriptionOperations.ResourceType;
         }
     }
 }

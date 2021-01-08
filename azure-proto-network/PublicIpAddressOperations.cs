@@ -21,6 +21,8 @@ namespace azure_proto_network
 
         public static readonly ResourceType ResourceType = "Microsoft.Network/publicIpAddresses";
 
+        protected override ResourceType ValidResourceType => ResourceType;
+
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ClientOptions.Convert<NetworkManagementClientOptions>())).PublicIPAddresses;
 
@@ -87,11 +89,6 @@ namespace azure_proto_network
                     Resource = new PublicIPAddressData(n);
                     return new PublicIpAddress(ClientOptions, Resource as PublicIPAddressData);
                 });
-        }
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
         }
     }
 }

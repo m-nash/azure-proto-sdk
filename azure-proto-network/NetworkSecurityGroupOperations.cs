@@ -38,10 +38,7 @@ namespace azure_proto_network
         {
         }
 
-        public NetworkSecurityGroupOperations(AzureResourceManagerClientOptions options, TrackedResource id)
-            : base(options, id)
-        {
-        }
+        protected override ResourceType ValidResourceType => ResourceType;
 
         public static readonly ResourceType ResourceType = "Microsoft.Network/networkSecurityGroups";
 
@@ -151,11 +148,6 @@ namespace azure_proto_network
         public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
-        }
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
         }
     }
 }

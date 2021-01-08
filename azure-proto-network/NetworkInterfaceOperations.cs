@@ -21,6 +21,8 @@ namespace azure_proto_network
 
         public static readonly ResourceType ResourceType = "Microsoft.Network/networkInterfaces";
 
+        protected override ResourceType ValidResourceType => ResourceType;
+
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ClientOptions.Convert<NetworkManagementClientOptions>())).NetworkInterfaces;
 
@@ -89,11 +91,6 @@ namespace azure_proto_network
                     Resource = new NetworkInterfaceData(n);
                     return new NetworkInterface(ClientOptions, Resource as NetworkInterfaceData);
                 });
-        }
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
         }
     }
 }

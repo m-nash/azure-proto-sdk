@@ -26,6 +26,8 @@ namespace azure_proto_compute
 
         public static readonly ResourceType ResourceType = "Microsoft.Compute/availabilitySets";
 
+        protected override ResourceType ValidResourceType => ResourceType;
+
         public ArmResponse<Response> Delete()
         {
             return new ArmResponse(Operations.Delete(Id.ResourceGroup, Id.Name));
@@ -108,10 +110,5 @@ namespace azure_proto_compute
                                         Id.Subscription,
                                         cred,
                                         ClientOptions.Convert<ComputeManagementClientOptions>())).AvailabilitySets;
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
-        }
     }
 }

@@ -20,6 +20,8 @@ namespace Azure.ResourceManager.Core
         internal ResourceGroupOperations(AzureResourceManagerClientOptions options, Resource resource)
             : base(options, resource) { }
 
+        protected override ResourceType ValidResourceType => ResourceType;
+
         internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(
             uri,
             Id.Subscription,
@@ -128,11 +130,6 @@ namespace Azure.ResourceManager.Core
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;
 
             return container.CreateAsync(name, model, token);
-        }
-
-        protected internal override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
         }
     }
 }

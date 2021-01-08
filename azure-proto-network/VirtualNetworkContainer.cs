@@ -28,6 +28,8 @@ namespace azure_proto_network
         {
         }
 
+        protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
+
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ClientOptions.Convert<NetworkManagementClientOptions>())).VirtualNetworks;
 
@@ -115,11 +117,6 @@ namespace azure_proto_network
         private  Func<Azure.ResourceManager.Network.Models.VirtualNetwork, VirtualNetwork> Convertor()
         {
             return s => new VirtualNetwork(ClientOptions, new VirtualNetworkData(s));
-        }
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceGroupOperations.ResourceType;
         }
     }
 }

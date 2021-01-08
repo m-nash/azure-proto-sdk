@@ -25,6 +25,8 @@ namespace azure_proto_compute
 
         public static readonly ResourceType ResourceType = "Microsoft.Compute/virtualMachines";
 
+        protected override ResourceType ValidResourceType => ResourceType;
+
         public static VirtualMachineOperations FromGeneric(ArmResourceOperations genericOperations)
         {
             return new VirtualMachineOperations(genericOperations);
@@ -169,10 +171,5 @@ namespace azure_proto_compute
 
         internal VirtualMachinesOperations Operations => GetClient<ComputeManagementClient>((baseUri, creds) =>
             new ComputeManagementClient(baseUri, Id.Subscription, creds, ClientOptions.Convert<ComputeManagementClientOptions>())).VirtualMachines;
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
-        }
     }
 }

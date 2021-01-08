@@ -30,6 +30,8 @@ namespace Azure.ResourceManager.Core
         {
         }
 
+        protected override ResourceType ValidResourceType => ResourceType;
+
         internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) =>
             new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ClientOptions.Convert<ResourcesManagementClientOptions>())).Subscriptions;
 
@@ -73,11 +75,6 @@ namespace Azure.ResourceManager.Core
         private Func<Azure.ResourceManager.Resources.Models.Subscription, Subscription> Converter()
         {
             return s => new Subscription(ClientOptions, new SubscriptionData(s));
-        }
-
-        protected internal override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
         }
     }
 }

@@ -36,11 +36,11 @@ namespace Azure.ResourceManager.Core
 
         public virtual void Validate(ResourceIdentifier identifier)
         {
-            if (identifier?.Type != GetValidResourceType())
-                throw new InvalidOperationException($"Invalid resource type {identifier?.Type} expected {GetValidResourceType()}");
+            if (identifier?.Type != ValidResourceType)
+                throw new InvalidOperationException($"Invalid resource type {identifier?.Type} expected {ValidResourceType}");
         }
 
-        protected internal abstract ResourceType GetValidResourceType();
+        protected abstract ResourceType ValidResourceType { get; }
 
         /// <summary>
         ///     Note that this is currently adapting to underlying management clients - once generator changes are in, this would
