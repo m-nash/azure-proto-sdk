@@ -66,7 +66,7 @@ namespace Azure.ResourceManager.Core
             });
         }
 
-        public ArmOperation<ResourceGroup> AddTag(string name, string value)
+        public ArmOperation<ResourceGroup> StartAddTag(string name, string value)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;
@@ -77,7 +77,7 @@ namespace Azure.ResourceManager.Core
             });
         }
 
-        public async Task<ArmOperation<ResourceGroup>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<ResourceGroup>> StartAddTagAsync(string name, string value, CancellationToken cancellationToken = default)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;

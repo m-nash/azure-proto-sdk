@@ -91,14 +91,14 @@ namespace azure_proto_compute
                 });
         }
 
-        public ArmOperation<AvailabilitySet> AddTag(string key, string value)
+        public ArmOperation<AvailabilitySet> StartAddTag(string key, string value)
         {
             var patchable = new AvailabilitySetUpdate();
             patchable.Tags[key] = value;
             return Update(patchable);
         }
 
-        public Task<ArmOperation<AvailabilitySet>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public Task<ArmOperation<AvailabilitySet>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new AvailabilitySetUpdate();
             patchable.Tags[key] = value;

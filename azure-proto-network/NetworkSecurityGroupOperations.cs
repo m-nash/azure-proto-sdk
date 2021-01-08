@@ -106,7 +106,7 @@ namespace azure_proto_network
                 });
         }
 
-        public ArmOperation<NetworkSecurityGroup> AddTag(string key, string value)
+        public ArmOperation<NetworkSecurityGroup> StartAddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
@@ -118,7 +118,7 @@ namespace azure_proto_network
                 });
         }
 
-        public async Task<ArmOperation<NetworkSecurityGroup>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<NetworkSecurityGroup>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;

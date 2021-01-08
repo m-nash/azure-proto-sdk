@@ -22,7 +22,7 @@ namespace client
                 if (rand.NextDouble() > 0.5)
                 {
                     Console.WriteLine("adding tag to {0}", vm.Id.Name);
-                    vm.AddTag("tagkey", "tagvalue");
+                    vm.StartAddTag("tagkey", "tagvalue");
                 }
             }
 

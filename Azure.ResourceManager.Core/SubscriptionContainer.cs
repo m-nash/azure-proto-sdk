@@ -93,5 +93,9 @@ namespace Azure.ResourceManager.Core
             return sub;
         }
 
+        private Func<ResourceManager.Resources.Models.Subscription, SubscriptionOperations> Converter()
+        {
+            return s => new SubscriptionOperations(ClientOptions, new SubscriptionData(s));
+        }
     }
 }
