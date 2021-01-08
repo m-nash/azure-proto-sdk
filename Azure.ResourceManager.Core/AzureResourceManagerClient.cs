@@ -13,8 +13,7 @@ using System.Threading.Tasks;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// The entry point for all ARM clients.  Note that, we may not want to take a direct dependency on Azure.Identity, so we may make the
-    /// credential required.
+    /// The entry point for all ARM clients.
     /// </summary>
     public class AzureResourceManagerClient
     {
@@ -155,8 +154,7 @@ namespace Azure.ResourceManager.Core
         /// Lists all geo-locations.
         /// </summary>
         /// <param name="subscriptionId"> The Id of the target subscription. </param>
-        /// <param name="token"> A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <param name="token"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of location data that may take multiple service requests to iterate over. </returns>
         /// <exception cref="InvalidOperationException"> <paramref name="subscriptionId"/> is null. </exception>
         public AsyncPageable<LocationData> ListLocationsAsync(string subscriptionId = null, CancellationToken token = default(CancellationToken))
@@ -184,8 +182,7 @@ namespace Azure.ResourceManager.Core
         /// Lists all geo-locations.
         /// </summary>
         /// <param name="subscriptionId"> The Id of the target subscription. </param>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of location data that may take multiple service requests to iterate over. </returns>
         /// <exception cref="InvalidOperationException"> <paramref name="subscriptionId"/> is null. </exception>
         public Pageable<LocationData> ListLocations(string subscriptionId = null, CancellationToken cancellationToken = default(CancellationToken))
@@ -206,8 +203,7 @@ namespace Azure.ResourceManager.Core
         /// Lists all available geo-locations.
         /// </summary>
         /// <param name="resourceType"> The resource type for subscription. </param>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
         /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
         public async IAsyncEnumerable<Location> ListAvailableLocationsAsync(ResourceType resourceType, [EnumeratorCancellation] CancellationToken cancellationToken = default)
@@ -229,8 +225,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="subscription"> The Azure subscription. </param>
         /// <param name="resourceType"> The resource type for subscription. </param>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
         public async IAsyncEnumerable<Location> ListAvailableLocationsAsync(string subscription, ResourceType resourceType, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
@@ -251,8 +246,7 @@ namespace Azure.ResourceManager.Core
         /// Lists all available geo-locations.
         /// </summary>
         /// <param name="resourceType"> The resource type for subscription. </param>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
         public IEnumerable<Location> ListAvailableLocations(ResourceType resourceType, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -382,8 +376,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets default subscription.
         /// </summary>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns the subscription id. </returns>
         internal async Task<string> GetDefaultSubscription(CancellationToken cancellationToken = default)
         {
