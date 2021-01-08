@@ -15,11 +15,14 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class ResourceListOperations
     {
+        private static ResourcesManagementClient GetResourcesClient(AzureResourceManagerClientOptions options, string id)
+        {
+            return new ResourcesManagementClient(options.BaseUri, id, options.Credential);
+        }
+
         /// <summary>
         /// List resources under the a resource context
         /// </summary>
-        /// <typeparam name="TOperations"> The type of the class containing operations for the underlying resource. </typeparam>
-        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
         /// <param name="clientOptions"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         /// <param name="resourceFilters"> Optional filters for results. </param>
@@ -28,20 +31,18 @@ namespace Azure.ResourceManager.Core
         /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
         /// <exception cref="ArgumentException"> <paramref name="id"/> is not valid to list at context. </exception>
-        public static Pageable<TOperations> ListAtContext<TOperations, TResource>(
+        public static Pageable<ArmResource> ListAtContext(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier id,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations>
-            where TResource : TrackedResource
         {
             Validate(id);
 
             var scopeId = id.Type == ResourceGroupOperations.ResourceType ? id.Name : null;
 
-            return ListAtContextInternal<TOperations, TResource>(
+            return ListAtContextInternal(
                 clientOptions,
                 id,
                 scopeId,
@@ -52,9 +53,7 @@ namespace Azure.ResourceManager.Core
 
         /// <summary>
         /// List resources under the a resource context
-        /// </summary>
-        /// <typeparam name="TOperations"> The type of the class containing operations for the underlying resource. </typeparam>
-        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
+        /// </summary>        
         /// <param name="clientOptions"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         /// <param name="resourceFilters"> Optional filters for results. </param>
@@ -63,20 +62,18 @@ namespace Azure.ResourceManager.Core
         /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns>An async collection of resource operations that may take multiple service requests to iterate over. </returns>
         /// <exception cref="ArgumentException"> <paramref name="id"/> is not valid to list at context. </exception>
-        public static AsyncPageable<TOperations> ListAtContextAsync<TOperations, TResource>(
+        public static AsyncPageable<ArmResource> ListAtContextAsync(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier id,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations>
-            where TResource : TrackedResource
         {
             Validate(id);
 
             var scopeId = id.Type == ResourceGroupOperations.ResourceType ? id.Name : null;
 
-            return ListAtContextInternalAsync<TOperations, TResource>(
+            return ListAtContextInternalAsync(
                 clientOptions,
                 id,
                 scopeId,
@@ -88,23 +85,19 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// List resources under a subscription
         /// </summary>
-        /// <typeparam name="TOperations"> The type of the class containing operations for the underlying resource. </typeparam>
-        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
         /// <param name="subscription"> The id of the Azure subscription. </param>
         /// <param name="resourceFilters"> Optional filters for results. </param>
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
         /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public static Pageable<TOperations> ListAtContext<TOperations, TResource>(
+        public static Pageable<ArmResource> ListAtContext(
             SubscriptionOperations subscription,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations>
-            where TResource : TrackedResource
         {
-            return ListAtContextInternal<TOperations, TResource>(
+            return ListAtContextInternal(
                 subscription.ClientOptions,
                 subscription.Id,
                 null,
@@ -116,23 +109,19 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// List resources under the a resource context
         /// </summary>
-        /// <typeparam name="TOperations"> The type of the class containing operations for the underlying resource. </typeparam>
-        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
         /// <param name="subscription"> The id of the Azure subscription. </param>
         /// <param name="resourceFilters"> Optional filters for results. </param>
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
         /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public static AsyncPageable<TOperations> ListAtContextAsync<TOperations, TResource>(
+        public static AsyncPageable<ArmResource> ListAtContextAsync(
             SubscriptionOperations subscription,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations>
-            where TResource : TrackedResource
         {
-            return ListAtContextInternalAsync<TOperations, TResource>(
+            return ListAtContextInternalAsync(
                 subscription.ClientOptions,
                 subscription.Id,
                 null,
@@ -141,21 +130,13 @@ namespace Azure.ResourceManager.Core
                 cancellationToken);
         }
 
-        private static ResourcesManagementClient GetResourcesClient(AzureResourceManagerClientOptions options, string id)
-        {
-            // TODO: should be able to access options.GetClient() instead of needing this method
-            return new ResourcesManagementClient(options.BaseUri, id, options.Credential);
-        }
-
-        private static AsyncPageable<TOperations> ListAtContextInternalAsync<TOperations, TResource>(
+        private static AsyncPageable<ArmResource> ListAtContextInternalAsync(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier scopeId,
             string scopeFilter,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations>
-            where TResource : TrackedResource
         {
             var resourceOperations = GetResourcesClient(clientOptions, scopeId.Subscription).Resources;
             AsyncPageable<GenericResourceExpanded> result;
@@ -173,18 +154,16 @@ namespace Azure.ResourceManager.Core
                     cancellationToken);
             }
 
-            return ConvertResultsAsync<TOperations, TResource>(result, clientOptions);
+            return ConvertResultsAsync(result, clientOptions);
         }
 
-        private static Pageable<TOperations> ListAtContextInternal<TOperations, TResource>(
+        private static Pageable<ArmResource> ListAtContextInternal(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier scopeId,
             string scopeFilter = null,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
-            where TOperations : ResourceOperationsBase<TOperations>
-            where TResource : TrackedResource
         {
             var resourceOperations = GetResourcesClient(clientOptions, scopeId.Subscription).Resources;
             Pageable<GenericResourceExpanded> result;
@@ -202,40 +181,33 @@ namespace Azure.ResourceManager.Core
                     cancellationToken);
             }
 
-            return ConvertResults<TOperations, TResource>(result, clientOptions);
+            return ConvertResults(result, clientOptions);
         }
 
-        private static Pageable<TOperations> ConvertResults<TOperations, TResource>(
+        private static Pageable<ArmResource> ConvertResults(
             Pageable<GenericResourceExpanded> result,
             AzureResourceManagerClientOptions clientOptions)
-            where TOperations : ResourceOperationsBase<TOperations>
-            where TResource : TrackedResource
         {
-            return new PhWrappingPageable<GenericResourceExpanded, TOperations>(
+            return new PhWrappingPageable<GenericResourceExpanded, ArmResource>(
                 result,
-                CreateResourceConverter<TOperations, TResource>(clientOptions));
+                CreateResourceConverter(clientOptions));
         }
 
-        private static AsyncPageable<TOperations> ConvertResultsAsync<TOperations, TResource>(
+        private static AsyncPageable<ArmResource> ConvertResultsAsync(
             AsyncPageable<GenericResourceExpanded> result,
             AzureResourceManagerClientOptions clientOptions)
-            where TOperations : ResourceOperationsBase<TOperations>
-            where TResource : TrackedResource
         {
-            return new PhWrappingAsyncPageable<GenericResourceExpanded, TOperations>(
+            return new PhWrappingAsyncPageable<GenericResourceExpanded, ArmResource>(
                 result,
-                CreateResourceConverter<TOperations, TResource>(clientOptions));
+                CreateResourceConverter(clientOptions));
         }
 
-        private static Func<GenericResourceExpanded, TOperations> CreateResourceConverter<TOperations, TResource>(
-            AzureResourceManagerClientOptions clientOptions)
-            where TOperations : ResourceOperationsBase<TOperations>
-            where TResource : TrackedResource
+        private static Func<GenericResourceExpanded, ArmResource> CreateResourceConverter(AzureResourceManagerClientOptions clientOptions)
         {
-             return s => Activator.CreateInstance(
-                    typeof(TOperations),
+            return s => Activator.CreateInstance(
+                    typeof(ArmResource),
                     clientOptions,
-                    Activator.CreateInstance(typeof(TResource), s as GenericResource) as TResource) as TOperations;
+                    Activator.CreateInstance(typeof(ArmResourceData), s as GenericResource) as ArmResourceData) as ArmResource;
         }
 
         private static void Validate(ResourceIdentifier id)
