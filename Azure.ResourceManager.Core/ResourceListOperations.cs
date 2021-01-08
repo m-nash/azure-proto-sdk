@@ -11,7 +11,7 @@ using Azure.ResourceManager.Resources.Models;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    ///     Generic list operations class - can be extended if a specific RP has more list operations
+    ///  Generic list operations class. This can be extended if a specific RP has more list operations.
     /// </summary>
     public class ResourceListOperations
     {

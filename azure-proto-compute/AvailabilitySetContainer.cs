@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace azure_proto_compute
 {
     /// <summary>
-    /// Operatiosn class for Availability Set Contaienrs (resource groups)
+    /// Operations class for Availability Set Contaienrs (resource groups)
     /// </summary>
     public class AvailabilitySetContainer : ResourceContainerBase<AvailabilitySet, AvailabilitySetData>
     {

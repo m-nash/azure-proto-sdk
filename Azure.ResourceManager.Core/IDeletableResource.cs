@@ -7,38 +7,45 @@ using System.Threading.Tasks;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// The operations to delete a resource
+    /// Interface for operations to delete a resource
     /// </summary>
     public interface IDeletableResource
     {
         /// <summary>
-        /// Delete the resource.  This call blocks until the delete operation is completed on the service.
+        /// Delete the resource.
         /// </summary>
-        /// <returns>The final http response to the delete request</returns>
+        /// <returns> The status of the delete operation. </returns>
         ArmResponse<Response> Delete();
 
         /// <summary>
-        /// Delete the resource.  This call returns a <see cref="Task"/> that completes the delete operation.  The task may perform multiple 
-        /// blocking calls
+        /// Delete the resource.
         /// </summary>
-        /// <param name="cancellationToken">A token allowing immediate cancellation of any blocking call performed during the deletion.</param>
-        /// <returns>A <see cref="Task"/> that completes the delete operation</returns>
+        /// <param name="cancellationToken"> A token allowing immediate cancellation of any blocking call performed during the deletion. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns the status of the delete operation. </returns>
         Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Delete the resource.  This call blocks until the delete operation is accepted on the service.
+        /// Delete the resource.
         /// </summary>
-        /// <param name="cancellationToken">A token allowing immediate cancellation of any blocking call performed during the deletion.</param>
-        /// <returns>An <see cref="ArmResponse{Response}"/> which allows the caller to control polling and waiting for resource deletion.
-        /// The operation yields the final http response to the delete request when complete.</returns>
+        /// <param name="cancellationToken"> A token allowing immediate cancellation of any blocking call performed during the deletion. </param>
+        /// <returns> A <see cref="ArmOperation{Response}"/> which allows the caller to control polling and waiting for resource deletion.
+        /// The operation yields the final http response to the delete request when complete. </returns>
+        /// <remarks>
+        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
+        /// </remarks>
         ArmOperation<Response> StartDelete(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete the resource.  This call returns a Task that blocks until the delete operation is accepted on the service.
         /// </summary>
-        /// <returns>A <see cref="Task"/> that performs deletion.  The task yields a <see cref="ArmResponse{Response}"/> which 
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
+        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns a <see cref="ArmOperation{Response}"/> which
         /// allows the caller to control polling and waiting for resource deletion.
-        /// The operation yields the final http response to the delete request when complete.</returns>
+        /// The operation yields the final http response to the delete request when complete. </returns>
+        /// <remarks>
+        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
+        /// </remarks>
         Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default);
     }
 }
