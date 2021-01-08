@@ -166,3 +166,13 @@ Example:
         /// Makes an additional network call to retrieve the full data model for each [Resource].
         /// </summary>
 ```
+
+### Builder
+
+#### Construct
+
+```
+        /// <summary>
+        /// Construct an object used to create a [Resource]
+        /// </summary>
+```
