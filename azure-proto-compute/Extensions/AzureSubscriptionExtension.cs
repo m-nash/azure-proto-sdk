@@ -1,8 +1,10 @@
 ﻿using Azure;
+using Azure.Core;
 using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Core;
 using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Core.Resources;
+using System;
 using System.Threading;
 
 namespace azure_proto_compute
@@ -20,12 +22,23 @@ namespace azure_proto_compute
         /// <returns></returns>
         public static Pageable<VirtualMachine> ListVirtualMachines(this SubscriptionOperations subscription)
         {
-            var vmOperations = subscription.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, subscription.Id.Subscription, cred,
-                    subscription.ClientOptions.Convert<ComputeManagementClientOptions>())).VirtualMachines;
+            ComputeManagementClient computeClient = GetComputeClient(subscription);
+            var vmOperations = computeClient.VirtualMachines;
             var result = vmOperations.ListAll();
             return new PhWrappingPageable<Azure.ResourceManager.Compute.Models.VirtualMachine, VirtualMachine>(
                 result,
                 s => new VirtualMachine(subscription.ClientOptions, new VirtualMachineData(s)));
+        }
+
+        private static ComputeManagementClient GetComputeClient(SubscriptionOperations subscription)
+        {
+            Func<Uri, TokenCredential, ComputeManagementClient> ctor = (baseUri, cred) => new ComputeManagementClient(
+                                baseUri,
+                                subscription.Id.Subscription,
+                                cred,
+                                subscription.ClientOptions.Convert<ComputeManagementClientOptions>());
+            var computeClient = subscription.GetClient(ctor);
+            return computeClient;
         }
 
         /// <summary>
@@ -47,30 +60,36 @@ namespace azure_proto_compute
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<ArmResource, ArmResourceData>(subscription.ClientOptions, subscription.Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext(subscription.ClientOptions, subscription.Id, filters, top, cancellationToken);
         }
 
         public static AsyncPageable<ArmResource> ListVirtualMachinesByNameAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(subscription.ClientOptions, subscription.Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync(subscription.ClientOptions, subscription.Id, filters, top, cancellationToken);
         }
         #endregion
 
         #region AvailabilitySet List Operations
-        public static Pageable<AvailabilitySet> ListAvailabilitySets(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<AvailabilitySet> ListAvailabilitySets(this SubscriptionOperations subscription)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(AvailabilitySetData.ResourceType);
-            filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext(subscription, filters, top, cancellationToken);
+            ComputeManagementClient computeClient = GetComputeClient(subscription);
+            var availabilitySetOperations = computeClient.AvailabilitySets;
+            var result = availabilitySetOperations.ListBySubscription();
+            return new PhWrappingPageable<Azure.ResourceManager.Compute.Models.AvailabilitySet, AvailabilitySet>(
+                result,
+                s => new AvailabilitySet(subscription.ClientOptions, new AvailabilitySetData(s)));
         }
 
-        public static AsyncPageable<AvailabilitySet> ListAvailabilitySetsAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter = null, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<AvailabilitySet> ListAvailabilitySetsAsync(this SubscriptionOperations subscription)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(AvailabilitySetData.ResourceType);
-            filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync(subscription, filters, top, cancellationToken);
+            ComputeManagementClient computeClient = GetComputeClient(subscription);
+            var availabilitySetOperations = computeClient.AvailabilitySets;
+            var result = availabilitySetOperations.ListBySubscriptionAsync();
+            return new PhWrappingAsyncPageable<Azure.ResourceManager.Compute.Models.AvailabilitySet, AvailabilitySet>(
+                result,
+                s => new AvailabilitySet(subscription.ClientOptions, new AvailabilitySetData(s)));
         }
         #endregion
     }

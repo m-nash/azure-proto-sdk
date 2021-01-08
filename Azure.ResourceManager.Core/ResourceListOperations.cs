@@ -15,7 +15,7 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class ResourceListOperations
     {
-        public static Pageable<ArmResourceOperations> ListAtContext(
+        public static Pageable<ArmResource> ListAtContext(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier id,
             ArmFilterCollection resourceFilters = null,
@@ -35,7 +35,7 @@ namespace Azure.ResourceManager.Core
                 cancellationToken);
         }
 
-        public static AsyncPageable<ArmResourceOperations> ListAtContextAsync(
+        public static AsyncPageable<ArmResource> ListAtContextAsync(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier id,
             ArmFilterCollection resourceFilters = null,
@@ -55,7 +55,7 @@ namespace Azure.ResourceManager.Core
                 cancellationToken);
         }
 
-        public static Pageable<ArmResourceOperations> ListAtContext(
+        public static Pageable<ArmResource> ListAtContext(
             SubscriptionOperations subscription,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
@@ -70,7 +70,7 @@ namespace Azure.ResourceManager.Core
                 cancellationToken);
         }
 
-        public static AsyncPageable<ArmResourceOperations> ListAtContextAsync(
+        public static AsyncPageable<ArmResource> ListAtContextAsync(
             SubscriptionOperations subscription,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
@@ -85,7 +85,7 @@ namespace Azure.ResourceManager.Core
                 cancellationToken);
         }
 
-        private static AsyncPageable<ArmResourceOperations> _ListAtContextAsync(
+        private static AsyncPageable<ArmResource> _ListAtContextAsync(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier scopeId,
             string scopeFilter,
@@ -112,7 +112,7 @@ namespace Azure.ResourceManager.Core
             return ConvertResultsAsync(result, clientOptions);
         }
 
-        private static Pageable<ArmResourceOperations> _ListAtContext(
+        private static Pageable<ArmResource> _ListAtContext(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier scopeId,
             string scopeFilter = null,
@@ -139,30 +139,30 @@ namespace Azure.ResourceManager.Core
             return ConvertResults(result, clientOptions);
         }
 
-        private static Pageable<ArmResourceOperations> ConvertResults(
+        private static Pageable<ArmResource> ConvertResults(
             Pageable<GenericResourceExpanded> result,
             AzureResourceManagerClientOptions clientOptions)
         {
-            return new PhWrappingPageable<GenericResourceExpanded, ArmResourceOperations>(
+            return new PhWrappingPageable<GenericResourceExpanded, ArmResource>(
                 result,
                 CreateResourceConverter(clientOptions));
         }
 
-        private static AsyncPageable<ArmResourceOperations> ConvertResultsAsync(
+        private static AsyncPageable<ArmResource> ConvertResultsAsync(
             AsyncPageable<GenericResourceExpanded> result,
             AzureResourceManagerClientOptions clientOptions)
         {
-            return new PhWrappingAsyncPageable<GenericResourceExpanded, ArmResourceOperations>(
+            return new PhWrappingAsyncPageable<GenericResourceExpanded, ArmResource>(
                 result,
                 CreateResourceConverter(clientOptions));
         }
 
-        private static Func<GenericResourceExpanded, ArmResourceOperations> CreateResourceConverter(AzureResourceManagerClientOptions clientOptions)
+        private static Func<GenericResourceExpanded, ArmResource> CreateResourceConverter(AzureResourceManagerClientOptions clientOptions)
         {
-             return s => Activator.CreateInstance(
-                    typeof(ArmResourceOperations),
+            return s => Activator.CreateInstance(
+                    typeof(ArmResource),
                     clientOptions,
-                    Activator.CreateInstance(typeof(ArmResource), s as Azure.ResourceManager.Resources.Models.Resource) as ArmResource) as ArmResourceOperations;
+                    Activator.CreateInstance(typeof(ArmResourceData), s as GenericResource) as ArmResourceData) as ArmResource;
         }
 
         private static void Validate(ResourceIdentifier id)

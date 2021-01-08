@@ -90,14 +90,14 @@ namespace azure_proto_network
         {
             ArmFilterCollection filters = new ArmFilterCollection(PublicIPAddressData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<ArmResource, ArmResourceData>(ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext(ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public AsyncPageable<ArmResource> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(PublicIPAddressData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync(ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public Pageable<PublicIpAddress> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
