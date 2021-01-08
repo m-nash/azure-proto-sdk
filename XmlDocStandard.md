@@ -18,7 +18,7 @@
 | `AzureResourceManagerClientOptions options` | `/// <param name="options"> The client parameters to use in these operations. </param>` |
 | `CancellationToken cancellationToken = default` | ``` /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.```<br>```/// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>``` |
 | `ArmResponse<TOperations>` | ??_____ |
-| `ArmResourceOperations` | ``` /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a virtual machine. </param>``` |
+| `ArmResourceOperations` | ``` /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a XXX. </param>``` |
 
 ### Standard class documentation
 
@@ -134,4 +134,29 @@ Example:
         /// Gets the resource type definition for a XXX.
         /// </summary>
 ```
+### List
 
+#### List / ListAsync
+
+```
+        /// <summary>
+        /// List the [Resource] for this resource group
+        /// </summary>
+```
+
+#### ListByName / ListByNameAsync
+
+```
+        /// <summary>
+        /// Filters the list of [Resource] for this [ParentResource] represented as generic resources
+        /// </summary>
+```
+
+#### ListByNameExpanded / ListByNameExpandedAsync
+
+```
+        /// <summary>
+        /// Filters the list of [Resource] for this [ParentResource] represented as generic resources.
+        /// Makes an additional network call to retrieve the full data model for each [Resource].
+        /// </summary>
+```
