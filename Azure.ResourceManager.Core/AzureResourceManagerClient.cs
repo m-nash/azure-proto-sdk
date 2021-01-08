@@ -13,52 +13,95 @@ using System.Threading.Tasks;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// The entry point for all ARM clients.  Note that, we may not want to take a dirrect dependency on Azure.Identity, so we may make the
-    /// credential required.
-    /// TODO: What is appropriate naming for ArmClient , given that we would not liek to make distinctions between data and management.
+    /// The entry point for all ARM clients.
     /// </summary>
     public class AzureResourceManagerClient
     {
+        /// <summary>
+        /// The base URI of the service.
+        /// </summary>
         internal static readonly string DefaultUri = "https://management.azure.com";
 
+        /// <summary>
+        /// Gets the Api version overrides.
+        /// </summary>
         public Dictionary<string, string> ApiVersionOverrides { get; private set; }
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
+        /// </summary>
         public AzureResourceManagerClient()
             : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
+        /// </summary>
+        /// <param name="options"> The client parameters to use in these operations. </param>
         public AzureResourceManagerClient(AzureResourceManagerClientOptions options)
             : this(options.BaseUri, options.Credential, null, options)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
+        /// </summary>
+        /// <param name="defaultSubscriptionId"> The id of the default Azure subscription. </param>
         public AzureResourceManagerClient(string defaultSubscriptionId)
             : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId, null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
+        /// </summary>
+        /// <param name="defaultSubscriptionId"> The id of the default Azure subscription. </param>
+        /// <param name="options"> The client parameters to use in these operations. </param>
         public AzureResourceManagerClient(string defaultSubscriptionId, AzureResourceManagerClientOptions options)
             : this(options.BaseUri, options.Credential, defaultSubscriptionId, null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
+        /// </summary>
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="defaultSubscriptionId"> The id of the default Azure subscription. </param>
         public AzureResourceManagerClient(TokenCredential credential, string defaultSubscriptionId)
             : this(new Uri(DefaultUri), credential, defaultSubscriptionId, null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
+        /// </summary>
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="defaultSubscriptionId"> The id of the default Azure subscription. </param>
+        /// <param name="options"> The client parameters to use in these operations. </param>
         public AzureResourceManagerClient(TokenCredential credential, string defaultSubscriptionId, AzureResourceManagerClientOptions options)
             : this(options.BaseUri, credential, defaultSubscriptionId, options)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
+        /// </summary>
+        /// <param name="baseUri"> The base URI of the service. </param>
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="options"> The client parameters to use in these operations. </param>
         public AzureResourceManagerClient(Uri baseUri, TokenCredential credential, AzureResourceManagerClientOptions options = null)
             : this(baseUri, credential, null, options)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
+        /// </summary>
+        /// <param name="baseUri"> The base URI of the service. </param>
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="defaultSubscriptionId"> The id of the default Azure subscription. </param>
+        /// <param name="options"> The client parameters to use in these operations. </param>
         public AzureResourceManagerClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId, AzureResourceManagerClientOptions options)
         {
             ClientOptions = new AzureResourceManagerClientOptions(baseUri, credential, options);
@@ -67,25 +110,53 @@ namespace Azure.ResourceManager.Core
             ApiVersionOverrides = new Dictionary<string, string>();
         }
 
+        /// <summary>
+        /// Gets the default Azure subscription.
+        /// </summary>
         public SubscriptionOperations DefaultSubscription { get; private set; }
 
+        /// <summary>
+        /// Gets the Azure resource manager client options.
+        /// </summary>
         internal virtual AzureResourceManagerClientOptions ClientOptions { get; }
 
+        /// <summary>
+        /// Gets the Azure subscription operations.
+        /// </summary>
+        /// <param name="subscription">  The data model of the subscription. </param>
+        /// <returns> Subscription operations. </returns>
         public SubscriptionOperations Subscription(SubscriptionData subscription) => new SubscriptionOperations(ClientOptions, subscription);
 
         /// <summary>
+        /// Gets the Azure subscription operations.
         /// </summary>
-        /// <param name="subscription"></param>
-        /// <returns></returns>
+        /// <param name="subscription"> The resource identifier of the subscription. </param>
+        /// <returns> Subscription operations. </returns>
         public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(ClientOptions, subscription);
 
+        /// <summary>
+        /// Gets the Azure subscription operations.
+        /// </summary>
+        /// <param name="subscription"> The id of the subscription. </param>
+        /// <returns> Subscription operations. </returns>
         public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(ClientOptions, subscription);
 
+        /// <summary>
+        /// Gets the Azure subscriptions.
+        /// </summary>
+        /// <returns> Subscription container. </returns>
         public SubscriptionContainer Subscriptions()
         {
             return new SubscriptionContainer(ClientOptions);
         }
 
+        /// <summary>
+        /// Lists all geo-locations.
+        /// </summary>
+        /// <param name="subscriptionId"> The Id of the target subscription. </param>
+        /// <param name="token"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of location data that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="InvalidOperationException"> <paramref name="subscriptionId"/> is null. </exception>
         public AsyncPageable<LocationData> ListLocationsAsync(string subscriptionId = null, CancellationToken token = default(CancellationToken))
         {
             async Task<AsyncPageable<LocationData>> PageableFunc()
@@ -107,6 +178,13 @@ namespace Azure.ResourceManager.Core
 
         }
 
+        /// <summary>
+        /// Lists all geo-locations.
+        /// </summary>
+        /// <param name="subscriptionId"> The Id of the target subscription. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A collection of location data that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="InvalidOperationException"> <paramref name="subscriptionId"/> is null. </exception>
         public Pageable<LocationData> ListLocations(string subscriptionId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrWhiteSpace(subscriptionId))
@@ -121,6 +199,13 @@ namespace Azure.ResourceManager.Core
             return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocations(subscriptionId, cancellationToken), s => new LocationData(s));
         }
 
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <param name="resourceType"> The resource type for subscription. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
         public async IAsyncEnumerable<Location> ListAvailableLocationsAsync(ResourceType resourceType, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             var subscriptionId = await GetDefaultSubscription(cancellationToken);
@@ -135,6 +220,13 @@ namespace Azure.ResourceManager.Core
             }
         }
 
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <param name="subscription"> The Azure subscription. </param>
+        /// <param name="resourceType"> The resource type for subscription. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
         public async IAsyncEnumerable<Location> ListAvailableLocationsAsync(string subscription, ResourceType resourceType, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             await foreach (var provider in GetResourcesClient(subscription).Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken).WithCancellation(cancellationToken))
@@ -150,12 +242,25 @@ namespace Azure.ResourceManager.Core
             }
         }
 
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <param name="resourceType"> The resource type for subscription. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
         public IEnumerable<Location> ListAvailableLocations(ResourceType resourceType, CancellationToken cancellationToken = default(CancellationToken))
         {
             var subscription = GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult();
             return ListAvailableLocations(subscription, resourceType, cancellationToken);
         }
 
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <param name="subscription"> The Azure subscription. </param>
+        /// <param name="resourceType"> The resource type for subscription. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
         public IEnumerable<Location> ListAvailableLocations(string subscription, ResourceType resourceType, CancellationToken cancellationToken = default(CancellationToken))
         {
             return GetResourcesClient(subscription).Providers.List(expand: "metadata", cancellationToken: cancellationToken)
@@ -164,33 +269,69 @@ namespace Azure.ResourceManager.Core
                 .Locations.Cast<Location>();
         }
 
+        /// <summary>
+        /// Gets resource group operations.
+        /// </summary>
+        /// <param name="subscription"> The id of the Azure subscription. </param>
+        /// <param name="resourceGroup"> The resource group name. </param>
+        /// <returns> Resource group operations. </returns>
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
         {
             return new ResourceGroupOperations(ClientOptions, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}");
         }
 
+        /// <summary>
+        /// Gets resource group operations.
+        /// </summary>
+        /// <param name="resourceGroup"> The resource identifier of the resource group. </param>
+        /// <returns> Resource group operations. </returns>
         public ResourceGroupOperations ResourceGroup(ResourceIdentifier resourceGroup)
         {
             return new ResourceGroupOperations(ClientOptions, resourceGroup);
         }
 
+        /// <summary>
+        /// Gets resource group operations.
+        /// </summary>
+        /// <param name="resourceGroup"> The data model of the resource group. </param>
+        /// <returns> Resource group operations. </returns>
         public ResourceGroupOperations ResourceGroup(ResourceGroupData resourceGroup)
         {
             return new ResourceGroupOperations(ClientOptions, resourceGroup.Id);
         }
 
+        /// <summary>
+        /// Gets resource operations base.
+        /// </summary>
+        /// <typeparam name="T"> The type of the underlying model this class wraps. </typeparam>
+        /// <param name="resource"> The tracked resource. </param>
+        /// <returns> Resource operations of the resource. </returns>
         public T GetResourceOperationsBase<T>(TrackedResource resource)
             where T : TrackedResource
         {
             return Activator.CreateInstance(typeof(T), ClientOptions, resource) as T;
         }
 
+        /// <summary>
+        /// Gets resource operations base.
+        /// </summary>
+        /// <typeparam name="T"> The type of the underlying model this class wraps. </typeparam>
+        /// <param name="resource"> The resource identifier of the resource. </param>
+        /// <returns> Resource operations of the resource. </returns>
         public T GetResourceOperationsBase<T>(ResourceIdentifier resource)
             where T : OperationsBase
         {
             return Activator.CreateInstance(typeof(T), ClientOptions, resource) as T;
         }
 
+        /// <summary>
+        /// Gets resource operations base.
+        /// </summary>
+        /// <typeparam name="T"> The type of the underlying model this class wraps. </typeparam>
+        /// <param name="subscription"> The id of the Azure subscription. </param>
+        /// <param name="resourceGroup"> The resource group name. </param>
+        /// <param name="name"> The resource type name. </param>
+        /// <returns> Resource operations of the resource. </returns>
         public T GetResourceOperationsBase<T>(string subscription, string resourceGroup, string name)
             where T : OperationsBase
         {
@@ -204,6 +345,18 @@ namespace Azure.ResourceManager.Core
                 CultureInfo.InvariantCulture) as T;
         }
 
+        /// <summary>
+        /// Gets resource operations base.
+        /// </summary>
+        /// <typeparam name="TContainer"> The type of the container class for a specific resource. </typeparam>
+        /// <typeparam name="TOperations"> The type of the operations class for a specific resource. </typeparam>
+        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
+        /// <param name="subscription"> The id of the Azure subscription. </param>
+        /// <param name="resourceGroup"> The resource group name. </param>
+        /// <param name="name"> The resource type name. </param>
+        /// <param name="model"> The resource data model. </param>
+        /// <param name="location"> The resource geo-location. </param>
+        /// <returns> Resource operations of the resource. </returns>
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string subscription, string resourceGroup, string name, TResource model, Location location = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations>
@@ -220,10 +373,10 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Fill in the default subscription in the simple case (passed in, or only one subscription available)
+        /// Gets default subscription.
         /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns the subscription id. </returns>
         internal async Task<string> GetDefaultSubscription(CancellationToken cancellationToken = default)
         {
             string sub = DefaultSubscription?.Id?.Subscription;
@@ -235,8 +388,14 @@ namespace Azure.ResourceManager.Core
             return sub;
         }
 
+        /// <summary>
+        /// Gets the subscription client.
+        /// </summary>
         internal SubscriptionsOperations SubscriptionsClient => GetResourcesClient(Guid.NewGuid().ToString()).Subscriptions;
 
+        /// <summary>
+        /// Gets the resource client.
+        /// </summary>
         internal ResourcesManagementClient GetResourcesClient(string subscription) => ClientOptions.GetClient((uri, credential) => new ResourcesManagementClient(uri, subscription, credential));
     }
 }
