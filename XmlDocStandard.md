@@ -16,7 +16,7 @@
 | `ResourceIdentifier id` | `/// <param name="id"> The identifier of the resource that is the target of operations. </param>`|
 | `ResourceIdentifier parentId` | `/// <param name="parentId"> The resource Id of the parent resource. </param>` |
 | `AzureResourceManagerClientOptions options` | `/// <param name="options"> The client parameters to use in these operations. </param>` |
-| `CancellationToken cancellationToken = default` | ``` /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.```<br>```/// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>``` |
+| `CancellationToken cancellationToken = default` | ``` /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>``` |
 | `ArmResponse<TOperations>` | ??_____ |
 | `ArmResourceOperations` | ``` /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a XXX. </param>``` |
 
