@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// Interface for operations that allow manipulating resource tags
+    /// Interface for operations that allow manipulating resource tags.
     /// </summary>
     /// <typeparam name="TOperations"> The typed operations for a specific resource. </typeparam>
     public interface ITaggableResource<TOperations>

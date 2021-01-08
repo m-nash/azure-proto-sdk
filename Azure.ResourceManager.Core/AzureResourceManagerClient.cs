@@ -229,7 +229,7 @@ namespace Azure.ResourceManager.Core
             string sub = DefaultSubscription?.Id?.Subscription;
             if (null == sub)
             {
-                sub = await Subscriptions().GetDefaultSubscription(cancellationToken);
+                sub = await Subscriptions().GetDefaultSubscriptionAsync(cancellationToken);
             }
 
             return sub;
