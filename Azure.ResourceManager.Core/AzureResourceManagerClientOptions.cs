@@ -76,8 +76,6 @@ namespace Azure.ResourceManager.Core
             }
         }
 
-        /// TODO policy lists are internal hence we don't have acces to them by inheriting ClientOptions in this Asembly, this is a wrapper for now to convert to the concrete
-        /// policy options.
         /// <summary>
         /// Adds a policy for Azure resource manager client http call.
         /// </summary>
@@ -85,6 +83,8 @@ namespace Azure.ResourceManager.Core
         /// <param name="position"> The position of the http call policy in the pipeline. </param>
         public new void AddPolicy(HttpPipelinePolicy policy, HttpPipelinePosition position)
         {
+            // TODO policy lists are internal hence we don't have acces to them by inheriting ClientOptions in this Asembly, this is a wrapper for now to convert to the concrete
+            // policy options.
             switch (position)
             {
                 case HttpPipelinePosition.PerCall:
