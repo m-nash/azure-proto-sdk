@@ -13,14 +13,14 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="SubscriptionData"/> class.
         /// </summary>
-        /// <param name="subscription">The subscription model</param>
+        /// <param name="subscription"> The subscription model. </param>
         public SubscriptionData(Azure.ResourceManager.Resources.Models.Subscription subscription)
             : base(subscription.Id, null, subscription)
         {
         }
 
         /// <summary>
-        /// Gets the subscription id
+        /// Gets the subscription id.
         /// </summary>
         public override string Name => Model.SubscriptionId;
 

@@ -11,8 +11,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="Subscription"/> class.
         /// </summary>
-        /// <param name="options">The client parameters to use in these operations.</param>
-        /// <param name="resource">The resource data model.</param>
+        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="resource"> The resource data model. </param>
         internal Subscription(AzureResourceManagerClientOptions options, SubscriptionData resource)
             : base(options, resource)
         {

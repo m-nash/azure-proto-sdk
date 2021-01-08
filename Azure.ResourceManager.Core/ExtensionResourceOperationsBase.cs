@@ -40,7 +40,7 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase"/> class.
         /// </summary>
         /// <param name="options">Client configuration properties for these operations</param>
-        /// <param name="resource">The extention resource for operatiosn to act upon</param>
+        /// <param name="resource">The extention resource for operations to act upon</param>
         protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
             : this(options, resource.Id)
         {
@@ -50,7 +50,7 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// Separate Extension resources from non-extension resources
     /// </summary>
-    /// <typeparam name="TOperations">The typed operatiosn class for a specific resource.</typeparam>
+    /// <typeparam name="TOperations">The typed operations class for a specific resource.</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:File may only contain a single type", Justification = "Resource types that differ by Type arguments")]
     public abstract class ExtensionResourceOperationsBase<TOperations> : ExtensionResourceOperationsBase
         where TOperations : ExtensionResourceOperationsBase<TOperations>
@@ -87,7 +87,7 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase{TOperations}"/> class.
         /// </summary>
         /// <param name="options">Client configuration properties for these operations</param>
-        /// <param name="resource">The extention resource for operatiosn to act upon</param>
+        /// <param name="resource">The extention resource for operations to act upon</param>
         protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
             : this(options, resource.Id)
         {

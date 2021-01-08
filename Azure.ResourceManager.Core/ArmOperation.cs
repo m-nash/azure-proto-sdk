@@ -30,7 +30,7 @@ namespace Azure.ResourceManager.Core
     }
 
     /// <summary>
-    ///     Generic ARM long runnign operation class for operatiosn with no returned value
+    ///     Generic ARM long runnign operation class for operations with no returned value
     ///     TODO: Reimplement without wrapping
     /// </summary>
     public class ArmVoidOperation : ArmOperation<Response>
