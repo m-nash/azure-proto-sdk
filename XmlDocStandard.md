@@ -184,4 +184,6 @@ Example:
         /// Add a tag to a [Resource].
         /// If the tag already exists it will be modified.
         /// </summary>
+        /// <param name="key"> The key for the tag. </param>
+        /// <param name="value"> The value for the tag. </param>
 ```
