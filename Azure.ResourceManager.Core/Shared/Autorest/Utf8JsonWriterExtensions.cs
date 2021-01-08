@@ -40,7 +40,8 @@ namespace Azure.Core
 
         public static void WriteNumberValue(this Utf8JsonWriter writer, DateTimeOffset value, string format)
         {
-            if (format != "U") throw new ArgumentOutOfRangeException(format, "Only 'U' format is supported when writing a DateTimeOffset as a Number.");
+            if (format != "U")
+                throw new ArgumentOutOfRangeException(format, "Only 'U' format is supported when writing a DateTimeOffset as a Number.");
 
             writer.WriteNumberValue(value.ToUnixTimeSeconds());
         }
@@ -83,7 +84,7 @@ namespace Azure.Core
                     writer.WriteStringValue(g);
                     break;
                 case DateTimeOffset dateTimeOffset:
-                    writer.WriteStringValue(dateTimeOffset,"O");
+                    writer.WriteStringValue(dateTimeOffset, "O");
                     break;
                 case DateTime dateTime:
                     writer.WriteStringValue(dateTime, "O");
@@ -95,6 +96,7 @@ namespace Azure.Core
                         writer.WritePropertyName(pair.Key);
                         writer.WriteObjectValue(pair.Value);
                     }
+
                     writer.WriteEndObject();
                     break;
                 case IEnumerable<object> objectEnumerable:
@@ -103,6 +105,7 @@ namespace Azure.Core
                     {
                         writer.WriteObjectValue(item);
                     }
+
                     writer.WriteEndArray();
                     break;
 

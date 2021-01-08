@@ -9,6 +9,7 @@ namespace Azure.Core
     internal interface IOperationSource<T>
     {
         T CreateResult(Response response, CancellationToken cancellationToken);
+
         ValueTask<T> CreateResultAsync(Response response, CancellationToken cancellationToken);
     }
 }

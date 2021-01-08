@@ -20,7 +20,6 @@ namespace Azure.ResourceManager.Core
         where TOperations : ResourceOperationsBase<TOperations>
         where TResource : Resource
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
         /// <param name="options">The http client options for these operations</param>
@@ -103,9 +102,9 @@ namespace Azure.ResourceManager.Core
 
         /// <summary>
         /// Begins an Operation on the service to create a new resource as specified. The call returns a Task
-        /// that completes when the service accepts the operation.  The 
+        /// that completes when the service accepts the operation.  The
         /// <see cref="System.Threading.Tasks.Task"/> yields an
-        /// <see cref="ArmOperation{TOperations}"/> which allows the caller to control polling for completion 
+        /// <see cref="ArmOperation{TOperations}"/> which allows the caller to control polling for completion
         /// of the Create operation.
         /// </summary>
         /// <param name="name">The name of the resource.</param>

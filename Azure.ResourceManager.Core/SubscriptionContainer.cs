@@ -33,9 +33,10 @@ namespace Azure.ResourceManager.Core
                 Converter());
         }
 
-        private Func<ResourceManager.Resources.Models.Subscription, SubscriptionOperations> Converter()
+        public override void Validate(ResourceIdentifier identifier)
         {
-            return s => new SubscriptionOperations(ClientOptions, new SubscriptionData(s));
+            if (identifier != null)
+                throw new ArgumentException("Invalid parent for subscription container");
         }
 
         internal async Task<string> GetDefaultSubscription(CancellationToken token = default(CancellationToken))
@@ -53,15 +54,14 @@ namespace Azure.ResourceManager.Core
             return sub;
         }
 
-        public override void Validate(ResourceIdentifier identifier)
-        {
-            if (identifier != null)
-                throw new ArgumentException("Invalid parent for subscription container");
-        }
-
         protected internal override ResourceType GetValidResourceType()
         {
             return SubscriptionOperations.ResourceType;
+        }
+
+        private Func<ResourceManager.Resources.Models.Subscription, SubscriptionOperations> Converter()
+        {
+            return s => new SubscriptionOperations(ClientOptions, new SubscriptionData(s));
         }
     }
 }

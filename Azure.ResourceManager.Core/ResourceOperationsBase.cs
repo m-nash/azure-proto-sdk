@@ -69,6 +69,21 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
+        /// Get details for this resource from the service.  This call will block until a response is returne from the service
+        /// </summary>
+        /// <returns>An Http response with the operations for this resource</returns>
+        public abstract ArmResponse<TOperations> Get();
+
+        /// <summary>
+        /// Get details for thsi resource from the service.  This call returns a Task, which can  be used to control waiting
+        /// for a response from the service.
+        /// </summary>
+        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service.</param>
+        /// <returns>A Task that is complete when a response is returned from the service.  The task yields the operations
+        /// over this resource when complete.</returns>
+        public abstract Task<ArmResponse<TOperations>> GetAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Gets new dictionary of tags after adding the key value pair or updating the existing key value pair
         /// </summary>
         /// <param name="key"> The key to update. </param>
@@ -85,20 +100,5 @@ namespace Azure.ResourceManager.Core
                 existingTags.Add(key, value);
             }
         }
-
-        /// <summary>
-        /// Get details for this resource from the service.  This call will block until a response is returne from the service
-        /// </summary>
-        /// <returns>An Http response with the operations for this resource</returns>
-        public abstract ArmResponse<TOperations> Get();
-
-        /// <summary>
-        /// Get details for thsi resource from the service.  This call returns a Task, which can  be used to control waiting
-        /// for a response from the service.
-        /// </summary>
-        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service.</param>
-        /// <returns>A Task that is complete when a response is returned from the service.  The task yields the operations
-        /// over this resource when complete.</returns>
-        public abstract Task<ArmResponse<TOperations>> GetAsync(CancellationToken cancellationToken = default);
     }
 }

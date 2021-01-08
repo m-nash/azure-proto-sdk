@@ -28,8 +28,6 @@ namespace Azure.ResourceManager.Core
 
         public virtual AzureResourceManagerClientOptions ClientOptions { get; }
 
-        protected virtual Resource Resource { get; set; }
-
         public virtual Location DefaultLocation { get; }
 
         public virtual ResourceIdentifier Id { get; }
@@ -39,8 +37,6 @@ namespace Azure.ResourceManager.Core
             if (identifier?.Type != GetValidResourceType())
                 throw new InvalidOperationException($"Invalid resource type {identifier?.Type} expected {GetValidResourceType()}");
         }
-
-        protected internal abstract ResourceType GetValidResourceType();
 
         /// <summary>
         ///     Note that this is currently adapting to underlying management clients - once generator changes are in, this would
@@ -53,5 +49,9 @@ namespace Azure.ResourceManager.Core
         {
             return ClientOptions.GetClient(creator);
         }
+
+        protected virtual Resource Resource { get; set; }
+
+        protected internal abstract ResourceType GetValidResourceType();
     }
 }

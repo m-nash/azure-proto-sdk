@@ -9,6 +9,6 @@ namespace Azure.Core
     {
         AzureAsyncOperation,
         Location,
-        OriginalUri
+        OriginalUri,
     }
 }

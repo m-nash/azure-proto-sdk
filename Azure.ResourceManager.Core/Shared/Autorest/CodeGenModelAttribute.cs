@@ -20,11 +20,13 @@ namespace Azure.Core
         /// </summary>
         public string[]? Formats { get; set; }
 
-        public CodeGenModelAttribute() : base(null)
+        public CodeGenModelAttribute()
+            : base(null)
         {
         }
 
-        public CodeGenModelAttribute(string originalName): base(originalName)
+        public CodeGenModelAttribute(string originalName)
+            : base(originalName)
         {
         }
     }

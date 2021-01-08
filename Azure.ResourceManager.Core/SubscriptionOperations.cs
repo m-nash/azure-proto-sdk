@@ -25,7 +25,7 @@ namespace Azure.ResourceManager.Core
         {
         }
 
-        internal SubscriptionOperations(AzureResourceManagerClientOptions options, Resource subscription )
+        internal SubscriptionOperations(AzureResourceManagerClientOptions options, Resource subscription)
             : base(options, subscription)
         {
         }
@@ -70,14 +70,14 @@ namespace Azure.ResourceManager.Core
                 Converter());
         }
 
-        private Func<Azure.ResourceManager.Resources.Models.Subscription, Subscription> Converter()
-        {
-            return s => new Subscription(ClientOptions, new SubscriptionData(s));
-        }
-
         protected internal override ResourceType GetValidResourceType()
         {
             return ResourceType;
+        }
+
+        private Func<Azure.ResourceManager.Resources.Models.Subscription, Subscription> Converter()
+        {
+            return s => new Subscription(ClientOptions, new SubscriptionData(s));
         }
     }
 }

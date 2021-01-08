@@ -23,7 +23,6 @@ namespace Azure.ResourceManager.Core
 
         public Dictionary<string, string> ApiVersionOverrides { get; private set; }
 
-
         public AzureResourceManagerClient()
             : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, null)
         {
@@ -100,11 +99,9 @@ namespace Azure.ResourceManager.Core
                 }
 
                 return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocationsAsync(subscriptionId, token), s => new LocationData(s));
-
             }
 
             return new PhTaskDeferringAsyncPageable<LocationData>(PageableFunc);
-
         }
 
         public Pageable<LocationData> ListLocations(string subscriptionId = null, CancellationToken cancellationToken = default(CancellationToken))

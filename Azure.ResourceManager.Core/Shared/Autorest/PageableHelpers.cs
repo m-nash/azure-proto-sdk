@@ -11,14 +11,16 @@ namespace Azure.Core
 {
     internal static class PageableHelpers
     {
-        public static Pageable<T> CreateEnumerable<T>(Func<int?, Page<T>> firstPageFunc, Func<string?, int?, Page<T>>? nextPageFunc, int? pageSize = default) where T : notnull
+        public static Pageable<T> CreateEnumerable<T>(Func<int?, Page<T>> firstPageFunc, Func<string?, int?, Page<T>>? nextPageFunc, int? pageSize = default)
+            where T : notnull
         {
             PageFunc<T> first = (continuationToken, pageSizeHint) => firstPageFunc(pageSizeHint);
             PageFunc<T>? next = nextPageFunc != null ? new PageFunc<T>(nextPageFunc) : null;
             return new FuncPageable<T>(first, next, pageSize);
         }
 
-        public static AsyncPageable<T> CreateAsyncEnumerable<T>(Func<int?, Task<Page<T>>> firstPageFunc, Func<string?, int?, Task<Page<T>>>? nextPageFunc, int? pageSize = default) where T : notnull
+        public static AsyncPageable<T> CreateAsyncEnumerable<T>(Func<int?, Task<Page<T>>> firstPageFunc, Func<string?, int?, Task<Page<T>>>? nextPageFunc, int? pageSize = default)
+            where T : notnull
         {
             AsyncPageFunc<T> first = (continuationToken, pageSizeHint) => firstPageFunc(pageSizeHint);
             AsyncPageFunc<T>? next = nextPageFunc != null ? new AsyncPageFunc<T>(nextPageFunc) : null;
@@ -26,9 +28,11 @@ namespace Azure.Core
         }
 
         internal delegate Task<Page<T>> AsyncPageFunc<T>(string? continuationToken = default, int? pageSizeHint = default);
+
         internal delegate Page<T> PageFunc<T>(string? continuationToken = default, int? pageSizeHint = default);
 
-        internal class FuncAsyncPageable<T> : AsyncPageable<T> where T : notnull
+        internal class FuncAsyncPageable<T> : AsyncPageable<T>
+            where T : notnull
         {
             private readonly AsyncPageFunc<T> _firstPageFunc;
             private readonly AsyncPageFunc<T>? _nextPageFunc;
@@ -57,11 +61,13 @@ namespace Azure.Core
                     yield return pageResponse;
                     continuationToken = pageResponse.ContinuationToken;
                     pageFunc = _nextPageFunc;
-                } while (!string.IsNullOrEmpty(continuationToken) && pageFunc != null);
+                }
+                while (!string.IsNullOrEmpty(continuationToken) && pageFunc != null);
             }
         }
 
-        internal class FuncPageable<T> : Pageable<T> where T : notnull
+        internal class FuncPageable<T> : Pageable<T>
+            where T : notnull
         {
             private readonly PageFunc<T> _firstPageFunc;
             private readonly PageFunc<T>? _nextPageFunc;
@@ -90,7 +96,8 @@ namespace Azure.Core
                     yield return pageResponse;
                     continuationToken = pageResponse.ContinuationToken;
                     pageFunc = _nextPageFunc;
-                } while (!string.IsNullOrEmpty(continuationToken) && pageFunc != null);
+                }
+                while (!string.IsNullOrEmpty(continuationToken) && pageFunc != null);
             }
         }
     }

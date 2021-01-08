@@ -25,10 +25,12 @@ namespace Azure.Core
                     {
                         return intValue;
                     }
+
                     if (element.TryGetInt64(out long longValue))
                     {
                         return longValue;
                     }
+
                     return element.GetDouble();
                 case JsonValueKind.True:
                     return true;
@@ -43,6 +45,7 @@ namespace Azure.Core
                     {
                         dictionary.Add(jsonProperty.Name, jsonProperty.Value.GetObject());
                     }
+
                     return dictionary;
                 case JsonValueKind.Array:
                     var list = new List<object?>();
@@ -50,6 +53,7 @@ namespace Azure.Core
                     {
                         list.Add(item.GetObject());
                     }
+
                     return list.ToArray();
                 default:
                     throw new NotSupportedException("Not supported value kind " + element.ValueKind);
@@ -80,6 +84,7 @@ namespace Azure.Core
                 {
                     throw new NotSupportedException($"Cannot convert \"{text}\" to a Char");
                 }
+
                 return text[0];
             }
             else

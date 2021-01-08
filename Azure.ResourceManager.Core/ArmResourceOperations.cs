@@ -28,11 +28,6 @@ namespace Azure.ResourceManager.Core
             creds,
             ClientOptions.Convert<ResourcesManagementClientOptions>()))?.Resources;
 
-        private protected virtual ArmResource GetResource()
-        {
-            return Get().Value;
-        }
-
         public ArmResponse<Response> Delete()
         {
             return new ArmResponse(Operations.StartDeleteById(Id, _apiVersion).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
@@ -113,6 +108,11 @@ namespace Azure.ResourceManager.Core
         protected internal override ResourceType GetValidResourceType()
         {
             return ResourceGroupOperations.ResourceType;
+        }
+
+        private protected virtual ArmResource GetResource()
+        {
+            return Get().Value;
         }
     }
 }

@@ -93,6 +93,11 @@ namespace Azure.ResourceManager.Core
                 cancellationToken);
         }
 
+        protected static ResourcesManagementClient GetResourcesClient(AzureResourceManagerClientOptions options, string id)
+        {
+            return new ResourcesManagementClient(options.BaseUri, id, options.Credential);
+        }
+
         private static AsyncPageable<TOperations> _ListAtContextAsync<TOperations, TResource>(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier scopeId,
@@ -131,7 +136,6 @@ namespace Azure.ResourceManager.Core
             CancellationToken cancellationToken = default)
             where TOperations : ResourceOperationsBase<TOperations>
             where TResource : TrackedResource
-
         {
             var resourceOperations = GetResourcesClient(clientOptions, scopeId.Subscription).Resources;
             Pageable<GenericResourceExpanded> result;
@@ -192,11 +196,6 @@ namespace Azure.ResourceManager.Core
                 throw new ArgumentException(
                     $"{id.Type} is not valid to list at context must be {ResourceGroupOperations.ResourceType} or {SubscriptionOperations.ResourceType}");
             }
-        }
-
-        protected static ResourcesManagementClient GetResourcesClient(AzureResourceManagerClientOptions options, string id)
-        {
-            return new ResourcesManagementClient(options.BaseUri, id, options.Credential);
         }
     }
 }

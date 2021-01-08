@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Azure.Core
 {
-    internal class ChangeTrackingList<T>: IList<T>, IReadOnlyList<T>
+    internal class ChangeTrackingList<T> : IList<T>, IReadOnlyList<T>
     {
         private IList<T>? _innerList;
 
@@ -18,11 +18,13 @@ namespace Azure.Core
         {
         }
 
-        public ChangeTrackingList(Optional<IList<T>> optionalList) : this(optionalList.Value)
+        public ChangeTrackingList(Optional<IList<T>> optionalList)
+            : this(optionalList.Value)
         {
         }
 
-        public ChangeTrackingList(Optional<IReadOnlyList<T>> optionalList) : this(optionalList.Value)
+        public ChangeTrackingList(Optional<IReadOnlyList<T>> optionalList)
+            : this(optionalList.Value)
         {
         }
 
@@ -64,6 +66,7 @@ namespace Azure.Core
 
                 return EnumerateEmpty();
             }
+
             return EnsureList().GetEnumerator();
         }
 
@@ -120,6 +123,7 @@ namespace Azure.Core
                 {
                     return 0;
                 }
+
                 return EnsureList().Count;
             }
         }
@@ -173,6 +177,7 @@ namespace Azure.Core
 
                 return EnsureList()[index];
             }
+
             set
             {
                 if (IsUndefined)

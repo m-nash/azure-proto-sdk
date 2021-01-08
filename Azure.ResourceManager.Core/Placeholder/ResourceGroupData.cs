@@ -9,7 +9,6 @@ namespace Azure.ResourceManager.Core
 {
     public class ResourceGroupData : TrackedResource<Azure.ResourceManager.Resources.Models.ResourceGroup>, IManagedByResource
     {
-
         public ResourceGroupData(Azure.ResourceManager.Resources.Models.ResourceGroup rg)
             : base(rg.Id, rg.Location, rg)
         {

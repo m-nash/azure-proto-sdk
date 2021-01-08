@@ -15,10 +15,14 @@ namespace Azure.ResourceManager.Core
         public static readonly ResourceType ResourceType = "Microsoft.Resources/resourceGroups";
 
         internal ResourceGroupOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id) { }
+            : base(options, id)
+        {
+        }
 
         internal ResourceGroupOperations(AzureResourceManagerClientOptions options, Resource resource)
-            : base(options, resource) { }
+            : base(options, resource)
+        {
+        }
 
         internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(
             uri,

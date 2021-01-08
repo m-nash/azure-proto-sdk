@@ -8,7 +8,8 @@ namespace Azure.Core
     [AttributeUsage(AttributeTargets.Class)]
     internal class CodeGenClientAttribute : CodeGenTypeAttribute
     {
-        public CodeGenClientAttribute(string originalName) : base(originalName)
+        public CodeGenClientAttribute(string originalName)
+            : base(originalName)
         {
         }
     }

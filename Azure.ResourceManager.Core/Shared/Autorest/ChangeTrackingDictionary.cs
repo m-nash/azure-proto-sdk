@@ -9,7 +9,8 @@ using System.Collections.Generic;
 
 namespace Azure.Core
 {
-    internal class ChangeTrackingDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IReadOnlyDictionary<TKey, TValue> where TKey: notnull
+    internal class ChangeTrackingDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IReadOnlyDictionary<TKey, TValue>
+        where TKey : notnull
     {
         private IDictionary<TKey, TValue>? _innerDictionary;
 
@@ -17,24 +18,28 @@ namespace Azure.Core
         {
         }
 
-        public ChangeTrackingDictionary(Optional<IReadOnlyDictionary<TKey, TValue>> optionalDictionary) : this(optionalDictionary.Value)
+        public ChangeTrackingDictionary(Optional<IReadOnlyDictionary<TKey, TValue>> optionalDictionary)
+            : this(optionalDictionary.Value)
         {
         }
 
-        public ChangeTrackingDictionary(Optional<IDictionary<TKey, TValue>> optionalDictionary) : this(optionalDictionary.Value)
+        public ChangeTrackingDictionary(Optional<IDictionary<TKey, TValue>> optionalDictionary)
+            : this(optionalDictionary.Value)
         {
         }
 
         private ChangeTrackingDictionary(IDictionary<TKey, TValue> dictionary)
         {
-            if (dictionary == null) return;
+            if (dictionary == null)
+                return;
 
             _innerDictionary = new Dictionary<TKey, TValue>(dictionary);
         }
 
         private ChangeTrackingDictionary(IReadOnlyDictionary<TKey, TValue> dictionary)
         {
-            if (dictionary == null) return;
+            if (dictionary == null)
+                return;
 
             _innerDictionary = new Dictionary<TKey, TValue>();
             foreach (KeyValuePair<TKey, TValue> pair in dictionary)
@@ -53,8 +58,10 @@ namespace Azure.Core
                 {
                     yield break;
                 }
+
                 return GetEmptyEnumerator();
             }
+
             return EnsureDictionary().GetEnumerator();
         }
 
@@ -124,6 +131,7 @@ namespace Azure.Core
                 {
                     return false;
                 }
+
                 return EnsureDictionary().IsReadOnly;
             }
         }
@@ -160,6 +168,7 @@ namespace Azure.Core
                 value = default!;
                 return false;
             }
+
             return EnsureDictionary().TryGetValue(key, out value!);
         }
 

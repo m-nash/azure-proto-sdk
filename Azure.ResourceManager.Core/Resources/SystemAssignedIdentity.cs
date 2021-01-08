@@ -10,33 +10,14 @@
 
         public Guid? PrincipalId { get; private set; }
 
-        public SystemAssignedIdentity() { }
+        public SystemAssignedIdentity()
+        {
+        }
 
         public SystemAssignedIdentity(Guid tenantId, Guid principalId)
         {
             TenantId = tenantId;
             PrincipalId = principalId;
-        }
-
-        public int CompareTo(SystemAssignedIdentity other)
-        {
-            if (other == null)
-                return 1;
-
-            int compareResult = 0;
-            if ((compareResult = TenantId.GetValueOrDefault().CompareTo(other.TenantId.GetValueOrDefault())) == 0 &&
-                (compareResult = PrincipalId.GetValueOrDefault().CompareTo(other.PrincipalId.GetValueOrDefault())) == 0)
-                return 0;
-
-            return compareResult;
-        }
-
-        public bool Equals(SystemAssignedIdentity other)
-        {
-            if (other == null)
-                return false;
-
-            return TenantId.Equals(other.TenantId) && PrincipalId.Equals(other.PrincipalId);
         }
 
         public static SystemAssignedIdentity Deserialize(JsonElement element)
@@ -109,6 +90,27 @@
                 return other == null;
 
             return original.Equals(other);
+        }
+
+        public int CompareTo(SystemAssignedIdentity other)
+        {
+            if (other == null)
+                return 1;
+
+            int compareResult = 0;
+            if ((compareResult = TenantId.GetValueOrDefault().CompareTo(other.TenantId.GetValueOrDefault())) == 0 &&
+                (compareResult = PrincipalId.GetValueOrDefault().CompareTo(other.PrincipalId.GetValueOrDefault())) == 0)
+                return 0;
+
+            return compareResult;
+        }
+
+        public bool Equals(SystemAssignedIdentity other)
+        {
+            if (other == null)
+                return false;
+
+            return TenantId.Equals(other.TenantId) && PrincipalId.Equals(other.PrincipalId);
         }
     }
 }

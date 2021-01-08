@@ -26,14 +26,17 @@ namespace Azure.Core
             return !(collection is ChangeTrackingDictionary<TKey, TValue> changeTrackingList && changeTrackingList.IsUndefined);
         }
 
-        public static bool IsDefined<T>(T? value) where T: struct
+        public static bool IsDefined<T>(T? value)
+            where T : struct
         {
             return value.HasValue;
         }
+
         public static bool IsDefined(object value)
         {
             return value != null;
         }
+
         public static bool IsDefined(string value)
         {
             return value != null;
@@ -50,6 +53,7 @@ namespace Azure.Core
             {
                 return optional.Value;
             }
+
             return new ChangeTrackingDictionary<TKey, TValue>(optional);
         }
 
@@ -59,14 +63,17 @@ namespace Azure.Core
             {
                 return optional.Value;
             }
+
             return new ChangeTrackingDictionary<TKey, TValue>(optional);
         }
+
         public static IReadOnlyList<T> ToList<T>(Optional<IReadOnlyList<T>> optional)
         {
             if (optional.HasValue)
             {
                 return optional.Value;
             }
+
             return new ChangeTrackingList<T>(optional);
         }
 
@@ -76,19 +83,23 @@ namespace Azure.Core
             {
                 return optional.Value;
             }
+
             return new ChangeTrackingList<T>(optional);
         }
 
-        public static T? ToNullable<T>(Optional<T> optional) where T: struct
+        public static T? ToNullable<T>(Optional<T> optional)
+            where T : struct
         {
             if (optional.HasValue)
             {
                 return optional.Value;
             }
+
             return default;
         }
 
-        public static T? ToNullable<T>(Optional<T?> optional) where T: struct
+        public static T? ToNullable<T>(Optional<T?> optional)
+            where T : struct
         {
             return optional.Value;
         }
@@ -96,16 +107,19 @@ namespace Azure.Core
 
     internal readonly partial struct Optional<T>
     {
-        public Optional(T value) : this()
+        public Optional(T value)
+            : this()
         {
             Value = value;
             HasValue = true;
         }
 
         public T Value { get; }
+
         public bool HasValue { get; }
 
         public static implicit operator Optional<T>(T value) => new Optional<T>(value);
+
         public static implicit operator T(Optional<T> optional) => optional.Value;
     }
 }

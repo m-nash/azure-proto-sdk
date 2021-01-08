@@ -13,6 +13,7 @@ namespace Azure.Core
     internal class TypeFormatters
     {
         private const string RoundtripZFormat = "yyyy-MM-ddTHH:mm:ss.fffffffZ";
+
         public static string DefaultNumberFormat { get; } = "G";
 
         public static string ToString(bool value) => value ? "true" : "false";
@@ -95,6 +96,20 @@ namespace Azure.Core
             return Convert.FromBase64CharArray(output, 0, output.Length);
         }
 
+        public static DateTimeOffset ParseDateTimeOffset(string value, string format)
+        {
+            return format switch
+            {
+                "U" => DateTimeOffset.FromUnixTimeSeconds(long.Parse(value, CultureInfo.InvariantCulture)),
+                _ => DateTimeOffset.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal)
+            };
+        }
+
+        public static TimeSpan ParseTimeSpan(string value, string format) => format switch
+        {
+            "P" => XmlConvert.ToTimeSpan(value),
+            _ => TimeSpan.ParseExact(value, format, CultureInfo.InvariantCulture)
+        };
 
         private static int GetNumBase64PaddingCharsToAddForDecode(int inputLength)
         {
@@ -110,20 +125,5 @@ namespace Azure.Core
                     throw new InvalidOperationException("Malformed input");
             }
         }
-
-        public static DateTimeOffset ParseDateTimeOffset(string value, string format)
-        {
-            return format switch
-            {
-                "U" => DateTimeOffset.FromUnixTimeSeconds(long.Parse(value, CultureInfo.InvariantCulture)),
-                _ => DateTimeOffset.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal)
-            };
-        }
-
-        public static TimeSpan ParseTimeSpan(string value, string format) => format switch
-        {
-            "P" => XmlConvert.ToTimeSpan(value),
-            _ => TimeSpan.ParseExact(value, format, CultureInfo.InvariantCulture)
-        };
     }
 }

@@ -21,7 +21,10 @@ namespace Azure.ResourceManager.Core
 
         public IDictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; private set; } // maintain structure of {id, (clientid, principal id)} in case of multiple UserIdentities
 
-        public Identity() : this(null, false) { } //not system or user
+        public Identity()
+            : this(null, false)
+        {
+        } // not system or user
 
         public Identity(Dictionary<ResourceIdentifier, UserAssignedIdentity> user, bool useSystemAssigned)
         {
@@ -48,33 +51,6 @@ namespace Azure.ResourceManager.Core
             {
                 UserAssignedIdentities = user;
             }
-        }
-
-        public bool Equals(Identity other)
-        {
-            if (other == null)
-                return false;
-
-            if (UserAssignedIdentities.Count == other.UserAssignedIdentities.Count)
-            {
-                foreach (var identity in UserAssignedIdentities)
-                {
-                    UserAssignedIdentity value;
-                    if (other.UserAssignedIdentities.TryGetValue(identity.Key, out value))
-                    {
-                        if (!UserAssignedIdentity.Equals(identity.Value, value))
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return SystemAssignedIdentity.Equals(SystemAssignedIdentity, other.SystemAssignedIdentity);
         }
 
         public static Identity Deserialize(JsonElement element)
@@ -193,6 +169,33 @@ namespace Azure.ResourceManager.Core
             writer.WriteEndObject();
             writer.WriteEndObject();
             writer.Flush();
+        }
+
+        public bool Equals(Identity other)
+        {
+            if (other == null)
+                return false;
+
+            if (UserAssignedIdentities.Count == other.UserAssignedIdentities.Count)
+            {
+                foreach (var identity in UserAssignedIdentities)
+                {
+                    UserAssignedIdentity value;
+                    if (other.UserAssignedIdentities.TryGetValue(identity.Key, out value))
+                    {
+                        if (!UserAssignedIdentity.Equals(identity.Value, value))
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return SystemAssignedIdentity.Equals(SystemAssignedIdentity, other.SystemAssignedIdentity);
         }
     }
 }

@@ -47,7 +47,8 @@ namespace Azure.Core
             return false;
         }
 
-        public static bool TryGetValue<T>(this ResponseHeaders headers, string name, out T? value) where T : struct
+        public static bool TryGetValue<T>(this ResponseHeaders headers, string name, out T? value)
+            where T : struct
         {
             if (headers.TryGetValue(name, out string? stringValue))
             {
@@ -59,7 +60,8 @@ namespace Azure.Core
             return false;
         }
 
-        public static bool TryGetValue<T>(this ResponseHeaders headers, string name, out T? value) where T : class
+        public static bool TryGetValue<T>(this ResponseHeaders headers, string name, out T? value)
+            where T : class
         {
             if (headers.TryGetValue(name, out string? stringValue))
             {

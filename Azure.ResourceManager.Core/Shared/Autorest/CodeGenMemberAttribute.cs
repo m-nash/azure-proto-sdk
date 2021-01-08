@@ -10,11 +10,13 @@ namespace Azure.Core
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     internal class CodeGenMemberAttribute : CodeGenTypeAttribute
     {
-        public CodeGenMemberAttribute() : base(null)
+        public CodeGenMemberAttribute()
+            : base(null)
         {
         }
 
-        public CodeGenMemberAttribute(string originalName) : base(originalName)
+        public CodeGenMemberAttribute(string originalName)
+            : base(originalName)
         {
         }
     }
