@@ -259,8 +259,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="subscription"> The Azure subscription. </param>
         /// <param name="resourceType"> The resource type for subscription. </param>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
         public IEnumerable<Location> ListAvailableLocations(string subscription, ResourceType resourceType, CancellationToken cancellationToken = default(CancellationToken))
         {
