@@ -176,3 +176,12 @@ Example:
         /// Construct an object used to create a [Resource]
         /// </summary>
 ```
+
+### Tags
+
+```
+        /// <summary>
+        /// Add a tag to a [Resource].
+        /// If the tag already exists it will be modified.
+        /// </summary>
+```
