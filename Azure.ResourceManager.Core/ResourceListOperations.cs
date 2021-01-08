@@ -15,6 +15,11 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class ResourceListOperations
     {
+        private static ResourcesManagementClient GetResourcesClient(AzureResourceManagerClientOptions options, string id)
+        {
+            return new ResourcesManagementClient(options.BaseUri, id, options.Credential);
+        }
+
         /// <summary>
         /// List resources under the a resource context
         /// </summary>
@@ -213,11 +218,6 @@ namespace Azure.ResourceManager.Core
                 throw new ArgumentException(
                     $"{id.Type} is not valid to list at context must be {ResourceGroupOperations.ResourceType} or {SubscriptionOperations.ResourceType}");
             }
-        }
-
-        private static ResourcesManagementClient GetResourcesClient(AzureResourceManagerClientOptions options, string id)
-        {
-            return new ResourcesManagementClient(options.BaseUri, id, options.Credential);
         }
     }
 }
