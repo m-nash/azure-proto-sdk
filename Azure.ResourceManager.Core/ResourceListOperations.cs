@@ -15,6 +15,17 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class ResourceListOperations
     {
+        /// <summary>
+        /// List resources under the a resource context
+        /// </summary>
+        /// <param name="clientOptions"> The client parameters to use in these operations. </param>
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
+        /// <param name="resourceFilters"> Optional filters for results. </param>
+        /// <param name="top"> The number of results to return. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
+        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="ArgumentException"> <paramref name="id"/> is not valid to list at context. </exception>
         public static Pageable<ArmResource> ListAtContext(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier id,
@@ -26,7 +37,7 @@ namespace Azure.ResourceManager.Core
 
             var scopeId = id.Type == ResourceGroupOperations.ResourceType ? id.Name : null;
 
-            return _ListAtContext(
+            return ListAtContextInternal(
                 clientOptions,
                 id,
                 scopeId,
@@ -35,6 +46,17 @@ namespace Azure.ResourceManager.Core
                 cancellationToken);
         }
 
+        /// <summary>
+        /// List resources under the a resource context
+        /// </summary>        
+        /// <param name="clientOptions"> The client parameters to use in these operations. </param>
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
+        /// <param name="resourceFilters"> Optional filters for results. </param>
+        /// <param name="top"> The number of results to return. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
+        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns>An async collection of resource operations that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="ArgumentException"> <paramref name="id"/> is not valid to list at context. </exception>
         public static AsyncPageable<ArmResource> ListAtContextAsync(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier id,
@@ -46,7 +68,7 @@ namespace Azure.ResourceManager.Core
 
             var scopeId = id.Type == ResourceGroupOperations.ResourceType ? id.Name : null;
 
-            return _ListAtContextAsync(
+            return ListAtContextInternalAsync(
                 clientOptions,
                 id,
                 scopeId,
@@ -55,13 +77,22 @@ namespace Azure.ResourceManager.Core
                 cancellationToken);
         }
 
+        /// <summary>
+        /// List resources under a subscription
+        /// </summary>
+        /// <param name="subscription"> The id of the Azure subscription. </param>
+        /// <param name="resourceFilters"> Optional filters for results. </param>
+        /// <param name="top"> The number of results to return. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
+        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
         public static Pageable<ArmResource> ListAtContext(
             SubscriptionOperations subscription,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
         {
-            return _ListAtContext(
+            return ListAtContextInternal(
                 subscription.ClientOptions,
                 subscription.Id,
                 null,
@@ -70,13 +101,22 @@ namespace Azure.ResourceManager.Core
                 cancellationToken);
         }
 
+        /// <summary>
+        /// List resources under the a resource context
+        /// </summary>
+        /// <param name="subscription"> The id of the Azure subscription. </param>
+        /// <param name="resourceFilters"> Optional filters for results. </param>
+        /// <param name="top"> The number of results to return. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
+        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
         public static AsyncPageable<ArmResource> ListAtContextAsync(
             SubscriptionOperations subscription,
             ArmFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
         {
-            return _ListAtContextAsync(
+            return ListAtContextInternalAsync(
                 subscription.ClientOptions,
                 subscription.Id,
                 null,
@@ -85,7 +125,7 @@ namespace Azure.ResourceManager.Core
                 cancellationToken);
         }
 
-        private static AsyncPageable<ArmResource> _ListAtContextAsync(
+        private static AsyncPageable<ArmResource> ListAtContextInternalAsync(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier scopeId,
             string scopeFilter,
@@ -112,7 +152,7 @@ namespace Azure.ResourceManager.Core
             return ConvertResultsAsync(result, clientOptions);
         }
 
-        private static Pageable<ArmResource> _ListAtContext(
+        private static Pageable<ArmResource> ListAtContextInternal(
             AzureResourceManagerClientOptions clientOptions,
             ResourceIdentifier scopeId,
             string scopeFilter = null,
@@ -175,7 +215,7 @@ namespace Azure.ResourceManager.Core
             }
         }
 
-        protected static ResourcesManagementClient GetResourcesClient(AzureResourceManagerClientOptions options, string id)
+        private static ResourcesManagementClient GetResourcesClient(AzureResourceManagerClientOptions options, string id)
         {
             return new ResourcesManagementClient(options.BaseUri, id, options.Credential);
         }
