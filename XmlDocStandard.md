@@ -23,24 +23,24 @@
 ### Standard class documentation
 
 ```
-xxxContainer.cs
+[Resource]Container.cs
     /// <summary>
-    /// A class representing collection of XXX and their operations over a ___ResourceGroup|Subscription??__
+    /// A class representing collection of [Resource] and their operations over a [ParentResource]
     /// </summary>
 
-xxx.cs
+[Resource].cs
     /// <summary>
-    /// A class representing a XXX along with the instance operations that can be performed on it.
+    /// A class representing a [Resource] along with the instance operations that can be performed on it.
     /// </summary>
 
-xxxOperations.cs
+[Resource]Operations.cs
     /// <summary>
-    /// A class representing the operations that can be performed over a specific XXX.
+    /// A class representing the operations that can be performed over a specific [Resource].
     /// </summary>
 
-xxxData.cs
+[Resource]Data.cs
     /// <summary>
-    /// A class representing the xxx data model.
+    /// A class representing the [Resource] data model.
     /// </summary>
 ```
 
@@ -77,29 +77,52 @@ Example:
 |Set Only | `/// Sets the ________.`|
 |Special case:<br>Boolean  | `/// Gets or sets a value indicating whether _______.`|
 
-### \<return\>
+### Return
+
+* For sync and async of same operations, the description should be the same. There is no need to call out sync's blocking nature.
+* The async return should starts with `A <see cref="Task"/> that on completion returns ` and followed by text for sync version.
+* For methods returning LRO (typically `StartXXX`), add following in remarks section.
+
+```
+        /// <remarks>
+        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
+        /// </remarks>
+```
+
+#### Pageable
+
 ```
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public static Pageable<TOperations> ...
+```
 
+#### AsyncPageable
+
+```
         /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public static AsyncPageable<TOperations> ListAtContextAsync ...
+```
 
-        /// <returns>An <see cref="ArmOperation{TOperations}"/> that allows polling for completion
-        /// of the Create operation.</returns>
-        /// <remarks>
-        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
-        /// </remarks>
-        public abstract ArmOperation<TOperations> StartCreate( ...
+#### Method
 
-        /// <returns>
-        /// A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{TOperations}"/>
-        ///  that allows polling for completion of the Create operation.
-        /// </returns>
-        /// <remarks>
-        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
-        /// </remarks>
-        public abstract Task<ArmOperation<TOperations>> StartCreateAsync( ...
+```
+        /// <returns> A response with the <see cref="ArmResponse{T}"/> operation for this resource. </returns>
+```
+
+#### MethodAsync
+
+```
+        /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{T}"/> operation for this resource. </returns>
+```
+
+#### StartMethod
+
+```
+        /// <returns> An <see cref="ArmOperation{T}"/> that allows polling for completion of the operation. </returns>
+```
+
+#### StartMethodAsync
+
+```
+        /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{T}"/> that allows polling for completion of the operation. </returns>
 ```
 
 ### \<exception>
@@ -109,24 +132,6 @@ Example:
     /// <exception cref="ArgumentException"> <paramref name="id"/> is not valid to list at context. </exception>
 ```
 
-### sync, async and LRO
-
-* For sync and async of same operations, the description should be the same. There is no need to call out sync's blocking nature.
-* The async return should starts with `A <see cref="Task"/> that on completion returns ` and followed by text for sync version.
-
-        /// <returns> A response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
-        public abstract ArmResponse<TOperations> Get(CancellationToken cancellationToken = default);
-
-        /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
-        public abstract Task<ArmResponse<TOperations>> GetAsync(CancellationToken cancellationToken = default);
-
-* For methods returning LRO (typically `StartXXX`), add following in remarks section.
-
-```
-        /// <remarks>
-        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
-        /// </remarks>
-```
 ### ResourceType
 
 ```
@@ -134,6 +139,7 @@ Example:
         /// Gets the resource type definition for a XXX.
         /// </summary>
 ```
+
 ### List
 
 #### List / ListAsync
