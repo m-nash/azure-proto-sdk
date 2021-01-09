@@ -25,7 +25,7 @@
 ```
 [Resource]Container.cs
     /// <summary>
-    /// A class representing collection of [Resource] and their operations over a [ParentResource]
+    /// A class representing collection of [Resource] and their operations over a [ParentResource].
     /// </summary>
 
 [Resource].cs
