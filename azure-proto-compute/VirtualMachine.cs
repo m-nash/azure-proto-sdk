@@ -19,7 +19,7 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// Represents the data model for a VirtualMachine returned by the service.
+        /// Gets the data representing this VirtualMachine.
         /// </summary>
         public VirtualMachineData Data { get; private set; }
     }
