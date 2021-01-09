@@ -27,14 +27,16 @@ namespace azure_proto_network
         {
         }
 
+        protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
+
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ClientOptions.Convert<NetworkManagementClientOptions>())).PublicIPAddresses;
 
-        public override ArmResponse<PublicIpAddress> Create(string name, PublicIPAddressData resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<PublicIpAddress> Create(string name, PublicIPAddressData resourceDetails)
         {
-            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
+            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails);
             return new PhArmResponse<PublicIpAddress, PublicIPAddress>(
-                operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
+                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
                 n => new PublicIpAddress(ClientOptions, new PublicIPAddressData(n)));
         }
 
@@ -115,11 +117,6 @@ namespace azure_proto_network
         private Func<PublicIPAddress, PublicIpAddress> convertor()
         {
             return s => new PublicIpAddress(ClientOptions, new PublicIPAddressData(s));
-        }
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceGroupOperations.ResourceType;
         }
     }
 }

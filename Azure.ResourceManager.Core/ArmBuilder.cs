@@ -30,11 +30,11 @@ namespace Azure.ResourceManager.Core
             return _resource;
         }
 
-        public ArmResponse<TOperations> Create(string name, CancellationToken cancellationToken = default)
+        public ArmResponse<TOperations> Create(string name)
         {
             _resource = Build();
 
-            return _unTypedContainer.Create(name, _resource, cancellationToken);
+            return _unTypedContainer.Create(name, _resource);
         }
 
         public async Task<ArmResponse<TOperations>> CreateAsync(

@@ -44,8 +44,9 @@ namespace azure_proto_authorization
         /// <summary>
         /// Gets the resource type of the resource being created.
         /// </summary>
-
         private RoleAssignmentsOperations Operations => GetClient<AuthorizationManagementClient>((baseUri, creds) => new AuthorizationManagementClient(Id.Subscription, baseUri, creds)).RoleAssignments;
+
+        protected override ResourceType ValidResourceType => RoleAssignmentOperations.ResourceType;
 
         /// <summary>
         /// Create a role assignment. This method blocks until the RoleAssignment is created on the service.
@@ -131,11 +132,6 @@ namespace azure_proto_authorization
         public override void Validate(ResourceIdentifier identifier)
         {
             return;
-        }
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return RoleAssignment.ResourceType;
         }
     }
 }

@@ -26,6 +26,15 @@ namespace azure_proto_compute
 
         public static readonly ResourceType ResourceType = "Microsoft.Compute/availabilitySets";
 
+        protected override ResourceType ValidResourceType => ResourceType;
+
+        private AvailabilitySetsOperations Operations => GetClient((uri, cred) =>
+            new ComputeManagementClient(
+                uri,
+                Id.Subscription,
+                cred,
+                ClientOptions.Convert<ComputeManagementClientOptions>())).AvailabilitySets;
+
         public ArmResponse<Response> Delete()
         {
             return new ArmResponse(Operations.Delete(Id.ResourceGroup, Id.Name));
@@ -89,29 +98,18 @@ namespace azure_proto_compute
                 });
         }
 
-        public ArmOperation<AvailabilitySet> AddTag(string key, string value)
+        public ArmOperation<AvailabilitySet> StartAddTag(string key, string value)
         {
             var patchable = new AvailabilitySetUpdate();
             patchable.Tags[key] = value;
             return Update(patchable);
         }
 
-        public Task<ArmOperation<AvailabilitySet>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public Task<ArmOperation<AvailabilitySet>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new AvailabilitySetUpdate();
             patchable.Tags[key] = value;
             return UpdateAsync(patchable);
-        }
-
-        internal AvailabilitySetsOperations Operations => GetClient<ComputeManagementClient>((uri, cred) =>
-            new ComputeManagementClient(uri,
-                                        Id.Subscription,
-                                        cred,
-                                        ClientOptions.Convert<ComputeManagementClientOptions>())).AvailabilitySets;
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
         }
     }
 }
