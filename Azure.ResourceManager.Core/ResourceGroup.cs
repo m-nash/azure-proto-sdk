@@ -8,8 +8,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceGroup"/> class.
         /// </summary>
-        /// /// <param name="options"> The client parameters to use in these operations. </param>
-        /// /// <param name="resource"> The ResourceGroupData to use in these operations. </param>
+        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="resource"> The ResourceGroupData to use in these operations. </param>
         internal ResourceGroup(AzureResourceManagerClientOptions options, ResourceGroupData resource)
             : base(options, resource)
         {
