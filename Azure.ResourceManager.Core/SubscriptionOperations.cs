@@ -53,18 +53,12 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the subscription client.
         /// </summary>
-        internal SubscriptionsOperations SubscriptionsClient => GetClient<ResourcesManagementClient>((uri, cred) =>
-            new ResourcesManagementClient(uri, Guid.NewGuid().ToString(), cred, ClientOptions.Convert<ResourcesManagementClientOptions>())).Subscriptions;
-
-        /// <summary>
-        /// Gets the resource group client.
-        /// </summary>
-        internal ResourceGroupsOperations RgOperations => GetClient((uri, cred) =>
+        private SubscriptionsOperations SubscriptionsClient => GetClient((uri, cred) =>
             new ResourcesManagementClient(
                 uri,
-                Id.Subscription,
+                Guid.NewGuid().ToString(),
                 cred,
-                ClientOptions.Convert<ResourcesManagementClientOptions>())).ResourceGroups;
+                ClientOptions.Convert<ResourcesManagementClientOptions>())).Subscriptions;
 
         /// <summary>
         /// Gets the resource group operations for a given resource group.

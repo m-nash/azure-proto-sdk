@@ -28,6 +28,13 @@ namespace azure_proto_compute
 
         protected override ResourceType ValidResourceType => ResourceType;
 
+        private AvailabilitySetsOperations Operations => GetClient((uri, cred) =>
+            new ComputeManagementClient(
+                uri,
+                Id.Subscription,
+                cred,
+                ClientOptions.Convert<ComputeManagementClientOptions>())).AvailabilitySets;
+
         public ArmResponse<Response> Delete()
         {
             return new ArmResponse(Operations.Delete(Id.ResourceGroup, Id.Name));
@@ -104,11 +111,5 @@ namespace azure_proto_compute
             patchable.Tags[key] = value;
             return UpdateAsync(patchable);
         }
-
-        internal AvailabilitySetsOperations Operations => GetClient<ComputeManagementClient>((uri, cred) =>
-            new ComputeManagementClient(uri,
-                                        Id.Subscription,
-                                        cred,
-                                        ClientOptions.Convert<ComputeManagementClientOptions>())).AvailabilitySets;
     }
 }

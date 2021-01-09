@@ -11,7 +11,7 @@ namespace azure_proto_compute
     public class VirtualMachineData : TrackedResource<Azure.ResourceManager.Compute.Models.VirtualMachine>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="______"/> class.
+        /// Initializes a new instance of the <see cref="VirtualMachineData"/> class.
         /// </summary>
         /// <param name="vm"> The virtual machine to initialize. </param>
         public VirtualMachineData(Azure.ResourceManager.Compute.Models.VirtualMachine vm) : base(vm.Id, vm.Location, vm)
