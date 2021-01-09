@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace azure_proto_compute
 {
     /// <summary>
-    /// A class representing collection of VirtualMachine and their operations over a ResourceGroup
+    /// A class representing collection of VirtualMachine and their operations over a ResourceGroup.
     /// </summary>
     public class VirtualMachineContainer : ResourceContainerBase<VirtualMachine, VirtualMachineData>
     {
@@ -105,7 +105,7 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// Construct an object used to create a VirtualMachine
+        /// Construct an object used to create a VirtualMachine.
         /// </summary>
         /// <param name="vmName"> The name of the Virtual Machine. </param>
         /// <param name="adminUser"> The admin username to use. </param>
@@ -145,7 +145,7 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// Construct an object used to create a VirtualMachine
+        /// Construct an object used to create a VirtualMachine.
         /// </summary>
         /// <param name="name"> The name of the Virtual Machine. </param>
         /// <param name="location"> The location to create the Virtual Machine. </param>
@@ -156,7 +156,7 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// List the virtual machines for this resource group
+        /// List the virtual machines for this resource group.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of <see cref="VirtualMachine"/> that may take multiple service requests to iterate over. </returns>
@@ -169,7 +169,7 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// List the virtual machines for this resource group
+        /// List the virtual machines for this resource group.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of <see cref="VirtualMachine"/> that may take multiple service requests to iterate over. </returns>
@@ -182,7 +182,7 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// Filters the list of virtual machines for this resource group represented as generic resources
+        /// Filters the list of virtual machines for this resource group represented as generic resources.
         /// </summary>
         /// <param name="filter"> The substring to filter by. </param>
         /// <param name="top"> The number of items to truncate by. </param>
@@ -196,7 +196,7 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// Filters the list of virtual machines for this resource group represented as generic resources
+        /// Filters the list of virtual machines for this resource group represented as generic resources.
         /// </summary>
         /// <param name="filter"> The substring to filter by. </param>
         /// <param name="top"> The number of items to truncate by. </param>
