@@ -9,7 +9,7 @@
         /// Initializes a new instance of the <see cref="ResourceGroup"/> class.
         /// </summary>
         /// /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="resource"> The resource group data to use in these operations. </param>
+        /// /// <param name="resource"> The ResourceGroupData to use in these operations. </param>
         internal ResourceGroup(AzureResourceManagerClientOptions options, ResourceGroupData resource)
             : base(options, resource)
         {
@@ -17,7 +17,7 @@
         }
 
         /// <summary>
-        /// Gets initializes a new instance of the <see cref="ResourceGroupData"/> class.
+        /// Gets the data representing this ResourceGroup.
         /// </summary>
         public ResourceGroupData Data { get; private set; }
     }
