@@ -136,7 +136,7 @@ Example:
 
 ```
         /// <summary>
-        /// Gets the resource type definition for a XXX.
+        /// Gets the resource type definition for a [Resource].
         /// </summary>
 ```
 
@@ -146,7 +146,7 @@ Example:
 
 ```
         /// <summary>
-        /// List the [Resource] for this resource group
+        /// List the [Resource] for this resource group.
         /// </summary>
 ```
 
@@ -154,7 +154,7 @@ Example:
 
 ```
         /// <summary>
-        /// Filters the list of [Resource] for this [ParentResource] represented as generic resources
+        /// Filters the list of [Resource] for this [ParentResource] represented as generic resources.
         /// </summary>
 ```
 
@@ -162,7 +162,7 @@ Example:
 
 ```
         /// <summary>
-        /// Filters the list of [Resource] for this [ParentResource] represented as generic resources.
+        /// Filters the list of [Resource] for this [ParentResource].
         /// Makes an additional network call to retrieve the full data model for each [Resource].
         /// </summary>
 ```
@@ -173,7 +173,7 @@ Example:
 
 ```
         /// <summary>
-        /// Construct an object used to create a [Resource]
+        /// Construct an object used to create a [Resource].
         /// </summary>
 ```
 
