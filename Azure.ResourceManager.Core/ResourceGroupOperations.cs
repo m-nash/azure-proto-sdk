@@ -23,16 +23,16 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceGroupOperations"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
+        /// /// <param name="options"> The client parameters to use in these operations. </param>
+        /// /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         internal ResourceGroupOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
             : base(options, id) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceGroupOperations"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="resource"> The resource that is the target of operations. </param>
+        /// /// <param name="options"> The client parameters to use in these operations. </param>
+        /// /// <param name="resource"> The resource that is the target of operations. </param>
         internal ResourceGroupOperations(AzureResourceManagerClientOptions options, Resource resource)
             : base(options, resource) { }
 
@@ -54,7 +54,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Deletes a ResourceGroupOperations.
         /// </summary>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{Response}"/> operation for this resource. </returns>
         public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
@@ -64,7 +64,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Deletes a ResourceGroupOperations with a long running operation.
         /// </summary>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A response with the <see cref="ArmOperation{Response}"/> operation for this resource. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
@@ -77,7 +77,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Deletes a ResourceGroupOperations.
         /// </summary>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{Response}"/> operation for this resource. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
@@ -102,7 +102,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets a ResourceGroupOperations.
         /// </summary>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{ResourceGroup}"/> operation for this resource. </returns>
         public async override Task<ArmResponse<ResourceGroup>> GetAsync(CancellationToken cancellationToken = default)
         {
@@ -116,8 +116,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Adds a tag to a ResourceGroupOperations.
         /// </summary>
-        /// <param name="name"> A string representing the name of the tag />. </param>
-        /// <param name="value"> A string representing the value of the tag />. </param>
+        /// /// <param name="name"> A string representing the name of the tag />. </param>
+        /// /// <param name="value"> A string representing the value of the tag />. </param>
         /// <returns> Returns a response with the <see cref="ArmOperation{ResourceGroup}{ResourceGroup}"/> operation for this resource. </returns>
         public ArmOperation<ResourceGroup> AddTag(string name, string value)
         {
@@ -133,8 +133,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Adds a tag to a ResourceGroupOperations.
         /// </summary>
-        /// <param name="name"> A string representing the name of the tag />. </param>
-        /// <param name="value"> A string representing the value of the tag />. </param>
+        /// /// <param name="name"> A string representing the name of the tag />. </param>
+        /// /// <param name="value"> A string representing the value of the tag />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmOperation{ResourceGroup}{ResourceGroup}"/> operation for this resource. </returns>
         public async Task<ArmOperation<ResourceGroup>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
         {
@@ -150,9 +150,9 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Create a resource with a ResourceGroupOperations.
         /// </summary>
-        /// <param name="name"> A string representing the name of the resource />. </param>
+        /// /// <param name="name"> A string representing the name of the resource />. </param>
         /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
-        /// <param name="Location"> A Location of where to to host the resource. />. </param>
+        /// /// <param name="Location"> A Location of where to to host the resource. />. </param>
         /// <returns> Returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, Location location = default)
             where TResource : TrackedResource
@@ -179,9 +179,9 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Create a resource with a ResourceGroupOperations.
         /// </summary>
-        /// <param name="name"> A string representing the name of the resource />. </param>
+        /// /// <param name="name"> A string representing the name of the resource />. </param>
         /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
-        /// <param name="Location"> A Location of where to to host the resource. />. </param>
+        /// /// <param name="Location"> A Location of where to to host the resource. />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, Location location = default, CancellationToken token = default)
             where TResource : TrackedResource
