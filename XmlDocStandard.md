@@ -187,3 +187,12 @@ Example:
         /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
 ```
+
+### Data Property
+
+```
+        /// <summary>
+        /// Gets the data representing this [Resource].
+        /// </summary>
+```
+
