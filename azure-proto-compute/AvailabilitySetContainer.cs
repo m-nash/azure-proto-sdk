@@ -27,14 +27,17 @@ namespace azure_proto_compute
         /// Initializes a new instance of the <see cref="AvailabilitySetContainer"/> class.
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
-        internal AvailabilitySetContainer(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id)
+        /// <param name="parentId"> The identifier of the resource that is the target of operations. </param>
+        internal AvailabilitySetContainer(AzureResourceManagerClientOptions options, ResourceIdentifier parentId)
+            : base(options, parentId)
         {
         }
 
         /// <inheritdoc/>
-        public override ArmResponse<AvailabilitySet> Create(string name, AvailabilitySetData resourceDetails, CancellationToken cancellationToken = default)
+        protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
+
+        /// <inheritdoc/>
+        public override ArmResponse<AvailabilitySet> Create(string name, AvailabilitySetData resourceDetails)
         {
             var response = Operations.CreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model);
             return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
