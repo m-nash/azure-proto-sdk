@@ -9,7 +9,6 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// Base class for resource operations.
     /// </summary>
-    // TODO: split this into a base class for all Operations, and a base class for specific operations
     public abstract class OperationsBase
     {
         /// <summary>
