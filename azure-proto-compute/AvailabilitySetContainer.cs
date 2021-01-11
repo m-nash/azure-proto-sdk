@@ -27,7 +27,7 @@ namespace azure_proto_compute
         /// Initializes a new instance of the <see cref="AvailabilitySetContainer"/> class.
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="parentId"> The identifier of the resource that is the target of operations. </param>
+        /// <param name="parentId"> The resource Id of the parent resource. </param>
         internal AvailabilitySetContainer(AzureResourceManagerClientOptions options, ResourceIdentifier parentId)
             : base(options, parentId)
         {
