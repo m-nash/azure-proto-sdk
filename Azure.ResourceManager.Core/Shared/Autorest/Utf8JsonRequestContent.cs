@@ -15,14 +15,14 @@ namespace Azure.Core
         private readonly MemoryStream _stream;
         private readonly RequestContent _content;
 
-        public Utf8JsonWriter JsonWriter { get; }
-
         public Utf8JsonRequestContent()
         {
             _stream = new MemoryStream();
             _content = Create(_stream);
             JsonWriter = new Utf8JsonWriter(_stream);
         }
+
+        public Utf8JsonWriter JsonWriter { get; }
 
         public override async Task WriteToAsync(Stream stream, CancellationToken cancellation)
         {

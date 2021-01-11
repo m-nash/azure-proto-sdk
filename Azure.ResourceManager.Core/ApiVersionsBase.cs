@@ -20,6 +20,36 @@ namespace Azure.ResourceManager.Core
             return version._value;
         }
 
+        public static bool operator ==(ApiVersionsBase first, string second)
+        {
+            if (ReferenceEquals(null, first))
+            {
+                return ReferenceEquals(null, second);
+            }
+
+            if (ReferenceEquals(null, second))
+            {
+                return false;
+            }
+
+            return first.Equals(second);
+        }
+
+        public static bool operator !=(ApiVersionsBase first, string second)
+        {
+            if (ReferenceEquals(null, first))
+            {
+                return !ReferenceEquals(null, second);
+            }
+
+            if (ReferenceEquals(null, second))
+            {
+                return true;
+            }
+
+            return !first.Equals(second);
+        }
+
         public int CompareTo(string other)
         {
             if (other == null)
@@ -69,36 +99,6 @@ namespace Azure.ResourceManager.Core
             }
 
             return other == _value;
-        }
-
-        public static bool operator ==(ApiVersionsBase first, string second)
-        {
-            if (ReferenceEquals(null, first))
-            {
-                return ReferenceEquals(null, second);
-            }
-
-            if (ReferenceEquals(null, second))
-            {
-                return false;
-            }
-
-            return first.Equals(second);
-        }
-
-        public static bool operator !=(ApiVersionsBase first, string second)
-        {
-            if (ReferenceEquals(null, first))
-            {
-                return !ReferenceEquals(null, second);
-            }
-
-            if (ReferenceEquals(null, second))
-            {
-                return true;
-            }
-
-            return !first.Equals(second);
         }
 
         public override string ToString()

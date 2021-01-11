@@ -9,6 +9,16 @@ namespace Azure.ResourceManager.Core
 
     public class UserAssignedIdentity
     {
+        public UserAssignedIdentity(Guid clientId, Guid principalId)
+        {
+            ClientId = clientId;
+            PrincipalId = principalId;
+        }
+
+        public Guid ClientId { get; set; }
+
+        public Guid PrincipalId { get; set; }
+
         public static UserAssignedIdentity Deserialize(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Undefined)
@@ -68,16 +78,6 @@ namespace Azure.ResourceManager.Core
                 return other == null;
 
             return original.Equals(other);
-        }
-
-        public Guid ClientId { get; set; }
-
-        public Guid PrincipalId { get; set; }
-
-        public UserAssignedIdentity(Guid clientId, Guid principalId)
-        {
-            ClientId = clientId;
-            PrincipalId = principalId;
         }
 
         public int CompareTo(UserAssignedIdentity other)

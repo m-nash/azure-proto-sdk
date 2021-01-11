@@ -9,6 +9,24 @@ using System.Text.Json;
 
 namespace Azure.Core
 {
+    internal readonly partial struct Optional<T>
+    {
+        public Optional(T value)
+            : this()
+        {
+            Value = value;
+            HasValue = true;
+        }
+
+        public T Value { get; }
+
+        public bool HasValue { get; }
+
+        public static implicit operator Optional<T>(T value) => new Optional<T>(value);
+
+        public static implicit operator T(Optional<T> optional) => optional.Value;
+    }
+
     internal static class Optional
     {
         public static bool IsCollectionDefined<T>(IEnumerable<T> collection)
@@ -103,23 +121,5 @@ namespace Azure.Core
         {
             return optional.Value;
         }
-    }
-
-    internal readonly partial struct Optional<T>
-    {
-        public Optional(T value)
-            : this()
-        {
-            Value = value;
-            HasValue = true;
-        }
-
-        public T Value { get; }
-
-        public bool HasValue { get; }
-
-        public static implicit operator Optional<T>(T value) => new Optional<T>(value);
-
-        public static implicit operator T(Optional<T> optional) => optional.Value;
     }
 }

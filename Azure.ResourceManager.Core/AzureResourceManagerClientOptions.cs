@@ -31,11 +31,15 @@ namespace Azure.ResourceManager.Core
                 Copy(other);
         }
 
+        internal IList<HttpPipelinePolicy> PerCallPolicies { get; } = new List<HttpPipelinePolicy>();
+
+        internal IList<HttpPipelinePolicy> PerRetryPolicies { get; } = new List<HttpPipelinePolicy>();
+
         public T Convert<T>()
             where T : ClientOptions, new()
         {
             var newOptions = new T();
-            newOptions.Transport = this.Transport;
+            newOptions.Transport = Transport;
             foreach (var pol in PerCallPolicies)
             {
                 newOptions.AddPolicy(pol, HttpPipelinePosition.PerCall);
@@ -68,10 +72,6 @@ namespace Azure.ResourceManager.Core
             base.AddPolicy(policy, position);
         }
 
-        internal IList<HttpPipelinePolicy> PerCallPolicies { get; } = new List<HttpPipelinePolicy>();
-
-        internal IList<HttpPipelinePolicy> PerRetryPolicies { get; } = new List<HttpPipelinePolicy>();
-
         [EditorBrowsable(EditorBrowsableState.Never)]
         public object GetOverrideObject<T>(Func<object> ctor)
         {
@@ -95,15 +95,15 @@ namespace Azure.ResourceManager.Core
         // Will be removed like AddPolicy when we move to azure core
         private void Copy(AzureResourceManagerClientOptions other)
         {
-            this.Transport = other.Transport;
+            Transport = other.Transport;
             foreach (var pol in other.PerCallPolicies)
             {
-                this.AddPolicy(pol, HttpPipelinePosition.PerCall);
+                AddPolicy(pol, HttpPipelinePosition.PerCall);
             }
 
             foreach (var pol in other.PerRetryPolicies)
             {
-                this.AddPolicy(pol, HttpPipelinePosition.PerRetry);
+                AddPolicy(pol, HttpPipelinePosition.PerRetry);
             }
         }
 

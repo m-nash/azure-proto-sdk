@@ -20,6 +20,15 @@ namespace Azure.Core
 
         private RawWritingPosition? _position;
 
+        private enum RawWritingPosition
+        {
+            Scheme,
+            Host,
+            Port,
+            Path,
+            Query,
+        }
+
         public void AppendRaw(string value, bool escape)
         {
             if (_position == null)
@@ -162,15 +171,6 @@ namespace Azure.Core
             }
 
             return (queryUnparsed.Substring(0, separatorIndex), queryUnparsed.Substring(separatorIndex + 1));
-        }
-
-        private enum RawWritingPosition
-        {
-            Scheme,
-            Host,
-            Port,
-            Path,
-            Query,
         }
     }
 }

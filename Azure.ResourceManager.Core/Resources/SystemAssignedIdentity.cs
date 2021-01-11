@@ -9,10 +9,6 @@ namespace Azure.ResourceManager.Core
 
     public class SystemAssignedIdentity
     {
-        public Guid? TenantId { get; private set; }
-
-        public Guid? PrincipalId { get; private set; }
-
         public SystemAssignedIdentity()
         {
         }
@@ -22,6 +18,10 @@ namespace Azure.ResourceManager.Core
             TenantId = tenantId;
             PrincipalId = principalId;
         }
+
+        public Guid? TenantId { get; private set; }
+
+        public Guid? PrincipalId { get; private set; }
 
         public static SystemAssignedIdentity Deserialize(JsonElement element)
         {

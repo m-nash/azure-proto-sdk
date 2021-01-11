@@ -50,6 +50,55 @@ namespace Azure.Core
 
         public bool IsUndefined => _innerList == null;
 
+        public int Count
+        {
+            get
+            {
+                if (IsUndefined)
+                {
+                    return 0;
+                }
+
+                return EnsureList().Count;
+            }
+        }
+
+        public bool IsReadOnly
+        {
+            get
+            {
+                if (IsUndefined)
+                {
+                    return false;
+                }
+
+                return EnsureList().IsReadOnly;
+            }
+        }
+
+        public T this[int index]
+        {
+            get
+            {
+                if (IsUndefined)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                return EnsureList()[index];
+            }
+
+            set
+            {
+                if (IsUndefined)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                EnsureList()[index] = value;
+            }
+        }
+
         public void Reset()
         {
             _innerList = null;
@@ -115,32 +164,6 @@ namespace Azure.Core
             return EnsureList().Remove(item);
         }
 
-        public int Count
-        {
-            get
-            {
-                if (IsUndefined)
-                {
-                    return 0;
-                }
-
-                return EnsureList().Count;
-            }
-        }
-
-        public bool IsReadOnly
-        {
-            get
-            {
-                if (IsUndefined)
-                {
-                    return false;
-                }
-
-                return EnsureList().IsReadOnly;
-            }
-        }
-
         public int IndexOf(T item)
         {
             if (IsUndefined)
@@ -164,29 +187,6 @@ namespace Azure.Core
             }
 
             EnsureList().RemoveAt(index);
-        }
-
-        public T this[int index]
-        {
-            get
-            {
-                if (IsUndefined)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index));
-                }
-
-                return EnsureList()[index];
-            }
-
-            set
-            {
-                if (IsUndefined)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index));
-                }
-
-                EnsureList()[index] = value;
-            }
         }
 
         private IList<T> EnsureList()

@@ -15,6 +15,11 @@ namespace azure_proto_authorization
     public class RoleAssignmentOperations : ExtensionResourceOperationsBase<RoleAssignment>, IDeletableResource
     {
         /// <summary>
+        /// Gets the resource type for Role Assignments
+        /// </summary>
+        public static readonly ResourceType ResourceType = "Microsoft.Authorization/roleAssignments";
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="RoleAssignmentOperations"/> class.
         /// Allows creating operations specific to a role assignment from generic ARM operations for the same resource
         /// </summary>
@@ -43,11 +48,6 @@ namespace azure_proto_authorization
             : this(options, resource.Id)
         {
         }
-
-        /// <summary>
-        /// Gets the resource type for Role Assignments
-        /// </summary>
-        public static readonly ResourceType ResourceType = "Microsoft.Authorization/roleAssignments";
 
         private RoleAssignmentsOperations Operations => GetClient<AuthorizationManagementClient>((baseUri, creds) => new AuthorizationManagementClient(Id.Subscription, baseUri, creds)).RoleAssignments;
 

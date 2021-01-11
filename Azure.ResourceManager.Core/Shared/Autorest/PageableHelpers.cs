@@ -11,6 +11,10 @@ namespace Azure.Core
 {
     internal static class PageableHelpers
     {
+        internal delegate Task<Page<T>> AsyncPageFunc<T>(string? continuationToken = default, int? pageSizeHint = default);
+
+        internal delegate Page<T> PageFunc<T>(string? continuationToken = default, int? pageSizeHint = default);
+
         public static Pageable<T> CreateEnumerable<T>(Func<int?, Page<T>> firstPageFunc, Func<string?, int?, Page<T>>? nextPageFunc, int? pageSize = default)
             where T : notnull
         {
@@ -26,10 +30,6 @@ namespace Azure.Core
             AsyncPageFunc<T>? next = nextPageFunc != null ? new AsyncPageFunc<T>(nextPageFunc) : null;
             return new FuncAsyncPageable<T>(first, next, pageSize);
         }
-
-        internal delegate Task<Page<T>> AsyncPageFunc<T>(string? continuationToken = default, int? pageSizeHint = default);
-
-        internal delegate Page<T> PageFunc<T>(string? continuationToken = default, int? pageSizeHint = default);
 
         internal class FuncAsyncPageable<T> : AsyncPageable<T>
             where T : notnull

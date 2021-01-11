@@ -32,6 +32,8 @@ namespace Azure.ResourceManager.Core
 
         public virtual ResourceIdentifier Id { get; }
 
+        protected virtual Resource Resource { get; set; }
+
         public virtual void Validate(ResourceIdentifier identifier)
         {
             if (identifier?.Type != GetValidResourceType())
@@ -49,8 +51,6 @@ namespace Azure.ResourceManager.Core
         {
             return ClientOptions.GetClient(creator);
         }
-
-        protected virtual Resource Resource { get; set; }
 
         protected internal abstract ResourceType GetValidResourceType();
     }

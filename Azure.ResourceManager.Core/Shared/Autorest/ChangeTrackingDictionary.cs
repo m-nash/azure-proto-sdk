@@ -50,6 +50,76 @@ namespace Azure.Core
 
         public bool IsUndefined => _innerDictionary == null;
 
+        IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys => Keys;
+
+        IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values => Values;
+
+        public int Count
+        {
+            get
+            {
+                if (IsUndefined)
+                {
+                    return 0;
+                }
+
+                return EnsureDictionary().Count;
+            }
+        }
+
+        public bool IsReadOnly
+        {
+            get
+            {
+                if (IsUndefined)
+                {
+                    return false;
+                }
+
+                return EnsureDictionary().IsReadOnly;
+            }
+        }
+
+        public ICollection<TKey> Keys
+        {
+            get
+            {
+                if (IsUndefined)
+                {
+                    return Array.Empty<TKey>();
+                }
+
+                return EnsureDictionary().Keys;
+            }
+        }
+
+        public ICollection<TValue> Values
+        {
+            get
+            {
+                if (IsUndefined)
+                {
+                    return Array.Empty<TValue>();
+                }
+
+                return EnsureDictionary().Values;
+            }
+        }
+
+        public TValue this[TKey key]
+        {
+            get
+            {
+                if (IsUndefined)
+                {
+                    throw new KeyNotFoundException(nameof(key));
+                }
+
+                return EnsureDictionary()[key];
+            }
+            set => EnsureDictionary()[key] = value;
+        }
+
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
             if (IsUndefined)
@@ -110,32 +180,6 @@ namespace Azure.Core
             return EnsureDictionary().Remove(item);
         }
 
-        public int Count
-        {
-            get
-            {
-                if (IsUndefined)
-                {
-                    return 0;
-                }
-
-                return EnsureDictionary().Count;
-            }
-        }
-
-        public bool IsReadOnly
-        {
-            get
-            {
-                if (IsUndefined)
-                {
-                    return false;
-                }
-
-                return EnsureDictionary().IsReadOnly;
-            }
-        }
-
         public void Add(TKey key, TValue value)
         {
             EnsureDictionary().Add(key, value);
@@ -170,50 +214,6 @@ namespace Azure.Core
             }
 
             return EnsureDictionary().TryGetValue(key, out value!);
-        }
-
-        public TValue this[TKey key]
-        {
-            get
-            {
-                if (IsUndefined)
-                {
-                    throw new KeyNotFoundException(nameof(key));
-                }
-
-                return EnsureDictionary()[key];
-            }
-            set => EnsureDictionary()[key] = value;
-        }
-
-        IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys => Keys;
-
-        IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values => Values;
-
-        public ICollection<TKey> Keys
-        {
-            get
-            {
-                if (IsUndefined)
-                {
-                    return Array.Empty<TKey>();
-                }
-
-                return EnsureDictionary().Keys;
-            }
-        }
-
-        public ICollection<TValue> Values
-        {
-            get
-            {
-                if (IsUndefined)
-                {
-                    return Array.Empty<TValue>();
-                }
-
-                return EnsureDictionary().Values;
-            }
         }
 
         private IDictionary<TKey, TValue> EnsureDictionary()

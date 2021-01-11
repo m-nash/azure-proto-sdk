@@ -16,12 +16,12 @@ namespace Azure.Core
             Headers = headers;
         }
 
-        public override Response GetRawResponse() => _rawResponse;
-
         public override T Value { get; }
 
         public THeaders Headers { get; }
 
         public static implicit operator Response(ResponseWithHeaders<T, THeaders> self) => self.GetRawResponse();
+
+        public override Response GetRawResponse() => _rawResponse;
     }
 }

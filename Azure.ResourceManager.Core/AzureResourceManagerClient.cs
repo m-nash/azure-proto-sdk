@@ -24,8 +24,6 @@ namespace Azure.ResourceManager.Core
     {
         internal static readonly string DefaultUri = "https://management.azure.com";
 
-        public Dictionary<string, string> ApiVersionOverrides { get; private set; }
-
         public AzureResourceManagerClient()
             : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, null)
         {
@@ -69,9 +67,9 @@ namespace Azure.ResourceManager.Core
             ApiVersionOverrides = new Dictionary<string, string>();
         }
 
-        public SubscriptionOperations DefaultSubscription { get; private set; }
+        public Dictionary<string, string> ApiVersionOverrides { get; private set; }
 
-        internal virtual AzureResourceManagerClientOptions ClientOptions { get; }
+        public SubscriptionOperations DefaultSubscription { get; private set; }
 
         public SubscriptionOperations Subscription(SubscriptionData subscription) => new SubscriptionOperations(ClientOptions, subscription);
 
@@ -219,6 +217,12 @@ namespace Azure.ResourceManager.Core
             return container.Create(name, model);
         }
 
+        internal virtual AzureResourceManagerClientOptions ClientOptions { get; }
+
+        internal SubscriptionsOperations SubscriptionsClient => GetResourcesClient(Guid.NewGuid().ToString()).Subscriptions;
+
+        internal ResourcesManagementClient GetResourcesClient(string subscription) => ClientOptions.GetClient((uri, credential) => new ResourcesManagementClient(uri, subscription, credential));
+
         /// <summary>
         /// Fill in the default subscription in the simple case (passed in, or only one subscription available)
         /// </summary>
@@ -234,9 +238,5 @@ namespace Azure.ResourceManager.Core
 
             return sub;
         }
-
-        internal SubscriptionsOperations SubscriptionsClient => GetResourcesClient(Guid.NewGuid().ToString()).Subscriptions;
-
-        internal ResourcesManagementClient GetResourcesClient(string subscription) => ClientOptions.GetClient((uri, credential) => new ResourcesManagementClient(uri, subscription, credential));
     }
 }

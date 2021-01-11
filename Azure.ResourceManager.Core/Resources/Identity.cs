@@ -17,10 +17,6 @@ namespace Azure.ResourceManager.Core
         private const string UserAssigned = "UserAssigned";
         private const string SystemAndUserAssigned = "SystemAssigned, UserAssigned";
 
-        public SystemAssignedIdentity SystemAssignedIdentity { get; private set; }
-
-        public IDictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; private set; } // maintain structure of {id, (clientid, principal id)} in case of multiple UserIdentities
-
         public Identity()
             : this(null, false)
         {
@@ -52,6 +48,10 @@ namespace Azure.ResourceManager.Core
                 UserAssignedIdentities = user;
             }
         }
+
+        public SystemAssignedIdentity SystemAssignedIdentity { get; private set; }
+
+        public IDictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; private set; } // maintain structure of {id, (clientid, principal id)} in case of multiple UserIdentities
 
         public static Identity Deserialize(JsonElement element)
         {
