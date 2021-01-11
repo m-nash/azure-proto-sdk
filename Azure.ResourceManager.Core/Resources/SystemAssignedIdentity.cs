@@ -1,4 +1,7 @@
-﻿namespace Azure.ResourceManager.Core
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Azure.ResourceManager.Core
 {
     using System;
     using System.Text.Json;

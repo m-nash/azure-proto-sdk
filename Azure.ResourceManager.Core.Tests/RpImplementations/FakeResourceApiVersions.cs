@@ -1,4 +1,7 @@
-﻿namespace Azure.ResourceManager.Core.Tests
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Azure.ResourceManager.Core.Tests
 {
     public class FakeResourceApiVersions : ApiVersionsBase
     {
