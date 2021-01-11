@@ -9,7 +9,7 @@ using Azure.ResourceManager.Resources;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// Operations for the RespourceGroups container in the given subscription context.  Allows Creating and listign respource groups
+    /// Operations for the RespourceGroups container in the given subscription context.  Allows Creating and listing respource groups
     /// and provides an attachment point for Collections of Tracked Resources.
     /// </summary>
     public class ResourceGroupContainer : ResourceContainerBase<ResourceGroup, ResourceGroupData>
