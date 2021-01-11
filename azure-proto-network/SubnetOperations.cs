@@ -22,6 +22,8 @@ namespace azure_proto_network
 
         public static readonly ResourceType ResourceType = "Microsoft.Network/virtualNetworks/subnets";
 
+        protected override ResourceType ValidResourceType => ResourceType;
+
         internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
                     ClientOptions.Convert<NetworkManagementClientOptions>())).Subnets;
 
@@ -63,11 +65,6 @@ namespace azure_proto_network
                     Resource = new SubnetData(n, DefaultLocation);
                     return new Subnet(ClientOptions, Resource as SubnetData);
                 });
-        }
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
         }
     }
 }

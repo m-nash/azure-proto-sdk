@@ -48,25 +48,17 @@ namespace Azure.ResourceManager.Core
         {
         }
 
+        protected override ResourceType ValidResourceType => ResourceType;
+
         /// <summary>
         /// Gets the subscription client.
         /// </summary>
-        internal SubscriptionsOperations SubscriptionsClient => GetClient((uri, cred) =>
+        private SubscriptionsOperations SubscriptionsClient => GetClient((uri, cred) =>
             new ResourcesManagementClient(
                 uri,
                 Guid.NewGuid().ToString(),
                 cred,
                 ClientOptions.Convert<ResourcesManagementClientOptions>())).Subscriptions;
-
-        /// <summary>
-        /// Gets the resource group client.
-        /// </summary>
-        internal ResourceGroupsOperations RgOperations => GetClient((uri, cred) =>
-            new ResourcesManagementClient(
-                uri,
-                Id.Subscription,
-                cred,
-                ClientOptions.Convert<ResourcesManagementClientOptions>())).ResourceGroups;
 
         /// <summary>
         /// Gets the resource group operations for a given resource group.
@@ -121,12 +113,6 @@ namespace Azure.ResourceManager.Core
             return new PhArmResponse<Subscription, Azure.ResourceManager.Resources.Models.Subscription>(
                 await SubscriptionsClient.GetAsync(Id.Name, cancellationToken),
                 Converter());
-        }
-
-        /// <inheritdoc/>
-        protected internal override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
         }
 
         private Func<Azure.ResourceManager.Resources.Models.Subscription, Subscription> Converter()

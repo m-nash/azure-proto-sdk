@@ -7,17 +7,29 @@ using Azure.Identity;
 
 namespace Azure.ResourceManager.Core
 {
+    /// <summary>
+    /// A class representing Azure resource manager client options.
+    /// </summary>
     public class AzureResourceManagerClientOptions : ClientOptions
     {
         private Dictionary<Type, object> _overrides = new Dictionary<Type, object>();
 
         private static readonly object _overridesLock = new object();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureResourceManagerClientOptions"/> class.
+        /// </summary>
         public AzureResourceManagerClientOptions()
             : this(new Uri(AzureResourceManagerClient.DefaultUri), new DefaultAzureCredential())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureResourceManagerClientOptions"/> class.
+        /// </summary>
+        /// <param name="baseUri"> The base URI of the service. </param>
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="other"> The client parameters to use in these operations. </param>
         public AzureResourceManagerClientOptions(Uri baseUri, TokenCredential credential, AzureResourceManagerClientOptions other = null)
         {
             BaseUri = baseUri;
@@ -27,6 +39,10 @@ namespace Azure.ResourceManager.Core
                 Copy(other);
         }
 
+        /// <summary>
+        /// Converts client options.
+        /// </summary>
+        /// <typeparam name="T"> The type of the underlying model this class wraps. </typeparam>
         public T Convert<T>()
             where T : ClientOptions, new()
         {
@@ -59,10 +75,16 @@ namespace Azure.ResourceManager.Core
                 this.AddPolicy(pol, HttpPipelinePosition.PerRetry);
             }
         }
-        // TODO policy lists are internal hence we don't have acces to them by inheriting ClientOptions in this Asembly, this is a wrapper for now to convert to the concrete
-        // policy options.
+
+        /// <summary>
+        /// Adds a policy for Azure resource manager client http call.
+        /// </summary>
+        /// <param name="policy"> The http call policy in the pipeline. </param>
+        /// <param name="position"> The position of the http call policy in the pipeline. </param>
         public new void AddPolicy(HttpPipelinePolicy policy, HttpPipelinePosition position)
         {
+            // TODO policy lists are internal hence we don't have acces to them by inheriting ClientOptions in this Asembly, this is a wrapper for now to convert to the concrete
+            // policy options.
             switch (position)
             {
                 case HttpPipelinePosition.PerCall:
@@ -78,10 +100,24 @@ namespace Azure.ResourceManager.Core
             base.AddPolicy(policy, position);
         }
 
+        /// <summary>
+        /// Gets each http call policies.
+        /// </summary>
+        /// <returns> A collection of http pipeline policy that may take multiple service requests to iterate over. </returns>
         internal IList<HttpPipelinePolicy> PerCallPolicies { get; } = new List<HttpPipelinePolicy>();
 
+        /// <summary>
+        /// Gets each http retry call policies.
+        /// </summary>
+        /// <returns> A collection of http pipeline policy that may take multiple service requests to iterate over. </returns>
         internal IList<HttpPipelinePolicy> PerRetryPolicies { get; } = new List<HttpPipelinePolicy>();
 
+        /// <summary>
+        /// Gets override object.
+        /// </summary>
+        /// <typeparam name="T"> The type of the underlying model this class wraps. </typeparam>
+        /// <param name="ctor"> A function which returns an object. </param>
+        /// <returns> The override object. </returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public object GetOverrideObject<T>(Func<object> ctor)
         {
@@ -102,23 +138,25 @@ namespace Azure.ResourceManager.Core
             return overrideObject;
         }
 
+        /// <summary>
+        /// Gets the Azure credential.
+        /// </summary>
         internal TokenCredential Credential { get; }
 
-
+        /// <summary>
+        /// Gets the base URI of the service.
+        /// </summary>
         internal Uri BaseUri { get; }
 
 
         /// <summary>
-        ///     HTTP client options that will be used for all clients created from this Azure Resource Manger Client.
+        /// Gets the HTTP client options that will be used for all clients created from this Azure Resource Manger Client.
+        /// Note that this is currently adapting to underlying management clients - once generator changes are in, this would
+        /// likely be unnecessary.
         /// </summary>
-
-        /// <summary>
-        ///     Note that this is currently adapting to underlying management clients - once generator changes are in, this would
-        ///     likely be unnecessary
-        /// </summary>
-        /// <typeparam name="T">Operations class</typeparam>
-        /// <param name="creator">Method to construct the operations class</param>
-        /// <returns>Constructed operations class</returns>
+        /// <typeparam name="T"> The type of the underlying model this class wraps. </typeparam>
+        /// <param name="creator"> A method to construct the operations class. </param>
+        /// <returns> The constructed operations class. </returns>
         internal T GetClient<T>(Func<Uri, TokenCredential, T> creator)
         {
             return creator(BaseUri, Credential);

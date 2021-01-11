@@ -15,7 +15,7 @@ namespace client
             foreach (var genericOp in rgOp.VirtualMachines().ListByName(Context.VmName))
             {
                 Console.WriteLine($"Adding tag to {genericOp.Id}");
-                genericOp.AddTag("tagKey", "tagVaue");
+                genericOp.StartAddTag("tagKey", "tagVaue");
             }
 
             var vmOp = rgOp.VirtualMachine(Context.VmName);
