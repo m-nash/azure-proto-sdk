@@ -36,7 +36,7 @@ namespace azure_proto_compute
         /// <inheritdoc/>
         public override ArmResponse<AvailabilitySet> Create(string name, AvailabilitySetData resourceDetails, CancellationToken cancellationToken = default)
         {
-            var response = Operations.CreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken);
+            var response = Operations.CreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model);
             return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 response,
                 a => new AvailabilitySet(ClientOptions, new AvailabilitySetData(a)));
@@ -146,11 +146,5 @@ namespace azure_proto_compute
         /// </summary>
         internal AvailabilitySetsOperations Operations => GetClient((uri, cred) => new ComputeManagementClient(uri, Id.Subscription, cred,
                     ClientOptions.Convert<ComputeManagementClientOptions>())).AvailabilitySets;
-
-        /// <inheritdoc/>
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceGroupOperations.ResourceType;
-        }
     }
 }

@@ -64,9 +64,15 @@ namespace Azure.ResourceManager.Core
         /// <param name="identifier"> The resource identifier. </param>
         public virtual void Validate(ResourceIdentifier identifier)
         {
-            if (identifier?.Type != GetValidResourceType())
-                throw new InvalidOperationException($"Invalid resource type {identifier?.Type} expected {GetValidResourceType()}");
+            if (identifier?.Type != ValidResourceType)
+                throw new InvalidOperationException($"Invalid resource type {identifier?.Type} expected {ValidResourceType}");
         }
+
+        /// <summary>
+        /// Gets the valid Azure resource type for the current operations.
+        /// </summary>
+        /// <returns> A valid Azure resource type. </returns>
+        protected abstract ResourceType ValidResourceType { get; }
 
         /// <summary>
         ///    Gets the client for specific azure resource types.
@@ -79,11 +85,5 @@ namespace Azure.ResourceManager.Core
             // TODO: Anyway to make this protected internal? It is used in Extensions
             return ClientOptions.GetClient(creator);
         }
-
-        /// <summary>
-        /// Gets the valid Azure resource type for the current operations.
-        /// </summary>
-        /// <returns> A valid Azure resource type. </returns>
-        protected internal abstract ResourceType GetValidResourceType();
     }
 }

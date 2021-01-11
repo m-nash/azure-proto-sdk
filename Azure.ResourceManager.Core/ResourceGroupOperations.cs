@@ -20,6 +20,8 @@ namespace Azure.ResourceManager.Core
         internal ResourceGroupOperations(AzureResourceManagerClientOptions options, Resource resource)
             : base(options, resource) { }
 
+        protected override ResourceType ValidResourceType => ResourceType;
+
         internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(
             uri,
             Id.Subscription,
@@ -64,7 +66,7 @@ namespace Azure.ResourceManager.Core
             });
         }
 
-        public ArmOperation<ResourceGroup> AddTag(string name, string value)
+        public ArmOperation<ResourceGroup> StartAddTag(string name, string value)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;
@@ -75,7 +77,7 @@ namespace Azure.ResourceManager.Core
             });
         }
 
-        public async Task<ArmOperation<ResourceGroup>> AddTagAsync(string name, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<ResourceGroup>> StartAddTagAsync(string name, string value, CancellationToken cancellationToken = default)
         {
             var patch = new ResourceGroupPatchable();
             patch.Tags[name] = value;
@@ -128,11 +130,6 @@ namespace Azure.ResourceManager.Core
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;
 
             return container.CreateAsync(name, model, token);
-        }
-
-        protected internal override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
         }
     }
 }

@@ -47,6 +47,18 @@ namespace azure_proto_compute
         public static readonly ResourceType ResourceType = "Microsoft.Compute/availabilitySets";
 
         /// <summary>
+        /// Gets the valid resource type definition for an availability set.
+        /// </summary>
+        protected override ResourceType ValidResourceType => ResourceType;
+
+        private AvailabilitySetsOperations Operations => GetClient((uri, cred) =>
+            new ComputeManagementClient(
+                uri,
+                Id.Subscription,
+                cred,
+                ClientOptions.Convert<ComputeManagementClientOptions>())).AvailabilitySets;
+
+        /// <summary>
         /// The operation to delete an availability set. 
         /// </summary>
         /// <returns> A response with the <see cref="ArmResponse{Response}"/> operation for this resource. </returns>
@@ -153,8 +165,8 @@ namespace azure_proto_compute
         /// </summary>
         /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
-        /// <returns> The operation of the updated resource. </returns>
-        public ArmOperation<AvailabilitySet> AddTag(string key, string value)
+        /// <returns> An <see cref="ArmOperation{AvailabilitySet}"/> that allows polling for completion of the operation. </returns>
+        public ArmOperation<AvailabilitySet> StartAddTag(string key, string value)
         {
             var patchable = new AvailabilitySetUpdate();
             patchable.Tags[key] = value;
@@ -166,27 +178,12 @@ namespace azure_proto_compute
         /// </summary>
         /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
-        /// <returns> A <see cref="Task"/> that on completion returns the operation of the updated resource. </returns>
-        public Task<ArmOperation<AvailabilitySet>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{AvailabilitySet}"/> that allows polling for completion of the operation. </returns>
+        public Task<ArmOperation<AvailabilitySet>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new AvailabilitySetUpdate();
             patchable.Tags[key] = value;
             return UpdateAsync(patchable);
-        }
-
-        /// <summary>
-        /// Gets the operations that can be performed over a specific availability set.
-        /// </summary>
-        internal AvailabilitySetsOperations Operations => GetClient<ComputeManagementClient>((uri, cred) =>
-            new ComputeManagementClient(uri,
-                                        Id.Subscription,
-                                        cred,
-                                        ClientOptions.Convert<ComputeManagementClientOptions>())).AvailabilitySets;
-
-        /// <inheritdoc/>
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
         }
     }
 }

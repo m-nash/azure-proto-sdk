@@ -31,6 +31,12 @@ namespace Azure.ResourceManager.Core
                 ClientOptions.Convert<ResourcesManagementClientOptions>())).Subscriptions;
 
         /// <summary>
+        /// Gets the valid resource type associated with the container.
+        /// </summary>
+        /// <returns> A valid Azure resource type. </returns>
+        protected override ResourceType ValidResourceType => SubscriptionOperations.ResourceType;
+
+        /// <summary>
         /// Lists all subscriptions in the current container.
         /// </summary>
         /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service.
@@ -85,15 +91,6 @@ namespace Azure.ResourceManager.Core
             }
 
             return sub;
-        }
-
-        /// <summary>
-        /// Gets the valid resource type associated with the container.
-        /// </summary>
-        /// <returns> A valid Azure resource type. </returns>
-        protected internal override ResourceType GetValidResourceType()
-        {
-            return SubscriptionOperations.ResourceType;
         }
 
         private Func<ResourceManager.Resources.Models.Subscription, SubscriptionOperations> Converter()

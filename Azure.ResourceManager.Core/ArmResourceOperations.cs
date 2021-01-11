@@ -33,6 +33,8 @@ namespace Azure.ResourceManager.Core
             return Get().Value;
         }
 
+        protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
+
         public ArmResponse<Response> Delete()
         {
             return new ArmResponse(Operations.StartDeleteById(Id, _apiVersion).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
@@ -56,7 +58,7 @@ namespace Azure.ResourceManager.Core
             return new ArmVoidOperation(operation);
         }
 
-        public ArmOperation<ArmResource> AddTag(string key, string value)
+        public ArmOperation<ArmResource> StartAddTag(string key, string value)
         {
             ArmResource resource = GetResource();
             UpdateTags(key, value, resource.Data.Tags);
@@ -69,7 +71,7 @@ namespace Azure.ResourceManager.Core
                 });
         }
 
-        public async Task<ArmOperation<ArmResource>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<ArmResource>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             ArmResource resource = GetResource();
             UpdateTags(key, value, resource.Data.Tags);
@@ -108,11 +110,6 @@ namespace Azure.ResourceManager.Core
         public override void Validate(ResourceIdentifier identifier)
         {
             return;
-        }
-
-        protected internal override ResourceType GetValidResourceType()
-        {
-            return ResourceGroupOperations.ResourceType;
         }
     }
 }

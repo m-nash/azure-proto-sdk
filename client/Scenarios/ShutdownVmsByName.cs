@@ -15,7 +15,7 @@ namespace client
 
             foreach(var armResource in sub.ListVirtualMachinesByName("even"))
             {
-                var vmOperations = new VirtualMachineOperations(armResource);
+                var vmOperations = VirtualMachineOperations.FromGeneric(armResource);
                 Console.WriteLine($"Stopping {armResource.Id.Name}");
                 vmOperations.PowerOff();
                 Console.WriteLine($"Starting {armResource.Id.Name}");

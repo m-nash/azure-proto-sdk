@@ -49,7 +49,7 @@ namespace Azure.ResourceManager.Core
         /// <exception cref="InvalidOperationException"> Resource identifier is not a valid type for this container. </exception>
         public override void Validate(ResourceIdentifier identifier)
         {
-            if (identifier.Type != GetValidResourceType())
+            if (identifier.Type != ValidResourceType)
                 throw new InvalidOperationException($"{identifier.Type} is not a valid container for {Id.Type}");
         }
 
@@ -58,14 +58,12 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="name"> The name of the resource. </param>
         /// <param name="resourceDetails"> The desired resource configuration. </param>
-        /// <param name="cancellationToken"> A token that allows the caller to cancel the call before
         /// it is completed. Note that cancellation cancels requests, but does not cancel the operation
         /// on the client side. </param>
         /// <returns>A response with the <see cref="ArmResponse{TOperations}"/> operation for the newly created resource.</returns>
         public abstract ArmResponse<TOperations> Create(
             string name,
-            TResource resourceDetails,
-            CancellationToken cancellationToken = default);
+            TResource resourceDetails);
 
         /// <summary>
         /// Creates a new resource asynchronously.

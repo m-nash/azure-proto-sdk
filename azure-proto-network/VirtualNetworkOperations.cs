@@ -24,6 +24,8 @@ namespace azure_proto_network
 
         public static readonly ResourceType ResourceType = "Microsoft.Network/virtualNetworks";
 
+        protected override ResourceType ValidResourceType => ResourceType;
+
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ClientOptions.Convert<NetworkManagementClientOptions>())).VirtualNetworks;
 
@@ -68,7 +70,7 @@ namespace azure_proto_network
                 });
         }
 
-        public ArmOperation<VirtualNetwork> AddTag(string key, string value)
+        public ArmOperation<VirtualNetwork> StartAddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
@@ -80,7 +82,7 @@ namespace azure_proto_network
                 });
         }
 
-        public async Task<ArmOperation<VirtualNetwork>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<VirtualNetwork>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
@@ -110,11 +112,6 @@ namespace azure_proto_network
         public virtual SubnetContainer Subnets()
         {
             return new SubnetContainer(ClientOptions, Id);
-        }
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
         }
     }
 }

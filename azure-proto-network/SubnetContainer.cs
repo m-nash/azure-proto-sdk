@@ -20,14 +20,16 @@ namespace azure_proto_network
         {
         }
 
+        protected override ResourceType ValidResourceType => VirtualNetworkOperations.ResourceType;
+
         internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
                     ClientOptions.Convert<NetworkManagementClientOptions>())).Subnets;
 
-        public override ArmResponse<Subnet> Create(string name, SubnetData resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<Subnet> Create(string name, SubnetData resourceDetails)
         {
-            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, name, resourceDetails.Model, cancellationToken);
+            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, name, resourceDetails.Model);
             return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(
-                operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
+                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
                 s => new Subnet(ClientOptions, new SubnetData(s, Location.Default)));
         }
 
@@ -87,11 +89,6 @@ namespace azure_proto_network
         {
             //TODO: Subnet will be a proxy resource and not a tracked resource ADO #4481
             return s => new Subnet(ClientOptions, new SubnetData(s, Location.Default));
-        }
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return VirtualNetworkOperations.ResourceType;
         }
     }
 }

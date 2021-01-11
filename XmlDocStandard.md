@@ -162,7 +162,7 @@ Example:
 
 ```
         /// <summary>
-        /// Filters the list of [Resource] for this [ParentResource] represented as generic resources.
+        /// Filters the list of [Resource] for this [ParentResource].
         /// Makes an additional network call to retrieve the full data model for each [Resource].
         /// </summary>
 ```
@@ -187,3 +187,12 @@ Example:
         /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
 ```
+
+### Data Property
+
+```
+        /// <summary>
+        /// Gets the data representing this [Resource].
+        /// </summary>
+```
+
