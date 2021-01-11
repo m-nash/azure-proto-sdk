@@ -17,6 +17,18 @@ namespace Azure.ResourceManager.Core
             Model = data;
         }
 
+        protected TrackedResource(string id, Location location, T data)
+        {
+            if(object.ReferenceEquals(id, null)){
+                Id = null;
+            }
+            else{
+                Id = id;
+            }
+            Location = location;
+            Model = data;
+        }
+
         public virtual T Model { get; set; }
 
         public static implicit operator T(TrackedResource<T> other)
