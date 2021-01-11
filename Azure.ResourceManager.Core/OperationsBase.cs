@@ -7,7 +7,7 @@ using Azure.Core;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// Base class for resource operations.
+    /// A class representing the operations that can be performed over a specific resource.
     /// </summary>
     public abstract class OperationsBase
     {

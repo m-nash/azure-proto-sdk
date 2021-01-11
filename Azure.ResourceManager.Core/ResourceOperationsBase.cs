@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// Base class for all operations over a resource.
+    /// A class representing the operations that can be performed over a specific resource.
     /// </summary>
     public abstract class ResourceOperationsBase : OperationsBase
     {
@@ -71,13 +71,13 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Get details for this resource from the service.
+        /// Gets details for this resource from the service.
         /// </summary>
         /// <returns> A response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public abstract ArmResponse<TOperations> Get();
 
         /// <summary>
-        /// Get details for this resource from the service.
+        /// Gets details for this resource from the service.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param> 
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>

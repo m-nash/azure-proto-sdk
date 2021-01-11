@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// Base class for resource container
+    /// A class representing collection of resources and their operations over their parent.
     /// </summary>
     /// <typeparam name="TOperations"> The type of the class containing operations for the underlying resource. </typeparam>
     /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
