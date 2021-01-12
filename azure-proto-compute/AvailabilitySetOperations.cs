@@ -46,9 +46,7 @@ namespace azure_proto_compute
         /// </summary>
         public static readonly ResourceType ResourceType = "Microsoft.Compute/availabilitySets";
 
-        /// <summary>
-        /// Gets the valid resource type definition for an availability set.
-        /// </summary>
+        /// <inheritdoc/>
         protected override ResourceType ValidResourceType => ResourceType;
 
         private AvailabilitySetsOperations Operations => GetClient((uri, cred) =>
@@ -161,10 +159,14 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// The operation to add a tag to an availability set.
+        /// Adds a tag to an availability set.
+        /// If the tag already exists it will be modified.
         /// </summary>
         /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
+        /// <remarks>
+        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning"> Details on long running operation object. </see>
+        /// </remarks>
         /// <returns> An <see cref="ArmOperation{AvailabilitySet}"/> that allows polling for completion of the operation. </returns>
         public ArmOperation<AvailabilitySet> StartAddTag(string key, string value)
         {
@@ -174,10 +176,14 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// The operation to add a tag to an availability set.
+        /// Adds a tag to an availability set.
+        /// If the tag already exists it will be modified.
         /// </summary>
         /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
+        /// <remarks>
+        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning"> Details on long running operation object. </see>
+        /// </remarks>
         /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{AvailabilitySet}"/> that allows polling for completion of the operation. </returns>
         public Task<ArmOperation<AvailabilitySet>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
