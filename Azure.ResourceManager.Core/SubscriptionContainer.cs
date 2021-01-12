@@ -16,7 +16,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         internal SubscriptionContainer(AzureResourceManagerClientOptions options)
-            : base(options, null, null)
+            : base(options, ResourceIdentifier.ROOT)
         {
         }
 
@@ -34,7 +34,7 @@ namespace Azure.ResourceManager.Core
         /// Gets the valid resource type associated with the container.
         /// </summary>
         /// <returns> A valid Azure resource type. </returns>
-        protected override ResourceType ValidResourceType => SubscriptionOperations.ResourceType;
+        protected override ResourceType ValidResourceType => ResourceIdentifier.ROOT;
 
         /// <summary>
         /// Lists all subscriptions in the current container.
@@ -68,7 +68,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="identifier"> The identifier of the resource. </param>
         public override void Validate(ResourceIdentifier identifier)
         {
-            if (identifier != null)
+            if (identifier != ResourceIdentifier.ROOT)
                 throw new ArgumentException("Invalid parent for subscription container");
         }
 
