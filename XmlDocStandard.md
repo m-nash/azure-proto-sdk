@@ -18,7 +18,7 @@
 | `AzureResourceManagerClientOptions options` | `/// <param name="options"> The client parameters to use in these operations. </param>` |
 | `CancellationToken cancellationToken = default` | ``` /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>``` |
 | `ArmResponse<TOperations>` | ??_____ |
-| `ArmResourceOperations` | ``` /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a XXX. </param>``` |
+| `ArmResourceOperations` | ``` /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a [Resource]. </param>``` |
 
 ### Standard class documentation
 
@@ -85,7 +85,7 @@ Example:
 
 ```
         /// <remarks>
-        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
+        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning"> Details on long running operation object. </see>
         /// </remarks>
 ```
 
@@ -146,7 +146,7 @@ Example:
 
 ```
         /// <summary>
-        /// List the [Resource] for this resource group.
+        /// Lists the [Resource] for this [Parent].
         /// </summary>
 ```
 
@@ -167,13 +167,29 @@ Example:
         /// </summary>
 ```
 
+#### List[Resource] / List[Resource]Async on SubscriptionExtensions
+
+```
+        /// <summary>
+        /// Lists the [Resource] for this subscription.
+        /// </summary>
+```
+
+#### List[Resource]ByName / List[Resource]ByNameAsync on SubscriptionExtensions
+
+```
+        /// <summary>
+        /// Filters the list of [Resource] for this [ParentResource] represented as generic resources.
+        /// </summary>
+```
+
 ### Builder
 
 #### Construct
 
 ```
         /// <summary>
-        /// Construct an object used to create a [Resource].
+        /// Constructs an object used to create a [Resource].
         /// </summary>
 ```
 
@@ -181,7 +197,7 @@ Example:
 
 ```
         /// <summary>
-        /// Add a tag to a [Resource].
+        /// Adds a tag to a [Resource].
         /// If the tag already exists it will be modified.
         /// </summary>
         /// <param name="key"> The key for the tag. </param>

@@ -15,11 +15,6 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class ResourceListOperations
     {
-        private static ResourcesManagementClient GetResourcesClient(AzureResourceManagerClientOptions options, string id)
-        {
-            return new ResourcesManagementClient(options.BaseUri, id, options.Credential);
-        }
-
         /// <summary>
         /// List resources under the a resource context
         /// </summary>
@@ -53,7 +48,7 @@ namespace Azure.ResourceManager.Core
 
         /// <summary>
         /// List resources under the a resource context
-        /// </summary>        
+        /// </summary>
         /// <param name="clientOptions"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         /// <param name="resourceFilters"> Optional filters for results. </param>
@@ -128,6 +123,11 @@ namespace Azure.ResourceManager.Core
                 resourceFilters,
                 top,
                 cancellationToken);
+        }
+
+        private static ResourcesManagementClient GetResourcesClient(AzureResourceManagerClientOptions options, string id)
+        {
+            return new ResourcesManagementClient(options.BaseUri, id, options.Credential);
         }
 
         private static AsyncPageable<ArmResource> ListAtContextInternalAsync(
