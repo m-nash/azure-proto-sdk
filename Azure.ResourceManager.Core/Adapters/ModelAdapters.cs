@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-
+using System;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
@@ -19,10 +19,12 @@ namespace Azure.ResourceManager.Core
 
         protected TrackedResource(string id, Location location, T data)
         {
-            if(object.ReferenceEquals(id, null)){
+            if (object.ReferenceEquals(id, null))
+            {
                 Id = null;
             }
-            else{
+            else
+            {
                 Id = id;
             }
             Location = location;

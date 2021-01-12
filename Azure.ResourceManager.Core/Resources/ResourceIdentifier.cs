@@ -141,6 +141,10 @@ namespace Azure.ResourceManager.Core
         /// <param name="id">A properly formed resource identity</param>
         protected virtual void Parse(string id)
         {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
             // Throw for null, empty, and string without the correct form
             if (string.IsNullOrWhiteSpace(id) || !id.Contains('/'))
                 throw new ArgumentOutOfRangeException($"'{id}' is not a valid resource");
