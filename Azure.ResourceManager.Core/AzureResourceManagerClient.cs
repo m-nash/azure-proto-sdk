@@ -23,11 +23,6 @@ namespace Azure.ResourceManager.Core
         internal static readonly string DefaultUri = "https://management.azure.com";
 
         /// <summary>
-        /// Gets the Api version overrides.
-        /// </summary>
-        public Dictionary<string, string> ApiVersionOverrides { get; private set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
         /// </summary>
         public AzureResourceManagerClient()
@@ -111,6 +106,11 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
+        /// Gets the Api version overrides.
+        /// </summary>
+        public Dictionary<string, string> ApiVersionOverrides { get; private set; }
+
+        /// <summary>
         /// Gets the default Azure subscription.
         /// </summary>
         public SubscriptionOperations DefaultSubscription { get; private set; }
@@ -119,6 +119,11 @@ namespace Azure.ResourceManager.Core
         /// Gets the Azure resource manager client options.
         /// </summary>
         internal virtual AzureResourceManagerClientOptions ClientOptions { get; }
+
+        /// <summary>
+        /// Gets the subscription client.
+        /// </summary>
+        internal SubscriptionsOperations SubscriptionsClient => GetResourcesClient(Guid.NewGuid().ToString()).Subscriptions;
 
         /// <summary>
         /// Gets the Azure subscription operations.
@@ -171,11 +176,9 @@ namespace Azure.ResourceManager.Core
                 }
 
                 return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocationsAsync(subscriptionId, token), s => new LocationData(s));
-
             }
 
             return new PhTaskDeferringAsyncPageable<LocationData>(PageableFunc);
-
         }
 
         /// <summary>
@@ -387,11 +390,6 @@ namespace Azure.ResourceManager.Core
 
             return sub;
         }
-
-        /// <summary>
-        /// Gets the subscription client.
-        /// </summary>
-        internal SubscriptionsOperations SubscriptionsClient => GetResourcesClient(Guid.NewGuid().ToString()).Subscriptions;
 
         /// <summary>
         /// Gets the resource client.

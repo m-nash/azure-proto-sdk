@@ -15,10 +15,14 @@ namespace Azure.ResourceManager.Core
     public class ResourceGroupContainer : ResourceContainerBase<ResourceGroup, ResourceGroupData>
     {
         internal ResourceGroupContainer(AzureResourceManagerClientOptions options, SubscriptionOperations subscription)
-            : base(options, subscription.Id) { }
+            : base(options, subscription.Id)
+        {
+        }
 
         internal ResourceGroupContainer(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id) { }
+            : base(options, id)
+        {
+        }
 
         internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(
             uri,

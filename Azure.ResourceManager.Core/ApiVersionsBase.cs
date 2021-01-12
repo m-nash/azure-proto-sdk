@@ -33,6 +33,48 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
+        /// Overrides == operator for comparing ApiVersionsBase object with string object.
+        /// </summary>
+        /// <param name="first"> The ApiVersionsBase object to compare. </param>
+        /// <param name="second"> The API version value in string to compare. </param>
+        /// <returns> Comparison result in boolean. Equal returns true otherwise returns false. </returns>
+        public static bool operator ==(ApiVersionsBase first, string second)
+        {
+            if (ReferenceEquals(null, first))
+            {
+                return ReferenceEquals(null, second);
+            }
+
+            if (ReferenceEquals(null, second))
+            {
+                return false;
+            }
+
+            return first.Equals(second);
+        }
+
+        /// <summary>
+        /// Overrides != operator for comparing ApiVersionsBase object with string object.
+        /// </summary>
+        /// <param name="first"> The ApiVersionsBase object to compare. </param>
+        /// <param name="second"> The API version value in string to compare. </param>
+        /// <returns> Comparison result in boolean. Equal returns false otherwise returns true. </returns>
+        public static bool operator !=(ApiVersionsBase first, string second)
+        {
+            if (ReferenceEquals(null, first))
+            {
+                return !ReferenceEquals(null, second);
+            }
+
+            if (ReferenceEquals(null, second))
+            {
+                return true;
+            }
+
+            return !first.Equals(second);
+        }
+
+        /// <summary>
         /// Compares two API version values in string type.
         /// </summary>
         /// <param name="other"> The API version value to compare. </param>
@@ -91,48 +133,6 @@ namespace Azure.ResourceManager.Core
             }
 
             return other == _value;
-        }
-
-        /// <summary>
-        /// Overrides == operator for comparing ApiVersionsBase object with string object.
-        /// </summary>
-        /// <param name="first"> The ApiVersionsBase object to compare. </param>
-        /// <param name="second"> The API version value in string to compare. </param>
-        /// <returns> Comparison result in boolean. Equal returns true otherwise returns false. </returns>
-        public static bool operator ==(ApiVersionsBase first, string second)
-        {
-            if (ReferenceEquals(null, first))
-            {
-                return ReferenceEquals(null, second);
-            }
-
-            if (ReferenceEquals(null, second))
-            {
-                return false;
-            }
-
-            return first.Equals(second);
-        }
-
-        /// <summary>
-        /// Overrides != operator for comparing ApiVersionsBase object with string object.
-        /// </summary>
-        /// <param name="first"> The ApiVersionsBase object to compare. </param>
-        /// <param name="second"> The API version value in string to compare. </param>
-        /// <returns> Comparison result in boolean. Equal returns false otherwise returns true. </returns>
-        public static bool operator !=(ApiVersionsBase first, string second)
-        {
-            if (ReferenceEquals(null, first))
-            {
-                return !ReferenceEquals(null, second);
-            }
-
-            if (ReferenceEquals(null, second))
-            {
-                return true;
-            }
-
-            return !first.Equals(second);
         }
 
         /// <summary>
