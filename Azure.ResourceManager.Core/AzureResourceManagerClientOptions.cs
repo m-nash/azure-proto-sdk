@@ -27,7 +27,7 @@ namespace Azure.ResourceManager.Core
             Credential = credential;
 
             // Will go away when moved into core since we will have directy acces the policies and transport, so just need to set those
-            if (!Object.ReferenceEquals(other, null))
+            if (!ReferenceEquals(other, null))
                 Copy(other);
         }
 
@@ -35,6 +35,13 @@ namespace Azure.ResourceManager.Core
 
         internal IList<HttpPipelinePolicy> PerRetryPolicies { get; } = new List<HttpPipelinePolicy>();
 
+        internal TokenCredential Credential { get; }
+
+        internal Uri BaseUri { get; }
+
+        /// <summary>
+        ///     HTTP client options that will be used for all clients created from this Azure Resource Manger Client.
+        /// </summary>
         public T Convert<T>()
             where T : ClientOptions, new()
         {
@@ -92,6 +99,18 @@ namespace Azure.ResourceManager.Core
             return overrideObject;
         }
 
+        /// <summary>
+        ///     Note that this is currently adapting to underlying management clients - once generator changes are in, this would
+        ///     likely be unnecessary
+        /// </summary>
+        /// <typeparam name="T">Operations class</typeparam>
+        /// <param name="creator">Method to construct the operations class</param>
+        /// <returns>Constructed operations class</returns>
+        internal T GetClient<T>(Func<Uri, TokenCredential, T> creator)
+        {
+            return creator(BaseUri, Credential);
+        }
+
         // Will be removed like AddPolicy when we move to azure core
         private void Copy(AzureResourceManagerClientOptions other)
         {
@@ -105,26 +124,6 @@ namespace Azure.ResourceManager.Core
             {
                 AddPolicy(pol, HttpPipelinePosition.PerRetry);
             }
-        }
-
-        internal TokenCredential Credential { get; }
-
-        internal Uri BaseUri { get; }
-
-        /// <summary>
-        ///     HTTP client options that will be used for all clients created from this Azure Resource Manger Client.
-        /// </summary>
-
-        /// <summary>
-        ///     Note that this is currently adapting to underlying management clients - once generator changes are in, this would
-        ///     likely be unnecessary
-        /// </summary>
-        /// <typeparam name="T">Operations class</typeparam>
-        /// <param name="creator">Method to construct the operations class</param>
-        /// <returns>Constructed operations class</returns>
-        internal T GetClient<T>(Func<Uri, TokenCredential, T> creator)
-        {
-            return creator(BaseUri, Credential);
         }
     }
 }

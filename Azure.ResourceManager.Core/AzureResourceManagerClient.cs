@@ -71,6 +71,10 @@ namespace Azure.ResourceManager.Core
 
         public SubscriptionOperations DefaultSubscription { get; private set; }
 
+        internal virtual AzureResourceManagerClientOptions ClientOptions { get; }
+
+        internal SubscriptionsOperations SubscriptionsClient => GetResourcesClient(Guid.NewGuid().ToString()).Subscriptions;
+
         public SubscriptionOperations Subscription(SubscriptionData subscription) => new SubscriptionOperations(ClientOptions, subscription);
 
         /// <summary>
@@ -216,10 +220,6 @@ namespace Azure.ResourceManager.Core
 
             return container.Create(name, model);
         }
-
-        internal virtual AzureResourceManagerClientOptions ClientOptions { get; }
-
-        internal SubscriptionsOperations SubscriptionsClient => GetResourcesClient(Guid.NewGuid().ToString()).Subscriptions;
 
         internal ResourcesManagementClient GetResourcesClient(string subscription) => ClientOptions.GetClient((uri, credential) => new ResourcesManagementClient(uri, subscription, credential));
 

@@ -23,7 +23,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
         /// <param name="options">The http client options for these operations</param>
-        /// <param name="parentId">The resource Id of the parent resource.</param>
+        /// <param name="id">The resource Id of the parent resource.</param>
+        /// </summary>
         protected ResourceContainerBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
            : base(options, id)
         {
@@ -33,6 +34,7 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
         /// <param name="options">The http client options for these operations</param>
         /// <param name="resource">The resource representing the parent resource.</param>
+        /// </summary>
         protected ResourceContainerBase(AzureResourceManagerClientOptions options, TrackedResource resource)
             : base(options, resource)
         {

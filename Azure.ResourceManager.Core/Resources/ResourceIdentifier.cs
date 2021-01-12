@@ -58,11 +58,6 @@ namespace Azure.ResourceManager.Core
             return new ResourceIdentifier(other);
         }
 
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
-
         /// <summary>
         ///     Allow static, safe comparisons of resource identifier strings or objects
         /// </summary>
@@ -98,6 +93,11 @@ namespace Azure.ResourceManager.Core
                 return 1;
 
             return x.CompareTo(y);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
         }
 
         public virtual int CompareTo(ResourceIdentifier other)

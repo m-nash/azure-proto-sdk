@@ -61,7 +61,7 @@ namespace azure_proto_authorization
         /// <summary>
         /// Gets the identifier of the RoleAssignment
         /// </summary>
-        public override ResourceIdentifier Id { get ; protected set ; }
+        public override ResourceIdentifier Id { get; protected set; }
 
         /// <summary>
         /// Gets the Track2 Management model associated with the data object
