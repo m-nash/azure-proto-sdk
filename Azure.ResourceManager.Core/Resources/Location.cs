@@ -321,7 +321,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Creates a new location implicitly from a string.
         /// </summary>
-        /// <param name="other">String to be assigned in the Name, CanonicalName or DisplayName form.</param>
+        /// <param name="other"> String to be assigned in the Name, CanonicalName or DisplayName form. </param>
         public static implicit operator Location(string other)
         {
             if (other == null)
@@ -340,7 +340,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Creates a string implicitly from a Location object.
         /// </summary>
-        /// <param name="other">Location object to be assigned.</param>
+        /// <param name="other"> Location object to be assigned. </param>
         public static implicit operator string(Location other)
         {
             if (other == null)
@@ -354,8 +354,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Detects if a location object is equal to another location instance or a string representing the location name.
         /// </summary>
-        /// <param name="other">Location object or name as a string.</param>
-        /// <returns>True or false.</returns>
+        /// <param name="other"> Location object or name as a string. </param>
+        /// <returns> True or false. </returns>
         public bool Equals(Location other)
         {
             if (other == null)
@@ -367,7 +367,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the display name of a location object.
         /// </summary>
-        /// <returns>Display name.</returns>
+        /// <returns> Display name. </returns>
         public override string ToString()
         {
             return DisplayName;
@@ -376,8 +376,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Compares this Location name to another Location to expose if it is greater, less or equal than this one.
         /// </summary>
-        /// <param name="other">Location object or name as a string.</param>
-        /// <returns>-1 for less than, 0 for equals, 1 for greater than.</returns>
+        /// <param name="other"> Location object or name as a string. </param>
+        /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
         public int CompareTo(Location other)
         {
             if (ReferenceEquals(other, null))
