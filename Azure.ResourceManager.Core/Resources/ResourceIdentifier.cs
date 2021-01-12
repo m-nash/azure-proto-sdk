@@ -15,11 +15,16 @@ namespace Azure.ResourceManager.Core
     public class ResourceIdentifier : IEquatable<ResourceIdentifier>, IEquatable<string>, IComparable<string>,
         IComparable<ResourceIdentifier>
     {
+        public static readonly string ROOT = ".";
         private readonly IDictionary<string, string> _partsDictionary =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         public ResourceIdentifier(string id)
         {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
             Id = id;
             Parse(id);
         }
@@ -57,8 +62,7 @@ namespace Azure.ResourceManager.Core
 
         public static implicit operator ResourceIdentifier(string other)
         {
-            var val = other == null ? throw new ArgumentNullException(nameof(other)) : new ResourceIdentifier(other);
-            return val;
+            return new ResourceIdentifier(other);
         }
 
         public virtual int CompareTo(ResourceIdentifier other)
@@ -141,9 +145,10 @@ namespace Azure.ResourceManager.Core
         /// <param name="id">A properly formed resource identity</param>
         protected virtual void Parse(string id)
         {
-            if (id == null)
+            if(id == ROOT)
             {
-                throw new ArgumentNullException(nameof(id));
+                Parent = null;
+                return;
             }
             // Throw for null, empty, and string without the correct form
             if (string.IsNullOrWhiteSpace(id) || !id.Contains('/'))
