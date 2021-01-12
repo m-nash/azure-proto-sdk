@@ -175,6 +175,14 @@ Example:
         /// </summary>
 ```
 
+#### List[Resource]ByName / List[Resource]ByNameAsync on SubscriptionExtensions
+
+```
+        /// <summary>
+        /// Filters the list of [Resource] for this [ParentResource] represented as generic resources.
+        /// </summary>
+```
+
 ### Builder
 
 #### Construct
