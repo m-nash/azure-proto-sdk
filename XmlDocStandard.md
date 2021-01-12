@@ -167,6 +167,14 @@ Example:
         /// </summary>
 ```
 
+#### List[Resource] / List[Resource]Async on SubscriptionExtensions
+
+```
+        /// <summary>
+        /// Lists the [Resource] for this subscription.
+        /// </summary>
+```
+
 ### Builder
 
 #### Construct
