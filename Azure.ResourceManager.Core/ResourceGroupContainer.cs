@@ -9,8 +9,7 @@ using Azure.ResourceManager.Resources;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// Operations for the RespourceGroups container in the given subscription context.  Allows Creating and listing respource groups
-    /// and provides an attachment point for Collections of Tracked Resources.
+    /// A class representing collection of ResourceGroupContainer and their operations over a ResourceGroup.
     /// </summary>
     public class ResourceGroupContainer : ResourceContainerBase<ResourceGroup, ResourceGroupData>
     {
@@ -20,7 +19,9 @@ namespace Azure.ResourceManager.Core
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="subscription"> The id of the Azure subscription. </param>
         internal ResourceGroupContainer(AzureResourceManagerClientOptions options, SubscriptionOperations subscription)
-            : base(options, subscription.Id) { }
+            : base(options, subscription.Id)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceGroupContainer"/> class.
@@ -28,7 +29,9 @@ namespace Azure.ResourceManager.Core
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         internal ResourceGroupContainer(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id) { }
+            : base(options, id)
+        {
+        }
 
         internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(
             uri,
@@ -88,8 +91,9 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// List the ResourceGroups.
+        /// List the resource groups for this subscription.
         /// </summary>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         public Pageable<ResourceGroup> List(CancellationToken cancellationToken = default)
         {
             return new PhWrappingPageable<ResourceManager.Resources.Models.ResourceGroup, ResourceGroup>(
@@ -98,8 +102,9 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// List the ResourceGroups.
+        /// List the resource groups for this subscription.
         /// </summary>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         public AsyncPageable<ResourceGroup> ListAsync(CancellationToken cancellationToken = default)
         {
             return new PhWrappingAsyncPageable<ResourceManager.Resources.Models.ResourceGroup, ResourceGroup>(
