@@ -159,7 +159,8 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// The operation to add a tag to an availability set.
+        /// Adds a tag to an availability set.
+        /// If the tag already exists it will be modified.
         /// </summary>
         /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
@@ -175,7 +176,8 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// The operation to add a tag to an availability set.
+        /// Adds a tag to an availability set.
+        /// If the tag already exists it will be modified.
         /// </summary>
         /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
