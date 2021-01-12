@@ -146,7 +146,7 @@ Example:
 
 ```
         /// <summary>
-        /// Lists the [Resource] for this resource group.
+        /// Lists the [Resource] for this [Parent].
         /// </summary>
 ```
 
