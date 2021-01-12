@@ -25,7 +25,7 @@ namespace Azure.ResourceManager.Core
         }
     }
 
-    //Or call generic resource, other resource??
+    // Or call generic resource, other resource??
     public abstract class ProxyResource<T> : Resource
         where T : class
     {
