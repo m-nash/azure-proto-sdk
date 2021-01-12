@@ -89,6 +89,7 @@ namespace Azure.ResourceManager.Core
         /// List the resource groups for this subscription.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A response with the <see cref="Pageable{ResourceGroup}"/> operation for this resource. </returns>
         public Pageable<ResourceGroup> List(CancellationToken cancellationToken = default)
         {
             return new PhWrappingPageable<ResourceManager.Resources.Models.ResourceGroup, ResourceGroup>(
@@ -100,6 +101,7 @@ namespace Azure.ResourceManager.Core
         /// List the resource groups for this subscription.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A response with the <see cref="AsyncPageable{ResourceGroup}"/> operation for this resource. </returns>
         public AsyncPageable<ResourceGroup> ListAsync(CancellationToken cancellationToken = default)
         {
             return new PhWrappingAsyncPageable<ResourceManager.Resources.Models.ResourceGroup, ResourceGroup>(
