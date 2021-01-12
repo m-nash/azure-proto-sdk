@@ -21,6 +21,8 @@ namespace azure_proto_network
 
         public static readonly ResourceType ResourceType = "Microsoft.Network/publicIpAddresses";
 
+        protected override ResourceType ValidResourceType => ResourceType;
+
         internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ClientOptions.Convert<NetworkManagementClientOptions>())).PublicIPAddresses;
 
@@ -65,7 +67,7 @@ namespace azure_proto_network
                });
         }
 
-        public ArmOperation<PublicIpAddress> AddTag(string key, string value)
+        public ArmOperation<PublicIpAddress> StartAddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
@@ -77,7 +79,7 @@ namespace azure_proto_network
                 });
         }
 
-        public async Task<ArmOperation<PublicIpAddress>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<PublicIpAddress>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
@@ -87,11 +89,6 @@ namespace azure_proto_network
                     Resource = new PublicIPAddressData(n);
                     return new PublicIpAddress(ClientOptions, Resource as PublicIPAddressData);
                 });
-        }
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
         }
     }
 }

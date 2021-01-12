@@ -16,7 +16,7 @@ namespace client
             {
                 await foreach (var armResource in subscription.ListVirtualMachinesByNameAsync("even"))
                 {
-                    var vmOperations = new VirtualMachineOperations(armResource);
+                    var vmOperations = VirtualMachineOperations.FromGeneric(armResource);
                     await vmOperations.PowerOffAsync();
                     await vmOperations.PowerOnAsync();
                 }
@@ -45,7 +45,7 @@ namespace client
             {
                 await foreach (var armResource in sub.ListVirtualMachinesByNameAsync("even"))
                 {
-                    var vmOperations = new VirtualMachineOperations(armResource);
+                    var vmOperations = VirtualMachineOperations.FromGeneric(armResource);
                     Console.WriteLine($"Stopping {vmOperations.Id.Subscription} {vmOperations.Id.ResourceGroup} {vmOperations.Id.Name}");
                     vmOperations.PowerOff();
                     Console.WriteLine($"Starting {vmOperations.Id.Subscription} {vmOperations.Id.ResourceGroup} {vmOperations.Id.Name}");

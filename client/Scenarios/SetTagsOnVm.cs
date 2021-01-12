@@ -16,7 +16,7 @@ namespace client
 
             var vm = vmOp.Get().Value;
             Console.WriteLine($"Adding tags to {vm.Data.Name}");
-            vm.AddTag("tagkey", "tagvalue");
+            vm.StartAddTag("tagkey", "tagvalue");
         }
     }
 }

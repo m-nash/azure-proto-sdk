@@ -28,14 +28,16 @@ namespace azure_proto_network
         {
         }
 
+        protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
+
         internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ClientOptions.Convert<NetworkManagementClientOptions>())).VirtualNetworks;
 
-        public override ArmResponse<VirtualNetwork> Create(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmResponse<VirtualNetwork> Create(string name, VirtualNetworkData resourceDetails)
         {
-            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken);
+            var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails);
             return new PhArmResponse<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
-                operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult(),
+                operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
                 n => new VirtualNetwork(ClientOptions, new VirtualNetworkData(n)));
         }
 
@@ -90,14 +92,14 @@ namespace azure_proto_network
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualNetworkData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext<ArmResource, ArmResourceData>(ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext(ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public AsyncPageable<ArmResource> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualNetworkData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync<ArmResource, ArmResourceData>(ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync(ClientOptions, Id, filters, top, cancellationToken);
         }
 
         public Pageable<VirtualNetwork> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
@@ -115,11 +117,6 @@ namespace azure_proto_network
         private  Func<Azure.ResourceManager.Network.Models.VirtualNetwork, VirtualNetwork> Convertor()
         {
             return s => new VirtualNetwork(ClientOptions, new VirtualNetworkData(s));
-        }
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceGroupOperations.ResourceType;
         }
     }
 }

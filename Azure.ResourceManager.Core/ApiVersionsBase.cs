@@ -6,50 +6,37 @@ using System.Text.RegularExpressions;
 
 namespace Azure.ResourceManager.Core
 {
+    /// <summary>
+    /// A class representing Azure resource API versions base.
+    /// </summary>
     public class ApiVersionsBase : IEquatable<string>, IComparable<string>
     {
         private readonly string _value;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApiVersionsBase"/> class.
+        /// </summary>
+        /// <param name="value"> The API version value. </param>
         protected ApiVersionsBase(string value)
         {
             _value = value;
         }
 
+        /// <summary>
+        /// Implicit operator to convert ApiVersionsBase to string.
+        /// </summary>
+        /// <param name="version"> The ApiVersionsBase object. </param>
+        /// <returns> API version value. </returns>
         public static implicit operator string(ApiVersionsBase version)
         {
             return version._value;
         }
 
-        public static bool operator ==(ApiVersionsBase first, string second)
-        {
-            if (ReferenceEquals(null, first))
-            {
-                return ReferenceEquals(null, second);
-            }
-
-            if (ReferenceEquals(null, second))
-            {
-                return false;
-            }
-
-            return first.Equals(second);
-        }
-
-        public static bool operator !=(ApiVersionsBase first, string second)
-        {
-            if (ReferenceEquals(null, first))
-            {
-                return !ReferenceEquals(null, second);
-            }
-
-            if (ReferenceEquals(null, second))
-            {
-                return true;
-            }
-
-            return !first.Equals(second);
-        }
-
+        /// <summary>
+        /// Compares two API version values in string type.
+        /// </summary>
+        /// <param name="other"> The API version value to compare. </param>
+        /// <returns> Comparison result in integer. 1 for greater than, 0 for equals to, and -1 for less than. </returns>
         public int CompareTo(string other)
         {
             if (other == null)
@@ -91,6 +78,11 @@ namespace Azure.ResourceManager.Core
             return thisDatePart.CompareTo(otherDatePart);
         }
 
+        /// <summary>
+        /// Compares the API version value in ApiVersionsBase object and the one in string.
+        /// </summary>
+        /// <param name="other"> The API version value to compare. </param>
+        /// <returns> Comparison result in boolean. Equal returns true otherwise returns false. </returns>
         public bool Equals(string other)
         {
             if (other == null)
@@ -101,11 +93,62 @@ namespace Azure.ResourceManager.Core
             return other == _value;
         }
 
+        /// <summary>
+        /// Overrides == operator for comparing ApiVersionsBase object with string object.
+        /// </summary>
+        /// <param name="first"> The ApiVersionsBase object to compare. </param>
+        /// <param name="second"> The API version value in string to compare. </param>
+        /// <returns> Comparison result in boolean. Equal returns true otherwise returns false. </returns>
+        public static bool operator ==(ApiVersionsBase first, string second)
+        {
+            if (ReferenceEquals(null, first))
+            {
+                return ReferenceEquals(null, second);
+            }
+
+            if (ReferenceEquals(null, second))
+            {
+                return false;
+            }
+
+            return first.Equals(second);
+        }
+
+        /// <summary>
+        /// Overrides != operator for comparing ApiVersionsBase object with string object.
+        /// </summary>
+        /// <param name="first"> The ApiVersionsBase object to compare. </param>
+        /// <param name="second"> The API version value in string to compare. </param>
+        /// <returns> Comparison result in boolean. Equal returns false otherwise returns true. </returns>
+        public static bool operator !=(ApiVersionsBase first, string second)
+        {
+            if (ReferenceEquals(null, first))
+            {
+                return !ReferenceEquals(null, second);
+            }
+
+            if (ReferenceEquals(null, second))
+            {
+                return true;
+            }
+
+            return !first.Equals(second);
+        }
+
+        /// <summary>
+        /// Converts ApiVersionsBase object to string.
+        /// </summary>
+        /// <returns> The API version value. </returns>
         public override string ToString()
         {
             return _value;
         }
 
+        /// <summary>
+        /// Compares the API version value in ApiVersionsBase object and the one in object.
+        /// </summary>
+        /// <param name="obj"> The object to compare. </param>
+        /// <returns> Comparison result in boolean. Equal returns true otherwise returns false. </returns>
         public override bool Equals(object obj)
         {
             if (obj is ApiVersionsBase)
@@ -121,6 +164,10 @@ namespace Azure.ResourceManager.Core
             return false;
         }
 
+        /// <summary>
+        /// Gets the hash code of the API version value.
+        /// </summary>
+        /// <returns> The hash code of the API version value. </returns>
         public override int GetHashCode()
         {
             return _value.GetHashCode();

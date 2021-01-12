@@ -38,10 +38,7 @@ namespace azure_proto_network
         {
         }
 
-        public NetworkSecurityGroupOperations(AzureResourceManagerClientOptions options, TrackedResource id)
-            : base(options, id)
-        {
-        }
+        protected override ResourceType ValidResourceType => ResourceType;
 
         public static readonly ResourceType ResourceType = "Microsoft.Network/networkSecurityGroups";
 
@@ -109,7 +106,7 @@ namespace azure_proto_network
                 });
         }
 
-        public ArmOperation<NetworkSecurityGroup> AddTag(string key, string value)
+        public ArmOperation<NetworkSecurityGroup> StartAddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
@@ -121,7 +118,7 @@ namespace azure_proto_network
                 });
         }
 
-        public async Task<ArmOperation<NetworkSecurityGroup>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<NetworkSecurityGroup>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
@@ -151,11 +148,6 @@ namespace azure_proto_network
         public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
-        }
-
-        protected override ResourceType GetValidResourceType()
-        {
-            return ResourceType;
         }
     }
 }

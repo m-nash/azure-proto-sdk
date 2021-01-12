@@ -10,23 +10,52 @@
 | Name       | Text     |
 | :------------- | :----------- |
 | Resource Group Name | `The name of Resource Group.` |
-| `Subscription Id` | `/// <param name="resource">The id of the Azure subscription.</param>` |
-| `Resource resource` | `/// <param name="resource">The resource that is the target of operations.</param>` |
-| `ResourceIdentifier id` | `/// <param name="id">The identifier of the resource that is the target of operations.</param>`|
-| `AzureResourceManagerClientOptions options` | `/// <param name="options">The client parameters to use in these operations.</param>` |
-| `CancellationToken cancellationToken = default` | ``` /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service.```<br>```/// The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>``` |
+| `Subscription Id` | `/// <param name="resource"> The id of the Azure subscription. </param>` |
+| `top` | `/// <param name="top"> The number of results to return. </param>` |
+| `Resource resource` | `/// <param name="resource"> The resource that is the target of operations. </param>` |
+| `ResourceIdentifier id` | `/// <param name="id"> The identifier of the resource that is the target of operations. </param>`|
+| `ResourceIdentifier parentId` | `/// <param name="parentId"> The resource Id of the parent resource. </param>` |
+| `AzureResourceManagerClientOptions options` | `/// <param name="options"> The client parameters to use in these operations. </param>` |
+| `CancellationToken cancellationToken = default` | ``` /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>``` |
 | `ArmResponse<TOperations>` | ??_____ |
+| `ArmResourceOperations` | ``` /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a [Resource]. </param>``` |
+
+### Standard class documentation
+
+```
+[Resource]Container.cs
+    /// <summary>
+    /// A class representing collection of [Resource] and their operations over a [ParentResource].
+    /// </summary>
+
+[Resource].cs
+    /// <summary>
+    /// A class representing a [Resource] along with the instance operations that can be performed on it.
+    /// </summary>
+
+[Resource]Operations.cs
+    /// <summary>
+    /// A class representing the operations that can be performed over a specific [Resource].
+    /// </summary>
+
+[Resource]Data.cs
+    /// <summary>
+    /// A class representing the [Resource] data model.
+    /// </summary>
+```
 
 ### TypeParam
 
 ```
-    /// <typeparam name="T">The type of __________  </typeparam>	
+    /// <typeparam name="T"> The type of __________. </typeparam>	
 
 Example:
 
-    /// <typeparam name="T">The type of the underlying model this class wraps</typeparam>  
+    /// <typeparam name="T"> The type of the underlying model this class wraps. </typeparam>  
 
-    /// <typeparam name="TOperations">The type of the operatiosn class for a specific resource.</typeparam>
+    /// <typeparam name="TOperations"> The type of the operations class for a specific resource. </typeparam>
+
+    /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
 ```
 
 ### Constructor
@@ -36,30 +65,134 @@ Example:
 
 ### Inherited/Override Methods
 ```
-    ///<inheritdoc/>
+    /// <inheritdoc/>
 ```
 
 ### Properties
 
 | Name       | Text                      |
 | - | - |
-|Get & Set | `/// Gets or sets the ________` |
-|Get Only | `/// Gets the ________`|
-|Set Only | `/// Sets the ________`|
-|Special case:<br>Boolean  | `/// Gets or sets a value indicating whether _______`|
+|Get & Set | `/// Gets or sets the ________.` |
+|Get Only | `/// Gets the ________.`|
+|Set Only | `/// Sets the ________.`|
+|Special case:<br>Boolean  | `/// Gets or sets a value indicating whether _______.`|
 
-### Sync and Async
+### Return
 
-There is no need to call out sync's blocking nature. ~~This call ...~~ strike thru do not show up in code block. Consider text below between ~~ to be removed.
+* For sync and async of same operations, the description should be the same. There is no need to call out sync's blocking nature.
+* The async return should starts with `A <see cref="Task"/> that on completion returns ` and followed by text for sync version.
+* For methods returning LRO (typically `StartXXX`), add following in remarks section.
 
+```
+        /// <remarks>
+        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning"> Details on long running operation object. </see>
+        /// </remarks>
+```
+
+#### Pageable
+
+```
+        /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
+```
+
+#### AsyncPageable
+
+```
+        /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
+```
+
+#### Method
+
+```
+        /// <returns> A response with the <see cref="ArmResponse{T}"/> operation for this resource. </returns>
+```
+
+#### MethodAsync
+
+```
+        /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{T}"/> operation for this resource. </returns>
+```
+
+#### StartMethod
+
+```
+        /// <returns> An <see cref="ArmOperation{T}"/> that allows polling for completion of the operation. </returns>
+```
+
+#### StartMethodAsync
+
+```
+        /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{T}"/> that allows polling for completion of the operation. </returns>
+```
+
+### \<exception>
+
+```
+    /// <exception cref="ArgumentNullException"> <paramref name="id"/> is null. </exception>
+    /// <exception cref="ArgumentException"> <paramref name="id"/> is not valid to list at context. </exception>
+```
+
+### ResourceType
+
+```
         /// <summary>
-        /// Get details for this resource from the service. ~~This call will block until a response is returned from the service~~
+        /// Gets the resource type definition for a [Resource].
         /// </summary>
-        /// <returns>A response with the operations for this resource</returns>
-        public abstract ArmResponse<TOperations> Get();
+```
 
-For Async, 
+### List
 
-        /// <returns>A <see cref="Task"/> that on completion returns the <see cref="TOperations"/> operation container for this resource. </returns>
-        public abstract Task<ArmResponse<TOperations>> GetAsync(CancellationToken cancellationToken = default);
- 
+#### List / ListAsync
+
+```
+        /// <summary>
+        /// Lists the [Resource] for this resource group.
+        /// </summary>
+```
+
+#### ListByName / ListByNameAsync
+
+```
+        /// <summary>
+        /// Filters the list of [Resource] for this [ParentResource] represented as generic resources.
+        /// </summary>
+```
+
+#### ListByNameExpanded / ListByNameExpandedAsync
+
+```
+        /// <summary>
+        /// Filters the list of [Resource] for this [ParentResource].
+        /// Makes an additional network call to retrieve the full data model for each [Resource].
+        /// </summary>
+```
+
+### Builder
+
+#### Construct
+
+```
+        /// <summary>
+        /// Constructs an object used to create a [Resource].
+        /// </summary>
+```
+
+### Tags
+
+```
+        /// <summary>
+        /// Adds a tag to a [Resource].
+        /// If the tag already exists it will be modified.
+        /// </summary>
+        /// <param name="key"> The key for the tag. </param>
+        /// <param name="value"> The value for the tag. </param>
+```
+
+### Data Property
+
+```
+        /// <summary>
+        /// Gets the data representing this [Resource].
+        /// </summary>
+```
+
