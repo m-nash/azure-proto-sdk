@@ -26,7 +26,9 @@ namespace Azure.ResourceManager.Core
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         internal ResourceGroupOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id) { }
+            : base(options, id)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceGroupOperations"/> class.
@@ -34,7 +36,9 @@ namespace Azure.ResourceManager.Core
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="resource"> The resource that is the target of operations. </param>
         internal ResourceGroupOperations(AzureResourceManagerClientOptions options, Resource resource)
-            : base(options, resource) { }
+            : base(options, resource)
+        {
+        }
 
         /// <inheritdoc/>
         protected override ResourceType ValidResourceType => ResourceType;
@@ -186,7 +190,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="name"> A string representing the name of the resource />. </param>
         /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
-        /// <param name="Location"> A Location of where to to host the resource. />. </param>
+        /// <param name="location"> A Location of where to to host the resource. />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, Location location = default, CancellationToken token = default)
             where TResource : TrackedResource

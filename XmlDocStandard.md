@@ -146,7 +146,7 @@ Example:
 
 ```
         /// <summary>
-        /// Lists the [Resource] for this resource group.
+        /// Lists the [Resource] for this [Parent].
         /// </summary>
 ```
 
@@ -164,6 +164,22 @@ Example:
         /// <summary>
         /// Filters the list of [Resource] for this [ParentResource].
         /// Makes an additional network call to retrieve the full data model for each [Resource].
+        /// </summary>
+```
+
+#### List[Resource] / List[Resource]Async on SubscriptionExtensions
+
+```
+        /// <summary>
+        /// Lists the [Resource] for this subscription.
+        /// </summary>
+```
+
+#### List[Resource]ByName / List[Resource]ByNameAsync on SubscriptionExtensions
+
+```
+        /// <summary>
+        /// Filters the list of [Resource] for this [ParentResource] represented as generic resources.
         /// </summary>
 ```
 

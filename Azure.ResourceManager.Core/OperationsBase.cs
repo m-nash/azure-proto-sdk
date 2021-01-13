@@ -58,6 +58,12 @@ namespace Azure.ResourceManager.Core
         protected virtual Resource Resource { get; set; }
 
         /// <summary>
+        /// Gets the valid Azure resource type for the current operations.
+        /// </summary>
+        /// <returns> A valid Azure resource type. </returns>
+        protected abstract ResourceType ValidResourceType { get; }
+
+        /// <summary>
         /// Validate the resource identifier against current operations.
         /// </summary>
         /// <param name="identifier"> The resource identifier. </param>
@@ -66,12 +72,6 @@ namespace Azure.ResourceManager.Core
             if (identifier?.Type != ValidResourceType)
                 throw new InvalidOperationException($"Invalid resource type {identifier?.Type} expected {ValidResourceType}");
         }
-
-        /// <summary>
-        /// Gets the valid Azure resource type for the current operations.
-        /// </summary>
-        /// <returns> A valid Azure resource type. </returns>
-        protected abstract ResourceType ValidResourceType { get; }
 
         /// <summary>
         ///    Gets the client for specific azure resource types.
