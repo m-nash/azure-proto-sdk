@@ -15,16 +15,21 @@ namespace Azure.ResourceManager.Core
     public class ResourceIdentifier : IEquatable<ResourceIdentifier>, IEquatable<string>, IComparable<string>,
         IComparable<ResourceIdentifier>
     {
-        public static readonly ResourceIdentifier Underfined =  new ResourceIdentifier("/"); //maybe changed to underfined?
+        public static readonly ResourceIdentifier Undefined = new ResourceIdentifier("/"); //maybe changed to Undefined?
         private readonly IDictionary<string, string> _partsDictionary =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         public ResourceIdentifier(string id)
         {
-            if (string.IsNullOrWhiteSpace(id))
+            if (id == null)
             {
                 throw new ArgumentNullException(nameof(id));
             }
+            if (id == string.Empty)
+            {
+                throw new ArgumentException("Id cannot be an empty string");
+            }
+
             Id = id;
             Parse(id);
         }
@@ -145,7 +150,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="id">A properly formed resource identity</param>
         protected virtual void Parse(string id)
         {
-            if(id == Underfined)
+            if (id == Undefined)
             {
                 Parent = null;
                 Name = null;
