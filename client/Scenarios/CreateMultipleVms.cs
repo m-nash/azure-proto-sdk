@@ -56,8 +56,8 @@ namespace client
                 var nic = resourceGroup.NetworkInterfaces().Construct(ipAddress.Data, subnet.Id).Create($"{Context.VmName}_{i}_nic").Value;
 
                 // Create VM
-                string num = i % 2 == 0 ? "even" : "odd";
-                string name = $"{Context.VmName}-{i}-{num}";
+                string num = i % 2 == 0 ? "-e" : "-o";
+                string name = $"{Context.VmName}{i}{num}";
                 Console.WriteLine("--------Start create VM {0}--------", i);
                 var vmOp = resourceGroup.VirtualMachines().Construct(name, "admin-user", "!@#$%asdfA", nic.Id, aset.Data).StartCreate(name);
                 operations.Add(vmOp);

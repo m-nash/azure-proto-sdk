@@ -117,7 +117,7 @@ namespace client
 
                 nic = await networkClient.NetworkInterfaces.StartCreateOrUpdate(resourceGroup.Name, $"{vmName}_nic", nic).WaitForCompletionAsync();
                 // Create VM
-                string num = i % 2 == 0 ? "even" : "odd";
+                string num = i % 2 == 0 ? "-e" : "-o";
                 string name = $"{vmName}-{num}";
                 Console.WriteLine("--------Start create VM {0}--------", i);
                 var vm = new VirtualMachine(Context.Loc)
@@ -125,23 +125,23 @@ namespace client
                     NetworkProfile = new Azure.ResourceManager.Compute.Models.NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nic.Id } } },
                     OsProfile = new OSProfile
                     {
-                        ComputerName = name,
-                        AdminUsername = "admin-user",
-                        AdminPassword = "!@#$%asdfA",
-                        LinuxConfiguration = new LinuxConfiguration { DisablePasswordAuthentication = false, ProvisionVMAgent = true }
+                        ComputerName = vmName,
+                        AdminUsername = adminUser,
+                        AdminPassword = adminPw,
+                        WindowsConfiguration = new WindowsConfiguration { TimeZone = "Pacific Standard Time", ProvisionVMAgent = true }
                     },
                     StorageProfile = new StorageProfile()
                     {
                         ImageReference = new ImageReference()
                         {
-                            Offer = "UbuntuServer",
-                            Publisher = "Canonical",
-                            Sku = "18.04-LTS",
+                            Offer = "WindowsServer",
+                            Publisher = "MicrosoftWindowsServer",
+                            Sku = "2019-Datacenter",
                             Version = "latest"
                         },
                         DataDisks = new List<DataDisk>()
                     },
-                    HardwareProfile = new HardwareProfile() { VmSize = VirtualMachineSizeTypes.StandardB1Ms },
+                        HardwareProfile = new HardwareProfile() { VmSize = VirtualMachineSizeTypes.StandardB1Ms },
                     // The namespace-qualified type for SubResource is needed because all 3 libraries define an identical SubResource type. In the proposed model, the common type would be part of the core library
                     AvailabilitySet = new Azure.ResourceManager.Compute.Models.SubResource() { Id = aset.Id }
                 };
