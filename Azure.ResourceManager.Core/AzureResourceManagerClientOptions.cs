@@ -12,9 +12,9 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class AzureResourceManagerClientOptions : ClientOptions
     {
-        private Dictionary<Type, object> _overrides = new Dictionary<Type, object>();
-
         private static readonly object _overridesLock = new object();
+
+        private Dictionary<Type, object> _overrides = new Dictionary<Type, object>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureResourceManagerClientOptions"/> class.
@@ -34,10 +34,33 @@ namespace Azure.ResourceManager.Core
         {
             BaseUri = baseUri;
             Credential = credential;
-            //Will go away when moved into core since we will have directy acces the policies and transport, so just need to set those
-            if (!Object.ReferenceEquals(other, null))
+
+            // Will go away when moved into core since we will have directy acces the policies and transport, so just need to set those
+            if (!ReferenceEquals(other, null))
                 Copy(other);
         }
+
+        /// <summary>
+        /// Gets each http call policies.
+        /// </summary>
+        /// <returns> A collection of http pipeline policy that may take multiple service requests to iterate over. </returns>
+        internal IList<HttpPipelinePolicy> PerCallPolicies { get; } = new List<HttpPipelinePolicy>();
+
+        /// <summary>
+        /// Gets each http retry call policies.
+        /// </summary>
+        /// <returns> A collection of http pipeline policy that may take multiple service requests to iterate over. </returns>
+        internal IList<HttpPipelinePolicy> PerRetryPolicies { get; } = new List<HttpPipelinePolicy>();
+
+        /// <summary>
+        /// Gets the Azure credential.
+        /// </summary>
+        internal TokenCredential Credential { get; }
+
+        /// <summary>
+        /// Gets the base URI of the service.
+        /// </summary>
+        internal Uri BaseUri { get; }
 
         /// <summary>
         /// Converts client options.
@@ -47,7 +70,7 @@ namespace Azure.ResourceManager.Core
             where T : ClientOptions, new()
         {
             var newOptions = new T();
-            newOptions.Transport = this.Transport;
+            newOptions.Transport = Transport;
             foreach (var pol in PerCallPolicies)
             {
                 newOptions.AddPolicy(pol, HttpPipelinePosition.PerCall);
@@ -59,21 +82,6 @@ namespace Azure.ResourceManager.Core
             }
 
             return newOptions;
-        }
-
-        // Will be removed like AddPolicy when we move to azure core
-        private void Copy(AzureResourceManagerClientOptions other)
-        {
-            this.Transport = other.Transport;
-            foreach (var pol in other.PerCallPolicies)
-            {
-                this.AddPolicy(pol, HttpPipelinePosition.PerCall);
-            }
-
-            foreach (var pol in other.PerRetryPolicies)
-            {
-                this.AddPolicy(pol, HttpPipelinePosition.PerRetry);
-            }
         }
 
         /// <summary>
@@ -99,18 +107,6 @@ namespace Azure.ResourceManager.Core
 
             base.AddPolicy(policy, position);
         }
-
-        /// <summary>
-        /// Gets each http call policies.
-        /// </summary>
-        /// <returns> A collection of http pipeline policy that may take multiple service requests to iterate over. </returns>
-        internal IList<HttpPipelinePolicy> PerCallPolicies { get; } = new List<HttpPipelinePolicy>();
-
-        /// <summary>
-        /// Gets each http retry call policies.
-        /// </summary>
-        /// <returns> A collection of http pipeline policy that may take multiple service requests to iterate over. </returns>
-        internal IList<HttpPipelinePolicy> PerRetryPolicies { get; } = new List<HttpPipelinePolicy>();
 
         /// <summary>
         /// Gets override object.
@@ -139,17 +135,6 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Gets the Azure credential.
-        /// </summary>
-        internal TokenCredential Credential { get; }
-
-        /// <summary>
-        /// Gets the base URI of the service.
-        /// </summary>
-        internal Uri BaseUri { get; }
-
-
-        /// <summary>
         /// Gets the HTTP client options that will be used for all clients created from this Azure Resource Manger Client.
         /// Note that this is currently adapting to underlying management clients - once generator changes are in, this would
         /// likely be unnecessary.
@@ -160,6 +145,21 @@ namespace Azure.ResourceManager.Core
         internal T GetClient<T>(Func<Uri, TokenCredential, T> creator)
         {
             return creator(BaseUri, Credential);
+        }
+
+        // Will be removed like AddPolicy when we move to azure core
+        private void Copy(AzureResourceManagerClientOptions other)
+        {
+            Transport = other.Transport;
+            foreach (var pol in other.PerCallPolicies)
+            {
+                AddPolicy(pol, HttpPipelinePosition.PerCall);
+            }
+
+            foreach (var pol in other.PerRetryPolicies)
+            {
+                AddPolicy(pol, HttpPipelinePosition.PerRetry);
+            }
         }
     }
 }

@@ -19,6 +19,7 @@
 | `CancellationToken cancellationToken = default` | ``` /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>``` |
 | `ArmResponse<TOperations>` | ??_____ |
 | `ArmResourceOperations` | ``` /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a [Resource]. </param>``` |
+| `Instance Params in Extension Methods` | `///<param> The <see  cref="[Type]" /> instance the method will execute against. </param>`|
 
 ### Standard class documentation
 
@@ -146,7 +147,7 @@ Example:
 
 ```
         /// <summary>
-        /// Lists the [Resource] for this resource group.
+        /// Lists the [Resource] for this [Parent].
         /// </summary>
 ```
 
@@ -164,6 +165,22 @@ Example:
         /// <summary>
         /// Filters the list of [Resource] for this [ParentResource].
         /// Makes an additional network call to retrieve the full data model for each [Resource].
+        /// </summary>
+```
+
+#### List[Resource] / List[Resource]Async on SubscriptionExtensions
+
+```
+        /// <summary>
+        /// Lists the [Resource] for this subscription.
+        /// </summary>
+```
+
+#### List[Resource]ByName / List[Resource]ByNameAsync on SubscriptionExtensions
+
+```
+        /// <summary>
+        /// Filters the list of [Resource] for this [ParentResource] represented as generic resources.
         /// </summary>
 ```
 

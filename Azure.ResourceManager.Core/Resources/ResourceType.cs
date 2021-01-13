@@ -19,13 +19,13 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         public static readonly ResourceType None = new ResourceType { Namespace = string.Empty, Type = string.Empty };
 
-        private ResourceType()
-        {
-        }
-
         public ResourceType(string resourceIdOrType)
         {
             Parse(resourceIdOrType);
+        }
+
+        private ResourceType()
+        {
         }
 
         public string Namespace { get; private set; }
@@ -105,6 +105,34 @@ namespace Azure.ResourceManager.Core
             return string.Equals(ToString(), other, StringComparison.InvariantCultureIgnoreCase);
         }
 
+        public override string ToString()
+        {
+            return $"{Namespace}/{Type}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            var resourceObj = obj as ResourceType;
+
+            if (resourceObj != null)
+                return Equals(resourceObj);
+
+            var stringObj = obj as string;
+
+            if (stringObj != null)
+                return Equals(stringObj);
+
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
+
         internal void Parse(string resourceIdOrType)
         {
             // Note that this code will either parse a resource id to find the type, or a resource type
@@ -129,7 +157,7 @@ namespace Azure.ResourceManager.Core
                 Namespace = "Microsoft.Resources";
             }
 
-            //Handle resource identifiers from RPs (they have the /providers path segment)
+            // Handle resource identifiers from RPs (they have the /providers path segment)
             if (parts.Contains(ResourceIdentifier.KnownKeys.ProviderNamespace))
             {
                 // it is a resource id from a provider
@@ -171,34 +199,6 @@ namespace Azure.ResourceManager.Core
             {
                 throw new ArgumentOutOfRangeException(nameof(resourceIdOrType));
             }
-        }
-
-        public override string ToString()
-        {
-            return $"{Namespace}/{Type}";
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-                return false;
-
-            var resourceObj = obj as ResourceType;
-
-            if (resourceObj != null)
-                return Equals(resourceObj);
-
-            var stringObj = obj as string;
-
-            if (stringObj != null)
-                return Equals(stringObj);
-
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return ToString().GetHashCode();
         }
     }
 }

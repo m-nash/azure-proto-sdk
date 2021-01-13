@@ -9,38 +9,15 @@ namespace Azure.ResourceManager.Core
 
     public class UserAssignedIdentity
     {
-        public Guid ClientId { get; set; }
-
-        public Guid PrincipalId { get; set; }
-
         public UserAssignedIdentity(Guid clientId, Guid principalId)
         {
             ClientId = clientId;
             PrincipalId = principalId;
         }
 
-        public int CompareTo(UserAssignedIdentity other)
-        {
-            if (other == null)
-                return 1;
+        public Guid ClientId { get; set; }
 
-            int compareResult = 0;
-            if ((compareResult = ClientId.CompareTo(other.ClientId)) == 0 &&
-                (compareResult = PrincipalId.CompareTo(other.PrincipalId)) == 0)
-            {
-                return 0;
-            }
-
-            return compareResult;
-        }
-
-        public bool Equals(UserAssignedIdentity other)
-        {
-            if (other == null)
-                return false;
-
-            return ClientId.Equals(other.ClientId) && PrincipalId.Equals(other.PrincipalId);
-        }
+        public Guid PrincipalId { get; set; }
 
         public static UserAssignedIdentity Deserialize(JsonElement element)
         {
@@ -57,14 +34,12 @@ namespace Azure.ResourceManager.Core
                 {
                     if (property.Value.ValueKind != JsonValueKind.Null)
                         principalId = Guid.Parse(property.Value.GetString());
-
                 }
 
                 if (property.NameEquals("clientId"))
                 {
                     if (property.Value.ValueKind != JsonValueKind.Null)
                         clientId = Guid.Parse(property.Value.GetString());
-
                 }
             }
 
@@ -103,6 +78,29 @@ namespace Azure.ResourceManager.Core
                 return other == null;
 
             return original.Equals(other);
+        }
+
+        public int CompareTo(UserAssignedIdentity other)
+        {
+            if (other == null)
+                return 1;
+
+            int compareResult = 0;
+            if ((compareResult = ClientId.CompareTo(other.ClientId)) == 0 &&
+                (compareResult = PrincipalId.CompareTo(other.PrincipalId)) == 0)
+            {
+                return 0;
+            }
+
+            return compareResult;
+        }
+
+        public bool Equals(UserAssignedIdentity other)
+        {
+            if (other == null)
+                return false;
+
+            return ClientId.Equals(other.ClientId) && PrincipalId.Equals(other.PrincipalId);
         }
     }
 }
