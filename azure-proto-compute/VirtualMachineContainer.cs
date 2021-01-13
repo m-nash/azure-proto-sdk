@@ -8,6 +8,7 @@ using Azure.ResourceManager.Core.Resources;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
 
 namespace azure_proto_compute
 {
@@ -116,6 +117,7 @@ namespace azure_proto_compute
         /// <returns> Object used to create a <see cref="VirtualMachine"/>. </returns>
         public VirtualMachineModelBuilder Construct(string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, AvailabilitySetData aset, Location location = null)
         {
+            Console.WriteLine("\n-----------------------\nVM NAME IS : " + vmName + "\n----------------------------------\n");
             var vm = new Azure.ResourceManager.Compute.Models.VirtualMachine(location ?? DefaultLocation)
             {
                 NetworkProfile = new NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nicId } } },
@@ -124,15 +126,15 @@ namespace azure_proto_compute
                     ComputerName = vmName,
                     AdminUsername = adminUser,
                     AdminPassword = adminPw,
-                    LinuxConfiguration = new LinuxConfiguration { DisablePasswordAuthentication = false, ProvisionVMAgent = true }
+                    WindowsConfiguration = new WindowsConfiguration { TimeZone = "Pacific Standard Time", ProvisionVMAgent = true }
                 },
                 StorageProfile = new StorageProfile()
                 {
                     ImageReference = new ImageReference()
                     {
-                        Offer = "UbuntuServer",
-                        Publisher = "Canonical",
-                        Sku = "18.04-LTS",
+                        Offer = "WindowsServer",
+                        Publisher = "MicrosoftWindowsServer",
+                        Sku = "2019-Datacenter",
                         Version = "latest"
                     },
                     DataDisks = new List<DataDisk>()
