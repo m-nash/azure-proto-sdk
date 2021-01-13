@@ -1,8 +1,10 @@
-﻿using Azure;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using Azure;
 using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Network.Models;
 using Azure.ResourceManager.Core;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,52 +12,57 @@ using System.Threading.Tasks;
 namespace azure_proto_network
 {
     /// <summary>
-    /// An operations + Data class for NSGs
-    /// TODO: How does the operation signature change for resources that support Etags?
+    /// A class representing the operations that can be performed over a specific NetworkSecurityGroup.
     /// </summary>
-    public class NetworkSecurityGroupOperations : ResourceOperationsBase<NetworkSecurityGroup>, ITaggableResource<NetworkSecurityGroup>, IDeletableResource
+    public partial class NetworkSecurityGroupOperations : ResourceOperationsBase<NetworkSecurityGroup>, ITaggableResource<NetworkSecurityGroup>, IDeletableResource
     {
-        class RuleIdEqualityComparer : IEqualityComparer<SecurityRule>
-        {
-            public bool Equals(SecurityRule x, SecurityRule y)
-            {
-                return ResourceIdentifier.Equals(x?.Id, y?.Id);
-            }
-
-            public int GetHashCode(SecurityRule obj)
-            {
-                return obj.Id.ToLower().GetHashCode();
-            }
-        }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetworkSecurityGroupOperations"/> class.
+        /// </summary>
+        /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a virtual machine. </param>
         internal NetworkSecurityGroupOperations(ArmResourceOperations genericOperations)
             : base(genericOperations.ClientOptions, genericOperations.Id)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetworkSecurityGroupOperations"/> class.
+        /// </summary>
+        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         internal NetworkSecurityGroupOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
             : base(options, id)
         {
         }
 
+        /// <inheritdoc />
         protected override ResourceType ValidResourceType => ResourceType;
 
+        /// <summary>
+        /// Gets the resource type definition for a network security group.
+        /// </summary>
         public static readonly ResourceType ResourceType = "Microsoft.Network/networkSecurityGroups";
 
-        internal NetworkSecurityGroupsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-                     ClientOptions.Convert<NetworkManagementClientOptions>())).NetworkSecurityGroups;
+        private NetworkSecurityGroupsOperations Operations => GetClient(
+            (uri, cred) => new NetworkManagementClient(
+                Id.Subscription,
+                uri,
+                cred,
+                ClientOptions.Convert<NetworkManagementClientOptions>())).NetworkSecurityGroups;
 
         /// <summary>
-        /// TODO: GENERATOR Make use of the entity tags on the resource - we may need to add to the generated management client
+        /// Updates the network security group rules.
         /// </summary>
-        /// <param name="rules">The new set of network security rules</param>
-        /// <returns>A network security group with the given set of rules merged with thsi one</returns>
-        public ArmOperation<NetworkSecurityGroup> UpdateRules(NetworkSecurityGroupData model, CancellationToken cancellationToken = default, params SecurityRule[] rules)
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <param name="rules"> The rules to be updated. </param>
+        /// <returns> An <see cref="ArmOperation{NetworkSecurityGroup}"/> that allows polling for completion of the operation. </returns>
+        public ArmOperation<NetworkSecurityGroup> UpdateRules(CancellationToken cancellationToken = default, params SecurityRule[] rules)
         {
+            var resource = GetResource();
             foreach (var rule in rules)
             {
                 // Note that this makes use of the 
-                var matchingRule = model.Model.SecurityRules.FirstOrDefault(r => ResourceIdentifier.Equals(r.Id, rule.Id));
+                var matchingRule = resource.Data.SecurityRules.FirstOrDefault(r => ResourceIdentifier.Equals(r.Id, rule.Id));
                 if (matchingRule != null)
                 {
                     matchingRule.Access = rule.Access;
@@ -74,18 +81,20 @@ namespace azure_proto_network
                 }
                 else
                 {
-                    model.Model.SecurityRules.Add(rule);
+                    resource.Data.SecurityRules.Add(rule);
                 }
             }
 
-            return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, model.Model),
+            return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
+                Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, resource.Data),
                 n =>
-                {
-                    Resource = new NetworkSecurityGroupData(n);
-                    return new NetworkSecurityGroup(ClientOptions, Resource as NetworkSecurityGroupData);
-                });
+                        {
+                            Resource = new NetworkSecurityGroupData(n);
+                            return new NetworkSecurityGroup(ClientOptions, Resource as NetworkSecurityGroupData);
+                        });
         }
 
+        /// <inheritdoc/>
         public override ArmResponse<NetworkSecurityGroup> Get()
         {
             return new PhArmResponse<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(Operations.Get(Id.ResourceGroup, Id.Name),
@@ -96,7 +105,8 @@ namespace azure_proto_network
                 });
         }
 
-        public async override Task<ArmResponse<NetworkSecurityGroup>> GetAsync(CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public override async Task<ArmResponse<NetworkSecurityGroup>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
                 n =>
@@ -106,18 +116,21 @@ namespace azure_proto_network
                 });
         }
 
+        /// <inheritdoc/>
         public ArmOperation<NetworkSecurityGroup> StartAddTag(string key, string value)
         {
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
-            return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+            return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
+                Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable), 
                 n =>
-                {
-                    Resource = new NetworkSecurityGroupData(n);
-                    return new NetworkSecurityGroup(ClientOptions, Resource as NetworkSecurityGroupData);
-                });
+                        {
+                            Resource = new NetworkSecurityGroupData(n);
+                            return new NetworkSecurityGroup(ClientOptions, Resource as NetworkSecurityGroupData);
+                        });
         }
 
+        /// <inheritdoc/>
         public async Task<ArmOperation<NetworkSecurityGroup>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var patchable = new TagsObject();
@@ -130,24 +143,33 @@ namespace azure_proto_network
                 });
         }
 
+        /// <inheritdoc/>
         public ArmResponse<Response> Delete()
         {
             return new ArmResponse(Operations.StartDelete(Id.ResourceGroup, Id.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
+        /// <inheritdoc/>
         public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmResponse((await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken)).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
+        /// <inheritdoc/>
         public ArmOperation<Response> StartDelete(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
+        /// <inheritdoc/>
         public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
+        }
+
+        private protected virtual NetworkSecurityGroup GetResource()
+        {
+            return Get().Value;
         }
     }
 }
