@@ -144,10 +144,7 @@ namespace azure_proto_compute
             return new PhWrappingAsyncPageable<ArmResource, AvailabilitySet>(results, s => new AvailabilitySetOperations(s).Get().Value);
         }
 
-        /// <summary>
-        /// Gets the operations that can be performed on the container.
-        /// </summary>
-        internal AvailabilitySetsOperations Operations => GetClient((uri, cred) => new ComputeManagementClient(uri, Id.Subscription, cred,
+        private AvailabilitySetsOperations Operations => GetClient((uri, cred) => new ComputeManagementClient(uri, Id.Subscription, cred,
                     ClientOptions.Convert<ComputeManagementClientOptions>())).AvailabilitySets;
     }
 }

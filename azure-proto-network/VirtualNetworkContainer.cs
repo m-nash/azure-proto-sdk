@@ -48,10 +48,7 @@ namespace azure_proto_network
         /// <inheritdoc/>
         protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
 
-        /// <summary>
-        /// Gets the operations that can be performed on the container.
-        /// </summary>
-        internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+        private VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
             ClientOptions.Convert<NetworkManagementClientOptions>())).VirtualNetworks;
 
         /// <inheritdoc/>
@@ -91,7 +88,7 @@ namespace azure_proto_network
         /// <summary>
         /// Constructs an object used to create a virtual nerwork.
         /// </summary>
-        /// <param name="vnetCidr">The CIDR of the resource. </param>
+        /// <param name="vnetCidr"> The CIDR of the resource. </param>
         /// <param name="location"> The location of the resource. </param>
         /// <returns> A builder with <see cref="VirtualNetwork"> and <see cref="VirtualNetworkData"/>. </returns>
         public ArmBuilder<VirtualNetwork, VirtualNetworkData> Construct(string vnetCidr, Location location = null)
@@ -106,7 +103,7 @@ namespace azure_proto_network
         }
 
         /// <summary>
-        /// The operation to list a virtual nerwork.
+        /// Lists the virtual network for this resource group.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
@@ -118,7 +115,7 @@ namespace azure_proto_network
         }
 
         /// <summary>
-        /// The operation to list a virtual nerwork.
+        /// Lists the virtual network for this resource group.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
@@ -159,6 +156,7 @@ namespace azure_proto_network
 
         /// <summary>
         /// Filters the list of virtual nerwork for this resource group.
+        /// Makes an additional network call to retrieve the full data model for each virtual nerwork.
         /// </summary>
         /// <param name="filter"> The filter used in this operation. </param>
         /// <param name="top"> The number of results to return. </param>
@@ -172,6 +170,7 @@ namespace azure_proto_network
 
         /// <summary>
         /// Filters the list of virtual nerwork for this resource group.
+        /// Makes an additional network call to retrieve the full data model for each virtual nerwork.
         /// </summary>
         /// <param name="filter"> The filter used in this operation. </param>
         /// <param name="top"> The number of results to return. </param>

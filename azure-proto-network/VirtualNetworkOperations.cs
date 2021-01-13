@@ -115,7 +115,8 @@ namespace azure_proto_network
         }
 
         /// <summary>
-        /// The operation to add a tag to a virtual nerwork.
+        /// Adds a tag to a virtual network.
+        /// If the tag already exists it will be modified.
         /// </summary>
         /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
@@ -136,7 +137,8 @@ namespace azure_proto_network
         }
 
         /// <summary>
-        /// The operation to add a tag to a virtual nerwork.
+        /// Adds a tag to a virtual network.
+        /// If the tag already exists it will be modified.
         /// </summary>
         /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
