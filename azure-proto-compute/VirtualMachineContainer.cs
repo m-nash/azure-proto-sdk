@@ -117,7 +117,6 @@ namespace azure_proto_compute
         /// <returns> Object used to create a <see cref="VirtualMachine"/>. </returns>
         public VirtualMachineModelBuilder Construct(string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, AvailabilitySetData aset, Location location = null)
         {
-            Console.WriteLine("\n-----------------------\nVM NAME IS : " + vmName + "\n----------------------------------\n");
             var vm = new Azure.ResourceManager.Compute.Models.VirtualMachine(location ?? DefaultLocation)
             {
                 NetworkProfile = new NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nicId } } },
