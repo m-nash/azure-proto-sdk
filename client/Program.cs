@@ -10,9 +10,8 @@ namespace client
             Scenario scenario = null;
             try
             {
-                scenario = ScenarioFactory.GetScenario(Scenarios.All);
+                scenario = ScenarioFactory.GetScenario(Scenarios.NullDataValues);
                 scenario.Execute();
-
             }
             finally
             {
