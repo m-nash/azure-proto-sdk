@@ -116,9 +116,9 @@ namespace client
                 NetworkProfile = new Azure.ResourceManager.Compute.Models.NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nic.Id } } },
                 OsProfile = new OSProfile
                 {
-                    ComputerName = vmName,
-                    AdminUsername = adminUser,
-                    AdminPassword = adminPw,
+                    ComputerName = Context.VmName,	                    
+                    AdminUsername = "admin-user",	                    
+                    AdminPassword = "!@#$%asdfA",
                     WindowsConfiguration = new WindowsConfiguration { TimeZone = "Pacific Standard Time", ProvisionVMAgent = true }
                 },
                 StorageProfile = new StorageProfile()
