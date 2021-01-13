@@ -19,6 +19,7 @@
 | `CancellationToken cancellationToken = default` | ``` /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>``` |
 | `ArmResponse<TOperations>` | ??_____ |
 | `ArmResourceOperations` | ``` /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a [Resource]. </param>``` |
+| `Instance Params in Extension Methods` | `///<param> The <see  cref="[Type]" /> instance the method will execute against. </param>`|
 
 ### Standard class documentation
 
