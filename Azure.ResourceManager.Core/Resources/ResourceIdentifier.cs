@@ -15,13 +15,13 @@ namespace Azure.ResourceManager.Core
     public class ResourceIdentifier : IEquatable<ResourceIdentifier>, IEquatable<string>, IComparable<string>,
         IComparable<ResourceIdentifier>
     {
-        public static readonly string ROOT = ".";
+        public static readonly ResourceIdentifier Underfined =  new ResourceIdentifier("/"); //maybe changed to underfined?
         private readonly IDictionary<string, string> _partsDictionary =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         public ResourceIdentifier(string id)
         {
-            if (id == null)
+            if (string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id));
             }
@@ -145,9 +145,11 @@ namespace Azure.ResourceManager.Core
         /// <param name="id">A properly formed resource identity</param>
         protected virtual void Parse(string id)
         {
-            if(id == ROOT)
+            if(id == Underfined)
             {
                 Parent = null;
+                Name = null;
+                Type = ResourceType.None;
                 return;
             }
             // Throw for null, empty, and string without the correct form
