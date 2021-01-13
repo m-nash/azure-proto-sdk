@@ -12,7 +12,6 @@ namespace client
             {
                 scenario = ScenarioFactory.GetScenario(Scenarios.NullDataValues);
                 scenario.Execute();
-
             }
             finally
             {
