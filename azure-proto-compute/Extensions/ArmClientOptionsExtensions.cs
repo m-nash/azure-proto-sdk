@@ -2,11 +2,19 @@
 
 namespace azure_proto_compute.Extensions
 {
+    /// <summary>
+    /// A class to add extension methods to AzureResourceManagerClientOptions.
+    /// </summary>
     public static class AzureResourceManagerClientOptionsExtensions
     {
-        public static ComputeRestApiVersions ComputeRestVersions(this AzureResourceManagerClientOptions AzureResourceManagerClientOptions)
+        /// <summary>
+        /// Adds a method to AzureResourceManagerClientOptions which returns all the versions to all resources inside the compute resource provider.
+        /// </summary>
+        ///<param> The <see  cref="[AzureResourceManagerClientOptions]" /> instance the method will execute against. </param>
+        /// <returns> Returns a response with the <see cref="ComputeRestApiVersions"/> operation for this resource. </returns>
+        public static ComputeRestApiVersions ComputeRestVersions(this AzureResourceManagerClientOptions azureResourceManagerClientOptions)
         {
-            return AzureResourceManagerClientOptions.GetOverrideObject<ComputeRestApiVersions>(() => new ComputeRestApiVersions()) as ComputeRestApiVersions;
+            return azureResourceManagerClientOptions.GetOverrideObject<ComputeRestApiVersions>(() => new ComputeRestApiVersions()) as ComputeRestApiVersions;
         }
     }
 }

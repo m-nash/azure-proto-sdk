@@ -7,9 +7,8 @@ using Azure.Core;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// Base class for resource operations.
+    /// A class representing the operations that can be performed over a specific resource.
     /// </summary>
-    // TODO: split this into a base class for all Operations, and a base class for specific operations
     public abstract class OperationsBase
     {
         /// <summary>
@@ -59,6 +58,12 @@ namespace Azure.ResourceManager.Core
         protected virtual Resource Resource { get; set; }
 
         /// <summary>
+        /// Gets the valid Azure resource type for the current operations.
+        /// </summary>
+        /// <returns> A valid Azure resource type. </returns>
+        protected abstract ResourceType ValidResourceType { get; }
+
+        /// <summary>
         /// Validate the resource identifier against current operations.
         /// </summary>
         /// <param name="identifier"> The resource identifier. </param>
@@ -67,12 +72,6 @@ namespace Azure.ResourceManager.Core
             if (identifier?.Type != ValidResourceType)
                 throw new InvalidOperationException($"Invalid resource type {identifier?.Type} expected {ValidResourceType}");
         }
-
-        /// <summary>
-        /// Gets the valid Azure resource type for the current operations.
-        /// </summary>
-        /// <returns> A valid Azure resource type. </returns>
-        protected abstract ResourceType ValidResourceType { get; }
 
         /// <summary>
         ///    Gets the client for specific azure resource types.

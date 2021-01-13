@@ -30,11 +30,6 @@ namespace Azure.ResourceManager.Core
 
         public ResourceType Type { get; protected set; }
 
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
-
         public string Subscription => _partsDictionary.ContainsKey(KnownKeys.Subscription)
             ? _partsDictionary[KnownKeys.Subscription]
             : null;
@@ -59,38 +54,6 @@ namespace Azure.ResourceManager.Core
         {
             var val = other == null ? throw new ArgumentNullException(nameof(other)) : new ResourceIdentifier(other);
             return val;
-        }
-
-        public virtual int CompareTo(ResourceIdentifier other)
-        {
-            return string.Compare(
-                Id?.ToLowerInvariant(),
-                other?.Id?.ToLowerInvariant(),
-                StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        public virtual int CompareTo(string other)
-        {
-            return string.Compare(
-                Id?.ToLowerInvariant(),
-                other?.ToLowerInvariant(),
-                StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        public virtual bool Equals(ResourceIdentifier other)
-        {
-            return string.Equals(
-                Id?.ToLowerInvariant(),
-                other?.Id?.ToLowerInvariant(),
-                StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        public virtual bool Equals(string other)
-        {
-            return string.Equals(
-                Id?.ToLowerInvariant(),
-                other?.ToLowerInvariant(),
-                StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>
@@ -130,6 +93,43 @@ namespace Azure.ResourceManager.Core
             return x.CompareTo(y);
         }
 
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
+        public virtual int CompareTo(ResourceIdentifier other)
+        {
+            return string.Compare(
+                Id?.ToLowerInvariant(),
+                other?.Id?.ToLowerInvariant(),
+                StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public virtual int CompareTo(string other)
+        {
+            return string.Compare(
+                Id?.ToLowerInvariant(),
+                other?.ToLowerInvariant(),
+                StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public virtual bool Equals(ResourceIdentifier other)
+        {
+            return string.Equals(
+                Id?.ToLowerInvariant(),
+                other?.Id?.ToLowerInvariant(),
+                StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public virtual bool Equals(string other)
+        {
+            return string.Equals(
+                Id?.ToLowerInvariant(),
+                other?.ToLowerInvariant(),
+                StringComparison.InvariantCultureIgnoreCase);
+        }
+
         public override string ToString()
         {
             return Id;
@@ -156,8 +156,8 @@ namespace Azure.ResourceManager.Core
             if (parts.Count < 2)
                 throw new ArgumentOutOfRangeException($"'{id}' is not a valid resource");
 
-            //This is asserting that resources must start with '/subscriptions', /tenants, or /locations.
-            //TODO: we will need to update this code to accomodate tenant based resources (which start with /providers)
+            // This is asserting that resources must start with '/subscriptions', /tenants, or /locations.
+            // TODO: we will need to update this code to accomodate tenant based resources (which start with /providers)
             if (!(KnownKeys.Subscription.Equals(parts[0], StringComparison.InvariantCultureIgnoreCase) ||
                   KnownKeys.Tenant.Equals(parts[0], StringComparison.InvariantCultureIgnoreCase) ||
                   KnownKeys.Location.Equals(parts[0], StringComparison.InvariantCultureIgnoreCase)))
@@ -224,14 +224,14 @@ namespace Azure.ResourceManager.Core
             if (parts.Count % 2 == 1)
                 parts.RemoveAt(parts.Count - 1);
 
-            //If this is a top-level resource, remove the providers/Namespace pair, otherwise continue
+            // If this is a top-level resource, remove the providers/Namespace pair, otherwise continue
             if (parts.Count > 2 && string.Equals(parts[parts.Count - 2], KnownKeys.ProviderNamespace))
             {
                 parts.RemoveAt(parts.Count - 1);
                 parts.RemoveAt(parts.Count - 1);
             }
 
-            //If this is not a top-level resource, it will have a parent
+            // If this is not a top-level resource, it will have a parent
             Parent = parts.Count > 1 ? new ResourceIdentifier($"/{string.Join("/", parts)}") : null;
         }
 

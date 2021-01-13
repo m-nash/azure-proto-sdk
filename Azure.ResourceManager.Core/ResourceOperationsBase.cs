@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// Base class for all operations over a resource.
+    /// A class representing the operations that can be performed over a specific resource.
     /// </summary>
     public abstract class ResourceOperationsBase : OperationsBase
     {
@@ -25,8 +25,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOperationsBase"/> class.
         /// </summary>
-        /// <param name="options">The client parameters to use in these operations.</param>
-        /// <param name="resource">The resource that is the target of operations.</param>
+        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="resource"> The resource that is the target of operations. </param>
         protected ResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
             : base(options, resource)
         {
@@ -71,18 +71,16 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Get details for this resource from the service.  This call will block until a response is returne from the service
+        /// Gets details for this resource from the service.
         /// </summary>
-        /// <returns> An Http response with the operations for this resource. </returns>
+        /// <returns> A response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public abstract ArmResponse<TOperations> Get();
 
         /// <summary>
-        /// Get details for this resource from the service.  This call returns a Task, which can  be used to control waiting
-        /// for a response from the service.
+        /// Gets details for this resource from the service.
         /// </summary>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. </param>
-        /// <returns> A Task that is complete when a response is returned from the service.  The task yields the operations
-        /// over this resource when complete. </returns>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public abstract Task<ArmResponse<TOperations>> GetAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
