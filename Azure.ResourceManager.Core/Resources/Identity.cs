@@ -9,7 +9,7 @@ using System.Text.Json;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    ///     Represents a managed identity
+    /// Represents a managed identity
     /// </summary>
     public class Identity : IEquatable<Identity>
     {
@@ -17,12 +17,19 @@ namespace Azure.ResourceManager.Core
         private const string UserAssigned = "UserAssigned";
         private const string SystemAndUserAssigned = "SystemAssigned, UserAssigned";
 
-        public SystemAssignedIdentity SystemAssignedIdentity { get; private set; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Identity"/> class with no <see cref="SystemAssignedIdentity"/>  or <see cref="UserAssignedIdentity"/>.
+        /// </summary>
+        public Identity()
+            : this(null, false)
+        {
+        } // not system or user
 
-        public IDictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; private set; } // maintain structure of {id, (clientid, principal id)} in case of multiple UserIdentities
-
-        public Identity() : this(null, false) { } //not system or user
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Identity"/> class.
+        /// </summary>
+        /// <param name="user"> Dictionary with Resource Identifier key and a <see cref="UserAssignedIdentity"/> object value. </param>
+        /// <param name="useSystemAssigned"> Flag for using <see cref="SystemAssignedIdentity"/> or not. </param>
         public Identity(Dictionary<ResourceIdentifier, UserAssignedIdentity> user, bool useSystemAssigned)
         {
             // check for combination of user and system on the impact to type value
@@ -50,33 +57,22 @@ namespace Azure.ResourceManager.Core
             }
         }
 
-        public bool Equals(Identity other)
-        {
-            if (other == null)
-                return false;
+        /// <summary>
+        /// Gets the System Assigned Identity.
+        /// </summary>
+        public SystemAssignedIdentity SystemAssignedIdentity { get; private set; }
 
-            if (UserAssignedIdentities.Count == other.UserAssignedIdentities.Count)
-            {
-                foreach (var identity in UserAssignedIdentities)
-                {
-                    UserAssignedIdentity value;
-                    if (other.UserAssignedIdentities.TryGetValue(identity.Key, out value))
-                    {
-                        if (!UserAssignedIdentity.Equals(identity.Value, value))
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
+        /// <summary>
+        /// Gets a dictionary of the User Assigned Identities.<para/>
+        /// Maintain structure of {id, (clientid, principal id)} in case of multiple UserIdentities.
+        /// </summary>
+        public IDictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; private set; }
 
-            return SystemAssignedIdentity.Equals(SystemAssignedIdentity, other.SystemAssignedIdentity);
-        }
-
+        /// <summary>
+        /// Converts a <see cref="JsonElement"/> into an <see cref="Identity"/> object.
+        /// </summary>
+        /// <param name="element"> A JSON containing an identity. </param>
+        /// <returns> New Identity object with JSON values</returns>
         public static Identity Deserialize(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Undefined)
@@ -134,6 +130,11 @@ namespace Azure.ResourceManager.Core
             return new Identity(systemAssignedIdentity, userAssignedIdentities);
         }
 
+        /// <summary>
+        /// Converts an <see cref="Identity"/> object into a <see cref="JsonElement"/>.
+        /// </summary>
+        /// <param name="writer"> Utf8JsonWriter object to which the output is going to be written. </param>
+        /// <param name="identity"> Identity object to be converted. </param>
         public static void Serialize(Utf8JsonWriter writer, Identity identity)
         {
             if (writer == null)
@@ -193,6 +194,38 @@ namespace Azure.ResourceManager.Core
             writer.WriteEndObject();
             writer.WriteEndObject();
             writer.Flush();
+        }
+
+        /// <summary>
+        /// Detects if this Identity is equals to antoher Identity instance.
+        /// </summary>
+        /// <param name="other"> Identity object to compare. </param>
+        /// <returns> True or False depending if they are equals. </returns>
+        public bool Equals(Identity other)
+        {
+            if (other == null)
+                return false;
+
+            if (UserAssignedIdentities.Count == other.UserAssignedIdentities.Count)
+            {
+                foreach (var identity in UserAssignedIdentities)
+                {
+                    UserAssignedIdentity value;
+                    if (other.UserAssignedIdentities.TryGetValue(identity.Key, out value))
+                    {
+                        if (!UserAssignedIdentity.Equals(identity.Value, value))
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return SystemAssignedIdentity.Equals(SystemAssignedIdentity, other.SystemAssignedIdentity);
         }
     }
 }
