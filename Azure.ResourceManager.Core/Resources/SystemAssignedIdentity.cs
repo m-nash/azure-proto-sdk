@@ -4,41 +4,44 @@
     using System.Text.Json;
     using Azure.Core;
 
+    /// <summary>
+    /// A class representing an Identity assigned by the system.
+    /// </summary>
     public class SystemAssignedIdentity
     {
-        public Guid? TenantId { get; private set; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SystemAssignedIdentity"/> class with Null properties.
+        /// </summary>
+        public SystemAssignedIdentity()
+        {
+        }
 
-        public Guid? PrincipalId { get; private set; }
-
-        public SystemAssignedIdentity() { }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SystemAssignedIdentity"/> class.
+        /// </summary>
+        /// <param name="tenantId"> Application Tenant ID. </param>
+        /// <param name="principalId"> Principal ID. </param>
         public SystemAssignedIdentity(Guid tenantId, Guid principalId)
         {
             TenantId = tenantId;
             PrincipalId = principalId;
         }
 
-        public int CompareTo(SystemAssignedIdentity other)
-        {
-            if (other == null)
-                return 1;
+        /// <summary>
+        /// Gets the Tenant ID.
+        /// </summary>
+        public Guid? TenantId { get; private set; }
 
-            int compareResult = 0;
-            if ((compareResult = TenantId.GetValueOrDefault().CompareTo(other.TenantId.GetValueOrDefault())) == 0 &&
-                (compareResult = PrincipalId.GetValueOrDefault().CompareTo(other.PrincipalId.GetValueOrDefault())) == 0)
-                return 0;
+        /// <summary>
+        /// Gets the Principal ID.
+        /// </summary>
+        public Guid? PrincipalId { get; private set; }
 
-            return compareResult;
-        }
-
-        public bool Equals(SystemAssignedIdentity other)
-        {
-            if (other == null)
-                return false;
-
-            return TenantId.Equals(other.TenantId) && PrincipalId.Equals(other.PrincipalId);
-        }
-
+        /// <summary>
+        /// Converts a <see cref="JsonElement"/> into an <see cref="SystemAssignedIdentity"/> object.
+        /// </summary>
+        /// <param name="element"> A JSON containing an identity. </param>
+        /// <returns> New <see cref="SystemAssignedIdentity"/> object with JSON values. </returns>
         public static SystemAssignedIdentity Deserialize(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Undefined)
@@ -72,6 +75,11 @@
             return new SystemAssignedIdentity(tenantId, principalId);
         }
 
+        /// <summary>
+        /// Converts an <see cref="SystemAssignedIdentity"/> object into a <see cref="JsonElement"/>.
+        /// </summary>
+        /// <param name="writer"> Utf8JsonWriter object to which the output is going to be written. </param>
+        /// <param name="systemAssignedIdentity"> <see cref="SystemAssignedIdentity"/> object to be converted. </param>
         public static void Serialize(Utf8JsonWriter writer, SystemAssignedIdentity systemAssignedIdentity)
         {
             if (systemAssignedIdentity == null)
@@ -103,12 +111,49 @@
             writer.Flush();
         }
 
+        /// <summary>
+        /// Compares two <see cref="SystemAssignedIdentity"/> objects to determine if they are equal.
+        /// </summary>
+        /// <param name="original"> First <see cref="SystemAssignedIdentity"/> object to compare. </param>
+        /// <param name="other"> Second <see cref="SystemAssignedIdentity"/> object to compare. </param>
+        /// <returns> True if they are equal, otherwise False. </returns>
         public static bool Equals(SystemAssignedIdentity original, SystemAssignedIdentity other)
         {
             if (original == null)
                 return other == null;
 
             return original.Equals(other);
+        }
+
+        /// <summary>
+        /// Compares this <see cref="SystemAssignedIdentity"/> with another instance.
+        /// </summary>
+        /// <param name="other"> <see cref="SystemAssignedIdentity"/> object to compare. </param>
+        /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
+        public int CompareTo(SystemAssignedIdentity other)
+        {
+            if (other == null)
+                return 1;
+
+            int compareResult = 0;
+            if ((compareResult = TenantId.GetValueOrDefault().CompareTo(other.TenantId.GetValueOrDefault())) == 0 &&
+                (compareResult = PrincipalId.GetValueOrDefault().CompareTo(other.PrincipalId.GetValueOrDefault())) == 0)
+                return 0;
+
+            return compareResult;
+        }
+
+        /// <summary>
+        /// Compares this <see cref="SystemAssignedIdentity"/> instance with another object and determines if they are equals.
+        /// </summary>
+        /// <param name="other"> <see cref="SystemAssignedIdentity"/> object to compare. </param>
+        /// <returns> True if they are equals, otherwise false. </returns>
+        public bool Equals(SystemAssignedIdentity other)
+        {
+            if (other == null)
+                return false;
+
+            return TenantId.Equals(other.TenantId) && PrincipalId.Equals(other.PrincipalId);
         }
     }
 }
