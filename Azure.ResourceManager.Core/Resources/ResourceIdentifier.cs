@@ -21,10 +21,7 @@ namespace Azure.ResourceManager.Core
         public ResourceIdentifier(string id)
         {
             Id = id;
-
-            // TODO: Due to the implicit this is called for blank constructions such as new PhResourceGroup
-            if (id != null)
-                Parse(id);
+            Parse(id);
         }
 
         public string Id { get; protected set; }
@@ -55,7 +52,7 @@ namespace Azure.ResourceManager.Core
 
         public static implicit operator ResourceIdentifier(string other)
         {
-            return new ResourceIdentifier(other);
+            return new ResourceIdentifier(other); // will null check in PR #119
         }
 
         /// <summary>

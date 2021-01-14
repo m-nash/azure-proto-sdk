@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-
+using System;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
@@ -13,6 +13,20 @@ namespace Azure.ResourceManager.Core
         protected TrackedResource(ResourceIdentifier id, Location location, T data)
         {
             Id = id;
+            Location = location;
+            Model = data;
+        }
+
+        protected TrackedResource(string id, Location location, T data)
+        {
+            if (object.ReferenceEquals(id, null))
+            {
+                Id = null;
+            }
+            else
+            {
+                Id = id;
+            }
             Location = location;
             Model = data;
         }
@@ -32,6 +46,19 @@ namespace Azure.ResourceManager.Core
         protected ProxyResource(ResourceIdentifier id, T data)
         {
             Id = id;
+            Model = data;
+        }
+
+        protected ProxyResource(string id, T data)
+        {
+            if (object.ReferenceEquals(id, null))
+            {
+                Id = null;
+            }
+            else
+            {
+                Id = id;
+            }
             Model = data;
         }
 
