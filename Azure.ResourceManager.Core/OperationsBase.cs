@@ -7,7 +7,7 @@ using Azure.Core;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// Base class for resource operations.
+    /// A class representing the operations that can be performed over a specific resource.
     /// </summary>
     public abstract class OperationsBase
     {
@@ -50,18 +50,19 @@ namespace Azure.ResourceManager.Core
         public TokenCredential Credential { get; }
 
         /// <summary>
-        /// Gets the base URI of the service.
-        /// </summary>
-        public Uri BaseUri { get; }
-
-        /// <summary>
         /// Gets the valid Azure resource type for the current operations.
         /// </summary>
         /// <returns> A valid Azure resource type. </returns>
         protected abstract ResourceType ValidResourceType { get; }
 
         /// <summary>
+        /// Gets the base URI of the service.
+        /// </summary>
+        public Uri BaseUri { get; }
+
+        /// <summary>
         /// Validate the resource identifier against current operations.
+
         /// </summary>
         /// <param name="identifier"> The resource identifier. </param>
         public virtual void Validate(ResourceIdentifier identifier)

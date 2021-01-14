@@ -14,10 +14,10 @@ namespace azure_proto_compute
     {
         #region Virtual Machine List Operations
         /// <summary>
-        /// List vms at the given subscription context
+        /// Lists the VirtualMachines for this SubscriptionOperations.
         /// </summary>
-        /// <param name="subscription"></param>
-        /// <returns></returns>
+        /// <param> The <see cref="[SubscriptionOperations]" /> instance the method will execute against. </param>
+        /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
         public static Pageable<VirtualMachine> ListVirtualMachines(this SubscriptionOperations subscription)
         {
             ComputeManagementClient computeClient = GetComputeClient(subscription);
@@ -38,10 +38,10 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// 
+        /// Lists the VirtualMachines for this SubscriptionOperations.
         /// </summary>
-        /// <param name="subscription"></param>
-        /// <returns></returns>
+        /// <param> The <see cref="[SubscriptionOperations]" /> instance the method will execute against. </param>
+        /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
         public static AsyncPageable<VirtualMachine> ListVirtualMachinesAsync(this SubscriptionOperations subscription)
         {
             var vmOperations = GetComputeClient(subscription).VirtualMachines;
@@ -51,6 +51,13 @@ namespace azure_proto_compute
                 s => new VirtualMachine(subscription, new VirtualMachineData(s)));
         }
 
+        /// <summary>
+        /// Filters the list of VMs for a SubscriptionOperations represented as generic resources.
+        /// </summary>
+        /// <param> The <see cref="[SubscriptionOperations]" /> instance the method will execute against. </param>
+        /// <param name="filter"> The ArmSubstringFilter to filter the list. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
         public static Pageable<ArmResource> ListVirtualMachinesByName(this SubscriptionOperations subscription, ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineOperations.ResourceType);
@@ -58,6 +65,13 @@ namespace azure_proto_compute
             return ResourceListOperations.ListAtContext(subscription, filters, top, cancellationToken);
         }
 
+        /// <summary>
+        /// Filters the list of VMs for a SubscriptionOperations represented as generic resources.
+        /// </summary>
+        /// <param> The <see cref="[SubscriptionOperations]" /> instance the method will execute against. </param>
+        /// <param name="filter"> The ArmSubstringFilter to filter the list. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
         public static AsyncPageable<ArmResource> ListVirtualMachinesByNameAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineOperations.ResourceType);
@@ -67,6 +81,11 @@ namespace azure_proto_compute
         #endregion
 
         #region AvailabilitySet List Operations
+        /// <summary>
+        /// Lists the AvailabilitySets for this SubscriptionOperations.
+        /// </summary>
+        /// <param> The <see cref="[SubscriptionOperations]" /> instance the method will execute against. </param>
+        /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
         public static Pageable<AvailabilitySet> ListAvailabilitySets(this SubscriptionOperations subscription)
         {
             ComputeManagementClient computeClient = GetComputeClient(subscription);
@@ -77,6 +96,11 @@ namespace azure_proto_compute
                 s => new AvailabilitySet(subscription, new AvailabilitySetData(s)));
         }
 
+        /// <summary>
+        /// Lists the AvailabilitySets for this SubscriptionOperations.
+        /// </summary>
+        /// <param> The <see cref="[SubscriptionOperations]" /> instance the method will execute against. </param>
+        /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
         public static AsyncPageable<AvailabilitySet> ListAvailabilitySetsAsync(this SubscriptionOperations subscription)
         {
             ComputeManagementClient computeClient = GetComputeClient(subscription);

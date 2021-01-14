@@ -16,7 +16,7 @@ namespace client
             foreach (var sub in client.Subscriptions().List())
             {
                 var vmList = sub.ListVirtualMachines();
-                foreach (var vm in vmList.Where(armResource => armResource.Data.Name.Contains("odd")))
+                foreach (var vm in vmList.Where(armResource => armResource.Data.Name.Contains("-o")))
                 {
                     Console.WriteLine($"In subscription list: Stopping {vm.Id}");
                     vm.PowerOff();
@@ -30,7 +30,7 @@ namespace client
             resourceGroup.VirtualMachines().List().Select(vm =>
             {
                 var parts = vm.Id.Name.Split('-');
-                var n = Convert.ToInt32(parts[parts.Length - 2]);
+                var n = Convert.ToInt32(parts[0].Last());
                 return (vm, n);
             })
                 .Where(tuple => tuple.n % 2 == 0)

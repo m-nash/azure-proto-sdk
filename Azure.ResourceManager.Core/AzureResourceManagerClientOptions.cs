@@ -11,9 +11,9 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class AzureResourceManagerClientOptions : ClientOptions
     {
-        private Dictionary<Type, object> _overrides = new Dictionary<Type, object>();
-
         private static readonly object _overridesLock = new object();
+
+        private Dictionary<Type, object> _overrides = new Dictionary<Type, object>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureResourceManagerClientOptions"/> class.
@@ -36,6 +36,18 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
+        /// Gets each http call policies.
+        /// </summary>
+        /// <returns> A collection of http pipeline policy that may take multiple service requests to iterate over. </returns>
+        internal IList<HttpPipelinePolicy> PerCallPolicies { get; } = new List<HttpPipelinePolicy>();
+
+        /// <summary>
+        /// Gets each http retry call policies.
+        /// </summary>
+        /// <returns> A collection of http pipeline policy that may take multiple service requests to iterate over. </returns>
+        internal IList<HttpPipelinePolicy> PerRetryPolicies { get; } = new List<HttpPipelinePolicy>();
+
+        /// <summary>
         /// Converts client options.
         /// </summary>
         /// <typeparam name="T"> The type of the underlying model this class wraps. </typeparam>
@@ -55,21 +67,6 @@ namespace Azure.ResourceManager.Core
             }
 
             return newOptions;
-        }
-
-        // Will be removed like AddPolicy when we move to azure core
-        private void Copy(AzureResourceManagerClientOptions other)
-        {
-            Transport = other.Transport;
-            foreach (var pol in other.PerCallPolicies)
-            {
-                AddPolicy(pol, HttpPipelinePosition.PerCall);
-            }
-
-            foreach (var pol in other.PerRetryPolicies)
-            {
-                AddPolicy(pol, HttpPipelinePosition.PerRetry);
-            }
         }
 
         /// <summary>
@@ -97,18 +94,6 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Gets each http call policies.
-        /// </summary>
-        /// <returns> A collection of http pipeline policy that may take multiple service requests to iterate over. </returns>
-        internal IList<HttpPipelinePolicy> PerCallPolicies { get; } = new List<HttpPipelinePolicy>();
-
-        /// <summary>
-        /// Gets each http retry call policies.
-        /// </summary>
-        /// <returns> A collection of http pipeline policy that may take multiple service requests to iterate over. </returns>
-        internal IList<HttpPipelinePolicy> PerRetryPolicies { get; } = new List<HttpPipelinePolicy>();
-
-        /// <summary>
         /// Gets override object.
         /// </summary>
         /// <typeparam name="T"> The type of the underlying model this class wraps. </typeparam>
@@ -132,6 +117,21 @@ namespace Azure.ResourceManager.Core
             }
 
             return overrideObject;
+        }
+
+        // Will be removed like AddPolicy when we move to azure core
+        private void Copy(AzureResourceManagerClientOptions other)
+        {
+            Transport = other.Transport;
+            foreach (var pol in other.PerCallPolicies)
+            {
+                AddPolicy(pol, HttpPipelinePosition.PerCall);
+            }
+
+            foreach (var pol in other.PerRetryPolicies)
+            {
+                AddPolicy(pol, HttpPipelinePosition.PerRetry);
+            }
         }
     }
 }

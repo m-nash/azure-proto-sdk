@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// Base class for all operations over a resource.
+    /// A class representing the operations that can be performed over a specific resource.
     /// </summary>
     public abstract class ResourceOperationsBase : OperationsBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOperationsBase"/> class.
         /// </summary>
-        /// <param name="operations"> The resource representing the resource. </param>
+        /// <param name="operations"> The operations representing the resource. </param>
         protected ResourceOperationsBase(ResourceOperationsBase operations)
             : base(operations.ClientOptions, operations.Id, operations.Credential, operations.BaseUri)
         {
@@ -26,10 +26,10 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOperationsBase"/> class.
         /// </summary>
-        /// <param name="parentOperations"> The resource representing the parent resource. </param>
+        /// <param name="options"> The operations to copy options from. </param>
         /// <param name="resourceId">The resource that is the target of operations.</param>
-        protected ResourceOperationsBase(ResourceOperationsBase parentOperations, ResourceIdentifier resourceId)
-            : base(parentOperations.ClientOptions, resourceId, parentOperations.Credential, parentOperations.BaseUri)
+        protected ResourceOperationsBase(ResourceOperationsBase options, ResourceIdentifier resourceId)
+            : base(options.ClientOptions, resourceId, options.Credential, options.BaseUri)
         {
         }
 
@@ -86,18 +86,16 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Get details for this resource from the service.  This call will block until a response is returne from the service
+        /// Gets details for this resource from the service.
         /// </summary>
         /// <returns> A response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public abstract ArmResponse<TOperations> Get();
 
         /// <summary>
-        /// Get details for this resource from the service.  This call returns a Task, which can  be used to control waiting
-        /// for a response from the service.
+        /// Gets details for this resource from the service.
         /// </summary>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. </param>
-        /// <returns> A Task that is complete when a response is returned from the service.  The task yields the operations
-        /// over this resource when complete. </returns>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public abstract Task<ArmResponse<TOperations>> GetAsync(CancellationToken cancellationToken = default);
 
         /// <summary>

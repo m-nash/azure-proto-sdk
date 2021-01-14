@@ -25,18 +25,20 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
-        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
-        /// <param name="baseUri"> The base URI of the service. </param>
-        protected ResourceGroupOperations(ResourceOperationsBase operations, ResourceIdentifier id)
-            : base(operations, id)
+        protected ResourceGroupOperations(ResourceOperationsBase options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
-        internal ResourceGroupOperations(SubscriptionOperations operations, string rgName)
-            : base(operations, $"{operations.Id}/resourceGroups/{rgName}")
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceGroupOperations"/> class.
+        /// </summary>
+        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="rgName"> The name of the resource group to use. </param>
+        internal ResourceGroupOperations(SubscriptionOperations options, string rgName)
+            : base(options, $"{options.Id}/resourceGroups/{rgName}")
         {
         }
-
 
         /// <inheritdoc/>
         protected override ResourceType ValidResourceType => ResourceType;
@@ -184,7 +186,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="name"> A string representing the name of the resource />. </param>
         /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
-        /// <param name="Location"> A Location of where to to host the resource. />. </param>
+        /// <param name="location"> A Location of where to to host the resource. />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, Location location = default, CancellationToken token = default)
             where TResource : TrackedResource

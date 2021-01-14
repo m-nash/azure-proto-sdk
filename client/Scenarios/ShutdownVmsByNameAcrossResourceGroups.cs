@@ -21,7 +21,7 @@ namespace client
 
             var subscription = new AzureResourceManagerClient().Subscription(Context.SubscriptionId);
 
-            Regex reg = new Regex($"{Context.VmName}.*even");
+            Regex reg = new Regex($"{Context.VmName}.*-e");
             Parallel.ForEach(subscription.ListVirtualMachines(), vm =>
             {
                 if (reg.IsMatch(vm.Id.Name))

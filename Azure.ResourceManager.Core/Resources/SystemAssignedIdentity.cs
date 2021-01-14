@@ -1,4 +1,7 @@
-﻿namespace Azure.ResourceManager.Core
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Azure.ResourceManager.Core
 {
     using System;
     using System.Text.Json;
@@ -6,11 +9,9 @@
 
     public class SystemAssignedIdentity
     {
-        public Guid? TenantId { get; private set; }
-
-        public Guid? PrincipalId { get; private set; }
-
-        public SystemAssignedIdentity() { }
+        public SystemAssignedIdentity()
+        {
+        }
 
         public SystemAssignedIdentity(Guid tenantId, Guid principalId)
         {
@@ -18,26 +19,9 @@
             PrincipalId = principalId;
         }
 
-        public int CompareTo(SystemAssignedIdentity other)
-        {
-            if (other == null)
-                return 1;
+        public Guid? TenantId { get; private set; }
 
-            int compareResult = 0;
-            if ((compareResult = TenantId.GetValueOrDefault().CompareTo(other.TenantId.GetValueOrDefault())) == 0 &&
-                (compareResult = PrincipalId.GetValueOrDefault().CompareTo(other.PrincipalId.GetValueOrDefault())) == 0)
-                return 0;
-
-            return compareResult;
-        }
-
-        public bool Equals(SystemAssignedIdentity other)
-        {
-            if (other == null)
-                return false;
-
-            return TenantId.Equals(other.TenantId) && PrincipalId.Equals(other.PrincipalId);
-        }
+        public Guid? PrincipalId { get; private set; }
 
         public static SystemAssignedIdentity Deserialize(JsonElement element)
         {
@@ -109,6 +93,27 @@
                 return other == null;
 
             return original.Equals(other);
+        }
+
+        public int CompareTo(SystemAssignedIdentity other)
+        {
+            if (other == null)
+                return 1;
+
+            int compareResult = 0;
+            if ((compareResult = TenantId.GetValueOrDefault().CompareTo(other.TenantId.GetValueOrDefault())) == 0 &&
+                (compareResult = PrincipalId.GetValueOrDefault().CompareTo(other.PrincipalId.GetValueOrDefault())) == 0)
+                return 0;
+
+            return compareResult;
+        }
+
+        public bool Equals(SystemAssignedIdentity other)
+        {
+            if (other == null)
+                return false;
+
+            return TenantId.Equals(other.TenantId) && PrincipalId.Equals(other.PrincipalId);
         }
     }
 }

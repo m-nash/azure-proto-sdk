@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// Base class for resource container
+    /// A class representing collection of resources and their operations over their parent.
     /// </summary>
     /// <typeparam name="TOperations"> The type of the class containing operations for the underlying resource. </typeparam>
     /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
@@ -43,44 +43,34 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Creates a new resource synchronously.
+        /// Creates a new resource.
         /// </summary>
         /// <param name="name"> The name of the resource. </param>
         /// <param name="resourceDetails"> The desired resource configuration. </param>
-        /// it is completed. Note that cancellation cancels requests, but does not cancel the operation
-        /// on the client side. </param>
-        /// <returns>A response with the <see cref="ArmResponse{TOperations}"/> operation for the newly created resource.</returns>
+        /// <returns> A response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public abstract ArmResponse<TOperations> Create(
             string name,
             TResource resourceDetails);
 
         /// <summary>
-        /// Creates a new resource asynchronously.
+        /// Creates a new resource.
         /// </summary>
         /// <param name="name"> The name of the resource. </param>
         /// <param name="resourceDetails"> The desired resource configuration. </param>
-        /// <param name="cancellationToken"> A token that allows the caller to cancel the call before
-        /// it is completed. Note that cancellation cancels requests, but does not cancel the operation
-        /// on the client side. </param>
-        /// <returns>A <see cref="Task"/> that on completion returns a response with the
-        /// <see cref="ArmResponse{TOperations}"/> operation for the newly created resource.</returns>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public abstract Task<ArmResponse<TOperations>> CreateAsync(
             string name,
             TResource resourceDetails,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Begins an Operation on the service to create a new resource as specified. The call blocks until the
-        /// service accepts the operation.  The returned Operation allows the caller to control polling for
-        /// completion of e Create operation.
+        /// Creates a new resource.
         /// </summary>
         /// <param name="name"> The name of the resource. </param>
         /// <param name="resourceDetails"> The desired resource configuration. </param>
-        /// <param name="cancellationToken"> A token that allows the caller to cancel the call before
-        /// it is completed. Note that cancellation cancels requests, but does not cancel the operation
-        /// on the client side. </param>
-        /// <returns>An <see cref="ArmOperation{TOperations}"/> that allows polling for completion
-        /// of the Create operation.</returns>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An <see cref="ArmOperation{TOperations}"/> that allows polling for completion of the operation. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
         /// </remarks>
@@ -90,21 +80,12 @@ namespace Azure.ResourceManager.Core
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Begins an Operation on the service to create a new resource as specified. The call returns a Task
-        /// that completes when the service accepts the operation.  The
-        /// <see cref="System.Threading.Tasks.Task"/> yields an
-        /// <see cref="ArmOperation{TOperations}"/> which allows the caller to control polling for completion
-        ///  of the Create operation.
+        /// Creates a new resource.
         /// </summary>
         /// <param name="name"> The name of the resource. </param>
         /// <param name="resourceDetails"> The desired resource configuration. </param>
-        /// <param name="cancellationToken"> A token that allows the caller to cancel the call before
-        /// it is completed. Note that cancellation cancels requests, but does not cancel the operation
-        /// on the client side. </param>
-        /// <returns>
-        /// A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{TOperations}"/>
-        ///  that allows polling for completion of the Create operation.
-        /// </returns>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{TOperations}"/> that allows polling for completion of the operation. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
         /// </remarks>

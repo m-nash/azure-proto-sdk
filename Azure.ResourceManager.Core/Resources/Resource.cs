@@ -31,7 +31,6 @@ namespace Azure.ResourceManager.Core
             return string.Compare(Id?.Id, other);
         }
 
-
         public virtual bool Equals(Resource other)
         {
             if (Id == null)

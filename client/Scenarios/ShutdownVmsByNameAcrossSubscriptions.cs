@@ -14,7 +14,7 @@ namespace client
 
             await foreach (var subscription in client.Subscriptions().ListAsync())
             {
-                await foreach (var armResource in subscription.ListVirtualMachinesByNameAsync("even"))
+                await foreach (var armResource in subscription.ListVirtualMachinesByNameAsync("-e"))
                 {
                     var vmOperations = VirtualMachineOperations.FromGeneric(armResource);
                     await vmOperations.PowerOffAsync();
@@ -43,7 +43,7 @@ namespace client
             var client = new AzureResourceManagerClient();
             foreach (var sub in client.Subscriptions().List())
             {
-                await foreach (var armResource in sub.ListVirtualMachinesByNameAsync("even"))
+                await foreach (var armResource in sub.ListVirtualMachinesByNameAsync("-e"))
                 {
                     var vmOperations = VirtualMachineOperations.FromGeneric(armResource);
                     Console.WriteLine($"Stopping {vmOperations.Id.Subscription} {vmOperations.Id.ResourceGroup} {vmOperations.Id.Name}");

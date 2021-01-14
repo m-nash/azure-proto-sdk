@@ -1,4 +1,7 @@
-﻿namespace Azure.ResourceManager.Core
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Azure.ResourceManager.Core
 {
     /// <summary>
     /// A class representing a ResourceGroup along with the instance operations that can be performed on it.
