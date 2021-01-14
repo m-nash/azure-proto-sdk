@@ -15,12 +15,13 @@ namespace Azure.ResourceManager.Core
     public class ResourceIdentifier : IEquatable<ResourceIdentifier>, IEquatable<string>, IComparable<string>,
         IComparable<ResourceIdentifier>
     {
-        public static readonly ResourceIdentifier Undefined = new ResourceIdentifier("/"); //maybe changed to Undefined?
+        public static readonly string Undefined = "/";
         private readonly IDictionary<string, string> _partsDictionary =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         public ResourceIdentifier(string id)
         {
+            Console.WriteLine("ID PASSED IN IS " + id);
             if (id == null)
             {
                 throw new ArgumentNullException(nameof(id));
@@ -34,6 +35,10 @@ namespace Azure.ResourceManager.Core
             Parse(id);
         }
 
+        public bool IsRoot()
+        {
+            return Id == Undefined;
+        }
         public string Id { get; protected set; }
 
         public string Name { get; protected set; }
@@ -150,7 +155,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="id">A properly formed resource identity</param>
         protected virtual void Parse(string id)
         {
-            if (id == Undefined)
+            if (id == ResourceIdentifier.Undefined)
             {
                 Parent = null;
                 Name = null;
@@ -218,7 +223,7 @@ namespace Azure.ResourceManager.Core
             parts.RemoveAt(parts.Count - 1);
 
             // remove the last key/value pair to arrive at the parent (Count will be zero for /subscriptions/{foo})
-            Parent = parts.Count > 1 ? new ResourceIdentifier($"/{string.Join("/", parts)}") : null;
+            Parent = parts.Count > 1 ? new ResourceIdentifier($"/{string.Join("/", parts)}") : Undefined;
         }
 
         protected virtual void ParseProviderResource(IList<string> parts)
@@ -244,7 +249,7 @@ namespace Azure.ResourceManager.Core
             }
 
             // If this is not a top-level resource, it will have a parent
-            Parent = parts.Count > 1 ? new ResourceIdentifier($"/{string.Join("/", parts)}") : null;
+            Parent = parts.Count > 1 ? new ResourceIdentifier($"/{string.Join("/", parts)}") : Undefined;
         }
 
         public static class KnownKeys

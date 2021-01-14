@@ -34,7 +34,7 @@ namespace Azure.ResourceManager.Core
         /// Gets the valid resource type associated with the container.
         /// </summary>
         /// <returns> A valid Azure resource type. </returns>
-        protected override ResourceType ValidResourceType => ResourceIdentifier.Undefined.Type; //.resource type at end 
+        protected override ResourceType ValidResourceType => new ResourceIdentifier(ResourceIdentifier.Undefined).Type; //.resource type at end 
 
         /// <summary>
         /// Lists all subscriptions in the current container.
@@ -68,7 +68,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="identifier"> The identifier of the resource. </param>
         public override void Validate(ResourceIdentifier identifier)
         {
-            if (identifier.Type != ResourceIdentifier.Undefined.Type)
+            if (identifier.Type != ResourceIdentifier.Undefined)
                 throw new ArgumentException("Subscription container's parent must be none");
         }
 
