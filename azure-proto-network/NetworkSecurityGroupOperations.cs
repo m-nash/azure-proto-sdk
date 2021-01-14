@@ -14,7 +14,7 @@ namespace azure_proto_network
     /// <summary>
     /// A class representing the operations that can be performed over a specific NetworkSecurityGroup.
     /// </summary>
-    public partial class NetworkSecurityGroupOperations : ResourceOperationsBase<NetworkSecurityGroup>, ITaggableResource<NetworkSecurityGroup>, IDeletableResource
+    public class NetworkSecurityGroupOperations : ResourceOperationsBase<NetworkSecurityGroup>, ITaggableResource<NetworkSecurityGroup>, IDeletableResource
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkSecurityGroupOperations"/> class.
