@@ -12,7 +12,9 @@ namespace azure_proto_network
     /// </summary>
     public class NetworkSecurityGroup : NetworkSecurityGroupOperations
     {
-        /// Initializes a new instance of the <see cref="NetworkSecurityGroup"/> class.	
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetworkSecurityGroup"/> class.
+        /// </summary>
         public NetworkSecurityGroup(AzureResourceManagerClientOptions options, NetworkSecurityGroupData resource)
             : base(options, resource.Id)
         {
