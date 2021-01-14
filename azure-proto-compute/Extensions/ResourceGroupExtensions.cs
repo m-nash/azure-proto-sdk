@@ -31,7 +31,7 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// Gets a <see cref="[VirtualMachine]" />.
+        /// Gets a VirtualMachine.
         /// </summary>
         /// <param> The <see cref="[ResourceGroup]" /> instance the method will execute against. </param>
         /// <param name="vmData"> The <see cref="[VirtualMachineData]" /> of the resource that is the target of operations. </param>
@@ -42,7 +42,7 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// Gets the <see cref="[VirtualMachineContainer]" /> for a <see cref="[VirtualMachine]" />.
+        /// Gets the VirtualMachineContainer for a VirtualMachine.
         /// </summary>
         /// <param> The <see cref="[ResourceGroup]" /> instance the method will execute against. </param>
         /// <returns> Returns a <see cref="[VirtualMachineContainer]" /> object. </returns>
@@ -52,7 +52,7 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// Gets the <see cref="[VirtualMachineContainer]" /> for a <see cref="[VirtualMachine]" />.
+        /// Gets the VirtualMachineContainer for a VirtualMachine.
         /// </summary>
         /// <param> The <see cref="[ResourceGroupOperations]" /> instance the method will execute against. </param>
         /// <returns> Returns a <see cref="[VirtualMachineContainer]" /> object. </returns>
@@ -85,7 +85,7 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// Gets an <see cref="[AvailabilitySet]" />.
+        /// Gets an AvailabilitySet.
         /// </summary>
         /// <param> The <see cref="[ResourceGroup]" /> instance the method will execute against. </param>
         /// <param name="availabilitySetData"> The <see cref="[AvailabilitySetData]" /> of the resource that is the target of operations. </param>
@@ -96,7 +96,7 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// Gets the <see cref="[AvailabilitySetContainer]" /> for an <see cref="[AvailabilitySet]" />.
+        /// Gets the AvailabilitySetContainer for an AvailabilitySet.
         /// </summary>
         /// <param> The <see cref="[ResourceGroup]" /> instance the method will execute against. </param>
         /// <returns> Returns an <see cref="[AvailabilitySetContainer]" /> object. </returns>
@@ -106,7 +106,7 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// Gets the <see cref="[AvailabilitySetContainer]" /> for an <see cref="[AvailabilitySet]" />.
+        /// Gets the AvailabilitySetContainer for an AvailabilitySet.
         /// </summary>
         /// <param> The <see cref="[ResourceGroupOperations]" /> instance the method will execute against. </param>
         /// <returns> Returns an <see cref="[AvailabilitySetContainer]" /> object. </returns>
