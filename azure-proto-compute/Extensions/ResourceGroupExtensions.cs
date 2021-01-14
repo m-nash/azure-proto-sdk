@@ -13,7 +13,7 @@ namespace azure_proto_compute
         /// </summary>
         /// <param> The <see cref="[ResourceGroupOperations]" /> instance the method will execute against. </param>
         /// <param name="vmName"> The name of the <see cref="[VirtualMachine]" />. </param>
-        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="[VirtualMachine]" />.</returns>
+        /// <returns> Returns an object representing the operations that can be performed over a specific VirtualMachine.</returns>
         public static VirtualMachineOperations VirtualMachine(this ResourceGroupOperations resourceGroup, string vmName)
         {
             return new VirtualMachineOperations(resourceGroup.ClientOptions, $"{resourceGroup.Id}/providers/Microsoft.Compute/virtualMachines/{vmName}");
@@ -24,7 +24,7 @@ namespace azure_proto_compute
         /// </summary>
         /// <param> The <see cref="[ResourceGroupOperations]" /> instance the method will execute against. </param>
         /// <param name="vmId"> The identifier of the resource that is the target of operations. </param>
-        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="[VirtualMachine]" />.</returns>
+        /// <returns> Returns an object representing the operations that can be performed over a specific VirtualMachine.</returns>
         public static VirtualMachineOperations VirtualMachine(this ResourceGroupOperations resourceGroup, ResourceIdentifier vmId)
         {
             return new VirtualMachineOperations(resourceGroup.ClientOptions, vmId);
@@ -67,7 +67,7 @@ namespace azure_proto_compute
         /// Gets an object representing the operations that can be performed over a specific <see cref="[AvailabilitySet]" />.
         /// <param> The <see cref="[ResourceGroupOperations]" /> instance the method will execute against. </param>
         /// <param name="availabilitySetName"> The name of the <see cref="[AvailabilitySet]" />. </param>
-        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="[AvailabilitySet]" />. </returns>
+        /// <returns> Returns an object representing the operations that can be performed over a specific AvailabilitySet. </returns>
         public static AvailabilitySetOperations AvailabilitySet(this ResourceGroupOperations resourceGroup, string availabilitySetName)
         {
             return new AvailabilitySetOperations(resourceGroup.ClientOptions, $"{resourceGroup.Id}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}");
@@ -78,7 +78,7 @@ namespace azure_proto_compute
         /// </summary>
         /// <param> The <see cref="[ResourceGroupOperations]" /> instance the method will execute against. </param>
         /// <param name="availabilitySetId"> The identifier of the resource that is the target of operations. </param>
-        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="[AvailabilitySet]" />. </returns>
+        /// <returns> Returns an object representing the operations that can be performed over a specific AvailabilitySet. </returns>
         public static AvailabilitySetOperations AvailabilitySet(this ResourceGroupOperations resourceGroup, ResourceIdentifier availabilitySetId)
         {
             return new AvailabilitySetOperations(resourceGroup.ClientOptions, availabilitySetId);
