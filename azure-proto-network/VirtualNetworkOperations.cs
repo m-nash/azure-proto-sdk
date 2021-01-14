@@ -13,12 +13,17 @@ namespace azure_proto_network
     public class VirtualNetworkOperations : ResourceOperationsBase<VirtualNetwork>, ITaggableResource<VirtualNetwork>, IDeletableResource
     {
         internal VirtualNetworkOperations(ArmResourceOperations genericOperations)
-            : base(genericOperations.ClientOptions, genericOperations.Id)
+            : base(genericOperations)
         {
         }
 
-        internal VirtualNetworkOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id)
+        protected VirtualNetworkOperations(ResourceOperationsBase operations, ResourceIdentifier id)
+            : base(operations, id)
+        {
+        }
+
+        internal VirtualNetworkOperations(ResourceOperationsBase operations, string vnetName)
+            : base(operations, $"{operations}/providers/Microsoft.Network/virtualNetworks/{vnetName}")
         {
         }
 
@@ -26,8 +31,11 @@ namespace azure_proto_network
 
         protected override ResourceType ValidResourceType => ResourceType;
 
-        internal VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-            ClientOptions.Convert<NetworkManagementClientOptions>())).VirtualNetworks;
+        internal VirtualNetworksOperations Operations => new NetworkManagementClient(
+            Id.Subscription,
+            BaseUri,
+            Credential,
+            ClientOptions.Convert<NetworkManagementClientOptions>()).VirtualNetworks;
 
         public ArmResponse<Response> Delete()
         {
@@ -53,21 +61,13 @@ namespace azure_proto_network
         public override ArmResponse<VirtualNetwork> Get()
         {
             return new PhArmResponse<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(Operations.Get(Id.ResourceGroup, Id.Name),
-                n =>
-                {
-                    Resource = new VirtualNetworkData(n);
-                    return new VirtualNetwork(ClientOptions, Resource as VirtualNetworkData);
-                });
+                n => new VirtualNetwork(this, new VirtualNetworkData(n)));
         }
 
         public async override Task<ArmResponse<VirtualNetwork>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
-                n =>
-                {
-                    Resource = new VirtualNetworkData(n);
-                    return new VirtualNetwork(ClientOptions, Resource as VirtualNetworkData);
-                });
+                n => new VirtualNetwork(this, new VirtualNetworkData(n)));
         }
 
         public ArmOperation<VirtualNetwork> StartAddTag(string key, string value)
@@ -75,11 +75,7 @@ namespace azure_proto_network
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
             return new PhArmOperation<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
-                n =>
-                {
-                    Resource = new VirtualNetworkData(n);
-                    return new VirtualNetwork(ClientOptions, Resource as VirtualNetworkData);
-                });
+                n => new VirtualNetwork(this, new VirtualNetworkData(n)));
         }
 
         public async Task<ArmOperation<VirtualNetwork>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
@@ -87,31 +83,17 @@ namespace azure_proto_network
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
             return new PhArmOperation<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
-                n =>
-                {
-                    Resource = new VirtualNetworkData(n);
-                    return new VirtualNetwork(ClientOptions, Resource as VirtualNetworkData);
-                });
-        }
-
-        public Subnet Subnet(SubnetData subnet)
-        {
-            return new Subnet(ClientOptions, subnet);
-        }
-
-        public SubnetOperations Subnet(ResourceIdentifier subnet)
-        {
-            return new SubnetOperations(ClientOptions, subnet);
+                n => new VirtualNetwork(this, new VirtualNetworkData(n)));
         }
 
         public SubnetOperations Subnet(string subnet)
         {
-            return new SubnetOperations(ClientOptions, $"{Id}/subnets/{subnet}");
+            return new SubnetOperations(this, subnet);
         }
 
-        public virtual SubnetContainer Subnets()
+        public SubnetContainer Subnets()
         {
-            return new SubnetContainer(ClientOptions, Id);
+            return new SubnetContainer(this);
         }
     }
 }

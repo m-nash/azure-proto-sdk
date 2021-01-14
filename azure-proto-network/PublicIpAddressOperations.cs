@@ -10,12 +10,17 @@ namespace azure_proto_network
     public class PublicIpAddressOperations : ResourceOperationsBase<PublicIpAddress>, ITaggableResource<PublicIpAddress>, IDeletableResource
     {
         internal PublicIpAddressOperations(ArmResourceOperations genericOperations)
-            : base(genericOperations.ClientOptions, genericOperations.Id)
+            : base(genericOperations)
         {
         }
 
-        internal PublicIpAddressOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+        protected PublicIpAddressOperations(ResourceOperationsBase options, ResourceIdentifier id)
             : base(options, id)
+        {
+        }
+
+        internal PublicIpAddressOperations(ResourceOperationsBase options, string publicIpName)
+            : base(options, $"{options.Id}/providers/Microsoft.Network/publicIpAddresses/{publicIpName}")
         {
         }
 
@@ -23,8 +28,11 @@ namespace azure_proto_network
 
         protected override ResourceType ValidResourceType => ResourceType;
 
-        internal PublicIPAddressesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-            ClientOptions.Convert<NetworkManagementClientOptions>())).PublicIPAddresses;
+        internal PublicIPAddressesOperations Operations => new NetworkManagementClient(
+            Id.Subscription,
+            BaseUri, 
+            Credential,
+            ClientOptions.Convert<NetworkManagementClientOptions>()).PublicIPAddresses;
 
         public ArmResponse<Response> Delete()
         {
@@ -50,21 +58,13 @@ namespace azure_proto_network
         public override ArmResponse<PublicIpAddress> Get()
         {
             return new PhArmResponse<PublicIpAddress, PublicIPAddress>(Operations.Get(Id.ResourceGroup, Id.Name),
-                n =>
-                {
-                    Resource = new PublicIPAddressData(n);
-                    return new PublicIpAddress(ClientOptions, Resource as PublicIPAddressData);
-                });
+                n => new PublicIpAddress(this, new PublicIPAddressData(n)));
         }
 
         public async override Task<ArmResponse<PublicIpAddress>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<PublicIpAddress, PublicIPAddress>(await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
-               n =>
-               {
-                   Resource = new PublicIPAddressData(n);
-                   return new PublicIpAddress(ClientOptions, Resource as PublicIPAddressData);
-               });
+                n => new PublicIpAddress(this, new PublicIPAddressData(n)));
         }
 
         public ArmOperation<PublicIpAddress> StartAddTag(string key, string value)
@@ -72,11 +72,7 @@ namespace azure_proto_network
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
             return new PhArmOperation<PublicIpAddress, PublicIPAddress>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
-                n =>
-                {
-                    Resource = new PublicIPAddressData(n);
-                    return new PublicIpAddress(ClientOptions, Resource as PublicIPAddressData);
-                });
+                n => new PublicIpAddress(this, new PublicIPAddressData(n)));
         }
 
         public async Task<ArmOperation<PublicIpAddress>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
@@ -84,11 +80,7 @@ namespace azure_proto_network
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
             return new PhArmOperation<PublicIpAddress, PublicIPAddress>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
-                n =>
-                {
-                    Resource = new PublicIPAddressData(n);
-                    return new PublicIpAddress(ClientOptions, Resource as PublicIPAddressData);
-                });
+                n => new PublicIpAddress(this, new PublicIPAddressData(n)));
         }
     }
 }

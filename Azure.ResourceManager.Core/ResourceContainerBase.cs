@@ -19,28 +19,17 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="parentId"> The resource Id of the parent resource. </param>
-        protected ResourceContainerBase(AzureResourceManagerClientOptions options, ResourceIdentifier parentId)
-           : base(options, parentId)
+        /// <param name="parent"> The resource representing the parent resource. </param>
+        protected ResourceContainerBase(ResourceOperationsBase parent)
+            : base(parent.ClientOptions, parent.Id, parent.Credential, parent.BaseUri)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
-        /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="parentResource"> The resource representing the parent resource. </param>
-        protected ResourceContainerBase(AzureResourceManagerClientOptions options, TrackedResource parentResource)
-            : base(options, parentResource)
-        {
-            Parent = parentResource;
+            Parent = parent;
         }
 
         /// <summary>
         /// Gets the parent resource of this resource
         /// </summary>
-        protected TrackedResource Parent { get; }
+        protected ResourceOperationsBase Parent { get; }
 
         /// <summary>
         /// Verify that the input resource Id is a valid container for this type.

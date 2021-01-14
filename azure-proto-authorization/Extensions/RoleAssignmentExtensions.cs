@@ -38,7 +38,7 @@ namespace azure_proto_authorization
         /// <returns>A <see cref="RoleAssignmentContainer"/> that allows creating and listing RoleAssignments</returns>
         public static RoleAssignmentContainer RoleAssigmentsAtScope(this SubscriptionOperations subscription, ResourceIdentifier scope)
         {
-            return new RoleAssignmentContainer(subscription.ClientOptions, scope);
+            return new RoleAssignmentContainer(subscription, scope);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace azure_proto_authorization
         /// <returns>A <see cref="RoleAssignmentContainer"/> that allows creating and listing RoleAssignments</returns>
         public static RoleAssignmentContainer RoleAssigmentsAtScope(this SubscriptionOperations subscription, Resource scope)
         {
-            return new RoleAssignmentContainer(subscription.ClientOptions, scope.Id);
+            return new RoleAssignmentContainer(subscription, scope.Id);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace azure_proto_authorization
         /// <returns>A <see cref="RoleAssignmentOperations"/> that allows getting and deleting RoleAssignments</returns>
         public static RoleAssignmentOperations RoleAssignment(this ResourceOperationsBase resource, string name)
         {
-            return new RoleAssignmentOperations(resource.ClientOptions, $"{resource.Id}/providers/Microsoft.Authorization/roleAssignments/{name}");
+            return new RoleAssignmentOperations(resource, $"{resource.Id}/providers/Microsoft.Authorization/roleAssignments/{name}");
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace azure_proto_authorization
         /// <returns>A <see cref="RoleAssignmentOperations"/> that allows getting and deleting RoleAssignments</returns>
         public static RoleAssignmentOperations RoleAssignment(this SubscriptionOperations resource, string name)
         {
-            return new RoleAssignmentOperations(resource.ClientOptions, $"{resource.Id}/providers/Microsoft.Authorization/roleAssignments/{name}");
+            return new RoleAssignmentOperations(resource, $"{resource.Id}/providers/Microsoft.Authorization/roleAssignments/{name}");
         }
 
         /// <summary>
@@ -86,19 +86,7 @@ namespace azure_proto_authorization
         /// <returns>A <see cref="RoleAssignmentOperations"/> that allows getting and deleting RoleAssignments</returns>
         public static RoleAssignmentOperations RoleAssignmentAtScope(this SubscriptionOperations resource, ResourceIdentifier resourceId)
         {
-            return new RoleAssignmentOperations(resource.ClientOptions, resourceId);
-        }
-
-        /// <summary>
-        /// Get RoleAssignment Operations for the given resource and scope.  Note that this is only valid for unconstrained role assignments, so
-        /// it is a generation-time decision if we include this.
-        /// </summary>
-        /// <param name="resource">The subscription containing the role assignment</param>
-        /// <param name="role">The object representing the role assignment</param>
-        /// <returns>A <see cref="RoleAssignmentOperations"/> that allows getting and deleting RoleAssignments</returns>
-        public static RoleAssignmentOperations RoleAssignmentAtScope(this SubscriptionOperations resource, RoleAssignmentData role)
-        {
-            return new RoleAssignmentOperations(resource.ClientOptions, role);
+            return new RoleAssignmentOperations(resource, resourceId);
         }
     }
 }

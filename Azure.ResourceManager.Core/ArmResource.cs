@@ -2,8 +2,8 @@
 {
     public class ArmResource : ArmResourceOperations
     {
-        public ArmResource(AzureResourceManagerClientOptions options, ArmResourceData resource)
-            : base(options, resource)
+        public ArmResource(ArmResourceOperations operations, ArmResourceData resource)
+            : base(operations, resource.Id)
         {
             Data = resource;
         }

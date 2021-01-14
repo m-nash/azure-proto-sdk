@@ -13,8 +13,9 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="resource"> The resource data model. </param>
-        internal Subscription(AzureResourceManagerClientOptions options, SubscriptionData resource)
-            : base(options, resource)
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        internal Subscription(SubscriptionOperations subscription, SubscriptionData resource)
+            : base(subscription, resource.Id)
         {
             Data = resource;
         }

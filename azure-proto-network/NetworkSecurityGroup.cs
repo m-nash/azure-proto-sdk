@@ -6,8 +6,8 @@ namespace azure_proto_network
 {
     public class NetworkSecurityGroup : NetworkSecurityGroupOperations
     {
-        public NetworkSecurityGroup(AzureResourceManagerClientOptions options, NetworkSecurityGroupData resource)
-            : base(options, resource.Id)
+        public NetworkSecurityGroup(ResourceOperationsBase operations, NetworkSecurityGroupData resource)
+            : base(operations, resource.Id)
         {
             Data = resource;
         }

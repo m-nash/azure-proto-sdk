@@ -10,8 +10,8 @@
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="resource"> The ResourceGroupData to use in these operations. </param>
-        internal ResourceGroup(AzureResourceManagerClientOptions options, ResourceGroupData resource)
-            : base(options, resource)
+        internal ResourceGroup(ResourceOperationsBase operations, ResourceGroupData resource)
+            : base(operations, resource.Id)
         {
             Data = resource;
         }

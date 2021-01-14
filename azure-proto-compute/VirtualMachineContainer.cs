@@ -21,23 +21,16 @@ namespace azure_proto_compute
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="resourceGroup"> The ResourceGroup that is the parent of the VirtualMachines. </param>
-        internal VirtualMachineContainer(AzureResourceManagerClientOptions options, ResourceGroupData resourceGroup)
-            : base(options, resourceGroup)
+        internal VirtualMachineContainer(ResourceGroupOperations resourceGroup)
+            : base(resourceGroup)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VirtualMachineContainer"/> class.
-        /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="parentId"> The identifier of the ResourceGroup that is the parent of the VirtualMachines. </param>
-        internal VirtualMachineContainer(AzureResourceManagerClientOptions options, ResourceIdentifier parentId)
-            : base(options, parentId)
-        {
-        }
-
-        private VirtualMachinesOperations Operations => this.GetClient((baseUri, cred) => new ComputeManagementClient(baseUri, Id.Subscription, cred,
-            ClientOptions.Convert<ComputeManagementClientOptions>())).VirtualMachines;
+        private VirtualMachinesOperations Operations => new ComputeManagementClient(
+            BaseUri,
+            Id.Subscription,
+            Credential,
+            ClientOptions.Convert<ComputeManagementClientOptions>()).VirtualMachines;
 
         protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
 
@@ -52,7 +45,7 @@ namespace azure_proto_compute
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model);
             return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
-                v => new VirtualMachine(ClientOptions, new VirtualMachineData(v)));
+                v => new VirtualMachine(Parent, new VirtualMachineData(v)));
         }
 
         /// <summary>
@@ -67,7 +60,7 @@ namespace azure_proto_compute
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                v => new VirtualMachine(ClientOptions, new VirtualMachineData(v)));
+                v => new VirtualMachine(Parent, new VirtualMachineData(v)));
         }
 
         /// <summary>
@@ -84,7 +77,7 @@ namespace azure_proto_compute
         {
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
-                v => new VirtualMachine(ClientOptions, new VirtualMachineData(v)));
+                v => new VirtualMachine(Parent, new VirtualMachineData(v)));
         }
 
         /// <summary>
@@ -101,7 +94,7 @@ namespace azure_proto_compute
         {
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
-                v => new VirtualMachine(ClientOptions, new VirtualMachineData(v)));
+                v => new VirtualMachine(Parent, new VirtualMachineData(v)));
         }
 
         /// <summary>
@@ -165,7 +158,7 @@ namespace azure_proto_compute
             var result = Operations.List(Id.Name, cancellationToken);
             return new PhWrappingPageable<Azure.ResourceManager.Compute.Models.VirtualMachine, VirtualMachine>(
                 result,
-                s => new VirtualMachine(ClientOptions, new VirtualMachineData(s)));
+                s => new VirtualMachine(Parent, new VirtualMachineData(s)));
         }
 
         /// <summary>
@@ -178,7 +171,7 @@ namespace azure_proto_compute
             var result = Operations.ListAsync(Id.Name, cancellationToken);
             return new PhWrappingAsyncPageable<Azure.ResourceManager.Compute.Models.VirtualMachine, VirtualMachine>(
                 result,
-                s => new VirtualMachine(ClientOptions, new VirtualMachineData(s)));
+                s => new VirtualMachine(Parent, new VirtualMachineData(s)));
         }
 
         /// <summary>
@@ -192,7 +185,7 @@ namespace azure_proto_compute
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineOperations.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext(ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
 
         /// <summary>
@@ -206,7 +199,7 @@ namespace azure_proto_compute
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineOperations.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync(ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
 
         /// <summary>

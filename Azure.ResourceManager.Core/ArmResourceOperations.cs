@@ -12,21 +12,16 @@ namespace Azure.ResourceManager.Core
     {
         private string _apiVersion;
 
-        public ArmResourceOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id)
+        internal ArmResourceOperations(ArmResourceOperations operations, ResourceIdentifier id)
+            : base(operations, id)
         {
         }
 
-        public ArmResourceOperations(AzureResourceManagerClientOptions options, ArmResourceData resource)
-            : base(options, resource)
-        {
-        }
-
-        private ResourcesOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(
-            uri,
+        private ResourcesOperations Operations => new ResourcesManagementClient(
+            BaseUri,
             Id.Subscription,
-            creds,
-            ClientOptions.Convert<ResourcesManagementClientOptions>()))?.Resources;
+            Credential,
+            ClientOptions.Convert<ResourcesManagementClientOptions>()).Resources;
 
         private protected virtual ArmResource GetResource()
         {
@@ -64,11 +59,7 @@ namespace Azure.ResourceManager.Core
             UpdateTags(key, value, resource.Data.Tags);
             return new PhArmOperation<ArmResource, GenericResource>(
                 Operations.StartUpdateById(Id, _apiVersion, resource.Data).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
-                v =>
-                {
-                    Resource = new ArmResourceData(v);
-                    return new ArmResource(ClientOptions, Resource as ArmResourceData);
-                });
+                v => new ArmResource(this, new ArmResourceData(v)));
         }
 
         public async Task<ArmOperation<ArmResource>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
@@ -78,33 +69,22 @@ namespace Azure.ResourceManager.Core
             var op = await Operations.StartUpdateByIdAsync(Id, _apiVersion, resource.Data, cancellationToken);
             return new PhArmOperation<ArmResource, GenericResource>(
                 await op.WaitForCompletionAsync(cancellationToken),
-                v =>
-                {
-                    Resource = new ArmResourceData(v);
-                    return new ArmResource(ClientOptions, Resource as ArmResourceData);
-                });
+                v => new ArmResource(this, new ArmResourceData(v)));
         }
 
+        /// <inheritdoc/>
         public override ArmResponse<ArmResource> Get()
         {
             return new PhArmResponse<ArmResource, GenericResource>(
                 Operations.GetById(Id, _apiVersion),
-                v =>
-                {
-                    Resource = new ArmResourceData(v);
-                    return new ArmResource(ClientOptions, Resource as ArmResourceData);
-                });
+                v => new ArmResource(this, new ArmResourceData(v)));
         }
 
         public override async Task<ArmResponse<ArmResource>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<ArmResource, GenericResource>(
                 await Operations.GetByIdAsync(Id, _apiVersion, cancellationToken),
-                v =>
-                {
-                    Resource = new ArmResourceData(v);
-                    return new ArmResource(ClientOptions, Resource as ArmResourceData);
-                });
+                v => new ArmResource(this, new ArmResourceData(v)));
         }
 
         public override void Validate(ResourceIdentifier identifier)

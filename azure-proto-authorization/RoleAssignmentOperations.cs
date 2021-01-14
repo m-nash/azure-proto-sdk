@@ -12,12 +12,17 @@ namespace azure_proto_authorization
     public class RoleAssignmentOperations : ExtensionResourceOperationsBase<RoleAssignment>, IDeletableResource
     {
         /// <summary>
+        /// Gets the resource type for Role Assignments
+        /// </summary>
+        public static readonly ResourceType ResourceType = "Microsoft.Authorization/roleAssignments";
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="RoleAssignmentOperations"/> class.
         /// Allows creating operations specific to a role assignment from generic ARM operations for the same resource
         /// </summary>
         /// <param name="genericOperations">A generic operations class corresponding to a Role Assignment</param>
         internal RoleAssignmentOperations(ArmResourceOperations genericOperations)
-            : this(genericOperations.ClientOptions, genericOperations.Id)
+            : base(genericOperations)
         {
         }
 
@@ -26,29 +31,19 @@ namespace azure_proto_authorization
         /// </summary>
         /// <param name="options">The http settings to use with these operations</param>
         /// <param name="id">The resource identifier for the RoleAssignment to operate on.</param>
-        internal RoleAssignmentOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id)
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        internal RoleAssignmentOperations(OperationsBase operation, ResourceIdentifier id)
+            : base(operation, id)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RoleAssignmentOperations"/> class.
-        /// </summary>
-        /// <param name="options">The http settings to use with these operations</param>
-        /// <param name="resource">The resource object for the RoleAssignment to operate on.</param>
-        internal RoleAssignmentOperations(AzureResourceManagerClientOptions options, Resource resource)
-            : this(options, resource.Id)
-        {
-        }
-
-        /// <summary>
-        /// Gets the resource type for Role Assignments
-        /// </summary>
-        public static readonly ResourceType ResourceType = "Microsoft.Authorization/roleAssignments";
-
-        private RoleAssignmentsOperations Operations => GetClient<AuthorizationManagementClient>((baseUri, creds) => new AuthorizationManagementClient(Id.Subscription, baseUri, creds)).RoleAssignments;
-
+        /// <inheritdoc/>
         protected override ResourceType ValidResourceType => ResourceType;
+
+        private RoleAssignmentsOperations Operations => new AuthorizationManagementClient(
+            Id.Subscription,
+            BaseUri,
+            Credential).RoleAssignments;
 
         /// <summary>
         /// Delete a role assignment. This operation may involve multiple blocking calls to the service.
@@ -102,7 +97,7 @@ namespace azure_proto_authorization
         public override ArmResponse<RoleAssignment> Get()
         {
             return new PhArmResponse<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(
-                Operations.GetById(Id), a => new RoleAssignment(ClientOptions, new RoleAssignmentData(a)));
+                Operations.GetById(Id), a => new RoleAssignment(this, new RoleAssignmentData(a)));
         }
 
         /// <summary>
@@ -115,7 +110,7 @@ namespace azure_proto_authorization
         {
             return new PhArmResponse<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(
                 await Operations.GetByIdAsync(Id, cancellationToken),
-                a => new RoleAssignment(ClientOptions, new RoleAssignmentData(a)));
+                a => new RoleAssignment(this, new RoleAssignmentData(a)));
         }
     }
 }

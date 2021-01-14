@@ -25,25 +25,27 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
-        internal ResourceGroupOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id) { }
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="baseUri"> The base URI of the service. </param>
+        protected ResourceGroupOperations(ResourceOperationsBase operations, ResourceIdentifier id)
+            : base(operations, id)
+        {
+        }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceGroupOperations"/> class.
-        /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="resource"> The resource that is the target of operations. </param>
-        internal ResourceGroupOperations(AzureResourceManagerClientOptions options, Resource resource)
-            : base(options, resource) { }
+        internal ResourceGroupOperations(SubscriptionOperations operations, string rgName)
+            : base(operations, $"{operations.Id}/resourceGroups/{rgName}")
+        {
+        }
+
 
         /// <inheritdoc/>
         protected override ResourceType ValidResourceType => ResourceType;
 
-        private ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(
-            uri,
+        private ResourceGroupsOperations Operations => new ResourcesManagementClient(
+            BaseUri,
             Id.Subscription,
-            creds,
-            ClientOptions.Convert<ResourcesManagementClientOptions>()))?.ResourceGroups;
+            Credential,
+            ClientOptions.Convert<ResourcesManagementClientOptions>()).ResourceGroups;
 
         /// <summary>
         /// When you delete a resource group, all of its resources are also deleted. Deleting a resource group deletes all of its template deployments and currently stored operations.
@@ -95,8 +97,7 @@ namespace Azure.ResourceManager.Core
         {
             return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Get(Id.Name), g =>
             {
-                Resource = new ResourceGroupData(g);
-                return new ResourceGroup(ClientOptions, Resource as ResourceGroupData);
+                return new ResourceGroup(this, new ResourceGroupData(g));
             });
         }
 
@@ -105,8 +106,7 @@ namespace Azure.ResourceManager.Core
         {
             return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.GetAsync(Id.Name, cancellationToken), g =>
             {
-                Resource = new ResourceGroupData(g);
-                return new ResourceGroup(ClientOptions, Resource as ResourceGroupData);
+                return new ResourceGroup(this, new ResourceGroupData(g));
             });
         }
 
@@ -126,8 +126,7 @@ namespace Azure.ResourceManager.Core
             patch.Tags[name] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Update(Id.Name, patch), g =>
             {
-                Resource = new ResourceGroupData(g);
-                return new ResourceGroup(ClientOptions, Resource as ResourceGroupData);
+                return new ResourceGroup(this, new ResourceGroupData(g));
             });
         }
 
@@ -147,8 +146,7 @@ namespace Azure.ResourceManager.Core
             patch.Tags[name] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.UpdateAsync(Id.Name, patch, cancellationToken), g =>
             {
-                Resource = new ResourceGroupData(g);
-                return new ResourceGroup(ClientOptions, Resource as ResourceGroupData);
+                return new ResourceGroup(this, new ResourceGroupData(g));
             });
         }
 
@@ -164,7 +162,7 @@ namespace Azure.ResourceManager.Core
             where TOperations : ResourceOperationsBase<TOperations>
             where TContainer : ResourceContainerBase<TOperations, TResource>
         {
-            var myResource = Resource as TrackedResource;
+            var myResource = model as TrackedResource;
 
             if (myResource == null)
             {
@@ -193,7 +191,7 @@ namespace Azure.ResourceManager.Core
             where TOperations : ResourceOperationsBase<TOperations>
             where TContainer : ResourceContainerBase<TOperations, TResource>
         {
-            var myResource = Resource as TrackedResource;
+            var myResource = model as TrackedResource;
 
             if (myResource == null)
             {

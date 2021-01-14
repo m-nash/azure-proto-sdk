@@ -10,13 +10,13 @@ namespace azure_proto_network
     /// </summary>
     public class SubnetOperations : ResourceOperationsBase<Subnet>, IDeletableResource
     {
-        internal SubnetOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+        protected SubnetOperations(ResourceOperationsBase options, ResourceIdentifier id)
             : base(options, id)
         {
         }
 
-        internal SubnetOperations(AzureResourceManagerClientOptions options, Resource resource)
-            : base(options, resource)
+        internal SubnetOperations(ResourceOperationsBase options, string subnetName)
+            : base(options, $"{options.Id}/subnets/{subnetName}")
         {
         }
 
@@ -24,8 +24,11 @@ namespace azure_proto_network
 
         protected override ResourceType ValidResourceType => ResourceType;
 
-        internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-                    ClientOptions.Convert<NetworkManagementClientOptions>())).Subnets;
+        internal SubnetsOperations Operations => new NetworkManagementClient(
+            Id.Subscription,
+            BaseUri,
+            Credential,
+            ClientOptions.Convert<NetworkManagementClientOptions>()).Subnets;
 
         public ArmResponse<Response> Delete()
         {
@@ -50,21 +53,13 @@ namespace azure_proto_network
         public override ArmResponse<Subnet> Get()
         {
             return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(Operations.Get(Id.ResourceGroup, Id.Parent.Name, Id.Name),
-                n =>
-                {
-                    Resource = new SubnetData(n, DefaultLocation);
-                    return new Subnet(ClientOptions, Resource as SubnetData);
-                });
+                n => new Subnet(this, new SubnetData(n, DefaultLocation)));
         }
 
         public async override Task<ArmResponse<Subnet>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(await Operations.GetAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, null, cancellationToken),
-                n =>
-                {
-                    Resource = new SubnetData(n, DefaultLocation);
-                    return new Subnet(ClientOptions, Resource as SubnetData);
-                });
+                n => new Subnet(this, new SubnetData(n, DefaultLocation)));
         }
     }
 }

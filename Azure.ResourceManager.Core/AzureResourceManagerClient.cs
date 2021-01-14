@@ -30,36 +30,9 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
         /// </summary>
-        public AzureResourceManagerClient()
-            : this(new Uri(DefaultUri), new DefaultAzureCredential(), null, null)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
-        /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        public AzureResourceManagerClient(AzureResourceManagerClientOptions options)
-            : this(options.BaseUri, options.Credential, null, options)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
-        /// </summary>
-        /// <param name="defaultSubscriptionId"> The id of the default Azure subscription. </param>
-        public AzureResourceManagerClient(string defaultSubscriptionId)
-            : this(new Uri(DefaultUri), new DefaultAzureCredential(), defaultSubscriptionId, null)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
-        /// </summary>
-        /// <param name="defaultSubscriptionId"> The id of the default Azure subscription. </param>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        public AzureResourceManagerClient(string defaultSubscriptionId, AzureResourceManagerClientOptions options)
-            : this(options.BaseUri, options.Credential, defaultSubscriptionId, null)
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        public AzureResourceManagerClient(AzureResourceManagerClientOptions options = default)
+            : this(null, null, new DefaultAzureCredential(), options)
         {
         }
 
@@ -67,20 +40,18 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
         /// </summary>
         /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
-        /// <param name="defaultSubscriptionId"> The id of the default Azure subscription. </param>
-        public AzureResourceManagerClient(TokenCredential credential, string defaultSubscriptionId)
-            : this(new Uri(DefaultUri), credential, defaultSubscriptionId, null)
+        public AzureResourceManagerClient(TokenCredential credential, AzureResourceManagerClientOptions options = default)
+            : this(null, null, credential, options)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
         /// </summary>
-        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
         /// <param name="defaultSubscriptionId"> The id of the default Azure subscription. </param>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        public AzureResourceManagerClient(TokenCredential credential, string defaultSubscriptionId, AzureResourceManagerClientOptions options)
-            : this(options.BaseUri, credential, defaultSubscriptionId, options)
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        public AzureResourceManagerClient(string defaultSubscriptionId, TokenCredential credential, AzureResourceManagerClientOptions options = default)
+            : this(defaultSubscriptionId, null, credential, options)
         {
         }
 
@@ -89,26 +60,30 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="baseUri"> The base URI of the service. </param>
         /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        public AzureResourceManagerClient(Uri baseUri, TokenCredential credential, AzureResourceManagerClientOptions options = null)
-            : this(baseUri, credential, null, options)
+        public AzureResourceManagerClient(Uri baseUri, TokenCredential credential, AzureResourceManagerClientOptions options = default)
+            : this(null, baseUri, credential, options)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
         /// </summary>
-        /// <param name="baseUri"> The base URI of the service. </param>
         /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
         /// <param name="defaultSubscriptionId"> The id of the default Azure subscription. </param>
         /// <param name="options"> The client parameters to use in these operations. </param>
-        public AzureResourceManagerClient(Uri baseUri, TokenCredential credential, string defaultSubscriptionId, AzureResourceManagerClientOptions options)
+        private AzureResourceManagerClient(string defaultSubscriptionId, Uri baseUri, TokenCredential credential, AzureResourceManagerClientOptions options = default)
         {
-            ClientOptions = new AzureResourceManagerClientOptions(baseUri, credential, options);
+            _credentials = credential;
+            _baseUri = baseUri;
+            ClientOptions = options ?? new AzureResourceManagerClientOptions();
             defaultSubscriptionId ??= GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult();
-            DefaultSubscription = new SubscriptionOperations(ClientOptions, new ResourceIdentifier($"/subscriptions/{defaultSubscriptionId}"));
+            DefaultSubscription = new SubscriptionOperations(ClientOptions, defaultSubscriptionId, credential, baseUri);
             ApiVersionOverrides = new Dictionary<string, string>();
         }
+
+        private TokenCredential _credentials;
+
+        private Uri _baseUri;
 
         /// <summary>
         /// Gets the default Azure subscription.
@@ -123,23 +98,24 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the Azure subscription operations.
         /// </summary>
-        /// <param name="subscription">  The data model of the subscription. </param>
+        /// <param name="subscriptionId"> The resource identifier of the subscription. </param>
         /// <returns> Subscription operations. </returns>
-        public SubscriptionOperations Subscription(SubscriptionData subscription) => new SubscriptionOperations(ClientOptions, subscription);
+        public SubscriptionOperations Subscription(ResourceIdentifier subscriptionId) => new SubscriptionOperations(
+            ClientOptions,
+            subscriptionId,
+            _credentials,
+            _baseUri);
 
         /// <summary>
         /// Gets the Azure subscription operations.
         /// </summary>
-        /// <param name="subscription"> The resource identifier of the subscription. </param>
+        /// <param name="subscriptionGuid"> The guid of the subscription. </param>
         /// <returns> Subscription operations. </returns>
-        public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(ClientOptions, subscription);
-
-        /// <summary>
-        /// Gets the Azure subscription operations.
-        /// </summary>
-        /// <param name="subscription"> The id of the subscription. </param>
-        /// <returns> Subscription operations. </returns>
-        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(ClientOptions, subscription);
+        public SubscriptionOperations Subscription(string subscriptionGuid) => new SubscriptionOperations(
+            ClientOptions,
+            subscriptionGuid,
+            _credentials,
+            _baseUri);
 
         /// <summary>
         /// Gets the Azure subscriptions.
@@ -147,7 +123,7 @@ namespace Azure.ResourceManager.Core
         /// <returns> Subscription container. </returns>
         public SubscriptionContainer Subscriptions()
         {
-            return new SubscriptionContainer(ClientOptions);
+            return new SubscriptionContainer(ClientOptions, _credentials, _baseUri);
         }
 
         /// <summary>
@@ -277,27 +253,17 @@ namespace Azure.ResourceManager.Core
         /// <returns> Resource group operations. </returns>
         public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
         {
-            return new ResourceGroupOperations(ClientOptions, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}");
+            return new ResourceGroupOperations(DefaultSubscription, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}");
         }
 
         /// <summary>
         /// Gets resource group operations.
         /// </summary>
-        /// <param name="resourceGroup"> The resource identifier of the resource group. </param>
+        /// <param name="resourceGroupId"> The resource identifier of the resource group. </param>
         /// <returns> Resource group operations. </returns>
-        public ResourceGroupOperations ResourceGroup(ResourceIdentifier resourceGroup)
+        public ResourceGroupOperations ResourceGroup(ResourceIdentifier resourceGroupId)
         {
-            return new ResourceGroupOperations(ClientOptions, resourceGroup);
-        }
-
-        /// <summary>
-        /// Gets resource group operations.
-        /// </summary>
-        /// <param name="resourceGroup"> The data model of the resource group. </param>
-        /// <returns> Resource group operations. </returns>
-        public ResourceGroupOperations ResourceGroup(ResourceGroupData resourceGroup)
-        {
-            return new ResourceGroupOperations(ClientOptions, resourceGroup.Id);
+            return new ResourceGroupOperations(DefaultSubscription, resourceGroupId);
         }
 
         /// <summary>
@@ -396,6 +362,6 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the resource client.
         /// </summary>
-        internal ResourcesManagementClient GetResourcesClient(string subscription) => ClientOptions.GetClient((uri, credential) => new ResourcesManagementClient(uri, subscription, credential));
+        internal ResourcesManagementClient GetResourcesClient(string subscription) => new ResourcesManagementClient(_baseUri, subscription, _credentials);
     }
 }

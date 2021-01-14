@@ -23,30 +23,19 @@ namespace azure_proto_authorization
         /// Initializes a new instance of the <see cref="RoleAssignmentContainer"/> class.
         /// </summary>
         /// <param name="options">The client options with http client details for these operations</param>
-        /// <param name="scope">The resource object of the target resource, resource group, or subscription for this role assignment</param>
-        /// <param name="options,">Client optiosn to use in these operations.</param>
-        internal RoleAssignmentContainer(AzureResourceManagerClientOptions options, Resource scope)
-            : this(options, scope.Id)
+        /// <param name="scope">The resource id of the target resource, resource group, or subscription for this role assignment</param>
+        internal RoleAssignmentContainer(OperationsBase operations, ResourceIdentifier scope)
+            : base(operations, scope)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RoleAssignmentContainer"/> class.
-        /// </summary>
-        /// <param name="options">The client options with http client details for these operations</param>
-        /// <param name="scope">The resource id of the target resource, resource group, or subscription for this role assignment</param>
-        /// <param name="options,">Client optiosn to use in these operations.</param>
-        internal RoleAssignmentContainer(AzureResourceManagerClientOptions options, ResourceIdentifier scope)
-            : base(options, scope)
-        {
-        }
+        /// <inheritdoc/>
+        protected override ResourceType ValidResourceType => RoleAssignmentOperations.ResourceType;
 
         /// <summary>
         /// Gets the resource type of the resource being created.
         /// </summary>
-        private RoleAssignmentsOperations Operations => GetClient<AuthorizationManagementClient>((baseUri, creds) => new AuthorizationManagementClient(Id.Subscription, baseUri, creds)).RoleAssignments;
-
-        protected override ResourceType ValidResourceType => RoleAssignmentOperations.ResourceType;
+        private RoleAssignmentsOperations Operations => new AuthorizationManagementClient(Id.Subscription, BaseUri, Credential).RoleAssignments;
 
         /// <summary>
         /// Create a role assignment. This method blocks until the RoleAssignment is created on the service.
@@ -60,7 +49,7 @@ namespace azure_proto_authorization
             var response = Operations.Create(Id, name, resourceDetails.ToModel(), cancellationToken);
             return new PhArmResponse<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(
                 response,
-                a => new RoleAssignment(ClientOptions, new RoleAssignmentData(a)));
+                a => new RoleAssignment(this, new RoleAssignmentData(a)));
         }
 
         /// <summary>
@@ -76,7 +65,7 @@ namespace azure_proto_authorization
             var response = await Operations.CreateAsync(Id, name, resourceDetails.ToModel(), cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(
                 response,
-                a => new RoleAssignment(ClientOptions, new RoleAssignmentData(a)));
+                a => new RoleAssignment(this, new RoleAssignmentData(a)));
         }
 
         /// <summary>
@@ -91,7 +80,7 @@ namespace azure_proto_authorization
         {
             return new PhArmOperation<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(
                 Operations.Create(Id, name, resourceDetails.ToModel(), cancellationToken),
-                a => new RoleAssignment(ClientOptions, new RoleAssignmentData(a)));
+                a => new RoleAssignment(this, new RoleAssignmentData(a)));
         }
 
         /// <summary>
@@ -106,7 +95,7 @@ namespace azure_proto_authorization
         {
             return new PhArmOperation<RoleAssignment, Azure.ResourceManager.Authorization.Models.RoleAssignment>(
                 await Operations.CreateAsync(Id, name, resourceDetails.ToModel(), cancellationToken).ConfigureAwait(false),
-                a => new RoleAssignment(ClientOptions, new RoleAssignmentData(a)));
+                a => new RoleAssignment(this, new RoleAssignmentData(a)));
         }
 
         /// <summary>

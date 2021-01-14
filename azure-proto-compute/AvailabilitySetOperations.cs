@@ -14,13 +14,8 @@ namespace azure_proto_compute
         {
         }
 
-        internal AvailabilitySetOperations(AzureResourceManagerClientOptions options, TrackedResource resource)
-            : base(options, resource)
-        {
-        }
-
-        internal AvailabilitySetOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id)
+        internal AvailabilitySetOperations(ResourceOperationsBase operations, string availabilitySetName)
+            : base(operations, availabilitySetName)
         {
         }
 
@@ -28,12 +23,11 @@ namespace azure_proto_compute
 
         protected override ResourceType ValidResourceType => ResourceType;
 
-        private AvailabilitySetsOperations Operations => GetClient((uri, cred) =>
-            new ComputeManagementClient(
-                uri,
-                Id.Subscription,
-                cred,
-                ClientOptions.Convert<ComputeManagementClientOptions>())).AvailabilitySets;
+        private AvailabilitySetsOperations Operations => new ComputeManagementClient(
+            BaseUri,
+            Id.Subscription,
+            Credential,
+            ClientOptions.Convert<ComputeManagementClientOptions>()).AvailabilitySets;
 
         public ArmResponse<Response> Delete()
         {
@@ -58,44 +52,28 @@ namespace azure_proto_compute
         {
             return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 Operations.Get(Id.ResourceGroup, Id.Name),
-                a =>
-                {
-                    Resource = new AvailabilitySetData(a);
-                    return new AvailabilitySet(ClientOptions, Resource as AvailabilitySetData);
-                });
+                a => new AvailabilitySet(this, new AvailabilitySetData(a)));
         }
 
         public async override Task<ArmResponse<AvailabilitySet>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 await Operations.GetAsync(Id.ResourceGroup, Id.Name, cancellationToken),
-                a =>
-                {
-                    Resource = new AvailabilitySetData(a);
-                    return new AvailabilitySet(ClientOptions, Resource as AvailabilitySetData);
-                });
+                a => new AvailabilitySet(this, new AvailabilitySetData(a)));
         }
 
         public ArmOperation<AvailabilitySet> Update(AvailabilitySetUpdate patchable)
         {
             return new PhArmOperation<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 Operations.Update(Id.ResourceGroup, Id.Name, patchable),
-                a =>
-                {
-                    Resource = new AvailabilitySetData(a);
-                    return new AvailabilitySet(ClientOptions, Resource as AvailabilitySetData);
-                });
+                a => new AvailabilitySet(this, new AvailabilitySetData(a)));
         }
 
         public async Task<ArmOperation<AvailabilitySet>> UpdateAsync(AvailabilitySetUpdate patchable, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 await Operations.UpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
-                a =>
-                {
-                    Resource = new AvailabilitySetData(a);
-                    return new AvailabilitySet(ClientOptions, Resource as AvailabilitySetData);
-                });
+                a => new AvailabilitySet(this, new AvailabilitySetData(a)));
         }
 
         public ArmOperation<AvailabilitySet> StartAddTag(string key, string value)

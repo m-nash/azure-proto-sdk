@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Azure.Core;
+using Azure.Core.Pipeline;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Azure.Core;
-using Azure.Core.Pipeline;
-using Azure.Identity;
 
 namespace Azure.ResourceManager.Core
 {
@@ -20,7 +19,7 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="AzureResourceManagerClientOptions"/> class.
         /// </summary>
         public AzureResourceManagerClientOptions()
-            : this(new Uri(AzureResourceManagerClient.DefaultUri), new DefaultAzureCredential())
+            : this(null)
         {
         }
 
@@ -28,14 +27,11 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="AzureResourceManagerClientOptions"/> class.
         /// </summary>
         /// <param name="baseUri"> The base URI of the service. </param>
-        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
         /// <param name="other"> The client parameters to use in these operations. </param>
-        public AzureResourceManagerClientOptions(Uri baseUri, TokenCredential credential, AzureResourceManagerClientOptions other = null)
+        internal AzureResourceManagerClientOptions(AzureResourceManagerClientOptions other = null)
         {
-            BaseUri = baseUri;
-            Credential = credential;
-            //Will go away when moved into core since we will have directy acces the policies and transport, so just need to set those
-            if (!Object.ReferenceEquals(other, null))
+            // Will go away when moved into core since we will have directy acces the policies and transport, so just need to set those
+            if (!ReferenceEquals(other, null))
                 Copy(other);
         }
 
@@ -47,7 +43,7 @@ namespace Azure.ResourceManager.Core
             where T : ClientOptions, new()
         {
             var newOptions = new T();
-            newOptions.Transport = this.Transport;
+            newOptions.Transport = Transport;
             foreach (var pol in PerCallPolicies)
             {
                 newOptions.AddPolicy(pol, HttpPipelinePosition.PerCall);
@@ -64,15 +60,15 @@ namespace Azure.ResourceManager.Core
         // Will be removed like AddPolicy when we move to azure core
         private void Copy(AzureResourceManagerClientOptions other)
         {
-            this.Transport = other.Transport;
+            Transport = other.Transport;
             foreach (var pol in other.PerCallPolicies)
             {
-                this.AddPolicy(pol, HttpPipelinePosition.PerCall);
+                AddPolicy(pol, HttpPipelinePosition.PerCall);
             }
 
             foreach (var pol in other.PerRetryPolicies)
             {
-                this.AddPolicy(pol, HttpPipelinePosition.PerRetry);
+                AddPolicy(pol, HttpPipelinePosition.PerRetry);
             }
         }
 
@@ -136,30 +132,6 @@ namespace Azure.ResourceManager.Core
             }
 
             return overrideObject;
-        }
-
-        /// <summary>
-        /// Gets the Azure credential.
-        /// </summary>
-        internal TokenCredential Credential { get; }
-
-        /// <summary>
-        /// Gets the base URI of the service.
-        /// </summary>
-        internal Uri BaseUri { get; }
-
-
-        /// <summary>
-        /// Gets the HTTP client options that will be used for all clients created from this Azure Resource Manger Client.
-        /// Note that this is currently adapting to underlying management clients - once generator changes are in, this would
-        /// likely be unnecessary.
-        /// </summary>
-        /// <typeparam name="T"> The type of the underlying model this class wraps. </typeparam>
-        /// <param name="creator"> A method to construct the operations class. </param>
-        /// <returns> The constructed operations class. </returns>
-        internal T GetClient<T>(Func<Uri, TokenCredential, T> creator)
-        {
-            return creator(BaseUri, Credential);
         }
     }
 }

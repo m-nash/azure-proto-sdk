@@ -11,18 +11,9 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase"/> class.
         /// </summary>
-        /// <param name="genericOperations">Operations to create this operations class from</param>
-        protected ExtensionResourceOperationsBase(ExtensionResourceOperationsBase genericOperations)
-            : this(genericOperations.ClientOptions, genericOperations.Id)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase"/> class.
-        /// </summary>
         /// <param name="genericOperations">Generic operations with the identifier for this extention resource</param>
         protected ExtensionResourceOperationsBase(OperationsBase genericOperations)
-            : this(genericOperations.ClientOptions, genericOperations.Id)
+            : base(genericOperations.ClientOptions, genericOperations.Id, genericOperations.Credential, genericOperations.BaseUri)
         {
         }
 
@@ -31,18 +22,8 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="options">Client configuration properties for these operations</param>
         /// <param name="id">The identifier of the extension resource</param>
-        protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase"/> class.
-        /// </summary>
-        /// <param name="options">Client configuration properties for these operations</param>
-        /// <param name="resource">The extention resource for operations to act upon</param>
-        protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
-            : this(options, resource.Id)
+        protected ExtensionResourceOperationsBase(OperationsBase genericOperations, ResourceIdentifier id)
+            : base(genericOperations.ClientOptions, id, genericOperations.Credential, genericOperations.BaseUri)
         {
         }
     }
@@ -59,17 +40,8 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase{TOperations}"/> class.
         /// </summary>
         /// <param name="genericOperations">Operations to create this operations class from</param>
-        protected ExtensionResourceOperationsBase(ExtensionResourceOperationsBase genericOperations)
-            : this(genericOperations.ClientOptions, genericOperations.Id)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase{TOperations}"/> class.
-        /// </summary>
-        /// <param name="genericOperations">Operations to create this operations class from</param>
         protected ExtensionResourceOperationsBase(OperationsBase genericOperations)
-            : this(genericOperations.ClientOptions, genericOperations.Id)
+            : base(genericOperations)
         {
         }
 
@@ -78,18 +50,8 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="options">Client configuration properties for these operations</param>
         /// <param name="id">The identifier of the extension resource</param>
-        protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase{TOperations}"/> class.
-        /// </summary>
-        /// <param name="options">Client configuration properties for these operations</param>
-        /// <param name="resource">The extention resource for operations to act upon</param>
-        protected ExtensionResourceOperationsBase(AzureResourceManagerClientOptions options, Resource resource)
-            : this(options, resource.Id)
+        protected ExtensionResourceOperationsBase(OperationsBase genericOperations, ResourceIdentifier id)
+            : base(genericOperations, id)
         {
         }
 

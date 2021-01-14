@@ -16,31 +16,19 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ExtensionResourceContainer{TOperations, TInput}"/> class.
         /// Create an ResourceContainer from an operations class or client
         /// </summary>
-        /// <param name="operations">The client or operations class to create this container from</param>
+        /// <param name="operations"> The client or operations class to create this container from. </param>
         protected ExtensionResourceContainer(OperationsBase operations)
-            : this(operations.ClientOptions, operations.Id)
+            : base(operations)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionResourceContainer{TOperations, TInput}"/> class.
         /// </summary>
-        /// <param name="options">The client options with http client details for these operations</param>
-        /// <param name="parentId">The resource Id of the parent resource</param>
-        /// <param name="options">Client optiosn to use in these operations.</param>
-        protected ExtensionResourceContainer(AzureResourceManagerClientOptions options, ResourceIdentifier parentId)
-            : base(options, parentId)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExtensionResourceContainer{TOperations, TInput}"/> class.
-        /// </summary>
-        /// <param name="options">The client options with http client details for these operations</param>
-        /// <param name="parent">The parent resource</param>
-        /// <param name="options">Client options to use in these operations</param>
-        protected ExtensionResourceContainer(AzureResourceManagerClientOptions options, Resource parent)
-            : this(options, parent.Id)
+        /// <param name="options"> The client options with http client details for these operations. </param>
+        /// <param name="parentId"> The resource Id of the parent resource. </param>
+        protected ExtensionResourceContainer(OperationsBase operations, ResourceIdentifier parentId)
+            : base(operations, parentId)
         {
         }
 

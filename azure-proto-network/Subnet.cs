@@ -4,8 +4,8 @@ namespace azure_proto_network
 {
     public class Subnet : SubnetOperations
     {
-        public Subnet(AzureResourceManagerClientOptions SubnetOptions, SubnetData resource)
-            : base(SubnetOptions, resource.Id)
+        public Subnet(ResourceOperationsBase options, SubnetData resource)
+            : base(options, resource.Id)
         {
             Data = resource;
         }
