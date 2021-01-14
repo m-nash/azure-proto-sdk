@@ -12,7 +12,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="resource"> The resource that is the target of operations. </param>
-        public VirtualNetwork(ResourceOperationsBase options, VirtualNetworkData resource)
+        internal VirtualNetwork(ResourceOperationsBase options, VirtualNetworkData resource)
             : base(options, resource.Id)
         {
             Data = resource;

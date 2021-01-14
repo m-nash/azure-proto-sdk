@@ -12,8 +12,8 @@ namespace azure_proto_compute
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="resource"> The resource that is the target of operations. </param>
-        public AvailabilitySet(ResourceOperationsBase options, AvailabilitySetData resource)
-            : base(operations, resource.Id)
+        internal AvailabilitySet(ResourceOperationsBase options, AvailabilitySetData resource)
+            : base(options, resource.Id)
         {
             Data = resource;
         }

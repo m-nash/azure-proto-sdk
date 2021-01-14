@@ -6,7 +6,7 @@ namespace azure_proto_network
 {
     public class NetworkSecurityGroup : NetworkSecurityGroupOperations
     {
-        public NetworkSecurityGroup(ResourceOperationsBase operations, NetworkSecurityGroupData resource)
+        internal NetworkSecurityGroup(ResourceOperationsBase operations, NetworkSecurityGroupData resource)
             : base(operations, resource.Id)
         {
             Data = resource;

@@ -21,27 +21,26 @@ namespace azure_proto_compute
             : base(genericOperations)
         {
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualMachineOperations"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="resourceGroup"> The client parameters to use in these operations. </param>
+        /// <param name="vmName"> The identifier of the resource that is the target of operations. </param>
+        internal VirtualMachineOperations(ResourceGroupOperations resourceGroup, string vmName)
+            : base(resourceGroup, $"{resourceGroup.Id}/providers/Microsoft.Compute/virtualMachines/{vmName}")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VirtualMachineOperations"/> class.
+        /// </summary>
+        /// <param name="operation"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         protected VirtualMachineOperations(ResourceOperationsBase operation, ResourceIdentifier id)
             : base(operation, id)
         {
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VirtualMachineOperations"/> class.
-        /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
-        internal VirtualMachineOperations(ResourceOperationsBase operation, string vmName)
-            : base(operation, $"{operation.Id}/providers/Microsoft.Compute/virtualMachines/{vmName}")
-        {
-        }
-
 
         /// <summary>
         /// Gets the resource type definition for a virtual machine.

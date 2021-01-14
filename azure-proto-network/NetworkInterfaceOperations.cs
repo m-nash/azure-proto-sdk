@@ -14,13 +14,13 @@ namespace azure_proto_network
         {
         }
 
-        protected NetworkInterfaceOperations(ResourceOperationsBase options, ResourceIdentifier id)
-            : base(options, id)
+        internal NetworkInterfaceOperations(ResourceGroupOperations resourceGroup, string nicName)
+            : base(resourceGroup, $"{resourceGroup.Id}/providers/Microsoft.Network/networkInterfaces/{nicName}")
         {
         }
 
-        internal NetworkInterfaceOperations(ResourceOperationsBase options, string nicName)
-            : base(options, $"{options.Id}/providers/Microsoft.Network/networkInterfaces/{nicName}")
+        protected NetworkInterfaceOperations(ResourceOperationsBase options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 

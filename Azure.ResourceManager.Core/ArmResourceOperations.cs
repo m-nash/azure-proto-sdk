@@ -17,8 +17,8 @@ namespace Azure.ResourceManager.Core
         {
         }
 
-        protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType; 
-        
+        protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
+
         private ResourcesOperations Operations => new ResourcesManagementClient(
             BaseUri,
             Id.Subscription,

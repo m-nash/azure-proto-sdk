@@ -24,10 +24,10 @@ namespace azure_proto_compute
         /// <summary>
         /// Initializes a new instance of the <see cref="ArmResourceOperations"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="resourceGroup"> The client parameters to use in these operations. </param>
         /// <param name="availabilitySetName"> The name of the availability set to use. </param>
-        internal AvailabilitySetOperations(ResourceOperationsBase options, string availabilitySetName)
-            : base(options, availabilitySetName)
+        internal AvailabilitySetOperations(ResourceGroupOperations resourceGroup, string availabilitySetName)
+            : base(resourceGroup, $"{resourceGroup.Id}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}")
         {
         }
 

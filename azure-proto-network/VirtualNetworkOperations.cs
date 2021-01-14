@@ -24,20 +24,20 @@ namespace azure_proto_network
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualNetworkOperations"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
-        protected VirtualNetworkOperations(ResourceOperationsBase options, ResourceIdentifier id)
-            : base(options, id)
+        /// <param name="resourceGroup"> The client parameters to use in these operations. </param>
+        /// <param name="vnetName"> The name of the virtual network to use. </param>
+        internal VirtualNetworkOperations(ResourceGroupOperations resourceGroup, string vnetName)
+            : base(resourceGroup, $"{resourceGroup}/providers/Microsoft.Network/virtualNetworks/{vnetName}")
         {
         }
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualNetworkOperations"/> class.
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="vnetName"> The name of the virtual network to use. </param>
-        internal VirtualNetworkOperations(ResourceOperationsBase options, string vnetName)
-            : base(options, $"{operations}/providers/Microsoft.Network/virtualNetworks/{vnetName}")
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
+        protected VirtualNetworkOperations(ResourceOperationsBase options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 

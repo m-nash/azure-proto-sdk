@@ -14,13 +14,13 @@ namespace azure_proto_network
         {
         }
 
-        protected PublicIpAddressOperations(ResourceOperationsBase options, ResourceIdentifier id)
-            : base(options, id)
+        internal PublicIpAddressOperations(ResourceGroupOperations resourceGroup, string publicIpName)
+            : base(resourceGroup, $"{resourceGroup.Id}/providers/Microsoft.Network/publicIpAddresses/{publicIpName}")
         {
         }
 
-        internal PublicIpAddressOperations(ResourceOperationsBase options, string publicIpName)
-            : base(options, $"{options.Id}/providers/Microsoft.Network/publicIpAddresses/{publicIpName}")
+        protected PublicIpAddressOperations(ResourceOperationsBase options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 

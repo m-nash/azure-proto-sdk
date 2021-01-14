@@ -12,7 +12,7 @@ namespace azure_proto_authorization
         /// </summary>
         /// <param name="options">The http settings for the operations over this resource</param>
         /// <param name="data">The properties of the resource</param>
-        public RoleAssignment(OperationsBase operations, RoleAssignmentData data)
+        internal RoleAssignment(OperationsBase operations, RoleAssignmentData data)
             : base(operations, data?.Id)
         {
             Data = data;

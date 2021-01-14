@@ -33,16 +33,15 @@ namespace azure_proto_network
         {
         }
 
+        internal NetworkSecurityGroupOperations(ResourceGroupOperations resourceGroup, string nsgName)
+            : base(resourceGroup, $"{resourceGroup.Id}/providers/Microsoft.Network/networkSecurityGroups/{nsgName}")
+        {
+        }
+
         protected NetworkSecurityGroupOperations(ResourceOperationsBase operation, ResourceIdentifier id)
             : base(operation, id)
         {
         }
-
-        internal NetworkSecurityGroupOperations(ResourceGroupOperations operation, string nsgName)
-            : base(operation, $"{operation.Id}/providers/Microsoft.Network/networkSecurityGroups/{nsgName}")
-        {
-        }
-
 
         protected override ResourceType ValidResourceType => ResourceType;
 

@@ -10,13 +10,13 @@ namespace azure_proto_network
     /// </summary>
     public class SubnetOperations : ResourceOperationsBase<Subnet>, IDeletableResource
     {
-        protected SubnetOperations(ResourceOperationsBase options, ResourceIdentifier id)
-            : base(options, id)
+        internal SubnetOperations(VirtualNetworkOperations virtualNetwork, string subnetName)
+            : base(virtualNetwork, $"{virtualNetwork.Id}/subnets/{subnetName}")
         {
         }
 
-        internal SubnetOperations(ResourceOperationsBase options, string subnetName)
-            : base(options, $"{options.Id}/subnets/{subnetName}")
+        protected SubnetOperations(ResourceOperationsBase options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 

@@ -24,9 +24,9 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ResourceGroupOperations"/> class.
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
-        protected ResourceGroupOperations(ResourceOperationsBase options, ResourceIdentifier id)
-            : base(options, id)
+        /// <param name="rgName"> The name of the resource group to use. </param>
+        internal ResourceGroupOperations(SubscriptionOperations options, string rgName)
+            : base(options, $"{options.Id}/resourceGroups/{rgName}")
         {
         }
 
@@ -34,9 +34,9 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ResourceGroupOperations"/> class.
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="rgName"> The name of the resource group to use. </param>
-        internal ResourceGroupOperations(SubscriptionOperations options, string rgName)
-            : base(options, $"{options.Id}/resourceGroups/{rgName}")
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
+        protected ResourceGroupOperations(ResourceOperationsBase options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
