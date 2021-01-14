@@ -49,6 +49,19 @@ namespace Azure.ResourceManager.Core
             Model = data;
         }
 
+        protected ProxyResource(string id, T data)
+        {
+            if (object.ReferenceEquals(id, null))
+            {
+                Id = null;
+            }
+            else
+            {
+                Id = id;
+            }
+            Model = data;
+        }
+
         public override ResourceIdentifier Id { get; protected set; }
 
         public virtual T Model { get; set; }
