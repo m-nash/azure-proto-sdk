@@ -34,7 +34,7 @@ namespace azure_proto_compute
         /// Gets an object representing a VirtualMachine along with the instance operations that can be performed on it.
         /// </summary>
         /// <param> The <see cref="[ResourceGroup]" /> instance the method will execute against. </param>
-        /// <param name="vmData"> The VirtualMachineData of the resource that is the target of operations. </param>
+        /// <param name="vmData"> The <see cref="[VirtualMachineData]" /> of the resource that is the target of operations. </param>
         /// <returns> Returns a <see cref="[VirtualMachine]" /> object. </returns>
         public static VirtualMachine VirtualMachine(this ResourceGroup resourceGroup, VirtualMachineData vmData)
         {
