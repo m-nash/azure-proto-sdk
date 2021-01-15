@@ -10,21 +10,32 @@ namespace azure_proto_network
 {
     public class SubnetContainer : ResourceContainerBase<Subnet, SubnetData>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubnetContainer"/> class.
+        /// </summary>
+        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="virtualNetwork"> The virtual network associate with this subnet </param>
         internal SubnetContainer(AzureResourceManagerClientOptions options, VirtualNetworkData virtualNetwork)
             : base(options, virtualNetwork)
         {
         }
 
-        internal SubnetContainer(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubnetContainer"/> class.
+        /// </summary>
+        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="virtualNetworkId"> The resource Id of the virtual network. </param>
+        internal SubnetContainer(AzureResourceManagerClientOptions options, ResourceIdentifier virtualNetworkId)
+            : base(options, virtualNetworkId)
         {
         }
-
+        /// <inheritdoc/>
         protected override ResourceType ValidResourceType => VirtualNetworkOperations.ResourceType;
 
-        internal SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
+        private SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
                     ClientOptions.Convert<NetworkManagementClientOptions>())).Subnets;
 
+        /// <inheritdoc/>
         public override ArmResponse<Subnet> Create(string name, SubnetData resourceDetails)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, name, resourceDetails.Model);
@@ -33,6 +44,7 @@ namespace azure_proto_network
                 s => new Subnet(ClientOptions, new SubnetData(s, Location.Default)));
         }
 
+        /// <inheritdoc/>
         public async override Task<ArmResponse<Subnet>> CreateAsync(string name, SubnetData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
@@ -41,6 +53,7 @@ namespace azure_proto_network
                 s => new Subnet(ClientOptions, new SubnetData(s, Location.Default)));
         }
 
+        /// <inheritdoc/>
         public override ArmOperation<Subnet> StartCreate(string name, SubnetData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<Subnet, Azure.ResourceManager.Network.Models.Subnet>(
@@ -48,6 +61,7 @@ namespace azure_proto_network
                 s => new Subnet(ClientOptions, new SubnetData(s, Location.Default)));
         }
 
+        /// <inheritdoc/>
         public async override Task<ArmOperation<Subnet>> StartCreateAsync(string name, SubnetData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<Subnet, Azure.ResourceManager.Network.Models.Subnet>(
@@ -55,12 +69,20 @@ namespace azure_proto_network
                 s => new Subnet(ClientOptions, new SubnetData(s, Location.Default)));
         }
 
-        public ArmBuilder<Subnet, SubnetData> Construct(string name, string cidr, Location location = null, NetworkSecurityGroupData group = null)
+        /// <summary>
+        /// Constructs an object used to create a subnet.
+        /// </summary>
+        /// <param name="name"> The name of the subnet </param>
+        /// <param name="subnetCidr"> The CIDR of the resource. </param>
+        /// <param name="location"> The location of the resource. </param>
+        /// <param name="group"> The network security group of the resource. </param>
+        /// <returns> A builder with <see cref="Subnet"> and <see cref="Subnet"/>. </returns>
+        public ArmBuilder<Subnet, SubnetData> Construct(string name, string subnetCidr, Location location = null, NetworkSecurityGroupData group = null)
         {
             var subnet = new Azure.ResourceManager.Network.Models.Subnet()
             {
                 Name = name,
-                AddressPrefix = cidr,
+                AddressPrefix = subnetCidr,
             };
 
             if (null != group)
@@ -70,7 +92,12 @@ namespace azure_proto_network
 
             return new ArmBuilder<Subnet, SubnetData>(this, new SubnetData(subnet, location ?? DefaultLocation));
         }
-
+        
+        /// <summary>
+        /// Lists the subnets for this virtual network.
+        /// </summary>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
         public Pageable<SubnetOperations> List(CancellationToken cancellationToken = default)
         {
             return new PhWrappingPageable<Azure.ResourceManager.Network.Models.Subnet, SubnetOperations>(
@@ -78,6 +105,11 @@ namespace azure_proto_network
                 this.convertor());
         }
 
+        /// <summary>
+        /// Lists the subnets for this virtual network.
+        /// </summary>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
         public AsyncPageable<SubnetOperations> ListAsync(CancellationToken cancellationToken = default)
         {
             return new PhWrappingAsyncPageable<Azure.ResourceManager.Network.Models.Subnet, SubnetOperations>(
