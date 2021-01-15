@@ -68,7 +68,7 @@ namespace azure_proto_compute
             set => Model.ProximityPlacementGroup = value;
         }
 
-        /// <summary> The resource status information. /// </summary>
+        /// <summary> The resource status information. </summary>
         public IList<InstanceViewStatus> Statuses => Model.Statuses;
     }
 }

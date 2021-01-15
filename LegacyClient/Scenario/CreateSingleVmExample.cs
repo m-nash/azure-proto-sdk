@@ -116,18 +116,18 @@ namespace client
                 NetworkProfile = new Azure.ResourceManager.Compute.Models.NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nic.Id } } },
                 OsProfile = new OSProfile
                 {
-                    ComputerName = Context.VmName,
-                    AdminUsername = "admin-user",
+                    ComputerName = Context.VmName,	                    
+                    AdminUsername = "admin-user",	                    
                     AdminPassword = "!@#$%asdfA",
-                    LinuxConfiguration = new LinuxConfiguration { DisablePasswordAuthentication = false, ProvisionVMAgent = true }
+                    WindowsConfiguration = new WindowsConfiguration { TimeZone = "Pacific Standard Time", ProvisionVMAgent = true }
                 },
                 StorageProfile = new StorageProfile()
                 {
                     ImageReference = new ImageReference()
                     {
-                        Offer = "UbuntuServer",
-                        Publisher = "Canonical",
-                        Sku = "18.04-LTS",
+                        Offer = "WindowsServer",
+                        Publisher = "MicrosoftWindowsServer",
+                        Sku = "2019-Datacenter",
                         Version = "latest"
                     },
                     DataDisks = new List<DataDisk>()

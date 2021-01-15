@@ -25,10 +25,7 @@ namespace Azure.ResourceManager.Core
         public ResourceIdentifier(string id)
         {
             Id = id;
-
-            // TODO: Due to the implicit this is called for blank constructions such as new PhResourceGroup
-            if (id != null)
-                Parse(id);
+            Parse(id);
         }
 
         /// <summary>
@@ -72,7 +69,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="other"> String to be implicit converted into a <see cref="ResourceIdentifier"/> object. </param>
         public static implicit operator ResourceIdentifier(string other)
         {
-            return new ResourceIdentifier(other);
+            return new ResourceIdentifier(other); // will null check in PR #119
         }
 
         /// <summary>
@@ -121,6 +118,7 @@ namespace Azure.ResourceManager.Core
             return x.CompareTo(y);
         }
 
+        /// <inheritdoc/>
         /// <inheritdoc/>
         public override int GetHashCode()
         {

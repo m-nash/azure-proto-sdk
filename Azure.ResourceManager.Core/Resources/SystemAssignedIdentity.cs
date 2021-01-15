@@ -1,4 +1,7 @@
-﻿namespace Azure.ResourceManager.Core
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+namespace Azure.ResourceManager.Core
 {
     using System;
     using System.Text.Json;
@@ -42,6 +45,12 @@
         /// </summary>
         /// <param name="element"> A JSON containing an identity. </param>
         /// <returns> New <see cref="SystemAssignedIdentity"/> object with JSON values. </returns>
+            if (other == null)
+                return false;
+
+            return TenantId.Equals(other.TenantId) && PrincipalId.Equals(other.PrincipalId);
+        }
+
         public static SystemAssignedIdentity Deserialize(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Undefined)
@@ -118,12 +127,6 @@
         /// <param name="other"> Second <see cref="SystemAssignedIdentity"/> object to compare. </param>
         /// <returns> True if they are equal, otherwise False. </returns>
         public static bool Equals(SystemAssignedIdentity original, SystemAssignedIdentity other)
-        {
-            if (original == null)
-                return other == null;
-
-            return original.Equals(other);
-        }
 
         /// <summary>
         /// Compares this <see cref="SystemAssignedIdentity"/> with another instance.
@@ -154,6 +157,12 @@
                 return false;
 
             return TenantId.Equals(other.TenantId) && PrincipalId.Equals(other.PrincipalId);
+        }
+        {
+            if (original == null)
+                return other == null;
+
+            return original.Equals(other);
         }
     }
 }

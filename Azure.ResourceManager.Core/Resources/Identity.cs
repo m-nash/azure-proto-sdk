@@ -67,6 +67,22 @@ namespace Azure.ResourceManager.Core
         /// Maintain structure of {id, (clientid, principal id)} in case of multiple UserIdentities.
         /// </summary>
         public IDictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; private set; }
+                    if (other.UserAssignedIdentities.TryGetValue(identity.Key, out value))
+                    {
+                        if (!UserAssignedIdentity.Equals(identity.Value, value))
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return SystemAssignedIdentity.Equals(SystemAssignedIdentity, other.SystemAssignedIdentity);
+        }
 
         /// <summary>
         /// Converts a <see cref="JsonElement"/> into an <see cref="Identity"/> object.

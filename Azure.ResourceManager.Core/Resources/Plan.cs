@@ -58,6 +58,10 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="other"> <see cref="Plan"/> object to compare. </param>
         /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
+            PromotionCode = promotionCode;
+            Version = version;
+        }
+
         public int CompareTo(Plan other)
         {
             if (other == null)

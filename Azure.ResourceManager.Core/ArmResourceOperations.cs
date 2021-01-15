@@ -22,18 +22,13 @@ namespace Azure.ResourceManager.Core
         {
         }
 
+        protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
+
         private ResourcesOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(
             uri,
             Id.Subscription,
             creds,
             ClientOptions.Convert<ResourcesManagementClientOptions>()))?.Resources;
-
-        private protected virtual ArmResource GetResource()
-        {
-            return Get().Value;
-        }
-
-        protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
 
         public ArmResponse<Response> Delete()
         {
@@ -110,6 +105,11 @@ namespace Azure.ResourceManager.Core
         public override void Validate(ResourceIdentifier identifier)
         {
             return;
+        }
+
+        private protected virtual ArmResource GetResource()
+        {
+            return Get().Value;
         }
     }
 }

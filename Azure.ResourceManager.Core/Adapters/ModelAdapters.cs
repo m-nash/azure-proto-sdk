@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-
+using System;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
@@ -17,6 +17,20 @@ namespace Azure.ResourceManager.Core
             Model = data;
         }
 
+        protected TrackedResource(string id, Location location, T data)
+        {
+            if (object.ReferenceEquals(id, null))
+            {
+                Id = null;
+            }
+            else
+            {
+                Id = id;
+            }
+            Location = location;
+            Model = data;
+        }
+
         public virtual T Model { get; set; }
 
         public static implicit operator T(TrackedResource<T> other)
@@ -25,13 +39,26 @@ namespace Azure.ResourceManager.Core
         }
     }
 
-    //Or call generic resource, other resource??
+    // Or call generic resource, other resource??
     public abstract class ProxyResource<T> : Resource
         where T : class
     {
         protected ProxyResource(ResourceIdentifier id, T data)
         {
             Id = id;
+            Model = data;
+        }
+
+        protected ProxyResource(string id, T data)
+        {
+            if (object.ReferenceEquals(id, null))
+            {
+                Id = null;
+            }
+            else
+            {
+                Id = id;
+            }
             Model = data;
         }
 

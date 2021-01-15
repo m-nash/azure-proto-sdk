@@ -8,6 +8,7 @@ using Azure.ResourceManager.Core.Resources;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
 
 namespace azure_proto_compute
 {
@@ -124,15 +125,15 @@ namespace azure_proto_compute
                     ComputerName = vmName,
                     AdminUsername = adminUser,
                     AdminPassword = adminPw,
-                    LinuxConfiguration = new LinuxConfiguration { DisablePasswordAuthentication = false, ProvisionVMAgent = true }
+                    WindowsConfiguration = new WindowsConfiguration { TimeZone = "Pacific Standard Time", ProvisionVMAgent = true }
                 },
                 StorageProfile = new StorageProfile()
                 {
                     ImageReference = new ImageReference()
                     {
-                        Offer = "UbuntuServer",
-                        Publisher = "Canonical",
-                        Sku = "18.04-LTS",
+                        Offer = "WindowsServer",
+                        Publisher = "MicrosoftWindowsServer",
+                        Sku = "2019-Datacenter",
                         Version = "latest"
                     },
                     DataDisks = new List<DataDisk>()

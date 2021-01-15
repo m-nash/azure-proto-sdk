@@ -57,6 +57,10 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="other"> <see cref="Sku"/> object to compare. </param>
         /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
+            Size = size;
+            Capacity = capacity;
+        }
+
         public int CompareTo(Sku other)
         {
             if (other == null)

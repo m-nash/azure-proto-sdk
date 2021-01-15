@@ -17,6 +17,7 @@
         ListByNameExpanded,
         ClientOptionsOverride,
         GetSubscription,
+        NullDataValues
         //RoleAssignment,
         //DeleteGeneric,
         //AddTagToGeneric
@@ -58,6 +59,8 @@
                     return new ClientOptionsOverride();
                 case Scenarios.GetSubscription:
                     return new GetSubscription();
+                case Scenarios.NullDataValues:
+                    return new NullDataValues();
                 //case Scenarios.RoleAssignment:
                 //    return new RoleAssignment();
                 //case Scenarios.DeleteGeneric:
