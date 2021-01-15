@@ -11,6 +11,9 @@ using System;
 
 namespace azure_proto_network
 {
+    /// <summary>
+    /// A class representing collection of <see cref="NetworkInterface"/> and their operations over a <see cref="ResourceGroup"/>.
+    /// </summary>
     public class NetworkInterfaceContainer : ResourceContainerBase<NetworkInterface, NetworkInterfaceData>
     {
         internal NetworkInterfaceContainer(AzureResourceManagerClientOptions options, ResourceGroupData resourceGroup) : base(options, resourceGroup) { }
@@ -20,8 +23,17 @@ namespace azure_proto_network
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred, 
             ClientOptions.Convert<NetworkManagementClientOptions>())).NetworkInterfaces;
 
+        /// <summary>
+        /// Gets the <see cref="ResourceType"/> for a <see cref="NetworkInterface"/>.
+        /// </summary>
         protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
 
+        /// <summary>
+        /// Creates a new <see cref="NetworkInterface"/>.
+        /// </summary>
+        /// <param name="name"> The name of the <see cref="NetworkInterface"/>. </param>
+        /// <param name="resourceDetails"> The properties of the <see cref="NetworkInterface"/>. </param>
+        /// <returns> An <see cref="ArmResponse{NetworkInterface}"/>. </returns>
         public override ArmResponse<NetworkInterface> Create(string name, NetworkInterfaceData resourceDetails)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails);
@@ -30,6 +42,14 @@ namespace azure_proto_network
                 n => new NetworkInterface(ClientOptions, new NetworkInterfaceData(n)));
         }
 
+        /// <summary>
+        /// Creates a new <see cref="NetworkInterface"/>.
+        /// </summary>
+        /// <param name="name"> The name of the <see cref="NetworkInterface"/>. </param>
+        /// <param name="resourceDetails"> The properties of the <see cref="NetworkInterface"/>. </param>
+        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service. 
+        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmResponse{NetworkInterface}"/>. </returns>
         public async override Task<ArmResponse<NetworkInterface>> CreateAsync(string name, NetworkInterfaceData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
@@ -38,6 +58,17 @@ namespace azure_proto_network
                 n => new NetworkInterface(ClientOptions, new NetworkInterfaceData(n)));
         }
 
+        /// <summary>
+        /// Creates a new <see cref="NetworkInterface"/>.
+        /// </summary>
+        /// <param name="name"> The name of the <see cref="NetworkInterface"/>. </param>
+        /// <param name="resourceDetails"> The properties of the <see cref="NetworkInterface"/>. </param>
+        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service. 
+        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// <returns>An <see cref="ArmOperation{NetworkInterface}"/> </returns>
+        /// <remarks>
+        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning"> for details on long running operations. </see>
+        /// </remarks>
         public override ArmOperation<NetworkInterface> StartCreate(string name, NetworkInterfaceData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
@@ -45,6 +76,14 @@ namespace azure_proto_network
                 n => new NetworkInterface(ClientOptions, new NetworkInterfaceData(n)));
         }
 
+        /// <summary>
+        /// Creates a new <see cref="NetworkInterface"/>.
+        /// </summary>
+        /// <param name="name"> The name of the <see cref="NetworkInterface"/>. </param>
+        /// <param name="resourceDetails"> The properties of the <see cref="NetworkInterface"/>. </param>
+        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service. 
+        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{NetworkInterface}"/>. </returns>
         public async override Task<ArmOperation<NetworkInterface>> StartCreateAsync(string name, NetworkInterfaceData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
@@ -52,6 +91,13 @@ namespace azure_proto_network
                 n => new NetworkInterface(ClientOptions, new NetworkInterfaceData(n)));
         }
 
+        /// <summary>
+        /// Constructs an object used to create a <see cref="NetworkInterface"/>.
+        /// </summary>
+        /// <param name="ip">The public IP address of the <see cref="NetworkInterface"/>. </param>
+        /// <param name="subnetId">The resource identifier of the subnet attached to this <see cref="NetworkInterface"/>. </param>
+        /// <param name="location">The <see cref="Location"/> that will contain the <see cref="NetworkInterface"/>. </param>
+        /// <returns>An object used to create a <see cref="NetworkInterface"/>. </returns>
         public ArmBuilder<NetworkInterface, NetworkInterfaceData> Construct(PublicIPAddressData ip, string subnetId, Location location = null)
         {
             var nic = new Azure.ResourceManager.Network.Models.NetworkInterface()
@@ -73,6 +119,12 @@ namespace azure_proto_network
             return new ArmBuilder<NetworkInterface, NetworkInterfaceData>(this, new NetworkInterfaceData(nic));
         }
 
+        /// <summary>
+        /// Lists the <see cref="NetworkInterface"/> for this <see cref="ResourceGroup"/>.
+        /// </summary>
+        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service. 
+        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// <returns>A collection of <see cref="NetworkInterface"/> that may take multiple service requests to iterate over. </returns>
         public Pageable<NetworkInterfaceOperations> List(CancellationToken cancellationToken = default)
         {
             return new PhWrappingPageable<Azure.ResourceManager.Network.Models.NetworkInterface, NetworkInterfaceOperations>(
@@ -80,6 +132,12 @@ namespace azure_proto_network
                 this.convertor());
         }
 
+        /// <summary>
+        /// Lists the <see cref="NetworkInterface"/> for this <see cref="ResourceGroup"/>.
+        /// </summary>
+        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service. 
+        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// <returns>An async collection of <see cref="NetworkInterface"/> that may take multiple service requests to iterate over. </returns>
         public AsyncPageable<NetworkInterfaceOperations> ListAsync(CancellationToken cancellationToken = default)
         {
             var result = Operations.ListAsync(Id.Name, cancellationToken);
@@ -88,6 +146,13 @@ namespace azure_proto_network
                 this.convertor());
         }
 
+        /// <summary>
+        /// Filters the list of <see cref="NetworkInterface"/> resources for this <see cref="ResourceGroup"/> represented as generic resources.
+        /// <param name="filter">A string to filter the <see cref="NetworkInterface"/> resources by name. </param>
+        /// <param name="top">The number of results to return per page of data. </param>
+        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service. 
+        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
         public Pageable<ArmResource> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(NetworkInterfaceData.ResourceType);
@@ -95,6 +160,13 @@ namespace azure_proto_network
             return ResourceListOperations.ListAtContext(ClientOptions, Id, filters, top, cancellationToken);
         }
 
+        /// <summary>
+        /// Filters the list of <see cref="NetworkInterface"/> resources for this <see cref="ResourceGroup"/> represented as generic resources.
+        /// <param name="filter">A string to filter the <see cref="NetworkInterface"/> resources by name. </param>
+        /// <param name="top">The number of results to return per page of data. </param>
+        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service. 
+        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
         public AsyncPageable<ArmResource> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             ArmFilterCollection filters = new ArmFilterCollection(NetworkInterfaceData.ResourceType);
@@ -102,12 +174,28 @@ namespace azure_proto_network
             return ResourceListOperations.ListAtContextAsync(ClientOptions, Id, filters, top, cancellationToken);
         }
 
+        /// <summary>
+        /// Filters the list of <see cref="NetworkInterface"/> resources for this <see cref="ResourceGroup"/>. 
+        /// Makes an additional network call to retrieve the full data model for each <see cref="NetworkInterface"/>.
+        /// <param name="filter">A string to filter the <see cref="NetworkInterface"/> resources by name. </param>
+        /// <param name="top">The number of results to return per page of data. </param>
+        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service. 
+        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
         public Pageable<NetworkInterface> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByName(filter, top, cancellationToken);
             return new PhWrappingPageable<ArmResource, NetworkInterface>(results, s => new NetworkInterfaceOperations(s).Get().Value);
         }
 
+        /// <summary>
+        /// Filters the list of <see cref="NetworkInterface"/> resources for this <see cref="ResourceGroup"/>. 
+        /// Makes an additional network call to retrieve the full data model for each <see cref="NetworkInterface"/>.
+        /// <param name="filter">A string to filter the <see cref="NetworkInterface"/> resources by name. </param>
+        /// <param name="top">The number of results to return per page of data. </param>
+        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service. 
+        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
         public AsyncPageable<NetworkInterface> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByNameAsync(filter, top, cancellationToken);
