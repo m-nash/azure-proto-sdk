@@ -45,7 +45,7 @@ namespace azure_proto_network
         }
 
         /// <inheritdoc/>
-        public async override Task<ArmResponse<Subnet>> CreateAsync(string name, SubnetData resourceDetails, CancellationToken cancellationToken = default)
+        public override async Task<ArmResponse<Subnet>> CreateAsync(string name, SubnetData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(
