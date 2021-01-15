@@ -6,20 +6,18 @@ using System;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    ///     Representaion of ARM SKU
+    /// Representaion of ARM SKU
     /// </summary>
     public class Sku : IEquatable<Sku>, IComparable<Sku>
     {
-        public string Name { get; private set; }
-
-        public string Tier { get; private set; }
-
-        public string Family { get; private set; }
-
-        public string Size { get; private set; }
-
-        public long? Capacity { get; private set; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Sku"/> class.
+        /// </summary>
+        /// <param name="name"> SKU's name. </param>
+        /// <param name="tier"> SKU's tier. </param>
+        /// <param name="family"> SKU's family. </param>
+        /// <param name="size"> SKU's size. </param>
+        /// <param name="capacity"> SKU's capacity. </param>
         internal Sku(string name, string tier, string family, string size, long? capacity = null)
         {
             Name = name;
@@ -29,6 +27,36 @@ namespace Azure.ResourceManager.Core
             Capacity = capacity;
         }
 
+        /// <summary>
+        /// Gets the Name.
+        /// </summary>
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// Gets the Tier.
+        /// </summary>
+        public string Tier { get; private set; }
+
+        /// <summary>
+        /// Gets the Family.
+        /// </summary>
+        public string Family { get; private set; }
+
+        /// <summary>
+        /// Gets the Size.
+        /// </summary>
+        public string Size { get; private set; }
+
+        /// <summary>
+        /// Gets the Capacity.
+        /// </summary>
+        public long? Capacity { get; private set; }
+
+        /// <summary>
+        /// Compares this <see cref="Sku"/> with another instance.
+        /// </summary>
+        /// <param name="other"> <see cref="Sku"/> object to compare. </param>
+        /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
         public int CompareTo(Sku other)
         {
             if (other == null)
@@ -49,6 +77,11 @@ namespace Azure.ResourceManager.Core
             return compareResult;
         }
 
+        /// <summary>
+        /// Compares this <see cref="Sku"/> instance with another object and determines if they are equals.
+        /// </summary>
+        /// <param name="other"> <see cref="Sku"/> object to compare. </param>
+        /// <returns> True if they are equals, otherwise false. </returns>
         public bool Equals(Sku other)
         {
             if (other == null)
