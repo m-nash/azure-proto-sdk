@@ -9,7 +9,6 @@ namespace Azure.ResourceManager.Core
 {
     /// <summary>
     /// Structure respresenting a resource type
-    /// TODO: Fill in comparison methods and comparison, equality, and coercion operator overloads
     /// </summary>
     public class ResourceType : IEquatable<ResourceType>, IEquatable<string>, IComparable<ResourceType>,
         IComparable<string>
@@ -84,7 +83,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Compares a <see cref="string"/> with a <see cref="ResourceType"/> object.
         /// </summary>
-        /// <param name="source"> String. </param>
+        /// <param name="source"> String representation of a ResourceType. </param>
         /// <param name="target"> <see cref="ResourceType"/> object. </param>
         /// <returns> True if they are equal, otherwise False. </returns>
         public static bool operator ==(string source, ResourceType target)
@@ -95,7 +94,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Compares two <see cref="ResourceType"/> objects.
         /// </summary>
-        /// <param name="source">First <see cref="ResourceType"/> object. </param>
+        /// <param name="source"> First <see cref="ResourceType"/> object. </param>
         /// <param name="target"> Second <see cref="ResourceType"/> object. </param>
         /// <returns> True if they are equal, otherwise False. </returns>
         public static bool operator ==(ResourceType source, ResourceType target)
@@ -107,7 +106,7 @@ namespace Azure.ResourceManager.Core
         /// Compares a <see cref="ResourceType"/> object with a <see cref="string"/>.
         /// </summary>
         /// <param name="source"> <see cref="ResourceType"/> object. </param>
-        /// <param name="target"> String. </param>
+        /// <param name="target"> String representation of a ResourceType. </param>
         /// <returns> False if they are equal, otherwise True. </returns>
         public static bool operator !=(ResourceType source, string target)
         {
@@ -128,7 +127,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Compares two <see cref="ResourceType"/> objects.
         /// </summary>
-        /// <param name="source">First <see cref="ResourceType"/> object. </param>
+        /// <param name="source"> First <see cref="ResourceType"/> object. </param>
         /// <param name="target"> Second <see cref="ResourceType"/> object. </param>
         /// <returns> False if they are equal, otherwise True. </returns>
         public static bool operator !=(ResourceType source, ResourceType target)

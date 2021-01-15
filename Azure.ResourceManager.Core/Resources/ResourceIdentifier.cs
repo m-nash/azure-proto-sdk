@@ -58,7 +58,7 @@ namespace Azure.ResourceManager.Core
             : null;
 
         /// <summary>
-        /// Gets or sets the Parent. <para/>
+        /// Gets or sets the Parent.
         /// Currently this will contain the identifier for either the parent resource, the resource group, the location, the subscription, or the tenant that is the logical parent of this resource.
         /// </summary>
         public ResourceIdentifier Parent { get; protected set; }
@@ -84,9 +84,9 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Allow static, safe comparisons of resource identifier strings or objects.
         /// </summary>
-        /// <param name="x" >A resource id. </param>
+        /// <param name="x"> A resource id. </param>
         /// <param name="y"> Another resource id. </param>
-        /// <returns>true if the resource ids are equivalent, otherwise false. </returns>
+        /// <returns> True if the resource ids are equivalent, otherwise False. </returns>
         public static bool Equals(ResourceIdentifier x, ResourceIdentifier y)
         {
             if (null == x && null == y)
