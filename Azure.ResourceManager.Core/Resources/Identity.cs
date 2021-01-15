@@ -72,7 +72,7 @@ namespace Azure.ResourceManager.Core
         /// Converts a <see cref="JsonElement"/> into an <see cref="Identity"/> object.
         /// </summary>
         /// <param name="element"> A JSON containing an identity. </param>
-        /// <returns> New Identity object with JSON values</returns>
+        /// <returns> New Identity object with JSON values. </returns>
         public static Identity Deserialize(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Undefined)
