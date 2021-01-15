@@ -119,7 +119,6 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <inheritdoc/>
-        /// <inheritdoc/>
         public override int GetHashCode()
         {
             return Id.GetHashCode();
