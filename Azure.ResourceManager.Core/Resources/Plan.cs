@@ -6,20 +6,19 @@ using System;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    ///     Representation of a publisher plan for marketplace RPs.
+    /// Representation of a publisher plan for marketplace RPs.
     /// </summary>
     public class Plan : IEquatable<Plan>, IComparable<Plan>
     {
-        public string Name { get; private set; }
 
-        public string Publisher { get; private set; }
-
-        public string Product { get; private set; }
-
-        public string PromotionCode { get; private set; }
-
-        public string Version { get; private set; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Plan"/> class.
+        /// </summary>
+        /// <param name="name"> Plan's Name. </param>
+        /// <param name="publisher"> Plan's Publisher.</param>
+        /// <param name="product"> Plan's Product. </param>
+        /// <param name="promotionCode"> Plan's Promotion Code. </param>
+        /// <param name="version"> Plan's Version. </param>
         internal Plan(string name, string publisher, string product, string promotionCode, string version)
         {
             Name = name;
@@ -29,6 +28,36 @@ namespace Azure.ResourceManager.Core
             Version = version;
         }
 
+        /// <summary>
+        /// Gets the plan's Name.
+        /// </summary>
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// Gets the plan's Publisher.
+        /// </summary>
+        public string Publisher { get; private set; }
+
+        /// <summary>
+        /// Gets the plan's product.
+        /// </summary>
+        public string Product { get; private set; }
+
+        /// <summary>
+        /// Gets the plan's Promotion Code.
+        /// </summary>
+        public string PromotionCode { get; private set; }
+
+        /// <summary>
+        /// Gets the plan's version.
+        /// </summary>
+        public string Version { get; private set; }
+
+        /// <summary>
+        /// Compares this <see cref="Plan"/> with another instance.
+        /// </summary>
+        /// <param name="other"> <see cref="Plan"/> object to compare. </param>
+        /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
         public int CompareTo(Plan other)
         {
             if (other == null)
@@ -50,6 +79,11 @@ namespace Azure.ResourceManager.Core
             return compareResult;
         }
 
+        /// <summary>
+        /// Compares this <see cref="Plan"/> instance with another object and determines if they are equals.
+        /// </summary>
+        /// <param name="other"> <see cref="Plan"/> object to compare. </param>
+        /// <returns> True if they are equals, otherwise false. </returns>
         public bool Equals(Plan other)
         {
             if (other == null)
