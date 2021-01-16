@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace azure_proto_network
 {
     /// <summary>
-    /// TODO: Subnet is a proxy resource, not a TrackedResource - need to adapt to using Resource as the base class
+    /// A class representing the subnet data model.
     /// </summary>
     public class SubnetData : ProxyResource<Azure.ResourceManager.Network.Models.Subnet>
     {
