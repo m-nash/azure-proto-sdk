@@ -10,6 +10,8 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class Plan : IEquatable<Plan>, IComparable<Plan>
     {
+        private ResourceManager.Resources.Models.Plan plan;
+
         internal Plan(string name, string publisher, string product, string promotionCode, string version)
         {
             Name = name;
@@ -17,6 +19,16 @@ namespace Azure.ResourceManager.Core
             Product = product;
             PromotionCode = promotionCode;
             Version = version;
+        }
+
+        // TODO: Will be deleted after we move in azure core repo
+        internal Plan(ResourceManager.Resources.Models.Plan plan)
+        {
+            Name = plan.Name;
+            Publisher = plan.Publisher;
+            Product = plan.Product;
+            PromotionCode = plan.PromotionCode;
+            Version = plan.Version;
         }
 
         public string Name { get; private set; }

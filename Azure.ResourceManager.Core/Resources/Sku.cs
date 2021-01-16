@@ -20,7 +20,7 @@ namespace Azure.ResourceManager.Core
             Capacity = capacity;
         }
 
-        // Will be deleted after we move in azure core repo
+        // TODO: Will be deleted after we move in azure core repo
         internal Sku(Azure.ResourceManager.Resources.Models.Sku sku)
         {
             Name = sku.Name;
