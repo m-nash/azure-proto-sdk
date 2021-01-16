@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using Azure.ResourceManager.Resources.Models;
 
 namespace Azure.ResourceManager.Core
 {
@@ -17,6 +18,16 @@ namespace Azure.ResourceManager.Core
             Family = family;
             Size = size;
             Capacity = capacity;
+        }
+
+        // Will be deleted after we move in azure core repo
+        internal Sku(Azure.ResourceManager.Resources.Models.Sku sku)
+        {
+            Name = sku.Name;
+            Tier = sku.Tier;
+            Family = sku.Family;
+            Size = sku.Size;
+            Capacity = sku.Capacity;
         }
 
         public string Name { get; private set; }

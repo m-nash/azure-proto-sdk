@@ -18,6 +18,8 @@ namespace Azure.ResourceManager.Core
             {
                 Tags.Add(tag);
             }
+
+            Sku = new Sku(Model.Sku);
         }
 
         public ArmResourceData(ResourceIdentifier id)
