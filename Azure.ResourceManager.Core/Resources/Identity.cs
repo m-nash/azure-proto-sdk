@@ -64,7 +64,7 @@ namespace Azure.ResourceManager.Core
 
         /// <summary>
         /// Gets a dictionary of the User Assigned Identities.
-        /// Maintain structure of {id, (ClientId, PrincipalId)} in case of multiple UserIdentities.
+        /// Maintains structure of {id, (ClientId, PrincipalId)} in case of multiple UserIdentities.
         /// </summary>
         public IDictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; private set; }
 
