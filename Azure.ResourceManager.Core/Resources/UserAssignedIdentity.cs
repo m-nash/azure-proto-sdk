@@ -15,8 +15,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="UserAssignedIdentity"/> class.
         /// </summary>
-        /// <param name="clientId"> Client ID. </param>
-        /// <param name="principalId"> Principal ID. </param>
+        /// <param name="clientId"> ClientId . </param>
+        /// <param name="principalId"> PrincipalId. </param>
         public UserAssignedIdentity(Guid clientId, Guid principalId)
         {
             ClientId = clientId;
@@ -36,7 +36,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Converts a <see cref="JsonElement"/> into an <see cref="UserAssignedIdentity"/> object.
         /// </summary>
-        /// <param name="element"> A JSON containing an identity. </param>
+        /// <param name="element"> A <see cref="JsonElement"/> containing an identity. </param>
         /// <returns> New <see cref="UserAssignedIdentity"/> object with JSON values. </returns>
         public static UserAssignedIdentity Deserialize(JsonElement element)
         {
@@ -134,7 +134,7 @@ namespace Azure.ResourceManager.Core
         /// Compares this <see cref="UserAssignedIdentity"/> instance with another object and determines if they are equals.
         /// </summary>
         /// <param name="other"> <see cref="UserAssignedIdentity"/> object to compare. </param>
-        /// <returns> True if they are equals, otherwise false. </returns>
+        /// <returns> True if they are equal, otherwise false. </returns>
         public bool Equals(UserAssignedIdentity other)
         {
             if (other == null)

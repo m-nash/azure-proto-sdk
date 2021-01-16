@@ -28,7 +28,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="Identity"/> class.
         /// </summary>
-        /// <param name="user"> Dictionary with Resource Identifier key and a <see cref="UserAssignedIdentity"/> object value. </param>
+        /// <param name="user"> Dictionary with a <see cref="ResourceIdentifier"/> key and a <see cref="UserAssignedIdentity"/> object value. </param>
         /// <param name="useSystemAssigned"> Flag for using <see cref="SystemAssignedIdentity"/> or not. </param>
         public Identity(Dictionary<ResourceIdentifier, UserAssignedIdentity> user, bool useSystemAssigned)
         {
@@ -58,20 +58,20 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Gets the System Assigned Identity.
+        /// Gets the SystemAssignedIdentity.
         /// </summary>
         public SystemAssignedIdentity SystemAssignedIdentity { get; private set; }
 
         /// <summary>
-        /// Gets a dictionary of the User Assigned Identities.<para/>
-        /// Maintain structure of {id, (clientid, principal id)} in case of multiple UserIdentities.
+        /// Gets a dictionary of the User Assigned Identities.
+        /// Maintain structure of {id, (ClientId, PrincipalId)} in case of multiple UserIdentities.
         /// </summary>
         public IDictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; private set; }
 
         /// <summary>
         /// Converts a <see cref="JsonElement"/> into an <see cref="Identity"/> object.
         /// </summary>
-        /// <param name="element"> A JSON containing an identity. </param>
+        /// <param name="element"> A <see cref="JsonElement"/> containing an <see cref="Identity"/>. </param>
         /// <returns> New Identity object with JSON values. </returns>
         public static Identity Deserialize(JsonElement element)
         {
@@ -197,10 +197,10 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Detects if this Identity is equals to antoher Identity instance.
+        /// Detects if this Identity is equals to another Identity instance.
         /// </summary>
         /// <param name="other"> Identity object to compare. </param>
-        /// <returns> True or False depending if they are equals. </returns>
+        /// <returns> True if they are equal, otherwise False. </returns>
         public bool Equals(Identity other)
         {
             if (other == null)

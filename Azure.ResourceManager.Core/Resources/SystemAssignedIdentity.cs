@@ -22,8 +22,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemAssignedIdentity"/> class.
         /// </summary>
-        /// <param name="tenantId"> Application Tenant ID. </param>
-        /// <param name="principalId"> Principal ID. </param>
+        /// <param name="tenantId"> Application TenantId . </param>
+        /// <param name="principalId"> PrincipalId. </param>
         public SystemAssignedIdentity(Guid tenantId, Guid principalId)
         {
             TenantId = tenantId;
@@ -43,7 +43,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Converts a <see cref="JsonElement"/> into an <see cref="SystemAssignedIdentity"/> object.
         /// </summary>
-        /// <param name="element"> A JSON containing an identity. </param>
+        /// <param name="element"> A <see cref="JsonElement"/> containing an identity. </param>
         /// <returns> New <see cref="SystemAssignedIdentity"/> object with JSON values. </returns>
         public static SystemAssignedIdentity Deserialize(JsonElement element)
         {
@@ -150,7 +150,7 @@ namespace Azure.ResourceManager.Core
         /// Compares this <see cref="SystemAssignedIdentity"/> instance with another object and determines if they are equals.
         /// </summary>
         /// <param name="other"> <see cref="SystemAssignedIdentity"/> object to compare. </param>
-        /// <returns> True if they are equals, otherwise false. </returns>
+        /// <returns> True if they are equal, otherwise false. </returns>
         public bool Equals(SystemAssignedIdentity other)
         {
             if (other == null)
