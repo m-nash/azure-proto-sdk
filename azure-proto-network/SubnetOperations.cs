@@ -57,7 +57,7 @@ namespace azure_proto_network
                 });
         }
 
-        public async override Task<ArmResponse<Subnet>> GetAsync(CancellationToken cancellationToken = default)
+        public override async Task<ArmResponse<Subnet>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(await Operations.GetAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, null, cancellationToken),
                 n =>
