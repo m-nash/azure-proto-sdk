@@ -13,7 +13,7 @@ namespace azure_proto_network
     /// <summary>
     /// A class to add extension methods to Azure subscription.
     /// </summary>
-    public static class AzureSubscriptionExtensions
+    public static class SubscriptionExtensions
     {
         #region Virtual Network Operations
 
