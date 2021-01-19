@@ -9,6 +9,9 @@ namespace azure_proto_network
     /// </summary>
     public class SubnetData : ProxyResource<Azure.ResourceManager.Network.Models.Subnet>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubnetData"/> class.
+        /// </summary>
         public SubnetData(Azure.ResourceManager.Network.Models.Subnet sub, string location) : base(sub.Id, sub)
         {
         }
@@ -17,7 +20,8 @@ namespace azure_proto_network
         /// Gets the subnet id.
         /// </summary>
         public override string Name => Model.Name;
-         /// <summary> The provisioning state of the subnet resource. </summary>
+
+        /// <summary> The provisioning state of the subnet resource. </summary>
         public ProvisioningState? ProvisioningState => Model.ProvisioningState;
 
         /// <summary>  
@@ -25,7 +29,7 @@ namespace azure_proto_network
         /// delegations and other user-defined properties.
         /// </summary>
         public string Purpose => Model.Purpose;
-        
+
         /// <summary> An array of references to the delegations on the subnet. </summary>
         public IList<Delegation> Delegations
         {
@@ -38,13 +42,14 @@ namespace azure_proto_network
 
         /// <summary>An array of references to the external resources using subnet. </summary>
         public IList<ResourceNavigationLink> ResourceNavigationLinks => Model.ResourceNavigationLinks;
-        
+
         /// <summary> Array of IpAllocation which reference this subnet. </summary>
         public IList<SubResource> IpAllocations
         {
             get => Model.IpAllocations;
             set => Model.IpAllocations = value;
         }
+
         /// <summary>  Array of IP configuration profiles which reference this subnet. </summary>
         public IList<IPConfigurationProfile> IpConfigurationProfiles => Model.IpConfigurationProfiles;
 
@@ -67,6 +72,7 @@ namespace azure_proto_network
             get => Model.ServiceEndpoints;
             set => Model.ServiceEndpoints = value;
         }
+        
         /// <summary> Nat gateway associated with this subnet. </summary>
         public SubResource NatGateway
         {

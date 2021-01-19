@@ -7,6 +7,9 @@ namespace azure_proto_network
     /// </summary>
     public class Subnet : SubnetOperations
     {
+        /// <summary>
+        /// A class representing a subnet along with the instance operations that can be performed on it.
+        /// </summary>
         public Subnet(AzureResourceManagerClientOptions SubnetOptions, SubnetData resource)
             : base(SubnetOptions, resource.Id)
         {
