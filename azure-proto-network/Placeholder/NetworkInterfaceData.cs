@@ -11,14 +11,14 @@ namespace azure_proto_network
     public class NetworkInterfaceData : TrackedResource<Azure.ResourceManager.Network.Models.NetworkInterface>, IEntityResource
     {
         /// <summary>
-        /// The ARM resource type for this <see cref="NetworkInterface"/>
+        /// The ARM resource type for this <see cref="NetworkInterface"/>.
         /// </summary>
         public static ResourceType ResourceType => "Microsoft.Network/networkInterfaces";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkInterface"/> class.
         /// </summary>
-        /// <param name="nic">The low level network interace model</param>
+        /// <param name="nic"> The low level network interace model. </param>
         public NetworkInterfaceData(Azure.ResourceManager.Network.Models.NetworkInterface nic) : base(nic.Id, nic.Location, nic)
         {
             if (null == nic.Tags)
@@ -28,12 +28,12 @@ namespace azure_proto_network
         }
 
         /// <summary>
-        /// gets the resource tags
+        /// Gets the resource tags.
         /// </summary>
         public override IDictionary<string, string> Tags => Model.Tags;
 
         /// <summary>
-        /// Gets the resource name
+        /// Gets the resource name.
         /// </summary>
         public override string Name => Model.Name;
 

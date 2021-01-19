@@ -27,9 +27,7 @@ namespace azure_proto_network
         /// </summary>
         public static readonly ResourceType ResourceType = "Microsoft.Network/networkInterfaces";
 
-        /// <summary>
-        /// The resource type of a <see cref="NetworkInterface"/>.
-        /// </summary>
+        /// <inheritdoc/>
         protected override ResourceType ValidResourceType => ResourceType;
 
         internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
@@ -38,7 +36,7 @@ namespace azure_proto_network
         /// <summary>
         /// Deletes a <see cref="NetworkInterface"/>.
         /// </summary>
-        /// <returns>An <see cref="ArmResponse"/> representing the service response to deletion. </returns>
+        /// <returns> An <see cref="ArmResponse"/> representing the service response to deletion. </returns>
         public ArmResponse<Response> Delete()
         {
             return new ArmResponse(Operations.StartDelete(Id.ResourceGroup, Id.Name).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
@@ -58,7 +56,7 @@ namespace azure_proto_network
         /// <summary>
         /// Deletes a <see cref="NetworkInterface"/>.
         /// </summary>
-        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service. 
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
         /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
         /// <returns> An <see cref="ArmOperation{Response}"/> that allows polling for completion of the operation. </returns>
         /// <remarks>
@@ -72,7 +70,7 @@ namespace azure_proto_network
         /// <summary>
         /// Deletes a <see cref="NetworkInterface"/>.
         /// </summary>
-        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service. 
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
         /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{Response}"/> that allows polling for completion of the operation. </returns>
         /// <remarks>
@@ -86,7 +84,7 @@ namespace azure_proto_network
         /// <summary>
         /// Gets details of the <see cref="NetworkInterface"/> from the service.
         /// </summary>
-        /// <returns>An <see cref="ArmResponse{NetworkInterface}"/>. </returns>
+        /// <returns> An <see cref="ArmResponse{NetworkInterface}"/>. </returns>
         public override ArmResponse<NetworkInterface> Get()
         {
             return new PhArmResponse<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
@@ -98,12 +96,7 @@ namespace azure_proto_network
                 });
         }
 
-        /// <summary>
-        /// Gets details of the <see cref="NetworkInterface"/> from the service.
-        /// </summary>
-        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service. 
-        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
-        /// <returns>A <see cref="Task"/> that returnes the details of the <see cref="NetworkInterface"/> when completed. </returns>
+        /// <inheritdoc/>
         public async override Task<ArmResponse<NetworkInterface>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
@@ -118,7 +111,7 @@ namespace azure_proto_network
         /// <summary>
         /// Add the given tag key and tag value to the <see cref="NetworkInterface"/> resource.
         /// </summary>
-        /// <param name="key" >The tag key. </param>
+        /// <param name="key" > The tag key. </param>
         /// <param name="value"> The Tag Value. </param>
         /// <returns> An <see cref="ArmOperation{NetworkInterface}"/> that allows polling for completion of the operation. </returns>
         /// <remarks>
@@ -139,9 +132,9 @@ namespace azure_proto_network
         /// <summary>
         /// Add the given tag key and tag value to the <see cref="NetworkInterface"/> resource.
         /// </summary>
-        /// <param name="key" >The tag key. </param>
+        /// <param name="key" > The tag key. </param>
         /// <param name="value"> The Tag Value. </param>
-        /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service. 
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
         /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns a <see cref="ArmOperation{NetworkInterface}"/> that allows polling for completion of the operation. </returns>
         /// <remarks>

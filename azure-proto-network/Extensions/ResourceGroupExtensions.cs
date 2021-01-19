@@ -49,21 +49,46 @@ namespace azure_proto_network
         #endregion
 
         #region Network Interface (NIC) operations
+
+        /// <summary>
+        /// Gets the operations over a specific <see cref="NetworkInterface>"/>
+        /// </summary>
+        /// <param name="resourceGroup"> The operations over a specific resource group. </param>
+        /// <param name="networkInterface"> The network interface to target for operations. </param>
+        /// <returns> A <see cref="NetworkInterface"/> including the operations that can be pefromed on it. </returns>
         public static NetworkInterface NetworkInterface(this ResourceGroupOperations resourceGroup, NetworkInterfaceData networkInterface)
         {
             return new NetworkInterface(resourceGroup.ClientOptions, networkInterface);
         }
 
+        /// <summary>
+        /// Gets the operations over a specific <see cref="NetworkInterface>"/>
+        /// </summary>
+        /// <param name="resourceGroup"> The operations over a specific resource group. </param>
+        /// <param name="networkInterface"> The name of the network interface to target for operations. </param>
+        /// <returns> A <see cref="NetworkInterface"/> including the operations that can be pefromed on it. </returns>
         public static NetworkInterfaceOperations NetworkInterface(this ResourceGroupOperations resourceGroup, string networkInterface)
         {
             return new NetworkInterfaceOperations(resourceGroup.ClientOptions, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/networkInterfaces/{networkInterface}"));
         }
 
+        /// <summary>
+        /// Gets the operations over the collection of <see cref="NetworkInterface"/> contained in the resource group.
+        /// </summary>
+        /// <param name="resourceGroup"> The <see cref="ResourceGroup"/> that contains the network interfaces. </param>
+        /// <returns> A <see cref="NetworkInterfaceContainer"/> representing the collection of <see cref="NetworkInterface"/> 
+        /// in the resource group. </returns>
         public static NetworkInterfaceContainer NetworkInterfaces(this ResourceGroup resourceGroup)
         {
             return new NetworkInterfaceContainer(resourceGroup.ClientOptions, resourceGroup.Data);
         }
 
+        /// <summary>
+        /// Gets the operations over the collection of <see cref="NetworkInterface"/> contained in the resource group.
+        /// </summary>
+        /// <param name="resourceGroup"> The name of the <see cref="ResourceGroup"/> that contains the network interfaces. </param>
+        /// <returns> A <see cref="NetworkInterfaceContainer"/> representing the collection of <see cref="NetworkInterface"/> 
+        /// in the resource group. </returns>
         public static NetworkInterfaceContainer NetworkInterfaces(this ResourceGroupOperations resourceGroup)
         {
             return new NetworkInterfaceContainer(resourceGroup.ClientOptions, resourceGroup.Id);
