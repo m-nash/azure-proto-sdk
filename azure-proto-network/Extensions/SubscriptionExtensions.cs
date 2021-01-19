@@ -1,15 +1,19 @@
-﻿using Azure;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using Azure;
 using Azure.Core;
 using Azure.ResourceManager.Core;
 using Azure.ResourceManager.Core.Adapters;
-using Azure.ResourceManager.Core.Resources;
 using Azure.ResourceManager.Network;
 using System;
-using System.Threading;
 
 namespace azure_proto_network
 {
-    public static class AzureSubscriptionExtensions
+    /// <summary>
+    /// A class to add extension methods to Azure subscription.
+    /// </summary>
+    public static class SubscriptionExtensions
     {
         #region Virtual Network Operations
 
@@ -24,6 +28,11 @@ namespace azure_proto_network
             return networkClient;
         }
 
+        /// <summary>
+        /// Lists the virtual networks for this subscription.
+        /// </summary>
+        /// <param name="subscription"> The <see cref="SubscriptionOperations" /> instance the method will execute against. </param>
+        /// <returns> A collection of <see cref="VirtualNetwork" /> resource operations that may take multiple service requests to iterate over. </returns>
         public static Pageable<VirtualNetwork> ListVnets(this SubscriptionOperations subscription)
         {
             NetworkManagementClient networkClient = GetNetworkClient(subscription);
@@ -34,6 +43,11 @@ namespace azure_proto_network
                 s => new VirtualNetwork(subscription.ClientOptions, new VirtualNetworkData(s)));
         }
 
+        /// <summary>
+        /// Lists the virtual networks for this subscription.
+        /// </summary>
+        /// <param name="subscription"> The <see cref="SubscriptionOperations" /> instance the method will execute against. </param>
+        /// <returns> An async collection of <see cref="VirtualNetwork" /> resource operations that may take multiple service requests to iterate over. </returns>
         public static AsyncPageable<VirtualNetwork> ListVnetsAsync(this SubscriptionOperations subscription)
         {
             NetworkManagementClient networkClient = GetNetworkClient(subscription);
@@ -48,6 +62,11 @@ namespace azure_proto_network
 
         #region Public IP Address Operations
 
+        /// <summary>
+        /// Lists the public IPs for this subscription.
+        /// </summary>
+        /// <param name="subscription"> The <see cref="SubscriptionOperations" /> instance the method will execute against. </param>
+        /// <returns> A collection of <see cref="PublicIpAddress" /> resource operations that may take multiple service requests to iterate over. </returns>
         public static Pageable<PublicIpAddress> ListPublicIps(this SubscriptionOperations subscription)
         {
             NetworkManagementClient networkClient = GetNetworkClient(subscription);
@@ -58,6 +77,11 @@ namespace azure_proto_network
                 s => new PublicIpAddress(subscription.ClientOptions, new PublicIPAddressData(s)));
         }
 
+        /// <summary>
+        /// Lists the public IP addresses for this subscription.
+        /// </summary>
+        /// <param name="subscription"> The <see cref="SubscriptionOperations" /> instance the method will execute against. </param>
+        /// <returns> An async collection of <see cref="PublicIpAddress" /> resource operations that may take multiple service requests to iterate over. </returns>
         public static AsyncPageable<PublicIpAddress> ListPublicIpsAsync(this SubscriptionOperations subscription)
         {
             NetworkManagementClient networkClient = GetNetworkClient(subscription);
@@ -72,6 +96,11 @@ namespace azure_proto_network
 
         #region Network Interface (NIC) operations
 
+        /// <summary>
+        /// Lists the network interfaces for this subscription.
+        /// </summary>
+        /// <param name="subscription"> The <see cref="SubscriptionOperations" /> instance the method will execute against. </param>
+        /// <returns> A collection of <see cref="NetworkInterface" /> resource operations that may take multiple service requests to iterate over. </returns>
         public static Pageable<NetworkInterface> ListNics(this SubscriptionOperations subscription)
         {
             NetworkManagementClient networkClient = GetNetworkClient(subscription);
@@ -82,6 +111,11 @@ namespace azure_proto_network
                 s => new NetworkInterface(subscription.ClientOptions, new NetworkInterfaceData(s)));
         }
 
+        /// <summary>
+        /// Lists the network interfaces for this subscription.
+        /// </summary>
+        /// <param name="subscription"> The <see cref="SubscriptionOperations" /> instance the method will execute against. </param>
+        /// <returns> An async collection of <see cref="NetworkInterface" /> resource operations that may take multiple service requests to iterate over. </returns>
         public static AsyncPageable<NetworkInterface> ListNicsAsync(this SubscriptionOperations subscription)
         {
             NetworkManagementClient networkClient = GetNetworkClient(subscription);
@@ -96,6 +130,11 @@ namespace azure_proto_network
 
         #region Network Security Group operations
 
+        /// <summary>
+        /// Lists the network security groups for this subscription.
+        /// </summary>
+        /// <param name="subscription"> The <see cref="SubscriptionOperations" /> instance the method will execute against. </param>
+        /// <returns> A collection of <see cref="NetworkSecurityGroup" /> resource operations that may take multiple service requests to iterate over. </returns>
         public static Pageable<NetworkSecurityGroup> ListNsgs(this SubscriptionOperations subscription)
         {
             NetworkManagementClient networkClient = GetNetworkClient(subscription);
@@ -106,6 +145,11 @@ namespace azure_proto_network
                 s => new NetworkSecurityGroup(subscription.ClientOptions, new NetworkSecurityGroupData(s)));
         }
 
+        /// <summary>
+        /// Lists the network security groups for this subscription.
+        /// </summary>
+        /// <param name="subscription"> The <see cref="SubscriptionOperations" /> instance the method will execute against. </param>
+        /// <returns> An async collection of <see cref="NetworkSecurityGroup" /> resource operations that may take multiple service requests to iterate over. </returns>
         public static AsyncPageable<NetworkSecurityGroup> ListNsgsAsync(this SubscriptionOperations subscription)
         {
             NetworkManagementClient networkClient = GetNetworkClient(subscription);
