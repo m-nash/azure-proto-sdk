@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using Azure.ResourceManager.Resources.Models;
 
 namespace Azure.ResourceManager.Core
 {
@@ -26,6 +27,10 @@ namespace Azure.ResourceManager.Core
             Size = size;
             Capacity = capacity;
         }
+
+        // TODO: Will be deleted after we move in azure core repo
+        internal Sku(ResourceManager.Resources.Models.Sku sku)
+            : this(sku.Name, sku.Tier, sku.Family, sku.Size, sku.Capacity) { }
 
         /// <summary>
         /// Gets the Name.

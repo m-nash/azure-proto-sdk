@@ -26,6 +26,10 @@ namespace Azure.ResourceManager.Core
             PromotionCode = promotionCode;
             Version = version;
         }
+        
+        // TODO: Will be deleted after we move in azure core repo
+        internal Plan(ResourceManager.Resources.Models.Plan plan)
+            : this(plan.Name, plan.Publisher, plan.Product, plan.PromotionCode, plan.Version) { }
 
         /// <summary>
         /// Gets the plan's Name.
