@@ -21,14 +21,8 @@ namespace Azure.ResourceManager.Core
         }
 
         // TODO: Will be deleted after we move in azure core repo
-        internal Sku(Azure.ResourceManager.Resources.Models.Sku sku)
-        {
-            Name = sku.Name;
-            Tier = sku.Tier;
-            Family = sku.Family;
-            Size = sku.Size;
-            Capacity = sku.Capacity;
-        }
+        internal Sku(ResourceManager.Resources.Models.Sku sku)
+            : this(sku.Name, sku.Tier, sku.Family, sku.Size, sku.Capacity) { }
 
         public string Name { get; private set; }
 
