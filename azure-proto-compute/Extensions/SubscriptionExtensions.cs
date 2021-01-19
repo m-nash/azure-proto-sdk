@@ -12,7 +12,7 @@ namespace azure_proto_compute
     /// <summary>
     /// Extension methods for convenient access on SubscriptionOperations in a client
     /// </summary>
-    public static class AzureSubscriptionExtension
+    public static class SubscriptionExtensions
     {
         #region Virtual Machine List Operations
         /// <summary>
