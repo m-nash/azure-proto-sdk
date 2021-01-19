@@ -10,7 +10,6 @@ namespace Azure.ResourceManager.Core
 {
     /// <summary>
     /// Canonical Representation of a Resource Identity
-    /// TODO: Implement operator overloads for equality, comparison, and coercion
     /// </summary>
     public class ResourceIdentifier : IEquatable<ResourceIdentifier>, IEquatable<string>, IComparable<string>,
         IComparable<ResourceIdentifier>

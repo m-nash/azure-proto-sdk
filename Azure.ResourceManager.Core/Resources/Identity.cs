@@ -18,7 +18,7 @@ namespace Azure.ResourceManager.Core
         private const string SystemAndUserAssigned = "SystemAssigned, UserAssigned";
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Identity"/> class with no <see cref="SystemAssignedIdentity"/>  or <see cref="UserAssignedIdentity"/>.
+        /// Initializes a new instance of the <see cref="Identity"/> class.
         /// </summary>
         public Identity()
             : this(null, false)
@@ -64,7 +64,6 @@ namespace Azure.ResourceManager.Core
 
         /// <summary>
         /// Gets a dictionary of the User Assigned Identities.
-        /// Maintains structure of {id, (ClientId, PrincipalId)} in case of multiple UserIdentities.
         /// </summary>
         public IDictionary<ResourceIdentifier, UserAssignedIdentity> UserAssignedIdentities { get; private set; }
 

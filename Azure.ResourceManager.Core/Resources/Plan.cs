@@ -10,7 +10,6 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class Plan : IEquatable<Plan>, IComparable<Plan>
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Plan"/> class.
         /// </summary>
@@ -58,7 +57,6 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="other"> <see cref="Plan"/> object to compare. </param>
         /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
-
         public int CompareTo(Plan other)
         {
             if (other == null)
