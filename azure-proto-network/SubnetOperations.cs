@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace azure_proto_network
 {
     /// <summary>
+    /// A class representing the operations that can be performed over a specific subnet.
     /// </summary>
     public class SubnetOperations : ResourceOperationsBase<Subnet>, IDeletableResource
     {
