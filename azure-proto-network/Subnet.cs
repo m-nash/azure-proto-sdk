@@ -16,6 +16,9 @@ namespace azure_proto_network
             Data = resource;
         }
 
+        /// <summary>
+        /// Gets the data representing the subnet
+        /// </summary>
         public SubnetData Data { get; private set; }
     }
 }
