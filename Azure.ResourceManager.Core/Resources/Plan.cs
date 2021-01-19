@@ -19,6 +19,10 @@ namespace Azure.ResourceManager.Core
             Version = version;
         }
 
+        // TODO: Will be deleted after we move in azure core repo
+        internal Plan(ResourceManager.Resources.Models.Plan plan)
+            : this(plan.Name, plan.Publisher, plan.Product, plan.PromotionCode, plan.Version) { }
+
         public string Name { get; private set; }
 
         public string Publisher { get; private set; }

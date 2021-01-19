@@ -18,6 +18,11 @@ namespace Azure.ResourceManager.Core
             {
                 Tags.Add(tag);
             }
+
+            Sku = new Sku(Model.Sku);
+            Plan = new Plan(Model.Plan);
+            Kind = Model.Kind;
+            ManagedBy = Model.ManagedBy;
         }
 
         public ArmResourceData(ResourceIdentifier id)
