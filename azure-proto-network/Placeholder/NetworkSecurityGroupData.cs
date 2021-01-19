@@ -28,7 +28,7 @@ namespace azure_proto_network
             }
         }
 
-        /// <summary> A unique read-only string that changes whenever the resource is updated. </summary>
+        /// <summary> Resource tags. </summary>
         public override IDictionary<string, string> Tags => Model.Tags;
 
         /// <summary> The name property of the network security group resource. </summary>
