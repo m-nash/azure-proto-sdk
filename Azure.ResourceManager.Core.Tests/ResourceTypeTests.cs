@@ -96,7 +96,6 @@ namespace Azure.ResourceManager.Core.Tests
             Assert.AreEqual(1, resourceType1.CompareTo(resourceType2));
         }
 
-
         [TestCase(-1, "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testRg/providers/Microsoft.Network1/virtualNetworks2/Testvnet/subnets/default1",
             "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testRg/providers/Microsoft.network2/virtualNetworks1/Testvnet/Subnets/default2")]
         [TestCase(1, "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testRg/providers/Microsoft.network2/VirtualNetworks2/Testvnet/subnets2/default1",
