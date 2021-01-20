@@ -16,10 +16,14 @@ namespace azure_proto_network
         {
         }
 
-        /// <summary> Gets the subnet id. </summary>
+        /// <summary>
+        /// Gets the subnet id. 
+        ///</summary>
         public override string Name => Model.Name;
 
-        /// <summary> The provisioning state of the subnet resource. </summary>
+        /// <summary> 
+        /// The provisioning state of the subnet resource. 
+        /// </summary>
         public ProvisioningState? ProvisioningState => Model.ProvisioningState;
 
         /// <summary> 
