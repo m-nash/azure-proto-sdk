@@ -4,30 +4,21 @@ using System.Collections.Generic;
 
 namespace azure_proto_network
 {
-    /// <summary>
-    /// A class representing the subnet data model.
-    /// </summary>
+    /// <summary> A class representing the subnet data model. </summary>
     public class SubnetData : ProxyResource<Azure.ResourceManager.Network.Models.Subnet>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SubnetData"/> class.
-        /// </summary>
+        /// <summary> Initializes a new instance of the <see cref="SubnetData"/> class. </summary>
         public SubnetData(Azure.ResourceManager.Network.Models.Subnet sub, string location) : base(sub.Id, sub)
         {
         }
 
-        /// <summary>
-        /// Gets the subnet id.
-        /// </summary>
+        /// <summary> Gets the subnet id. </summary>
         public override string Name => Model.Name;
 
         /// <summary> The provisioning state of the subnet resource. </summary>
         public ProvisioningState? ProvisioningState => Model.ProvisioningState;
 
-        /// <summary>  
-        /// A read-only string identifying the intention of use for this subnet based on
-        /// delegations and other user-defined properties.
-        /// </summary>
+        /// <summary> A read-only string identifying the intention use for this subnet based on delegations and other user-defined properties. </summary>
         public string Purpose => Model.Purpose;
 
         /// <summary> An array of references to the delegations on the subnet. </summary>
