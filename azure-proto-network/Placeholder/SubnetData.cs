@@ -9,7 +9,9 @@ namespace azure_proto_network
     /// </summary>
     public class SubnetData : ProxyResource<Azure.ResourceManager.Network.Models.Subnet>
     {
-        /// <summary> Initializes a new instance of the <see cref="SubnetData"/> class. </summary>
+        /// <summary> 
+        // Initializes a new instance of the <see cref="SubnetData"/> class. 
+        //</summary>
         public SubnetData(Azure.ResourceManager.Network.Models.Subnet sub, string location) : base(sub.Id, sub)
         {
         }
@@ -20,7 +22,9 @@ namespace azure_proto_network
         /// <summary> The provisioning state of the subnet resource. </summary>
         public ProvisioningState? ProvisioningState => Model.ProvisioningState;
 
-        /// <summary> A read-only string identifying the intention use for this subnet based on delegations and other user-defined properties. </summary>
+        /// <summary> 
+        /// A read-only string identifying the intention use for this subnet based on delegations and other user-defined properties.
+        /// </summary>
         public string Purpose => Model.Purpose;
 
         /// <summary> An array of references to the delegations on the subnet. </summary>
@@ -30,10 +34,10 @@ namespace azure_proto_network
             set => Model.Delegations = value;
         }
 
-        /// <summary>An array of references to services injecting into this subnet. </summary>
+        /// <summary> An array of references to services injecting into this subnet. </summary>
         public IList<ServiceAssociationLink> ServiceAssociationLinks => Model.ServiceAssociationLinks;
 
-        /// <summary>An array of references to the external resources using subnet. </summary>
+        /// <summary> An array of references to the external resources using subnet. </summary>
         public IList<ResourceNavigationLink> ResourceNavigationLinks => Model.ResourceNavigationLinks;
 
         /// <summary> Array of IpAllocation which reference this subnet. </summary>
