@@ -9,8 +9,7 @@ using System.Linq;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    ///     Canonical Representation of a Resource Identity
-    ///     TODO: Implement operator overloads for equality, comparison, and coercion
+    /// Canonical Representation of a Resource Identity
     /// </summary>
     public class ResourceIdentifier : IEquatable<ResourceIdentifier>, IEquatable<string>, IComparable<string>,
         IComparable<ResourceIdentifier>
@@ -18,49 +17,75 @@ namespace Azure.ResourceManager.Core
         private readonly IDictionary<string, string> _partsDictionary =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceIdentifier"/> class.
+        /// </summary>
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         public ResourceIdentifier(string id)
         {
             Id = id;
             Parse(id);
         }
 
+        /// <summary>
+        /// Gets or sets the Resource ID.
+        /// </summary>
         public string Id { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the Resource Name.
+        /// </summary>
         public string Name { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the Resoucer Type.
+        /// </summary>
         public ResourceType Type { get; protected set; }
 
+        /// <summary>
+        /// Gets the Subscription.
+        /// </summary>
         public string Subscription => _partsDictionary.ContainsKey(KnownKeys.Subscription)
             ? _partsDictionary[KnownKeys.Subscription]
             : null;
 
+        /// <summary>
+        /// Gets the Resource Group.
+        /// </summary>
         public string ResourceGroup => _partsDictionary.ContainsKey(KnownKeys.ResourceGroup)
             ? _partsDictionary[KnownKeys.ResourceGroup]
             : null;
 
         /// <summary>
-        ///     Currently this will contain the identifier for either the parent resource, the resource group, the location, the
-        ///     subscription,
-        ///     or the tenant that is the logical parent of this resource
+        /// Gets or sets the Parent.
+        /// Currently this will contain the identifier for either the parent resource, the resource group, the location, the subscription, or the tenant that is the logical parent of this resource.
         /// </summary>
         public ResourceIdentifier Parent { get; protected set; }
 
-        public static implicit operator string(ResourceIdentifier other)
-        {
-            return other.Id;
-        }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceIdentifier"/> class from a string.
+        /// </summary>
+        /// <param name="other"> String to be implicit converted into a <see cref="ResourceIdentifier"/> object. </param>
         public static implicit operator ResourceIdentifier(string other)
         {
             return new ResourceIdentifier(other); // will null check in PR #119
         }
 
         /// <summary>
-        ///     Allow static, safe comparisons of resource identifier strings or objects
+        /// Creates a new string from  a <see cref="ResourceIdentifier"/> object.
         /// </summary>
-        /// <param name="x">A resource id</param>
-        /// <param name="y">A resource id</param>
-        /// <returns>true if the resource ids are equivalent, otherwise false</returns>
+        /// <param name="other"> <see cref="ResourceIdentifier"/> object to be implicit converted into an string. </param>
+        public static implicit operator string(ResourceIdentifier other)
+        {
+            return other.Id;
+        }
+
+        /// <summary>
+        /// Allow static, safe comparisons of resource identifier strings or objects.
+        /// </summary>
+        /// <param name="x"> A resource id. </param>
+        /// <param name="y"> Another resource id. </param>
+        /// <returns> True if the resource ids are equivalent, otherwise False. </returns>
         public static bool Equals(ResourceIdentifier x, ResourceIdentifier y)
         {
             if (null == x && null == y)
@@ -73,11 +98,11 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        ///     Allow static null-safe comparisons between resource identifier strings or objects
+        /// Allow static null-safe comparisons between resource identifier strings or objects.
         /// </summary>
-        /// <param name="x">A resource id</param>
-        /// <param name="y">A resource id</param>
-        /// <returns>-1 if x &lt; y, 0 if x == y, 1 if x &gt; y</returns>
+        /// <param name="x"> A resource id. </param>
+        /// <param name="y"> Another resource id. </param>
+        /// <returns> -1 if x &lt; y, 0 if x == y, 1 if x &gt; y. </returns>
         public static int CompareTo(ResourceIdentifier x, ResourceIdentifier y)
         {
             if (null == x && null == y)
@@ -92,11 +117,23 @@ namespace Azure.ResourceManager.Core
             return x.CompareTo(y);
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             return Id.GetHashCode();
         }
 
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return Id;
+        }
+
+        /// <summary>
+        /// Compares this <see cref="ResourceIdentifier"/> instance ID with another instance's ID.
+        /// </summary>
+        /// <param name="other"> <see cref="ResourceIdentifier"/> object to compare. </param>
+        /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
         public virtual int CompareTo(ResourceIdentifier other)
         {
             return string.Compare(
@@ -105,6 +142,11 @@ namespace Azure.ResourceManager.Core
                 StringComparison.InvariantCultureIgnoreCase);
         }
 
+        /// <summary>
+        /// Compares this <see cref="ResourceIdentifier"/> instance ID with another plain text ID.
+        /// </summary>
+        /// <param name="other"> The ID to compare. </param>
+        /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
         public virtual int CompareTo(string other)
         {
             return string.Compare(
@@ -113,6 +155,11 @@ namespace Azure.ResourceManager.Core
                 StringComparison.InvariantCultureIgnoreCase);
         }
 
+        /// <summary>
+        /// Compares this <see cref="ResourceIdentifier"/> instance ID with another <see cref="ResourceIdentifier"/> instance's ID and determines if they are equals.
+        /// </summary>
+        /// <param name="other"> <see cref="ResourceIdentifier"/> object to compare. </param>
+        /// <returns> True if they are equals, otherwise false. </returns>
         public virtual bool Equals(ResourceIdentifier other)
         {
             return string.Equals(
@@ -121,6 +168,11 @@ namespace Azure.ResourceManager.Core
                 StringComparison.InvariantCultureIgnoreCase);
         }
 
+        /// <summary>
+        /// Compares this <see cref="ResourceIdentifier"/> instance ID with another plain text ID. and determines if they are equals.
+        /// </summary>
+        /// <param name="other"> <see cref="ResourceIdentifier"/> The ID to compare. </param>
+        /// <returns> True if they are equals, otherwise false. </returns>
         public virtual bool Equals(string other)
         {
             return string.Equals(
@@ -129,15 +181,10 @@ namespace Azure.ResourceManager.Core
                 StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public override string ToString()
-        {
-            return Id;
-        }
-
         /// <summary>
-        ///     Populate Resource Identity fields from input string
+        /// Populate Resource Identity fields from input string.
         /// </summary>
-        /// <param name="id">A properly formed resource identity</param>
+        /// <param name="id"> A properly formed resource identity. </param>
         protected virtual void Parse(string id)
         {
             // Throw for null, empty, and string without the correct form
@@ -183,10 +230,14 @@ namespace Azure.ResourceManager.Core
             }
         }
 
+        /// <summary>
+        /// Helper method to parse a built in resource.
+        /// </summary>
+        /// <param name="parts"> Resource ID paths consisting of name/value pairs. </param>
         protected virtual void ParseGenericResource(IList<string> parts)
         {
-            Debug.Assert(parts != null);
-            Debug.Assert(parts.Count > 1);
+            Debug.Assert(parts != null, "Parts parameter is null.");
+            Debug.Assert(parts.Count > 1, "Parts should be a list containing more than 1 elements.");
 
             // The resource consists of well-known name-value pairs.  Make a resource dictionary
             // using the names as keys, and the values as values
@@ -204,6 +255,10 @@ namespace Azure.ResourceManager.Core
             Parent = parts.Count > 1 ? new ResourceIdentifier($"/{string.Join("/", parts)}") : null;
         }
 
+        /// <summary>
+        /// Helper method to parse a resource that comes from a provider.
+        /// </summary>
+        /// <param name="parts"> Resource ID paths consisting of name/value pairs. </param>
         protected virtual void ParseProviderResource(IList<string> parts)
         {
             // The resource consists of name/value pairs, make a dictionary out of it
@@ -230,18 +285,39 @@ namespace Azure.ResourceManager.Core
             Parent = parts.Count > 1 ? new ResourceIdentifier($"/{string.Join("/", parts)}") : null;
         }
 
+        /// <summary>
+        /// Helper class with the known keys in a dictionary for easy access.
+        /// </summary>
         public static class KnownKeys
         {
+            /// <summary>
+            /// Gets the key for Subscription.
+            /// </summary>
             public static string Subscription => "subscriptions";
 
+            /// <summary>
+            /// Gets the key for Tenant.
+            /// </summary>
             public static string Tenant => "tenants";
 
+            /// <summary>
+            /// Gets the key for Resource Group.
+            /// </summary>
             public static string ResourceGroup => "resourcegroups";
 
+            /// <summary>
+            /// Gets the key for Location.
+            /// </summary>
             public static string Location => "locations";
 
+            /// <summary>
+            /// Gets the key for Provider Namespace.
+            /// </summary>
             public static string ProviderNamespace => "providers";
 
+            /// <summary>
+            /// Gets the key for Untracked Subresource.
+            /// </summary>
             public static string UntrackedSubResource => Guid.NewGuid().ToString();
         }
     }

@@ -8,17 +8,20 @@ using System.Linq;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    ///     Structure respresenting a resource type
-    ///     TODO: Fill in comparison methods and comparison, equality, and coercion operator overloads
+    /// Structure respresenting a resource type
     /// </summary>
     public class ResourceType : IEquatable<ResourceType>, IEquatable<string>, IComparable<ResourceType>,
         IComparable<string>
     {
         /// <summary>
-        ///     The "none" resource type
+        /// The "none" resource type
         /// </summary>
         public static readonly ResourceType None = new ResourceType { Namespace = string.Empty, Type = string.Empty };
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceType"/> class.
+        /// </summary>
+        /// <param name="resourceIdOrType"> Option to provide the Resource Type directly, or a Resource ID from which the type is going to be obtained. </param>
         public ResourceType(string resourceIdOrType)
         {
             Parse(resourceIdOrType);
@@ -28,10 +31,19 @@ namespace Azure.ResourceManager.Core
         {
         }
 
+        /// <summary>
+        /// Gets the resource type Namespace.
+        /// </summary>
         public string Namespace { get; private set; }
 
+        /// <summary>
+        /// Gets the resource Type.
+        /// </summary>
         public string Type { get; private set; }
 
+        /// <summary>
+        /// Gets the resource type Parent.
+        /// </summary>
         public ResourceType Parent
         {
             get
@@ -48,36 +60,76 @@ namespace Azure.ResourceManager.Core
             }
         }
 
+        /// <summary>
+        /// Implicit operator for initializing a <see cref="ResourceType"/> instance from a string.
+        /// </summary>
+        /// <param name="other"> String to be conferted into a <see cref="ResourceType"/> object. </param>
         public static implicit operator ResourceType(string other)
         {
             return new ResourceType(other);
         }
 
+        /// <summary>
+        /// Compares a <see cref="ResourceType"/> object with a <see cref="string"/>.
+        /// </summary>
+        /// <param name="source"> <see cref="ResourceType"/> object. </param>
+        /// <param name="target"> String. </param>
+        /// <returns> True if they are equal, otherwise False. </returns>
         public static bool operator ==(ResourceType source, string target)
         {
             return source.Equals(target);
         }
 
+        /// <summary>
+        /// Compares a <see cref="string"/> with a <see cref="ResourceType"/> object.
+        /// </summary>
+        /// <param name="source"> String representation of a ResourceType. </param>
+        /// <param name="target"> <see cref="ResourceType"/> object. </param>
+        /// <returns> True if they are equal, otherwise False. </returns>
         public static bool operator ==(string source, ResourceType target)
         {
             return target.Equals(source);
         }
 
+        /// <summary>
+        /// Compares two <see cref="ResourceType"/> objects.
+        /// </summary>
+        /// <param name="source"> First <see cref="ResourceType"/> object. </param>
+        /// <param name="target"> Second <see cref="ResourceType"/> object. </param>
+        /// <returns> True if they are equal, otherwise False. </returns>
         public static bool operator ==(ResourceType source, ResourceType target)
         {
             return source.Equals(target);
         }
 
+        /// <summary>
+        /// Compares a <see cref="ResourceType"/> object with a <see cref="string"/>.
+        /// </summary>
+        /// <param name="source"> <see cref="ResourceType"/> object. </param>
+        /// <param name="target"> String representation of a ResourceType. </param>
+        /// <returns> False if they are equal, otherwise True. </returns>
         public static bool operator !=(ResourceType source, string target)
         {
             return !source.Equals(target);
         }
 
+        /// <summary>
+        /// Compares a <see cref="string"/> with a <see cref="ResourceType"/> object.
+        /// </summary>
+        /// <param name="source"> String. </param>
+        /// <param name="target"> <see cref="ResourceType"/> object. </param>
+        /// <returns> False if they are equal, otherwise True. </returns>
         public static bool operator !=(string source, ResourceType target)
         {
             return !target.Equals(source);
         }
 
+        /// <summary>
+        /// Compares two <see cref="ResourceType"/> objects.
+        /// </summary>
+        /// <param name="source"> First <see cref="ResourceType"/> object. </param>
+        /// <param name="target"> Second <see cref="ResourceType"/> object. </param>
+        /// <returns> False if they are equal, otherwise True. </returns>
         public static bool operator !=(ResourceType source, ResourceType target)
         {
             if (object.ReferenceEquals(source, null))
@@ -85,31 +137,53 @@ namespace Azure.ResourceManager.Core
             return !source.Equals(target);
         }
 
+        /// <summary>
+        /// Compares this <see cref="ResourceType"/> with another instance.
+        /// </summary>
+        /// <param name="other"> <see cref="ResourceType"/> object to compare. </param>
+        /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
         public int CompareTo(ResourceType other)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Compares this <see cref="ResourceType"/> with a resource type representation as a string.
+        /// </summary>
+        /// <param name="other"> String to compare. </param>
+        /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
         public int CompareTo(string other)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Compares this <see cref="ResourceType"/> instance with another object and determines if they are equals.
+        /// </summary>
+        /// <param name="other"> <see cref="ResourceType"/> object to compare. </param>
+        /// <returns> True if they are equals, otherwise false. </returns>
         public bool Equals(ResourceType other)
         {
             return string.Equals(ToString(), other.ToString(), StringComparison.InvariantCultureIgnoreCase);
         }
 
+        /// <summary>
+        /// Compares this <see cref="ResourceType"/> instance with a string and determines if they are equals.
+        /// </summary>
+        /// <param name="other"> String to compare. </param>
+        /// <returns> True if they are equals, otherwise false. </returns>
         public bool Equals(string other)
         {
             return string.Equals(ToString(), other, StringComparison.InvariantCultureIgnoreCase);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"{Namespace}/{Type}";
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             if (obj == null)
@@ -128,11 +202,17 @@ namespace Azure.ResourceManager.Core
             return base.Equals(obj);
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             return ToString().GetHashCode();
         }
 
+        /// <summary>
+        /// Helper method to determine if the given string is a Resource ID or a Type,
+        /// and then assign the proper values to the <see cref="ResourceType"/> class properties.
+        /// </summary>
+        /// <param name="resourceIdOrType"> String to be parsed. </param>
         internal void Parse(string resourceIdOrType)
         {
             // Note that this code will either parse a resource id to find the type, or a resource type
