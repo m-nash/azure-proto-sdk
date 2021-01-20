@@ -62,7 +62,6 @@ namespace Azure.ResourceManager.Core
 
         /// <summary>
         /// Validate the resource identifier against current operations.
-
         /// </summary>
         /// <param name="identifier"> The resource identifier. </param>
         public virtual void Validate(ResourceIdentifier identifier)
