@@ -8,6 +8,16 @@ namespace azure_proto_compute
     public static class ResourceGroupExtensions
     {
         #region VirtualMachines
+        /// <summary>
+        /// Gets an object representing the operations that can be performed over a specific VirtualMachine.
+        /// </summary>
+        /// <param> The <see cref="[ResourceGroupOperations]" /> instance the method will execute against. </param>
+        /// <param name="vmName"> The name of the VirtualMachine. </param>
+        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="[VirtualMachine]" />.</returns>
+        public static VirtualMachineOperations GetVirtualMachineOperations(this ResourceGroupOperations resourceGroup, string vmName)
+        {
+            return new VirtualMachineOperations(resourceGroup.ClientOptions, $"{resourceGroup.Id}/providers/Microsoft.Compute/virtualMachines/{vmName}");
+        }
 
         /// <summary>
         /// Gets an object representing the operations that can be performed over a specific VirtualMachine.
@@ -42,6 +52,15 @@ namespace azure_proto_compute
         #endregion
 
         #region AvailabilitySets
+        /// <summary>
+        /// Gets an object representing the operations that can be performed over a specific AvailabilitySet.
+        /// <param> The <see cref="[ResourceGroupOperations]" /> instance the method will execute against. </param>
+        /// <param name="availabilitySetName"> The name of the AvailibilitySet. </param>
+        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="[AvailabilitySet]" />. </returns>
+        public static AvailabilitySetOperations GetAvailabilitySetOperations(this ResourceGroupOperations resourceGroup, string availabilitySetName)
+        {
+            return new AvailabilitySetOperations(resourceGroup.ClientOptions, $"{resourceGroup.Id}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}");
+        }
 
         /// <summary>
         /// Gets an object representing the operations that can be performed over a specific AvailabilitySet.

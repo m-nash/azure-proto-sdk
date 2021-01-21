@@ -22,6 +22,16 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="SubscriptionOperations"/> class.
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="subscriptionId"> The Id of the subscription. </param>
+        internal SubscriptionOperations(AzureResourceManagerClientOptions options, string subscriptionId)
+            : base(options, $"/subscriptions/{subscriptionId}")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscriptionOperations"/> class.
+        /// </summary>
+        /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the subscription. </param>
         internal SubscriptionOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
             : base(options, id)
