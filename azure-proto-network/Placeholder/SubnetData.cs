@@ -51,7 +51,7 @@ namespace azure_proto_network
             set => Model.IpAllocations = value;
         }
 
-        /// <summary>  Array of IP configuration profiles which reference this subnet. </summary>
+        /// <summary> Array of IP configuration profiles which reference this subnet. </summary>
         public IList<IPConfigurationProfile> IpConfigurationProfiles => Model.IpConfigurationProfiles;
 
         /// <summary> An array of references to the network interface IP configurations using subnet. </summary>
@@ -109,10 +109,10 @@ namespace azure_proto_network
             set => Model.AddressPrefix = value;
         }
 
-        /// <summary>  A unique read-only string that changes whenever the resource is updated. </summary>
+        /// <summary> A unique read-only string that changes whenever the resource is updated. </summary>
         public string Etag => Model.Etag;
 
-        /// <summary>  An array of service endpoint policies. </summary>
+        /// <summary> An array of service endpoint policies. </summary>
         public IList<ServiceEndpointPolicy> ServiceEndpointPolicies
         {
             get => Model.ServiceEndpointPolicies;
