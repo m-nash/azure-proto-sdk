@@ -126,7 +126,7 @@ namespace Azure.ResourceManager.Core
         /// Gets the Azure subscriptions.
         /// </summary>
         /// <returns> Subscription container. </returns>
-        public SubscriptionContainer Subscriptions()
+        public SubscriptionContainer GetSubscriptionContainer()
         {
             return new SubscriptionContainer(ClientOptions, _credentials, _baseUri);
         }
@@ -251,10 +251,10 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets resource group operations.
         /// </summary>
-        /// <param name="subscription"> The id of the Azure subscription. </param>
-        /// <param name="resourceGroup"> The resource group name. </param>
+        /// <param name="subscriptionGuid"> The id of the Azure subscription. </param>
+        /// <param name="resourceGroupName"> The resource group name. </param>
         /// <returns> Resource group operations. </returns>
-        public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
+        public ResourceGroupOperations GetResourceGroupOperations(string subscriptionGuid, string resourceGroupName)
         {
             return new ResourceGroupOperations(DefaultSubscription, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}");
         }
@@ -351,7 +351,7 @@ namespace Azure.ResourceManager.Core
             string sub = DefaultSubscription?.Id?.Subscription;
             if (null == sub)
             {
-                sub = await Subscriptions().GetDefaultSubscriptionAsync(cancellationToken);
+                sub = await GetSubscriptionContainer().GetDefaultSubscriptionAsync(cancellationToken);
             }
 
             return sub;

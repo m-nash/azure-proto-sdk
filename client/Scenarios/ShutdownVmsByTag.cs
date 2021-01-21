@@ -12,11 +12,11 @@ namespace client
             var createMultipleVms = new CreateMultipleVms(Context);
             createMultipleVms.Execute();
 
-            var rg = new AzureResourceManagerClient().ResourceGroup(Context.SubscriptionId, Context.RgName).Get().Value;
+            var rg = new AzureResourceManagerClient().GetResourceGroupOperations(Context.SubscriptionId, Context.RgName).Get().Value;
 
             //set tags on random vms
             Random rand = new Random(Environment.TickCount);
-            foreach (var generic in rg.VirtualMachines().ListByName(Environment.UserName))
+            foreach (var generic in rg.GetVirtualMachineContainer().ListByName(Environment.UserName))
             {
                 var vm = VirtualMachineOperations.FromGeneric(generic);
                 if (rand.NextDouble() > 0.5)
@@ -26,7 +26,7 @@ namespace client
                 }
             }
 
-            var filteredList = rg.VirtualMachines().List().Where(vm =>
+            var filteredList = rg.GetVirtualMachineContainer().List().Where(vm =>
             {
                 string value;
                 return (vm.Data.Tags.TryGetValue("tagkey", out value) && value == "tagvalue");

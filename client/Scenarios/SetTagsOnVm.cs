@@ -11,8 +11,8 @@ namespace client
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
 
-            var rgOp = new AzureResourceManagerClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
-            var vmOp = rgOp.VirtualMachine(Context.VmName);
+            var rgOp = new AzureResourceManagerClient().GetResourceGroupOperations(Context.SubscriptionId, Context.RgName);
+            var vmOp = rgOp.GetVirtualMachineOperations(Context.VmName);
 
             var vm = vmOp.Get().Value;
             Console.WriteLine($"Adding tags to {vm.Data.Name}");

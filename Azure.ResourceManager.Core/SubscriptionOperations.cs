@@ -43,9 +43,7 @@ namespace Azure.ResourceManager.Core
 
         protected override ResourceType ValidResourceType => ResourceType;
 
-        /// <summary>
-        /// Gets the subscription client.
-        /// </summary>
+
         private SubscriptionsOperations SubscriptionsClient => new ResourcesManagementClient(
             BaseUri,
             Guid.NewGuid().ToString(),
@@ -76,7 +74,7 @@ namespace Azure.ResourceManager.Core
         /// Gets the resource group container under this subscription
         /// </summary>
         /// <returns> The resource group container. </returns>
-        public ResourceGroupContainer ResourceGroups()
+        public ResourceGroupContainer GetResourceGroupContainer()
         {
             return new ResourceGroupContainer(this);
         }

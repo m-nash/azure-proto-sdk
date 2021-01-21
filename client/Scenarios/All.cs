@@ -27,7 +27,7 @@ namespace client
                 foreach (var rgId in CleanUp)
                 {
                     ResourceIdentifier id = new ResourceIdentifier(rgId);
-                    var rg = new AzureResourceManagerClient().ResourceGroup(rgId);
+                    var rg = new AzureResourceManagerClient().GetResourceGroupOperations(rgId);
                     Console.WriteLine($"--------Deleting {rg.Id.Name}--------");
                     try
                     {

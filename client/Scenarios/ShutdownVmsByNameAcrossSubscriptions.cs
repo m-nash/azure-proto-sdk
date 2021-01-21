@@ -12,7 +12,7 @@ namespace client
         {
             var client = new AzureResourceManagerClient();
 
-            await foreach (var subscription in client.Subscriptions().ListAsync())
+            await foreach (var subscription in client.GetSubscriptionContainer().ListAsync())
             {
                 await foreach (var armResource in subscription.ListVirtualMachinesByNameAsync("-e"))
                 {
@@ -41,7 +41,7 @@ namespace client
 
 
             var client = new AzureResourceManagerClient();
-            foreach (var sub in client.Subscriptions().List())
+            foreach (var sub in client.GetSubscriptionContainer().List())
             {
                 await foreach (var armResource in sub.ListVirtualMachinesByNameAsync("-e"))
                 {
