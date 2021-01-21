@@ -13,7 +13,7 @@ namespace client
             createMultipleVms.Execute();
 
             var client = new AzureResourceManagerClient();
-            foreach (var sub in client.Subscriptions().List())
+            foreach (var sub in client.GetSubscriptionContainer().List())
             {
                 var vmList = sub.ListVirtualMachines();
                 foreach (var vm in vmList.Where(armResource => armResource.Data.Name.Contains("-o")))
@@ -25,9 +25,9 @@ namespace client
                 }
             }
 
-            var resourceGroup = new AzureResourceManagerClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
+            var resourceGroup = new AzureResourceManagerClient().GetResourceGroupOperations(Context.SubscriptionId, Context.RgName);
 
-            resourceGroup.VirtualMachines().List().Select(vm =>
+            resourceGroup.GetVirtualMachineContainer().List().Select(vm =>
             {
                 var parts = vm.Id.Name.Split('-');
                 var n = Convert.ToInt32(parts[0].Last());

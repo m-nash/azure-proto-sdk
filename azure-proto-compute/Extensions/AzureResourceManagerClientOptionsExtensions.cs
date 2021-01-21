@@ -12,7 +12,7 @@ namespace azure_proto_compute.Extensions
         /// </summary>
         ///<param> The <see  cref="[AzureResourceManagerClientOptions]" /> instance the method will execute against. </param>
         /// <returns> Returns a response with the <see cref="ComputeRestApiVersions"/> operation for this resource. </returns>
-        public static ComputeRestApiVersions ComputeRestVersions(this AzureResourceManagerClientOptions azureResourceManagerClientOptions)
+        public static ComputeRestApiVersions GetComputeRestApiVersions(this AzureResourceManagerClientOptions azureResourceManagerClientOptions)
         {
             return azureResourceManagerClientOptions.GetOverrideObject<ComputeRestApiVersions>(() => new ComputeRestApiVersions()) as ComputeRestApiVersions;
         }

@@ -21,7 +21,7 @@ namespace client
             var client1 = new AzureResourceManagerClient(options1);
             var client2 = new AzureResourceManagerClient(options2);
 
-            foreach (var sub in client1.Subscriptions().List())
+            foreach (var sub in client1.GetSubscriptionContainer().List())
             {
                 var x = sub;
             }

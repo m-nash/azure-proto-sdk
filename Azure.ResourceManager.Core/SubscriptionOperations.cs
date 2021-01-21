@@ -63,38 +63,28 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the resource group operations for a given resource group.
         /// </summary>
-        /// <param name="resourceGroup"> The resource group. </param>
+        /// <param name="resourceGroupData"> The resource group. </param>
         /// <returns> The resource group operations. </returns>
-        public ResourceGroupOperations ResourceGroup(ResourceGroupData resourceGroup)
+        public ResourceGroup GetResourceGroup(ResourceGroupData resourceGroupData)
         {
-            return new ResourceGroupOperations(ClientOptions, resourceGroup);
+            return new ResourceGroup(ClientOptions, resourceGroupData);
         }
 
         /// <summary>
         /// Gets the resource group operations for a given resource group.
         /// </summary>
-        /// <param name="resourceGroup"> The resource group identifier. </param>
+        /// <param name="resourceGroupId"> The resource group identifier. </param>
         /// <returns> The resource group operations. </returns>
-        public ResourceGroupOperations ResourceGroup(ResourceIdentifier resourceGroup)
+        public ResourceGroupOperations GetResourceGroupOperations(ResourceIdentifier resourceGroupId)
         {
-            return new ResourceGroupOperations(ClientOptions, resourceGroup);
-        }
-
-        /// <summary>
-        /// Gets the resource group operations for a given resource group.
-        /// </summary>
-        /// <param name="resourceGroupId"> The Id of the resource group. </param>
-        /// <returns> The resource group operations. </returns>
-        public ResourceGroupOperations ResourceGroup(string resourceGroupId)
-        {
-            return new ResourceGroupOperations(ClientOptions, $"{Id}/resourceGroups/{resourceGroupId}");
+            return new ResourceGroupOperations(ClientOptions, resourceGroupId);
         }
 
         /// <summary>
         /// Gets the resource group container under this subscription
         /// </summary>
         /// <returns> The resource group container. </returns>
-        public ResourceGroupContainer ResourceGroups()
+        public ResourceGroupContainer GetResourceGroupContainer()
         {
             return new ResourceGroupContainer(ClientOptions, this);
         }

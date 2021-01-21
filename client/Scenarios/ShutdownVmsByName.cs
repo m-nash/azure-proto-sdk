@@ -11,7 +11,7 @@ namespace client
             var createMultipleVms = new CreateMultipleVms(Context);
             createMultipleVms.Execute();
 
-            var sub = new AzureResourceManagerClient().Subscription(Context.SubscriptionId);
+            var sub = new AzureResourceManagerClient().GetSubscriptionOperations(Context.SubscriptionId);
 
             foreach(var armResource in sub.ListVirtualMachinesByName("even"))
             {

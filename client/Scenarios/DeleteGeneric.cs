@@ -12,8 +12,8 @@ namespace client
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
 
-            var rgOp = new AzureResourceManagerClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
-            foreach(var genericOp in rgOp.VirtualMachines().ListByName(Context.VmName))
+            var rgOp = new AzureResourceManagerClient().GetResourceGroupOperations(Context.SubscriptionId, Context.RgName);
+            foreach(var genericOp in rgOp.GetVirtualMachineContainer().ListByName(Context.VmName))
             {
                 Console.WriteLine($"Deleting {genericOp.Id}");
                 genericOp.Delete();
@@ -21,7 +21,7 @@ namespace client
 
             try
             {
-                var vmOp = rgOp.VirtualMachine(Context.VmName);
+                var vmOp = rgOp.GetVirtualMachineOperations(Context.VmName);
                 Console.WriteLine($"Trying to get {vmOp.Id}");
                 var response = vmOp.Get();
             }
