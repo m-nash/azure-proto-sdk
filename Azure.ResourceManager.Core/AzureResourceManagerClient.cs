@@ -105,7 +105,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="subscriptionId"> The resource identifier of the subscription. </param>
         /// <returns> Subscription operations. </returns>
-        public SubscriptionOperations Subscription(ResourceIdentifier subscriptionId) => new SubscriptionOperations(
+        public SubscriptionOperations GetSubscriptionOperations(ResourceIdentifier subscriptionId) => new SubscriptionOperations(
             ClientOptions,
             subscriptionId,
             _credentials,
@@ -116,7 +116,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="subscriptionGuid"> The guid of the subscription. </param>
         /// <returns> Subscription operations. </returns>
-        public SubscriptionOperations Subscription(string subscriptionGuid) => new SubscriptionOperations(
+        public SubscriptionOperations GetSubscriptionOperations(string subscriptionGuid) => new SubscriptionOperations(
             ClientOptions,
             subscriptionGuid,
             _credentials,
@@ -256,7 +256,7 @@ namespace Azure.ResourceManager.Core
         /// <returns> Resource group operations. </returns>
         public ResourceGroupOperations GetResourceGroupOperations(string subscriptionGuid, string resourceGroupName)
         {
-            return new ResourceGroupOperations(DefaultSubscription, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}");
+            return new ResourceGroupOperations(DefaultSubscription, $"/subscriptions/{subscriptionGuid}/resourceGroups/{resourceGroupName}");
         }
 
         /// <summary>
@@ -264,7 +264,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="resourceGroupId"> The resource identifier of the resource group. </param>
         /// <returns> Resource group operations. </returns>
-        public ResourceGroupOperations ResourceGroup(ResourceIdentifier resourceGroupId)
+        public ResourceGroupOperations GetResourceGroupOperations(ResourceIdentifier resourceGroupId)
         {
             return new ResourceGroupOperations(DefaultSubscription, resourceGroupId);
         }
@@ -357,9 +357,6 @@ namespace Azure.ResourceManager.Core
             return sub;
         }
 
-        /// <summary>
-        /// Gets the resource client.
-        /// </summary>
-        internal ResourcesManagementClient GetResourcesClient(string subscription) => new ResourcesManagementClient(_baseUri, subscription, _credentials);
+        private ResourcesManagementClient GetResourcesClient(string subscription) => new ResourcesManagementClient(_baseUri, subscription, _credentials);
     }
 }

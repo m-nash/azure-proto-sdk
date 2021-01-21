@@ -63,9 +63,9 @@ namespace azure_proto_network
         /// <param name="resourceGroup"> The operations over a specific resource group. </param>
         /// <param name="networkInterface"> The network interface to target for operations. </param>
         /// <returns> A <see cref="NetworkInterface"/> including the operations that can be peformed on it. </returns>
-        public static NetworkInterfaceOperations NetworkInterface(this ResourceGroupOperations resourceGroup, string networkInterface)
+        public static NetworkInterfaceOperations GetNetworkInterfaceOperations(this ResourceGroupOperations resourceGroup, string networkInterface)
         {
-            return new NetworkInterface(resourceGroup.ClientOptions, networkInterface);
+            return new NetworkInterfaceOperations(resourceGroup, networkInterface);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="resourceGroup"> The operations over a specific resource group. </param>
         /// <returns> A <see cref="NetworkInterfaceContainer"/> representing the collection of <see cref="NetworkInterface"/> 
-        public static NetworkInterfaceContainer NetworkInterfaces(this ResourceGroupOperations resourceGroup)
+        public static NetworkInterfaceContainer GetNetworkInterfaceContainer(this ResourceGroupOperations resourceGroup)
         {
             return new NetworkInterfaceContainer(resourceGroup);
         }
@@ -86,19 +86,9 @@ namespace azure_proto_network
         /// <param name="resourceGroup"> The <see cref="ResourceGroupOperations" /> instance the method will execute against. </param>
         /// <param name="networkSecurityGroup"> The resource id of <see cref="GetNetworkSecurityGroupOperations" /> data model. </param>
         /// <returns> An instance of <see cref="NetworkSecurityGroup" />. </returns>
-        public static NetworkSecurityGroupOperations NetworkSecurityGroup(this ResourceGroupOperations operations, string networkSecurityGroup)
+        public static NetworkSecurityGroupOperations GetNetworkSecurityGroupOperations(this ResourceGroupOperations operations, string networkSecurityGroup)
         {
             return new NetworkSecurityGroupOperations(operations, networkSecurityGroup);
-        }
-
-        /// <summary>
-        /// Gets a <see cref="NetworkSecurityGroupContainer"/> under a <see cref="ResourceGroup"/>.
-        /// </summary>
-        /// <param name="resourceGroup"> The <see cref="ResourceGroup" /> instance the method will execute against. </param>
-        /// <returns> An instance of <see cref="NetworkSecurityGroupContainer" />. </returns>
-        public static NetworkSecurityGroupContainer NetworkSecurityGroups(this ResourceGroup resourceGroup)
-        {
-            return new NetworkSecurityGroupContainer(resourceGroup.ClientOptions, resourceGroup.Data);
         }
 
         /// <summary>

@@ -55,7 +55,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="resourceGroupId"> The resource group identifier. </param>
         /// <returns> The resource group operations. </returns>
-        public ResourceGroupOperations ResourceGroup(ResourceIdentifier resourceGroupId)
+        public ResourceGroupOperations GetResourceGroupOperations(ResourceIdentifier resourceGroupId)
         {
             return new ResourceGroupOperations(this, resourceGroupId);
         }
@@ -65,7 +65,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <returns> The resource group operations. </returns>
-        public ResourceGroupOperations ResourceGroup(string resourceGroupName)
+        public ResourceGroupOperations GetResourceGroupOperations(string resourceGroupName)
         {
             return new ResourceGroupOperations(this, resourceGroupName);
         }
