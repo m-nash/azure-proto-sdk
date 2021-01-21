@@ -12,24 +12,14 @@ namespace azure_proto_network
     {
         #region Virtual Network Operations
 
-        /// <summary>
-        /// Gets a <see cref="VirtualNetwork"/> for a given resource under a <see cref="ResourceGroup"/>. 
-        /// </summary>
-        /// <param name="resourceGroup"> The <see cref="ResourceGroup" /> instance the method will execute against. </param>
-        /// <param name="virtualNetwork"> The <see cref="VirtualNetworkData" /> data model. </param>
-        /// <returns> An instance of <see cref="VirtualNetwork" />. </returns>
-        public static VirtualNetwork VirtualNetwork(this ResourceGroup resourceGroup, VirtualNetworkData virtualNetwork)
-        {
-            return new VirtualNetwork(resourceGroup.ClientOptions, virtualNetwork);
-        }
 
         /// <summary>
         /// Gets a <see cref="VirtualNetworkOperations"/> for a given resource under a <see cref="ResourceGroup"/>. 
         /// </summary>
         /// <param name="resourceGroup"> The <see cref="ResourceGroupOperations" /> instance the method will execute against. </param>
-        /// <param name="virtualNetwork"> The resource id of <see cref="VirtualNetwork" /> data model. </param>
+        /// <param name="virtualNetwork"> The resource id of <see cref="GetVirtualNetworkOperations" /> data model. </param>
         /// <returns> An instance of <see cref="VirtualNetworkOperations" />. </returns>
-        public static VirtualNetworkOperations VirtualNetwork(this ResourceGroupOperations resourceGroup, string virtualNetwork)
+        public static VirtualNetworkOperations GetVirtualNetworkOperations(this ResourceGroupOperations resourceGroup, string virtualNetwork)
         {
             return new VirtualNetworkOperations(resourceGroup.ClientOptions, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/virtualNetworks/{virtualNetwork}"));
         }
@@ -39,7 +29,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="resourceGroup"> The <see cref="ResourceGroup" /> instance the method will execute against. </param>
         /// <returns> An instance of <see cref="VirtualNetworkContainer" />. </returns>
-        public static VirtualNetworkContainer VirtualNetworks(this ResourceGroup resourceGroup)
+        public static VirtualNetworkContainer GetVirtualNetworkContainer(this ResourceGroup resourceGroup)
         {
             return new VirtualNetworkContainer(resourceGroup.ClientOptions, resourceGroup.Data);
         }
@@ -49,7 +39,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="resourceGroup"> The <see cref="ResourceGroupOperations" /> instance the method will execute against. </param>
         /// <returns> An instance of <see cref="VirtualNetworkContainer" />. </returns>
-        public static VirtualNetworkContainer VirtualNetworks(this ResourceGroupOperations resourceGroup)
+        public static VirtualNetworkContainer GetVirtualNetworkContainer(this ResourceGroupOperations resourceGroup)
         {
             return new VirtualNetworkContainer(resourceGroup.ClientOptions, resourceGroup.Id);
         }
@@ -58,23 +48,12 @@ namespace azure_proto_network
         #region Public IP Address Operations
 
         /// <summary>
-        /// Gets a <see cref="PublicIpAddress"/> under a <see cref="ResourceGroup"/>. 
-        /// </summary>
-        /// <param name="resourceGroup"> The <see cref="ResourceGroupOperations" /> instance the method will execute against. </param>
-        /// <param name="publicIpAddress"> The <see cref="PublicIPAddressData" /> data model. </param>
-        /// <returns> An instance of <see cref="PublicIpAddress" />. </returns>
-        public static PublicIpAddress PublicIpAddress(this ResourceGroupOperations resourceGroup, PublicIPAddressData publicIpAddress)
-        {
-            return new PublicIpAddress(resourceGroup.ClientOptions, publicIpAddress);
-        }
-
-        /// <summary>
         /// Gets a <see cref="PublicIpAddressOperations"/> under a <see cref="ResourceGroup"/>. 
         /// </summary>
         /// <param name="resourceGroup"> The <see cref="ResourceGroupOperations" /> instance the method will execute against. </param>
-        /// <param name="publicIpAddress"> The resource id of <see cref="PublicIpAddress" /> data model. </param>
+        /// <param name="publicIpAddress"> The resource id of <see cref="GetPublicIpAddressOperations" /> data model. </param>
         /// <returns> An instance of <see cref="PublicIpAddressOperations" />. </returns>
-        public static PublicIpAddressOperations PublicIpAddress(this ResourceGroupOperations resourceGroup, string publicIpAddress)
+        public static PublicIpAddressOperations GetPublicIpAddressOperations(this ResourceGroupOperations resourceGroup, string publicIpAddress)
         {
             return new PublicIpAddressOperations(resourceGroup.ClientOptions, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/publicIpAddresses/{publicIpAddress}"));
         }
@@ -84,7 +63,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="resourceGroup"> The <see cref="ResourceGroup" /> instance the method will execute against. </param>
         /// <returns> An instance of <see cref="PublicIpAddressContainer" />. </returns>
-        public static PublicIpAddressContainer PublicIpAddresses(this ResourceGroup resourceGroup)
+        public static PublicIpAddressContainer GetPublicIpAddressContainer(this ResourceGroup resourceGroup)
         {
             return new PublicIpAddressContainer(resourceGroup.ClientOptions, resourceGroup.Data);
         }
@@ -94,7 +73,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="resourceGroup"> The <see cref="ResourceGroupOperations" /> instance the method will execute against. </param>
         /// <returns> An instance of <see cref="PublicIpAddressContainer" />. </returns>
-        public static PublicIpAddressContainer PublicIpAddresses(this ResourceGroupOperations resourceGroup)
+        public static PublicIpAddressContainer GetPublicIpAddresseContainer(this ResourceGroupOperations resourceGroup)
         {
             return new PublicIpAddressContainer(resourceGroup.ClientOptions, resourceGroup.Id);
         }
@@ -103,45 +82,34 @@ namespace azure_proto_network
         #region Network Interface (NIC) operations
 
         /// <summary>
-        /// Gets the operations over a specific <see cref="NetworkInterface>"/>
-        /// </summary>
-        /// <param name="resourceGroup"> The operations over a specific resource group. </param>
-        /// <param name="networkInterface"> The network interface to target for operations. </param>
-        /// <returns> A <see cref="NetworkInterface"/> including the operations that can be peformed on it. </returns>
-        public static NetworkInterface NetworkInterface(this ResourceGroupOperations resourceGroup, NetworkInterfaceData networkInterface)
-        {
-            return new NetworkInterface(resourceGroup.ClientOptions, networkInterface);
-        }
-
-        /// <summary>
-        /// Gets the operations over a specific <see cref="NetworkInterface>"/>
+        /// Gets the operations over a specific <see cref="GetNetworkInterfaceOperations>"/>
         /// </summary>
         /// <param name="resourceGroup"> The operations over a specific resource group. </param>
         /// <param name="networkInterface"> The name of the network interface to target for operations. </param>
-        /// <returns> A <see cref="NetworkInterface"/> including the operations that can be peformed on it. </returns>
-        public static NetworkInterfaceOperations NetworkInterface(this ResourceGroupOperations resourceGroup, string networkInterface)
+        /// <returns> A <see cref="GetNetworkInterfaceOperations"/> including the operations that can be peformed on it. </returns>
+        public static NetworkInterfaceOperations GetNetworkInterfaceOperations(this ResourceGroupOperations resourceGroup, string networkInterface)
         {
             return new NetworkInterfaceOperations(resourceGroup.ClientOptions, new ResourceIdentifier($"{resourceGroup.Id}/providers/Microsoft.Network/networkInterfaces/{networkInterface}"));
         }
 
         /// <summary>
-        /// Gets the operations over the collection of <see cref="NetworkInterface"/> contained in the resource group.
+        /// Gets the operations over the collection of <see cref="GetNetworkInterfaceOperations"/> contained in the resource group.
         /// </summary>
         /// <param name="resourceGroup"> The <see cref="ResourceGroup"/> that contains the network interfaces. </param>
-        /// <returns> A <see cref="NetworkInterfaceContainer"/> representing the collection of <see cref="NetworkInterface"/> 
+        /// <returns> A <see cref="NetworkInterfaceContainer"/> representing the collection of <see cref="GetNetworkInterfaceOperations"/> 
         /// in the resource group. </returns>
-        public static NetworkInterfaceContainer NetworkInterfaces(this ResourceGroup resourceGroup)
+        public static NetworkInterfaceContainer GetNetworkInterfaceContainer(this ResourceGroup resourceGroup)
         {
             return new NetworkInterfaceContainer(resourceGroup.ClientOptions, resourceGroup.Data);
         }
 
         /// <summary>
-        /// Gets the operations over the collection of <see cref="NetworkInterface"/> contained in the resource group.
+        /// Gets the operations over the collection of <see cref="GetNetworkInterfaceOperations"/> contained in the resource group.
         /// </summary>
         /// <param name="resourceGroup"> The name of the <see cref="ResourceGroup"/> that contains the network interfaces. </param>
-        /// <returns> A <see cref="NetworkInterfaceContainer"/> representing the collection of <see cref="NetworkInterface"/> 
+        /// <returns> A <see cref="NetworkInterfaceContainer"/> representing the collection of <see cref="GetNetworkInterfaceOperations"/> 
         /// in the resource group. </returns>
-        public static NetworkInterfaceContainer NetworkInterfaces(this ResourceGroupOperations resourceGroup)
+        public static NetworkInterfaceContainer GetNetworkInterfaceContainer(this ResourceGroupOperations resourceGroup)
         {
             return new NetworkInterfaceContainer(resourceGroup.ClientOptions, resourceGroup.Id);
         }
@@ -150,23 +118,12 @@ namespace azure_proto_network
         #region Network Security Group operations
 
         /// <summary>
-        /// Gets a <see cref="NetworkSecurityGroup"/> under a <see cref="ResourceGroup"/>.
-        /// </summary>
-        /// <param name="resourceGroup"> The <see cref="ResourceGroupOperations" /> instance the method will execute against. </param>
-        /// <param name="networkSecurityGroup"> The <see cref="NetworkSecurityGroupData" /> data model. </param>
-        /// <returns> An instance of <see cref="NetworkSecurityGroup" />. </returns>
-        public static NetworkSecurityGroup NetworkSecurityGroup(this ResourceGroupOperations resourceGroup, NetworkSecurityGroupData networkSecurityGroup)
-        {
-            return new NetworkSecurityGroup(resourceGroup.ClientOptions, networkSecurityGroup);
-        }
-
-        /// <summary>
         /// Gets a <see cref="NetworkSecurityGroupOperations"/> under a <see cref="ResourceGroup"/>.
         /// </summary>
         /// <param name="operations"> The <see cref="ResourceGroupOperations" /> instance the method will execute against. </param>
-        /// <param name="networkSecurityGroup"> The resource id of <see cref="NetworkSecurityGroup" /> data model. </param>
+        /// <param name="networkSecurityGroup"> The resource id of <see cref="GetNetworkSecurityGroupOperations" /> data model. </param>
         /// <returns> An instance of <see cref="NetworkSecurityGroupOperations" />. </returns>
-        public static NetworkSecurityGroupOperations NetworkSecurityGroup(this ResourceGroupOperations operations, string networkSecurityGroup)
+        public static NetworkSecurityGroupOperations GetNetworkSecurityGroupOperations(this ResourceGroupOperations operations, string networkSecurityGroup)
         {
             return new NetworkSecurityGroupOperations(operations.ClientOptions, new ResourceIdentifier($"{operations.Id}/providers/Microsoft.Network/networkSecurityGroups/{networkSecurityGroup}"));
         }
@@ -176,7 +133,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="resourceGroup"> The <see cref="ResourceGroup" /> instance the method will execute against. </param>
         /// <returns> An instance of <see cref="NetworkSecurityGroupContainer" />. </returns>
-        public static NetworkSecurityGroupContainer NetworkSecurityGroups(this ResourceGroup resourceGroup)
+        public static NetworkSecurityGroupContainer GetNetworkSecurityGroupContainer(this ResourceGroup resourceGroup)
         {
             return new NetworkSecurityGroupContainer(resourceGroup.ClientOptions, resourceGroup.Data);
         }
@@ -186,7 +143,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="resourceGroup"> The <see cref="ResourceGroupOperations" /> instance the method will execute against. </param>
         /// <returns> An instance of <see cref="NetworkSecurityGroupContainer" />. </returns>
-        public static NetworkSecurityGroupContainer NetworkSecurityGroups(this ResourceGroupOperations resourceGroup)
+        public static NetworkSecurityGroupContainer GetNetworkSecurityGroupContainer(this ResourceGroupOperations resourceGroup)
         {
             return new NetworkSecurityGroupContainer(resourceGroup.ClientOptions, resourceGroup.Id);
         }

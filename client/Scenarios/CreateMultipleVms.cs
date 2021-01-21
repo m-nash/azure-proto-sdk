@@ -15,21 +15,21 @@ namespace client
         public override void Execute()
         {
             var client = new AzureResourceManagerClient();
-            var subscription = client.Subscription(Context.SubscriptionId);
+            var subscription = client.GetSubscriptionOperations(Context.SubscriptionId);
 
             // Create Resource Group
             Console.WriteLine($"--------Start create group {Context.RgName}--------");
-            var resourceGroup = subscription.ResourceGroups().Create(Context.RgName, Context.Loc).Value;
+            var resourceGroup = subscription.GetResourceGroupContainer().Create(Context.RgName, Context.Loc).Value;
             CleanUp.Add(resourceGroup.Id);
 
             // Create AvailabilitySet
             Console.WriteLine("--------Start create AvailabilitySet--------");
-            var aset = resourceGroup.AvailabilitySets().Construct("Aligned").Create(Context.VmName + "_aSet").Value;
+            var aset = resourceGroup.GetAvailabilitySetContainer().Construct("Aligned").Create(Context.VmName + "_aSet").Value;
 
             // Create VNet
             Console.WriteLine("--------Start create VNet--------");
             string vnetName = Context.VmName + "_vnet";
-            var vnet = resourceGroup.VirtualNetworks().Construct("10.0.0.0/16").Create(vnetName).Value;
+            var vnet = resourceGroup.GetVirtualNetworkContainer().Construct("10.0.0.0/16").Create(vnetName).Value;
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
@@ -37,7 +37,7 @@ namespace client
 
             //create network security group
             Console.WriteLine("--------Start create NetworkSecurityGroup--------");
-            _ = resourceGroup.NetworkSecurityGroups().Construct(Context.NsgName, 80).Create(Context.NsgName).Value;
+            _ = resourceGroup.GetNetworkSecurityGroupContainer().Construct(Context.NsgName, 80).Create(Context.NsgName).Value;
 
             CreateVms(resourceGroup, aset, subnet);
         }
@@ -49,17 +49,17 @@ namespace client
             {
                 // Create IP Address
                 Console.WriteLine("--------Start create IP Address--------");
-                var ipAddress = resourceGroup.PublicIpAddresses().Construct().Create($"{Context.VmName}_{i}_ip").Value;
+                var ipAddress = resourceGroup.GetPublicIpAddressContainer().Construct().Create($"{Context.VmName}_{i}_ip").Value;
 
                 // Create Network Interface
                 Console.WriteLine("--------Start create Network Interface--------");
-                var nic = resourceGroup.NetworkInterfaces().Construct(ipAddress.Data, subnet.Id).Create($"{Context.VmName}_{i}_nic").Value;
+                var nic = resourceGroup.GetNetworkInterfaceContainer().Construct(ipAddress.Data, subnet.Id).Create($"{Context.VmName}_{i}_nic").Value;
 
                 // Create VM
                 string num = i % 2 == 0 ? "-e" : "-o";
                 string name = $"{Context.VmName}{i}{num}";
                 Console.WriteLine("--------Start create VM {0}--------", i);
-                var vmOp = resourceGroup.VirtualMachines().Construct(name, "admin-user", "!@#$%asdfA", nic.Id, aset.Data).StartCreate(name);
+                var vmOp = resourceGroup.GetVirtualMachineContainer().Construct(name, "admin-user", "!@#$%asdfA", nic.Id, aset.Data).StartCreate(name);
                 operations.Add(vmOp);
             }
 
