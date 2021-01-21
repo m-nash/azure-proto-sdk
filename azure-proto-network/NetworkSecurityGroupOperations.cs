@@ -90,7 +90,7 @@ namespace azure_proto_network
             }
 
             return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
-                Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, model.Model),
+                Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, resource.Data),
                 n => new NetworkSecurityGroup(this, new NetworkSecurityGroupData(n)));
         }
 

@@ -153,7 +153,7 @@ namespace azure_proto_network
         {
             return new PhWrappingPageable<Azure.ResourceManager.Network.Models.NetworkSecurityGroup, NetworkSecurityGroup>(
                 Operations.List(Id.Name, cancellationToken),
-                r => new NetworkSecurityGroup(ClientOptions, new NetworkSecurityGroupData(r)));
+                r => new NetworkSecurityGroup(Parent, new NetworkSecurityGroupData(r)));
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace azure_proto_network
         {
             return new PhWrappingAsyncPageable<Azure.ResourceManager.Network.Models.NetworkSecurityGroup, NetworkSecurityGroup>(
                 Operations.ListAsync(Id.Name, cancellationToken),
-                r => new NetworkSecurityGroup(ClientOptions, new NetworkSecurityGroupData(r)));
+                r => new NetworkSecurityGroup(Parent, new NetworkSecurityGroupData(r)));
         }
 
         /// <summary>
