@@ -87,7 +87,7 @@ namespace Azure.ResourceManager.Core
 
         public int CompareTo(ResourceType other)
         {
-            if ((object)other == null)
+            if (ReferenceEquals(other, null))
                 return 1;
 
             if (ReferenceEquals(this, other))
