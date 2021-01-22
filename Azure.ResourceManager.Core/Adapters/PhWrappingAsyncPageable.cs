@@ -3,102 +3,48 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
-using Azure;
 
 namespace Azure.ResourceManager.Core.Adapters
 {
     /// <summary>
-    ///     Returns an AsyncPageable that executes a given task before retrieving the first page of results
+    /// As above, returns an AsyncPageable that transforms each page of contents  after they are retrieved from the server
+    /// accorgin to the profived transformation function
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class PhTaskDeferringAsyncPageable<T> : AsyncPageable<T>
-        where T : notnull
+    /// <typeparam name="TModel"> The model returned by existing AsyncPageable methods. </typeparam>
+    /// <typeparam name="TOperations"> The <see cref="ResourceOperationsBase"/> to convert TModel into. </typeparam>
+    public class PhWrappingAsyncPageable<TModel, TOperations> : AsyncPageable<TOperations>
+        where TOperations : class
+        where TModel : class
     {
-        private readonly Func<Task<AsyncPageable<T>>> _task;
+        private readonly Func<TModel, TOperations> _converter;
+        private readonly IEnumerable<AsyncPageable<TModel>> _wrapped;
 
-        public PhTaskDeferringAsyncPageable(Func<Task<AsyncPageable<T>>> task)
-        {
-            _task = task;
-        }
-
-        public override async IAsyncEnumerable<Page<T>> AsPages(
-            string continuationToken = null,
-            int? pageSizeHint = null)
-        {
-            await foreach (var page in (await _task()).AsPages())
-            {
-                yield return page;
-            }
-        }
-    }
-
-    /// <summary>
-    ///     This class allows performing conversions on pages of data as they are accessed - used in the prototype to convett
-    ///     between underlying model types and the new model types that extend Resource,
-    ///     and also for returning Operations classes for those underlying objects.
-    /// </summary>
-    /// <typeparam name="T">The type parameter of the Pageable we are wrapping</typeparam>
-    /// <typeparam name="U">The desired type parameter of the returned pageable</typeparam>
-    public class PhWrappingPageable<T, U> : Pageable<U>
-        where U : class
-        where T : class
-    {
-        private readonly Func<T, U> _converter;
-        private readonly IEnumerable<Pageable<T>> _wrapped;
-
-        public PhWrappingPageable(Pageable<T> wrapped, Func<T, U> converter)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PhWrappingAsyncPageable{TModel, TOperations}"/> class.
+        /// </summary>
+        /// <param name="wrapped"> The results to wrap. </param>
+        /// <param name="converter"> The function used to convert from existing type to new type. </param>
+        public PhWrappingAsyncPageable(AsyncPageable<TModel> wrapped, Func<TModel, TOperations> converter)
         {
             _wrapped = new[] { wrapped };
             _converter = converter;
         }
 
-        public PhWrappingPageable(IEnumerable<Pageable<T>> wrapped, Func<T, U> converter)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PhWrappingAsyncPageable{TModel, TOperations}"/> class.
+        /// </summary>
+        /// <param name="wrapped"> The results to wrap. </param>
+        /// <param name="converter"> The function used to convert from existing type to new type. </param>
+        public PhWrappingAsyncPageable(IEnumerable<AsyncPageable<TModel>> wrapped, Func<TModel, TOperations> converter)
         {
             _wrapped = wrapped;
             _converter = converter;
         }
 
-        public override IEnumerable<Page<U>> AsPages(string continuationToken = null, int? pageSizeHint = null)
-        {
-            foreach (var pages in _wrapped)
-            {
-                foreach (var page in pages.AsPages())
-                {
-                    yield return new WrappingPage<T, U>(page, _converter);
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    ///     As above, returns an AsyncPageable that transforms each page of contents  after they are retrieved from the server
-    ///     accorgin to the profived transformation function
-    /// </summary>
-    /// <typeparam name="T">The generic type parameter of the underlying wrapped AsyncPageable</typeparam>
-    /// <typeparam name="U">The desired generic type parameter fo the returned AsyncPageable</typeparam>
-    public class PhWrappingAsyncPageable<T, U> : AsyncPageable<U>
-        where U : class
-        where T : class
-    {
-        private readonly Func<T, U> _converter;
-        private readonly IEnumerable<AsyncPageable<T>> _wrapped;
-
-        public PhWrappingAsyncPageable(AsyncPageable<T> wrapped, Func<T, U> converter)
-        {
-            _wrapped = new[] { wrapped };
-            _converter = converter;
-        }
-
-        public PhWrappingAsyncPageable(IEnumerable<AsyncPageable<T>> wrapped, Func<T, U> converter)
-        {
-            _wrapped = wrapped;
-            _converter = converter;
-        }
-
-        public override async IAsyncEnumerable<Page<U>> AsPages(
+        /// <inheritdoc/>
+        public override async IAsyncEnumerable<Page<TOperations>> AsPages(
             string continuationToken = null,
             int? pageSizeHint = null)
         {
@@ -106,32 +52,9 @@ namespace Azure.ResourceManager.Core.Adapters
             {
                 await foreach (var page in pageEnum.AsPages().WithCancellation(CancellationToken))
                 {
-                    yield return new WrappingPage<T, U>(page, _converter);
+                    yield return new WrappingPage<TModel, TOperations>(page, _converter);
                 }
             }
-        }
-    }
-
-    internal class WrappingPage<T, U> : Page<U>
-        where U : class
-        where T : class
-    {
-        private readonly Func<T, U> _converter;
-        private readonly Page<T> _wrapped;
-
-        internal WrappingPage(Page<T> wrapped, Func<T, U> converter)
-        {
-            _wrapped = wrapped;
-            _converter = converter;
-        }
-
-        public override IReadOnlyList<U> Values => _wrapped.Values.Select(_converter).ToImmutableList();
-
-        public override string ContinuationToken => _wrapped.ContinuationToken;
-
-        public override Response GetRawResponse()
-        {
-            return _wrapped.GetRawResponse();
         }
     }
 }

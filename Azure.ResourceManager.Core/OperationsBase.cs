@@ -50,15 +50,15 @@ namespace Azure.ResourceManager.Core
         public TokenCredential Credential { get; }
 
         /// <summary>
+        /// Gets the base URI of the service.
+        /// </summary>
+        public Uri BaseUri { get; }
+
+        /// <summary>
         /// Gets the valid Azure resource type for the current operations.
         /// </summary>
         /// <returns> A valid Azure resource type. </returns>
         protected abstract ResourceType ValidResourceType { get; }
-
-        /// <summary>
-        /// Gets the base URI of the service.
-        /// </summary>
-        public Uri BaseUri { get; }
 
         /// <summary>
         /// Validate the resource identifier against current operations.

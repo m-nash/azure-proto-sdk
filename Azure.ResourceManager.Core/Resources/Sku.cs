@@ -28,9 +28,14 @@ namespace Azure.ResourceManager.Core
             Capacity = capacity;
         }
 
-        // TODO: Will be deleted after we move in azure core repo
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Sku"/> class.
+        /// </summary>
+        /// <param name="sku"> The sku to copy from. </param>
         internal Sku(ResourceManager.Resources.Models.Sku sku)
-            : this(sku.Name, sku.Tier, sku.Family, sku.Size, sku.Capacity) { }
+            : this(sku.Name, sku.Tier, sku.Family, sku.Size, sku.Capacity)
+        {
+        }
 
         /// <summary>
         /// Gets the Name.

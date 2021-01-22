@@ -1,4 +1,7 @@
-﻿using Azure.Core;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using Azure.Core;
 using Azure.Core.Pipeline;
 using System;
 using System.Collections.Generic;
@@ -26,7 +29,6 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureResourceManagerClientOptions"/> class.
         /// </summary>
-        /// <param name="baseUri"> The base URI of the service. </param>
         /// <param name="other"> The client parameters to use in these operations. </param>
         internal AzureResourceManagerClientOptions(AzureResourceManagerClientOptions other = null)
         {
@@ -51,6 +53,7 @@ namespace Azure.ResourceManager.Core
         /// Converts client options.
         /// </summary>
         /// <typeparam name="T"> The type of the underlying model this class wraps. </typeparam>
+        /// <returns> The converted client options. </returns>
         public T Convert<T>()
             where T : ClientOptions, new()
         {

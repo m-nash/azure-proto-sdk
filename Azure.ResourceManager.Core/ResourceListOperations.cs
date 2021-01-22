@@ -18,14 +18,11 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// List resources under the a resource context
         /// </summary>
-        /// <param name="clientOptions"> The client parameters to use in these operations. </param>
-        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
+        /// <param name="resourceGroup"> The <see cref="ResourceGroupOperations"/> instance to use for the list. </param>
         /// <param name="resourceFilters"> Optional filters for results. </param>
         /// <param name="top"> The number of results to return. </param>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
-        /// <exception cref="ArgumentException"> <paramref name="id"/> is not valid to list at context. </exception>
         public static Pageable<ArmResource> ListAtContext(
             ResourceGroupOperations resourceGroup,
             ArmFilterCollection resourceFilters = null,
@@ -43,14 +40,11 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// List resources under the a resource context
         /// </summary>
-        /// <param name="clientOptions"> The client parameters to use in these operations. </param>
-        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
+        /// <param name="resourceGroup"> The <see cref="ResourceGroupOperations"/> instance to use for the list. </param>
         /// <param name="resourceFilters"> Optional filters for results. </param>
         /// <param name="top"> The number of results to return. </param>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns>An async collection of resource operations that may take multiple service requests to iterate over. </returns>
-        /// <exception cref="ArgumentException"> <paramref name="id"/> is not valid to list at context. </exception>
         public static AsyncPageable<ArmResource> ListAtContextAsync(
             ResourceGroupOperations resourceGroup,
             ArmFilterCollection resourceFilters = null,
@@ -68,11 +62,10 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// List resources under a subscription
         /// </summary>
-        /// <param name="subscription"> The id of the Azure subscription. </param>
+        /// <param name="subscription"> The <see cref="SubscriptionOperations"/> instance to use for the list. </param>
         /// <param name="resourceFilters"> Optional filters for results. </param>
         /// <param name="top"> The number of results to return. </param>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
         public static Pageable<ArmResource> ListAtContext(
             SubscriptionOperations subscription,
@@ -91,11 +84,10 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// List resources under the a resource context
         /// </summary>
-        /// <param name="subscription"> The id of the Azure subscription. </param>
+        /// <param name="subscription"> The <see cref="SubscriptionOperations"/> instance to use for the list. </param>
         /// <param name="resourceFilters"> Optional filters for results. </param>
         /// <param name="top"> The number of results to return. </param>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
         public static AsyncPageable<ArmResource> ListAtContextAsync(
             SubscriptionOperations subscription,

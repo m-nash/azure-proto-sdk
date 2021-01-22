@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase"/> class.
         /// </summary>
-        /// <param name="genericOperations">Generic operations with the identifier for this extention resource</param>
+        /// <param name="genericOperations"> The operations to copy the client options from. </param>
         protected ExtensionResourceOperationsBase(OperationsBase genericOperations)
             : base(genericOperations.ClientOptions, genericOperations.Id, genericOperations.Credential, genericOperations.BaseUri)
         {
@@ -23,8 +23,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase"/> class.
         /// </summary>
-        /// <param name="options">Client configuration properties for these operations</param>
-        /// <param name="id">The identifier of the extension resource</param>
+        /// <param name="genericOperations"> The operations to copy the client options from. </param>
+        /// <param name="id"> The identifier of the extension resource. </param>
         protected ExtensionResourceOperationsBase(OperationsBase genericOperations, ResourceIdentifier id)
             : base(genericOperations.ClientOptions, id, genericOperations.Credential, genericOperations.BaseUri)
         {
@@ -42,7 +42,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase{TOperations}"/> class.
         /// </summary>
-        /// <param name="genericOperations">Operations to create this operations class from</param>
+        /// <param name="genericOperations"> The operations to copy the client options from. </param>
         protected ExtensionResourceOperationsBase(OperationsBase genericOperations)
             : base(genericOperations)
         {
@@ -51,8 +51,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionResourceOperationsBase{TOperations}"/> class.
         /// </summary>
-        /// <param name="options">Client configuration properties for these operations</param>
-        /// <param name="id">The identifier of the extension resource</param>
+        /// <param name="genericOperations"> The operations to copy the client options from. </param>
+        /// <param name="id"> The identifier of the extension resource. </param>
         protected ExtensionResourceOperationsBase(OperationsBase genericOperations, ResourceIdentifier id)
             : base(genericOperations, id)
         {
@@ -61,15 +61,15 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Get details and operations for this extension resource.  This call will block the thread until details are returned from the service.
         /// </summary>
-        /// <returns>An Http Response containing details and operations for the extension resource</returns>
+        /// <returns> An Http Response containing details and operations for the extension resource. </returns>
         public abstract ArmResponse<TOperations> Get();
 
         /// <summary>
         /// Get details and operations for this extension resource.  This call returns a Task that completes when the details are returned from the service.
         /// </summary>
-        /// <param name="cancellationToken">A token allowing cancellation of the Http call in the task</param>
-        /// <returns>A Task that retrieves the resource details. When complete, the task will yield an Http Response
-        /// containing details and operations for the extension resource</returns>
+        /// <param name="cancellationToken"> A token allowing cancellation of the Http call in the task. </param>
+        /// <returns> A Task that retrieves the resource details. When complete, the task will yield an Http Response
+        /// containing details and operations for the extension resource. </returns>
         public abstract Task<ArmResponse<TOperations>> GetAsync(CancellationToken cancellationToken = default);
     }
 }

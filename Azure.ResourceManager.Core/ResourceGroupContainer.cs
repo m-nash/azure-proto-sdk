@@ -22,14 +22,14 @@ namespace Azure.ResourceManager.Core
         {
         }
 
+        /// <inheritdoc/>
+        protected override ResourceType ValidResourceType => SubscriptionOperations.ResourceType;
+
         private ResourceGroupsOperations Operations => new ResourcesManagementClient(
             BaseUri,
             Id.Subscription,
             Credential,
             ClientOptions.Convert<ResourcesManagementClientOptions>()).ResourceGroups;
-
-        /// <inheritdoc/>
-        protected override ResourceType ValidResourceType => SubscriptionOperations.ResourceType;
 
         /// <summary>
         /// Creates a new ResourceGroup.

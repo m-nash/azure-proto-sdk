@@ -6,31 +6,39 @@ using System;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    ///     Base resource type: All resources have these properties. Proxy and other untracked resources should extend this
-    ///     class
-    ///     TODO: Implement comparison, equality, and type coercion operator overloads
-    ///     TODO: What to do with properties derived from ResourceId when object is created? Should we have a special factory
-    ///     for each?
+    /// A class representing the base resource used by all azure resources.
     /// </summary>
     public abstract class Resource : IEquatable<Resource>, IEquatable<string>, IComparable<Resource>,
         IComparable<string>
     {
+        /// <summary>
+        /// Gets or sets the resource identifier.
+        /// </summary>
         public abstract ResourceIdentifier Id { get; protected set; }
 
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
         public virtual string Name => Id?.Name;
 
+        /// <summary>
+        /// Gets the resource type.
+        /// </summary>
         public virtual ResourceType Type => Id?.Type;
 
+        /// <inheritdoc/>
         public virtual int CompareTo(Resource other)
         {
             return string.Compare(Id?.Id, other?.Id);
         }
 
+        /// <inheritdoc/>
         public virtual int CompareTo(string other)
         {
             return string.Compare(Id?.Id, other);
         }
 
+        /// <inheritdoc/>
         public virtual bool Equals(Resource other)
         {
             if (Id == null)
@@ -39,6 +47,7 @@ namespace Azure.ResourceManager.Core
             return Id.Equals(other?.Id);
         }
 
+        /// <inheritdoc/>
         public virtual bool Equals(string other)
         {
             if (Id == null)

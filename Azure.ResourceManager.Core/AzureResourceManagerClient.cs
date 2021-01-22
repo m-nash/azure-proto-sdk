@@ -1,4 +1,7 @@
-﻿using Azure.Core;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using Azure.Core;
 using Azure.Identity;
 using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
@@ -22,10 +25,14 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         internal static readonly string DefaultUri = "https://management.azure.com";
 
+        private TokenCredential _credentials;
+
+        private Uri _baseUri;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
         /// </summary>
-        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="options"> The client parameters to use in these operations. </param>
         public AzureResourceManagerClient(AzureResourceManagerClientOptions options = default)
             : this(null, null, new DefaultAzureCredential(), options)
         {
@@ -35,6 +42,7 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
         /// </summary>
         /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="options"> The client parameters to use in these operations. </param>
         public AzureResourceManagerClient(TokenCredential credential, AzureResourceManagerClientOptions options = default)
             : this(null, null, credential, options)
         {
@@ -45,6 +53,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="defaultSubscriptionId"> The id of the default Azure subscription. </param>
         /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="options"> The client parameters to use in these operations. </param>
         public AzureResourceManagerClient(string defaultSubscriptionId, TokenCredential credential, AzureResourceManagerClientOptions options = default)
             : this(defaultSubscriptionId, null, credential, options)
         {
@@ -55,6 +64,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="baseUri"> The base URI of the service. </param>
         /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="options"> The client parameters to use in these operations. </param>
         public AzureResourceManagerClient(Uri baseUri, TokenCredential credential, AzureResourceManagerClientOptions options = default)
             : this(null, baseUri, credential, options)
         {
@@ -63,8 +73,9 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
         /// </summary>
-        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
         /// <param name="defaultSubscriptionId"> The id of the default Azure subscription. </param>
+        /// <param name="baseUri"> The base URI of the service. </param>
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
         /// <param name="options"> The client parameters to use in these operations. </param>
         private AzureResourceManagerClient(string defaultSubscriptionId, Uri baseUri, TokenCredential credential, AzureResourceManagerClientOptions options = default)
         {
@@ -75,10 +86,6 @@ namespace Azure.ResourceManager.Core
             DefaultSubscription = new SubscriptionOperations(ClientOptions, defaultSubscriptionId, credential, baseUri);
             ApiVersionOverrides = new Dictionary<string, string>();
         }
-
-        private TokenCredential _credentials;
-
-        private Uri _baseUri;
 
         /// <summary>
         /// Gets the Api version overrides.

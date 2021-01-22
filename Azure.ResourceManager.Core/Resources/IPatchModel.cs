@@ -10,6 +10,9 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public interface IPatchModel
     {
+        /// <summary>
+        /// Gets the tags.
+        /// </summary>
         IDictionary<string, string> Tags { get; }
     }
 }

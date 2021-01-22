@@ -4,20 +4,23 @@
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    ///     Resource that uses SKU
-    ///     TODO: GENERATOR Note that it is unclear whether we get value from these interfaces, using these as a placeholder,
-    ///     this
-    ///     could just be generated code with supporting types for entities like 'plan'.  The determinitive factor should be
-    ///     if the additional type structure enables a desirable generic treatment of resources.  Initial thought is that
-    ///     Managed Identity, Private Link and Entity Tags would beneft fromt he extra OM here, but that ManagedBy and Sku do
-    ///     not.
+    /// An interface representing a resource that has a <see cref="Sku"/>.
     /// </summary>
     public interface ISkuResource
     {
+        /// <summary>
+        /// Gets or sets the sku.
+        /// </summary>
         Sku Sku { get; set; }
 
+        /// <summary>
+        /// Gets or sets the plan.
+        /// </summary>
         Plan Plan { get; set; }
 
+        /// <summary>
+        /// Gets or sets the kind.
+        /// </summary>
         string Kind { get; set; }
     }
 }

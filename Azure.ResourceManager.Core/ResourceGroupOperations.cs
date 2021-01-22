@@ -138,7 +138,8 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="name"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
-        /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
         /// </remarks>
@@ -156,8 +157,11 @@ namespace Azure.ResourceManager.Core
         /// Create a resource with a ResourceGroupOperations.
         /// </summary>
         /// <param name="name"> A string representing the name of the resource />. </param>
-        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
+        /// <param name="model"> The model representing the object to create. />. </param>
         /// <param name="location"> A Location of where to to host the resource. />. </param>
+        /// <typeparam name="TContainer"> The type of the class containing the container for the specific resource. </typeparam>
+        /// <typeparam name="TOperations"> The type of the operations class for a specific resource. </typeparam>
+        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
         /// <returns> Returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, Location location = default)
             where TResource : TrackedResource
@@ -185,10 +189,14 @@ namespace Azure.ResourceManager.Core
         /// Create a resource with a ResourceGroupOperations.
         /// </summary>
         /// <param name="name"> A string representing the name of the resource />. </param>
-        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
+        /// <param name="model"> The model representing the object to create. />. </param>
         /// <param name="location"> A Location of where to to host the resource. />. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <typeparam name="TContainer"> The type of the class containing the container for the specific resource. </typeparam>
+        /// <typeparam name="TOperations"> The type of the operations class for a specific resource. </typeparam>
+        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
-        public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, Location location = default, CancellationToken token = default)
+        public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, Location location = default, CancellationToken cancellationToken = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations>
             where TContainer : ResourceContainerBase<TOperations, TResource>
@@ -207,7 +215,7 @@ namespace Azure.ResourceManager.Core
 
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;
 
-            return container.CreateAsync(name, model, token);
+            return container.CreateAsync(name, model, cancellationToken);
         }
     }
 }
