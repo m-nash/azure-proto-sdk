@@ -16,12 +16,12 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
   </ItemGroup>
-  <Target Name="GenerateHtmlCoverageReport" AfterTargets="GenerateCoverageResultAfterTest">
+  <!--Target Name="GenerateHtmlCoverageReport" AfterTargets="GenerateCoverageResultAfterTest">
     <ItemGroup>
       <CoverageFiles Include="coverage.$(TargetFrameworks).cobertura.xml" />
     </ItemGroup>
     <Exec Command="dotnet $(UserProfile)\.nuget\packages\reportgenerator\4.7.1\tools\$(TargetFrameworks)\ReportGenerator.dll -reports:@(CoverageFiles) -targetdir:coverage -reporttypes:Html" />
-  </Target>
+  </Target-->
   <ItemGroup>
     <ProjectReference Include="..\Azure.ResourceManager.Core\Azure.ResourceManager.Core.csproj" />
   </ItemGroup>
