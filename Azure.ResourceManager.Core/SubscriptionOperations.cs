@@ -41,24 +41,16 @@ namespace Azure.ResourceManager.Core
         {
         }
 
+        /// <summary>
+        /// Gets the valid resource type for this operation class
+        /// </summary>
         protected override ResourceType ValidResourceType => ResourceType;
-
 
         private SubscriptionsOperations SubscriptionsClient => new ResourcesManagementClient(
             BaseUri,
             Guid.NewGuid().ToString(),
             Credential,
             ClientOptions.Convert<ResourcesManagementClientOptions>()).Subscriptions;
-
-        /// <summary>
-        /// Gets the resource group operations for a given resource group.
-        /// </summary>
-        /// <param name="resourceGroupId"> The resource group identifier. </param>
-        /// <returns> The resource group operations. </returns>
-        public ResourceGroupOperations GetResourceGroupOperations(ResourceIdentifier resourceGroupId)
-        {
-            return new ResourceGroupOperations(this, resourceGroupId);
-        }
 
         /// <summary>
         /// Gets the resource group operations for a given resource group.
