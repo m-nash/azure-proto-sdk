@@ -40,7 +40,7 @@ namespace Azure.ResourceManager.Core
 
         public virtual int CompareTo(string other)
         {
-            return string.Compare(Id?.Id, other);
+            return string.Compare(Id?.Id, other, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public virtual bool Equals(Resource other)
