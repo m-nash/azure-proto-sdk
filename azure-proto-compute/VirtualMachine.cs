@@ -1,4 +1,5 @@
-﻿using Azure.ResourceManager.Core;
+﻿using System.Threading.Tasks;
+using Azure.ResourceManager.Core;
 
 namespace azure_proto_compute
 {
@@ -22,5 +23,15 @@ namespace azure_proto_compute
         /// Gets the data representing this VirtualMachine.
         /// </summary>
         public VirtualMachineData Data { get; private set; }
+
+        private protected override VirtualMachine GetResource()
+        {
+            return this;
+        }
+
+        private protected override Task<VirtualMachine> GetResourceAsync()
+        {
+            return Task.FromResult(this);
+        }
     }
 }
