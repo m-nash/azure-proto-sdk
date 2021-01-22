@@ -8,7 +8,6 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     ///     Base resource type: All resources have these properties. Proxy and other untracked resources should extend this
     ///     class
-    ///     TODO: Implement comparison, equality, and type coercion operator overloads
     ///     TODO: What to do with properties derived from ResourceId when object is created? Should we have a special factory
     ///     for each?
     /// </summary>
