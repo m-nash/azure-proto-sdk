@@ -99,18 +99,27 @@ namespace Azure.ResourceManager.Core
 
         public virtual int CompareTo(ResourceIdentifier other)
         {
-            return string.Compare(
-                Id?.ToLowerInvariant(),
-                other?.Id?.ToLowerInvariant(),
-                StringComparison.InvariantCultureIgnoreCase);
+            if (other == null)
+                return 1;
+
+            if (object.ReferenceEquals(this, other))
+                return 0;
+
+            int compareResult = 0;
+
+            if ((compareResult = string.Compare(Id, other.Id, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
+                (compareResult = string.Compare(Name, other.Name, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
+                (compareResult = Type.CompareTo(Type)) == 0 &&
+                (compareResult = string.Compare(Subscription, other.Subscription, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
+                (compareResult = string.Compare(ResourceGroup, other.ResourceGroup, StringComparison.InvariantCultureIgnoreCase)) == 0)
+                return 0;
+
+            return compareResult;
         }
 
         public virtual int CompareTo(string other)
         {
-            return string.Compare(
-                Id?.ToLowerInvariant(),
-                other?.ToLowerInvariant(),
-                StringComparison.InvariantCultureIgnoreCase);
+            return CompareTo(new ResourceIdentifier(other));
         }
 
         public virtual bool Equals(ResourceIdentifier other)
