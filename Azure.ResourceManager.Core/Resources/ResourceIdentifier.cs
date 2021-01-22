@@ -136,22 +136,10 @@ namespace Azure.ResourceManager.Core
         /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
         public virtual int CompareTo(ResourceIdentifier other)
         {
-            if (other == null)
-                return 1;
-
-            if (object.ReferenceEquals(this, other))
-                return 0;
-
-            int compareResult = 0;
-
-            if ((compareResult = string.Compare(Id, other.Id, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
-                (compareResult = string.Compare(Name, other.Name, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
-                (compareResult = Type.CompareTo(Type)) == 0 &&
-                (compareResult = string.Compare(Subscription, other.Subscription, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
-                (compareResult = string.Compare(ResourceGroup, other.ResourceGroup, StringComparison.InvariantCultureIgnoreCase)) == 0)
-                return 0;
-
-            return compareResult;
+            return string.Compare(
+                Id?.ToLowerInvariant(),
+                other?.Id?.ToLowerInvariant(),
+                StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>
@@ -161,7 +149,10 @@ namespace Azure.ResourceManager.Core
         /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
         public virtual int CompareTo(string other)
         {
-            return CompareTo(new ResourceIdentifier(other));
+            return string.Compare(
+                Id?.ToLowerInvariant(),
+                other?.ToLowerInvariant(),
+                StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>
