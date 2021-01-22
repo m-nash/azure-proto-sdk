@@ -50,6 +50,7 @@ namespace Azure.ResourceManager.Core.Tests
             ResourceTest resource1 = new ResourceTest("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testRg/providers/Microsoft.ClassicStorage/storageAccounts/account1");
             ResourceTest resource2 = null;
             Assert.AreEqual(1, resource1.CompareTo(resource2));
+            Assert.AreEqual(1, resource1.CompareTo((string)null));
         }
 
         [Test]
