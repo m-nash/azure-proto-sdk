@@ -1,8 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -89,6 +93,15 @@ namespace Azure.ResourceManager.Core
             return new ResourceGroupContainer(ClientOptions, this);
         }
 
+        /// <summary>
+        /// Gets the location group container under this subscription
+        /// </summary>
+        /// <returns> The resource group container. </returns>
+        public LocationContainer GetLocationContainer()
+        {
+            return new LocationContainer(ClientOptions, this);
+        }
+
         /// <inheritdoc/>
         public override ArmResponse<Subscription> Get()
         {
@@ -108,6 +121,49 @@ namespace Azure.ResourceManager.Core
         private Func<Azure.ResourceManager.Resources.Models.Subscription, Subscription> Converter()
         {
             return s => new Subscription(ClientOptions, new SubscriptionData(s));
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
+        public Pageable<LocationData> ListAvailableLocations(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var client = GetResourcesClient(Id.Subscription).Subscriptions;
+            var result = client.ListLocations(Id.Subscription, cancellationToken);
+            return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(
+                result,
+                location =>
+                {
+                    return location.DisplayName;
+                });
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
+        public async IAsyncEnumerable<LocationData> ListAvailableLocationsAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            if (Id.Subscription == null)
+            {
+                throw new InvalidOperationException("Please select a default subscription");
+            }
+
+            await foreach (var provider in GetResourcesClient(Id.Subscription).Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken).WithCancellation(cancellationToken))
+            {
+                if (string.Equals(provider.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var foundResource = provider.ResourceTypes.FirstOrDefault(p => ResourceType.Equals(p.ResourceType));
+                    foreach (var location in foundResource.Locations)
+                    {
+                        yield return location;
+                    }
+                }
+            }
         }
     }
 }

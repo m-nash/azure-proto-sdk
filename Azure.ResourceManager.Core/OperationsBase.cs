@@ -17,11 +17,11 @@ namespace Azure.ResourceManager.Core
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         /// <param name="location"> The location for the Azure resource. </param>
-        protected OperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id, Location location = null)
+        protected OperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id, LocationData location = null)
         {
             ClientOptions = options;
             Id = id;
-            DefaultLocation = location ?? Location.Default;
+            DefaultLocation = location ?? LocationData.Default;
 
             Validate(id);
         }
@@ -45,7 +45,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the default location.
         /// </summary>
-        public virtual Location DefaultLocation { get; }
+        public virtual LocationData DefaultLocation { get; }
 
         /// <summary>
         /// Gets the resource identifier.

@@ -43,7 +43,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="name"> The name of the ResourceGroup. </param>
         /// <param name="location"> The location of the ResourceGroup. </param>
         /// <returns> A response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
-        public ArmOperation<ResourceGroup> Create(string name, Location location)
+        public ArmOperation<ResourceGroup> Create(string name, LocationData location)
         {
             var model = new ResourceGroupData(new ResourceManager.Resources.Models.ResourceGroup(location));
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(

@@ -2,7 +2,11 @@
 using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Compute.Models;
 using Azure.ResourceManager.Core;
+using Azure.ResourceManager.Core.Adapters;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -285,6 +289,45 @@ namespace azure_proto_compute
                     Resource = new VirtualMachineData(v);
                     return new VirtualMachine(ClientOptions, Resource as VirtualMachineData);
                 });
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
+        public IEnumerable<LocationData> ListAvailableLocations(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var pageableProvider = GetResourcesClient(Id.Subscription).Providers.List(expand: "metadata", cancellationToken: cancellationToken);
+            var vmProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var vmResource = vmProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
+            return vmResource.Locations.Cast<LocationData>();
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
+        public async IAsyncEnumerable<LocationData> ListAvailableLocationsAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            if (Id.Subscription == null)
+            {
+                throw new InvalidOperationException("Please select a default subscription");
+            }
+
+            await foreach (var provider in GetResourcesClient(Id.Subscription).Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken).WithCancellation(cancellationToken))
+            {
+                if (string.Equals(provider.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var foundResource = provider.ResourceTypes.FirstOrDefault(p => ResourceType.Equals(p.ResourceType));
+                    foreach (var location in foundResource.Locations)
+                    {
+                        yield return location;
+                    }
+                }
+            }
         }
     }
 }

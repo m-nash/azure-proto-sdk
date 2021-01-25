@@ -26,11 +26,11 @@ namespace Azure.ResourceManager.Core
         }
 
         public ArmResourceData(ResourceIdentifier id)
-            : base(id, Location.Default, null)
+            : base(id, LocationData.Default, null)
         {
         }
 
-        public ArmResourceData(ResourceIdentifier id, Location location)
+        public ArmResourceData(ResourceIdentifier id, LocationData location)
             : base(id, location, null)
         {
         }

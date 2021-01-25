@@ -91,7 +91,7 @@ namespace azure_proto_network
         /// <param name="vnetCidr"> The CIDR of the resource. </param>
         /// <param name="location"> The location of the resource. </param>
         /// <returns> A builder with <see cref="VirtualNetwork"> and <see cref="VirtualNetworkData"/>. </returns>
-        public ArmBuilder<VirtualNetwork, VirtualNetworkData> Construct(string vnetCidr, Location location = null)
+        public ArmBuilder<VirtualNetwork, VirtualNetworkData> Construct(string vnetCidr, LocationData location = null)
         {
             var vnet = new Azure.ResourceManager.Network.Models.VirtualNetwork()
             {

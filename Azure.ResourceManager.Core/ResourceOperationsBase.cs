@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using Azure.ResourceManager.Resources;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -100,5 +101,10 @@ namespace Azure.ResourceManager.Core
                 existingTags.Add(key, value);
             }
         }
+
+        /// <summary>
+        /// Gets the resource client.
+        /// </summary>
+        protected ResourcesManagementClient GetResourcesClient(string subscription) => ClientOptions.GetClient((uri, credential) => new ResourcesManagementClient(uri, subscription, credential));
     }
 }

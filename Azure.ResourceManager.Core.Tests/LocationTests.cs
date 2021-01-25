@@ -18,7 +18,7 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(null, null, null, null)]
         public void CanCreateLocation(string name, string expectedName, string expectedCanonincalName, string expectedDisplayName)
         {
-            Location location = name;
+            LocationData location = name;
             if (name == null)
             {
                 Assert.IsNull(location);
@@ -42,7 +42,7 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase("")]
         public void NameTypeIsName(string location)
         {
-            Location loc = location;
+            LocationData loc = location;
             Assert.IsTrue(loc.Name == loc.DisplayName && loc.Name == loc.CanonicalName);
         }
 
@@ -53,7 +53,7 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase("a-b-c-5")]
         public void NameTypeIsCanonical(string location)
         {
-            Location loc = location;
+            LocationData loc = location;
             Assert.IsTrue(loc.CanonicalName == location && loc.Name != location && loc.DisplayName != location);
         }
 
@@ -68,7 +68,7 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase("A B C 5")]
         public void NameTypeIsDisplayName(string location)
         {
-            Location loc = location;
+            LocationData loc = location;
             Assert.IsTrue(loc.DisplayName == location && loc.Name != location && loc.CanonicalName != location);
         }
 
@@ -84,8 +84,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(false, "West US", null)]
         public void EqualsToObject(bool expected, string left, string right)
         {
-            Location loc1 = left;
-            Location loc2 = right;
+            LocationData loc1 = left;
+            LocationData loc2 = right;
             Assert.AreEqual(expected, loc1.Equals(loc2));
 
             if (expected)
@@ -110,7 +110,7 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(false, "West Us", null)]
         public void EqualsToString(bool expected, string left, string right)
         {
-            Location location = left;
+            LocationData location = left;
             Assert.AreEqual(expected, location.Equals(right));
 
             if (expected)
@@ -130,7 +130,7 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase("private-cloud", "Private Cloud")]
         public void CanParseToString(string name, string expected)
         {
-            Location location1 = name;
+            LocationData location1 = name;
             Assert.AreEqual(expected, location1.ToString());
         }
 
@@ -147,8 +147,8 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase("South US", null, 1)]
         public void CompareToObject(string left, string right, int expected)
         {
-            Location location1 = left;
-            Location location2 = right;
+            LocationData location1 = left;
+            LocationData location2 = right;
             Assert.AreEqual(expected, location1.CompareTo(location2));
             if (right != null)
             {
@@ -169,7 +169,7 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase("South US", null, 1)]
         public void CompareToString(string left, string right, int expected)
         {
-            Location location1 = left;
+            LocationData location1 = left;
             Assert.AreEqual(expected, location1.CompareTo(right));
             if (right != null)
             {
@@ -190,7 +190,7 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(null, null)]
         public void CanCastLocationToString(string name, string expected)
         {
-            Location location = name;
+            LocationData location = name;
             string strLocation = location;
             Assert.AreEqual(expected, strLocation);
         }
@@ -207,7 +207,7 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase (null,null)]
         public void CanCastStringToLocation(string name, string expected)
         {
-            Location location1 = name;
+            LocationData location1 = name;
             if (name == null)
                 Assert.Throws<System.NullReferenceException>(()=> { string x = location1.DisplayName; });
             else
@@ -217,9 +217,9 @@ namespace Azure.ResourceManager.Core.Tests
         [Test]
         public void CanAccessDefaultLocation()
         {
-            Assert.IsNotNull(Location.Default);
-            Location location = Location.Default;
-            Assert.IsTrue(location.Equals(Location.Default));
+            Assert.IsNotNull(LocationData.Default);
+            LocationData location = LocationData.Default;
+            Assert.IsTrue(location.Equals(LocationData.Default));
         }
     }
 }

@@ -10,14 +10,14 @@ namespace Azure.ResourceManager.Core
     public abstract class TrackedResource<T> : TrackedResource
         where T : class
     {
-        protected TrackedResource(ResourceIdentifier id, Location location, T data)
+        protected TrackedResource(ResourceIdentifier id, LocationData location, T data)
         {
             Id = id;
             Location = location;
             Model = data;
         }
 
-        protected TrackedResource(string id, Location location, T data)
+        protected TrackedResource(string id, LocationData location, T data)
         {
             if (object.ReferenceEquals(id, null))
             {
