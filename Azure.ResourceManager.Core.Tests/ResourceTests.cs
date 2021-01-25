@@ -61,14 +61,4 @@ namespace Azure.ResourceManager.Core.Tests
             Assert.AreEqual(0, resource1.CompareTo(resource2));
         }
     }
-
-    public class ResourceTest : Resource
-    {
-        public ResourceTest(string id)
-        {
-            Id = id;
-        }
-
-        public override ResourceIdentifier Id { get; protected set; }
-    }
 }
