@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// Represents an Azure geography region where supported resource providers live.
     /// </summary>
-    public class LocationData : TrackedResource, IEquatable<LocationData>, IComparable<LocationData> //inherit from Tracked Resource
+    public class LocationData : IEquatable<LocationData>, IComparable<LocationData>
     {
         #region Public Cloud Locations
 

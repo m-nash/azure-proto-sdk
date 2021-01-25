@@ -79,7 +79,7 @@ namespace Azure.ResourceManager.Core
                 }
             }
 
-            return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocations(subscriptionId, cancellationToken), s => new LocationData(s));
+            return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocations(subscriptionId, cancellationToken), s => s.DisplayName);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Azure.ResourceManager.Core
                     }
                 }
 
-                return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocationsAsync(subscriptionId, token), s => new LocationData(s));
+                return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocationsAsync(subscriptionId, token), s => s.DisplayName);
             }
 
             return new PhTaskDeferringAsyncPageable<LocationData>(PageableFunc);
