@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Azure.ResourceManager.Core.Tests
 {
-    public class ResourceTest : Resource
+    public class TestResource : Resource
     {
-        public ResourceTest(string id)
+        public TestResource(string id)
         {
             Id = id;
         }

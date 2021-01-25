@@ -21,8 +21,8 @@ namespace Azure.ResourceManager.Core.Tests
             "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testRg/providers/Microsoft.ClassicStorage/storageAccounts/account2")]
         public void CompareToObject(int expected, string id1, string id2)
         {
-            ResourceTest resource1 = new ResourceTest(id1);
-            ResourceTest resource2 = new ResourceTest(id2);
+            TestResource resource1 = new TestResource(id1);
+            TestResource resource2 = new TestResource(id2);
             Assert.AreEqual(expected, resource1.CompareTo(resource2));
         }
 
@@ -40,15 +40,15 @@ namespace Azure.ResourceManager.Core.Tests
             "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testRg/providers/Microsoft.ClassicStorage/storageAccounts/account2")]
         public void CompareToString(int expected, string id1, string id2)
         {
-            ResourceTest resource1 = new ResourceTest(id1);
+            TestResource resource1 = new TestResource(id1);
             Assert.AreEqual(expected, resource1.CompareTo(id2));
         }
 
         [Test]
         public void CompareToNull()
         {
-            ResourceTest resource1 = new ResourceTest("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testRg/providers/Microsoft.ClassicStorage/storageAccounts/account1");
-            ResourceTest resource2 = null;
+            TestResource resource1 = new TestResource("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testRg/providers/Microsoft.ClassicStorage/storageAccounts/account1");
+            TestResource resource2 = null;
             Assert.AreEqual(1, resource1.CompareTo(resource2));
             Assert.AreEqual(1, resource1.CompareTo((string)null));
         }
@@ -56,8 +56,8 @@ namespace Azure.ResourceManager.Core.Tests
         [Test]
         public void CompareToSame()
         {
-            ResourceTest resource1 = new ResourceTest("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testRg/providers/Microsoft.ClassicStorage/storageAccounts/account1");
-            ResourceTest resource2 = resource1;
+            TestResource resource1 = new TestResource("/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/testRg/providers/Microsoft.ClassicStorage/storageAccounts/account1");
+            TestResource resource2 = resource1;
             Assert.AreEqual(0, resource1.CompareTo(resource2));
         }
     }
