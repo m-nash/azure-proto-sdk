@@ -11,14 +11,14 @@ namespace client
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
 
-            var rgOp = new AzureResourceManagerClient().ResourceGroup(Context.SubscriptionId, Context.RgName);
-            foreach (var genericOp in rgOp.VirtualMachines().ListByName(Context.VmName))
+            var rgOp = new AzureResourceManagerClient().GetResourceGroupOperations(Context.SubscriptionId, Context.RgName);
+            foreach (var genericOp in rgOp.GetVirtualMachineContainer().ListByName(Context.VmName))
             {
                 Console.WriteLine($"Adding tag to {genericOp.Id}");
                 genericOp.StartAddTag("tagKey", "tagVaue");
             }
 
-            var vmOp = rgOp.VirtualMachine(Context.VmName);
+            var vmOp = rgOp.GetVirtualMachineOperations(Context.VmName);
             Console.WriteLine($"Getting {vmOp.Id}");
             var vm = vmOp.Get().Value;
 

@@ -18,7 +18,7 @@ namespace client
                 foreach (var rgId in Scenario.CleanUp)
                 {
                     ResourceIdentifier id = new ResourceIdentifier(rgId);
-                    var rg = new AzureResourceManagerClient().Subscription(id.Subscription).ResourceGroup(id);
+                    var rg = new AzureResourceManagerClient().GetSubscriptionOperations(id.Subscription).GetResourceGroupOperations(id);
                     Console.WriteLine($"--------Deleting {rg.Id.Name}--------");
                     try
                     {

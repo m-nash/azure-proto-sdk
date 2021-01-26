@@ -19,7 +19,7 @@ namespace client
                 context = new ScenarioContext();
             }
 
-            var subscription = new AzureResourceManagerClient().Subscription(Context.SubscriptionId);
+            var subscription = new AzureResourceManagerClient().GetSubscriptionOperations(Context.SubscriptionId);
 
             Regex reg = new Regex($"{Context.VmName}.*-e");
             Parallel.ForEach(subscription.ListVirtualMachines(), vm =>

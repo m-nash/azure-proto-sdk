@@ -128,29 +128,22 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the Azure subscription operations.
         /// </summary>
-        /// <param name="subscription">  The data model of the subscription. </param>
+        /// <param name="subscriptionData">  The data model of the subscription. </param>
         /// <returns> Subscription operations. </returns>
-        public SubscriptionOperations Subscription(SubscriptionData subscription) => new SubscriptionOperations(ClientOptions, subscription);
+        public Subscription GetSubscription(SubscriptionData subscriptionData) => new Subscription(ClientOptions, subscriptionData);
 
         /// <summary>
         /// Gets the Azure subscription operations.
         /// </summary>
-        /// <param name="subscription"> The resource identifier of the subscription. </param>
+        /// <param name="subscriptionId"> The resource identifier of the subscription. </param>
         /// <returns> Subscription operations. </returns>
-        public SubscriptionOperations Subscription(ResourceIdentifier subscription) => new SubscriptionOperations(ClientOptions, subscription);
-
-        /// <summary>
-        /// Gets the Azure subscription operations.
-        /// </summary>
-        /// <param name="subscription"> The id of the subscription. </param>
-        /// <returns> Subscription operations. </returns>
-        public SubscriptionOperations Subscription(string subscription) => new SubscriptionOperations(ClientOptions, subscription);
+        public SubscriptionOperations GetSubscriptionOperations(ResourceIdentifier subscriptionId) => new SubscriptionOperations(ClientOptions, subscriptionId);
 
         /// <summary>
         /// Gets the Azure subscriptions.
         /// </summary>
         /// <returns> Subscription container. </returns>
-        public SubscriptionContainer Subscriptions()
+        public SubscriptionContainer GetSubscriptionContainer()
         {
             return new SubscriptionContainer(ClientOptions);
         }
@@ -275,32 +268,32 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets resource group operations.
         /// </summary>
-        /// <param name="subscription"> The id of the Azure subscription. </param>
-        /// <param name="resourceGroup"> The resource group name. </param>
+        /// <param name="subscriptionGuid"> The id of the Azure subscription. </param>
+        /// <param name="resourceGroupName"> The resource group name. </param>
         /// <returns> Resource group operations. </returns>
-        public ResourceGroupOperations ResourceGroup(string subscription, string resourceGroup)
+        public ResourceGroupOperations GetResourceGroupOperations(string subscriptionGuid, string resourceGroupName)
         {
-            return new ResourceGroupOperations(ClientOptions, $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}");
+            return new ResourceGroupOperations(ClientOptions, $"/subscriptions/{subscriptionGuid}/resourceGroups/{resourceGroupName}");
         }
 
         /// <summary>
         /// Gets resource group operations.
         /// </summary>
-        /// <param name="resourceGroup"> The resource identifier of the resource group. </param>
+        /// <param name="resourceGroupName"> The resource identifier of the resource group. </param>
         /// <returns> Resource group operations. </returns>
-        public ResourceGroupOperations ResourceGroup(ResourceIdentifier resourceGroup)
+        public ResourceGroupOperations GetResourceGroupOperations(ResourceIdentifier resourceGroupName)
         {
-            return new ResourceGroupOperations(ClientOptions, resourceGroup);
+            return new ResourceGroupOperations(ClientOptions, resourceGroupName);
         }
 
         /// <summary>
         /// Gets resource group operations.
         /// </summary>
-        /// <param name="resourceGroup"> The data model of the resource group. </param>
+        /// <param name="resourceGroupName"> The data model of the resource group. </param>
         /// <returns> Resource group operations. </returns>
-        public ResourceGroupOperations ResourceGroup(ResourceGroupData resourceGroup)
+        public ResourceGroup GetResourceGroup(ResourceGroupData resourceGroupData)
         {
-            return new ResourceGroupOperations(ClientOptions, resourceGroup.Id);
+            return new ResourceGroup(ClientOptions, resourceGroupData);
         }
 
         /// <summary>
@@ -385,7 +378,7 @@ namespace Azure.ResourceManager.Core
             string sub = DefaultSubscription?.Id?.Subscription;
             if (null == sub)
             {
-                sub = await Subscriptions().GetDefaultSubscriptionAsync(cancellationToken);
+                sub = await GetSubscriptionContainer().GetDefaultSubscriptionAsync(cancellationToken);
             }
 
             return sub;

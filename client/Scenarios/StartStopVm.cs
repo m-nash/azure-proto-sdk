@@ -12,9 +12,9 @@ namespace client
             createVm.Execute();
 
             var client = new AzureResourceManagerClient();
-            var subscription = client.Subscription(Context.SubscriptionId);
-            var resourceGroup = subscription.ResourceGroup(Context.RgName);
-            var vm = resourceGroup.VirtualMachine(Context.VmName);
+            var subscription = client.GetSubscriptionOperations(Context.SubscriptionId);
+            var resourceGroup = subscription.GetResourceGroupOperations(Context.RgName);
+            var vm = resourceGroup.GetVirtualMachineOperations(Context.VmName);
             Console.WriteLine($"Found VM {Context.VmName}");
             Console.WriteLine("--------Stopping VM--------");
             vm.PowerOff();

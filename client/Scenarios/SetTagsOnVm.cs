@@ -18,6 +18,8 @@ namespace client
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
 
+            var rgOp = new AzureResourceManagerClient().GetResourceGroupOperations(Context.SubscriptionId, Context.RgName);
+            var vmOp = rgOp.GetVirtualMachineOperations(Context.VmName);
             ExecuteAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         }
 

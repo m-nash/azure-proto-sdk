@@ -144,7 +144,21 @@ namespace Azure.ResourceManager.Core
         /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
         public int CompareTo(ResourceType other)
         {
-            throw new NotImplementedException();
+            if (ReferenceEquals(other, null))
+                return 1;
+
+            if (ReferenceEquals(this, other))
+                return 0;
+
+            int compareResult = 0;
+            if ((compareResult = string.Compare(Namespace, other.Namespace, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
+                (compareResult = string.Compare(Type, other.Type, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
+                (other.Parent != null))
+            {
+                return Parent.CompareTo(other.Parent);
+            }
+
+            return compareResult;
         }
 
         /// <summary>
@@ -154,7 +168,7 @@ namespace Azure.ResourceManager.Core
         /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
         public int CompareTo(string other)
         {
-            throw new NotImplementedException();
+            return CompareTo(new ResourceType(other));
         }
 
         /// <summary>
