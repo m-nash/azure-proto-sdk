@@ -13,7 +13,8 @@ namespace Azure.ResourceManager.Core
 
         public ArmResourceData Data { get; }
 
-        private protected override ArmResource GetResource()
+        /// <inheritdoc />
+        protected override ArmResource GetResource()
         {
             return this;
         }

@@ -9,6 +9,11 @@ namespace azure_proto_compute
     public class VirtualMachine : VirtualMachineOperations
     {
         /// <summary>
+        /// Gets the data representing this VirtualMachine.
+        /// </summary>
+        public VirtualMachineData Data { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="VirtualMachine"/> class.
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
@@ -19,17 +24,14 @@ namespace azure_proto_compute
             Data = resource;
         }
 
-        /// <summary>
-        /// Gets the data representing this VirtualMachine.
-        /// </summary>
-        public VirtualMachineData Data { get; private set; }
-
-        private protected override VirtualMachine GetResource()
+        /// <inheritdoc />
+        protected override VirtualMachine GetResource()
         {
             return this;
         }
 
-        private protected override Task<VirtualMachine> GetResourceAsync()
+        /// <inheritdoc />
+        protected override Task<VirtualMachine> GetResourceAsync()
         {
             return Task.FromResult(this);
         }

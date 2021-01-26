@@ -166,10 +166,5 @@ namespace azure_proto_network
         {
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
-
-        private protected virtual NetworkSecurityGroup GetResource()
-        {
-            return Get().Value;
-        }
     }
 }

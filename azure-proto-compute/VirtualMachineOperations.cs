@@ -290,16 +290,5 @@ namespace azure_proto_compute
                     return new VirtualMachine(ClientOptions, Resource as VirtualMachineData);
                 });
         }
-
-        private protected virtual VirtualMachine GetResource()
-        {
-            return Get().Value;
-        }
-
-        private protected virtual async Task<VirtualMachine> GetResourceAsync()
-        {
-            var vm = await GetAsync();
-            return vm.Value;
-        }
     }
 }

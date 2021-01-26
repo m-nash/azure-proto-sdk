@@ -84,6 +84,24 @@ namespace Azure.ResourceManager.Core
         public abstract Task<ArmResponse<TOperations>> GetAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Get details for this resource from the service or can be overriden to provide a cached instance.
+        /// </summary>
+        /// <returns> A <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
+        protected virtual TOperations GetResource()
+        {
+            return Get().Value;
+        }
+
+        /// <summary>
+        /// Get details for this resource from the service or can be overriden to provide a cached instance.
+        /// </summary>
+        /// <returns> A <see cref="Task"/> that on completion returns a <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
+        protected virtual async Task<TOperations> GetResourceAsync()
+        {
+            return (await GetAsync()).Value;
+        }
+
+        /// <summary>
         /// Gets new dictionary of tags after adding the key value pair or updating the existing key value pair
         /// </summary>
         /// <param name="key"> The key to update. </param>

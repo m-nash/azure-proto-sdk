@@ -106,10 +106,5 @@ namespace Azure.ResourceManager.Core
         {
             return;
         }
-
-        private protected virtual ArmResource GetResource()
-        {
-            return Get().Value;
-        }
     }
 }
