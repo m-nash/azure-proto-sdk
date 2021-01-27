@@ -8,6 +8,9 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public interface IEntityResource
     {
+        /// <summary>
+        /// Gets the etag.
+        /// </summary>
         string Etag { get; }
     }
 }

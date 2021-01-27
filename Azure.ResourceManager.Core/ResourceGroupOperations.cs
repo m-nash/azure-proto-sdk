@@ -24,9 +24,9 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ResourceGroupOperations"/> class.
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
-        internal ResourceGroupOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id)
+        /// <param name="rgName"> The name of the resource group to use. </param>
+        internal ResourceGroupOperations(SubscriptionOperations options, string rgName)
+            : base(options, $"{options.Id}/resourceGroups/{rgName}")
         {
         }
 
@@ -34,20 +34,20 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ResourceGroupOperations"/> class.
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="resource"> The resource that is the target of operations. </param>
-        internal ResourceGroupOperations(AzureResourceManagerClientOptions options, Resource resource)
-            : base(options, resource)
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
+        protected ResourceGroupOperations(ResourceOperationsBase options, ResourceIdentifier id)
+            : base(options, id)
         {
         }
 
         /// <inheritdoc/>
         protected override ResourceType ValidResourceType => ResourceType;
 
-        private ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, creds) => new ResourcesManagementClient(
-            uri,
+        private ResourceGroupsOperations Operations => new ResourcesManagementClient(
+            BaseUri,
             Id.Subscription,
-            creds,
-            ClientOptions.Convert<ResourcesManagementClientOptions>()))?.ResourceGroups;
+            Credential,
+            ClientOptions.Convert<ResourcesManagementClientOptions>()).ResourceGroups;
 
         /// <summary>
         /// When you delete a resource group, all of its resources are also deleted. Deleting a resource group deletes all of its template deployments and currently stored operations.
@@ -99,8 +99,7 @@ namespace Azure.ResourceManager.Core
         {
             return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Get(Id.Name), g =>
             {
-                Resource = new ResourceGroupData(g);
-                return new ResourceGroup(ClientOptions, Resource as ResourceGroupData);
+                return new ResourceGroup(this, new ResourceGroupData(g));
             });
         }
 
@@ -109,8 +108,7 @@ namespace Azure.ResourceManager.Core
         {
             return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.GetAsync(Id.Name, cancellationToken), g =>
             {
-                Resource = new ResourceGroupData(g);
-                return new ResourceGroup(ClientOptions, Resource as ResourceGroupData);
+                return new ResourceGroup(this, new ResourceGroupData(g));
             });
         }
 
@@ -130,8 +128,7 @@ namespace Azure.ResourceManager.Core
             patch.Tags[name] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Update(Id.Name, patch), g =>
             {
-                Resource = new ResourceGroupData(g);
-                return new ResourceGroup(ClientOptions, Resource as ResourceGroupData);
+                return new ResourceGroup(this, new ResourceGroupData(g));
             });
         }
 
@@ -141,7 +138,8 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="name"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
-        /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
         /// </remarks>
@@ -151,8 +149,7 @@ namespace Azure.ResourceManager.Core
             patch.Tags[name] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.UpdateAsync(Id.Name, patch, cancellationToken), g =>
             {
-                Resource = new ResourceGroupData(g);
-                return new ResourceGroup(ClientOptions, Resource as ResourceGroupData);
+                return new ResourceGroup(this, new ResourceGroupData(g));
             });
         }
 
@@ -160,15 +157,18 @@ namespace Azure.ResourceManager.Core
         /// Create a resource with a ResourceGroupOperations.
         /// </summary>
         /// <param name="name"> A string representing the name of the resource />. </param>
-        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
+        /// <param name="model"> The model representing the object to create. />. </param>
         /// <param name="location"> A Location of where to to host the resource. />. </param>
+        /// <typeparam name="TContainer"> The type of the class containing the container for the specific resource. </typeparam>
+        /// <typeparam name="TOperations"> The type of the operations class for a specific resource. </typeparam>
+        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
         /// <returns> Returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, Location location = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations>
             where TContainer : ResourceContainerBase<TOperations, TResource>
         {
-            var myResource = Resource as TrackedResource;
+            var myResource = model as TrackedResource;
 
             if (myResource == null)
             {
@@ -189,15 +189,19 @@ namespace Azure.ResourceManager.Core
         /// Create a resource with a ResourceGroupOperations.
         /// </summary>
         /// <param name="name"> A string representing the name of the resource />. </param>
-        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
+        /// <param name="model"> The model representing the object to create. />. </param>
         /// <param name="location"> A Location of where to to host the resource. />. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <typeparam name="TContainer"> The type of the class containing the container for the specific resource. </typeparam>
+        /// <typeparam name="TOperations"> The type of the operations class for a specific resource. </typeparam>
+        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
-        public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, Location location = default, CancellationToken token = default)
+        public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, Location location = default, CancellationToken cancellationToken = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations>
             where TContainer : ResourceContainerBase<TOperations, TResource>
         {
-            var myResource = Resource as TrackedResource;
+            var myResource = model as TrackedResource;
 
             if (myResource == null)
             {
@@ -211,7 +215,7 @@ namespace Azure.ResourceManager.Core
 
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;
 
-            return container.CreateAsync(name, model, token);
+            return container.CreateAsync(name, model, cancellationToken);
         }
     }
 }

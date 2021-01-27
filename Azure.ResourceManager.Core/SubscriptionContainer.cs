@@ -1,3 +1,4 @@
+using Azure.Core;
 using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
 using System;
@@ -15,26 +16,26 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="SubscriptionContainer"/> class.
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
-        internal SubscriptionContainer(AzureResourceManagerClientOptions options)
-            : base(options, null, null)
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="baseUri"> The base URI of the service. </param>
+        internal SubscriptionContainer(AzureResourceManagerClientOptions options, TokenCredential credential, Uri baseUri)
+            : base(options, null, credential, baseUri)
         {
         }
 
         /// <summary>
-        /// Gets the operations that can be performed on the container.
-        /// </summary>
-        internal SubscriptionsOperations Operations => GetClient((uri, cred) =>
-            new ResourcesManagementClient(
-                uri,
-                Guid.NewGuid().ToString(),
-                cred,
-                ClientOptions.Convert<ResourcesManagementClientOptions>())).Subscriptions;
-
-        /// <summary>
         /// Gets the valid resource type associated with the container.
         /// </summary>
-        /// <returns> A valid Azure resource type. </returns>
         protected override ResourceType ValidResourceType => SubscriptionOperations.ResourceType;
+
+        /// <summary>
+        /// Gets the operations that can be performed on the container.
+        /// </summary>
+        private SubscriptionsOperations Operations => new ResourcesManagementClient(
+            BaseUri,
+            Guid.NewGuid().ToString(),
+            Credential,
+            ClientOptions.Convert<ResourcesManagementClientOptions>()).Subscriptions;
 
         /// <summary>
         /// Lists all subscriptions in the current container.
@@ -95,7 +96,7 @@ namespace Azure.ResourceManager.Core
 
         private Func<ResourceManager.Resources.Models.Subscription, SubscriptionOperations> Converter()
         {
-            return s => new SubscriptionOperations(ClientOptions, new SubscriptionData(s));
+            return s => new SubscriptionOperations(ClientOptions, s.SubscriptionId, Credential, BaseUri);
         }
     }
 }

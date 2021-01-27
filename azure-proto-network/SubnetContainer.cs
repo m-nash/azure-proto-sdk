@@ -13,28 +13,20 @@ namespace azure_proto_network
         /// <summary>
         /// Initializes a new instance of the <see cref="SubnetContainer"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="virtualNetwork"> The virtual network associate with this subnet </param>
-        internal SubnetContainer(AzureResourceManagerClientOptions options, VirtualNetworkData virtualNetwork)
-            : base(options, virtualNetwork)
+        internal SubnetContainer(VirtualNetworkOperations virtualNetwork)
+            : base(virtualNetwork)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SubnetContainer"/> class.
-        /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="virtualNetworkId"> The resource Id of the virtual network. </param>
-        internal SubnetContainer(AzureResourceManagerClientOptions options, ResourceIdentifier virtualNetworkId)
-            : base(options, virtualNetworkId)
-        {
-        }
-        
         /// <inheritdoc/>
         protected override ResourceType ValidResourceType => VirtualNetworkOperations.ResourceType;
 
-        private SubnetsOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-                    ClientOptions.Convert<NetworkManagementClientOptions>())).Subnets;
+        private SubnetsOperations Operations => new NetworkManagementClient(
+            Id.Subscription,
+            BaseUri,
+            Credential,
+            ClientOptions.Convert<NetworkManagementClientOptions>()).Subnets;
 
         /// <inheritdoc/>
         public override ArmResponse<Subnet> Create(string name, SubnetData resourceDetails)
@@ -42,7 +34,7 @@ namespace azure_proto_network
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, name, resourceDetails.Model);
             return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(
                 operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
-                s => new Subnet(ClientOptions, new SubnetData(s, Location.Default)));
+                s => new Subnet(Parent, new SubnetData(s, Location.Default)));
         }
 
         /// <inheritdoc/>
@@ -51,7 +43,7 @@ namespace azure_proto_network
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                s => new Subnet(ClientOptions, new SubnetData(s, Location.Default)));
+                s => new Subnet(Parent, new SubnetData(s, Location.Default)));
         }
 
         /// <inheritdoc/>
@@ -59,7 +51,7 @@ namespace azure_proto_network
         {
             return new PhArmOperation<Subnet, Azure.ResourceManager.Network.Models.Subnet>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, name, resourceDetails.Model, cancellationToken),
-                s => new Subnet(ClientOptions, new SubnetData(s, Location.Default)));
+                s => new Subnet(Parent, new SubnetData(s, Location.Default)));
         }
 
         /// <inheritdoc/>
@@ -67,7 +59,7 @@ namespace azure_proto_network
         {
             return new PhArmOperation<Subnet, Azure.ResourceManager.Network.Models.Subnet>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, Id.Name, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
-                s => new Subnet(ClientOptions, new SubnetData(s, Location.Default)));
+                s => new Subnet(Parent, new SubnetData(s, Location.Default)));
         }
 
         /// <summary>
@@ -121,7 +113,7 @@ namespace azure_proto_network
         private Func<Azure.ResourceManager.Network.Models.Subnet, Subnet> convertor()
         {
             //TODO: Subnet will be a proxy resource and not a tracked resource ADO #4481
-            return s => new Subnet(ClientOptions, new SubnetData(s, Location.Default));
+            return s => new Subnet(Parent, new SubnetData(s, Location.Default));
         }
     }
 }
