@@ -29,13 +29,25 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public virtual int CompareTo(Resource other)
         {
-            return string.Compare(Id?.Id, other?.Id);
+            if (other == null)
+                return 1;
+
+            if (ReferenceEquals(this, other))
+                return 0;
+
+            int compareResult = 0;
+            if ((compareResult = string.Compare(Id, other.Id, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
+                (compareResult = string.Compare(Name, other.Name, StringComparison.InvariantCultureIgnoreCase)) == 0 &&
+                (compareResult = Type.CompareTo(other.Type)) == 0)
+                return 0;
+
+            return compareResult;
         }
 
         /// <inheritdoc/>
         public virtual int CompareTo(string other)
         {
-            return string.Compare(Id?.Id, other);
+            return string.Compare(Id?.Id, other, StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <inheritdoc/>
