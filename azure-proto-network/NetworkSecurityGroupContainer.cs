@@ -23,7 +23,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a [Resource]. </param>
         internal NetworkSecurityGroupContainer(ArmResourceOperations genericOperations)
-            : base(genericOperations.ClientOptions, genericOperations.Id)
+            : base(genericOperations)
         {
         }
 
@@ -32,28 +32,18 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="resourceGroup"> The ResourceGroup that is the parent of the NetworkSecurityGroups. </param>
-        internal NetworkSecurityGroupContainer(AzureResourceManagerClientOptions options, ResourceGroupData resourceGroup)
-            : base(options, resourceGroup)
+        internal NetworkSecurityGroupContainer(ResourceGroupOperations resourceGroup)
+            : base(resourceGroup)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NetworkSecurityGroupContainer"/> class.
-        /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="parentId"> The identifier of the ResourceGroup that is the parent of the NetworkSecurityGroups. </param>
-        internal NetworkSecurityGroupContainer(AzureResourceManagerClientOptions options, ResourceIdentifier parentId)
-            : base(options, parentId)
-        {
-        }
-
-        /// <summary>
-        /// Gets the valid resource type for this resource.
-        /// </summary>
         protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
 
-        private NetworkSecurityGroupsOperations Operations => GetClient((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-                    ClientOptions.Convert<NetworkManagementClientOptions>())).NetworkSecurityGroups;
+        private NetworkSecurityGroupsOperations Operations => new NetworkManagementClient(
+            Id.Subscription,
+            BaseUri,
+            Credential,
+            ClientOptions.Convert<NetworkManagementClientOptions>()).NetworkSecurityGroups;
 
         /// <inheritdoc />
         public override ArmResponse<NetworkSecurityGroup> Create(string name, NetworkSecurityGroupData resourceDetails)
@@ -61,7 +51,7 @@ namespace azure_proto_network
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model);
             return new PhArmResponse<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
                 operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new NetworkSecurityGroup(ClientOptions, new NetworkSecurityGroupData(n)));
+                n => new NetworkSecurityGroup(Parent, new NetworkSecurityGroupData(n)));
         }
 
         /// <inheritdoc />
@@ -70,7 +60,7 @@ namespace azure_proto_network
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                n => new NetworkSecurityGroup(ClientOptions, new NetworkSecurityGroupData(n)));
+                n => new NetworkSecurityGroup(Parent, new NetworkSecurityGroupData(n)));
         }
 
         /// <inheritdoc />
@@ -78,7 +68,7 @@ namespace azure_proto_network
         {
             return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
-                n => new NetworkSecurityGroup(ClientOptions, new NetworkSecurityGroupData(n)));
+                n => new NetworkSecurityGroup(Parent, new NetworkSecurityGroupData(n)));
         }
 
         /// <inheritdoc />
@@ -86,7 +76,7 @@ namespace azure_proto_network
         {
             return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
-                n => new NetworkSecurityGroup(ClientOptions, new NetworkSecurityGroupData(n)));
+                n => new NetworkSecurityGroup(Parent, new NetworkSecurityGroupData(n)));
         }
 
         /// <summary>
@@ -163,7 +153,7 @@ namespace azure_proto_network
         {
             return new PhWrappingPageable<Azure.ResourceManager.Network.Models.NetworkSecurityGroup, NetworkSecurityGroup>(
                 Operations.List(Id.Name, cancellationToken),
-                r=> new NetworkSecurityGroup(ClientOptions, new NetworkSecurityGroupData(r)));
+                r => new NetworkSecurityGroup(Parent, new NetworkSecurityGroupData(r)));
         }
 
         /// <summary>
@@ -175,7 +165,7 @@ namespace azure_proto_network
         {
             return new PhWrappingAsyncPageable<Azure.ResourceManager.Network.Models.NetworkSecurityGroup, NetworkSecurityGroup>(
                 Operations.ListAsync(Id.Name, cancellationToken),
-                r => new NetworkSecurityGroup(ClientOptions, new NetworkSecurityGroupData(r)));
+                r => new NetworkSecurityGroup(Parent, new NetworkSecurityGroupData(r)));
         }
 
         /// <summary>
@@ -189,7 +179,7 @@ namespace azure_proto_network
         {
             ArmFilterCollection filters = new ArmFilterCollection(NetworkSecurityGroupOperations.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext(ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
 
         /// <summary>
@@ -203,7 +193,7 @@ namespace azure_proto_network
         {
             ArmFilterCollection filters = new ArmFilterCollection(NetworkSecurityGroupOperations.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync(ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
 
         /// <summary>

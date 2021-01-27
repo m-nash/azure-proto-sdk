@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System.Threading;
-using System.Threading.Tasks;
 using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Azure.ResourceManager.Core
 {
@@ -16,26 +16,20 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceGroupContainer"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="subscription"> The id of the Azure subscription. </param>
-        internal ResourceGroupContainer(AzureResourceManagerClientOptions options, SubscriptionOperations subscription)
-            : base(options, subscription.Id)
+        /// <param name="subscription"> The parent subscription. </param>
+        internal ResourceGroupContainer(SubscriptionOperations subscription)
+            : base(subscription)
         {
         }
-
-        internal ResourceGroupContainer(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id)
-        {
-        }
-
-        internal ResourceGroupsOperations Operations => GetClient<ResourcesManagementClient>((uri, cred) => new ResourcesManagementClient(
-            uri,
-            Id.Subscription,
-            cred,
-            ClientOptions.Convert<ResourcesManagementClientOptions>())).ResourceGroups;
 
         /// <inheritdoc/>
         protected override ResourceType ValidResourceType => SubscriptionOperations.ResourceType;
+
+        private ResourceGroupsOperations Operations => new ResourcesManagementClient(
+            BaseUri,
+            Id.Subscription,
+            Credential,
+            ClientOptions.Convert<ResourcesManagementClientOptions>()).ResourceGroups;
 
         /// <summary>
         /// Creates a new ResourceGroup.
@@ -48,7 +42,7 @@ namespace Azure.ResourceManager.Core
             var model = new ResourceGroupData(new ResourceManager.Resources.Models.ResourceGroup(location));
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(
                 Operations.CreateOrUpdate(name, model),
-                g => new ResourceGroup(ClientOptions, new ResourceGroupData(g)));
+                g => new ResourceGroup(Parent, new ResourceGroupData(g)));
         }
 
         /// <inheritdoc/>
@@ -57,7 +51,7 @@ namespace Azure.ResourceManager.Core
             var response = Operations.CreateOrUpdate(name, resourceDetails);
             return new PhArmResponse<ResourceGroup, ResourceManager.Resources.Models.ResourceGroup>(
                 response,
-                g => new ResourceGroup(ClientOptions, new ResourceGroupData(g)));
+                g => new ResourceGroup(Parent, new ResourceGroupData(g)));
         }
 
         /// <inheritdoc/>
@@ -66,7 +60,7 @@ namespace Azure.ResourceManager.Core
             var response = await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<ResourceGroup, ResourceManager.Resources.Models.ResourceGroup>(
                 response,
-                g => new ResourceGroup(ClientOptions, new ResourceGroupData(g)));
+                g => new ResourceGroup(Parent, new ResourceGroupData(g)));
         }
 
         /// <inheritdoc/>
@@ -74,7 +68,7 @@ namespace Azure.ResourceManager.Core
         {
             return new PhArmOperation<ResourceGroup, ResourceManager.Resources.Models.ResourceGroup>(
                 Operations.CreateOrUpdate(name, resourceDetails, cancellationToken),
-                g => new ResourceGroup(ClientOptions, new ResourceGroupData(g)));
+                g => new ResourceGroup(Parent, new ResourceGroupData(g)));
         }
 
         /// <inheritdoc/>
@@ -82,7 +76,7 @@ namespace Azure.ResourceManager.Core
         {
             return new PhArmOperation<ResourceGroup, ResourceManager.Resources.Models.ResourceGroup>(
                 await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken).ConfigureAwait(false),
-                g => new ResourceGroup(ClientOptions, new ResourceGroupData(g)));
+                g => new ResourceGroup(Parent, new ResourceGroupData(g)));
         }
 
         /// <summary>
@@ -94,7 +88,7 @@ namespace Azure.ResourceManager.Core
         {
             return new PhWrappingPageable<ResourceManager.Resources.Models.ResourceGroup, ResourceGroup>(
                 Operations.List(null, null, cancellationToken),
-                s => new ResourceGroup(ClientOptions, new ResourceGroupData(s)));
+                s => new ResourceGroup(Parent, new ResourceGroupData(s)));
         }
 
         /// <summary>
@@ -106,7 +100,7 @@ namespace Azure.ResourceManager.Core
         {
             return new PhWrappingAsyncPageable<ResourceManager.Resources.Models.ResourceGroup, ResourceGroup>(
                 Operations.ListAsync(null, null, cancellationToken),
-                s => new ResourceGroup(ClientOptions, new ResourceGroupData(s)));
+                s => new ResourceGroup(Parent, new ResourceGroupData(s)));
         }
     }
 }

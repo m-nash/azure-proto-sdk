@@ -2,11 +2,9 @@
 // Licensed under the MIT License.
 
 using Azure;
-using Azure.Core;
 using Azure.ResourceManager.Core;
 using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Network;
-using System;
 
 namespace azure_proto_network
 {
@@ -19,13 +17,11 @@ namespace azure_proto_network
 
         private static NetworkManagementClient GetNetworkClient(SubscriptionOperations subscription)
         {
-            Func<Uri, TokenCredential, NetworkManagementClient> ctor = (baseUri, cred) => new NetworkManagementClient(
-                                subscription.Id.Subscription,
-                                baseUri,
-                                cred,
-                                subscription.ClientOptions.Convert<NetworkManagementClientOptions>());
-            var networkClient = subscription.GetClient(ctor);
-            return networkClient;
+            return new NetworkManagementClient(
+                subscription.Id.Subscription,
+                subscription.BaseUri,
+                subscription.Credential,
+                subscription.ClientOptions.Convert<NetworkManagementClientOptions>());
         }
 
         /// <summary>
@@ -40,7 +36,7 @@ namespace azure_proto_network
             var result = vmOperations.ListAll();
             return new PhWrappingPageable<Azure.ResourceManager.Network.Models.VirtualNetwork, VirtualNetwork>(
                 result,
-                s => new VirtualNetwork(subscription.ClientOptions, new VirtualNetworkData(s)));
+                s => new VirtualNetwork(subscription, new VirtualNetworkData(s)));
         }
 
         /// <summary>
@@ -55,7 +51,7 @@ namespace azure_proto_network
             var result = vmOperations.ListAllAsync();
             return new PhWrappingAsyncPageable<Azure.ResourceManager.Network.Models.VirtualNetwork, VirtualNetwork>(
                 result,
-                s => new VirtualNetwork(subscription.ClientOptions, new VirtualNetworkData(s)));
+                s => new VirtualNetwork(subscription, new VirtualNetworkData(s)));
         }
 
         #endregion
@@ -74,7 +70,7 @@ namespace azure_proto_network
             var result = publicIPAddressesOperations.ListAll();
             return new PhWrappingPageable<Azure.ResourceManager.Network.Models.PublicIPAddress, PublicIpAddress>(
                 result,
-                s => new PublicIpAddress(subscription.ClientOptions, new PublicIPAddressData(s)));
+                s => new PublicIpAddress(subscription, new PublicIPAddressData(s)));
         }
 
         /// <summary>
@@ -89,7 +85,7 @@ namespace azure_proto_network
             var result = publicIPAddressesOperations.ListAllAsync();
             return new PhWrappingAsyncPageable<Azure.ResourceManager.Network.Models.PublicIPAddress, PublicIpAddress>(
                 result,
-                s => new PublicIpAddress(subscription.ClientOptions, new PublicIPAddressData(s)));
+                s => new PublicIpAddress(subscription, new PublicIPAddressData(s)));
         }
 
         #endregion
@@ -108,7 +104,7 @@ namespace azure_proto_network
             var result = networkInterfacesOperations.ListAll();
             return new PhWrappingPageable<Azure.ResourceManager.Network.Models.NetworkInterface, NetworkInterface>(
                 result,
-                s => new NetworkInterface(subscription.ClientOptions, new NetworkInterfaceData(s)));
+                s => new NetworkInterface(subscription, new NetworkInterfaceData(s)));
         }
 
         /// <summary>
@@ -124,7 +120,7 @@ namespace azure_proto_network
             var result = networkInterfacesOperations.ListAllAsync();
             return new PhWrappingAsyncPageable<Azure.ResourceManager.Network.Models.NetworkInterface, NetworkInterface>(
                 result,
-                s => new NetworkInterface(subscription.ClientOptions, new NetworkInterfaceData(s)));
+                s => new NetworkInterface(subscription, new NetworkInterfaceData(s)));
         }
 
         #endregion
@@ -143,7 +139,7 @@ namespace azure_proto_network
             var result = networkSecurityGroupsOperations.ListAll();
             return new PhWrappingPageable<Azure.ResourceManager.Network.Models.NetworkSecurityGroup, NetworkSecurityGroup>(
                 result,
-                s => new NetworkSecurityGroup(subscription.ClientOptions, new NetworkSecurityGroupData(s)));
+                s => new NetworkSecurityGroup(subscription, new NetworkSecurityGroupData(s)));
         }
 
         /// <summary>
@@ -158,7 +154,7 @@ namespace azure_proto_network
             var result = networkSecurityGroupsOperations.ListAllAsync();
             return new PhWrappingAsyncPageable<Azure.ResourceManager.Network.Models.NetworkSecurityGroup, NetworkSecurityGroup>(
                 result,
-                s => new NetworkSecurityGroup(subscription.ClientOptions, new NetworkSecurityGroupData(s)));
+                s => new NetworkSecurityGroup(subscription, new NetworkSecurityGroupData(s)));
         }
 
         #endregion

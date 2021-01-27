@@ -10,6 +10,9 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public interface IManagedIdentity
     {
+        /// <summary>
+        /// Gets or sets the identity list.
+        /// </summary>
         IList<Identity> Identity { get; set; }
     }
 }

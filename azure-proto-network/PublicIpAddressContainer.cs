@@ -19,28 +19,8 @@ namespace azure_proto_network
         /// Initializes a new instance of the <see cref="PublicIpAddressContainer"/> class.
         /// </summary>
         /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a PublicIpAddress. </param>
-        internal PublicIpAddressContainer(ArmResourceOperations genericOperations)
-            : base(genericOperations.ClientOptions,genericOperations.Id)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PublicIpAddressContainer"/> class.
-        /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="resourceGroup"> The ResourceGroup that is the parent of the PublicIpAddress. </param>
-        internal PublicIpAddressContainer(AzureResourceManagerClientOptions options, ResourceGroupData resourceGroup)
-            : base(options, resourceGroup)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PublicIpAddressContainer"/> class.
-        /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="parentId"> The identifier of the ResourceGroup that is the parent of the PublicIpAddress. </param>
-        internal PublicIpAddressContainer(AzureResourceManagerClientOptions options, ResourceIdentifier parentId)
-            : base(options, parentId)
+        internal PublicIpAddressContainer(ResourceGroupOperations resourceGroup)
+            : base(resourceGroup)
         {
         }
 
@@ -49,8 +29,11 @@ namespace azure_proto_network
         /// </summary>
         protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
 
-        private PublicIPAddressesOperations Operations => GetClient((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-            ClientOptions.Convert<NetworkManagementClientOptions>())).PublicIPAddresses;
+        private PublicIPAddressesOperations Operations => new NetworkManagementClient(
+            Id.Subscription,
+            BaseUri,
+            Credential,
+            ClientOptions.Convert<NetworkManagementClientOptions>()).PublicIPAddresses;
 
         /// <inheritdoc />
         public override ArmResponse<PublicIpAddress> Create(string name, PublicIPAddressData resourceDetails)
@@ -58,7 +41,7 @@ namespace azure_proto_network
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails);
             return new PhArmResponse<PublicIpAddress, PublicIPAddress>(
                 operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new PublicIpAddress(ClientOptions, new PublicIPAddressData(n)));
+                n => new PublicIpAddress(Parent, new PublicIPAddressData(n)));
         }
 
         /// <inheritdoc />
@@ -67,7 +50,7 @@ namespace azure_proto_network
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<PublicIpAddress, PublicIPAddress>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                n => new PublicIpAddress(ClientOptions, new PublicIPAddressData(n)));
+                n => new PublicIpAddress(Parent, new PublicIPAddressData(n)));
         }
 
         /// <inheritdoc />
@@ -75,7 +58,7 @@ namespace azure_proto_network
         {
             return new PhArmOperation<PublicIpAddress, PublicIPAddress>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken),
-                n => new PublicIpAddress(ClientOptions, new PublicIPAddressData(n)));
+                n => new PublicIpAddress(Parent, new PublicIPAddressData(n)));
         }
 
         /// <inheritdoc />
@@ -83,7 +66,7 @@ namespace azure_proto_network
         {
             return new PhArmOperation<PublicIpAddress, PublicIPAddress>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),
-                n => new PublicIpAddress(ClientOptions, new PublicIPAddressData(n)));
+                n => new PublicIpAddress(Parent, new PublicIPAddressData(n)));
         }
 
         /// <summary>
@@ -112,7 +95,7 @@ namespace azure_proto_network
         {
             return new PhWrappingPageable<PublicIPAddress, PublicIpAddress>(
                 Operations.List(Id.Name, cancellationToken),
-                this.Convertor());
+                Convertor());
         }
 
         /// <summary>
@@ -124,7 +107,7 @@ namespace azure_proto_network
         {
             return new PhWrappingAsyncPageable<PublicIPAddress, PublicIpAddress>(
                 Operations.ListAsync(Id.Name, cancellationToken),
-                this.Convertor());
+                Convertor());
         }
 
         /// <summary>
@@ -138,7 +121,7 @@ namespace azure_proto_network
         {
             ArmFilterCollection filters = new ArmFilterCollection(PublicIPAddressData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext(ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
 
         /// <summary>
@@ -152,7 +135,7 @@ namespace azure_proto_network
         {
             ArmFilterCollection filters = new ArmFilterCollection(PublicIPAddressData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync(ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
 
         /// <summary>
@@ -185,7 +168,7 @@ namespace azure_proto_network
 
         private Func<PublicIPAddress, PublicIpAddress> Convertor()
         {
-            return s => new PublicIpAddress(ClientOptions, new PublicIPAddressData(s));
+            return s => new PublicIpAddress(Parent, new PublicIPAddressData(s));
         }
     }
 }

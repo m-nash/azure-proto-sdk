@@ -4,16 +4,16 @@ using Azure.ResourceManager.Core;
 namespace azure_proto_authorization
 {
     /// <summary>
-    /// Placholder class containing Role assignment POCO properties
+    /// Placholder class containing Role assignment POCO properties.
     /// </summary>
     public class RoleAssignmentData : Resource
     {
-        Azure.ResourceManager.Authorization.Models.RoleAssignment _model;
+        private Azure.ResourceManager.Authorization.Models.RoleAssignment _model;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleAssignmentData"/> class.
         /// </summary>
-        /// <param name="assign">The Track2 management plane assignment</param>
+        /// <param name="assign"> The Track2 management plane assignment. </param>
         public RoleAssignmentData(Azure.ResourceManager.Authorization.Models.RoleAssignment assign)
         {
             _model = assign;
@@ -31,12 +31,12 @@ namespace azure_proto_authorization
         public static Azure.ResourceManager.Core.ResourceType ResourceType => "Microsoft.Authorization/roleAssignments";
 
         /// <summary>
-        /// Gets the target of this role assignment
+        /// Gets the target of this role assignment.
         /// </summary>
         public string Scope { get; }
 
         /// <summary>
-        /// Gets the role definition id for this role assignment - determines the permissions allowed by this assignment
+        /// Gets the role definition id for this role assignment - determines the permissions allowed by this assignment.
         /// </summary>
         public ResourceIdentifier RoleDefinitionId { get; }
 
@@ -46,24 +46,24 @@ namespace azure_proto_authorization
         public string PrincipalId { get; }
 
         /// <summary>
-        /// Gets the type of the principal associated with this assignment
+        /// Gets the type of the principal associated with this assignment.
         /// </summary>
         public PrincipalType? PrincipalType { get; }
 
         /// <summary>
-        /// Gets the value determining whether the principal can delegate its permissions
+        /// Gets the value determining whether the principal can delegate its permissions.
         /// </summary>
         public bool? CanDelegate { get; }
 
         /// <summary>
-        /// Gets the identifier of the RoleAssignment
+        /// Gets or sets the identifier of the RoleAssignment.
         /// </summary>
-        public override ResourceIdentifier Id { get ; protected set ; }
+        public override ResourceIdentifier Id { get; protected set; }
 
         /// <summary>
-        /// Gets the Track2 Management model associated with the data object
+        /// Gets the Track2 Management model associated with the data object.
         /// </summary>
-        /// <returns>The Track2 Role Assignment, for serialization</returns>
+        /// <returns> The Track2 Role Assignment, for serialization. </returns>
         public Azure.ResourceManager.Authorization.Models.RoleAssignment ToModel()
         {
             return _model;

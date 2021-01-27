@@ -26,10 +26,15 @@ namespace Azure.ResourceManager.Core
             PromotionCode = promotionCode;
             Version = version;
         }
-        
-        // TODO: Will be deleted after we move in azure core repo
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Plan"/> class.
+        /// </summary>
+        /// <param name="plan"> The plan to copy from. </param>
         internal Plan(ResourceManager.Resources.Models.Plan plan)
-            : this(plan.Name, plan.Publisher, plan.Product, plan.PromotionCode, plan.Version) { }
+            : this(plan.Name, plan.Publisher, plan.Product, plan.PromotionCode, plan.Version)
+        {
+        }
 
         /// <summary>
         /// Gets the plan's Name.
@@ -66,7 +71,7 @@ namespace Azure.ResourceManager.Core
             if (other == null)
                 return 1;
 
-            if (object.ReferenceEquals(this, other))
+            if (ReferenceEquals(this, other))
                 return 0;
 
             int compareResult = 0;
@@ -92,7 +97,7 @@ namespace Azure.ResourceManager.Core
             if (other == null)
                 return false;
 
-            if (object.ReferenceEquals(this, other))
+            if (ReferenceEquals(this, other))
                 return true;
 
             return string.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase) &&

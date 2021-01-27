@@ -7,61 +7,116 @@ using System.Threading.Tasks;
 
 namespace Azure.ResourceManager.Core
 {
+    /// <summary>
+    /// A class representing a builder object used to create Azure resources.
+    /// </summary>
+    /// <typeparam name="TOperations"> The type of the operations class for a specific resource. </typeparam>
+    /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
     public class ArmBuilder<TOperations, TResource>
         where TResource : Resource
         where TOperations : ResourceOperationsBase<TOperations>
     {
-        protected TResource _resource;
-        protected ResourceContainerBase<TOperations, TResource> _unTypedContainer;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ArmBuilder{TOperations, TResource}"/> class.
+        /// </summary>
+        /// <param name="container"> The container objec to create the resource in. </param>
+        /// <param name="resource"> The resource to create. </param>
         public ArmBuilder(ResourceContainerBase<TOperations, TResource> container, TResource resource)
         {
-            _resource = resource;
-            _unTypedContainer = container;
+            Resource = resource;
+            UnTypedContainer = container;
         }
 
+        /// <summary>
+        /// Gets the resource object to create.
+        /// </summary>
+        protected TResource Resource { get; private set; }
+
+        /// <summary>
+        /// Gets the container object to create the resource in.
+        /// </summary>
+        protected ResourceContainerBase<TOperations, TResource> UnTypedContainer { get; private set; }
+
+        /// <summary>
+        /// Creates the resource objec to send to the Azure API.
+        /// </summary>
+        /// <returns> The resource to create. </returns>
         public TResource Build()
         {
             ThrowIfNotValid();
             OnBeforeBuild();
-            _Build();
+            InternalBuild();
             OnAfterBuild();
 
-            return _resource;
+            return Resource;
         }
 
+        /// <summary>
+        /// Creates a new resource.
+        /// </summary>
+        /// <param name="name"> The name of the new resource to create. </param>
+        /// <returns> A response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public ArmResponse<TOperations> Create(string name)
         {
-            _resource = Build();
+            Resource = Build();
 
-            return _unTypedContainer.Create(name, _resource);
+            return UnTypedContainer.Create(name, Resource);
         }
 
+        /// <summary>
+        /// Creates a new resource.
+        /// </summary>
+        /// <param name="name"> The name of the new resource to create. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public async Task<ArmResponse<TOperations>> CreateAsync(
             string name,
             CancellationToken cancellationToken = default)
         {
-            _resource = Build();
+            Resource = Build();
 
-            return await _unTypedContainer.CreateAsync(name, _resource, cancellationToken);
+            return await UnTypedContainer.CreateAsync(name, Resource, cancellationToken);
         }
 
+        /// <summary>
+        /// Creates a new resource.
+        /// </summary>
+        /// <param name="name"> The name of the new resource to create. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An <see cref="ArmOperation{TOperations}"/> that allows polling for completion of the operation. </returns>
+        /// <remarks>
+        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
+        /// </remarks>
         public ArmOperation<TOperations> StartCreate(string name, CancellationToken cancellationToken = default)
         {
-            _resource = Build();
+            Resource = Build();
 
-            return _unTypedContainer.StartCreate(name, _resource, cancellationToken);
+            return UnTypedContainer.StartCreate(name, Resource, cancellationToken);
         }
 
+        /// <summary>
+        /// Creates a new resource.
+        /// </summary>
+        /// <param name="name"> The name of the new resource to create. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{TOperations}"/> that allows polling for completion of the operation. </returns>
+        /// <remarks>
+        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
+        /// </remarks>
         public async Task<ArmOperation<TOperations>> StartCreateAsync(
             string name,
             CancellationToken cancellationToken = default)
         {
-            _resource = Build();
+            Resource = Build();
 
-            return await _unTypedContainer.StartCreateAsync(name, _resource, cancellationToken);
+            return await UnTypedContainer.StartCreateAsync(name, Resource, cancellationToken);
         }
 
+        /// <summary>
+        /// Determines whether or not the resource is valid.
+        /// </summary>
+        /// <param name="message"> The message indicating what is wrong with the resource. </param>
+        /// <returns> Whether or not the resource is valid. </returns>
         protected virtual bool IsValid(out string message)
         {
             message = string.Empty;
@@ -69,15 +124,21 @@ namespace Azure.ResourceManager.Core
             return true;
         }
 
+        /// <summary>
+        /// Perform any tasks necessary after the resource is built
+        /// </summary>
         protected virtual void OnAfterBuild()
         {
         }
 
+        /// <summary>
+        /// Perform any tasks necessary before the resource is built
+        /// </summary>
         protected virtual void OnBeforeBuild()
         {
         }
 
-        private void _Build()
+        private void InternalBuild()
         {
         }
 

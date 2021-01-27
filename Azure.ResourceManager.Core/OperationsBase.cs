@@ -16,36 +16,18 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
-        /// <param name="location"> The location for the Azure resource. </param>
-        protected OperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id, LocationData location = null)
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="baseUri"> The base URI of the service. </param>
+        protected OperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id, TokenCredential credential, Uri baseUri)
         {
             ClientOptions = options;
             Id = id;
-            DefaultLocation = location ?? LocationData.Default;
+            DefaultLocation = Location.Default;
+            Credential = credential;
+            BaseUri = baseUri;
 
             Validate(id);
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OperationsBase"/> class.
-        /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="resource"> The Azure resource that is the target of operations. </param>
-        protected OperationsBase(AzureResourceManagerClientOptions options, Resource resource)
-            : this(options, resource?.Id, (resource as TrackedResource)?.Location)
-        {
-            Resource = resource;
-        }
-
-        /// <summary>
-        /// Gets the Azure Resource Manager client options.
-        /// </summary>
-        public virtual AzureResourceManagerClientOptions ClientOptions { get; }
-
-        /// <summary>
-        /// Gets the default location.
-        /// </summary>
-        public virtual LocationData DefaultLocation { get; }
 
         /// <summary>
         /// Gets the resource identifier.
@@ -53,9 +35,24 @@ namespace Azure.ResourceManager.Core
         public virtual ResourceIdentifier Id { get; }
 
         /// <summary>
-        /// Gets or sets the Azure resource.
+        /// Gets the default location.
         /// </summary>
-        protected virtual Resource Resource { get; set; }
+        public virtual Location DefaultLocation { get; }
+
+        /// <summary>
+        /// Gets the Azure Resource Manager client options.
+        /// </summary>
+        public virtual AzureResourceManagerClientOptions ClientOptions { get; }
+
+        /// <summary>
+        /// Gets the Azure credential.
+        /// </summary>
+        public TokenCredential Credential { get; }
+
+        /// <summary>
+        /// Gets the base URI of the service.
+        /// </summary>
+        public Uri BaseUri { get; }
 
         /// <summary>
         /// Gets the valid Azure resource type for the current operations.
@@ -71,18 +68,6 @@ namespace Azure.ResourceManager.Core
         {
             if (identifier?.Type != ValidResourceType)
                 throw new InvalidOperationException($"Invalid resource type {identifier?.Type} expected {ValidResourceType}");
-        }
-
-        /// <summary>
-        ///    Gets the client for specific azure resource types.
-        /// </summary>
-        /// <typeparam name="T"> The type of the operations class for a specific resource. </typeparam>
-        /// <param name="creator"> The client creation function. </param>
-        /// <returns> An instance of client for a given resource type. </returns>
-        public T GetClient<T>(Func<Uri, TokenCredential, T> creator)
-        {
-            // TODO: Anyway to make this protected internal? It is used in Extensions
-            return ClientOptions.GetClient(creator);
         }
     }
 }

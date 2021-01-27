@@ -11,10 +11,10 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceGroup"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="operations"> The operations to copy the client options from. </param>
         /// <param name="resource"> The ResourceGroupData to use in these operations. </param>
-        internal ResourceGroup(AzureResourceManagerClientOptions options, ResourceGroupData resource)
-            : base(options, resource)
+        internal ResourceGroup(ResourceOperationsBase operations, ResourceGroupData resource)
+            : base(operations, resource.Id)
         {
             Data = resource;
         }

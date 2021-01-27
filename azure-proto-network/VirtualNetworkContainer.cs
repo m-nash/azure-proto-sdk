@@ -19,37 +19,20 @@ namespace azure_proto_network
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualNetworkContainer"/> class.
         /// </summary>
-        /// <param name="genericOperations"> Operations to create this operations class from. </param>
-        internal VirtualNetworkContainer(ArmResourceOperations genericOperations)
-            : base(genericOperations.ClientOptions, genericOperations.Id)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VirtualNetworkContainer"/> class.
-        /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="resourceGroup"> The data of Resource Group. </param>
-        internal VirtualNetworkContainer(AzureResourceManagerClientOptions options, ResourceGroupData resourceGroup)
-            : base(options, resourceGroup)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VirtualNetworkContainer"/> class.
-        /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="parentId"> The resource Id of the parent resource. </param>
-        internal VirtualNetworkContainer(AzureResourceManagerClientOptions options, ResourceIdentifier parentId)
-            : base(options, parentId)
+        /// <param name="resourceGroup"> The parent resource group. </param>
+        internal VirtualNetworkContainer(ResourceGroupOperations resourceGroup)
+            : base(resourceGroup)
         {
         }
 
         /// <inheritdoc/>
         protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
 
-        private VirtualNetworksOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-            ClientOptions.Convert<NetworkManagementClientOptions>())).VirtualNetworks;
+        private VirtualNetworksOperations Operations => new NetworkManagementClient(
+            Id.Subscription,
+            BaseUri,
+            Credential,
+            ClientOptions.Convert<NetworkManagementClientOptions>()).VirtualNetworks;
 
         /// <inheritdoc/>
         public override ArmResponse<VirtualNetwork> Create(string name, VirtualNetworkData resourceDetails)
@@ -57,7 +40,7 @@ namespace azure_proto_network
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails);
             return new PhArmResponse<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
                 operation.WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
-                n => new VirtualNetwork(ClientOptions, new VirtualNetworkData(n)));
+                n => new VirtualNetwork(Parent, new VirtualNetworkData(n)));
         }
 
         /// <inheritdoc/>
@@ -66,7 +49,7 @@ namespace azure_proto_network
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
                 await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false),
-                n => new VirtualNetwork(ClientOptions, new VirtualNetworkData(n)));
+                n => new VirtualNetwork(Parent, new VirtualNetworkData(n)));
         }
 
         /// <inheritdoc/>
@@ -74,7 +57,7 @@ namespace azure_proto_network
         {
             return new PhArmOperation<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken),
-                n => new VirtualNetwork(ClientOptions, new VirtualNetworkData(n)));
+                n => new VirtualNetwork(Parent, new VirtualNetworkData(n)));
         }
 
         /// <inheritdoc/>
@@ -82,7 +65,7 @@ namespace azure_proto_network
         {
             return new PhArmOperation<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),
-                n => new VirtualNetwork(ClientOptions, new VirtualNetworkData(n)));
+                n => new VirtualNetwork(Parent, new VirtualNetworkData(n)));
         }
 
         /// <summary>
@@ -137,7 +120,7 @@ namespace azure_proto_network
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualNetworkData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContext(ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContext(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
 
         /// <summary>
@@ -151,7 +134,7 @@ namespace azure_proto_network
         {
             ArmFilterCollection filters = new ArmFilterCollection(VirtualNetworkData.ResourceType);
             filters.SubstringFilter = filter;
-            return ResourceListOperations.ListAtContextAsync(ClientOptions, Id, filters, top, cancellationToken);
+            return ResourceListOperations.ListAtContextAsync(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
 
         /// <summary>
@@ -184,7 +167,7 @@ namespace azure_proto_network
 
         private Func<Azure.ResourceManager.Network.Models.VirtualNetwork, VirtualNetwork> Convertor()
         {
-            return s => new VirtualNetwork(ClientOptions, new VirtualNetworkData(s));
+            return s => new VirtualNetwork(Parent, new VirtualNetworkData(s));
         }
     }
 }
