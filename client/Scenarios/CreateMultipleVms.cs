@@ -19,7 +19,7 @@ namespace client
 
             // Create Resource Group
             Console.WriteLine($"--------Start create group {Context.RgName}--------");
-            var resourceGroup = subscription.GetResourceGroupContainer().Create(Context.RgName, Context.Loc).Value;
+            var resourceGroup = subscription.GetResourceGroupContainer().Construct(Context.Loc).Create(Context.RgName).Value;
             CleanUp.Add(resourceGroup.Id);
 
             // Create AvailabilitySet
