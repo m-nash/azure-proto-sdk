@@ -302,6 +302,15 @@ namespace azure_proto_compute
             var vmProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
             var vmResource = vmProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
             return vmResource.Locations.Cast<LocationData>();
+
+            var client = new AzureResourceManagerClient();
+            var subscription = client.DefaultSubscription;
+            var rgo = subscription.GetResourceGroupOperations("id");
+            var getVms = rgo.GetVirtualMachineContainer().List();
+
+            var client2 = new AzureResourceManagerClient();
+            var sub2 = client.DefaultSubscription;
+            var loc = sub2.GetLocationContainer().List();
         }
 
         /// <summary>
@@ -310,23 +319,36 @@ namespace azure_proto_compute
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
         /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
-        public async IAsyncEnumerable<LocationData> ListAvailableLocationsAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
+        public async Task<IAsyncEnumerable<LocationData>> ListAvailableLocationsAsync(CancellationToken cancellationToken = default)
         {
-            if (Id.Subscription == null)
-            {
-                throw new InvalidOperationException("Please select a default subscription");
-            }
+            //if (Id.Subscription == null)
+            //{
+            //    throw new InvalidOperationException("Please select a default subscription");
+            //}
 
-            await foreach (var provider in GetResourcesClient(Id.Subscription).Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken).WithCancellation(cancellationToken))
+            //await foreach (var provider in GetResourcesClient(Id.Subscription).Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken).WithCancellation(cancellationToken))
+            //{
+            //    if (string.Equals(provider.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase))
+            //    {
+            //        var foundResource = provider.ResourceTypes.FirstOrDefault(p => ResourceType.Equals(p.ResourceType));
+            //        foreach (var location in foundResource.Locations)
+            //        {
+            //            yield return location;
+            //        }
+            //    }
+            //}
+
+            var asyncpageableProvider = GetResourcesClient(Id.Subscription).Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken);
+            var vmProvider = await asyncpageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var vmResource = vmProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
+            var y = vmResource.Locations.ToAsyncEnumerable().Cast<LocationData>();
+            var cast = vmResource.Locations.Cast<LocationData>();
+            var x = cast.ToAsyncEnumerable<LocationData>();
+            return y;
+            var loc = await ListAvailableLocationsAsync();
+            await foreach(var z in await ListAvailableLocationsAsync())
             {
-                if (string.Equals(provider.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    var foundResource = provider.ResourceTypes.FirstOrDefault(p => ResourceType.Equals(p.ResourceType));
-                    foreach (var location in foundResource.Locations)
-                    {
-                        yield return location;
-                    }
-                }
+
             }
         }
     }
