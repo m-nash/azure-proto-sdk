@@ -319,7 +319,7 @@ namespace azure_proto_compute
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
         /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
-        public async Task<IAsyncEnumerable<LocationData>> ListAvailableLocationsAsync(CancellationToken cancellationToken = default)
+        public async IAsyncEnumerable<LocationData> ListAvailableLocationsAsyncHelper(CancellationToken cancellationToken = default)
         {
             //if (Id.Subscription == null)
             //{
@@ -344,12 +344,17 @@ namespace azure_proto_compute
             var y = vmResource.Locations.ToAsyncEnumerable().Cast<LocationData>();
             var cast = vmResource.Locations.Cast<LocationData>();
             var x = cast.ToAsyncEnumerable<LocationData>();
-            return y;
-            var loc = await ListAvailableLocationsAsync();
-            await foreach(var z in await ListAvailableLocationsAsync())
-            {
+            yield return (LocationData)x;
+            //var loc = await ListAvailableLocationsAsync();
+            //await foreach(var z in await ListAvailableLocationsAsync())
+            //{
 
-            }
+            //}
+        }
+
+        public async IAsyncEnumerable<LocationData> ListAvailableLocationsAsync(CancellationToken cancellationToken = default)
+        {
+            yield return (LocationData)await ListAvailableLocationsAsyncHelper(cancellationToken);
         }
     }
 }
