@@ -13,7 +13,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="operations"> The operations object to copy the client parameters from. </param>
         /// <param name="resource"> The data model representing the generic azure resource. </param>
-        internal ArmResource(ArmResourceOperations operations, ArmResourceData resource)
+        internal ArmResource(ResourceOperationsBase operations, ArmResourceData resource)
             : base(operations, resource.Id)
         {
             Data = resource;

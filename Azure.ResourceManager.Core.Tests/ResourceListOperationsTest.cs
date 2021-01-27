@@ -1,3 +1,4 @@
+using Azure.Identity;
 using Azure.ResourceManager.Resources.Models;
 using NUnit.Framework;
 using System;
@@ -11,53 +12,115 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase]
         public void TestArmResponseArmResource()
         {
-            var testDic = new Dictionary<string, string> { { "tag1", "value1" } };
-            String loc = "Japan East";
-            var sku = new Azure.ResourceManager.Resources.Models.Sku();
-            sku.Capacity = 10;
-            sku.Family = "family";
-            sku.Name = "name";
-            sku.Size = "size";
-            sku.Tier = "tier";
-            var plan = new Azure.ResourceManager.Resources.Models.Plan();
+            var expected = GetGenericResource();
+            var asArmOp = (ArmResource)TestListActivator(expected);
+
+            Assert.IsNotNull(asArmOp.Data.Sku);
+            Assert.AreEqual(expected.Sku.Capacity, asArmOp.Data.Sku.Capacity);
+            Assert.AreEqual(expected.Sku.Family, asArmOp.Data.Sku.Family);
+            Assert.AreEqual(expected.Sku.Name, asArmOp.Data.Sku.Name);
+            Assert.AreEqual(expected.Sku.Size, asArmOp.Data.Sku.Size);
+            Assert.AreEqual(expected.Sku.Tier, asArmOp.Data.Sku.Tier);
+
+            Assert.IsNotNull(asArmOp.Data.Plan);
+            Assert.AreEqual(expected.Plan.Name, asArmOp.Data.Plan.Name);
+            Assert.AreEqual(expected.Plan.Product, asArmOp.Data.Plan.Product);
+            Assert.AreEqual(expected.Plan.PromotionCode, asArmOp.Data.Plan.PromotionCode);
+            Assert.AreEqual(expected.Plan.Publisher, asArmOp.Data.Plan.Publisher);
+            Assert.AreEqual(expected.Plan.Version, asArmOp.Data.Plan.Version);
+
+            Assert.IsTrue(expected.Location == asArmOp.Data.Location);
+            Assert.AreEqual(expected.Kind, asArmOp.Data.Kind);
+            Assert.AreEqual(expected.ManagedBy, asArmOp.Data.ManagedBy);
+        }
+
+        private static ResourceManager.Resources.Models.Plan GetPlan()
+        {
+            var plan = new ResourceManager.Resources.Models.Plan();
             plan.Name = "name";
             plan.Product = "product";
             plan.Publisher = "publisher";
             plan.PromotionCode = "promo";
             plan.Version = "version";
-            string kind = "UserAssigned";
-            string managedBy = "test";
-            var asArmOp = (ArmResource)TestListActivator(testDic, sku, plan, kind, managedBy, loc);
-            
-            Assert.IsNotNull(asArmOp.Data.Sku);
-            Assert.AreEqual(sku.Capacity, asArmOp.Data.Sku.Capacity);
-            Assert.AreEqual(sku.Family, asArmOp.Data.Sku.Family);
-            Assert.AreEqual(sku.Name, asArmOp.Data.Sku.Name);
-            Assert.AreEqual(sku.Size, asArmOp.Data.Sku.Size);
-            Assert.AreEqual(sku.Tier, asArmOp.Data.Sku.Tier);
-
-            Assert.IsNotNull(asArmOp.Data.Plan);
-            Assert.AreEqual(plan.Name, asArmOp.Data.Plan.Name);
-            Assert.AreEqual(plan.Product, asArmOp.Data.Plan.Product);
-            Assert.AreEqual(plan.PromotionCode, asArmOp.Data.Plan.PromotionCode);
-            Assert.AreEqual(plan.Publisher, asArmOp.Data.Plan.Publisher);
-            Assert.AreEqual(plan.Version, asArmOp.Data.Plan.Version);
-
-            Assert.IsTrue(loc == asArmOp.DefaultLocation);
-            Assert.AreEqual(kind, asArmOp.Data.Kind);
-            Assert.AreEqual(managedBy, asArmOp.Data.ManagedBy);
+            return plan;
         }
 
-        private static object TestListActivator(Dictionary<string, string> tags = null,
-            Azure.ResourceManager.Resources.Models.Sku sku = default,
-            Azure.ResourceManager.Resources.Models.Plan plan = default,
-            string kind = default, 
-            string managedBy = default,
-            string location = "East US")
+        private static ResourceManager.Resources.Models.Sku GetSku()
         {
-            var testMethod = typeof(ResourceListOperations).GetMethod("CreateResourceConverter", BindingFlags.Static | BindingFlags.NonPublic);
-            var options = new AzureResourceManagerClientOptions();
-            var function = (Func<GenericResourceExpanded, ArmResource>)testMethod.Invoke(null, new object[] { options });
+            var sku = new ResourceManager.Resources.Models.Sku();
+            sku.Capacity = 10;
+            sku.Family = "family";
+            sku.Name = "name";
+            sku.Size = "size";
+            sku.Tier = "tier";
+            return sku;
+        }
+
+        [TestCase]
+        public void TestArmResourceActivator()
+        {
+            var expected = GetGenericResource();
+            var actual = Activator.CreateInstance(typeof(ArmResourceData), expected as GenericResource) as ArmResourceData;
+
+            Assert.IsNotNull(actual.Sku);
+            Assert.AreEqual(expected.Sku.Capacity, actual.Sku.Capacity);
+            Assert.AreEqual(expected.Sku.Family, actual.Sku.Family);
+            Assert.AreEqual(expected.Sku.Name, actual.Sku.Name);
+            Assert.AreEqual(expected.Sku.Size, actual.Sku.Size);
+            Assert.AreEqual(expected.Sku.Tier, actual.Sku.Tier);
+
+            Assert.IsNotNull(actual.Plan);
+            Assert.AreEqual(expected.Plan.Name, actual.Plan.Name);
+            Assert.AreEqual(expected.Plan.Product, actual.Plan.Product);
+            Assert.AreEqual(expected.Plan.PromotionCode, actual.Plan.PromotionCode);
+            Assert.AreEqual(expected.Plan.Publisher, actual.Plan.Publisher);
+            Assert.AreEqual(expected.Plan.Version, actual.Plan.Version);
+
+            Assert.IsTrue(expected.Location == actual.Location);
+            Assert.AreEqual(expected.Kind, actual.Kind);
+            Assert.AreEqual(expected.ManagedBy, actual.ManagedBy);
+
+        }
+
+        private static object TestListActivator(GenericResourceExpanded genericResource)
+        {
+            var createResourceConverterMethod = typeof(ResourceListOperations).GetMethod("CreateResourceConverter", BindingFlags.Static | BindingFlags.NonPublic);
+            ResourceGroupOperations rgOp = GetResourceGroupOperations();
+            var activatorFunction = (Func<GenericResourceExpanded, ArmResource>)createResourceConverterMethod.Invoke(null, new object[] { rgOp });
+            return activatorFunction.DynamicInvoke(new object[] { genericResource });
+        }
+
+        private static ResourceGroupOperations GetResourceGroupOperations()
+        {
+            var rgOp = new ResourceGroupOperations(
+                            new SubscriptionOperations(
+                                new AzureResourceManagerClientOptions(),
+                                Guid.Empty.ToString(),
+                                new DefaultAzureCredential(), //should make a fake credential creation
+                                new Uri("http://foo.com")),
+                            "rgName");
+            return rgOp;
+        }
+
+        private static GenericResourceExpanded GetGenericResource()
+        {
+            return GetGenereicResource(
+                new Dictionary<string, string> { { "tag1", "value1" } },
+                GetSku(),
+                GetPlan(),
+                "UserAssigned",
+                "test",
+                "Japan East");
+        }
+
+        private static GenericResourceExpanded GetGenereicResource(
+            Dictionary<string, string> tags,
+            ResourceManager.Resources.Models.Sku sku,
+            ResourceManager.Resources.Models.Plan plan,
+            string kind,
+            string managedBy,
+            string location)
+        {
             var resource = new GenericResourceExpanded();
             resource.Location = location;
             resource.Tags = tags ?? new Dictionary<string, string>();
@@ -65,7 +128,7 @@ namespace Azure.ResourceManager.Core.Tests
             resource.Plan = plan;
             resource.Kind = kind;
             resource.ManagedBy = managedBy;
-            return function.DynamicInvoke(new object[] { resource });
+            return resource;
         }
     }
 }

@@ -59,7 +59,7 @@ namespace azure_proto_compute
         /// Initializes a new instance of the <see cref="VirtualMachineOperations"/> class from a <see cref="ArmResourceOperations"/>.
         /// </summary>
         /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a virtual machine. </param>
-        /// <returns></returns>
+        /// <returns> A new instance of the <see cref="VirtualMachineOperations"/> class. </returns>
         public static VirtualMachineOperations FromGeneric(ArmResourceOperations genericOperations)
         {
             return new VirtualMachineOperations(genericOperations);

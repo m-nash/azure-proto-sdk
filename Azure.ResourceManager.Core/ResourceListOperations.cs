@@ -6,6 +6,8 @@ using Azure.ResourceManager.Core.Resources;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using System;
+using System.Globalization;
+using System.Reflection;
 using System.Threading;
 
 namespace Azure.ResourceManager.Core
@@ -105,7 +107,7 @@ namespace Azure.ResourceManager.Core
 
         private static ResourcesManagementClient GetResourcesClient(ResourceOperationsBase resourceOperations)
         {
-            return new ResourcesManagementClient(resourceOperations.BaseUri, resourceOperations.Id, resourceOperations.Credential);
+            return new ResourcesManagementClient(resourceOperations.BaseUri, resourceOperations.Id.Subscription, resourceOperations.Credential);
         }
 
         private static AsyncPageable<ArmResource> ListAtContextInternalAsync(
@@ -180,10 +182,21 @@ namespace Azure.ResourceManager.Core
 
         private static Func<GenericResourceExpanded, ArmResource> CreateResourceConverter(ResourceOperationsBase resourceOperations)
         {
-            return s => Activator.CreateInstance(
-                    typeof(ArmResource),
+            return s =>
+            {
+                var args = new object[]
+                {
                     resourceOperations,
-                    Activator.CreateInstance(typeof(ArmResourceData), s as GenericResource) as ArmResourceData) as ArmResource;
+                    Activator.CreateInstance(typeof(ArmResourceData), s as GenericResource) as ArmResourceData,
+                };
+
+                return Activator.CreateInstance(
+                    typeof(ArmResource),
+                    BindingFlags.Instance | BindingFlags.NonPublic,
+                    null,
+                    args,
+                    CultureInfo.InvariantCulture) as ArmResource;
+            };
         }
     }
 }

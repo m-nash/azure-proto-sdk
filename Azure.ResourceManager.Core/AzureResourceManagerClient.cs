@@ -263,7 +263,7 @@ namespace Azure.ResourceManager.Core
         /// <returns> Resource group operations. </returns>
         public ResourceGroupOperations GetResourceGroupOperations(string subscriptionGuid, string resourceGroupName)
         {
-            return new ResourceGroupOperations(DefaultSubscription, $"/subscriptions/{subscriptionGuid}/resourceGroups/{resourceGroupName}");
+            return GetSubscriptionOperations(subscriptionGuid).GetResourceGroupOperations(resourceGroupName);
         }
 
         /// <summary>
@@ -273,31 +273,7 @@ namespace Azure.ResourceManager.Core
         /// <returns> Resource group operations. </returns>
         public ResourceGroupOperations GetResourceGroupOperations(ResourceIdentifier resourceGroupId)
         {
-            return new ResourceGroupOperations(DefaultSubscription, resourceGroupId);
-        }
-
-        /// <summary>
-        /// Gets resource operations base.
-        /// </summary>
-        /// <typeparam name="T"> The type of the underlying model this class wraps. </typeparam>
-        /// <param name="resource"> The tracked resource. </param>
-        /// <returns> Resource operations of the resource. </returns>
-        public T GetResourceOperationsBase<T>(TrackedResource resource)
-            where T : TrackedResource
-        {
-            return Activator.CreateInstance(typeof(T), ClientOptions, resource) as T;
-        }
-
-        /// <summary>
-        /// Gets resource operations base.
-        /// </summary>
-        /// <typeparam name="T"> The type of the underlying model this class wraps. </typeparam>
-        /// <param name="resource"> The resource identifier of the resource. </param>
-        /// <returns> Resource operations of the resource. </returns>
-        public T GetResourceOperationsBase<T>(ResourceIdentifier resource)
-            where T : OperationsBase
-        {
-            return Activator.CreateInstance(typeof(T), ClientOptions, resource) as T;
+            return GetSubscriptionOperations(resourceGroupId.Subscription).GetResourceGroupOperations(resourceGroupId.ResourceGroup);
         }
 
         /// <summary>
@@ -308,16 +284,16 @@ namespace Azure.ResourceManager.Core
         /// <param name="resourceGroup"> The resource group name. </param>
         /// <param name="name"> The resource type name. </param>
         /// <returns> Resource operations of the resource. </returns>
-        public T GetResourceOperationsBase<T>(string subscription, string resourceGroup, string name)
+        public T GetResourceOperations<T>(string subscription, string resourceGroup, string name)
             where T : OperationsBase
         {
+            var rgOp = GetSubscriptionOperations(subscription).GetResourceGroupOperations(resourceGroup);
             string resourceType = typeof(T).GetField("ResourceType", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetValue(null).ToString();
-            ResourceIdentifier id = $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/{resourceType}/{name}";
             return Activator.CreateInstance(
                 typeof(T),
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
                 null,
-                new object[] { ClientOptions, id },
+                new object[] { rgOp, name },
                 CultureInfo.InvariantCulture) as T;
         }
 

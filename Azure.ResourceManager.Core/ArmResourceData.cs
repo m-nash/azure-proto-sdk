@@ -23,8 +23,12 @@ namespace Azure.ResourceManager.Core
                 Tags.Add(tag);
             }
 
-            Sku = new Sku(Model.Sku);
-            Plan = new Plan(Model.Plan);
+            if (Model.Sku != null)
+                Sku = new Sku(Model.Sku);
+
+            if (Model.Plan != null)
+                Plan = new Plan(Model.Plan);
+
             Kind = Model.Kind;
             ManagedBy = Model.ManagedBy;
         }

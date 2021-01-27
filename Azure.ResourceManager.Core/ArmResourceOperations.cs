@@ -20,7 +20,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="operations"> The resource operations to copy the options from. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
-        internal ArmResourceOperations(ArmResourceOperations operations, ResourceIdentifier id)
+        internal ArmResourceOperations(ResourceOperationsBase operations, ResourceIdentifier id)
             : base(operations, id)
         {
             _apiVersion = "BAD VALUE";
