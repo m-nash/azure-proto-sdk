@@ -37,19 +37,19 @@ namespace client
             Console.WriteLine($"Adding tags to {vmOp.Id.Name}");
 
             var vm = (await vmOp.StartAddTag("key1", "value1").WaitForCompletionAsync()).Value;
-            Debug.Assert(vm.Data.Tags.Count() == 1);
+            Debug.Assert(vm.Data.Tags.Where(x => x.Key.StartsWith("key")).Count() == 1);
             DumpDictionary(vm.Data.Tags);
 
             vm = (await vm.StartAddTag("key2", "value2").WaitForCompletionAsync()).Value;
-            Debug.Assert(vm.Data.Tags.Count() == 2);
+            Debug.Assert(vm.Data.Tags.Where(x => x.Key.StartsWith("key")).Count() == 2);
             DumpDictionary(vm.Data.Tags);
 
             vm = (await (await vmOp.StartAddTagAsync("key3", "value3")).WaitForCompletionAsync()).Value;
-            Debug.Assert(vm.Data.Tags.Count() == 3);
+            Debug.Assert(vm.Data.Tags.Where(x => x.Key.StartsWith("key")).Count() == 3);
             DumpDictionary(vm.Data.Tags);
 
             vm = (await vm.StartAddTagAsync("key4", "value4")).WaitForCompletionAsync().Result.Value;
-            Debug.Assert(vm.Data.Tags.Count() == 4);
+            Debug.Assert(vm.Data.Tags.Where(x => x.Key.StartsWith("key")).Count() == 4);
             DumpDictionary(vm.Data.Tags);
         }
     }
