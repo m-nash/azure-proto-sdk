@@ -4,10 +4,7 @@
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// Abstract class for long-running or synchronous applications. If we want to add ARM-specific OM, this is where we
-    /// would add it.
-    /// We may need to add ARM-specific OM, as customers have asked for additional configurability over polling stratgies
-    /// on a per-operation basis
+    /// Abstract class for long-running or synchronous applications.
     /// </summary>
     /// <typeparam name="TOperations"> The <see cref="OperationsBase"/> to return representing the result of the ArmOperation. </typeparam>
     public abstract class ArmOperation<TOperations> : Operation<TOperations>

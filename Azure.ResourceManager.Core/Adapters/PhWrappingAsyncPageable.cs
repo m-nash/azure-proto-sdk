@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace Azure.ResourceManager.Core.Adapters
 {
     /// <summary>
-    /// As above, returns an AsyncPageable that transforms each page of contents  after they are retrieved from the server
-    /// accorgin to the profived transformation function
+    /// Returns an AsyncPageable that transforms each page of contents  after they are retrieved from the server
+    /// according to the profived transformation function
     /// </summary>
     /// <typeparam name="TModel"> The model returned by existing AsyncPageable methods. </typeparam>
     /// <typeparam name="TOperations"> The <see cref="ResourceOperationsBase"/> to convert TModel into. </typeparam>
