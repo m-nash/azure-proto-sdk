@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using Azure.Core;
 using Azure.ResourceManager.Resources;
 using System;
 using System.Threading;
@@ -23,61 +24,42 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="subscriptionId"> The Id of the subscription. </param>
-        internal SubscriptionOperations(AzureResourceManagerClientOptions options, string subscriptionId)
-            : base(options, $"/subscriptions/{subscriptionId}")
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="baseUri"> The base URI of the service. </param>
+        internal SubscriptionOperations(AzureResourceManagerClientOptions options, string subscriptionId, TokenCredential credential, Uri baseUri)
+            : base(options, $"/subscriptions/{subscriptionId}", credential, baseUri)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubscriptionOperations"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="subscription"> The subscription operations to copy client options from. </param>
         /// <param name="id"> The identifier of the subscription. </param>
-        internal SubscriptionOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id)
+        protected SubscriptionOperations(SubscriptionOperations subscription, ResourceIdentifier id)
+            : base(subscription.ClientOptions, id, subscription.Credential, subscription.BaseUri)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SubscriptionOperations"/> class.
+        /// Gets the valid resource type for this operation class
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="subscription"> The subscription resource. </param>
-        internal SubscriptionOperations(AzureResourceManagerClientOptions options, Resource subscription)
-            : base(options, subscription)
-        {
-        }
-
         protected override ResourceType ValidResourceType => ResourceType;
 
-        /// <summary>
-        /// Gets the subscription client.
-        /// </summary>
-        private SubscriptionsOperations SubscriptionsClient => GetClient((uri, cred) =>
-            new ResourcesManagementClient(
-                uri,
-                Guid.NewGuid().ToString(),
-                cred,
-                ClientOptions.Convert<ResourcesManagementClientOptions>())).Subscriptions;
+        private SubscriptionsOperations SubscriptionsClient => new ResourcesManagementClient(
+            BaseUri,
+            Guid.NewGuid().ToString(),
+            Credential,
+            ClientOptions.Convert<ResourcesManagementClientOptions>()).Subscriptions;
 
         /// <summary>
         /// Gets the resource group operations for a given resource group.
         /// </summary>
-        /// <param name="resourceGroupData"> The resource group. </param>
+        /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <returns> The resource group operations. </returns>
-        public ResourceGroup GetResourceGroup(ResourceGroupData resourceGroupData)
+        public ResourceGroupOperations GetResourceGroupOperations(string resourceGroupName)
         {
-            return new ResourceGroup(ClientOptions, resourceGroupData);
-        }
-
-        /// <summary>
-        /// Gets the resource group operations for a given resource group.
-        /// </summary>
-        /// <param name="resourceGroupId"> The resource group identifier. </param>
-        /// <returns> The resource group operations. </returns>
-        public ResourceGroupOperations GetResourceGroupOperations(ResourceIdentifier resourceGroupId)
-        {
-            return new ResourceGroupOperations(ClientOptions, resourceGroupId);
+            return new ResourceGroupOperations(this, resourceGroupName);
         }
 
         /// <summary>
@@ -86,7 +68,7 @@ namespace Azure.ResourceManager.Core
         /// <returns> The resource group container. </returns>
         public ResourceGroupContainer GetResourceGroupContainer()
         {
-            return new ResourceGroupContainer(ClientOptions, this);
+            return new ResourceGroupContainer(this);
         }
 
         /// <inheritdoc/>
@@ -107,7 +89,7 @@ namespace Azure.ResourceManager.Core
 
         private Func<Azure.ResourceManager.Resources.Models.Subscription, Subscription> Converter()
         {
-            return s => new Subscription(ClientOptions, new SubscriptionData(s));
+            return s => new Subscription(this, new SubscriptionData(s));
         }
     }
 }

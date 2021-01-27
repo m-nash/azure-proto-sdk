@@ -44,8 +44,14 @@ namespace Azure.ResourceManager.Core
             }
         }
 
-        public Identity(SystemAssignedIdentity systemAssigned, IDictionary<ResourceIdentifier, UserAssignedIdentity> user) // TODO: remove this constructor later
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Identity"/> class.
+        /// </summary>
+        /// <param name="systemAssigned"> The <see cref="SystemAssignedIdentity"/> to use. </param>
+        /// <param name="user"> Dictionary with a <see cref="ResourceIdentifier"/> key and a <see cref="UserAssignedIdentity"/> object value. </param>
+        public Identity(SystemAssignedIdentity systemAssigned, IDictionary<ResourceIdentifier, UserAssignedIdentity> user)
         {
+            // TODO: remove this constructor later
             SystemAssignedIdentity = systemAssigned;
             if (user == null)
             {

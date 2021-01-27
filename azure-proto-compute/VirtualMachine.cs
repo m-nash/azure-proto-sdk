@@ -18,8 +18,8 @@ namespace azure_proto_compute
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="resource"> The resource that is the target of operations. </param>
-        internal VirtualMachine(AzureResourceManagerClientOptions options, VirtualMachineData resource)
-            : base(options, resource.Id)
+        internal VirtualMachine(ResourceOperationsBase operations, VirtualMachineData resource)
+            : base(operations, resource.Id)
         {
             Data = resource;
         }

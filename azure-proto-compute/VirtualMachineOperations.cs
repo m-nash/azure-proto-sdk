@@ -25,10 +25,20 @@ namespace azure_proto_compute
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualMachineOperations"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="resourceGroup"> The client parameters to use in these operations. </param>
+        /// <param name="vmName"> The identifier of the resource that is the target of operations. </param>
+        internal VirtualMachineOperations(ResourceGroupOperations resourceGroup, string vmName)
+            : base(resourceGroup, $"{resourceGroup.Id}/providers/Microsoft.Compute/virtualMachines/{vmName}")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VirtualMachineOperations"/> class.
+        /// </summary>
+        /// <param name="operation"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
-        internal VirtualMachineOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
-            : base(options, id)
+        protected VirtualMachineOperations(ResourceOperationsBase operation, ResourceIdentifier id)
+            : base(operation, id)
         {
         }
 
@@ -39,14 +49,17 @@ namespace azure_proto_compute
 
         protected override ResourceType ValidResourceType => ResourceType;
 
-        private VirtualMachinesOperations Operations => GetClient<ComputeManagementClient>((baseUri, creds) =>
-            new ComputeManagementClient(baseUri, Id.Subscription, creds, ClientOptions.Convert<ComputeManagementClientOptions>())).VirtualMachines;
+        private VirtualMachinesOperations Operations => new ComputeManagementClient(
+            BaseUri,
+            Id.Subscription,
+            Credential,
+            ClientOptions.Convert<ComputeManagementClientOptions>()).VirtualMachines;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualMachineOperations"/> class from a <see cref="ArmResourceOperations"/>.
         /// </summary>
         /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a virtual machine. </param>
-        /// <returns></returns>
+        /// <returns> A new instance of the <see cref="VirtualMachineOperations"/> class. </returns>
         public static VirtualMachineOperations FromGeneric(ArmResourceOperations genericOperations)
         {
             return new VirtualMachineOperations(genericOperations);
@@ -194,11 +207,7 @@ namespace azure_proto_compute
         {
             return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 Operations.Get(Id.ResourceGroup, Id.Name),
-                v =>
-                {
-                    Resource = new VirtualMachineData(v);
-                    return new VirtualMachine(ClientOptions, Resource as VirtualMachineData);
-                });
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
         }
 
         /// <inheritdoc/>
@@ -206,11 +215,7 @@ namespace azure_proto_compute
         {
             return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 await Operations.GetAsync(Id.ResourceGroup, Id.Name, cancellationToken),
-                v =>
-                {
-                    Resource = new VirtualMachineData(v);
-                    return new VirtualMachine(ClientOptions, Resource as VirtualMachineData);
-                });
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
         }
 
         /// <summary>
@@ -222,11 +227,7 @@ namespace azure_proto_compute
         {
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable),
-                v =>
-                {
-                    Resource = new VirtualMachineData(v);
-                    return new VirtualMachine(ClientOptions, Resource as VirtualMachineData);
-                });
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
         }
 
         /// <summary>
@@ -239,11 +240,7 @@ namespace azure_proto_compute
         {
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
-                v =>
-                {
-                    Resource = new VirtualMachineData(v);
-                    return new VirtualMachine(ClientOptions, Resource as VirtualMachineData);
-                });
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
         }
 
         /// <summary>
@@ -261,11 +258,7 @@ namespace azure_proto_compute
 
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable),
-                v =>
-                {
-                    Resource = new VirtualMachineData(v);
-                    return new VirtualMachine(ClientOptions, Resource as VirtualMachineData);
-                });
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
         }
 
         /// <summary>
@@ -284,11 +277,7 @@ namespace azure_proto_compute
 
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
-                v =>
-                {
-                    Resource = new VirtualMachineData(v);
-                    return new VirtualMachine(ClientOptions, Resource as VirtualMachineData);
-                });
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
         }
     }
 }

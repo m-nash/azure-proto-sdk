@@ -12,7 +12,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="resource"> The resource that is the target of operations. </param>
-        internal PublicIpAddress(AzureResourceManagerClientOptions options, PublicIPAddressData resource)
+        internal PublicIpAddress(ResourceOperationsBase options, PublicIPAddressData resource)
             : base(options, resource.Id)
         {
             Data = resource;

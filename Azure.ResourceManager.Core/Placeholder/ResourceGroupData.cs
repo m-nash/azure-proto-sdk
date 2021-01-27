@@ -7,10 +7,16 @@ using Azure.ResourceManager.Resources.Models;
 
 namespace Azure.ResourceManager.Core
 {
-    public class ResourceGroupData : TrackedResource<Azure.ResourceManager.Resources.Models.ResourceGroup>, IManagedByResource
+    /// <summary>
+    /// A class representing the ResourceGroup data model.
+    /// </summary>
+    public class ResourceGroupData : TrackedResource<ResourceManager.Resources.Models.ResourceGroup>, IManagedByResource
     {
-
-        public ResourceGroupData(Azure.ResourceManager.Resources.Models.ResourceGroup rg)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceGroupData"/> class.
+        /// </summary>
+        /// <param name="rg"> The existing resource group model to copy from. </param>
+        public ResourceGroupData(ResourceManager.Resources.Models.ResourceGroup rg)
             : base(rg.Id, rg.Location, rg)
         {
             if (rg.Tags == null)
@@ -19,16 +25,24 @@ namespace Azure.ResourceManager.Core
             }
         }
 
+        /// <inheritdoc/>
         public override IDictionary<string, string> Tags => Model.Tags;
 
+        /// <inheritdoc/>
         public override string Name => Model.Name;
 
+        /// <summary>
+        /// Gets or sets the resource group properties
+        /// </summary>
         public ResourceGroupProperties Properties
         {
             get => Model.Properties;
             set => Model.Properties = value;
         }
 
+        /// <summary>
+        /// Gets or sets who this resource group is managed by
+        /// </summary>
         public string ManagedBy
         {
             get => Model.ManagedBy;

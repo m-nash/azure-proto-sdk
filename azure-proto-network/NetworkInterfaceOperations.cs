@@ -13,11 +13,16 @@ namespace azure_proto_network
     public class NetworkInterfaceOperations : ResourceOperationsBase<NetworkInterface>, ITaggableResource<NetworkInterface>, IDeletableResource
     {
         internal NetworkInterfaceOperations(ArmResourceOperations genericOperations)
-            : base(genericOperations.ClientOptions, genericOperations.Id)
+            : base(genericOperations)
         {
         }
 
-        internal NetworkInterfaceOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+        internal NetworkInterfaceOperations(ResourceGroupOperations resourceGroup, string nicName)
+            : base(resourceGroup, $"{resourceGroup.Id}/providers/Microsoft.Network/networkInterfaces/{nicName}")
+        {
+        }
+
+        protected NetworkInterfaceOperations(ResourceOperationsBase options, ResourceIdentifier id)
             : base(options, id)
         {
         }
@@ -30,8 +35,11 @@ namespace azure_proto_network
         /// <inheritdoc/>
         protected override ResourceType ValidResourceType => ResourceType;
 
-        internal NetworkInterfacesOperations Operations => GetClient<NetworkManagementClient>((uri, cred) => new NetworkManagementClient(Id.Subscription, uri, cred,
-            ClientOptions.Convert<NetworkManagementClientOptions>())).NetworkInterfaces;
+        internal NetworkInterfacesOperations Operations => new NetworkManagementClient(
+            Id.Subscription,
+            BaseUri,
+            Credential,
+            ClientOptions.Convert<NetworkManagementClientOptions>()).NetworkInterfaces;
 
         /// <summary>
         /// Deletes a <see cref="NetworkInterface"/>.
@@ -89,11 +97,7 @@ namespace azure_proto_network
         {
             return new PhArmResponse<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
                 Operations.Get(Id.ResourceGroup, Id.Name),
-                n =>
-                {
-                    Resource = new NetworkInterfaceData(n);
-                    return new NetworkInterface(ClientOptions, Resource as NetworkInterfaceData);
-                });
+                n => new NetworkInterface(this, new NetworkInterfaceData(n)));
         }
 
         /// <inheritdoc/>
@@ -101,11 +105,7 @@ namespace azure_proto_network
         {
             return new PhArmResponse<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
                 await Operations.GetAsync(Id.ResourceGroup, Id.Name, null, cancellationToken),
-                n =>
-                {
-                    Resource = new NetworkInterfaceData(n);
-                    return new NetworkInterface(ClientOptions, Resource as NetworkInterfaceData);
-                });
+                n => new NetworkInterface(this, new NetworkInterfaceData(n)));
         }
 
         /// <summary>
@@ -122,11 +122,7 @@ namespace azure_proto_network
             var patchable = new TagsObject();
             patchable.Tags[key] = value;
             return new PhArmOperation<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
-                n =>
-                {
-                    Resource = new NetworkInterfaceData(n);
-                    return new NetworkInterface(ClientOptions, Resource as NetworkInterfaceData);
-                });
+                n => new NetworkInterface(this, new NetworkInterfaceData(n)));
         }
 
         /// <summary>
@@ -146,11 +142,7 @@ namespace azure_proto_network
             patchable.Tags[key] = value;
             return new PhArmOperation<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
                 await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
-                n =>
-                {
-                    Resource = new NetworkInterfaceData(n);
-                    return new NetworkInterface(ClientOptions, Resource as NetworkInterfaceData);
-                });
+                n => new NetworkInterface(this, new NetworkInterfaceData(n)));
         }
     }
 }

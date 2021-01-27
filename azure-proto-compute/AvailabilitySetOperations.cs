@@ -24,10 +24,10 @@ namespace azure_proto_compute
         /// <summary>
         /// Initializes a new instance of the <see cref="ArmResourceOperations"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="resource"> The resource that is the target of operations. </param>
-        internal AvailabilitySetOperations(AzureResourceManagerClientOptions options, TrackedResource resource)
-            : base(options, resource)
+        /// <param name="resourceGroup"> The client parameters to use in these operations. </param>
+        /// <param name="availabilitySetName"> The name of the availability set to use. </param>
+        internal AvailabilitySetOperations(ResourceGroupOperations resourceGroup, string availabilitySetName)
+            : base(resourceGroup, $"{resourceGroup.Id}/providers/Microsoft.Compute/availabilitySets/{availabilitySetName}")
         {
         }
 
@@ -36,7 +36,7 @@ namespace azure_proto_compute
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
-        internal AvailabilitySetOperations(AzureResourceManagerClientOptions options, ResourceIdentifier id)
+        protected AvailabilitySetOperations(ResourceOperationsBase options, ResourceIdentifier id)
             : base(options, id)
         {
         }
@@ -49,12 +49,11 @@ namespace azure_proto_compute
         /// <inheritdoc/>
         protected override ResourceType ValidResourceType => ResourceType;
 
-        private AvailabilitySetsOperations Operations => GetClient((uri, cred) =>
-            new ComputeManagementClient(
-                uri,
-                Id.Subscription,
-                cred,
-                ClientOptions.Convert<ComputeManagementClientOptions>())).AvailabilitySets;
+        private AvailabilitySetsOperations Operations => new ComputeManagementClient(
+            BaseUri,
+            Id.Subscription,
+            Credential,
+            ClientOptions.Convert<ComputeManagementClientOptions>()).AvailabilitySets;
 
         /// <summary>
         /// The operation to delete an availability set. 
@@ -106,11 +105,7 @@ namespace azure_proto_compute
         {
             return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 Operations.Get(Id.ResourceGroup, Id.Name),
-                a =>
-                {
-                    Resource = new AvailabilitySetData(a);
-                    return new AvailabilitySet(ClientOptions, Resource as AvailabilitySetData);
-                });
+                a => new AvailabilitySet(this, new AvailabilitySetData(a)));
         }
 
         /// <inheritdoc/>
@@ -118,11 +113,7 @@ namespace azure_proto_compute
         {
             return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 await Operations.GetAsync(Id.ResourceGroup, Id.Name, cancellationToken),
-                a =>
-                {
-                    Resource = new AvailabilitySetData(a);
-                    return new AvailabilitySet(ClientOptions, Resource as AvailabilitySetData);
-                });
+                a => new AvailabilitySet(this, new AvailabilitySetData(a)));
         }
 
         /// <summary>
@@ -134,11 +125,7 @@ namespace azure_proto_compute
         {
             return new PhArmOperation<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 Operations.Update(Id.ResourceGroup, Id.Name, patchable),
-                a =>
-                {
-                    Resource = new AvailabilitySetData(a);
-                    return new AvailabilitySet(ClientOptions, Resource as AvailabilitySetData);
-                });
+                a => new AvailabilitySet(this, new AvailabilitySetData(a)));
         }
 
         /// <summary>
@@ -151,11 +138,7 @@ namespace azure_proto_compute
         {
             return new PhArmOperation<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 await Operations.UpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
-                a =>
-                {
-                    Resource = new AvailabilitySetData(a);
-                    return new AvailabilitySet(ClientOptions, Resource as AvailabilitySetData);
-                });
+                a => new AvailabilitySet(this, new AvailabilitySetData(a)));
         }
 
         /// <summary>

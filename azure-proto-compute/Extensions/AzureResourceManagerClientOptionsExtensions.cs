@@ -10,7 +10,7 @@ namespace azure_proto_compute.Extensions
         /// <summary>
         /// Adds a method to AzureResourceManagerClientOptions which returns all the versions to all resources inside the compute resource provider.
         /// </summary>
-        ///<param> The <see  cref="[AzureResourceManagerClientOptions]" /> instance the method will execute against. </param>
+        ///<param> The <see  cref="AzureResourceManagerClientOptions" /> instance the method will execute against. </param>
         /// <returns> Returns a response with the <see cref="ComputeRestApiVersions"/> operation for this resource. </returns>
         public static ComputeRestApiVersions GetComputeRestApiVersions(this AzureResourceManagerClientOptions azureResourceManagerClientOptions)
         {
