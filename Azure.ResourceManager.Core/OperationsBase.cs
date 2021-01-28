@@ -22,7 +22,7 @@ namespace Azure.ResourceManager.Core
         {
             ClientOptions = options;
             Id = id;
-            DefaultLocation = Location.Default;
+            DefaultLocation = LocationData.Default;
             Credential = credential;
             BaseUri = baseUri;
 
@@ -37,7 +37,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the default location.
         /// </summary>
-        public virtual Location DefaultLocation { get; }
+        public virtual LocationData DefaultLocation { get; }
 
         /// <summary>
         /// Gets the Azure Resource Manager client options.

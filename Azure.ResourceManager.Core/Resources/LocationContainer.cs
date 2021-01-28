@@ -14,8 +14,8 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class LocationContainer : OperationsBase
     {
-        public LocationContainer(AzureResourceManagerClientOptions clientOptions, SubscriptionOperations subscriptionOperations)
-            : base(clientOptions, subscriptionOperations.Id)
+        internal LocationContainer(SubscriptionOperations subscriptionOperations)
+            : base(subscriptionOperations.ClientOptions, subscriptionOperations.Id, subscriptionOperations.Credential, subscriptionOperations.BaseUri)
         {
         }
 
@@ -24,12 +24,12 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the resource client.
         /// </summary>
-        internal ResourcesManagementClient GetResourcesClient(string subscription) => ClientOptions.GetClient((uri, credential) => new ResourcesManagementClient(uri, subscription, credential));
+        private ResourcesManagementClient ResourcesClient => new ResourcesManagementClient(BaseUri, Id.Subscription, Credential);
 
         /// <summary>
         /// Gets the subscription client.
         /// </summary>
-        internal SubscriptionsOperations SubscriptionsClient => GetResourcesClient(Guid.NewGuid().ToString()).Subscriptions;
+        private SubscriptionsOperations SubscriptionsClient => ResourcesClient.Subscriptions;
 
         /// <summary>
         /// Gets the Azure subscriptions.
@@ -37,7 +37,7 @@ namespace Azure.ResourceManager.Core
         /// <returns> Subscription container. </returns>
         public SubscriptionContainer GetSubscriptionContainer()
         {
-            return new SubscriptionContainer(ClientOptions);
+            return new SubscriptionContainer(ClientOptions, Credential, BaseUri);
         }
 
         /// <summary>

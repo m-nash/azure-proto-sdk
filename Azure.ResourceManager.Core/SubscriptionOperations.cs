@@ -1,15 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Azure.ResourceManager.Core.Adapters;
-using Azure.Core;
-using Azure.ResourceManager.Resources;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.Core;
+using Azure.ResourceManager.Resources;
 
 namespace Azure.ResourceManager.Core
 {
@@ -81,7 +77,7 @@ namespace Azure.ResourceManager.Core
         /// <returns> The resource group container. </returns>
         public LocationContainer GetLocationContainer()
         {
-            return new LocationContainer(ClientOptions, this);
+            return new LocationContainer(this);
         }
 
         /// <inheritdoc/>

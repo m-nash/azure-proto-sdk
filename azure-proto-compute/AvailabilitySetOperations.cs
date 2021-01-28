@@ -186,10 +186,10 @@ namespace azure_proto_compute
         /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
         public IEnumerable<LocationData> ListAvailableLocations(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return GetResourcesClient(Id.Subscription).Providers.List(expand: "metadata", cancellationToken: cancellationToken)
-                .FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase))
-                .ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType))
-                .Locations.Cast<LocationData>();
+            var pageableProvider = ResourcesClient.Providers.List(expand: "metadata", cancellationToken: cancellationToken);
+            var availabilitySetProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var availabilitySetResource = availabilitySetProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
+            return availabilitySetResource.Locations.Cast<LocationData>();
         }
 
         /// <summary>
@@ -198,24 +198,12 @@ namespace azure_proto_compute
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
         /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
-        public async IAsyncEnumerable<LocationData> ListAvailableLocationsAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<LocationData>> ListAvailableLocationsAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            if (Id.Subscription == null)
-            {
-                throw new InvalidOperationException("Please select a default subscription");
-            }
-
-            await foreach (var provider in GetResourcesClient(Id.Subscription).Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken).WithCancellation(cancellationToken))
-            {
-                if (string.Equals(provider.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    var foundResource = provider.ResourceTypes.FirstOrDefault(p => ResourceType.Equals(p.ResourceType));
-                    foreach (var location in foundResource.Locations)
-                    {
-                        yield return location;
-                    }
-                }
-            }
+            var asyncpageableProvider = ResourcesClient.Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken);
+            var availabilitySetProvider = await asyncpageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var availabilitySetResource = availabilitySetProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
+            return availabilitySetResource.Locations.Cast<LocationData>();
         }
     }
 }
