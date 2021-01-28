@@ -141,17 +141,5 @@ namespace Azure.ResourceManager.Core
         public override void Validate(ResourceIdentifier identifier)
         {
         }
-
-        /// <inheritdoc />
-        protected override GenericResource GetResource()
-        {
-            return this;
-        }
-
-        /// <inheritdoc />
-        protected override Task<GenericResource> GetResourceAsync()
-        {
-            return Task.FromResult(this);
-        }
     }
 }

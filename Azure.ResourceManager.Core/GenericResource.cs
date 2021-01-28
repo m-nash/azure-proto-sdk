@@ -27,7 +27,7 @@ namespace Azure.ResourceManager.Core
         public GenericResourceData Data { get; }
 
         /// <inheritdoc/>
-        private protected override GenericResource GetResource()
+        protected override GenericResource GetResource()
         {
             return this;
         }
