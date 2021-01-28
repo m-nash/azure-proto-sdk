@@ -92,14 +92,14 @@ namespace azure_proto_network
         public override ArmResponse<Subnet> Get()
         {
             return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(Operations.Get(Id.ResourceGroup, Id.Parent.Name, Id.Name),
-                n => new Subnet(this, new SubnetData(n, DefaultLocation)));
+                n => new Subnet(this, new SubnetData(n)));
         }
         
         /// <inheritdoc/>
         public override async Task<ArmResponse<Subnet>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(await Operations.GetAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, null, cancellationToken),
-                n => new Subnet(this, new SubnetData(n, DefaultLocation)));
+                n => new Subnet(this, new SubnetData(n)));
         }
     }
 }

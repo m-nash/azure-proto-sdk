@@ -12,7 +12,7 @@ namespace azure_proto_network
         /// <summary> 
         // Initializes a new instance of the <see cref="SubnetData"/> class. 
         //</summary>
-        public SubnetData(Azure.ResourceManager.Network.Models.Subnet sub, string location) : base(sub.Id, sub)
+        public SubnetData(Azure.ResourceManager.Network.Models.Subnet sub) : base(sub.Id, sub)
         {
         }
 
