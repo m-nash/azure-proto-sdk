@@ -6,6 +6,7 @@ using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Azure.ResourceManager.Core
 {
@@ -125,6 +126,10 @@ namespace Azure.ResourceManager.Core
         public ArmOperation<ResourceGroup> StartAddTag(string name, string value)
         {
             var patch = new ResourceGroupPatchable();
+            if (object.ReferenceEquals(patch.Tags, null))
+            {
+                patch.Tags = new Dictionary<string, string>();
+            }
             patch.Tags[name] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Update(Id.Name, patch), g =>
             {
@@ -146,6 +151,10 @@ namespace Azure.ResourceManager.Core
         public async Task<ArmOperation<ResourceGroup>> StartAddTagAsync(string name, string value, CancellationToken cancellationToken = default)
         {
             var patch = new ResourceGroupPatchable();
+            if (object.ReferenceEquals(patch.Tags, null))
+            {
+                patch.Tags = new Dictionary<string, string>();
+            }
             patch.Tags[name] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.UpdateAsync(Id.Name, patch, cancellationToken), g =>
             {
