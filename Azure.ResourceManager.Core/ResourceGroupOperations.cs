@@ -172,12 +172,12 @@ namespace Azure.ResourceManager.Core
 
             if (myResource == null)
             {
-                myResource = new ArmResourceData(Id);
+                myResource = new GenericResourceData(Id);
             }
 
             if (location != null)
             {
-                myResource = new ArmResourceData(Id, location);
+                myResource = new GenericResourceData(Id, location);
             }
 
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;
@@ -205,12 +205,12 @@ namespace Azure.ResourceManager.Core
 
             if (myResource == null)
             {
-                myResource = new ArmResourceData(Id);
+                myResource = new GenericResourceData(Id);
             }
 
             if (location != null)
             {
-                myResource = new ArmResourceData(Id, location);
+                myResource = new GenericResourceData(Id, location);
             }
 
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;

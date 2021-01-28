@@ -16,8 +16,8 @@ namespace azure_proto_compute
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualMachineOperations"/> class.
         /// </summary>
-        /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a virtual machine. </param>
-        internal VirtualMachineOperations(ArmResourceOperations genericOperations)
+        /// <param name="genericOperations"> An instance of <see cref="GenericResourceOperations"/> that has an id for a virtual machine. </param>
+        internal VirtualMachineOperations(GenericResourceOperations genericOperations)
             : base(genericOperations)
         {
         }
@@ -56,11 +56,11 @@ namespace azure_proto_compute
             ClientOptions.Convert<ComputeManagementClientOptions>()).VirtualMachines;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="VirtualMachineOperations"/> class from a <see cref="ArmResourceOperations"/>.
+        /// Initializes a new instance of the <see cref="VirtualMachineOperations"/> class from a <see cref="GenericResourceOperations"/>.
         /// </summary>
-        /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a virtual machine. </param>
+        /// <param name="genericOperations"> An instance of <see cref="GenericResourceOperations"/> that has an id for a virtual machine. </param>
         /// <returns> A new instance of the <see cref="VirtualMachineOperations"/> class. </returns>
-        public static VirtualMachineOperations FromGeneric(ArmResourceOperations genericOperations)
+        public static VirtualMachineOperations FromGeneric(GenericResourceOperations genericOperations)
         {
             return new VirtualMachineOperations(genericOperations);
         }

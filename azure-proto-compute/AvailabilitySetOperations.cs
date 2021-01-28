@@ -13,16 +13,16 @@ namespace azure_proto_compute
     public class AvailabilitySetOperations : ResourceOperationsBase<AvailabilitySet>, ITaggableResource<AvailabilitySet>, IDeletableResource
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArmResourceOperations"/> class.
+        /// Initializes a new instance of the <see cref="GenericResourceOperations"/> class.
         /// </summary>
-        /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for an availability set. </param>
-        internal AvailabilitySetOperations(ArmResourceOperations genericOperations)
+        /// <param name="genericOperations"> An instance of <see cref="GenericResourceOperations"/> that has an id for an availability set. </param>
+        internal AvailabilitySetOperations(GenericResourceOperations genericOperations)
             : base(genericOperations)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArmResourceOperations"/> class.
+        /// Initializes a new instance of the <see cref="GenericResourceOperations"/> class.
         /// </summary>
         /// <param name="resourceGroup"> The client parameters to use in these operations. </param>
         /// <param name="availabilitySetName"> The name of the availability set to use. </param>
@@ -32,7 +32,7 @@ namespace azure_proto_compute
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArmResourceOperations"/> class.
+        /// Initializes a new instance of the <see cref="GenericResourceOperations"/> class.
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>

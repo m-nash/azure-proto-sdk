@@ -55,12 +55,12 @@ namespace azure_proto_compute
         /// Filters the list of VMs for a SubscriptionOperations represented as generic resources.
         /// </summary>
         /// <param> The <see cref="SubscriptionOperations" /> instance the method will execute against. </param>
-        /// <param name="filter"> The ArmSubstringFilter to filter the list. </param>
+        /// <param name="filter"> The ResourceNameFilter to filter the list. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public static Pageable<ArmResource> ListVirtualMachinesByName(this SubscriptionOperations subscription, ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public static Pageable<GenericResource> ListVirtualMachinesByName(this SubscriptionOperations subscription, ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineOperations.ResourceType);
+            ResourceFilterCollection filters = new ResourceFilterCollection(VirtualMachineOperations.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContext(subscription, filters, top, cancellationToken);
         }
@@ -69,12 +69,12 @@ namespace azure_proto_compute
         /// Filters the list of VMs for a SubscriptionOperations represented as generic resources.
         /// </summary>
         /// <param> The <see cref="SubscriptionOperations" /> instance the method will execute against. </param>
-        /// <param name="filter"> The ArmSubstringFilter to filter the list. </param>
+        /// <param name="filter"> The ResourceNameFilter to filter the list. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public static AsyncPageable<ArmResource> ListVirtualMachinesByNameAsync(this SubscriptionOperations subscription, ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public static AsyncPageable<GenericResource> ListVirtualMachinesByNameAsync(this SubscriptionOperations subscription, ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineOperations.ResourceType);
+            ResourceFilterCollection filters = new ResourceFilterCollection(VirtualMachineOperations.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync(subscription, filters, top, cancellationToken);
         }
