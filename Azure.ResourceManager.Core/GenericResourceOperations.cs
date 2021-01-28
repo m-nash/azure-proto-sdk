@@ -142,13 +142,16 @@ namespace Azure.ResourceManager.Core
         {
         }
 
-        /// <summary>
-        /// Gets the resource associated with this operations object
-        /// </summary>
-        /// <returns> An instance of a <see cref="GenericResource"/>. </returns>
-        private protected virtual GenericResource GetResource()
+        /// <inheritdoc />
+        protected override GenericResource GetResource()
         {
-            return Get().Value;
+            return this;
+        }
+
+        /// <inheritdoc />
+        protected override Task<GenericResource> GetResourceAsync()
+        {
+            return Task.FromResult(this);
         }
     }
 }

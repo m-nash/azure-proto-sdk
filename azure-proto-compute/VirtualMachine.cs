@@ -1,4 +1,5 @@
-﻿using Azure.ResourceManager.Core;
+﻿using System.Threading.Tasks;
+using Azure.ResourceManager.Core;
 
 namespace azure_proto_compute
 {
@@ -8,9 +9,14 @@ namespace azure_proto_compute
     public class VirtualMachine : VirtualMachineOperations
     {
         /// <summary>
+        /// Gets the data representing this VirtualMachine.
+        /// </summary>
+        public VirtualMachineData Data { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="VirtualMachine"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="operations"> The operations to copy options from. </param>
         /// <param name="resource"> The resource that is the target of operations. </param>
         internal VirtualMachine(ResourceOperationsBase operations, VirtualMachineData resource)
             : base(operations, resource.Id)
@@ -18,9 +24,16 @@ namespace azure_proto_compute
             Data = resource;
         }
 
-        /// <summary>
-        /// Gets the data representing this VirtualMachine.
-        /// </summary>
-        public VirtualMachineData Data { get; private set; }
+        /// <inheritdoc />
+        protected override VirtualMachine GetResource()
+        {
+            return this;
+        }
+
+        /// <inheritdoc />
+        protected override Task<VirtualMachine> GetResourceAsync()
+        {
+            return Task.FromResult(this);
+        }
     }
 }

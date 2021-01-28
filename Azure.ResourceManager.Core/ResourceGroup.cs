@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System.Threading.Tasks;
+
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
@@ -23,5 +25,17 @@ namespace Azure.ResourceManager.Core
         /// Gets the data representing this ResourceGroup.
         /// </summary>
         public ResourceGroupData Data { get; private set; }
+
+        /// <inheritdoc />
+        protected override ResourceGroup GetResource()
+        {
+            return this;
+        }
+
+        /// <inheritdoc />
+        protected override Task<ResourceGroup> GetResourceAsync()
+        {
+            return Task.FromResult(this);
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System.Threading.Tasks;
+
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
@@ -28,6 +30,12 @@ namespace Azure.ResourceManager.Core
         private protected override GenericResource GetResource()
         {
             return this;
+        }
+
+        /// <inheritdoc />
+        protected override Task<GenericResource> GetResourceAsync()
+        {
+            return Task.FromResult(this);
         }
     }
 }

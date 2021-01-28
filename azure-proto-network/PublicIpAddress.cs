@@ -1,4 +1,5 @@
-﻿using Azure.ResourceManager.Core;
+﻿using System.Threading.Tasks;
+using Azure.ResourceManager.Core;
 
 namespace azure_proto_network
 {
@@ -22,5 +23,17 @@ namespace azure_proto_network
         /// Gets the data representing this PublicIPAddress.
         /// </summary>
         public PublicIPAddressData Data { get; private set; }
+
+        /// <inheritdoc />
+        protected override PublicIpAddress GetResource()
+        {
+            return this;
+        }
+
+        /// <inheritdoc />
+        protected override Task<PublicIpAddress> GetResourceAsync()
+        {
+            return Task.FromResult(this);
+        }
     }
 }
