@@ -8,15 +8,15 @@ namespace Azure.ResourceManager.Core.Resources
     /// <summary>
     /// A class representing a tag filter used in Azure API calls.
     /// </summary>
-    public class TagFilter : GenericResourceFilter
+    public class ResourceTagFilter : GenericResourceFilter
     {
         private readonly Tuple<string, string> _tag;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TagFilter"/> class.
+        /// Initializes a new instance of the <see cref="ResourceTagFilter"/> class.
         /// </summary>
         /// <param name="tag"> The tag to filter by. </param>
-        public TagFilter(Tuple<string, string> tag)
+        public ResourceTagFilter(Tuple<string, string> tag)
         {
             _tag = tag;
             Key = _tag.Item1;
@@ -24,11 +24,11 @@ namespace Azure.ResourceManager.Core.Resources
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TagFilter"/> class.
+        /// Initializes a new instance of the <see cref="ResourceTagFilter"/> class.
         /// </summary>
         /// <param name="tagKey"> The key of the tag to filter by. </param>
         /// <param name="tagValue">The value of the tag to filter by. </param>
-        public TagFilter(string tagKey, string tagValue)
+        public ResourceTagFilter(string tagKey, string tagValue)
             : this(new Tuple<string, string>(tagKey, tagValue))
         {
         }

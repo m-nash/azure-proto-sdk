@@ -39,7 +39,7 @@ namespace Azure.ResourceManager.Core.Resources
         /// <summary>
         /// Gets or sets the tag filter to use in the collection.
         /// </summary>
-        public TagFilter TagFilter { get; set; }
+        public ResourceTagFilter TagFilter { get; set; }
 
         /// <inheritdoc/>
         public override string ToString()
