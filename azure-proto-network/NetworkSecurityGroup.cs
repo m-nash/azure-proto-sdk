@@ -4,6 +4,7 @@
 using Azure.ResourceManager.Network.Models;
 using Azure.ResourceManager.Core;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace azure_proto_network
 {
@@ -27,5 +28,17 @@ namespace azure_proto_network
         /// Gets the data representing this network security group.
         /// </summary>
         public NetworkSecurityGroupData Data { get; private set; }
+
+        /// <inheritdoc />
+        protected override NetworkSecurityGroup GetResource()
+        {
+            return this;
+        }
+
+        /// <inheritdoc />
+        protected override Task<NetworkSecurityGroup> GetResourceAsync()
+        {
+            return Task.FromResult(this);
+        }
     }
 }

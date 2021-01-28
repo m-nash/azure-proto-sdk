@@ -143,14 +143,5 @@ namespace Azure.ResourceManager.Core
         {
             return;
         }
-
-        /// <summary>
-        /// Gets the resource associated with this operations object
-        /// </summary>
-        /// <returns> An instance of a <see cref="ArmResource"/>. </returns>
-        private protected virtual ArmResource GetResource()
-        {
-            return Get().Value;
-        }
     }
 }

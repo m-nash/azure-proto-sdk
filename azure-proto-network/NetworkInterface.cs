@@ -1,4 +1,5 @@
-﻿using Azure.ResourceManager.Core;
+﻿using System.Threading.Tasks;
+using Azure.ResourceManager.Core;
 
 namespace azure_proto_network
 {
@@ -17,5 +18,17 @@ namespace azure_proto_network
         /// Gets the <see cref="NetworkInterfaceData"/> for this <see cref="NetworkInterface"/>.
         /// </summary>
         public NetworkInterfaceData Data { get; private set; }
+
+        /// <inheritdoc />
+        protected override NetworkInterface GetResource()
+        {
+            return this;
+        }
+
+        /// <inheritdoc />
+        protected override Task<NetworkInterface> GetResourceAsync()
+        {
+            return Task.FromResult(this);
+        }
     }
 }

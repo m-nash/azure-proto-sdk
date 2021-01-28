@@ -1,4 +1,5 @@
-﻿using Azure.ResourceManager.Core;
+﻿using System.Threading.Tasks;
+using Azure.ResourceManager.Core;
 
 namespace azure_proto_network
 {
@@ -20,5 +21,17 @@ namespace azure_proto_network
         /// Gets the data representing the subnet
         /// </summary>
         public SubnetData Data { get; private set; }
+
+        /// <inheritdoc />
+        protected override Subnet GetResource()
+        {
+            return this;
+        }
+
+        /// <inheritdoc />
+        protected override Task<Subnet> GetResourceAsync()
+        {
+            return Task.FromResult(this);
+        }
     }
 }
