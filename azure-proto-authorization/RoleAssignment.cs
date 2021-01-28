@@ -1,4 +1,5 @@
-﻿using Azure.ResourceManager.Core;
+﻿using System.Threading.Tasks;
+using Azure.ResourceManager.Core;
 
 namespace azure_proto_authorization
 {
@@ -22,5 +23,17 @@ namespace azure_proto_authorization
         /// Gets the properties of the RoleAssignment.
         /// </summary>
         public RoleAssignmentData Data { get; }
+
+        /// <inheritdoc />
+        protected override RoleAssignment GetResource()
+        {
+            return this;
+        }
+
+        /// <inheritdoc />
+        protected override Task<RoleAssignment> GetResourceAsync()
+        {
+            return Task.FromResult(this);
+        }
     }
 }

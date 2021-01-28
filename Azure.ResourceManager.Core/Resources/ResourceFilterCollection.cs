@@ -8,38 +8,38 @@ namespace Azure.ResourceManager.Core.Resources
     /// <summary>
     /// A class representing a collection of arm filters.
     /// </summary>
-    public class ArmFilterCollection
+    public class ResourceFilterCollection
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArmFilterCollection"/> class.
+        /// Initializes a new instance of the <see cref="ResourceFilterCollection"/> class.
         /// </summary>
-        public ArmFilterCollection()
+        public ResourceFilterCollection()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArmFilterCollection"/> class.
+        /// Initializes a new instance of the <see cref="ResourceFilterCollection"/> class.
         /// </summary>
         /// <param name="type"> The resource type to filter by. </param>
-        public ArmFilterCollection(ResourceType type)
+        public ResourceFilterCollection(ResourceType type)
         {
-            ResourceTypeFilter = new ArmResourceTypeFilter(type);
+            ResourceTypeFilter = new ResourceTypeFilter(type);
         }
 
         /// <summary>
         /// Gets or sets the substring filter to use in the collection.
         /// </summary>
-        public ArmSubstringFilter SubstringFilter { get; set; }
+        public ResourceNameFilter SubstringFilter { get; set; }
 
         /// <summary>
         /// Gets the resource type filter to use in the collection.
         /// </summary>
-        public ArmResourceTypeFilter ResourceTypeFilter { get; }
+        public ResourceTypeFilter ResourceTypeFilter { get; }
 
         /// <summary>
         /// Gets or sets the tag filter to use in the collection.
         /// </summary>
-        public ArmTagFilter TagFilter { get; set; }
+        public ResourceTagFilter TagFilter { get; set; }
 
         /// <inheritdoc/>
         public override string ToString()

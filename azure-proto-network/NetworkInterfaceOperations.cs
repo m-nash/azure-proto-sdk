@@ -12,7 +12,7 @@ namespace azure_proto_network
     /// </summary>
     public class NetworkInterfaceOperations : ResourceOperationsBase<NetworkInterface>, ITaggableResource<NetworkInterface>, IDeletableResource
     {
-        internal NetworkInterfaceOperations(ArmResourceOperations genericOperations)
+        internal NetworkInterfaceOperations(GenericResourceOperations genericOperations)
             : base(genericOperations)
         {
         }

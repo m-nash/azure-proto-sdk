@@ -8,13 +8,13 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// A class representing the generic azure resource data model.
     /// </summary>
-    public class ArmResourceData : TrackedResource<GenericResource>, IManagedByResource, ISkuResource
+    public class GenericResourceData : TrackedResource<ResourceManager.Resources.Models.GenericResource>, IManagedByResource, ISkuResource
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArmResourceData"/> class.
+        /// Initializes a new instance of the <see cref="GenericResourceData"/> class.
         /// </summary>
         /// <param name="genericResource"> The existing resource model to copy from. </param>
-        public ArmResourceData(GenericResource genericResource)
+        public GenericResourceData(ResourceManager.Resources.Models.GenericResource genericResource)
             : base(genericResource.Id, genericResource.Location, genericResource)
         {
             Tags.Clear();
@@ -34,20 +34,20 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArmResourceData"/> class.
+        /// Initializes a new instance of the <see cref="GenericResourceData"/> class.
         /// </summary>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
-        public ArmResourceData(ResourceIdentifier id)
+        public GenericResourceData(ResourceIdentifier id)
             : base(id, LocationData.Default, null)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArmResourceData"/> class.
+        /// Initializes a new instance of the <see cref="GenericResourceData"/> class.
         /// </summary>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         /// <param name="location"> The location of the resource. </param>
-        public ArmResourceData(ResourceIdentifier id, LocationData location)
+        public GenericResourceData(ResourceIdentifier id, LocationData location)
             : base(id, location, null)
         {
         }

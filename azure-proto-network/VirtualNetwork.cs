@@ -1,4 +1,5 @@
-﻿using Azure.ResourceManager.Core;
+﻿using System.Threading.Tasks;
+using Azure.ResourceManager.Core;
 
 namespace azure_proto_network
 {
@@ -22,5 +23,17 @@ namespace azure_proto_network
         /// Gets or sets the virtual nerwork data.
         /// </summary>
         public VirtualNetworkData Data { get; private set; }
+
+        /// <inheritdoc />
+        protected override VirtualNetwork GetResource()
+        {
+            return this;
+        }
+
+        /// <inheritdoc />
+        protected override Task<VirtualNetwork> GetResourceAsync()
+        {
+            return Task.FromResult(this);
+        }
     }
 }

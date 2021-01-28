@@ -126,9 +126,9 @@ namespace azure_proto_network
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
         /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public Pageable<ArmResource> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public Pageable<GenericResource> ListByName(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(NetworkInterfaceData.ResourceType);
+            ResourceFilterCollection filters = new ResourceFilterCollection(NetworkInterfaceData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContext(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
@@ -140,9 +140,9 @@ namespace azure_proto_network
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
         /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public AsyncPageable<ArmResource> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<GenericResource> ListByNameAsync(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(NetworkInterfaceData.ResourceType);
+            ResourceFilterCollection filters = new ResourceFilterCollection(NetworkInterfaceData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
@@ -155,10 +155,10 @@ namespace azure_proto_network
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
         /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public Pageable<NetworkInterface> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public Pageable<NetworkInterface> ListByNameExpanded(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByName(filter, top, cancellationToken);
-            return new PhWrappingPageable<ArmResource, NetworkInterface>(results, s => new NetworkInterfaceOperations(s).Get().Value);
+            return new PhWrappingPageable<GenericResource, NetworkInterface>(results, s => new NetworkInterfaceOperations(s).Get().Value);
         }
 
         /// <summary>
@@ -169,10 +169,10 @@ namespace azure_proto_network
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
         /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public AsyncPageable<NetworkInterface> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<NetworkInterface> ListByNameExpandedAsync(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByNameAsync(filter, top, cancellationToken);
-            return new PhWrappingAsyncPageable<ArmResource, NetworkInterface>(results, s => new NetworkInterfaceOperations(s).Get().Value);
+            return new PhWrappingAsyncPageable<GenericResource, NetworkInterface>(results, s => new NetworkInterfaceOperations(s).Get().Value);
         }
         
         private Func<Azure.ResourceManager.Network.Models.NetworkInterface, NetworkInterface> convertor()

@@ -9,10 +9,10 @@ namespace Azure.ResourceManager.Core.Resources
     /// <summary>
     /// Syntactic sugar for creating ARM filters
     /// </summary>
-    public abstract class ArmResourceFilter : IEquatable<string>, IEquatable<ArmResourceFilter>
+    public abstract class GenericResourceFilter : IEquatable<string>, IEquatable<GenericResourceFilter>
     {
         /// <inheritdoc/>
-        public abstract bool Equals(ArmResourceFilter other);
+        public abstract bool Equals(GenericResourceFilter other);
 
         /// <inheritdoc/>
         public abstract bool Equals(string other);
