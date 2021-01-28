@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 using Azure.ResourceManager.Resources;
-using Azure.ResourceManager.Resources.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,7 +12,7 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class GenericResourceOperations : ResourceOperationsBase<GenericResource>, ITaggableResource<GenericResource>, IDeletableResource
     {
-        private string _apiVersion;
+        private readonly string _apiVersion;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GenericResourceOperations"/> class.
@@ -98,7 +97,7 @@ namespace Azure.ResourceManager.Core
             GenericResource resource = GetResource();
             UpdateTags(key, value, resource.Data.Tags);
             return new PhArmOperation<GenericResource, ResourceManager.Resources.Models.GenericResource>(
-                Operations.StartUpdateById(base.Id, _apiVersion, resource.Data).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+                Operations.StartUpdateById(Id, _apiVersion, resource.Data).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
                 v => new GenericResource(this, new GenericResourceData(v)));
         }
 
@@ -126,7 +125,7 @@ namespace Azure.ResourceManager.Core
         public override ArmResponse<GenericResource> Get()
         {
             return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
-                Operations.GetById(base.Id, _apiVersion),
+                Operations.GetById(Id, _apiVersion),
                 v => new GenericResource(this, new GenericResourceData(v)));
         }
 
@@ -134,14 +133,13 @@ namespace Azure.ResourceManager.Core
         public override async Task<ArmResponse<GenericResource>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
-                await Operations.GetByIdAsync(base.Id, _apiVersion, cancellationToken),
+                await Operations.GetByIdAsync(Id, _apiVersion, cancellationToken),
                 v => new GenericResource(this, new GenericResourceData(v)));
         }
 
         /// <inheritdoc/>
         public override void Validate(ResourceIdentifier identifier)
         {
-            return;
         }
 
         /// <summary>
