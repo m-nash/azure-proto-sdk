@@ -11,16 +11,16 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// A class representing the operations that can be performed over a specific ArmResource.
     /// </summary>
-    public class ArmResourceOperations : ResourceOperationsBase<ArmResource>, ITaggableResource<ArmResource>, IDeletableResource
+    public class GenericResourceOperations : ResourceOperationsBase<GenericResource>, ITaggableResource<GenericResource>, IDeletableResource
     {
         private string _apiVersion;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArmResourceOperations"/> class.
+        /// Initializes a new instance of the <see cref="GenericResourceOperations"/> class.
         /// </summary>
         /// <param name="operations"> The resource operations to copy the options from. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
-        internal ArmResourceOperations(ResourceOperationsBase operations, ResourceIdentifier id)
+        internal GenericResourceOperations(ResourceOperationsBase operations, ResourceIdentifier id)
             : base(operations, id)
         {
             _apiVersion = "BAD VALUE";
@@ -93,13 +93,13 @@ namespace Azure.ResourceManager.Core
         /// <param name="key"> The tag key. </param>
         /// <param name="value"> The tag value. </param>
         /// <returns>An <see cref="ArmOperation{TOperations}"/> that allows the user to control polling and waiting for Tag completion.</returns>
-        public ArmOperation<ArmResource> StartAddTag(string key, string value)
+        public ArmOperation<GenericResource> StartAddTag(string key, string value)
         {
-            ArmResource resource = GetResource();
+            GenericResource resource = GetResource();
             UpdateTags(key, value, resource.Data.Tags);
-            return new PhArmOperation<ArmResource, GenericResource>(
-                Operations.StartUpdateById(Id, _apiVersion, resource.Data).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
-                v => new ArmResource(this, new ArmResourceData(v)));
+            return new PhArmOperation<GenericResource, ResourceManager.Resources.Models.GenericResource>(
+                Operations.StartUpdateById(base.Id, _apiVersion, resource.Data).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+                v => new GenericResource(this, new GenericResourceData(v)));
         }
 
         /// <summary>
@@ -112,30 +112,30 @@ namespace Azure.ResourceManager.Core
         /// <returns> A <see cref="Task"/> that performs the Tag operation.  The Task yields an an
         /// <see cref="ArmOperation{TOperations}"/> that allows the user to control polling and waiting for
         /// Tag completion. </returns>
-        public async Task<ArmOperation<ArmResource>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<GenericResource>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
-            ArmResource resource = GetResource();
+            GenericResource resource = GetResource();
             UpdateTags(key, value, resource.Data.Tags);
             var op = await Operations.StartUpdateByIdAsync(Id, _apiVersion, resource.Data, cancellationToken);
-            return new PhArmOperation<ArmResource, GenericResource>(
+            return new PhArmOperation<GenericResource, ResourceManager.Resources.Models.GenericResource>(
                 await op.WaitForCompletionAsync(cancellationToken),
-                v => new ArmResource(this, new ArmResourceData(v)));
+                v => new GenericResource(this, new GenericResourceData(v)));
         }
 
         /// <inheritdoc/>
-        public override ArmResponse<ArmResource> Get()
+        public override ArmResponse<GenericResource> Get()
         {
-            return new PhArmResponse<ArmResource, GenericResource>(
-                Operations.GetById(Id, _apiVersion),
-                v => new ArmResource(this, new ArmResourceData(v)));
+            return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
+                Operations.GetById(base.Id, _apiVersion),
+                v => new GenericResource(this, new GenericResourceData(v)));
         }
 
         /// <inheritdoc/>
-        public override async Task<ArmResponse<ArmResource>> GetAsync(CancellationToken cancellationToken = default)
+        public override async Task<ArmResponse<GenericResource>> GetAsync(CancellationToken cancellationToken = default)
         {
-            return new PhArmResponse<ArmResource, GenericResource>(
-                await Operations.GetByIdAsync(Id, _apiVersion, cancellationToken),
-                v => new ArmResource(this, new ArmResourceData(v)));
+            return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
+                await Operations.GetByIdAsync(base.Id, _apiVersion, cancellationToken),
+                v => new GenericResource(this, new GenericResourceData(v)));
         }
 
         /// <inheritdoc/>
@@ -147,8 +147,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the resource associated with this operations object
         /// </summary>
-        /// <returns> An instance of a <see cref="ArmResource"/>. </returns>
-        private protected virtual ArmResource GetResource()
+        /// <returns> An instance of a <see cref="GenericResource"/>. </returns>
+        private protected virtual GenericResource GetResource()
         {
             return Get().Value;
         }

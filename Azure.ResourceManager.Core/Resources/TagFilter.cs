@@ -8,15 +8,15 @@ namespace Azure.ResourceManager.Core.Resources
     /// <summary>
     /// A class representing a tag filter used in Azure API calls.
     /// </summary>
-    public class ArmTagFilter : ArmResourceFilter
+    public class TagFilter : GenericResourceFilter
     {
         private readonly Tuple<string, string> _tag;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArmTagFilter"/> class.
+        /// Initializes a new instance of the <see cref="TagFilter"/> class.
         /// </summary>
         /// <param name="tag"> The tag to filter by. </param>
-        public ArmTagFilter(Tuple<string, string> tag)
+        public TagFilter(Tuple<string, string> tag)
         {
             _tag = tag;
             Key = _tag.Item1;
@@ -24,11 +24,11 @@ namespace Azure.ResourceManager.Core.Resources
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArmTagFilter"/> class.
+        /// Initializes a new instance of the <see cref="TagFilter"/> class.
         /// </summary>
         /// <param name="tagKey"> The key of the tag to filter by. </param>
         /// <param name="tagValue">The value of the tag to filter by. </param>
-        public ArmTagFilter(string tagKey, string tagValue)
+        public TagFilter(string tagKey, string tagValue)
             : this(new Tuple<string, string>(tagKey, tagValue))
         {
         }
@@ -50,7 +50,7 @@ namespace Azure.ResourceManager.Core.Resources
         }
 
         /// <inheritdoc/>
-        public override bool Equals(ArmResourceFilter other)
+        public override bool Equals(GenericResourceFilter other)
         {
             throw new NotImplementedException();
         }

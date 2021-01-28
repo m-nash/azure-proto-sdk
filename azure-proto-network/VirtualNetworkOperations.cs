@@ -15,8 +15,8 @@ namespace azure_proto_network
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualNetworkOperations"/> class.
         /// </summary>
-        /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a virtual nerwork. </param>
-        internal VirtualNetworkOperations(ArmResourceOperations genericOperations)
+        /// <param name="genericOperations"> An instance of <see cref="GenericResourceOperations"/> that has an id for a virtual nerwork. </param>
+        internal VirtualNetworkOperations(GenericResourceOperations genericOperations)
             : base(genericOperations)
         {
         }

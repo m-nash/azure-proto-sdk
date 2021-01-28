@@ -58,7 +58,7 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ResourceOperationsBase{TOperations}"/> class.
         /// </summary>
         /// <param name="genericOperations"> Generic ARMResourceOperations for this resource type. </param>
-        protected ResourceOperationsBase(ArmResourceOperations genericOperations)
+        protected ResourceOperationsBase(GenericResourceOperations genericOperations)
             : base(genericOperations)
         {
         }

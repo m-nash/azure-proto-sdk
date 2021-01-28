@@ -18,8 +18,8 @@ namespace azure_proto_network
         /// <summary>
         /// Initializes a new instance of the <see cref="PublicIpAddressOperations"/> class.
         /// </summary>
-        /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a virtual machine. </param>
-        internal PublicIpAddressOperations(ArmResourceOperations genericOperations)
+        /// <param name="genericOperations"> An instance of <see cref="GenericResourceOperations"/> that has an id for a virtual machine. </param>
+        internal PublicIpAddressOperations(GenericResourceOperations genericOperations)
             : base(genericOperations)
         {
         }

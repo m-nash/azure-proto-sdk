@@ -8,13 +8,13 @@ namespace Azure.ResourceManager.Core.Resources
     /// <summary>
     /// A class representing a resource type filter used in Azure API calls.
     /// </summary>
-    public class ArmResourceTypeFilter : ArmResourceFilter
+    public class ResourceTypeFilter : GenericResourceFilter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArmResourceTypeFilter"/> class.
+        /// Initializes a new instance of the <see cref="ResourceTypeFilter"/> class.
         /// </summary>
         /// <param name="resourceType"> The resource type to filter by. </param>
-        public ArmResourceTypeFilter(ResourceType resourceType)
+        public ResourceTypeFilter(ResourceType resourceType)
         {
             ResourceType = resourceType;
         }
@@ -31,7 +31,7 @@ namespace Azure.ResourceManager.Core.Resources
         }
 
         /// <inheritdoc/>
-        public override bool Equals(ArmResourceFilter other)
+        public override bool Equals(GenericResourceFilter other)
         {
             throw new NotImplementedException();
         }

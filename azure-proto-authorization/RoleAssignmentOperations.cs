@@ -21,7 +21,7 @@ namespace azure_proto_authorization
         /// Allows creating operations specific to a role assignment from generic ARM operations for the same resource
         /// </summary>
         /// <param name="genericOperations">A generic operations class corresponding to a Role Assignment. </param>
-        internal RoleAssignmentOperations(ArmResourceOperations genericOperations)
+        internal RoleAssignmentOperations(GenericResourceOperations genericOperations)
             : base(genericOperations)
         {
         }

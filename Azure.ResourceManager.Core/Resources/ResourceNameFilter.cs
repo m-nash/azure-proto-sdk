@@ -9,7 +9,7 @@ namespace Azure.ResourceManager.Core.Resources
     /// <summary>
     /// A class representing a substring filter used in Azure API calls.
     /// </summary>
-    public class ArmSubstringFilter : ArmResourceFilter
+    public class ResourceNameFilter : GenericResourceFilter
     {
         /// <summary>
         /// Gets or sets the name.
@@ -22,12 +22,12 @@ namespace Azure.ResourceManager.Core.Resources
         public string ResourceGroup { get; set; }
 
         /// <summary>
-        /// Converts a string into an <see cref="ArmSubstringFilter"/>.
+        /// Converts a string into an <see cref="ResourceNameFilter"/>.
         /// </summary>
-        /// <param name="nameString">hgjhg hjhgjh</param>
-        public static implicit operator ArmSubstringFilter(string nameString)
+        /// <param name="nameString"> The string that can be match in any part of the resource name. </param>
+        public static implicit operator ResourceNameFilter(string nameString)
         {
-            return new ArmSubstringFilter { Name = nameString };
+            return new ResourceNameFilter { Name = nameString };
         }
 
         /// <inheritdoc/>
@@ -37,7 +37,7 @@ namespace Azure.ResourceManager.Core.Resources
         }
 
         /// <inheritdoc/>
-        public override bool Equals(ArmResourceFilter other)
+        public override bool Equals(GenericResourceFilter other)
         {
             throw new NotImplementedException();
         }
