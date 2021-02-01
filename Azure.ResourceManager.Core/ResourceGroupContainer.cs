@@ -3,9 +3,9 @@
 
 using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace Azure.ResourceManager.Core
 {
@@ -36,7 +36,9 @@ namespace Azure.ResourceManager.Core
         /// Constructs an object used to create a resource group.
         /// </summary>
         /// <param name="location"> The location of the resource group. </param>
-        /// <returns> A builder with <see cref="ResourceGroup"> and <see cref="ResourceGroupData"/>. </returns>
+        /// <param name="tags"> The tags of the resource group. </param>
+        /// <param name="managedBy"> Who the resource group is managed by. </param>
+        /// <returns> A builder with <see cref="ResourceGroup"/> and <see cref="ResourceGroupData"/>. </returns>
         public ArmBuilder<ResourceGroup, ResourceGroupData> Construct(Location location, IDictionary<string, string> tags = default, string managedBy = default)
         {
             var model = new ResourceManager.Resources.Models.ResourceGroup(location);

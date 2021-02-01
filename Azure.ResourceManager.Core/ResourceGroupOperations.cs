@@ -4,9 +4,9 @@
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace Azure.ResourceManager.Core
 {
@@ -130,6 +130,7 @@ namespace Azure.ResourceManager.Core
             {
                 patch.Tags = new Dictionary<string, string>();
             }
+
             patch.Tags[name] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Update(Id.Name, patch), g =>
             {
@@ -155,6 +156,7 @@ namespace Azure.ResourceManager.Core
             {
                 patch.Tags = new Dictionary<string, string>();
             }
+
             patch.Tags[name] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.UpdateAsync(Id.Name, patch, cancellationToken), g =>
             {

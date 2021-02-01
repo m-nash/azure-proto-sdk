@@ -17,10 +17,11 @@
         ListByNameExpanded,
         ClientOptionsOverride,
         GetSubscription,
-        NullDataValues
+        NullDataValues,
         //RoleAssignment,
         //DeleteGeneric,
-        //AddTagToGeneric
+        //AddTagToGeneric,
+        CheckResourceExists,
     }
 
     class ScenarioFactory
@@ -67,6 +68,8 @@
                 //    return new DeleteGeneric();
                 //case Scenarios.AddTagToGeneric:
                 //    return new AddTagToGeneric();
+                case Scenarios.CheckResourceExists:
+                    return new CheckResourceExists();
                 default:
                     return null;
             }
