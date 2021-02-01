@@ -22,6 +22,7 @@
         //DeleteGeneric,
         //AddTagToGeneric,
         CheckResourceExists,
+        GetFromOperations,
     }
 
     class ScenarioFactory
@@ -70,6 +71,8 @@
                 //    return new AddTagToGeneric();
                 case Scenarios.CheckResourceExists:
                     return new CheckResourceExists();
+                case Scenarios.GetFromOperations:
+                    return new GetFromOperations();
                 default:
                     return null;
             }

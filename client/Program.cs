@@ -10,7 +10,7 @@ namespace client
             Scenario scenario = null;
             try
             {
-                scenario = ScenarioFactory.GetScenario(Scenarios.CheckResourceExists);
+                scenario = ScenarioFactory.GetScenario(Scenarios.GetFromOperations);
                 scenario.Execute();
             }
             finally
