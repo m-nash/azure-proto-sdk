@@ -287,11 +287,10 @@ namespace azure_proto_compute
         /// <summary>
         /// Lists all available geo-locations.
         /// </summary>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
-        public IEnumerable<LocationData> ListAvailableLocations(CancellationToken cancellationToken = default(CancellationToken))
+        public IEnumerable<LocationData> ListAvailableLocations()
         {
-            var pageableProvider = ResourcesClient.Providers.List(expand: "metadata", cancellationToken: cancellationToken);
+            var pageableProvider = ResourcesClient.Providers.List(expand: "metadata");
             var vmProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
             var vmResource = vmProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
             return vmResource.Locations.Cast<LocationData>();

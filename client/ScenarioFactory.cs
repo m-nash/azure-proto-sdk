@@ -4,6 +4,7 @@
     {
         All,
         CreateSingleVmExample,
+        CheckLocation,
         ShutdownVmsByName,
         StartStopVm,
         StartFromVm,

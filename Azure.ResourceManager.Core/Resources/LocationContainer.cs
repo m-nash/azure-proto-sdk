@@ -41,45 +41,21 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Gets the default Azure subscription.
-        /// </summary>
-        public SubscriptionOperations DefaultSubscription { get; private set; }
-
-        /// <summary>
-        /// Gets default subscription.
-        /// </summary>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
-        /// <returns> A <see cref="Task"/> that on completion returns the subscription id. </returns>
-        internal async Task<string> GetDefaultSubscription(CancellationToken cancellationToken = default)
-        {
-            string sub = DefaultSubscription?.Id?.Subscription;
-            if (null == sub)
-            {
-                sub = await GetSubscriptionContainer().GetDefaultSubscriptionAsync(cancellationToken);
-            }
-
-            return sub;
-        }
-
-        /// <summary>
         /// Lists all geo-locations.
         /// </summary>
-        /// <param name="subscriptionId"> The Id of the target subscription. </param>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of location data that may take multiple service requests to iterate over. </returns>
         /// <exception cref="InvalidOperationException"> <paramref name="subscriptionId"/> is null. </exception>
-        public Pageable<LocationData> List(string subscriptionId = null, CancellationToken cancellationToken = default(CancellationToken))
+        public Pageable<LocationData> List()
         {
-            if (string.IsNullOrWhiteSpace(subscriptionId))
+            if (string.IsNullOrWhiteSpace(Id.Subscription))
             {
-                subscriptionId = GetDefaultSubscription(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
-                if (subscriptionId == null)
+                if (Id.Subscription == null)
                 {
                     throw new InvalidOperationException("Please select a default subscription");
                 }
             }
 
-            return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocations(subscriptionId, cancellationToken), s => s.DisplayName);
+            return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocations(Id.Subscription), s => s.DisplayName);
         }
 
         /// <summary>
@@ -93,16 +69,16 @@ namespace Azure.ResourceManager.Core
         {
             async Task<AsyncPageable<LocationData>> PageableFunc()
             {
-                if (string.IsNullOrWhiteSpace(subscriptionId))
+                if (string.IsNullOrWhiteSpace(Id.Subscription))
                 {
-                    subscriptionId = await GetDefaultSubscription(token);
+                    subscriptionId = Id.Subscription;//await GetDefaultSubscription(token); //ASK
                     if (subscriptionId == null)
                     {
                         throw new InvalidOperationException("Please select a default subscription");
                     }
                 }
 
-                return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocationsAsync(subscriptionId, token), s => s.DisplayName);
+                return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocationsAsync(Id.Subscription, token), s => s.DisplayName);
             }
 
             return new PhTaskDeferringAsyncPageable<LocationData>(PageableFunc);
