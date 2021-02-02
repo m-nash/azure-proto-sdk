@@ -39,8 +39,6 @@ namespace client
                 Console.WriteLine("--------Starting VM {0}--------", vm.Id.Name);
                 vm.PowerOn();
             }
-
-            
         }
     }
 }

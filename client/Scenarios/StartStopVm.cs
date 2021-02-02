@@ -20,8 +20,6 @@ namespace client
             vm.PowerOff();
             Console.WriteLine("--------Starting VM--------");
             vm.PowerOn();
-
-            
         }
     }
 }

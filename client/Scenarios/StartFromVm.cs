@@ -21,8 +21,6 @@ namespace client
             var rg = client.GetResourceGroupOperations(Context.SubscriptionId, Context.RgName);
             var vm2 = rg.GetVirtualMachineOperations(Context.VmName).Get().Value.Data;
             Console.WriteLine($"Found VM {vm2.Id}");
-
-            
         }
     }
 }
