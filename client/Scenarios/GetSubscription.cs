@@ -6,7 +6,7 @@ namespace client
 {
     class GetSubscription : Scenario
     {
-        public override void Execute()
+        public override System.Threading.Tasks.Task Execute()
         {
             var sandboxId = "db1ab6f0-4769-4b27-930e-01e2ef9c123c";
             var expectDisplayName = "Azure SDK sandbox";
@@ -14,6 +14,7 @@ namespace client
             var result = subOp.Get();
             Debug.Assert(expectDisplayName == result.Value.Data.DisplayName);
             Console.WriteLine("Passed, got " + result.Value.Data.DisplayName);
+            return System.Threading.Tasks.Task.FromResult<object>(null);
         }
     }
 }

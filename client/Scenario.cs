@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace client
 {
@@ -8,7 +9,7 @@ namespace client
 
         public readonly static HashSet<string> CleanUp = new HashSet<string>();
 
-        public abstract void Execute();
+        public abstract Task Execute();
 
         public Scenario() : this(new ScenarioContext()) { }
 

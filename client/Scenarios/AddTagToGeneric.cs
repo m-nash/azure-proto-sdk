@@ -6,7 +6,7 @@ namespace client
 {
     class AddTagToGeneric : Scenario
     {
-        public override void Execute()
+        public override System.Threading.Tasks.Task Execute()
         {
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
@@ -24,6 +24,7 @@ namespace client
 
             if(!vm.Data.Tags.ContainsKey("tagKey"))
                 throw new InvalidOperationException("Failed");
+            return System.Threading.Tasks.Task.FromResult<object>(null);
         }
     }
 }

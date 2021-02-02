@@ -8,7 +8,7 @@ namespace client
 {
     class ListByNameExpanded : Scenario
     {
-        public override void Execute()
+        public override System.Threading.Tasks.Task Execute()
         {
             var createMultipleVms = new CreateMultipleVms(Context);
             createMultipleVms.Execute();
@@ -74,6 +74,7 @@ namespace client
                 Console.WriteLine($"--------VNet id--------: {VNet.Data.Id}");
             }
             ExecuteAsync(rg).GetAwaiter().GetResult();
+            return System.Threading.Tasks.Task.FromResult<object>(null);
         }
 
         private async Task ExecuteAsync(ResourceGroup rg)

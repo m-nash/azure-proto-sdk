@@ -9,7 +9,7 @@ namespace client
 {
     class ClientOptionsOverride : Scenario
     {
-        public override void Execute()
+        public override System.Threading.Tasks.Task Execute()
         {
 
             AzureResourceManagerClientOptions options1 = new AzureResourceManagerClientOptions();
@@ -28,6 +28,7 @@ namespace client
             
             Debug.Assert(dummyPolicy1.numMsgGot != dummyPolicy2.numMsgGot);
             Console.WriteLine("\nPASSED\n");
+            return System.Threading.Tasks.Task.FromResult<object>(null);
         }
 
         private class dummyPolicy : HttpPipelineSynchronousPolicy

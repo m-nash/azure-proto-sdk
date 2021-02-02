@@ -23,6 +23,10 @@
         //AddTagToGeneric,
         CheckResourceExists,
         GetFromOperations,
+        CreateSingleVmExampleAsync,
+        StartCreateSingleVmExampleAsync,
+
+        StartCreateSingleVmExample
     }
 
     class ScenarioFactory
@@ -73,6 +77,12 @@
                     return new CheckResourceExists();
                 case Scenarios.GetFromOperations:
                     return new GetFromOperations();
+                case Scenarios.CreateSingleVmExampleAsync:
+                    return new CreateSingleVmExampleAsync();
+                case Scenarios.StartCreateSingleVmExampleAsync:
+                    return new StartCreateSingleVmExampleAsync();
+                case Scenarios.StartCreateSingleVmExample:
+                    return new StartCreateSingleVmExample();
                 default:
                     return null;
             }

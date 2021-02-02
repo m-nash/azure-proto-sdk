@@ -1,12 +1,13 @@
 ﻿using Azure.ResourceManager.Core;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace client
 {
     class All : Scenario
     {
-        public override void Execute()
+        public override async System.Threading.Tasks.Task Execute()
         {
             var list = Enum.GetValues(typeof(Scenarios)).Cast<Scenarios>().ToList();
             try
@@ -17,7 +18,7 @@ namespace client
                     {
                         Console.WriteLine($"########## Starting Scenario {scenario} ##########");
                         var executable = ScenarioFactory.GetScenario(scenario);
-                        executable.Execute();
+                        await executable.Execute();
                         Console.WriteLine($"########## Finished Scenario {scenario} ##########");
                     }
                 }

@@ -11,7 +11,7 @@ namespace client
 {
     class VmModelBuilder : Scenario
     {
-        public override void Execute()
+        public override System.Threading.Tasks.Task Execute()
         {
             throw new NotImplementedException();
         }

@@ -23,7 +23,7 @@ namespace client
             }
         }
 
-        public async override void Execute()
+        public async override System.Threading.Tasks.Task Execute()
         {
             #region SETUP
             ScenarioContext[] contexts = new ScenarioContext[] { new ScenarioContext(), new ScenarioContext("c9cbd920-c00c-427c-852b-8aaf38badaeb") };

@@ -11,7 +11,7 @@ namespace client
 
         public CreateSingleVmExample(ScenarioContext context) : base(context) { }
 
-        public override void Execute()
+        public override System.Threading.Tasks.Task Execute()
         {
             var client = new AzureResourceManagerClient();
             var subscription = client.GetSubscriptionOperations(Context.SubscriptionId);
@@ -31,8 +31,8 @@ namespace client
             var vnet = resourceGroup.GetVirtualNetworkContainer().Construct("10.0.0.0/16").Create(vnetName).Value;
 
             //create subnet
-            Console.WriteLine("--------Start create Subnet--------");
-            var subnet = vnet.GetSubnetContainer().Construct(Context.SubnetName, "10.0.0.0/24").Create(Context.SubnetName).Value;
+            Console.WriteLine("--------Start create Subnet async--------");
+            var subnet = vnet.GetSubnetContainer().Construct(Context.SubnetName, "10.0.0.0/24").CreateAsync(Context.SubnetName).ConfigureAwait(false).GetAwaiter().GetResult().Value;
 
             //create network security group
             Console.WriteLine("--------Start create NetworkSecurityGroup--------");
@@ -52,6 +52,7 @@ namespace client
 
             Console.WriteLine("VM ID: " + vm.Id);
             Console.WriteLine("--------Done create VM--------");
+            return System.Threading.Tasks.Task.FromResult<object>(null);
         }
     }
 }

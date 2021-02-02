@@ -7,7 +7,7 @@ namespace client
 {
     class ShutdownVmsByLINQ : Scenario
     {
-        public override void Execute()
+        public override System.Threading.Tasks.Task Execute()
         {
             var createMultipleVms = new CreateMultipleVms(Context);
             createMultipleVms.Execute();
@@ -42,6 +42,8 @@ namespace client
                     Console.WriteLine($"In resource group list: Starting {tuple.vm.Id.Name}");
                     tuple.vm.PowerOn();
                 });
+
+            return System.Threading.Tasks.Task.FromResult<object>(null);
         }
     }
 }

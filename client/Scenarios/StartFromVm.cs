@@ -6,7 +6,7 @@ namespace client
 {
     class StartFromVm : Scenario
     {
-        public override void Execute()
+        public override System.Threading.Tasks.Task Execute()
         {
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
@@ -21,6 +21,8 @@ namespace client
             var rg = client.GetResourceGroupOperations(Context.SubscriptionId, Context.RgName);
             var vm2 = rg.GetVirtualMachineOperations(Context.VmName).Get().Value.Data;
             Console.WriteLine($"Found VM {vm2.Id}");
+
+            return System.Threading.Tasks.Task.FromResult<object>(null);
         }
     }
 }

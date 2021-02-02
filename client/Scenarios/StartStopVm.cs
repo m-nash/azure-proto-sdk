@@ -6,7 +6,7 @@ namespace client
 {
     class StartStopVm : Scenario
     {
-        public override void Execute()
+        public override System.Threading.Tasks.Task Execute()
         {
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
@@ -20,6 +20,8 @@ namespace client
             vm.PowerOff();
             Console.WriteLine("--------Starting VM--------");
             vm.PowerOn();
+
+            return System.Threading.Tasks.Task.FromResult<object>(null);
         }
     }
 }
