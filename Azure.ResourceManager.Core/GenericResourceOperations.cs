@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using Azure.ResourceManager.Resources;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -140,6 +141,46 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public override void Validate(ResourceIdentifier identifier)
         {
+        }
+
+        public ArmResponse<GenericResource> SetTags(IDictionary<string, string> tags)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmResponse<GenericResource>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmOperation<GenericResource> StartSetTags(IDictionary<string, string> tags)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmOperation<GenericResource>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmResponse<GenericResource> RemoveTag(string key)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmResponse<GenericResource>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmOperation<GenericResource> StartRemoveTag(string key)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmOperation<GenericResource>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
