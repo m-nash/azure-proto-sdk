@@ -4,6 +4,7 @@
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -216,6 +217,46 @@ namespace Azure.ResourceManager.Core
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;
 
             return container.CreateAsync(name, model, cancellationToken);
+        }
+
+        public ArmResponse<ResourceGroup> SetTags(IDictionary<string, string> tags)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ArmResponse<ResourceGroup>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ArmOperation<ResourceGroup> StartSetTags(IDictionary<string, string> tags)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ArmOperation<ResourceGroup>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ArmResponse<ResourceGroup> RemoveTag(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ArmResponse<ResourceGroup>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ArmOperation<ResourceGroup> StartRemoveTag(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ArmOperation<ResourceGroup>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
         }
     }
 }
