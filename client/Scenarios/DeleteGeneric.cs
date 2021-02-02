@@ -7,7 +7,7 @@ namespace client
 {
     class DeleteGeneric : Scenario
     {
-        public override System.Threading.Tasks.Task Execute()
+        public override void Execute()
         {
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
@@ -28,7 +28,7 @@ namespace client
             catch(RequestFailedException e) when (e.Status == 404)
             {
                 Console.WriteLine("Got 404 returned as expected");
-                return System.Threading.Tasks.Task.FromResult<object>(null);
+                
             }
 
             throw new InvalidOperationException("Failed");

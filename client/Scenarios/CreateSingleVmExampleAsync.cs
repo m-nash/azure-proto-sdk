@@ -11,9 +11,14 @@ namespace client
 
         public CreateSingleVmExampleAsync(ScenarioContext context) : base(context) { }
 
-        public override async System.Threading.Tasks.Task Execute()
+        public override void Execute()
         {
-            var client = new AzureResourceManagerClient();
+            ExcuteAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+        }
+
+        private async System.Threading.Tasks.Task ExcuteAsync()
+        {
+                var client = new AzureResourceManagerClient();
             var subscription = client.GetSubscriptionOperations(Context.SubscriptionId);
 
             // Create Resource Group

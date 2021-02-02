@@ -11,7 +11,11 @@ namespace client
 
         public StartCreateSingleVmExampleAsync(ScenarioContext context) : base(context) { }
 
-        public override async System.Threading.Tasks.Task Execute()
+        public override void Execute()
+        {
+            ExecuteAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+        }
+        private async System.Threading.Tasks.Task ExecuteAsync()
         {
             var client = new AzureResourceManagerClient();
             var subscription = client.GetSubscriptionOperations(Context.SubscriptionId);

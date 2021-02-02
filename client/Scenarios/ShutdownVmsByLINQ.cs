@@ -7,7 +7,7 @@ namespace client
 {
     class ShutdownVmsByLINQ : Scenario
     {
-        public override System.Threading.Tasks.Task Execute()
+        public override void Execute()
         {
             var createMultipleVms = new CreateMultipleVms(Context);
             createMultipleVms.Execute();
@@ -43,7 +43,7 @@ namespace client
                     tuple.vm.PowerOn();
                 });
 
-            return System.Threading.Tasks.Task.FromResult<object>(null);
+            
         }
     }
 }

@@ -6,7 +6,7 @@ namespace client
 {
     class ShutdownVmsByName: Scenario
     {
-        public override System.Threading.Tasks.Task Execute()
+        public override void Execute()
         {
             var createMultipleVms = new CreateMultipleVms(Context);
             createMultipleVms.Execute();
@@ -22,7 +22,7 @@ namespace client
                 vmOperations.PowerOn();
             }
             
-            return System.Threading.Tasks.Task.FromResult<object>(null);
+            
         }
     }
 }

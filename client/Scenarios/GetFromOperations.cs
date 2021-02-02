@@ -6,7 +6,7 @@ namespace client
 {
     class GetFromOperations : Scenario
     {
-        public override System.Threading.Tasks.Task Execute()
+        public override void Execute()
         {
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
@@ -23,7 +23,7 @@ namespace client
             _ = resourceGroup.GetNetworkInterfaceOperations($"{Context.VmName}_nic").Get().Value;
             _ = resourceGroup.GetVirtualMachineOperations(Context.VmName).Get().Value;
 
-            return System.Threading.Tasks.Task.FromResult<object>(null);
+            
         }
     }
 }

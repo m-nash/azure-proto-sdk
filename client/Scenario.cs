@@ -9,7 +9,7 @@ namespace client
 
         public readonly static HashSet<string> CleanUp = new HashSet<string>();
 
-        public abstract Task Execute();
+        public abstract void Execute();
 
         public Scenario() : this(new ScenarioContext()) { }
 

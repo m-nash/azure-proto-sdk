@@ -6,7 +6,7 @@ namespace client
 {
     class SetTagsOnVm : Scenario
     {
-        public override System.Threading.Tasks.Task Execute()
+        public override void Execute()
         {
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
@@ -17,7 +17,7 @@ namespace client
             var vm = vmOp.Get().Value;
             Console.WriteLine($"Adding tags to {vm.Data.Name}");
             vm.StartAddTag("tagkey", "tagvalue");
-            return System.Threading.Tasks.Task.FromResult<object>(null);
+            
         }
     }
 }

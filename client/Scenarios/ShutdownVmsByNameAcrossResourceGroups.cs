@@ -8,7 +8,7 @@ namespace client
 {
     class ShutdownVmsByNameAcrossResourceGroups : Scenario
     {
-        public override System.Threading.Tasks.Task Execute()
+        public override void Execute()
         {
             int numberOfRgs = 2;
             var context = Context;
@@ -32,7 +32,7 @@ namespace client
                     vm.PowerOn();
                 }
             });
-            return System.Threading.Tasks.Task.FromResult<object>(null);
+            
         }
     }
 }

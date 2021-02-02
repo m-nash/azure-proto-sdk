@@ -7,7 +7,7 @@ namespace client
 {
     class All : Scenario
     {
-        public override async System.Threading.Tasks.Task Execute()
+        public override void Execute()
         {
             var list = Enum.GetValues(typeof(Scenarios)).Cast<Scenarios>().ToList();
             try
@@ -18,7 +18,7 @@ namespace client
                     {
                         Console.WriteLine($"########## Starting Scenario {scenario} ##########");
                         var executable = ScenarioFactory.GetScenario(scenario);
-                        await executable.Execute();
+                        executable.Execute();
                         Console.WriteLine($"########## Finished Scenario {scenario} ##########");
                     }
                 }

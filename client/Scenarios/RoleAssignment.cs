@@ -8,7 +8,7 @@ namespace client
 {
     class RoleAssignment : Scenario
     {
-        public override System.Threading.Tasks.Task Execute()
+        public override void Execute()
         {
             var client = new AzureResourceManagerClient();
             var subscription = client.GetSubscriptionOperations(Context.SubscriptionId);
@@ -66,7 +66,7 @@ namespace client
             assign2 = assign2.Get().Value;
             Console.WriteLine($"Created assignment: '{assign.Data.Id}'");
 
-            return System.Threading.Tasks.Task.FromResult<object>(null);
+            
         }
     }
 }

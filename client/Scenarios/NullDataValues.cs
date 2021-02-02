@@ -8,7 +8,7 @@ namespace client
 {
     class NullDataValues : Scenario
     {
-        public override System.Threading.Tasks.Task Execute()
+        public override void Execute()
         {
             var rg = new Azure.ResourceManager.Resources.Models.ResourceGroup("East US");
             var resourceGroupData = new ResourceGroupData(rg);
@@ -17,7 +17,7 @@ namespace client
             var aset = new Azure.ResourceManager.Compute.Models.AvailabilitySet("East US");
             var availabilitySet =  new AvailabilitySetData(aset);
 
-            return System.Threading.Tasks.Task.FromResult<object>(null);
+            
         }
     }
 }

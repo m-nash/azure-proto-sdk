@@ -12,7 +12,7 @@ namespace client
 
         public CreateMultipleVms(ScenarioContext context) : base(context) { }
 
-        public override System.Threading.Tasks.Task Execute()
+        public override void Execute()
         {
             var client = new AzureResourceManagerClient();
             var subscription = client.GetSubscriptionOperations(Context.SubscriptionId);
@@ -40,7 +40,7 @@ namespace client
             _ = resourceGroup.GetNetworkSecurityGroupContainer().Construct(Context.NsgName, 80).Create(Context.NsgName).Value;
 
             CreateVms(resourceGroup, aset, subnet);
-            return System.Threading.Tasks.Task.FromResult<object>(null);
+            
         }
 
         private void CreateVms(ResourceGroup resourceGroup, AvailabilitySet aset, SubnetOperations subnet)

@@ -11,7 +11,7 @@ namespace client
 
         public CreateSingleVmExample(ScenarioContext context) : base(context) { }
 
-        public override System.Threading.Tasks.Task Execute()
+        public override void Execute()
         {
             var client = new AzureResourceManagerClient();
             var subscription = client.GetSubscriptionOperations(Context.SubscriptionId);
@@ -52,7 +52,7 @@ namespace client
 
             Console.WriteLine("VM ID: " + vm.Id);
             Console.WriteLine("--------Done create VM--------");
-            return System.Threading.Tasks.Task.FromResult<object>(null);
+            
         }
     }
 }

@@ -6,7 +6,7 @@ namespace client
 {
     class GenericEntityLoop : Scenario
     {
-        public override System.Threading.Tasks.Task Execute()
+        public override void Execute()
         {
             var createVm = new CreateSingleVmExample(Context);
             createVm.Execute();
@@ -17,7 +17,7 @@ namespace client
                 Console.WriteLine($"{entity.Id.Name}");
                 entity.StartAddTag("name", "Value");
             }
-            return System.Threading.Tasks.Task.FromResult<object>(null);
+            
         }
     }
 }

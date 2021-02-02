@@ -5,13 +5,13 @@ namespace client
 {
     class Program
     {
-        static async System.Threading.Tasks.Task Main(string[] args)
+        static void Main(string[] args)
         {
             Scenario scenario = null;
             try
             {
                 scenario = ScenarioFactory.GetScenario(Scenarios.CreateSingleVmExample);
-                await scenario.Execute();
+                scenario.Execute();
             }
             finally
             {

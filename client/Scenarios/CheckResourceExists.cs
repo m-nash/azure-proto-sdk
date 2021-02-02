@@ -6,7 +6,7 @@ namespace client
 {
     class CheckResourceExists : Scenario
     {
-        public override System.Threading.Tasks.Task Execute()
+        public override void Execute()
         {
             var client = new AzureResourceManagerClient();
             var subOp = client.DefaultSubscription;
@@ -49,7 +49,7 @@ namespace client
             if (!asetContainer.TryGetValue(asetName, out asetOutput))
                 throw new Exception($"The availability set {asetName} should have existed.");
                 
-            return System.Threading.Tasks.Task.FromResult<object>(null);
+            
         }
     }
 }
