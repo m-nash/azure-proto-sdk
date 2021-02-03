@@ -37,11 +37,11 @@ namespace client
 
             //create subnet
             Console.WriteLine("--------Start StartCreate Subnet--------");
-            var subnet = (await(vnet.GetSubnetContainer().Construct(Context.SubnetName, "10.0.0.0/24").StartCreate(Context.SubnetName)).WaitForCompletionAsync()).Value;
+            var subnet = (await(vnet.GetSubnetContainer().Construct("10.0.0.0/24").StartCreate(Context.SubnetName)).WaitForCompletionAsync()).Value;
 
             //create network security group
             Console.WriteLine("--------Start StartCreate NetworkSecurityGroup--------");
-            _ = (await(resourceGroup.GetNetworkSecurityGroupContainer().Construct(Context.NsgName, 80).StartCreate(Context.NsgName)).WaitForCompletionAsync()).Value;
+            _ = (await(resourceGroup.GetNetworkSecurityGroupContainer().Construct(80).StartCreate(Context.NsgName)).WaitForCompletionAsync()).Value;
 
             // Create IP Address
             Console.WriteLine("--------Start StartCreate IP Address--------");

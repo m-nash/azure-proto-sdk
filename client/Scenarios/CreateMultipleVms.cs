@@ -33,11 +33,11 @@ namespace client
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
-            var subnet = vnet.GetSubnetContainer().Construct(Context.SubnetName, "10.0.0.0/24").Create(Context.SubnetName).Value;
+            var subnet = vnet.GetSubnetContainer().Construct("10.0.0.0/24").Create(Context.SubnetName).Value;
 
             //create network security group
             Console.WriteLine("--------Start create NetworkSecurityGroup--------");
-            _ = resourceGroup.GetNetworkSecurityGroupContainer().Construct(Context.NsgName, 80).Create(Context.NsgName).Value;
+            _ = resourceGroup.GetNetworkSecurityGroupContainer().Construct(80).Create(Context.NsgName).Value;
 
             CreateVms(resourceGroup, aset, subnet);
             

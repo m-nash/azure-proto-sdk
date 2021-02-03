@@ -86,12 +86,10 @@ namespace azure_proto_network
         /// <param name="location"> The location to create the network security group. </param>
         /// <param name="openPorts"> The location to create the network security group. </param>
         /// <returns> Object used to create a <see cref="NetworkSecurityGroup"/>. </returns>
-        public ArmBuilder<NetworkSecurityGroup, NetworkSecurityGroupData> Construct(string name, Location location = null, params int[] openPorts)
+        public ArmBuilder<NetworkSecurityGroup, NetworkSecurityGroupData> Construct(Location location = null, params int[] openPorts)
         {
             var nsg = new Azure.ResourceManager.Network.Models.NetworkSecurityGroup
             {
-                // TODO: Name should be settable
-                // Name = name,
                 Location = location ?? DefaultLocation
             };
             var index = 0;
@@ -118,12 +116,10 @@ namespace azure_proto_network
         /// <param name="name"> The name of the network security group. </param>
         /// <param name="openPorts"> The location to create the network security group. </param>
         /// <returns> Object used to create a <see cref="NetworkSecurityGroup"/>. </returns>
-        public ArmBuilder<NetworkSecurityGroup, NetworkSecurityGroupData> Construct(string name, params int[] openPorts)
+        public ArmBuilder<NetworkSecurityGroup, NetworkSecurityGroupData> Construct(params int[] openPorts)
         {
             var nsg = new Azure.ResourceManager.Network.Models.NetworkSecurityGroup
             {
-                // TODO: Name should be settable
-                // Name = name,
                 Location = DefaultLocation,
             };
             var index = 0;

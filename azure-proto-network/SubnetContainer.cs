@@ -70,11 +70,10 @@ namespace azure_proto_network
         /// <param name="location"> The location of the resource. </param>
         /// <param name="group"> The network security group of the resource. </param>
         /// <returns> A builder with <see cref="Subnet"> and <see cref="Subnet"/>. </returns>
-        public ArmBuilder<Subnet, SubnetData> Construct(string name, string subnetCidr, NetworkSecurityGroupData group = null)
+        public SubnetBuilder Construct(string subnetCidr, NetworkSecurityGroupData group = null)
         {
             var subnet = new Azure.ResourceManager.Network.Models.Subnet()
             {
-                Name = name,
                 AddressPrefix = subnetCidr,
             };
 
@@ -83,7 +82,7 @@ namespace azure_proto_network
                 subnet.NetworkSecurityGroup = group.Model;
             }
 
-            return new ArmBuilder<Subnet, SubnetData>(this, new SubnetData(subnet));
+            return new SubnetBuilder(this, new SubnetData(subnet));
         }
         
         /// <summary>
