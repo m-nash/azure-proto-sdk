@@ -25,8 +25,8 @@
         GetFromOperations,
         CreateSingleVmExampleAsync,
         StartCreateSingleVmExampleAsync,
-
-        StartCreateSingleVmExample
+        StartCreateSingleVmExample,
+        DefaultSubscription
     }
 
     class ScenarioFactory
@@ -83,6 +83,8 @@
                     return new StartCreateSingleVmExampleAsync();
                 case Scenarios.StartCreateSingleVmExample:
                     return new StartCreateSingleVmExample();
+                case Scenarios.DefaultSubscription:
+                    return new DefaultSubscription();
                 default:
                     return null;
             }
