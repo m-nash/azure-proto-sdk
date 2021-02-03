@@ -156,8 +156,8 @@ namespace azure_proto_network
         {
             var pageableProvider = ResourcesClient.Providers.List(expand: "metadata");
             var networkInterfaceProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
-            var networkInterfaceResource = networkInterfaceProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
-            return networkInterfaceResource.Locations.Cast<LocationData>();
+            var networkInterfaceResource = networkInterfaceProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType)); 
+            return networkInterfaceResource.Locations.Select(l => (LocationData)l);
         }
 
         /// <summary>
@@ -170,8 +170,8 @@ namespace azure_proto_network
         {
             var asyncpageableProvider = ResourcesClient.Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken);
             var networkInterfaceProvider = await asyncpageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
-            var networkInterfaceResource = networkInterfaceProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
-            return networkInterfaceResource.Locations.Cast<LocationData>();
+            var networkInterfaceResource = networkInterfaceProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return networkInterfaceResource.Locations.Select(l => (LocationData)l);
         }
     }
 }

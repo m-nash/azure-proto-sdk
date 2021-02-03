@@ -45,7 +45,7 @@ namespace azure_proto_network
         /// <summary>
         /// Gets the resource type definition for a public IP address.
         /// </summary>
-        public static readonly ResourceType ResourceType = "Microsoft.Network/publicIpAddresses";
+        public static readonly ResourceType ResourceType = "Microsoft.Network/publicIPAddresses";
 
         /// <inheritdoc />
         protected override ResourceType ValidResourceType => ResourceType;
@@ -154,8 +154,8 @@ namespace azure_proto_network
         {
             var pageableProvider = ResourcesClient.Providers.List(expand: "metadata");
             var publicIPProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
-            var publicIPResource = publicIPProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
-            return publicIPResource.Locations.Cast<LocationData>();
+            var publicIPResource = publicIPProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return publicIPResource.Locations.Select(l => (LocationData)l);
         }
 
         /// <summary>
@@ -168,8 +168,8 @@ namespace azure_proto_network
         {
             var asyncpageableProvider = ResourcesClient.Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken);
             var publicIPProvider = await asyncpageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
-            var publicIPResource = publicIPProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
-            return publicIPResource.Locations.Cast<LocationData>();
+            var publicIPResource = publicIPProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return publicIPResource.Locations.Select(l => (LocationData)l);
         }
     }
 }

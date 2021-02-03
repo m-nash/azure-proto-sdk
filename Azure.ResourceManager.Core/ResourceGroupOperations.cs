@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -230,8 +231,8 @@ namespace Azure.ResourceManager.Core
         {
             var pageableProvider = ResourcesClient.Providers.List(expand: "metadata");
             var rgProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
-            var rgResource = rgProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
-            return rgResource.Locations.Cast<LocationData>();
+            var rgResource = rgProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return rgResource.Locations.Select(l => (LocationData)l);
         }
 
         /// <summary>
@@ -244,8 +245,8 @@ namespace Azure.ResourceManager.Core
         {
             var asyncpageableProvider = ResourcesClient.Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken);
             var rgProvider = await asyncpageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
-            var rgResource = rgProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
-            return rgResource.Locations.Cast<LocationData>();
+            var rgResource = rgProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return rgResource.Locations.Select(l => (LocationData)l);
         }
     }
 }

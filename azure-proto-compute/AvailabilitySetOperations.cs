@@ -187,8 +187,8 @@ namespace azure_proto_compute
         {
             var pageableProvider = ResourcesClient.Providers.List(expand: "metadata");
             var availabilitySetProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
-            var availabilitySetResource = availabilitySetProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
-            return availabilitySetResource.Locations.Cast<LocationData>();
+            var availabilitySetResource = availabilitySetProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return availabilitySetResource.Locations.Select(l => (LocationData)l);
         }
 
         /// <summary>
@@ -201,8 +201,8 @@ namespace azure_proto_compute
         {
             var asyncpageableProvider = ResourcesClient.Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken);
             var availabilitySetProvider = await asyncpageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
-            var availabilitySetResource = availabilitySetProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
-            return availabilitySetResource.Locations.Cast<LocationData>();
+            var availabilitySetResource = availabilitySetProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return availabilitySetResource.Locations.Select(l => (LocationData)l);
         }
     }
 }

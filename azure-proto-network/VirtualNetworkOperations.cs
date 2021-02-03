@@ -183,8 +183,8 @@ namespace azure_proto_network
         {
             var pageableProvider = ResourcesClient.Providers.List(expand: "metadata");
             var vnProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
-            var vnResource = vnProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
-            return vnResource.Locations.Cast<LocationData>();
+            var vnResource = vnProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return vnResource.Locations.Select(l => (LocationData)l);
         }
 
         /// <summary>
@@ -197,8 +197,8 @@ namespace azure_proto_network
         {
             var asyncpageableProvider = ResourcesClient.Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken);
             var vnProvider = await asyncpageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
-            var vnResource = vnProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Equals(r.ResourceType));
-            return vnResource.Locations.Cast<LocationData>();
+            var vnResource = vnProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return vnResource.Locations.Select(l => (LocationData)l);
         }
     }
 }

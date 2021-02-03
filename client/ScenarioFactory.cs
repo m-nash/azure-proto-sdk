@@ -4,7 +4,7 @@
     {
         All,
         CreateSingleVmExample,
-        CheckLocation,
+        CreateSingleVMCheckLocation,
         ShutdownVmsByName,
         StartStopVm,
         StartFromVm,
@@ -68,6 +68,8 @@
                 //    return new DeleteGeneric();
                 //case Scenarios.AddTagToGeneric:
                 //    return new AddTagToGeneric();
+                case Scenarios.CreateSingleVMCheckLocation:
+                    return new CreateSingleVMCheckLocation();
                 default:
                     return null;
             }
