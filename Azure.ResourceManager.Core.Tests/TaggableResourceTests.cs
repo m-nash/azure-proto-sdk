@@ -16,7 +16,14 @@ namespace Azure.ResourceManager.Core.Tests
         [Test]
         public void TestSetTagsActivator()
         {
-            TaggableResource taggableResource = new TaggableResource(new ResourceBase(new AzureResourceManagerClientOptions(), Id,new DefaultAzureCredential(), new Uri("")), Id);
+            var rgOp = new ResourceGroupOperations(
+                            new SubscriptionOperations(
+                                new AzureResourceManagerClientOptions(),
+                                "0accec26-d6de-4757-8e74-d080f38eaaab",
+                                new DefaultAzureCredential(), //should make a fake credential creation
+                                new Uri("https://management.azure.com")),
+                            "Aqua");
+            TaggableResource taggableResource = new TaggableResource(rgOp, Id);
             taggableResource.StartAddTag("key1", "value1");
             taggableResource.StartAddTag("key2", "value2");
             var result = taggableResource.SetTags(UpdateTags);
