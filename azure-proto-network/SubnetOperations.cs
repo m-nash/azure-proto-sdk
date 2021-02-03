@@ -14,13 +14,18 @@ namespace azure_proto_network
         /// <summary>
         /// Initializes a new instance of the <see cref="SubnetOperations"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
+        /// <param name="virtualNetwork"> The client parameters to use in these operations. </param>
+        /// <param name="subnetName"> The name of the subnet. </param>
         internal SubnetOperations(VirtualNetworkOperations virtualNetwork, string subnetName)
             : base(virtualNetwork, $"{virtualNetwork.Id}/subnets/{subnetName}")
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubnetOperations"/> class.
+        /// </summary>
+        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         protected SubnetOperations(ResourceOperationsBase options, ResourceIdentifier id)
             : base(options, id)
         {

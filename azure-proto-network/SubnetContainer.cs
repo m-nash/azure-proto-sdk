@@ -8,6 +8,9 @@ using System;
 
 namespace azure_proto_network
 {
+    /// <summary>
+    /// A class representing collection of Subnets and their operations over a VirtualNetwork.
+    /// </summary>
     public class SubnetContainer : ResourceContainerBase<Subnet, SubnetData>
     {
         /// <summary>
@@ -65,11 +68,9 @@ namespace azure_proto_network
         /// <summary>
         /// Constructs an object used to create a subnet.
         /// </summary>
-        /// <param name="name"> The name of the subnet </param>
         /// <param name="subnetCidr"> The CIDR of the resource. </param>
-        /// <param name="location"> The location of the resource. </param>
         /// <param name="group"> The network security group of the resource. </param>
-        /// <returns> A builder with <see cref="Subnet"> and <see cref="Subnet"/>. </returns>
+        /// <returns> A builder with <see cref="Subnet"/> and <see cref="Subnet"/>. </returns>
         public SubnetBuilder Construct(string subnetCidr, NetworkSecurityGroupData group = null)
         {
             var subnet = new Azure.ResourceManager.Network.Models.Subnet()

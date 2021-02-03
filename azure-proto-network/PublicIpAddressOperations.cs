@@ -27,13 +27,18 @@ namespace azure_proto_network
         /// <summary>
         /// Initializes a new instance of the <see cref="PublicIpAddressOperations"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
+        /// <param name="resourceGroup"> The client parameters to use in these operations. </param>
+        /// <param name="publicIpName"> The public ip address name. </param>
         internal PublicIpAddressOperations(ResourceGroupOperations resourceGroup, string publicIpName)
             : base(resourceGroup, $"{resourceGroup.Id}/providers/Microsoft.Network/publicIpAddresses/{publicIpName}")
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PublicIpAddressOperations"/> class.
+        /// </summary>
+        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         protected PublicIpAddressOperations(ResourceOperationsBase options, ResourceIdentifier id)
             : base(options, id)
         {

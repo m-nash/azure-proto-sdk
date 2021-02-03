@@ -10,8 +10,8 @@ namespace azure_proto_network
     public class SubnetData : ProxyResource<Azure.ResourceManager.Network.Models.Subnet>
     {
         /// <summary> 
-        // Initializes a new instance of the <see cref="SubnetData"/> class. 
-        //</summary>
+        /// Initializes a new instance of the <see cref="SubnetData"/> class. 
+        /// </summary>
         public SubnetData(Azure.ResourceManager.Network.Models.Subnet sub) : base(sub.Id, sub)
         {
         }

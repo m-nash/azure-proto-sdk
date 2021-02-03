@@ -22,6 +22,11 @@ namespace azure_proto_network
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetworkInterfaceOperations"/> class.
+        /// </summary>
+        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         protected NetworkInterfaceOperations(ResourceOperationsBase options, ResourceIdentifier id)
             : base(options, id)
         {
@@ -54,7 +59,7 @@ namespace azure_proto_network
         /// Deletes a <see cref="NetworkInterface"/>.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
-        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// The default value is <see cref="System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that returns an <see cref="ArmResponse"/> when completed. </returns>
         public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
@@ -65,7 +70,7 @@ namespace azure_proto_network
         /// Deletes a <see cref="NetworkInterface"/>.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
-        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// The default value is <see cref="System.Threading.CancellationToken.None" />. </param>
         /// <returns> An <see cref="ArmOperation{Response}"/> that allows polling for completion of the operation. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning"> Details on long running operation object. </see>
@@ -79,7 +84,7 @@ namespace azure_proto_network
         /// Deletes a <see cref="NetworkInterface"/>.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
-        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// The default value is <see cref="System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{Response}"/> that allows polling for completion of the operation. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning"> Details on long running operation object. </see>
@@ -131,7 +136,7 @@ namespace azure_proto_network
         /// <param name="key" > The tag key. </param>
         /// <param name="value"> The Tag Value. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
-        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// The default value is <see cref="System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns a <see cref="ArmOperation{NetworkInterface}"/> that allows polling for completion of the operation. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning"> Details on long running operation object. </see>

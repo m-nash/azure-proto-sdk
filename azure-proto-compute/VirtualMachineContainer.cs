@@ -20,7 +20,6 @@ namespace azure_proto_compute
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualMachineContainer"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="resourceGroup"> The ResourceGroup that is the parent of the VirtualMachines. </param>
         internal VirtualMachineContainer(ResourceGroupOperations resourceGroup)
             : base(resourceGroup)
@@ -33,6 +32,9 @@ namespace azure_proto_compute
             Credential,
             ClientOptions.Convert<ComputeManagementClientOptions>()).VirtualMachines;
 
+        /// <summary>
+        /// Gets the valid resource type for this object
+        /// </summary>
         protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
 
         /// <summary>

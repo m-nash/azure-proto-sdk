@@ -47,6 +47,9 @@ namespace azure_proto_compute
         /// </summary>
         public static readonly ResourceType ResourceType = "Microsoft.Compute/virtualMachines";
 
+        /// <summary>
+        /// Gets the valid resources for virtual machines.
+        /// </summary>
         protected override ResourceType ValidResourceType => ResourceType;
 
         private VirtualMachinesOperations Operations => new ComputeManagementClient(

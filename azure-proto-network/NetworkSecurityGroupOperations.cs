@@ -28,13 +28,18 @@ namespace azure_proto_network
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkSecurityGroupOperations"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
+        /// <param name="resourceGroup"> The client parameters to use in these operations. </param>
+        /// <param name="nsgName"> The network security group name. </param>
         internal NetworkSecurityGroupOperations(ResourceGroupOperations resourceGroup, string nsgName)
             : base(resourceGroup, $"{resourceGroup.Id}/providers/Microsoft.Network/networkSecurityGroups/{nsgName}")
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetworkSecurityGroupOperations"/> class.
+        /// </summary>
+        /// <param name="operation"> The client parameters to use in these operations. </param>
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         protected NetworkSecurityGroupOperations(ResourceOperationsBase operation, ResourceIdentifier id)
             : base(operation, id)
         {

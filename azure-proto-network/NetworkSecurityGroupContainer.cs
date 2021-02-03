@@ -30,13 +30,15 @@ namespace azure_proto_network
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkSecurityGroupContainer"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="resourceGroup"> The ResourceGroup that is the parent of the NetworkSecurityGroups. </param>
         internal NetworkSecurityGroupContainer(ResourceGroupOperations resourceGroup)
             : base(resourceGroup)
         {
         }
 
+        /// <summary>
+        /// Gets the valid resource type for network security groups.
+        /// </summary>
         protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
 
         private NetworkSecurityGroupsOperations Operations => new NetworkManagementClient(
@@ -82,7 +84,6 @@ namespace azure_proto_network
         /// <summary>
         /// Construct an object used to create a network security group.
         /// </summary>
-        /// <param name="name"> The name of the network security group. </param>
         /// <param name="location"> The location to create the network security group. </param>
         /// <param name="openPorts"> The location to create the network security group. </param>
         /// <returns> Object used to create a <see cref="NetworkSecurityGroup"/>. </returns>
@@ -113,7 +114,6 @@ namespace azure_proto_network
         /// <summary>
         /// Construct an object used to create a network security group.
         /// </summary>
-        /// <param name="name"> The name of the network security group. </param>
         /// <param name="openPorts"> The location to create the network security group. </param>
         /// <returns> Object used to create a <see cref="NetworkSecurityGroup"/>. </returns>
         public ArmBuilder<NetworkSecurityGroup, NetworkSecurityGroupData> Construct(params int[] openPorts)
