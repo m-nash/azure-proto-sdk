@@ -3,6 +3,7 @@
 
 using System;
 using Azure.Core;
+using Azure.ResourceManager.Resources;
 
 namespace Azure.ResourceManager.Core
 {
@@ -59,6 +60,11 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <returns> A valid Azure resource type. </returns>
         protected abstract ResourceType ValidResourceType { get; }
+
+        /// <summary>
+        /// Gets the resource client.
+        /// </summary>
+        protected ResourcesManagementClient ResourcesClient => new ResourcesManagementClient(BaseUri, Id.Subscription, Credential);
 
         /// <summary>
         /// Validate the resource identifier against current operations.

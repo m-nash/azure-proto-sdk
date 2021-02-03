@@ -22,11 +22,6 @@ namespace Azure.ResourceManager.Core
         protected override ResourceType ValidResourceType => SubscriptionOperations.ResourceType;
 
         /// <summary>
-        /// Gets the resource client.
-        /// </summary>
-        private ResourcesManagementClient ResourcesClient => new ResourcesManagementClient(BaseUri, Id.Subscription, Credential);
-
-        /// <summary>
         /// Gets the subscription client.
         /// </summary>
         private SubscriptionsOperations SubscriptionsClient => ResourcesClient.Subscriptions;
@@ -49,10 +44,7 @@ namespace Azure.ResourceManager.Core
         {
             if (string.IsNullOrWhiteSpace(Id.Subscription))
             {
-                if (Id.Subscription == null)
-                {
-                    throw new InvalidOperationException("Please select a default subscription");
-                }
+                throw new InvalidOperationException("Please select a valid subscription");
             }
 
             return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocations(Id.Subscription), s => s.DisplayName);
@@ -71,11 +63,7 @@ namespace Azure.ResourceManager.Core
             {
                 if (string.IsNullOrWhiteSpace(Id.Subscription))
                 {
-                    subscriptionId = Id.Subscription;//await GetDefaultSubscription(token); //ASK
-                    if (subscriptionId == null)
-                    {
-                        throw new InvalidOperationException("Please select a default subscription");
-                    }
+                    throw new InvalidOperationException("Please select a valid subscription");
                 }
 
                 return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocationsAsync(Id.Subscription, token), s => s.DisplayName);

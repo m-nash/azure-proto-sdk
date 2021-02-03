@@ -134,10 +134,5 @@ namespace Azure.ResourceManager.Core
                 existingTags.Add(key, value);
             }
         }
-
-        /// <summary>
-        /// Gets the resource client.
-        /// </summary>
-        protected ResourcesManagementClient ResourcesClient => new ResourcesManagementClient(BaseUri, Id.Subscription, Credential);
     }
 }

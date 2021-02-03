@@ -18,9 +18,6 @@ namespace client
             Console.WriteLine($"Found VM {Context.VmName}");
             Console.WriteLine("--------Stopping VM--------");
             vm.PowerOff();
-            var virtualMachine = vm.Get().Value;
-            var status = virtualMachine.Data.ProvisioningState;
-            Console.WriteLine(status);
             Console.WriteLine("--------Starting VM--------");
             vm.PowerOn();
         }
