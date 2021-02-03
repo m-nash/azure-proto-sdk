@@ -10,7 +10,7 @@ namespace client
             Scenario scenario = null;
             try
             {
-                scenario = ScenarioFactory.GetScenario(Scenarios.CheckLocation);
+                scenario = ScenarioFactory.GetScenario(Scenarios.SetTagsOnVm);
                 scenario.Execute();
             }
             finally
