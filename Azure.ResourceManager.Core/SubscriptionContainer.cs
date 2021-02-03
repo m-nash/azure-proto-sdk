@@ -43,9 +43,9 @@ namespace Azure.ResourceManager.Core
         /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service.
         /// The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public Pageable<SubscriptionOperations> List(CancellationToken cancellationToken = default)
+        public Pageable<Subscription> List(CancellationToken cancellationToken = default)
         {
-            return new PhWrappingPageable<ResourceManager.Resources.Models.Subscription, SubscriptionOperations>(
+            return new PhWrappingPageable<ResourceManager.Resources.Models.Subscription, Subscription>(
                 Operations.List(cancellationToken),
                 Converter());
         }
@@ -56,9 +56,9 @@ namespace Azure.ResourceManager.Core
         /// <param name="cancellationToken">A token to allow the caller to cancel the call to the service.
         /// The default value is <see cref="P:System.Threading.CancellationToken.None" />.</param>
         /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public AsyncPageable<SubscriptionOperations> ListAsync(CancellationToken cancellationToken = default)
+        public AsyncPageable<Subscription> ListAsync(CancellationToken cancellationToken = default)
         {
-            return new PhWrappingAsyncPageable<ResourceManager.Resources.Models.Subscription, SubscriptionOperations>(
+            return new PhWrappingAsyncPageable<ResourceManager.Resources.Models.Subscription, Subscription>(
                 Operations.ListAsync(cancellationToken),
                 Converter());
         }
@@ -79,24 +79,24 @@ namespace Azure.ResourceManager.Core
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
         /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns the subscription id. </returns>
-        internal async Task<string> GetDefaultSubscriptionAsync(CancellationToken cancellationToken = default)
+        internal async Task<Subscription> GetDefaultSubscriptionAsync(CancellationToken cancellationToken = default)
         {
             var subs = ListAsync(cancellationToken).GetAsyncEnumerator();
-            string sub = null;
+            Subscription result = null;
             if (await subs.MoveNextAsync())
             {
                 if (subs.Current != null)
                 {
-                    sub = subs.Current.Id.Subscription;
+                    result = subs.Current;
                 }
             }
 
-            return sub;
+            return result;
         }
 
-        private Func<ResourceManager.Resources.Models.Subscription, SubscriptionOperations> Converter()
+        private Func<ResourceManager.Resources.Models.Subscription, Subscription> Converter()
         {
-            return s => new SubscriptionOperations(ClientOptions, s.SubscriptionId, Credential, BaseUri);
+            return s => new Subscription(new SubscriptionOperations(ClientOptions, s.SubscriptionId, Credential, BaseUri), new SubscriptionData(s));
         }
     }
 }
