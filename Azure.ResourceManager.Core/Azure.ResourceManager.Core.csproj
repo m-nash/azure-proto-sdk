@@ -19,6 +19,7 @@
     <PackageReference Include="Azure.Identity" Version="1.2.0-preview.5" />
     <PackageReference Include="Azure.ResourceManager.Resources" Version="1.0.0-preview.1" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.8" />
+    <PackageReference Include="System.Linq.Async" Version="5.0.0" />
   </ItemGroup>
 
 </Project>

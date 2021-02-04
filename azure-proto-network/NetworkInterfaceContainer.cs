@@ -69,9 +69,9 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="ip"> The public IP address of the <see cref="NetworkInterface"/>. </param>
         /// <param name="subnetId"> The resource identifier of the subnet attached to this <see cref="NetworkInterface"/>. </param>
-        /// <param name="location"> The <see cref="Location"/> that will contain the <see cref="NetworkInterface"/>. </param>
+        /// <param name="location"> The <see cref="LocationData"/> that will contain the <see cref="NetworkInterface"/>. </param>
         /// <returns>An object used to create a <see cref="NetworkInterface"/>. </returns>
-        public ArmBuilder<NetworkInterface, NetworkInterfaceData> Construct(PublicIPAddressData ip, string subnetId, Location location = null)
+        public ArmBuilder<NetworkInterface, NetworkInterfaceData> Construct(PublicIPAddressData ip, string subnetId, LocationData location = null)
         {
             var nic = new Azure.ResourceManager.Network.Models.NetworkInterface()
             {

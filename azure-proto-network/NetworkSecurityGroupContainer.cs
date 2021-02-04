@@ -86,7 +86,7 @@ namespace azure_proto_network
         /// <param name="location"> The location to create the network security group. </param>
         /// <param name="openPorts"> The location to create the network security group. </param>
         /// <returns> Object used to create a <see cref="NetworkSecurityGroup"/>. </returns>
-        public ArmBuilder<NetworkSecurityGroup, NetworkSecurityGroupData> Construct(string name, Location location = null, params int[] openPorts)
+        public ArmBuilder<NetworkSecurityGroup, NetworkSecurityGroupData> Construct(string name, LocationData location = null, params int[] openPorts)
         {
             var nsg = new Azure.ResourceManager.Network.Models.NetworkSecurityGroup
             {

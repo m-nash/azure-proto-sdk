@@ -38,7 +38,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         public GenericResourceData(ResourceIdentifier id)
-            : base(id, Location.Default, null)
+            : base(id, LocationData.Default, null)
         {
         }
 
@@ -47,7 +47,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         /// <param name="location"> The location of the resource. </param>
-        public GenericResourceData(ResourceIdentifier id, Location location)
+        public GenericResourceData(ResourceIdentifier id, LocationData location)
             : base(id, location, null)
         {
         }

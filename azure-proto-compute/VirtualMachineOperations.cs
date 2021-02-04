@@ -2,7 +2,11 @@
 using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Compute.Models;
 using Azure.ResourceManager.Core;
+using Azure.ResourceManager.Core.Adapters;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -278,6 +282,32 @@ namespace azure_proto_compute
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
                 v => new VirtualMachine(this, new VirtualMachineData(v)));
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
+        public IEnumerable<LocationData> ListAvailableLocations()
+        {
+            var pageableProvider = ResourcesClient.Providers.List(expand: "metadata");
+            var vmProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var vmResource = vmProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return vmResource.Locations.Select(l => (LocationData)l);
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
+        public async Task<IEnumerable<LocationData>> ListAvailableLocationsAsync(CancellationToken cancellationToken = default)
+        {
+            var asyncpageableProvider = ResourcesClient.Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken);
+            var vmProvider = await asyncpageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var vmResource = vmProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType)); 
+            return vmResource.Locations.Select(l => (LocationData)l);
         }
     }
 }
