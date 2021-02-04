@@ -39,7 +39,6 @@ namespace Azure.ResourceManager.Core
         /// Lists all geo-locations.
         /// </summary>
         /// <returns> A collection of location data that may take multiple service requests to iterate over. </returns>
-        /// <exception cref="InvalidOperationException"> <paramref name="subscriptionId"/> is null. </exception>
         public Pageable<LocationData> List()
         {
             return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocations(Id.Subscription), s => s.DisplayName);
@@ -48,10 +47,8 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Lists all geo-locations.
         /// </summary>
-        /// <param name="subscriptionId"> The Id of the target subscription. </param>
         /// <param name="token"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of location data that may take multiple service requests to iterate over. </returns>
-        /// <exception cref="InvalidOperationException"> <paramref name="subscriptionId"/> is null. </exception>
         public AsyncPageable<LocationData> ListAsync(CancellationToken token = default(CancellationToken))
         {
             async Task<AsyncPageable<LocationData>> PageableFunc()
