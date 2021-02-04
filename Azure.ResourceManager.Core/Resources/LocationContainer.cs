@@ -42,11 +42,6 @@ namespace Azure.ResourceManager.Core
         /// <exception cref="InvalidOperationException"> <paramref name="subscriptionId"/> is null. </exception>
         public Pageable<LocationData> List()
         {
-            if (string.IsNullOrWhiteSpace(Id.Subscription))
-            {
-                throw new InvalidOperationException("Please select a valid subscription");
-            }
-
             return new PhWrappingPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocations(Id.Subscription), s => s.DisplayName);
         }
 
@@ -57,15 +52,10 @@ namespace Azure.ResourceManager.Core
         /// <param name="token"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of location data that may take multiple service requests to iterate over. </returns>
         /// <exception cref="InvalidOperationException"> <paramref name="subscriptionId"/> is null. </exception>
-        public AsyncPageable<LocationData> ListAsync(string subscriptionId = null, CancellationToken token = default(CancellationToken))
+        public AsyncPageable<LocationData> ListAsync(CancellationToken token = default(CancellationToken))
         {
             async Task<AsyncPageable<LocationData>> PageableFunc()
             {
-                if (string.IsNullOrWhiteSpace(Id.Subscription))
-                {
-                    throw new InvalidOperationException("Please select a valid subscription");
-                }
-
                 return new PhWrappingAsyncPageable<Azure.ResourceManager.Resources.Models.Location, LocationData>(SubscriptionsClient.ListLocationsAsync(Id.Subscription, token), s => s.DisplayName);
             }
 
