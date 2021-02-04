@@ -103,21 +103,21 @@ namespace azure_proto_compute
         /// <summary>
         /// Construct an object used to create a VirtualMachine.
         /// </summary>
-        /// <param name="vmName"> The name of the Virtual Machine. </param>
+        /// <param name="hostName"> The hostname for the virtual machine. </param>
         /// <param name="adminUser"> The admin username to use. </param>
         /// <param name="adminPw"> The admin password to use. </param>
         /// <param name="nicId"> The network interface id to use. </param>
         /// <param name="aset"> The availability set to use. </param>
         /// <param name="location"> The location to create the Virtual Machine. </param>
         /// <returns> Object used to create a <see cref="VirtualMachine"/>. </returns>
-        public VirtualMachineModelBuilder Construct(string adminUser, string adminPw, ResourceIdentifier nicId, AvailabilitySetData aset, Location location = null)
+        public VirtualMachineModelBuilder Construct(string hostName, string adminUser, string adminPw, ResourceIdentifier nicId, AvailabilitySetData aset, Location location = null)
         {
             var vm = new Azure.ResourceManager.Compute.Models.VirtualMachine(location ?? DefaultLocation)
             {
                 NetworkProfile = new NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nicId } } },
                 OsProfile = new OSProfile
                 {
-                    ComputerName = vmName,
+                    ComputerName = hostName,
                     AdminUsername = adminUser,
                     AdminPassword = adminPw,
                     WindowsConfiguration = new WindowsConfiguration { TimeZone = "Pacific Standard Time", ProvisionVMAgent = true }

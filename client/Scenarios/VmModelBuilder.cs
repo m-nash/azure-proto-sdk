@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using azure_proto_compute;
 using Azure.ResourceManager.Core;
 using azure_proto_network;
+using azure_proto_compute.Convenience;
 
 namespace client
 {
@@ -48,8 +49,10 @@ namespace client
             var nic = resourceGroup.GetNetworkInterfaceContainer().Construct(ipAddress.Data, subnet.Id).Create($"{Context.VmName}_nic").Value;
 
             // Options: required parameters on in the constructor
-            var vm = resourceGroup.GetVirtualMachineContainer().Construct(Context.VmName, Context.Loc)
-                .UseWindowsImage("admin-user", "!@#$%asdfA")
+            VirtualMachineModelBuilder vmBuilder = new VirtualMachineModelBuilder(
+                resourceGroup.GetVirtualMachineContainer(),
+                new VirtualMachineData(new Azure.ResourceManager.Compute.Models.VirtualMachine(Context.Loc))); ;
+            var vm = vmBuilder.UseWindowsImage("admin-user", "!@#$%asdfA")
                 .RequiredNetworkInterface(nic.Id)
                 .RequiredAvalabilitySet(aset.Id)
                 .Create(Context.VmName).Value;

@@ -8,10 +8,14 @@ namespace azure_proto_compute.Convenience
     /// </summary>
     public class VirtualMachineModelBuilder : VirtualMachineModelBuilderBase
     {
-        // TODO: GENERATOR Update Builder after models are incorporated in generated models
-
-        internal VirtualMachineModelBuilder(VirtualMachineContainer containerOperations, VirtualMachineData vm): base(containerOperations, vm)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VirtualMachineModelBuilder"/> class.
+        /// </summary>
+        /// <param name="containerOperations"> The container to create the virtual machine in. </param>
+        /// <param name="vm"> The data model representing the virtual machine to create. </param>
+        public VirtualMachineModelBuilder(VirtualMachineContainer containerOperations, VirtualMachineData vm): base(containerOperations, vm)
         {
+            // TODO: GENERATOR Update Builder after models are incorporated in generated models
             // _model.Name = vmName;
             //_model = new VirtualMachine(location);
         }

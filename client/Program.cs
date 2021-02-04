@@ -10,7 +10,7 @@ namespace client
             Scenario scenario = null;
             try
             {
-                scenario = ScenarioFactory.GetScenario(Scenarios.DefaultSubscription);
+                scenario = ScenarioFactory.GetScenario(Scenarios.CreateMultipleVms);
                 scenario.Execute();
             }
             finally
