@@ -5,6 +5,7 @@ using Azure.Identity;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Azure.ResourceManager.Core.Tests
 {
@@ -14,7 +15,7 @@ namespace Azure.ResourceManager.Core.Tests
         static readonly IDictionary<string, string> UpdateTags = new Dictionary<string, string> { { "UpdateKey1", "UpdateValue1" }, { "UpdateKey2", "UpdateValue2" } };
         
         [Test]
-        public void TestSetTagsActivator()
+        public async Task TestSetTagsActivatorAsync()
         {
             var rgOp = new ResourceGroupOperations(
                             new SubscriptionOperations(
@@ -24,8 +25,13 @@ namespace Azure.ResourceManager.Core.Tests
                                 new Uri("https://management.azure.com")),
                             "Aqua");
             TaggableResource taggableResource = new TaggableResource(rgOp, Id);
-            taggableResource.StartAddTag("key1", "value1");
-            taggableResource.StartAddTag("key2", "value2");
+
+            // Incase test class is wrong.
+            GenericResourceOperations ops = new GenericResourceOperations(rgOp, Id);
+            await ops.StartAddTag("key1", "value1").WaitForCompletionAsync();
+
+            await taggableResource.StartAddTag("key1", "value1").WaitForCompletionAsync();
+            await taggableResource.StartAddTag("key2", "value2").WaitForCompletionAsync();
             var result = taggableResource.SetTags(UpdateTags);
             Assert.AreEqual(result.Value.Data.Tags, UpdateTags);
         }

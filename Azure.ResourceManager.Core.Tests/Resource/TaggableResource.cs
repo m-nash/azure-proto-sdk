@@ -63,7 +63,7 @@ namespace Azure.ResourceManager.Core.Tests
         public ArmOperation<GenericResource> StartAddTag(string key, string value)
         {
             GenericResource resource = GetResource();
-            UpdateTags(key, value, resource.Data.Tags);
+            UpdateTags(key, value, ref resource);
             return new PhArmOperation<GenericResource, ResourceManager.Resources.Models.GenericResource>(
                 Operations.StartUpdateById(Id, _apiVersion, resource.Data).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
                 v => new GenericResource(this, new GenericResourceData(v)));
@@ -82,7 +82,7 @@ namespace Azure.ResourceManager.Core.Tests
         public async Task<ArmOperation<GenericResource>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             GenericResource resource = GetResource();
-            UpdateTags(key, value, resource.Data.Tags);
+            UpdateTags(key, value, ref resource);
             var op = await Operations.StartUpdateByIdAsync(Id, _apiVersion, resource.Data, cancellationToken);
             return new PhArmOperation<GenericResource, ResourceManager.Resources.Models.GenericResource>(
                 await op.WaitForCompletionAsync(cancellationToken),
