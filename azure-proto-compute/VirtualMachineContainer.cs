@@ -110,7 +110,7 @@ namespace azure_proto_compute
         /// <param name="aset"> The availability set to use. </param>
         /// <param name="location"> The location to create the Virtual Machine. </param>
         /// <returns> Object used to create a <see cref="VirtualMachine"/>. </returns>
-        public VirtualMachineModelBuilder Construct(string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, AvailabilitySetData aset, Location location = null)
+        public VirtualMachineModelBuilder Construct(string adminUser, string adminPw, ResourceIdentifier nicId, AvailabilitySetData aset, Location location = null)
         {
             var vm = new Azure.ResourceManager.Compute.Models.VirtualMachine(location ?? DefaultLocation)
             {
@@ -138,17 +138,6 @@ namespace azure_proto_compute
             };
 
             return new VirtualMachineModelBuilder(this, new VirtualMachineData(vm));
-        }
-
-        /// <summary>
-        /// Construct an object used to create a VirtualMachine.
-        /// </summary>
-        /// <param name="name"> The name of the Virtual Machine. </param>
-        /// <param name="location"> The location to create the Virtual Machine. </param>
-        /// <returns> Object used to create a <see cref="VirtualMachine"/>. </returns>
-        public VirtualMachineModelBuilder Construct(string name, Location location)
-        {
-            return new VirtualMachineModelBuilder(null, null);
         }
 
         /// <summary>
