@@ -12,7 +12,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="container"> The container to create the subnet in. </param>
         /// <param name="subnet"> The data model representing the subnet to create. </param>
-        public SubnetBuilder(SubnetContainer container, SubnetData subnet)
+        internal SubnetBuilder(SubnetContainer container, SubnetData subnet)
             : base(container, subnet)
         {
 

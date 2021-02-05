@@ -52,7 +52,7 @@ namespace client
 
             // Create VM
             Console.WriteLine("--------Start StartCreate VM async--------");
-            var vm = (await (await resourceGroup.GetVirtualMachineContainer().Construct(Context.Hostname, "admin-user", "!@#$%asdfA", nic.Id, aset.Data).StartCreateAsync(Context.VmName)).WaitForCompletionAsync()).Value;
+            var vm = (await (await resourceGroup.GetVirtualMachineContainer().Construct(Context.Hostname, "admin-user", "!@#$%asdfA", nic.Id, aset.Id).StartCreateAsync(Context.VmName)).WaitForCompletionAsync()).Value;
 
             Console.WriteLine("VM ID: " + vm.Id);
             Console.WriteLine("--------Done StartCreate VM--------");
