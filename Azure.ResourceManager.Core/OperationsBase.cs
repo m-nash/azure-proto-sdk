@@ -3,6 +3,7 @@
 
 using System;
 using Azure.Core;
+using Azure.ResourceManager.Resources;
 
 namespace Azure.ResourceManager.Core
 {
@@ -22,7 +23,7 @@ namespace Azure.ResourceManager.Core
         {
             ClientOptions = options;
             Id = id;
-            DefaultLocation = Location.Default;
+            DefaultLocation = LocationData.Default;
             Credential = credential;
             BaseUri = baseUri;
 
@@ -37,7 +38,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the default location.
         /// </summary>
-        public virtual Location DefaultLocation { get; }
+        public virtual LocationData DefaultLocation { get; }
 
         /// <summary>
         /// Gets the Azure Resource Manager client options.
@@ -59,6 +60,11 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <returns> A valid Azure resource type. </returns>
         protected abstract ResourceType ValidResourceType { get; }
+
+        /// <summary>
+        /// Gets the resource client.
+        /// </summary>
+        protected ResourcesManagementClient ResourcesClient => new ResourcesManagementClient(BaseUri, Id.Subscription, Credential);
 
         /// <summary>
         /// Validate the resource identifier against current operations.

@@ -25,9 +25,9 @@ namespace Azure.ResourceManager.Core
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public static Pageable<ArmResource> ListAtContext(
+        public static Pageable<GenericResource> ListAtContext(
             ResourceGroupOperations resourceGroup,
-            ArmFilterCollection resourceFilters = null,
+            ResourceFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
         {
@@ -47,9 +47,9 @@ namespace Azure.ResourceManager.Core
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns>An async collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public static AsyncPageable<ArmResource> ListAtContextAsync(
+        public static AsyncPageable<GenericResource> ListAtContextAsync(
             ResourceGroupOperations resourceGroup,
-            ArmFilterCollection resourceFilters = null,
+            ResourceFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
         {
@@ -69,9 +69,9 @@ namespace Azure.ResourceManager.Core
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public static Pageable<ArmResource> ListAtContext(
+        public static Pageable<GenericResource> ListAtContext(
             SubscriptionOperations subscription,
-            ArmFilterCollection resourceFilters = null,
+            ResourceFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
         {
@@ -91,9 +91,9 @@ namespace Azure.ResourceManager.Core
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
-        public static AsyncPageable<ArmResource> ListAtContextAsync(
+        public static AsyncPageable<GenericResource> ListAtContextAsync(
             SubscriptionOperations subscription,
-            ArmFilterCollection resourceFilters = null,
+            ResourceFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
         {
@@ -110,10 +110,10 @@ namespace Azure.ResourceManager.Core
             return new ResourcesManagementClient(resourceOperations.BaseUri, resourceOperations.Id.Subscription, resourceOperations.Credential);
         }
 
-        private static AsyncPageable<ArmResource> ListAtContextInternalAsync(
+        private static AsyncPageable<GenericResource> ListAtContextInternalAsync(
             ResourceOperationsBase resourceOperations,
             string scopeFilter,
-            ArmFilterCollection resourceFilters = null,
+            ResourceFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
         {
@@ -136,10 +136,10 @@ namespace Azure.ResourceManager.Core
             return ConvertResultsAsync(result, resourceOperations);
         }
 
-        private static Pageable<ArmResource> ListAtContextInternal(
+        private static Pageable<GenericResource> ListAtContextInternal(
             ResourceOperationsBase resourceOperations,
             string scopeFilter = null,
-            ArmFilterCollection resourceFilters = null,
+            ResourceFilterCollection resourceFilters = null,
             int? top = null,
             CancellationToken cancellationToken = default)
         {
@@ -162,40 +162,40 @@ namespace Azure.ResourceManager.Core
             return ConvertResults(result, resourceOperations);
         }
 
-        private static Pageable<ArmResource> ConvertResults(
+        private static Pageable<GenericResource> ConvertResults(
             Pageable<GenericResourceExpanded> result,
             ResourceOperationsBase resourceOperations)
         {
-            return new PhWrappingPageable<GenericResourceExpanded, ArmResource>(
+            return new PhWrappingPageable<GenericResourceExpanded, GenericResource>(
                 result,
                 CreateResourceConverter(resourceOperations));
         }
 
-        private static AsyncPageable<ArmResource> ConvertResultsAsync(
+        private static AsyncPageable<GenericResource> ConvertResultsAsync(
             AsyncPageable<GenericResourceExpanded> result,
             ResourceOperationsBase resourceOperations)
         {
-            return new PhWrappingAsyncPageable<GenericResourceExpanded, ArmResource>(
+            return new PhWrappingAsyncPageable<GenericResourceExpanded, GenericResource>(
                 result,
                 CreateResourceConverter(resourceOperations));
         }
 
-        private static Func<GenericResourceExpanded, ArmResource> CreateResourceConverter(ResourceOperationsBase resourceOperations)
+        private static Func<GenericResourceExpanded, GenericResource> CreateResourceConverter(ResourceOperationsBase resourceOperations)
         {
             return s =>
             {
                 var args = new object[]
                 {
                     resourceOperations,
-                    Activator.CreateInstance(typeof(ArmResourceData), s as GenericResource) as ArmResourceData,
+                    Activator.CreateInstance(typeof(GenericResourceData), s as ResourceManager.Resources.Models.GenericResource) as GenericResourceData,
                 };
 
                 return Activator.CreateInstance(
-                    typeof(ArmResource),
+                    typeof(GenericResource),
                     BindingFlags.Instance | BindingFlags.NonPublic,
                     null,
                     args,
-                    CultureInfo.InvariantCulture) as ArmResource;
+                    CultureInfo.InvariantCulture) as GenericResource;
             };
         }
     }

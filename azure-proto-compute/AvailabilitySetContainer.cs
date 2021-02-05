@@ -65,7 +65,7 @@ namespace azure_proto_compute
         /// <param name="skuName"> The sku name of the resource. </param>
         /// <param name="location"> The location of the resource. </param>
         /// <returns> A builder with <see cref="AvailabilitySet"/> and <see cref="AvailabilitySetData"/>. </returns>
-        public ArmBuilder<AvailabilitySet, AvailabilitySetData> Construct(string skuName, Location location = null)
+        public ArmBuilder<AvailabilitySet, AvailabilitySetData> Construct(string skuName, LocationData location = null)
         {
             var availabilitySet = new Azure.ResourceManager.Compute.Models.AvailabilitySet(location ?? DefaultLocation)
             {
@@ -84,9 +84,9 @@ namespace azure_proto_compute
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of resource that may take multiple service requests to iterate over. </returns>
-        public Pageable<ArmResource> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public Pageable<GenericResource> ListByName(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(AvailabilitySetData.ResourceType);
+            ResourceFilterCollection filters = new ResourceFilterCollection(AvailabilitySetData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContext(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
@@ -98,9 +98,9 @@ namespace azure_proto_compute
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of resource that may take multiple service requests to iterate over. </returns>
-        public AsyncPageable<ArmResource> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<GenericResource> ListByNameAsync(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(AvailabilitySetData.ResourceType);
+            ResourceFilterCollection filters = new ResourceFilterCollection(AvailabilitySetData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
@@ -113,10 +113,10 @@ namespace azure_proto_compute
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of availability set that may take multiple service requests to iterate over. </returns>
-        public Pageable<AvailabilitySet> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public Pageable<AvailabilitySet> ListByNameExpanded(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByName(filter, top, cancellationToken);
-            return new PhWrappingPageable<ArmResource, AvailabilitySet>(results, s => new AvailabilitySetOperations(s).Get().Value);
+            return new PhWrappingPageable<GenericResource, AvailabilitySet>(results, s => new AvailabilitySetOperations(s).Get().Value);
         }
 
         /// <summary>
@@ -127,10 +127,10 @@ namespace azure_proto_compute
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An asyc collection of availability set that may take multiple service requests to iterate over. </returns>
-        public AsyncPageable<AvailabilitySet> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<AvailabilitySet> ListByNameExpandedAsync(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByNameAsync(filter, top, cancellationToken);
-            return new PhWrappingAsyncPageable<ArmResource, AvailabilitySet>(results, s => new AvailabilitySetOperations(s).Get().Value);
+            return new PhWrappingAsyncPageable<GenericResource, AvailabilitySet>(results, s => new AvailabilitySetOperations(s).Get().Value);
         }
 
         private AvailabilitySetsOperations Operations => new ComputeManagementClient(

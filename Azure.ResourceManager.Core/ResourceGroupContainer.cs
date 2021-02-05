@@ -39,7 +39,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="tags"> The tags of the resource group. </param>
         /// <param name="managedBy"> Who the resource group is managed by. </param>
         /// <returns> A builder with <see cref="ResourceGroup"/> and <see cref="ResourceGroupData"/>. </returns>
-        public ArmBuilder<ResourceGroup, ResourceGroupData> Construct(Location location, IDictionary<string, string> tags = default, string managedBy = default)
+        public ArmBuilder<ResourceGroup, ResourceGroupData> Construct(LocationData location, IDictionary<string, string> tags = default, string managedBy = default)
         {
             var model = new ResourceManager.Resources.Models.ResourceGroup(location);
             model.Tags = tags;

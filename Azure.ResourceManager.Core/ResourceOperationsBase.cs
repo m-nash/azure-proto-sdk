@@ -3,6 +3,7 @@
 
 using Azure.Core;
 using System;
+using Azure.ResourceManager.Resources;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -58,7 +59,7 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ResourceOperationsBase{TOperations}"/> class.
         /// </summary>
         /// <param name="genericOperations"> Generic ARMResourceOperations for this resource type. </param>
-        protected ResourceOperationsBase(ArmResourceOperations genericOperations)
+        protected ResourceOperationsBase(GenericResourceOperations genericOperations)
             : base(genericOperations)
         {
         }
@@ -97,6 +98,24 @@ namespace Azure.ResourceManager.Core
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public abstract Task<ArmResponse<TOperations>> GetAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get details for this resource from the service or can be overriden to provide a cached instance.
+        /// </summary>
+        /// <returns> A <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
+        protected virtual TOperations GetResource()
+        {
+            return Get().Value;
+        }
+
+        /// <summary>
+        /// Get details for this resource from the service or can be overriden to provide a cached instance.
+        /// </summary>
+        /// <returns> A <see cref="Task"/> that on completion returns a <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
+        protected virtual async Task<TOperations> GetResourceAsync()
+        {
+            return (await GetAsync()).Value;
+        }
 
         /// <summary>
         /// Gets new dictionary of tags after adding the key value pair or updating the existing key value pair

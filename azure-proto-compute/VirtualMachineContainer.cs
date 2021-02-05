@@ -110,7 +110,7 @@ namespace azure_proto_compute
         /// <param name="aset"> The availability set to use. </param>
         /// <param name="location"> The location to create the Virtual Machine. </param>
         /// <returns> Object used to create a <see cref="VirtualMachine"/>. </returns>
-        public VirtualMachineModelBuilder Construct(string hostName, string adminUser, string adminPw, ResourceIdentifier nicId, AvailabilitySetData aset, Location location = null)
+        public VirtualMachineModelBuilder Construct(string hostName, string adminUser, string adminPw, ResourceIdentifier nicId, AvailabilitySetData aset, LocationData location = null)
         {
             var vm = new Azure.ResourceManager.Compute.Models.VirtualMachine(location ?? DefaultLocation)
             {
@@ -172,10 +172,10 @@ namespace azure_proto_compute
         /// <param name="filter"> The substring to filter by. </param>
         /// <param name="top"> The number of items to truncate by. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
-        /// <returns> A collection of <see cref="ArmResource"/> that may take multiple service requests to iterate over. </returns>
-        public Pageable<ArmResource> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        /// <returns> A collection of <see cref="GenericResource"/> that may take multiple service requests to iterate over. </returns>
+        public Pageable<GenericResource> ListByName(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineOperations.ResourceType);
+            ResourceFilterCollection filters = new ResourceFilterCollection(VirtualMachineOperations.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContext(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
@@ -186,10 +186,10 @@ namespace azure_proto_compute
         /// <param name="filter"> The substring to filter by. </param>
         /// <param name="top"> The number of items to truncate by. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
-        /// <returns> An async collection of <see cref="ArmResource"/> that may take multiple service requests to iterate over. </returns>
-        public AsyncPageable<ArmResource> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        /// <returns> An async collection of <see cref="GenericResource"/> that may take multiple service requests to iterate over. </returns>
+        public AsyncPageable<GenericResource> ListByNameAsync(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(VirtualMachineOperations.ResourceType);
+            ResourceFilterCollection filters = new ResourceFilterCollection(VirtualMachineOperations.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
@@ -202,10 +202,10 @@ namespace azure_proto_compute
         /// <param name="top"> The number of items to truncate by. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of <see cref="VirtualMachine"/> that may take multiple service requests to iterate over. </returns>
-        public Pageable<VirtualMachine> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public Pageable<VirtualMachine> ListByNameExpanded(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByName(filter, top, cancellationToken);
-            return new PhWrappingPageable<ArmResource, VirtualMachine>(results, s => (new VirtualMachineOperations(s)).Get().Value);
+            return new PhWrappingPageable<GenericResource, VirtualMachine>(results, s => (new VirtualMachineOperations(s)).Get().Value);
         }
 
         /// <summary>
@@ -216,10 +216,10 @@ namespace azure_proto_compute
         /// <param name="top"> The number of items to truncate by. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of <see cref="VirtualMachine"/> that may take multiple service requests to iterate over. </returns>
-        public AsyncPageable<VirtualMachine> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<VirtualMachine> ListByNameExpandedAsync(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByNameAsync(filter, top, cancellationToken);
-            return new PhWrappingAsyncPageable<ArmResource, VirtualMachine>(results, s => (new VirtualMachineOperations(s)).Get().Value);
+            return new PhWrappingAsyncPageable<GenericResource, VirtualMachine>(results, s => (new VirtualMachineOperations(s)).Get().Value);
         }
     }
 }

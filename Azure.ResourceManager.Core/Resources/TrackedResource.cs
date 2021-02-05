@@ -20,7 +20,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets or sets the location the resource is in.
         /// </summary>
-        public virtual Location Location { get; protected set; }
+        public virtual LocationData Location { get; protected set; }
 
         /// <summary>
         /// Gets or sets the identifier for the resource.

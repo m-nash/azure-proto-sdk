@@ -8,6 +8,8 @@ using Azure.ResourceManager.Core;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System;
 
 namespace azure_proto_network
 {
@@ -19,8 +21,8 @@ namespace azure_proto_network
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkSecurityGroupOperations"/> class.
         /// </summary>
-        /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a virtual machine. </param>
-        internal NetworkSecurityGroupOperations(ArmResourceOperations genericOperations)
+        /// <param name="genericOperations"> An instance of <see cref="GenericResourceOperations"/> that has an id for a virtual machine. </param>
+        internal NetworkSecurityGroupOperations(GenericResourceOperations genericOperations)
             : base(genericOperations)
         {
         }
@@ -156,9 +158,30 @@ namespace azure_proto_network
             return new ArmVoidOperation(await Operations.StartDeleteAsync(Id.ResourceGroup, Id.Name, cancellationToken));
         }
 
-        private protected virtual NetworkSecurityGroup GetResource()
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
+        public IEnumerable<LocationData> ListAvailableLocations()
         {
-            return Get().Value;
+            var pageableProvider = ResourcesClient.Providers.List(expand: "metadata");
+            var networkSecurityProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var networkSecurityResource = networkSecurityProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return networkSecurityResource.Locations.Select(l => (LocationData)l);
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
+        public async Task<IEnumerable<LocationData>> ListAvailableLocationsAsync(CancellationToken cancellationToken = default)
+        {
+            var asyncpageableProvider = ResourcesClient.Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken);
+            var networkSecurityProvider = await asyncpageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var networkSecurityResource = networkSecurityProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return networkSecurityResource.Locations.Select(l => (LocationData)l);
         }
     }
 }

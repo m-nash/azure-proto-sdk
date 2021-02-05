@@ -7,6 +7,9 @@ using Azure.ResourceManager.Network.Models;
 using Azure.ResourceManager.Core;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using System;
 
 namespace azure_proto_network
 {
@@ -18,8 +21,8 @@ namespace azure_proto_network
         /// <summary>
         /// Initializes a new instance of the <see cref="PublicIpAddressOperations"/> class.
         /// </summary>
-        /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a virtual machine. </param>
-        internal PublicIpAddressOperations(ArmResourceOperations genericOperations)
+        /// <param name="genericOperations"> An instance of <see cref="GenericResourceOperations"/> that has an id for a virtual machine. </param>
+        internal PublicIpAddressOperations(GenericResourceOperations genericOperations)
             : base(genericOperations)
         {
         }
@@ -47,7 +50,7 @@ namespace azure_proto_network
         /// <summary>
         /// Gets the resource type definition for a public IP address.
         /// </summary>
-        public static readonly ResourceType ResourceType = "Microsoft.Network/publicIpAddresses";
+        public static readonly ResourceType ResourceType = "Microsoft.Network/publicIPAddresses";
 
         /// <inheritdoc />
         protected override ResourceType ValidResourceType => ResourceType;
@@ -146,6 +149,32 @@ namespace azure_proto_network
             patchable.Tags[key] = value;
             return new PhArmOperation<PublicIpAddress, PublicIPAddress>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
                 n => new PublicIpAddress(this, new PublicIPAddressData(n)));
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
+        public IEnumerable<LocationData> ListAvailableLocations()
+        {
+            var pageableProvider = ResourcesClient.Providers.List(expand: "metadata");
+            var publicIPProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var publicIPResource = publicIPProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return publicIPResource.Locations.Select(l => (LocationData)l);
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
+        public async Task<IEnumerable<LocationData>> ListAvailableLocationsAsync(CancellationToken cancellationToken = default)
+        {
+            var asyncpageableProvider = ResourcesClient.Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken);
+            var publicIPProvider = await asyncpageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var publicIPResource = publicIPProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return publicIPResource.Locations.Select(l => (LocationData)l);
         }
     }
 }

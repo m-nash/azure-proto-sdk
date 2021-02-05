@@ -74,7 +74,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="location"> The location to create the network security group. </param>
         /// <returns> Object used to create a <see cref="PublicIpAddress"/>. </returns>
-        public ArmBuilder<PublicIpAddress, PublicIPAddressData> Construct(Location location = null)
+        public ArmBuilder<PublicIpAddress, PublicIPAddressData> Construct(LocationData location = null)
         {
             var ipAddress = new PublicIPAddress()
             {
@@ -116,10 +116,10 @@ namespace azure_proto_network
         /// <param name="filter"> The substring to filter by. </param>
         /// <param name="top"> The number of items to truncate by. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
-        /// <returns> A collection of <see cref="ArmResource"/> that may take multiple service requests to iterate over. </returns>
-        public Pageable<ArmResource> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        /// <returns> A collection of <see cref="GenericResource"/> that may take multiple service requests to iterate over. </returns>
+        public Pageable<GenericResource> ListByName(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(PublicIPAddressData.ResourceType);
+            ResourceFilterCollection filters = new ResourceFilterCollection(PublicIPAddressData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContext(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
@@ -130,10 +130,10 @@ namespace azure_proto_network
         /// <param name="filter"> The substring to filter by. </param>
         /// <param name="top"> The number of items to truncate by. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
-        /// <returns> An async collection of <see cref="ArmResource"/> that may take multiple service requests to iterate over. </returns>
-        public AsyncPageable<ArmResource> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        /// <returns> An async collection of <see cref="GenericResource"/> that may take multiple service requests to iterate over. </returns>
+        public AsyncPageable<GenericResource> ListByNameAsync(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(PublicIPAddressData.ResourceType);
+            ResourceFilterCollection filters = new ResourceFilterCollection(PublicIPAddressData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
@@ -146,10 +146,10 @@ namespace azure_proto_network
         /// <param name="top"> The number of items to truncate by. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of <see cref="PublicIpAddress"/> that may take multiple service requests to iterate over. </returns>
-        public Pageable<PublicIpAddress> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public Pageable<PublicIpAddress> ListByNameExpanded(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByName(filter, top, cancellationToken);
-            return new PhWrappingPageable<ArmResource, PublicIpAddress>(results, s => new PublicIpAddressOperations(s).Get().Value);
+            return new PhWrappingPageable<GenericResource, PublicIpAddress>(results, s => new PublicIpAddressOperations(s).Get().Value);
         }
 
         /// <summary>
@@ -160,10 +160,10 @@ namespace azure_proto_network
         /// <param name="top"> The number of items to truncate by. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of <see cref="PublicIpAddress"/> that may take multiple service requests to iterate over. </returns>
-        public AsyncPageable<PublicIpAddress> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<PublicIpAddress> ListByNameExpandedAsync(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByNameAsync(filter, top, cancellationToken);
-            return new PhWrappingAsyncPageable<ArmResource, PublicIpAddress>(results, s => new PublicIpAddressOperations(s).Get().Value);
+            return new PhWrappingAsyncPageable<GenericResource, PublicIpAddress>(results, s => new PublicIpAddressOperations(s).Get().Value);
         }
 
         private Func<PublicIPAddress, PublicIpAddress> Convertor()

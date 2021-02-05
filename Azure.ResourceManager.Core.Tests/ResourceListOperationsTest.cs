@@ -13,7 +13,7 @@ namespace Azure.ResourceManager.Core.Tests
         public void TestArmResponseArmResource()
         {
             var expected = GetGenericResource();
-            var asArmOp = (ArmResource)TestListActivator(expected);
+            var asArmOp = (GenericResource)TestListActivator(expected);
 
             Assert.IsNotNull(asArmOp.Data.Sku);
             Assert.AreEqual(expected.Sku.Capacity, asArmOp.Data.Sku.Capacity);
@@ -60,7 +60,7 @@ namespace Azure.ResourceManager.Core.Tests
         public void TestArmResourceActivator()
         {
             var expected = GetGenericResource();
-            var actual = Activator.CreateInstance(typeof(ArmResourceData), expected as GenericResource) as ArmResourceData;
+            var actual = Activator.CreateInstance(typeof(GenericResourceData), expected as ResourceManager.Resources.Models.GenericResource) as GenericResourceData;
 
             Assert.IsNotNull(actual.Sku);
             Assert.AreEqual(expected.Sku.Capacity, actual.Sku.Capacity);
@@ -86,7 +86,7 @@ namespace Azure.ResourceManager.Core.Tests
         {
             var createResourceConverterMethod = typeof(ResourceListOperations).GetMethod("CreateResourceConverter", BindingFlags.Static | BindingFlags.NonPublic);
             ResourceGroupOperations rgOp = GetResourceGroupOperations();
-            var activatorFunction = (Func<GenericResourceExpanded, ArmResource>)createResourceConverterMethod.Invoke(null, new object[] { rgOp });
+            var activatorFunction = (Func<GenericResourceExpanded, GenericResource>)createResourceConverterMethod.Invoke(null, new object[] { rgOp });
             return activatorFunction.DynamicInvoke(new object[] { genericResource });
         }
 

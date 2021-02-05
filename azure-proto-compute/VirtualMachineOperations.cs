@@ -2,7 +2,11 @@
 using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Compute.Models;
 using Azure.ResourceManager.Core;
+using Azure.ResourceManager.Core.Adapters;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,8 +20,8 @@ namespace azure_proto_compute
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualMachineOperations"/> class.
         /// </summary>
-        /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a virtual machine. </param>
-        internal VirtualMachineOperations(ArmResourceOperations genericOperations)
+        /// <param name="genericOperations"> An instance of <see cref="GenericResourceOperations"/> that has an id for a virtual machine. </param>
+        internal VirtualMachineOperations(GenericResourceOperations genericOperations)
             : base(genericOperations)
         {
         }
@@ -59,11 +63,11 @@ namespace azure_proto_compute
             ClientOptions.Convert<ComputeManagementClientOptions>()).VirtualMachines;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="VirtualMachineOperations"/> class from a <see cref="ArmResourceOperations"/>.
+        /// Initializes a new instance of the <see cref="VirtualMachineOperations"/> class from a <see cref="GenericResourceOperations"/>.
         /// </summary>
-        /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a virtual machine. </param>
+        /// <param name="genericOperations"> An instance of <see cref="GenericResourceOperations"/> that has an id for a virtual machine. </param>
         /// <returns> A new instance of the <see cref="VirtualMachineOperations"/> class. </returns>
-        public static VirtualMachineOperations FromGeneric(ArmResourceOperations genericOperations)
+        public static VirtualMachineOperations FromGeneric(GenericResourceOperations genericOperations)
         {
             return new VirtualMachineOperations(genericOperations);
         }
@@ -214,7 +218,7 @@ namespace azure_proto_compute
         }
 
         /// <inheritdoc/>
-        public async override Task<ArmResponse<VirtualMachine>> GetAsync(CancellationToken cancellationToken = default)
+        public override async Task<ArmResponse<VirtualMachine>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 await Operations.GetAsync(Id.ResourceGroup, Id.Name, cancellationToken),
@@ -255,8 +259,10 @@ namespace azure_proto_compute
         /// <returns> An <see cref="ArmOperation{VirtualMachine}"/> that allows polling for completion of the operation. </returns>
         public ArmOperation<VirtualMachine> StartAddTag(string key, string value)
         {
-            var patchable = new VirtualMachineUpdate { Tags = new Dictionary<string, string>() };
-            patchable.Tags.Add(key, value);
+            var vm = GetResource();
+            var patchable = new VirtualMachineUpdate { Tags = vm.Data.Tags };
+            UpdateTags(key, value, patchable.Tags);
+
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable),
                 v => new VirtualMachine(this, new VirtualMachineData(v)));
@@ -272,11 +278,39 @@ namespace azure_proto_compute
         /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{VirtualMachine}"/> that allows polling for completion of the operation. </returns>
         public async Task<ArmOperation<VirtualMachine>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
-            var patchable = new VirtualMachineUpdate { Tags = new Dictionary<string, string>() };
-            patchable.Tags.Add(key, value);
+            var vm = await GetResourceAsync();
+            var patchable = new VirtualMachineUpdate { Tags = vm.Data.Tags };
+            UpdateTags(key, value, patchable.Tags);
+
             return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
                 await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
                 v => new VirtualMachine(this, new VirtualMachineData(v)));
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
+        public IEnumerable<LocationData> ListAvailableLocations()
+        {
+            var pageableProvider = ResourcesClient.Providers.List(expand: "metadata");
+            var vmProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var vmResource = vmProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return vmResource.Locations.Select(l => (LocationData)l);
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
+        public async Task<IEnumerable<LocationData>> ListAvailableLocationsAsync(CancellationToken cancellationToken = default)
+        {
+            var asyncpageableProvider = ResourcesClient.Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken);
+            var vmProvider = await asyncpageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var vmResource = vmProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType)); 
+            return vmResource.Locations.Select(l => (LocationData)l);
         }
     }
 }

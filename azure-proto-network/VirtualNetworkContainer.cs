@@ -74,7 +74,7 @@ namespace azure_proto_network
         /// <param name="vnetCidr"> The CIDR of the resource. </param>
         /// <param name="location"> The location of the resource. </param>
         /// <returns> A builder with <see cref="VirtualNetwork"/> and <see cref="VirtualNetworkData"/>. </returns>
-        public ArmBuilder<VirtualNetwork, VirtualNetworkData> Construct(string vnetCidr, Location location = null)
+        public ArmBuilder<VirtualNetwork, VirtualNetworkData> Construct(string vnetCidr, LocationData location = null)
         {
             var vnet = new Azure.ResourceManager.Network.Models.VirtualNetwork()
             {
@@ -116,9 +116,9 @@ namespace azure_proto_network
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of resource that may take multiple service requests to iterate over. </returns>
-        public Pageable<ArmResource> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public Pageable<GenericResource> ListByName(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(VirtualNetworkData.ResourceType);
+            ResourceFilterCollection filters = new ResourceFilterCollection(VirtualNetworkData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContext(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
@@ -130,9 +130,9 @@ namespace azure_proto_network
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of resource that may take multiple service requests to iterate over. </returns>
-        public AsyncPageable<ArmResource> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<GenericResource> ListByNameAsync(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(VirtualNetworkData.ResourceType);
+            ResourceFilterCollection filters = new ResourceFilterCollection(VirtualNetworkData.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
@@ -145,10 +145,10 @@ namespace azure_proto_network
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of resource that may take multiple service requests to iterate over. </returns>
-        public Pageable<VirtualNetwork> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public Pageable<VirtualNetwork> ListByNameExpanded(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByName(filter, top, cancellationToken);
-            return new PhWrappingPageable<ArmResource, VirtualNetwork>(results, s => new VirtualNetworkOperations(s).Get().Value);
+            return new PhWrappingPageable<GenericResource, VirtualNetwork>(results, s => new VirtualNetworkOperations(s).Get().Value);
         }
 
         /// <summary>
@@ -159,10 +159,10 @@ namespace azure_proto_network
         /// <param name="top"> The number of results to return. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An asyc collection of availability set that may take multiple service requests to iterate over. </returns>
-        public AsyncPageable<VirtualNetwork> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<VirtualNetwork> ListByNameExpandedAsync(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByNameAsync(filter, top, cancellationToken);
-            return new PhWrappingAsyncPageable<ArmResource, VirtualNetwork>(results, s => new VirtualNetworkOperations(s).Get().Value);
+            return new PhWrappingAsyncPageable<GenericResource, VirtualNetwork>(results, s => new VirtualNetworkOperations(s).Get().Value);
         }
 
         private Func<Azure.ResourceManager.Network.Models.VirtualNetwork, VirtualNetwork> Convertor()

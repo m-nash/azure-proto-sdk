@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using Azure.ResourceManager.Resources.Models;
+
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
@@ -16,7 +18,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         /// <param name="location"> The location of the resource. </param>
         /// <param name="data"> The model to copy from. </param>
-        protected TrackedResource(ResourceIdentifier id, Location location, TModel data)
+        protected TrackedResource(ResourceIdentifier id, LocationData location, TModel data)
         {
             Id = id;
             Location = location;
@@ -29,7 +31,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         /// <param name="location"> The location of the resource. </param>
         /// <param name="data"> The model to copy from. </param>
-        protected TrackedResource(string id, Location location, TModel data)
+        protected TrackedResource(string id, LocationData location, TModel data)
         {
             if (ReferenceEquals(id, null))
             {

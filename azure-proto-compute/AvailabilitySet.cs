@@ -1,4 +1,5 @@
-﻿using Azure.ResourceManager.Core;
+﻿using System.Threading.Tasks;
+using Azure.ResourceManager.Core;
 
 namespace azure_proto_compute
 {
@@ -22,5 +23,17 @@ namespace azure_proto_compute
         /// Gets or sets the availability set data.
         /// </summary>
         public AvailabilitySetData Data { get; private set; }
+
+        /// <inheritdoc />
+        protected override AvailabilitySet GetResource()
+        {
+            return this;
+        }
+
+        /// <inheritdoc />
+        protected override Task<AvailabilitySet> GetResourceAsync()
+        {
+            return Task.FromResult(this);
+        }
     }
 }

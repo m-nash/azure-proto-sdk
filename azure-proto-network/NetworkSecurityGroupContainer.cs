@@ -21,8 +21,8 @@ namespace azure_proto_network
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkSecurityGroupContainer"/> class.
         /// </summary>
-        /// <param name="genericOperations"> An instance of <see cref="ArmResourceOperations"/> that has an id for a [Resource]. </param>
-        internal NetworkSecurityGroupContainer(ArmResourceOperations genericOperations)
+        /// <param name="genericOperations"> An instance of <see cref="GenericResourceOperations"/> that has an id for a [Resource]. </param>
+        internal NetworkSecurityGroupContainer(GenericResourceOperations genericOperations)
             : base(genericOperations)
         {
         }
@@ -87,7 +87,7 @@ namespace azure_proto_network
         /// <param name="location"> The location to create the network security group. </param>
         /// <param name="openPorts"> The location to create the network security group. </param>
         /// <returns> Object used to create a <see cref="NetworkSecurityGroup"/>. </returns>
-        public ArmBuilder<NetworkSecurityGroup, NetworkSecurityGroupData> Construct(Location location = null, params int[] openPorts)
+        public ArmBuilder<NetworkSecurityGroup, NetworkSecurityGroupData> Construct(Location locationData = null, params int[] openPorts)
         {
             var nsg = new Azure.ResourceManager.Network.Models.NetworkSecurityGroup
             {
@@ -170,10 +170,10 @@ namespace azure_proto_network
         /// <param name="filter"> The substring to filter by. </param>
         /// <param name="top"> The number of items to truncate by. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
-        /// <returns> A collection of <see cref="ArmResource"/> that may take multiple service requests to iterate over. </returns>
-        public Pageable<ArmResource> ListByName(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        /// <returns> A collection of <see cref="GenericResource"/> that may take multiple service requests to iterate over. </returns>
+        public Pageable<GenericResource> ListByName(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(NetworkSecurityGroupOperations.ResourceType);
+            ResourceFilterCollection filters = new ResourceFilterCollection(NetworkSecurityGroupOperations.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContext(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
@@ -184,10 +184,10 @@ namespace azure_proto_network
         /// <param name="filter"> The substring to filter by. </param>
         /// <param name="top"> The number of items to truncate by. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
-        /// <returns> An async collection of <see cref="ArmResource"/> that may take multiple service requests to iterate over. </returns>
-        public AsyncPageable<ArmResource> ListByNameAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        /// <returns> An async collection of <see cref="GenericResource"/> that may take multiple service requests to iterate over. </returns>
+        public AsyncPageable<GenericResource> ListByNameAsync(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
-            ArmFilterCollection filters = new ArmFilterCollection(NetworkSecurityGroupOperations.ResourceType);
+            ResourceFilterCollection filters = new ResourceFilterCollection(NetworkSecurityGroupOperations.ResourceType);
             filters.SubstringFilter = filter;
             return ResourceListOperations.ListAtContextAsync(Parent as ResourceGroupOperations, filters, top, cancellationToken);
         }
@@ -200,10 +200,10 @@ namespace azure_proto_network
         /// <param name="top"> The number of items to truncate by. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of <see cref="NetworkSecurityGroup"/> that may take multiple service requests to iterate over. </returns>
-        public Pageable<NetworkSecurityGroup> ListByNameExpanded(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public Pageable<NetworkSecurityGroup> ListByNameExpanded(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByName(filter, top, cancellationToken);
-            return new PhWrappingPageable<ArmResource, NetworkSecurityGroup>(results, s => new NetworkSecurityGroupOperations(s).Get().Value);
+            return new PhWrappingPageable<GenericResource, NetworkSecurityGroup>(results, s => new NetworkSecurityGroupOperations(s).Get().Value);
         }
 
         /// <summary>
@@ -214,10 +214,10 @@ namespace azure_proto_network
         /// <param name="top"> The number of items to truncate by. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of <see cref="NetworkSecurityGroup"/> that may take multiple service requests to iterate over. </returns>
-        public AsyncPageable<NetworkSecurityGroup> ListByNameExpandedAsync(ArmSubstringFilter filter, int? top = null, CancellationToken cancellationToken = default)
+        public AsyncPageable<NetworkSecurityGroup> ListByNameExpandedAsync(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
             var results = ListByNameAsync(filter, top, cancellationToken);
-            return new PhWrappingAsyncPageable<ArmResource, NetworkSecurityGroup>(results, s => new NetworkSecurityGroupOperations(s).Get().Value);
+            return new PhWrappingAsyncPageable<GenericResource, NetworkSecurityGroup>(results, s => new NetworkSecurityGroupOperations(s).Get().Value);
         }
     }
 }

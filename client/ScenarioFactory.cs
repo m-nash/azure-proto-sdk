@@ -4,6 +4,7 @@
     {
         All,
         CreateSingleVmExample,
+        CreateSingleVMCheckLocation,
         ShutdownVmsByName,
         StartStopVm,
         StartFromVm,
@@ -85,6 +86,8 @@
                     return new StartCreateSingleVmExample();
                 case Scenarios.DefaultSubscription:
                     return new DefaultSubscription();
+                case Scenarios.CreateSingleVMCheckLocation:
+                    return new CreateSingleVMCheckLocation();
                 default:
                     return null;
             }
