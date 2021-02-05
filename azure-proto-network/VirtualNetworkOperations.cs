@@ -30,7 +30,7 @@ namespace azure_proto_network
         /// <param name="resourceGroup"> The client parameters to use in these operations. </param>
         /// <param name="vnetName"> The name of the virtual network to use. </param>
         internal VirtualNetworkOperations(ResourceGroupOperations resourceGroup, string vnetName)
-            : base(resourceGroup, $"{resourceGroup}/providers/Microsoft.Network/virtualNetworks/{vnetName}")
+            : base(resourceGroup, $"{resourceGroup.Id}/providers/Microsoft.Network/virtualNetworks/{vnetName}")
         {
         }
         
@@ -161,7 +161,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="subnet"> The name of the subnet. </param>
         /// <returns> An instance of SubnetOperations. </returns>
-        public SubnetOperations Subnet(string subnet)
+        public SubnetOperations GetSubnetOperations(string subnet)
         {
             return new SubnetOperations(this, subnet);
         }
@@ -170,7 +170,7 @@ namespace azure_proto_network
         /// Gets a list of subnet in the virtual nerwork.
         /// </summary>
         /// <returns> An object representing collection of subnets and their operations over a virtual network. </returns>
-        public SubnetContainer Subnets()
+        public SubnetContainer GetSubnetContainer()
         {
             return new SubnetContainer(this);
         }

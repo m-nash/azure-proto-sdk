@@ -16,7 +16,7 @@ namespace azure_proto_compute
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualMachine"/> class.
         /// </summary>
-        /// <param name="operations"> The operations to copy options from. </param>
+        /// <param name="operations"> The client parameters to use in these operations. </param>
         /// <param name="resource"> The resource that is the target of operations. </param>
         internal VirtualMachine(ResourceOperationsBase operations, VirtualMachineData resource)
             : base(operations, resource.Id)

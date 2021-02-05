@@ -6,6 +6,7 @@ namespace client
     {
         public static readonly string AzureSdkSandboxId = "db1ab6f0-4769-4b27-930e-01e2ef9c123c";
 
+        public string Hostname => $"{Environment.UserName}";
         public string VmName => $"{Environment.UserName}";
         public string RgName { get; private set; }
         public string NsgName => $"{Environment.UserName}-test-nsg";

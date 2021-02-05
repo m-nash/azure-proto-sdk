@@ -82,8 +82,16 @@ namespace Azure.ResourceManager.Core
             _credentials = credential;
             _baseUri = baseUri;
             ClientOptions = options ?? new AzureResourceManagerClientOptions();
-            defaultSubscriptionId ??= GetDefaultSubscription().ConfigureAwait(false).GetAwaiter().GetResult();
-            DefaultSubscription = new SubscriptionOperations(ClientOptions, defaultSubscriptionId, credential, baseUri);
+
+            if (string.IsNullOrWhiteSpace(defaultSubscriptionId))
+            {
+                DefaultSubscription = GetDefaultSubscriptionAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+            }
+            else
+            {
+                DefaultSubscription = GetSubscriptionOperations(defaultSubscriptionId).Get().Value;
+            }
+
             ApiVersionOverrides = new Dictionary<string, string>();
         }
 
@@ -95,7 +103,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the default Azure subscription.
         /// </summary>
-        public SubscriptionOperations DefaultSubscription { get; private set; }
+        public Subscription DefaultSubscription { get; private set; }
 
         /// <summary>
         /// Gets the Azure resource manager client options.
@@ -207,15 +215,9 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns the subscription id. </returns>
-        internal async Task<string> GetDefaultSubscription(CancellationToken cancellationToken = default)
+        internal async Task<Subscription> GetDefaultSubscriptionAsync(CancellationToken cancellationToken = default)
         {
-            string sub = DefaultSubscription?.Id?.Subscription;
-            if (null == sub)
-            {
-                sub = await GetSubscriptionContainer().GetDefaultSubscriptionAsync(cancellationToken);
-            }
-
-            return sub;
+            return await GetSubscriptionContainer().GetDefaultSubscriptionAsync(cancellationToken);
         }
 
         private ResourcesManagementClient GetResourcesClient(string subscription) => new ResourcesManagementClient(_baseUri, subscription, _credentials);

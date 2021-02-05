@@ -20,7 +20,6 @@ namespace azure_proto_compute
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualMachineContainer"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="resourceGroup"> The ResourceGroup that is the parent of the VirtualMachines. </param>
         internal VirtualMachineContainer(ResourceGroupOperations resourceGroup)
             : base(resourceGroup)
@@ -33,6 +32,9 @@ namespace azure_proto_compute
             Credential,
             ClientOptions.Convert<ComputeManagementClientOptions>()).VirtualMachines;
 
+        /// <summary>
+        /// Gets the valid resource type for this object
+        /// </summary>
         protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
 
         /// <summary>
@@ -101,23 +103,23 @@ namespace azure_proto_compute
         /// <summary>
         /// Construct an object used to create a VirtualMachine.
         /// </summary>
-        /// <param name="vmName"> The name of the Virtual Machine. </param>
+        /// <param name="hostName"> The hostname for the virtual machine. </param>
         /// <param name="adminUser"> The admin username to use. </param>
-        /// <param name="adminPw"> The admin password to use. </param>
-        /// <param name="nicId"> The network interface id to use. </param>
-        /// <param name="aset"> The availability set to use. </param>
+        /// <param name="adminPassword"> The admin password to use. </param>
+        /// <param name="networkInterfaceId"> The network interface id to use. </param>
+        /// <param name="availabilitySetId"> The availability set id to use. </param>
         /// <param name="location"> The location to create the Virtual Machine. </param>
         /// <returns> Object used to create a <see cref="VirtualMachine"/>. </returns>
-        public VirtualMachineModelBuilder Construct(string vmName, string adminUser, string adminPw, ResourceIdentifier nicId, AvailabilitySetData aset, LocationData location = null)
+        public VirtualMachineModelBuilder Construct(string hostName, string adminUser, string adminPassword, ResourceIdentifier networkInterfaceId, ResourceIdentifier availabilitySetId, LocationData location = null)
         {
             var vm = new Azure.ResourceManager.Compute.Models.VirtualMachine(location ?? DefaultLocation)
             {
-                NetworkProfile = new NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = nicId } } },
+                NetworkProfile = new NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = networkInterfaceId } } },
                 OsProfile = new OSProfile
                 {
-                    ComputerName = vmName,
+                    ComputerName = hostName,
                     AdminUsername = adminUser,
-                    AdminPassword = adminPw,
+                    AdminPassword = adminPassword,
                     WindowsConfiguration = new WindowsConfiguration { TimeZone = "Pacific Standard Time", ProvisionVMAgent = true }
                 },
                 StorageProfile = new StorageProfile()
@@ -132,21 +134,10 @@ namespace azure_proto_compute
                     DataDisks = new List<DataDisk>()
                 },
                 HardwareProfile = new HardwareProfile() { VmSize = VirtualMachineSizeTypes.StandardB1Ms },
-                AvailabilitySet = new SubResource() { Id = aset.Id }
+                AvailabilitySet = new SubResource() { Id = availabilitySetId }
             };
 
             return new VirtualMachineModelBuilder(this, new VirtualMachineData(vm));
-        }
-
-        /// <summary>
-        /// Construct an object used to create a VirtualMachine.
-        /// </summary>
-        /// <param name="name"> The name of the Virtual Machine. </param>
-        /// <param name="location"> The location to create the Virtual Machine. </param>
-        /// <returns> Object used to create a <see cref="VirtualMachine"/>. </returns>
-        public VirtualMachineModelBuilder Construct(string name, LocationData location)
-        {
-            return new VirtualMachineModelBuilder(null, null);
         }
 
         /// <summary>

@@ -5,6 +5,10 @@
     <RootNamespace>azure_proto_network</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Git\azure-proto-sdk\azure-proto-network\obj\azure-proto-network.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Azure.ResourceManager.Network" Version="1.0.0-preview.1" />
   </ItemGroup>

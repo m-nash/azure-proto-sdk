@@ -33,6 +33,11 @@ namespace Azure.ResourceManager.Core
         protected TResource Resource { get; private set; }
 
         /// <summary>
+        /// Gets the resource name.
+        /// </summary>
+        protected string ResourceName { get; private set; }
+
+        /// <summary>
         /// Gets the container object to create the resource in.
         /// </summary>
         protected ResourceContainerBase<TOperations, TResource> UnTypedContainer { get; private set; }
@@ -58,6 +63,7 @@ namespace Azure.ResourceManager.Core
         /// <returns> A response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public ArmResponse<TOperations> Create(string name)
         {
+            ResourceName = name;
             Resource = Build();
 
             return UnTypedContainer.Create(name, Resource);
@@ -73,6 +79,7 @@ namespace Azure.ResourceManager.Core
             string name,
             CancellationToken cancellationToken = default)
         {
+            ResourceName = name;
             Resource = Build();
 
             return await UnTypedContainer.CreateAsync(name, Resource, cancellationToken);
@@ -89,6 +96,7 @@ namespace Azure.ResourceManager.Core
         /// </remarks>
         public ArmOperation<TOperations> StartCreate(string name, CancellationToken cancellationToken = default)
         {
+            ResourceName = name;
             Resource = Build();
 
             return UnTypedContainer.StartCreate(name, Resource, cancellationToken);
@@ -107,6 +115,7 @@ namespace Azure.ResourceManager.Core
             string name,
             CancellationToken cancellationToken = default)
         {
+            ResourceName = name;
             Resource = Build();
 
             return await UnTypedContainer.StartCreateAsync(name, Resource, cancellationToken);

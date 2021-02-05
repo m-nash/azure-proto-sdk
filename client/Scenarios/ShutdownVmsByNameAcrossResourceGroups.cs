@@ -32,6 +32,7 @@ namespace client
                     vm.PowerOn();
                 }
             });
+            
         }
     }
 }

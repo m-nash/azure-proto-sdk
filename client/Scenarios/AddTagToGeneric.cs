@@ -24,6 +24,7 @@ namespace client
 
             if(!vm.Data.Tags.ContainsKey("tagKey"))
                 throw new InvalidOperationException("Failed");
+            
         }
     }
 }

@@ -15,7 +15,7 @@ namespace client
 
             // Create Resource Group
             Console.WriteLine($"--------Start create group {Context.RgName}--------");
-            var resourceGroup = subscription.GetResourceGroupContainer().Create(Context.RgName, Context.Loc).Value;
+            var resourceGroup = subscription.GetResourceGroupContainer().Construct(Context.Loc).Create(Context.RgName).Value;
             CleanUp.Add(resourceGroup.Id);
 
             Console.WriteLine("--------Start create Assignment--------");
@@ -36,11 +36,11 @@ namespace client
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
-            var subnet = vnet.Subnets().Construct(Context.SubnetName, "10.0.0.0/24").Create(Context.SubnetName).Value;
+            var subnet = vnet.GetSubnetContainer().Construct("10.0.0.0/24").Create(Context.SubnetName).Value;
 
             //create network security group
             Console.WriteLine("--------Start create NetworkSecurityGroup--------");
-            _ = resourceGroup.GetNetworkSecurityGroupContainer().Construct(Context.NsgName, 80).Create(Context.NsgName).Value;
+            _ = resourceGroup.GetNetworkSecurityGroupContainer().Construct(80).Create(Context.NsgName).Value;
 
             // Create IP Address
             Console.WriteLine("--------Start create IP Address--------");
@@ -52,7 +52,7 @@ namespace client
 
             // Create VM
             Console.WriteLine("--------Start create VM--------");
-            var vm = resourceGroup.GetVirtualMachineContainer().Construct(Context.VmName, "admin-user", "!@#$%asdfA", nic.Id, aset.Data).Create(Context.VmName).Value;
+            var vm = resourceGroup.GetVirtualMachineContainer().Construct(Context.Hostname, "admin-user", "!@#$%asdfA", nic.Id, aset.Id).Create(Context.VmName).Value;
 
             Console.WriteLine("VM ID: " + vm.Id);
             Console.WriteLine("--------Done create VM--------");
@@ -65,6 +65,8 @@ namespace client
 
             assign2 = assign2.Get().Value;
             Console.WriteLine($"Created assignment: '{assign.Data.Id}'");
+
+            
         }
     }
 }

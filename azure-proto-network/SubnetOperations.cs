@@ -14,13 +14,18 @@ namespace azure_proto_network
         /// <summary>
         /// Initializes a new instance of the <see cref="SubnetOperations"/> class.
         /// </summary>
-        /// <param name="options"> The client parameters to use in these operations. </param>
-        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
+        /// <param name="virtualNetwork"> The client parameters to use in these operations. </param>
+        /// <param name="subnetName"> The name of the subnet. </param>
         internal SubnetOperations(VirtualNetworkOperations virtualNetwork, string subnetName)
             : base(virtualNetwork, $"{virtualNetwork.Id}/subnets/{subnetName}")
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubnetOperations"/> class.
+        /// </summary>
+        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         protected SubnetOperations(ResourceOperationsBase options, ResourceIdentifier id)
             : base(options, id)
         {
@@ -92,14 +97,14 @@ namespace azure_proto_network
         public override ArmResponse<Subnet> Get()
         {
             return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(Operations.Get(Id.ResourceGroup, Id.Parent.Name, Id.Name),
-                n => new Subnet(this, new SubnetData(n, DefaultLocation)));
+                n => new Subnet(this, new SubnetData(n)));
         }
         
         /// <inheritdoc/>
         public override async Task<ArmResponse<Subnet>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(await Operations.GetAsync(Id.ResourceGroup, Id.Parent.Name, Id.Name, null, cancellationToken),
-                n => new Subnet(this, new SubnetData(n, DefaultLocation)));
+                n => new Subnet(this, new SubnetData(n)));
         }
     }
 }

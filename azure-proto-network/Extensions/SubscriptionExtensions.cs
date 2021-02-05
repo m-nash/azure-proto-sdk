@@ -96,7 +96,7 @@ namespace azure_proto_network
         /// Lists the <see cref="NetworkInterface"/> for this <see cref="Subscription"/>.
         /// </summary>
         /// <param name="subscription"> The <see cref="Subscription"/> to target for listing. </param>
-        /// <returns>A collection of <see cref="NetworkInterface>"/> that may take multiple service requests to iterate over. </returns>
+        /// <returns> A collection of <see cref="NetworkInterface"/> that may take multiple service requests to iterate over. </returns>
         public static Pageable<NetworkInterface> ListNics(this SubscriptionOperations subscription)
         {
             NetworkManagementClient networkClient = GetNetworkClient(subscription);
@@ -111,8 +111,7 @@ namespace azure_proto_network
         /// Lists the <see cref="NetworkInterface"/> for this <see cref="Subscription"/>.
         /// </summary>
         /// <param name="subscription"> The <see cref="Subscription"/> to target for listing. </param>
-        /// <returns>A <see cref="Task"/> that on completion returns a collection of <see cref="NetworkInterface>"/> that may 
-        /// take multiple service requests to iterate over. </returns>
+        /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
         public static AsyncPageable<NetworkInterface> ListNicsAsync(this SubscriptionOperations subscription)
         {
             NetworkManagementClient networkClient = GetNetworkClient(subscription);

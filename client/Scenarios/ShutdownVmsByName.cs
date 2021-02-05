@@ -21,6 +21,8 @@ namespace client
                 Console.WriteLine($"Starting {armResource.Id.ResourceGroup} : {armResource.Id.Name}");
                 vmOperations.PowerOn();
             }
+            
+            
         }
     }
 }
