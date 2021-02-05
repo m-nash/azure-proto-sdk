@@ -14,11 +14,16 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class LocationContainer : OperationsBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LocationContainer"/> class.
+        /// </summary>
+        /// <param name="subscriptionOperations"> The subscription that this location container belongs to. </param>
         internal LocationContainer(SubscriptionOperations subscriptionOperations)
             : base(subscriptionOperations.ClientOptions, subscriptionOperations.Id, subscriptionOperations.Credential, subscriptionOperations.BaseUri)
         {
         }
 
+        /// <inheritdoc/>
         protected override ResourceType ValidResourceType => SubscriptionOperations.ResourceType;
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace client
                 throw new Exception($"The resource group {Context.RgName} should not have existed.");
 
             Console.WriteLine($"Creating {Context.RgName}");
-            _ = rgContainer.Construct(Location.Default).Create(Context.RgName).Value;
+            _ = rgContainer.Construct(LocationData.Default).Create(Context.RgName).Value;
 
             Console.WriteLine($"Making sure {Context.RgName} exists now.");
             if (!rgContainer.DoesExist(Context.RgName))

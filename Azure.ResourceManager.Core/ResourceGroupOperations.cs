@@ -6,8 +6,6 @@ using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -235,7 +233,6 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Lists all available geo-locations.
         /// </summary>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
         public IEnumerable<LocationData> ListAvailableLocations()
         {
