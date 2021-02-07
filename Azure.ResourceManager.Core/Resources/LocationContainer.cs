@@ -3,7 +3,6 @@
 
 using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,11 +13,16 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     public class LocationContainer : OperationsBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LocationContainer"/> class.
+        /// </summary>
+        /// <param name="subscriptionOperations"> The parent subscription. </param>
         internal LocationContainer(SubscriptionOperations subscriptionOperations)
             : base(subscriptionOperations.ClientOptions, subscriptionOperations.Id, subscriptionOperations.Credential, subscriptionOperations.BaseUri)
         {
         }
 
+        /// <inheritdoc/>
         protected override ResourceType ValidResourceType => SubscriptionOperations.ResourceType;
 
         /// <summary>

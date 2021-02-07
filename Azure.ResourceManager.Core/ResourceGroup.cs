@@ -24,7 +24,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the data representing this ResourceGroup.
         /// </summary>
-        public ResourceGroupData Data { get; private set; }
+        public ResourceGroupData Data { get; }
 
         /// <inheritdoc />
         protected override ResourceGroup GetResource()

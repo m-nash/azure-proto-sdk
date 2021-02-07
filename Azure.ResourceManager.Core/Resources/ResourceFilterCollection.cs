@@ -8,7 +8,7 @@ namespace Azure.ResourceManager.Core.Resources
     /// <summary>
     /// A class representing a collection of arm filters.
     /// </summary>
-    public class ResourceFilterCollection
+    public sealed class ResourceFilterCollection
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceFilterCollection"/> class.
