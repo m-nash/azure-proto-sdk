@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace Azure.ResourceManager.Core
 {
     /// <summary>
-    /// Generic ARM long runnign operation class for operations with no returned value
+    /// Generic ARM long running operation class for operations with no returned value
     /// </summary>
-    public class ArmVoidOperation : ArmOperation<Response>
+    public sealed class ArmVoidOperation : ArmOperation<Response>
     {
         private readonly Operation<Response> _wrapped;
 
@@ -92,7 +92,7 @@ namespace Azure.ResourceManager.Core
             /// <summary>
             /// Initializes a new instance of the <see cref="WrappingResponse"/> class.
             /// </summary>
-            /// <param name="wrapped"> The response objec to wrap. </param>
+            /// <param name="wrapped"> The response object to wrap. </param>
             public WrappingResponse(Response wrapped)
             {
                 _wrapped = wrapped;

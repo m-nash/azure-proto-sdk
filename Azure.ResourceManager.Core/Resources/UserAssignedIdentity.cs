@@ -10,7 +10,7 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// A class representing an Identity assigned by the user.
     /// </summary>
-    public class UserAssignedIdentity
+    public sealed class UserAssignedIdentity
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UserAssignedIdentity"/> class.

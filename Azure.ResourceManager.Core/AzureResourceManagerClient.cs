@@ -3,13 +3,10 @@
 
 using Azure.Core;
 using Azure.Identity;
-using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,16 +15,16 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// The entry point for all ARM clients.
     /// </summary>
-    public class AzureResourceManagerClient
+    public sealed class AzureResourceManagerClient
     {
         /// <summary>
         /// The base URI of the service.
         /// </summary>
         internal static readonly string DefaultUri = "https://management.azure.com";
 
-        private TokenCredential _credentials;
+        private readonly TokenCredential _credentials;
 
-        private Uri _baseUri;
+        private readonly Uri _baseUri;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureResourceManagerClient"/> class.
@@ -108,7 +105,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the Azure resource manager client options.
         /// </summary>
-        internal virtual AzureResourceManagerClientOptions ClientOptions { get; }
+        internal AzureResourceManagerClientOptions ClientOptions { get; }
 
         /// <summary>
         /// Gets the Azure subscription operations.

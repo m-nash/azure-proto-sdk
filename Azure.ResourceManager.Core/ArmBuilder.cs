@@ -19,7 +19,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ArmBuilder{TOperations, TResource}"/> class.
         /// </summary>
-        /// <param name="container"> The container objec to create the resource in. </param>
+        /// <param name="container"> The container object to create the resource in. </param>
         /// <param name="resource"> The resource to create. </param>
         public ArmBuilder(ResourceContainerBase<TOperations, TResource> container, TResource resource)
         {
@@ -43,7 +43,7 @@ namespace Azure.ResourceManager.Core
         protected ResourceContainerBase<TOperations, TResource> UnTypedContainer { get; private set; }
 
         /// <summary>
-        /// Creates the resource objec to send to the Azure API.
+        /// Creates the resource object to send to the Azure API.
         /// </summary>
         /// <returns> The resource to create. </returns>
         public TResource Build()
@@ -153,9 +153,7 @@ namespace Azure.ResourceManager.Core
 
         private void ThrowIfNotValid()
         {
-            string message;
-
-            if (!IsValid(out message))
+            if (!IsValid(out var message))
             {
                 throw new InvalidOperationException(message);
             }
