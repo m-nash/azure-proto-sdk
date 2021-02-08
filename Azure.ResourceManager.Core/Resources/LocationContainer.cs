@@ -3,7 +3,6 @@
 
 using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 

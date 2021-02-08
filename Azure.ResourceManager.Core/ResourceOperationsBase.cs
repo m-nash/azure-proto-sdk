@@ -3,7 +3,6 @@
 
 using Azure.Core;
 using System;
-using Azure.ResourceManager.Resources;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;

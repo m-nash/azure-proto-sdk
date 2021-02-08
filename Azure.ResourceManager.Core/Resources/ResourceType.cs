@@ -10,7 +10,7 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// Structure respresenting a resource type
     /// </summary>
-    public class ResourceType : IEquatable<ResourceType>, IEquatable<string>, IComparable<ResourceType>,
+    public sealed class ResourceType : IEquatable<ResourceType>, IEquatable<string>, IComparable<ResourceType>,
         IComparable<string>
     {
         /// <summary>
