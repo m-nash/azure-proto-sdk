@@ -122,27 +122,8 @@ namespace Azure.ResourceManager.Core
         /// <param name="key"> The key to update. </param>
         /// <param name="value"> The value to update. </param>
         /// <param name="existingTags"> Existing tag dictionary to update. </param>
-        protected void UpdateTags(string key, string value, ref IDictionary<string, string> existingTags)
+        protected void UpdateTags(string key, string value, IDictionary<string, string> existingTags)
         {
-            if (existingTags.ContainsKey(key))
-            {
-                existingTags[key] = value;
-            }
-            else
-            {
-                existingTags.Add(key, value);
-            }
-        }
-
-        /// <summary>
-        /// Gets new dictionary of tags after adding the key value pair or updating the existing key value pair
-        /// </summary>
-        /// <param name="key"> The key to update. </param>
-        /// <param name="value"> The value to update. </param>
-        /// <param name="resource"> Resource to update. </param>
-        protected void UpdateTags(string key, string value, ref GenericResource resource)
-        {
-            var existingTags = resource.Data.Tags;
             if (existingTags.ContainsKey(key))
             {
                 existingTags[key] = value;

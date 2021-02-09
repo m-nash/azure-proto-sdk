@@ -25,11 +25,6 @@ namespace Azure.ResourceManager.Core.Tests
                                 new Uri("https://management.azure.com")),
                             "Aqua");
             TaggableResource taggableResource = new TaggableResource(rgOp, Id);
-
-            // Incase test class is wrong.
-            GenericResourceOperations ops = new GenericResourceOperations(rgOp, Id);
-            await ops.StartAddTag("key1", "value1").WaitForCompletionAsync();
-
             await taggableResource.StartAddTag("key1", "value1").WaitForCompletionAsync();
             await taggableResource.StartAddTag("key2", "value2").WaitForCompletionAsync();
             var result = taggableResource.SetTags(UpdateTags);

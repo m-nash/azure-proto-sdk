@@ -10,7 +10,7 @@ namespace Azure.ResourceManager.Core.Tests
 {
     public class TaggableResource : ResourceOperationsBase<GenericResource>, ITaggableResource<GenericResource>
     {
-        private readonly string _apiVersion = "2019-06-01";
+        private readonly string _apiVersion;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaggableResource"/> class.
@@ -63,9 +63,12 @@ namespace Azure.ResourceManager.Core.Tests
         public ArmOperation<GenericResource> StartAddTag(string key, string value)
         {
             GenericResource resource = GetResource();
-            UpdateTags(key, value, ref resource);
+            UpdateTags(key, value, resource.Data.Tags);
+            // TODO: Fix cast error
+            ResourceManager.Resources.Models.GenericResource casterror = resource.Data;
+            casterror.Tags.Add(key, value);
             return new PhArmOperation<GenericResource, ResourceManager.Resources.Models.GenericResource>(
-                Operations.StartUpdateById(Id, _apiVersion, resource.Data).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+                Operations.StartUpdateById(Id, _apiVersion, casterror).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
                 v => new GenericResource(this, new GenericResourceData(v)));
         }
 
@@ -82,7 +85,7 @@ namespace Azure.ResourceManager.Core.Tests
         public async Task<ArmOperation<GenericResource>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             GenericResource resource = GetResource();
-            UpdateTags(key, value, ref resource);
+            UpdateTags(key, value, resource.Data.Tags);
             var op = await Operations.StartUpdateByIdAsync(Id, _apiVersion, resource.Data, cancellationToken);
             return new PhArmOperation<GenericResource, ResourceManager.Resources.Models.GenericResource>(
                 await op.WaitForCompletionAsync(cancellationToken),
