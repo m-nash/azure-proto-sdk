@@ -42,6 +42,8 @@ namespace client
                     Console.WriteLine($"In resource group list: Starting {tuple.vm.Id.Name}");
                     tuple.vm.PowerOn();
                 });
+
+            
         }
     }
 }

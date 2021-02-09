@@ -19,7 +19,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ArmBuilder{TOperations, TResource}"/> class.
         /// </summary>
-        /// <param name="container"> The container objec to create the resource in. </param>
+        /// <param name="container"> The container object to create the resource in. </param>
         /// <param name="resource"> The resource to create. </param>
         public ArmBuilder(ResourceContainerBase<TOperations, TResource> container, TResource resource)
         {
@@ -33,12 +33,17 @@ namespace Azure.ResourceManager.Core
         protected TResource Resource { get; private set; }
 
         /// <summary>
+        /// Gets the resource name.
+        /// </summary>
+        protected string ResourceName { get; private set; }
+
+        /// <summary>
         /// Gets the container object to create the resource in.
         /// </summary>
         protected ResourceContainerBase<TOperations, TResource> UnTypedContainer { get; private set; }
 
         /// <summary>
-        /// Creates the resource objec to send to the Azure API.
+        /// Creates the resource object to send to the Azure API.
         /// </summary>
         /// <returns> The resource to create. </returns>
         public TResource Build()
@@ -58,6 +63,7 @@ namespace Azure.ResourceManager.Core
         /// <returns> A response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
         public ArmResponse<TOperations> Create(string name)
         {
+            ResourceName = name;
             Resource = Build();
 
             return UnTypedContainer.Create(name, Resource);
@@ -73,6 +79,7 @@ namespace Azure.ResourceManager.Core
             string name,
             CancellationToken cancellationToken = default)
         {
+            ResourceName = name;
             Resource = Build();
 
             return await UnTypedContainer.CreateAsync(name, Resource, cancellationToken);
@@ -89,6 +96,7 @@ namespace Azure.ResourceManager.Core
         /// </remarks>
         public ArmOperation<TOperations> StartCreate(string name, CancellationToken cancellationToken = default)
         {
+            ResourceName = name;
             Resource = Build();
 
             return UnTypedContainer.StartCreate(name, Resource, cancellationToken);
@@ -107,6 +115,7 @@ namespace Azure.ResourceManager.Core
             string name,
             CancellationToken cancellationToken = default)
         {
+            ResourceName = name;
             Resource = Build();
 
             return await UnTypedContainer.StartCreateAsync(name, Resource, cancellationToken);
@@ -144,9 +153,7 @@ namespace Azure.ResourceManager.Core
 
         private void ThrowIfNotValid()
         {
-            string message;
-
-            if (!IsValid(out message))
+            if (!IsValid(out var message))
             {
                 throw new InvalidOperationException(message);
             }

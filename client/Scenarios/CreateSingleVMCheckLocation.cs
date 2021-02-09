@@ -19,7 +19,7 @@ namespace client
 
             // Create Resource Group
             Console.WriteLine($"--------Start create group {Context.RgName}--------");
-            var resourceGroup = subscription.GetResourceGroupContainer().Create(Context.RgName, Context.Loc).Value;
+            var resourceGroup = subscription.GetResourceGroupContainer().Construct(Context.Loc).Create(Context.RgName).Value;
             CleanUp.Add(resourceGroup.Id);
             Console.WriteLine("\nResource Group List Available Locations: ");
             var loc = resourceGroup.ListAvailableLocations();
@@ -51,11 +51,11 @@ namespace client
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
-            var subnet = vnet.Subnets().Construct(Context.SubnetName, "10.0.0.0/24").Create(Context.SubnetName).Value;
+            var subnet = vnet.GetSubnetContainer().Construct("10.0.0.0/24").Create(Context.SubnetName).Value;
 
             //create network security group
             Console.WriteLine("--------Start create NetworkSecurityGroup--------");
-            var nsg = resourceGroup.GetNetworkSecurityGroupContainer().Construct(Context.NsgName, 80).Create(Context.NsgName).Value;
+            var nsg = resourceGroup.GetNetworkSecurityGroupContainer().Construct(80).Create(Context.NsgName).Value;
             Console.WriteLine("\nNetwork Security Group List Available Locations: ");
             loc = nsg.ListAvailableLocations();
             foreach (var l in loc)
@@ -85,7 +85,7 @@ namespace client
 
             // Create VM
             Console.WriteLine("--------Start create VM--------");
-            var vm = resourceGroup.GetVirtualMachineContainer().Construct(Context.VmName, "admin-user", "!@#$%asdfA", nic.Id, aset.Data).Create(Context.VmName).Value;
+            var vm = resourceGroup.GetVirtualMachineContainer().Construct(Context.Hostname, "admin-user", "!@#$%asdfA", nic.Id, aset.Id).Create(Context.VmName).Value;
             Console.WriteLine("\nVirtual Machine List Available Locations: ");
             loc = vm.ListAvailableLocations();
             foreach (var l in loc)

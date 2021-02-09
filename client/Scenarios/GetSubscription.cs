@@ -14,6 +14,7 @@ namespace client
             var result = subOp.Get();
             Debug.Assert(expectDisplayName == result.Value.Data.DisplayName);
             Console.WriteLine("Passed, got " + result.Value.Data.DisplayName);
+            
         }
     }
 }

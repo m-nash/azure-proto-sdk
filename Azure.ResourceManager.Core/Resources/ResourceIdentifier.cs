@@ -11,7 +11,10 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// Canonical Representation of a Resource Identity
     /// </summary>
-    public class ResourceIdentifier : IEquatable<ResourceIdentifier>, IEquatable<string>, IComparable<string>,
+    public sealed class ResourceIdentifier :
+        IEquatable<ResourceIdentifier>,
+        IEquatable<string>,
+        IComparable<string>,
         IComparable<ResourceIdentifier>
     {
         private readonly IDictionary<string, string> _partsDictionary =
@@ -28,19 +31,19 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Gets or sets the Resource ID.
+        /// Gets the Resource ID.
         /// </summary>
-        public string Id { get; protected set; }
+        public string Id { get; private set; }
 
         /// <summary>
-        /// Gets or sets the Resource Name.
+        /// Gets the Resource Name.
         /// </summary>
-        public string Name { get; protected set; }
+        public string Name { get; private set; }
 
         /// <summary>
-        /// Gets or sets the Resoucer Type.
+        /// Gets the Resource Type.
         /// </summary>
-        public ResourceType Type { get; protected set; }
+        public ResourceType Type { get; private set; }
 
         /// <summary>
         /// Gets the Subscription.
@@ -57,10 +60,10 @@ namespace Azure.ResourceManager.Core
             : null;
 
         /// <summary>
-        /// Gets or sets the Parent.
+        /// Gets the Parent.
         /// Currently this will contain the identifier for either the parent resource, the resource group, the location, the subscription, or the tenant that is the logical parent of this resource.
         /// </summary>
-        public ResourceIdentifier Parent { get; protected set; }
+        public ResourceIdentifier Parent { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceIdentifier"/> class from a string.
@@ -134,7 +137,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="other"> <see cref="ResourceIdentifier"/> object to compare. </param>
         /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
-        public virtual int CompareTo(ResourceIdentifier other)
+        public int CompareTo(ResourceIdentifier other)
         {
             return string.Compare(
                 Id?.ToLowerInvariant(),
@@ -147,7 +150,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="other"> The ID to compare. </param>
         /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
-        public virtual int CompareTo(string other)
+        public int CompareTo(string other)
         {
             return string.Compare(
                 Id?.ToLowerInvariant(),
@@ -160,7 +163,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="other"> <see cref="ResourceIdentifier"/> object to compare. </param>
         /// <returns> True if they are equals, otherwise false. </returns>
-        public virtual bool Equals(ResourceIdentifier other)
+        public bool Equals(ResourceIdentifier other)
         {
             return string.Equals(
                 Id?.ToLowerInvariant(),
@@ -173,7 +176,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="other"> <see cref="ResourceIdentifier"/> The ID to compare. </param>
         /// <returns> True if they are equals, otherwise false. </returns>
-        public virtual bool Equals(string other)
+        public bool Equals(string other)
         {
             return string.Equals(
                 Id?.ToLowerInvariant(),
@@ -185,7 +188,7 @@ namespace Azure.ResourceManager.Core
         /// Populate Resource Identity fields from input string.
         /// </summary>
         /// <param name="id"> A properly formed resource identity. </param>
-        protected virtual void Parse(string id)
+        private void Parse(string id)
         {
             // Throw for null, empty, and string without the correct form
             if (string.IsNullOrWhiteSpace(id) || !id.Contains('/'))
@@ -234,7 +237,7 @@ namespace Azure.ResourceManager.Core
         /// Helper method to parse a built in resource.
         /// </summary>
         /// <param name="parts"> Resource ID paths consisting of name/value pairs. </param>
-        protected virtual void ParseGenericResource(IList<string> parts)
+        private void ParseGenericResource(IList<string> parts)
         {
             Debug.Assert(parts != null, "Parts parameter is null.");
             Debug.Assert(parts.Count > 1, "Parts should be a list containing more than 1 elements.");
@@ -259,7 +262,7 @@ namespace Azure.ResourceManager.Core
         /// Helper method to parse a resource that comes from a provider.
         /// </summary>
         /// <param name="parts"> Resource ID paths consisting of name/value pairs. </param>
-        protected virtual void ParseProviderResource(IList<string> parts)
+        private void ParseProviderResource(IList<string> parts)
         {
             // The resource consists of name/value pairs, make a dictionary out of it
             for (var i = 0; i < parts.Count - 1; i += 2)

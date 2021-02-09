@@ -19,7 +19,7 @@ namespace client
 
             // Create Resource Group
             Console.WriteLine($"--------Start create group {Context.RgName}--------");
-            var resourceGroup = subscription.GetResourceGroupContainer().Create(Context.RgName, Context.Loc).Value;
+            var resourceGroup = subscription.GetResourceGroupContainer().Construct(Context.Loc).Create(Context.RgName).Value;
             CleanUp.Add(resourceGroup.Id);
 
             // Create AvailabilitySet
@@ -33,13 +33,14 @@ namespace client
 
             //create subnet
             Console.WriteLine("--------Start create Subnet--------");
-            var subnet = vnet.Subnets().Construct(Context.SubnetName, "10.0.0.0/24").Create(Context.SubnetName).Value;
+            var subnet = vnet.GetSubnetContainer().Construct("10.0.0.0/24").Create(Context.SubnetName).Value;
 
             //create network security group
             Console.WriteLine("--------Start create NetworkSecurityGroup--------");
-            _ = resourceGroup.GetNetworkSecurityGroupContainer().Construct(Context.NsgName, 80).Create(Context.NsgName).Value;
+            _ = resourceGroup.GetNetworkSecurityGroupContainer().Construct(80).Create(Context.NsgName).Value;
 
             CreateVms(resourceGroup, aset, subnet);
+            
         }
 
         private void CreateVms(ResourceGroup resourceGroup, AvailabilitySet aset, SubnetOperations subnet)
@@ -59,7 +60,7 @@ namespace client
                 string num = i % 2 == 0 ? "-e" : "-o";
                 string name = $"{Context.VmName}{i}{num}";
                 Console.WriteLine("--------Start create VM {0}--------", i);
-                var vmOp = resourceGroup.GetVirtualMachineContainer().Construct(name, "admin-user", "!@#$%asdfA", nic.Id, aset.Data).StartCreate(name);
+                var vmOp = resourceGroup.GetVirtualMachineContainer().Construct(Context.Hostname, "admin-user", "!@#$%asdfA", nic.Id, aset.Id).StartCreate(name);
                 operations.Add(vmOp);
             }
 

@@ -17,6 +17,7 @@ namespace client
                 Console.WriteLine($"{entity.Id.Name}");
                 entity.StartAddTag("name", "Value");
             }
+            
         }
     }
 }

@@ -16,6 +16,8 @@ namespace client
             var networkInterfaceData = new NetworkInterfaceData(nic);
             var aset = new Azure.ResourceManager.Compute.Models.AvailabilitySet("East US");
             var availabilitySet =  new AvailabilitySetData(aset);
+
+            
         }
     }
 }

@@ -18,7 +18,7 @@ namespace azure_proto_network
         /// <summary>
         /// Initializes a new instance of the <see cref="PublicIpAddressContainer"/> class.
         /// </summary>
-        /// <param name="genericOperations"> An instance of <see cref="GenericResourceOperations"/> that has an id for a PublicIpAddress. </param>
+        /// <param name="resourceGroup"> The client parameters to use in these operations. </param>
         internal PublicIpAddressContainer(ResourceGroupOperations resourceGroup)
             : base(resourceGroup)
         {

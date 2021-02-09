@@ -13,7 +13,7 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="ArmOperation{TOperations}"/> class.
         /// </summary>
         /// <param name="syncValue"> The <see cref="OperationsBase"/> representing the result of the ArmOperation. </param>
-        public ArmOperation(TOperations syncValue)
+        protected ArmOperation(TOperations syncValue)
         {
             CompletedSynchronously = syncValue != null;
             SyncValue = syncValue;
