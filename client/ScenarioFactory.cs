@@ -3,6 +3,7 @@
     enum Scenarios
     {
         All,
+        GetVMTaskExamples,
         CreateSingleVmExample,
         CreateSingleVMCheckLocation,
         ShutdownVmsByName,
@@ -70,6 +71,8 @@
                 //    return new AddTagToGeneric();
                 case Scenarios.CreateSingleVMCheckLocation:
                     return new CreateSingleVMCheckLocation();
+                case Scenarios.GetVMTaskExamples:
+                    return new GetVMTaskExamples();
                 default:
                     return null;
             }

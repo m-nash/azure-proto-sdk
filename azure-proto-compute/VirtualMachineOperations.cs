@@ -59,6 +59,11 @@ namespace azure_proto_compute
             Credential,
             ClientOptions.Convert<ComputeManagementClientOptions>()).VirtualMachines;
 
+        public static VirtualMachineOperations FromId(ResourceIdentifier resourceId, AzureResourceManagerClient client)
+        {
+            return client.GetSubscriptionOperations(resourceId.Subscription).GetResourceGroupOperations(resourceId.ResourceGroup).GetVirtualMachineOperations(resourceId.Name);
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualMachineOperations"/> class from a <see cref="GenericResourceOperations"/>.
         /// </summary>

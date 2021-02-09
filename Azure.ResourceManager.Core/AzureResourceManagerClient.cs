@@ -3,13 +3,10 @@
 
 using Azure.Core;
 using Azure.Identity;
-using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -166,12 +163,31 @@ namespace Azure.ResourceManager.Core
             where T : OperationsBase
         {
             var rgOp = GetSubscriptionOperations(subscription).GetResourceGroupOperations(resourceGroup);
-            string resourceType = typeof(T).GetField("ResourceType", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetValue(null).ToString();
             return Activator.CreateInstance(
                 typeof(T),
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
                 null,
                 new object[] { rgOp, name },
+                CultureInfo.InvariantCulture) as T;
+        }
+
+        /// <summary>
+        /// Gets resource operations base.
+        /// </summary>
+        /// <typeparam name="T"> The type of the underlying model this class wraps. </typeparam>
+        /// <param name="subscription"> The id of the Azure subscription. </param>
+        /// <param name="resourceGroup"> The resource group name. </param>
+        /// <param name="name"> The resource type name. </param>
+        /// <returns> Resource operations of the resource. </returns>
+        public T GetResourceOperations<T>(ResourceIdentifier resourceId)
+            where T : OperationsBase
+        {
+            var rgOp = GetSubscriptionOperations(resourceId.Subscription).GetResourceGroupOperations(resourceId.ResourceGroup);
+            return Activator.CreateInstance(
+                typeof(T),
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
+                null,
+                new object[] { rgOp, resourceId.Name },
                 CultureInfo.InvariantCulture) as T;
         }
 

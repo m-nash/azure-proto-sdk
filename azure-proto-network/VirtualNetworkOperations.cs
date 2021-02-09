@@ -30,7 +30,7 @@ namespace azure_proto_network
         /// <param name="resourceGroup"> The client parameters to use in these operations. </param>
         /// <param name="vnetName"> The name of the virtual network to use. </param>
         internal VirtualNetworkOperations(ResourceGroupOperations resourceGroup, string vnetName)
-            : base(resourceGroup, $"{resourceGroup}/providers/Microsoft.Network/virtualNetworks/{vnetName}")
+            : base(resourceGroup, $"{resourceGroup.Id}/providers/Microsoft.Network/virtualNetworks/{vnetName}")
         {
         }
         

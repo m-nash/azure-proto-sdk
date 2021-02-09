@@ -3,6 +3,7 @@ using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Core;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
 
 namespace azure_proto_network
 {
@@ -73,6 +74,13 @@ namespace azure_proto_network
         public ArmOperation<Response> StartDelete(CancellationToken cancellationToken = default)
         {
             return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Parent.Name, Id.Name));
+        }
+
+        public static SubnetOperations FromId(ResourceIdentifier resourceId, AzureResourceManagerClient client)
+        {
+            var subOps = client.GetSubscriptionOperations(resourceId.Subscription);
+            var rgOps = subOps.GetResourceGroupOperations(resourceId.ResourceGroup);
+            return ResourceGroupExtensions.GetVirtualNetworkOperations(rgOps, resourceId.Parent.Name).Subnet(resourceId.Name);
         }
 
         /// <summary>
