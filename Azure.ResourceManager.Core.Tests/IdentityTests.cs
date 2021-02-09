@@ -18,33 +18,55 @@ namespace Azure.ResourceManager.Core.Tests
             Assert.IsNull(identity.SystemAssignedIdentity);
         }
 
-        [TestCase]
-        public void CheckUserTrueConstructor()
+        [TestCase ("/subscriptions/6b085460-5f00-477e-ba44-1035046e9101/resourceGroups/tester/providers/Microsoft.Web/sites/autotest", false)]
+        [TestCase ("", true)]
+        [TestCase (" ", true)]
+        [TestCase (null, true)]
+        public void CheckUserTrueConstructor(string resourceID, bool invalidParameter)
         {
             var dict1 = new Dictionary<ResourceIdentifier, UserAssignedIdentity>();
-            dict1["/subscriptions/6b085460-5f00-477e-ba44-1035046e9101/resourceGroups/tester/providers/Microsoft.Web/sites/autotest"] = new UserAssignedIdentity(Guid.Empty, Guid.Empty);
-            Identity identity = new Identity(dict1, true);
-            Assert.IsNotNull(identity);
-            Assert.IsNotNull(identity.UserAssignedIdentities);
-            Assert.IsTrue(identity.UserAssignedIdentities.Count == 1);
-            Assert.IsNotNull(identity.SystemAssignedIdentity);
-            Assert.IsNull(identity.SystemAssignedIdentity.TenantId);
-            Assert.IsNull(identity.SystemAssignedIdentity.PrincipalId);
+
+            if (invalidParameter)
+            {
+                Assert.Throws<System.ArgumentOutOfRangeException>(() => { dict1[resourceID] = new UserAssignedIdentity(Guid.Empty, Guid.Empty); });
+            }
+            else
+            {
+                dict1[resourceID] = new UserAssignedIdentity(Guid.Empty, Guid.Empty);
+                Identity identity = new Identity(dict1, true);
+                Assert.IsNotNull(identity);
+                Assert.IsNotNull(identity.UserAssignedIdentities);
+                Assert.IsTrue(identity.UserAssignedIdentities.Count == 1);
+                Assert.IsNotNull(identity.SystemAssignedIdentity);
+                Assert.IsNull(identity.SystemAssignedIdentity.TenantId);
+                Assert.IsNull(identity.SystemAssignedIdentity.PrincipalId);
+            }
         }
 
-        [TestCase]
-        public void CheckUserFalseConstructor()
+        [TestCase ("/subscriptions/6b085460-5f00-477e-ba44-1035046e9101/resourceGroups/tester/providers/Microsoft.Web/sites/autotest", false)]
+        [TestCase("", true)]
+        [TestCase(" ", true)]
+        [TestCase(null, true)]
+        public void CheckUserFalseConstructor(string resourceID, bool invalidParameter)
         {
             var dict1 = new Dictionary<ResourceIdentifier, UserAssignedIdentity>();
-            dict1["/subscriptions/6b0854cv-5f21-477e-ba44-1035046e9101/resourceGroups/tester/providers/Microsoft.Web/sites/autotest"] = new UserAssignedIdentity(Guid.Empty, Guid.Empty);
-            var system = new SystemAssignedIdentity(Guid.Empty, Guid.Empty);
-            Identity identity = new Identity(system, dict1);
-            Assert.IsNotNull(identity);
-            Assert.IsNotNull(identity.UserAssignedIdentities);
-            Assert.IsTrue(identity.UserAssignedIdentities.Count == 1);
-            Assert.IsNotNull(identity.SystemAssignedIdentity);
-            Assert.IsTrue(identity.SystemAssignedIdentity.TenantId.Equals(Guid.Empty));
-            Assert.IsTrue(identity.SystemAssignedIdentity.PrincipalId.Equals(Guid.Empty));
+
+            if(invalidParameter)
+            {
+                Assert.Throws<System.ArgumentOutOfRangeException>(() => { dict1[resourceID] = new UserAssignedIdentity(Guid.Empty, Guid.Empty); });
+            }
+            else
+            {
+                dict1[resourceID] = new UserAssignedIdentity(Guid.Empty, Guid.Empty);
+                var system = new SystemAssignedIdentity(Guid.Empty, Guid.Empty);
+                Identity identity = new Identity(system, dict1);
+                Assert.IsNotNull(identity);
+                Assert.IsNotNull(identity.UserAssignedIdentities);
+                Assert.IsTrue(identity.UserAssignedIdentities.Count == 1);
+                Assert.IsNotNull(identity.SystemAssignedIdentity);
+                Assert.IsTrue(identity.SystemAssignedIdentity.TenantId.Equals(Guid.Empty));
+                Assert.IsTrue(identity.SystemAssignedIdentity.PrincipalId.Equals(Guid.Empty));
+            } 
         }
 
         [TestCase]
