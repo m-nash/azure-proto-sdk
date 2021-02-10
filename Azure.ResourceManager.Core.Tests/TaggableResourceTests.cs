@@ -22,95 +22,78 @@ namespace Azure.ResourceManager.Core.Tests
                     new DefaultAzureCredential(), //should make a fake credential creation
                     new Uri("https://management.azure.com")),
                 "Aqua");
+        static TaggableResource TaggableResource = new TaggableResource(Operations, Id);
 
         [SetUp]
-        public void GlobalSetUp()
+        public async Task GlobalSetUp()
         {
-            TaggableResource taggableResource = new TaggableResource(Operations, Id);
+            await TaggableResource.StartAddTag("key1", "value1").WaitForCompletionAsync();
+            await TaggableResource.StartAddTag("key2", "value2").WaitForCompletionAsync();
+        }
+
+        [TearDown]
+        public void GlobalTearDown()
+        {
             String[] keys = { "key1", "key2", "UpdateKey1", "UpdateKey2" };
             foreach (string key in keys)
             {
-                taggableResource.RemoveTag(key);
+                TaggableResource.RemoveTag(key);
             }
         }
 
         [Test]
-        public async Task TestSetTagsActivator()
+        public void TestSetTagsActivator()
         {
-            TaggableResource taggableResource = new TaggableResource(Operations, Id);
-            await taggableResource.StartAddTag("key1", "value1").WaitForCompletionAsync();
-            await taggableResource.StartAddTag("key2", "value2").WaitForCompletionAsync();
-            var result = taggableResource.SetTags(UpdateTags);
+            var result = TaggableResource.SetTags(UpdateTags);
             Assert.AreEqual(result.Value.Data.Tags, UpdateTags);
         }
 
         [Test]
         public async Task TestSetTagsAsyncActivator()
         {
-            TaggableResource taggableResource = new TaggableResource(Operations, Id);
-            taggableResource.StartAddTag("key1", "value1");
-            taggableResource.StartAddTag("key2", "value2");
-            var result = await taggableResource.SetTagsAsync(UpdateTags);
+            var result = await TaggableResource.SetTagsAsync(UpdateTags);
             Assert.AreEqual(result.Value.Data.Tags, UpdateTags);
         }
 
         [Test]
         public void TestStartSetTagsActivator()
         {
-            TaggableResource taggableResource = new TaggableResource(Operations, Id);
-            taggableResource.StartAddTag("key1", "value1");
-            taggableResource.StartAddTag("key2", "value2");
-            var result = taggableResource.StartSetTags(UpdateTags).WaitForCompletionAsync().Result;
+            var result = TaggableResource.StartSetTags(UpdateTags).WaitForCompletionAsync().Result;
             Assert.AreEqual(result.Value.Data.Tags, UpdateTags);
         }
 
         [Test]
         public async Task TestStartSetTagsAsyncActivator()
         {
-            TaggableResource taggableResource = new TaggableResource(Operations, Id);
-            taggableResource.StartAddTag("key1", "value1");
-            taggableResource.StartAddTag("key2", "value2");
-            var result = await taggableResource.StartSetTagsAsync(UpdateTags);
+            var result = await TaggableResource.StartSetTagsAsync(UpdateTags);
             Assert.AreEqual(result.Value.Data.Tags, UpdateTags);
         }
 
         [TestCaseSource(nameof(TagSource))]
         public void TestRemoveTagActivator(string key, IDictionary<string, string> tags)
         {
-            TaggableResource taggableResource = new TaggableResource(Operations, Id);
-            taggableResource.StartAddTag("key1", "value1");
-            taggableResource.StartAddTag("key2", "value2");
-            var result = taggableResource.RemoveTag(key);
+            var result = TaggableResource.RemoveTag(key);
             Assert.AreEqual(result.Value.Data.Tags, tags);
         }
 
         [TestCaseSource(nameof(TagSource))]
         public async Task TestRemoveTagAsyncActivator(string key, IDictionary<string, string> tags)
         {
-            TaggableResource taggableResource = new TaggableResource(Operations, Id);
-            taggableResource.StartAddTag("key1", "value1");
-            taggableResource.StartAddTag("key2", "value2");
-            var result = await taggableResource.RemoveTagAsync(key);
+            var result = await TaggableResource.RemoveTagAsync(key);
             Assert.AreEqual(result.Value.Data.Tags, tags);
         }
 
         [TestCaseSource(nameof(TagSource))]
         public void TestStartRemoveTagActivator(string key, IDictionary<string, string> tags)
         {
-            TaggableResource taggableResource = new TaggableResource(Operations, Id);
-            taggableResource.StartAddTag("key1", "value1");
-            taggableResource.StartAddTag("key2", "value2");
-            var result = taggableResource.StartRemoveTag(key).WaitForCompletionAsync().Result;
+            var result = TaggableResource.StartRemoveTag(key).WaitForCompletionAsync().Result;
             Assert.AreEqual(result.Value.Data.Tags, tags);
         }
 
         [TestCaseSource(nameof(TagSource))]
         public async Task TestStartRemoveTagAsyncActivator(string key, IDictionary<string, string> tags)
         {
-            TaggableResource taggableResource = new TaggableResource(Operations, Id);
-            taggableResource.StartAddTag("key1", "value1");
-            taggableResource.StartAddTag("key2", "value2");
-            var result = await taggableResource.StartRemoveTagAsync(key);
+            var result = await TaggableResource.StartRemoveTagAsync(key);
             Assert.AreEqual(result.Value.Data.Tags, tags);
         }
 
