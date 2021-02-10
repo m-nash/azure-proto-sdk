@@ -25,9 +25,10 @@ namespace client
             // OPTION 1
             var vmOps = client.GetVirtualMachineOperations(vmResourceId);
             vmOps.PowerOff();
+            Console.WriteLine("\nOPTION 1: client.GetVirtualMachineOperations(vmResourceId)");
             Console.WriteLine("Option 1 vm is " + vmOps.Get().Value.Data.InstanceView.Statuses.Last().Code);
             vmOps.PowerOn();
-            Console.WriteLine("Option 2 vm is " + vmOps.Get().Value.Data.InstanceView.Statuses.Last().Code);
+            Console.WriteLine("Option 1 vm is " + vmOps.Get().Value.Data.InstanceView.Statuses.Last().Code);
 
             var subnetOps = client.GetSubnetOperations(subnetResourceId);
             Console.WriteLine("Option 1 subnet is " + subnetOps.Id);
@@ -35,6 +36,7 @@ namespace client
             // OPTION 2
             vmOps = VirtualMachineOperations.FromId(vmResourceId, client);
             vmOps.PowerOff();
+            Console.WriteLine("\nOPTION 2: VirtualMachineOperations.FromId(vmResourceId, client)");
             Console.WriteLine("Option 2 vm is " + vmOps.Get().Value.Data.InstanceView.Statuses.Last().Code);
             vmOps.PowerOn();
             Console.WriteLine("Option 2 vm is " + vmOps.Get().Value.Data.InstanceView.Statuses.Last().Code);
@@ -45,6 +47,7 @@ namespace client
             // OPTION 3
             vmOps = client.GetResourceOperations<VirtualMachineOperations>(vmResourceId);
             vmOps.PowerOff();
+            Console.WriteLine("\nOPTION 3: client.GetResourceOperations<VirtualMachineOperations>(vmResourceId)");
             Console.WriteLine("Option 3 vm is " + vmOps.Get().Value.Data.InstanceView.Statuses.Last().Code);
             vmOps.PowerOn();
             Console.WriteLine("Option 3 vm is " + vmOps.Get().Value.Data.InstanceView.Statuses.Last().Code);
