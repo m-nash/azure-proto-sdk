@@ -9,7 +9,7 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// Representaion of ARM SKU
     /// </summary>
-    public class Sku : IEquatable<Sku>, IComparable<Sku>
+    public sealed class Sku : IEquatable<Sku>, IComparable<Sku>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Sku"/> class.

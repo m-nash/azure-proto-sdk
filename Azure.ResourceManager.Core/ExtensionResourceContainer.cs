@@ -36,7 +36,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Validate that the given resource Id represents a valid parent for thsi resource
+        /// Validate that the given resource Id represents a valid parent for this resource
         /// </summary>
         /// <param name="identifier"> The resource Id of the parent resource. </param>
         public override void Validate(ResourceIdentifier identifier)
@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Create a new extension resource at the given scope.  Block further execution on the current thread until creation is complete.
         /// </summary>
-        /// <param name="name"> The name of the created extention resource. </param>
+        /// <param name="name"> The name of the created extension resource. </param>
         /// <param name="resourceDetails"> The properties of the extension resource. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An Http envelope containing the operations for the given extension. </returns>
@@ -56,7 +56,7 @@ namespace Azure.ResourceManager.Core
         /// Create a new extension resource at the given scope without blocking the current thread.
         /// Returns a Task that allows control over when or if the thread is blocked.
         /// </summary>
-        /// <param name="name">The name of the created extention resource. </param>
+        /// <param name="name">The name of the created extension resource. </param>
         /// <param name="resourceDetails">The properties of the extension resource. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns>A Task that creates the extension resource. </returns>
@@ -66,7 +66,7 @@ namespace Azure.ResourceManager.Core
         /// Begin Creation of a new extension resource. Block until the creation is accepted by the service.
         /// The returned object allows fine-grained control over waiting for creation to complete.
         /// </summary>
-        /// <param name="name"> The name of the created extention resource. </param>
+        /// <param name="name"> The name of the created extension resource. </param>
         /// <param name="resourceDetails"> The properties of the extension resource. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> An instance of <see cref="ArmOperation{TOperation}"/>, allowing fine grained control over waiting for creation to complete. </returns>
@@ -76,7 +76,7 @@ namespace Azure.ResourceManager.Core
         /// Begin Creation of a new extension resource in a background task.
         /// When creation has successfully begin, the object returned from the completed task allows fine-grained control over waiting for creation to complete.
         /// </summary>
-        /// <param name="name"> The name of the created extention resource. </param>
+        /// <param name="name"> The name of the created extension resource. </param>
         /// <param name="resourceDetails"> The properties of the extension resource. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{TOperations}"/> that allows polling for completion of the operation. </returns>
@@ -86,15 +86,15 @@ namespace Azure.ResourceManager.Core
         /// Lists the extension resources at the current scope. Blocks until the first page of results is returned.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
-        /// <returns> An instance of <see cref="Azure.Pageable{TOperations}"/> allowing paged or unpaged enumeration of results. </returns>
+        /// <returns> An instance of <see cref="Azure.Pageable{TOperations}"/> allowing paged or non-paged enumeration of results. </returns>
         public abstract Pageable<TOperations> ListAtScope(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Lists the extension resources at the current scope asynchronously. The returned task completes when the first page of results is returrned.
+        /// Lists the extension resources at the current scope asynchronously. The returned task completes when the first page of results is returned.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token clients can use to cancel any blocking HTTP requests made by this method, including
         /// any Http requests that result from enumerating pages of results. </param>
-        /// <returns> An instance of <see cref="Azure.AsyncPageable{TOperations}"/> allowing asynchronous paged or unpaged enumeration of results. </returns>
+        /// <returns> An instance of <see cref="Azure.AsyncPageable{TOperations}"/> allowing asynchronous paged or non-paged enumeration of results. </returns>
         public abstract AsyncPageable<TOperations> ListAtScopeAsync(CancellationToken cancellationToken = default);
     }
 }

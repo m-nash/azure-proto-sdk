@@ -6,7 +6,7 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// A class representing a response object from azure resource manager service.
     /// </summary>
-    public class ArmResponse : ArmResponse<Response>
+    public sealed class ArmResponse : ArmResponse<Response>
     {
         private readonly Response _response;
 

@@ -24,7 +24,7 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets the subscription data model.
         /// </summary>
-        public SubscriptionData Data { get; private set; }
+        public SubscriptionData Data { get; }
 
         /// <inheritdoc />
         protected override Subscription GetResource()

@@ -4,7 +4,9 @@ using Azure.ResourceManager.Network.Models;
 using Azure.ResourceManager.Core;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 using System.Collections.Generic;
+using System;
 
 namespace azure_proto_network
 {
@@ -28,7 +30,7 @@ namespace azure_proto_network
         /// <param name="resourceGroup"> The client parameters to use in these operations. </param>
         /// <param name="vnetName"> The name of the virtual network to use. </param>
         internal VirtualNetworkOperations(ResourceGroupOperations resourceGroup, string vnetName)
-            : base(resourceGroup, $"{resourceGroup}/providers/Microsoft.Network/virtualNetworks/{vnetName}")
+            : base(resourceGroup, $"{resourceGroup.Id}/providers/Microsoft.Network/virtualNetworks/{vnetName}")
         {
         }
         
@@ -159,7 +161,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="subnet"> The name of the subnet. </param>
         /// <returns> An instance of SubnetOperations. </returns>
-        public SubnetOperations Subnet(string subnet)
+        public SubnetOperations GetSubnetOperations(string subnet)
         {
             return new SubnetOperations(this, subnet);
         }
@@ -168,7 +170,7 @@ namespace azure_proto_network
         /// Gets a list of subnet in the virtual nerwork.
         /// </summary>
         /// <returns> An object representing collection of subnets and their operations over a virtual network. </returns>
-        public SubnetContainer Subnets()
+        public SubnetContainer GetSubnetContainer()
         {
             return new SubnetContainer(this);
         }
@@ -211,6 +213,32 @@ namespace azure_proto_network
         public Task<ArmOperation<VirtualNetwork>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
+        public IEnumerable<LocationData> ListAvailableLocations()
+        {
+            var pageableProvider = ResourcesClient.Providers.List(expand: "metadata");
+            var vnProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var vnResource = vnProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return vnResource.Locations.Select(l => (LocationData)l);
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
+        public async Task<IEnumerable<LocationData>> ListAvailableLocationsAsync(CancellationToken cancellationToken = default)
+        {
+            var asyncpageableProvider = ResourcesClient.Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken);
+            var vnProvider = await asyncpageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var vnResource = vnProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return vnResource.Locations.Select(l => (LocationData)l);
         }
     }
 }

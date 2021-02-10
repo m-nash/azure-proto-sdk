@@ -18,7 +18,7 @@ namespace azure_proto_network
         /// <summary>
         /// Initializes a new instance of the <see cref="PublicIpAddressContainer"/> class.
         /// </summary>
-        /// <param name="genericOperations"> An instance of <see cref="GenericResourceOperations"/> that has an id for a PublicIpAddress. </param>
+        /// <param name="resourceGroup"> The client parameters to use in these operations. </param>
         internal PublicIpAddressContainer(ResourceGroupOperations resourceGroup)
             : base(resourceGroup)
         {
@@ -74,7 +74,7 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="location"> The location to create the network security group. </param>
         /// <returns> Object used to create a <see cref="PublicIpAddress"/>. </returns>
-        public ArmBuilder<PublicIpAddress, PublicIPAddressData> Construct(Location location = null)
+        public ArmBuilder<PublicIpAddress, PublicIPAddressData> Construct(LocationData location = null)
         {
             var ipAddress = new PublicIPAddress()
             {

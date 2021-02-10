@@ -4,6 +4,7 @@
     {
         All,
         CreateSingleVmExample,
+        CreateSingleVMCheckLocation,
         ShutdownVmsByName,
         StartStopVm,
         StartFromVm,
@@ -17,10 +18,16 @@
         ListByNameExpanded,
         ClientOptionsOverride,
         GetSubscription,
-        NullDataValues
+        NullDataValues,
         //RoleAssignment,
         //DeleteGeneric,
-        //AddTagToGeneric
+        //AddTagToGeneric,
+        CheckResourceExists,
+        GetFromOperations,
+        CreateSingleVmExampleAsync,
+        StartCreateSingleVmExampleAsync,
+        StartCreateSingleVmExample,
+        DefaultSubscription
     }
 
     class ScenarioFactory
@@ -67,6 +74,20 @@
                 //    return new DeleteGeneric();
                 //case Scenarios.AddTagToGeneric:
                 //    return new AddTagToGeneric();
+                case Scenarios.CheckResourceExists:
+                    return new CheckResourceExists();
+                case Scenarios.GetFromOperations:
+                    return new GetFromOperations();
+                case Scenarios.CreateSingleVmExampleAsync:
+                    return new CreateSingleVmExampleAsync();
+                case Scenarios.StartCreateSingleVmExampleAsync:
+                    return new StartCreateSingleVmExampleAsync();
+                case Scenarios.StartCreateSingleVmExample:
+                    return new StartCreateSingleVmExample();
+                case Scenarios.DefaultSubscription:
+                    return new DefaultSubscription();
+                case Scenarios.CreateSingleVMCheckLocation:
+                    return new CreateSingleVMCheckLocation();
                 default:
                     return null;
             }

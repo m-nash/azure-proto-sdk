@@ -5,6 +5,7 @@ using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -66,7 +67,7 @@ namespace Azure.ResourceManager.Core
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{Response}"/> operation for this resource. </returns>
         public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
-            return new ArmResponse(await Operations.StartDelete(Id.Name).WaitForCompletionAsync());
+            return new ArmResponse(await Operations.StartDelete(Id.Name).WaitForCompletionAsync(cancellationToken));
         }
 
         /// <summary>
@@ -105,7 +106,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <inheritdoc/>
-        public async override Task<ArmResponse<ResourceGroup>> GetAsync(CancellationToken cancellationToken = default)
+        public override async Task<ArmResponse<ResourceGroup>> GetAsync(CancellationToken cancellationToken = default)
         {
             return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.GetAsync(Id.Name, cancellationToken), g =>
             {
@@ -126,6 +127,11 @@ namespace Azure.ResourceManager.Core
         public ArmOperation<ResourceGroup> StartAddTag(string name, string value)
         {
             var patch = new ResourceGroupPatchable();
+            if (object.ReferenceEquals(patch.Tags, null))
+            {
+                patch.Tags = new Dictionary<string, string>();
+            }
+
             patch.Tags[name] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Update(Id.Name, patch), g =>
             {
@@ -147,6 +153,11 @@ namespace Azure.ResourceManager.Core
         public async Task<ArmOperation<ResourceGroup>> StartAddTagAsync(string name, string value, CancellationToken cancellationToken = default)
         {
             var patch = new ResourceGroupPatchable();
+            if (object.ReferenceEquals(patch.Tags, null))
+            {
+                patch.Tags = new Dictionary<string, string>();
+            }
+
             patch.Tags[name] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.UpdateAsync(Id.Name, patch, cancellationToken), g =>
             {
@@ -164,7 +175,7 @@ namespace Azure.ResourceManager.Core
         /// <typeparam name="TOperations"> The type of the operations class for a specific resource. </typeparam>
         /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
         /// <returns> Returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
-        public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, Location location = default)
+        public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, LocationData location = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations>
             where TContainer : ResourceContainerBase<TOperations, TResource>
@@ -197,7 +208,7 @@ namespace Azure.ResourceManager.Core
         /// <typeparam name="TOperations"> The type of the operations class for a specific resource. </typeparam>
         /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
-        public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, Location location = default, CancellationToken cancellationToken = default)
+        public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, LocationData location = default, CancellationToken cancellationToken = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations>
             where TContainer : ResourceContainerBase<TOperations, TResource>
@@ -265,6 +276,32 @@ namespace Azure.ResourceManager.Core
         public Task<ArmOperation<ResourceGroup>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
+        public IEnumerable<LocationData> ListAvailableLocations()
+        {
+            var pageableProvider = ResourcesClient.Providers.List(expand: "metadata");
+            var rgProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var rgResource = rgProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return rgResource.Locations.Select(l => (LocationData)l);
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
+        public async Task<IEnumerable<LocationData>> ListAvailableLocationsAsync(CancellationToken cancellationToken = default)
+        {
+            var asyncpageableProvider = ResourcesClient.Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken);
+            var rgProvider = await asyncpageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var rgResource = rgProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return rgResource.Locations.Select(l => (LocationData)l);
         }
     }
 }

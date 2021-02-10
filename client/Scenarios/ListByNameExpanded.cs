@@ -74,6 +74,7 @@ namespace client
                 Console.WriteLine($"--------VNet id--------: {VNet.Data.Id}");
             }
             ExecuteAsync(rg).GetAwaiter().GetResult();
+            
         }
 
         private async Task ExecuteAsync(ResourceGroup rg)

@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -93,5 +94,49 @@ namespace Azure.ResourceManager.Core
             string name,
             TResource resourceDetails,
             CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Returns the resource from Azure if it exists
+        /// </summary>
+        /// <param name="resourceName"> The name of the resource you want to get. </param>
+        /// <param name="resource"> The resource if it existed, null otherwise. </param>
+        /// <returns> Whether or not the resource existed. </returns>
+        public virtual bool TryGetValue(string resourceName, out ArmResponse<TOperations> resource)
+        {
+            var op = GetOperation(resourceName);
+
+            try
+            {
+                resource = op.Get();
+                return true;
+            }
+            catch
+            {
+                resource = null;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether or not the azure resource exists in this container
+        /// </summary>
+        /// <param name="resourceName"> The name of the resource you want to check. </param>
+        /// <returns> Whether or not the resource existed. </returns>
+        public virtual bool DoesExist(string resourceName)
+        {
+            ArmResponse<TOperations> output;
+            return TryGetValue(resourceName, out output);
+        }
+
+        private ResourceOperationsBase<TOperations> GetOperation(string resourceName)
+        {
+            Type opType = typeof(TOperations).BaseType;
+            return Activator.CreateInstance(
+                typeof(TOperations).BaseType,
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
+                null,
+                new object[] { Parent, resourceName },
+                CultureInfo.InvariantCulture) as ResourceOperationsBase<TOperations>;
+        }
     }
 }

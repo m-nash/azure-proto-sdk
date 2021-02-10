@@ -69,9 +69,9 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="ip"> The public IP address of the <see cref="NetworkInterface"/>. </param>
         /// <param name="subnetId"> The resource identifier of the subnet attached to this <see cref="NetworkInterface"/>. </param>
-        /// <param name="location"> The <see cref="Location"/> that will contain the <see cref="NetworkInterface"/>. </param>
+        /// <param name="location"> The <see cref="LocationData"/> that will contain the <see cref="NetworkInterface"/>. </param>
         /// <returns>An object used to create a <see cref="NetworkInterface"/>. </returns>
-        public ArmBuilder<NetworkInterface, NetworkInterfaceData> Construct(PublicIPAddressData ip, string subnetId, Location location = null)
+        public ArmBuilder<NetworkInterface, NetworkInterfaceData> Construct(PublicIPAddressData ip, string subnetId, LocationData location = null)
         {
             var nic = new Azure.ResourceManager.Network.Models.NetworkInterface()
             {
@@ -96,7 +96,7 @@ namespace azure_proto_network
         /// Lists the <see cref="NetworkInterface"/> for this <see cref="ResourceGroup"/>.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
-        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// The default value is <see cref="System.Threading.CancellationToken.None"/>. </param>
         /// <returns> A collection of <see cref="NetworkInterface"/> that may take multiple service requests to iterate over. </returns>
         public Pageable<NetworkInterfaceOperations> List(CancellationToken cancellationToken = default)
         {
@@ -109,7 +109,7 @@ namespace azure_proto_network
         /// Lists the <see cref="NetworkInterface"/> for this <see cref="ResourceGroup"/>.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
-        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// The default value is <see cref="System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of <see cref="NetworkInterface"/> that may take multiple service requests to iterate over. </returns>
         public AsyncPageable<NetworkInterfaceOperations> ListAsync(CancellationToken cancellationToken = default)
         {
@@ -121,10 +121,11 @@ namespace azure_proto_network
 
         /// <summary>
         /// Filters the list of <see cref="NetworkInterface"/> resources for this <see cref="ResourceGroup"/> represented as generic resources.
+        /// </summary>
         /// <param name="filter"> A string to filter the <see cref="NetworkInterface"/> resources by name. </param>
         /// <param name="top"> The number of results to return per page of data. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
-        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// The default value is <see cref="System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
         public Pageable<GenericResource> ListByName(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
@@ -135,10 +136,11 @@ namespace azure_proto_network
 
         /// <summary>
         /// Filters the list of <see cref="NetworkInterface"/> resources for this <see cref="ResourceGroup"/> represented as generic resources.
+        /// </summary>
         /// <param name="filter"> A string to filter the <see cref="NetworkInterface"/> resources by name. </param>
         /// <param name="top"> The number of results to return per page of data. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
-        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// The default value is <see cref="System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
         public AsyncPageable<GenericResource> ListByNameAsync(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
@@ -150,10 +152,11 @@ namespace azure_proto_network
         /// <summary>
         /// Filters the list of <see cref="NetworkInterface"/> resources for this <see cref="ResourceGroup"/>. 
         /// Makes an additional network call to retrieve the full data model for each <see cref="NetworkInterface"/>.
+        /// </summary>
         /// <param name="filter"> A string to filter the <see cref="NetworkInterface"/> resources by name. </param>
         /// <param name="top"> The number of results to return per page of data. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
-        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// The default value is <see cref="System.Threading.CancellationToken.None" />. </param>
         /// <returns> A collection of resource operations that may take multiple service requests to iterate over. </returns>
         public Pageable<NetworkInterface> ListByNameExpanded(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {
@@ -164,10 +167,11 @@ namespace azure_proto_network
         /// <summary>
         /// Filters the list of <see cref="NetworkInterface"/> resources for this <see cref="ResourceGroup"/>. 
         /// Makes an additional network call to retrieve the full data model for each <see cref="NetworkInterface"/>.
+        /// </summary>
         /// <param name="filter"> A string to filter the <see cref="NetworkInterface"/> resources by name. </param>
         /// <param name="top"> The number of results to return per page of data. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
-        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// The default value is <see cref="System.Threading.CancellationToken.None" />. </param>
         /// <returns> An async collection of resource operations that may take multiple service requests to iterate over. </returns>
         public AsyncPageable<NetworkInterface> ListByNameExpandedAsync(ResourceNameFilter filter, int? top = null, CancellationToken cancellationToken = default)
         {

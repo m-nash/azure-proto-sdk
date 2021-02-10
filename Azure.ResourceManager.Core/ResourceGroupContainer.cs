@@ -3,6 +3,7 @@
 
 using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,17 +33,18 @@ namespace Azure.ResourceManager.Core
             ClientOptions.Convert<ResourcesManagementClientOptions>()).ResourceGroups;
 
         /// <summary>
-        /// Creates a new ResourceGroup.
+        /// Constructs an object used to create a resource group.
         /// </summary>
-        /// <param name="name"> The name of the ResourceGroup. </param>
-        /// <param name="location"> The location of the ResourceGroup. </param>
-        /// <returns> A response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
-        public ArmOperation<ResourceGroup> Create(string name, Location location)
+        /// <param name="location"> The location of the resource group. </param>
+        /// <param name="tags"> The tags of the resource group. </param>
+        /// <param name="managedBy"> Who the resource group is managed by. </param>
+        /// <returns> A builder with <see cref="ResourceGroup"/> and <see cref="ResourceGroupData"/>. </returns>
+        public ArmBuilder<ResourceGroup, ResourceGroupData> Construct(LocationData location, IDictionary<string, string> tags = default, string managedBy = default)
         {
-            var model = new ResourceGroupData(new ResourceManager.Resources.Models.ResourceGroup(location));
-            return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(
-                Operations.CreateOrUpdate(name, model),
-                g => new ResourceGroup(Parent, new ResourceGroupData(g)));
+            var model = new ResourceManager.Resources.Models.ResourceGroup(location);
+            model.Tags = tags;
+            model.ManagedBy = managedBy;
+            return new ArmBuilder<ResourceGroup, ResourceGroupData>(this, new ResourceGroupData(model));
         }
 
         /// <inheritdoc/>
@@ -55,7 +57,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <inheritdoc/>
-        public async override Task<ArmResponse<ResourceGroup>> CreateAsync(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
+        public override async Task<ArmResponse<ResourceGroup>> CreateAsync(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
             var response = await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<ResourceGroup, ResourceManager.Resources.Models.ResourceGroup>(
@@ -72,7 +74,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <inheritdoc/>
-        public async override Task<ArmOperation<ResourceGroup>> StartCreateAsync(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
+        public override async Task<ArmOperation<ResourceGroup>> StartCreateAsync(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<ResourceGroup, ResourceManager.Resources.Models.ResourceGroup>(
                 await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken).ConfigureAwait(false),

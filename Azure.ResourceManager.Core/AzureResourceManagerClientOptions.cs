@@ -12,7 +12,7 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// A class representing Azure resource manager client options.
     /// </summary>
-    public class AzureResourceManagerClientOptions : ClientOptions
+    public sealed class AzureResourceManagerClientOptions : ClientOptions
     {
         private static readonly object _overridesLock = new object();
 

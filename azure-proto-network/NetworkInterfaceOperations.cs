@@ -5,6 +5,8 @@ using Azure.ResourceManager.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
+using System;
 
 namespace azure_proto_network
 {
@@ -23,6 +25,11 @@ namespace azure_proto_network
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetworkInterfaceOperations"/> class.
+        /// </summary>
+        /// <param name="options"> The client parameters to use in these operations. </param>
+        /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         protected NetworkInterfaceOperations(ResourceOperationsBase options, ResourceIdentifier id)
             : base(options, id)
         {
@@ -55,7 +62,7 @@ namespace azure_proto_network
         /// Deletes a <see cref="NetworkInterface"/>.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
-        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// The default value is <see cref="System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that returns an <see cref="ArmResponse"/> when completed. </returns>
         public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
         {
@@ -66,7 +73,7 @@ namespace azure_proto_network
         /// Deletes a <see cref="NetworkInterface"/>.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
-        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// The default value is <see cref="System.Threading.CancellationToken.None" />. </param>
         /// <returns> An <see cref="ArmOperation{Response}"/> that allows polling for completion of the operation. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning"> Details on long running operation object. </see>
@@ -80,7 +87,7 @@ namespace azure_proto_network
         /// Deletes a <see cref="NetworkInterface"/>.
         /// </summary>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
-        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// The default value is <see cref="System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{Response}"/> that allows polling for completion of the operation. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning"> Details on long running operation object. </see>
@@ -132,7 +139,7 @@ namespace azure_proto_network
         /// <param name="key" > The tag key. </param>
         /// <param name="value"> The Tag Value. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
-        /// The default value is <see cref=System.Threading.CancellationToken.None" />. </param>
+        /// The default value is <see cref="System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns a <see cref="ArmOperation{NetworkInterface}"/> that allows polling for completion of the operation. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning"> Details on long running operation object. </see>
@@ -184,6 +191,32 @@ namespace azure_proto_network
         public Task<ArmOperation<NetworkInterface>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
+        public IEnumerable<LocationData> ListAvailableLocations()
+        {
+            var pageableProvider = ResourcesClient.Providers.List(expand: "metadata");
+            var networkInterfaceProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var networkInterfaceResource = networkInterfaceProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType)); 
+            return networkInterfaceResource.Locations.Select(l => (LocationData)l);
+        }
+
+        /// <summary>
+        /// Lists all available geo-locations.
+        /// </summary>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> An async collection of location that may take multiple service requests to iterate over. </returns>
+        /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
+        public async Task<IEnumerable<LocationData>> ListAvailableLocationsAsync(CancellationToken cancellationToken = default)
+        {
+            var asyncpageableProvider = ResourcesClient.Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken);
+            var networkInterfaceProvider = await asyncpageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
+            var networkInterfaceResource = networkInterfaceProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
+            return networkInterfaceResource.Locations.Select(l => (LocationData)l);
         }
     }
 }

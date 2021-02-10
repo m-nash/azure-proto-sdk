@@ -28,7 +28,7 @@ namespace client
             catch(RequestFailedException e) when (e.Status == 404)
             {
                 Console.WriteLine("Got 404 returned as expected");
-                return;
+                
             }
 
             throw new InvalidOperationException("Failed");

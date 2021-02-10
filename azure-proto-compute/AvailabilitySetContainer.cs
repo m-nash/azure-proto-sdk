@@ -64,8 +64,8 @@ namespace azure_proto_compute
         /// </summary>
         /// <param name="skuName"> The sku name of the resource. </param>
         /// <param name="location"> The location of the resource. </param>
-        /// <returns> A builder with <see cref="AvailabilitySet"> and <see cref="AvailabilitySetData"/>. </returns>
-        public ArmBuilder<AvailabilitySet, AvailabilitySetData> Construct(string skuName, Location location = null)
+        /// <returns> A builder with <see cref="AvailabilitySet"/> and <see cref="AvailabilitySetData"/>. </returns>
+        public ArmBuilder<AvailabilitySet, AvailabilitySetData> Construct(string skuName, LocationData location = null)
         {
             var availabilitySet = new Azure.ResourceManager.Compute.Models.AvailabilitySet(location ?? DefaultLocation)
             {
