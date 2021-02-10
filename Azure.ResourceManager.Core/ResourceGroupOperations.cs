@@ -219,41 +219,49 @@ namespace Azure.ResourceManager.Core
             return container.CreateAsync(name, model, cancellationToken);
         }
 
+        /// <inheritdoc/>
         public ArmResponse<ResourceGroup> SetTags(IDictionary<string, string> tags)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public Task<ArmResponse<ResourceGroup>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public ArmOperation<ResourceGroup> StartSetTags(IDictionary<string, string> tags)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public Task<ArmOperation<ResourceGroup>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public ArmResponse<ResourceGroup> RemoveTag(string key)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public Task<ArmResponse<ResourceGroup>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public ArmOperation<ResourceGroup> StartRemoveTag(string key)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc/>
         public Task<ArmOperation<ResourceGroup>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();

@@ -279,5 +279,45 @@ namespace azure_proto_compute
                 await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
                 v => new VirtualMachine(this, new VirtualMachineData(v)));
         }
+
+        public ArmResponse<VirtualMachine> SetTags(IDictionary<string, string> tags)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmResponse<VirtualMachine>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmOperation<VirtualMachine> StartSetTags(IDictionary<string, string> tags)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmOperation<VirtualMachine>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmResponse<VirtualMachine> RemoveTag(string key)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmResponse<VirtualMachine>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmOperation<VirtualMachine> StartRemoveTag(string key)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmOperation<VirtualMachine>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

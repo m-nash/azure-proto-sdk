@@ -4,6 +4,7 @@ using Azure.ResourceManager.Network.Models;
 using Azure.ResourceManager.Core;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace azure_proto_network
 {
@@ -170,6 +171,46 @@ namespace azure_proto_network
         public SubnetContainer Subnets()
         {
             return new SubnetContainer(this);
+        }
+
+        public ArmResponse<VirtualNetwork> SetTags(IDictionary<string, string> tags)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmResponse<VirtualNetwork>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmOperation<VirtualNetwork> StartSetTags(IDictionary<string, string> tags)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmOperation<VirtualNetwork>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmResponse<VirtualNetwork> RemoveTag(string key)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmResponse<VirtualNetwork>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmOperation<VirtualNetwork> StartRemoveTag(string key)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmOperation<VirtualNetwork>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

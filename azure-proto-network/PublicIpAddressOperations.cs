@@ -7,6 +7,7 @@ using Azure.ResourceManager.Network.Models;
 using Azure.ResourceManager.Core;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace azure_proto_network
 {
@@ -141,6 +142,46 @@ namespace azure_proto_network
             patchable.Tags[key] = value;
             return new PhArmOperation<PublicIpAddress, PublicIPAddress>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
                 n => new PublicIpAddress(this, new PublicIPAddressData(n)));
+        }
+
+        public ArmResponse<PublicIpAddress> SetTags(IDictionary<string, string> tags)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmResponse<PublicIpAddress>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmOperation<PublicIpAddress> StartSetTags(IDictionary<string, string> tags)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmOperation<PublicIpAddress>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmResponse<PublicIpAddress> RemoveTag(string key)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmResponse<PublicIpAddress>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmOperation<PublicIpAddress> StartRemoveTag(string key)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmOperation<PublicIpAddress>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

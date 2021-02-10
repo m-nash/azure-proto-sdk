@@ -4,6 +4,7 @@ using Azure.ResourceManager.Network.Models;
 using Azure.ResourceManager.Core;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace azure_proto_network
 {
@@ -143,6 +144,46 @@ namespace azure_proto_network
             return new PhArmOperation<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
                 await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
                 n => new NetworkInterface(this, new NetworkInterfaceData(n)));
+        }
+
+        public ArmResponse<NetworkInterface> SetTags(IDictionary<string, string> tags)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmResponse<NetworkInterface>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmOperation<NetworkInterface> StartSetTags(IDictionary<string, string> tags)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmOperation<NetworkInterface>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmResponse<NetworkInterface> RemoveTag(string key)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmResponse<NetworkInterface>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ArmOperation<NetworkInterface> StartRemoveTag(string key)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<ArmOperation<NetworkInterface>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
