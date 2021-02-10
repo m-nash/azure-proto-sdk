@@ -64,11 +64,8 @@ namespace Azure.ResourceManager.Core.Tests
         {
             GenericResource resource = GetResource();
             UpdateTags(key, value, resource.Data.Tags);
-            // TODO: Fix cast error
-            ResourceManager.Resources.Models.GenericResource casterror = resource.Data;
-            casterror.Tags.Add(key, value);
             return new PhArmOperation<GenericResource, ResourceManager.Resources.Models.GenericResource>(
-                Operations.StartUpdateById(Id, _apiVersion, casterror).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+                Operations.StartUpdateById(Id, _apiVersion, resource.Data).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
                 v => new GenericResource(this, new GenericResourceData(v)));
         }
 

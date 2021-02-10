@@ -82,5 +82,20 @@ namespace Azure.ResourceManager.Core
         /// Gets the Tags.
         /// </summary>
         public override IDictionary<string, string> Tags { get; }
+
+        /// <summary>
+        /// Converts from a <see cref="GenericResourceData"/> into the ResourceManager.Resources.Models.GenericResource.
+        /// </summary>
+        /// <param name="other"> The tracked resource convert from. </param>
+        public static implicit operator ResourceManager.Resources.Models.GenericResource(GenericResourceData other)
+        {
+            other.Model.Tags.Clear();
+            foreach (var tag in other.Tags)
+            {
+                other.Model.Tags.Add(tag);
+            }
+
+            return other.Model;
+        }
     }
 }

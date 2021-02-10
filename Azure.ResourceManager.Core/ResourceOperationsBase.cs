@@ -154,7 +154,11 @@ namespace Azure.ResourceManager.Core
         /// <param name="existingTags"> Existing tag dictionary to update. </param>
         protected void ReplaceTags(IDictionary<string, string> tags, IDictionary<string, string> existingTags)
         {
-            existingTags = tags;
+            existingTags.Clear();
+            foreach (var tag in tags)
+            {
+                existingTags.Add(tag);
+            }
         }
     }
 }

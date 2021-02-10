@@ -48,5 +48,20 @@ namespace Azure.ResourceManager.Core
             get => Model.ManagedBy;
             set => Model.ManagedBy = value;
         }
+
+        /// <summary>
+        /// Converts from a <see cref="ResourceGroupData"/> into the ResourceManager.Resources.Models.ResourceGroup.
+        /// </summary>
+        /// <param name="other"> The tracked resource convert from. </param>
+        public static implicit operator ResourceManager.Resources.Models.ResourceGroup(ResourceGroupData other)
+        {
+            other.Model.Tags.Clear();
+            foreach (var tag in other.Tags)
+            {
+                other.Model.Tags.Add(tag);
+            }
+
+            return other.Model;
+        }
     }
 }
