@@ -182,26 +182,6 @@ namespace Azure.ResourceManager.Core
         /// <summary>
         /// Gets resource operations base.
         /// </summary>
-        /// <typeparam name="T"> The type of the underlying model this class wraps. </typeparam>
-        /// <param name="subscription"> The id of the Azure subscription. </param>
-        /// <param name="resourceGroup"> The resource group name. </param>
-        /// <param name="name"> The resource type name. </param>
-        /// <returns> Resource operations of the resource. </returns>
-        public T GetResourceOperations<T>(ResourceIdentifier resourceId)
-            where T : OperationsBase
-        {
-            var rgOp = GetSubscriptionOperations(resourceId.Subscription).GetResourceGroupOperations(resourceId.ResourceGroup);
-            return Activator.CreateInstance(
-                typeof(T),
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
-                null,
-                new object[] { rgOp, resourceId.Name },
-                CultureInfo.InvariantCulture) as T;
-        }
-
-        /// <summary>
-        /// Gets resource operations base.
-        /// </summary>
         /// <typeparam name="TContainer"> The type of the container class for a specific resource. </typeparam>
         /// <typeparam name="TOperations"> The type of the operations class for a specific resource. </typeparam>
         /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>

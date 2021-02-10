@@ -85,7 +85,7 @@ namespace azure_proto_network
         {
             var subOps = client.GetSubscriptionOperations(resourceId.Subscription);
             var rgOps = subOps.GetResourceGroupOperations(resourceId.ResourceGroup);
-            return ResourceGroupExtensions.GetVirtualNetworkOperations(rgOps, resourceId.Parent.Name).Subnet(resourceId.Name);
+            return ResourceGroupExtensions.GetVirtualNetworkOperations(rgOps, resourceId.Parent.Name).GetSubnetOperations(resourceId.Name);
         }
 
         /// <summary>
