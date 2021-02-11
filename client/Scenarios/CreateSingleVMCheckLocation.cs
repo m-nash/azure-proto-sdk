@@ -63,19 +63,9 @@ namespace client
                 Console.WriteLine(l.DisplayName);
             }
 
-            // Create IP Address
-            Console.WriteLine("--------Start create IP Address--------");
-            var ipAddress = resourceGroup.GetPublicIpAddressContainer().Construct().Create($"{Context.VmName}_ip").Value;
-            Console.WriteLine("\nPublicIP Address List Available Locations: ");
-            loc = ipAddress.ListAvailableLocations();
-            foreach (var l in loc)
-            {
-                Console.WriteLine(l.DisplayName);
-            }
-
             // Create Network Interface
             Console.WriteLine("--------Start create Network Interface--------");
-            var nic = resourceGroup.GetNetworkInterfaceContainer().Construct(ipAddress.Data, subnet.Id).Create($"{Context.VmName}_nic").Value;
+            var nic = resourceGroup.GetNetworkInterfaceContainer().Construct(subnet.Id).Create($"{Context.VmName}_nic").Value;
             Console.WriteLine("\nNetwork Interface Container List Available Locations: ");
             loc = nic.ListAvailableLocations();
             foreach (var l in loc)

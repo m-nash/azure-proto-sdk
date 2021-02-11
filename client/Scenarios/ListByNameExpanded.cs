@@ -54,11 +54,6 @@ namespace client
                 Console.WriteLine($"--------NetworkSecurityGroup id--------: {networkSecurityGroup.Data.Id}");
             }
 
-            foreach (var publicIpAddress in rg.GetPublicIpAddressContainer().ListByName(Environment.UserName))
-            {
-                Console.WriteLine($"--------PublicIpAddress operation id--------: {publicIpAddress.Id}");
-            }
-
             foreach (var publicIpAddress in rg.GetNetworkSecurityGroupContainer().ListByNameExpanded(Environment.UserName))
             {
                 Console.WriteLine($"--------PublicIpAddress id--------: {publicIpAddress.Data.Id}");
@@ -117,11 +112,6 @@ namespace client
             await foreach (var networkSecurityGroup in rg.GetNetworkSecurityGroupContainer().ListByNameExpandedAsync(Environment.UserName))
             {
                 Console.WriteLine($"--------NetworkSecurityGroup id--------: {networkSecurityGroup.Data.Id}");
-            }
-
-            await foreach (var publicIpAddress in rg.GetPublicIpAddressContainer().ListByNameAsync(Environment.UserName))
-            {
-                Console.WriteLine($"--------PublicIpAddress operation id--------: {publicIpAddress.Id}");
             }
 
             await foreach (var publicIpAddress in rg.GetNetworkSecurityGroupContainer().ListByNameExpandedAsync(Environment.UserName))

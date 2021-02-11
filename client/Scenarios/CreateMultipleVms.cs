@@ -48,13 +48,9 @@ namespace client
             List<ArmOperation<VirtualMachine>> operations = new List<ArmOperation<VirtualMachine>>();
             for (int i = 0; i < 10; i++)
             {
-                // Create IP Address
-                Console.WriteLine("--------Start create IP Address--------");
-                var ipAddress = resourceGroup.GetPublicIpAddressContainer().Construct().Create($"{Context.VmName}_{i}_ip").Value;
-
                 // Create Network Interface
                 Console.WriteLine("--------Start create Network Interface--------");
-                var nic = resourceGroup.GetNetworkInterfaceContainer().Construct(ipAddress.Data, subnet.Id).Create($"{Context.VmName}_{i}_nic").Value;
+                var nic = resourceGroup.GetNetworkInterfaceContainer().Construct(subnet.Id).Create($"{Context.VmName}_{i}_nic").Value;
 
                 // Create VM
                 string num = i % 2 == 0 ? "-e" : "-o";
