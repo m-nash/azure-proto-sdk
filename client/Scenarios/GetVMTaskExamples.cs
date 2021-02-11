@@ -55,7 +55,18 @@ namespace client
             subnetOps = client.GetResourceOperations<SubnetOperations>(subnetResourceId);
             Console.WriteLine("Option 3 subnet is " + subnetOps.Id);
 
-            Console.WriteLine("--------Done create VM--------");
+            // OPTION 4
+            vmOps = new VirtualMachineOperations(resourceId, client);
+            vmOps.PowerOff();
+            Console.WriteLine("\nOPTION 4: new VirtualMachineOperations(resourceId, client)");
+            Console.WriteLine("Option 4 vm is " + vmOps.Get().Value.Data.InstanceView.Statuses.Last().Code);
+            vmOps.PowerOn();
+            Console.WriteLine("Option 4 vm is " + vmOps.Get().Value.Data.InstanceView.Statuses.Last().Code);
+
+            subnetOps = new SubnetOperations(subnetResourceId, client);
+            Console.WriteLine("Option 4 subnet is " + subnetOps.Id);
+
+            Console.WriteLine("Demo complete");
         }
     }
 }
