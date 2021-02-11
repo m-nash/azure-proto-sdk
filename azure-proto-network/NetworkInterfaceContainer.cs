@@ -71,7 +71,7 @@ namespace azure_proto_network
         /// <param name="subnetId"> The resource identifier of the subnet attached to this <see cref="NetworkInterface"/>. </param>
         /// <param name="location"> The <see cref="LocationData"/> that will contain the <see cref="NetworkInterface"/>. </param>
         /// <returns>An object used to create a <see cref="NetworkInterface"/>. </returns>
-        public ArmBuilder<NetworkInterface, NetworkInterfaceData> Construct(PublicIPAddressData ip, string subnetId, LocationData location = null)
+        public ArmBuilder<NetworkInterface, NetworkInterfaceData> Construct(string subnetId, PublicIPAddressData ip = default, LocationData location = null)
         {
             var nic = new Azure.ResourceManager.Network.Models.NetworkInterface()
             {
@@ -84,10 +84,12 @@ namespace azure_proto_network
                         Primary = true,
                         Subnet = new Azure.ResourceManager.Network.Models.Subnet() { Id = subnetId },
                         PrivateIPAllocationMethod = IPAllocationMethod.Dynamic,
-                        PublicIPAddress = new PublicIPAddress() { Id = ip.Id }
                     }
                 }
             };
+
+            if (ip != null)
+                nic.IpConfigurations[0].PublicIPAddress = new PublicIPAddress() { Id = ip.Id };
 
             return new ArmBuilder<NetworkInterface, NetworkInterfaceData>(this, new NetworkInterfaceData(nic));
         }
