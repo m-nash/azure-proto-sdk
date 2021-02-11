@@ -43,13 +43,9 @@ namespace client
             Console.WriteLine("--------Start StartCreate NetworkSecurityGroup--------");
             _ = (await(resourceGroup.GetNetworkSecurityGroupContainer().Construct(80).StartCreate(Context.NsgName)).WaitForCompletionAsync()).Value;
 
-            // Create IP Address
-            Console.WriteLine("--------Start StartCreate IP Address--------");
-            var ipAddress = (await(resourceGroup.GetPublicIpAddressContainer().Construct().StartCreate($"{Context.VmName}_ip")).WaitForCompletionAsync()).Value;
-
             // Create Network Interface
             Console.WriteLine("--------Start StartCreate Network Interface--------");
-            var nic = (await(resourceGroup.GetNetworkInterfaceContainer().Construct(ipAddress.Data, subnet.Id).StartCreate($"{Context.VmName}_nic")).WaitForCompletionAsync()).Value;
+            var nic = (await(resourceGroup.GetNetworkInterfaceContainer().Construct(subnet.Id).StartCreate($"{Context.VmName}_nic")).WaitForCompletionAsync()).Value;
 
             // Create VM
             Console.WriteLine("--------Start StartCreate VM --------");
