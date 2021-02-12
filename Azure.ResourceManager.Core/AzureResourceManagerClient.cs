@@ -171,7 +171,6 @@ namespace Azure.ResourceManager.Core
             where T : OperationsBase
         {
             var rgOp = GetSubscriptionOperations(subscription).GetResourceGroupOperations(resourceGroup);
-            string resourceType = typeof(T).GetField("ResourceType", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetValue(null).ToString();
             return Activator.CreateInstance(
                 typeof(T),
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
