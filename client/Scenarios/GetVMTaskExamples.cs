@@ -15,16 +15,19 @@ namespace client
 
         public override void Execute()
         {
+            var createVm = new CreateSingleVmExample(Context);
+            createVm.Execute();
+
             var client = new AzureResourceManagerClient();
+            var subscription = client.GetSubscriptionOperations(Context.SubscriptionId);
+            var resourceGroup = subscription.GetResourceGroupOperations(Context.RgName);
+            var vmId = resourceGroup.GetVirtualMachineOperations(Context.VmName).Id;
+            var vnId = resourceGroup.GetVirtualNetworkOperations(Context.VmName + "_vnet").Id;
+            var subnetId = resourceGroup.GetVirtualNetworkOperations(Context.VmName + "_vnet").GetSubnetOperations(Context.SubnetName).Id;
+            var asId = resourceGroup.GetAvailabilitySetOperations(Context.VmName + "_aSet").Id;
+            var nsgId = resourceGroup.GetNetworkSecurityGroupOperations(Context.NsgName).Id;
+            var niId = resourceGroup.GetNetworkInterfaceOperations(Context.VmName + "_nic").Id;
 
-            string vmId = "/subscriptions/db1ab6f0-4769-4b27-930e-01e2ef9c123c/resourceGroups/nbhatia-test/providers/Microsoft.Compute/virtualMachines/nibhati";
-            string subnetId = "/subscriptions/db1ab6f0-4769-4b27-930e-01e2ef9c123c/resourceGroups/nbhatia-test/providers/Microsoft.Network/virtualNetworks/nibhati_vnet/subnets/nibhati-subnet";
-            string asId = "/subscriptions/db1ab6f0-4769-4b27-930e-01e2ef9c123c/resourceGroups/nbhatia-test/providers/Microsoft.Compute/availabilitySets/nibhati_aSet";
-            string nsgId = "/subscriptions/db1ab6f0-4769-4b27-930e-01e2ef9c123c/resourceGroups/nbhatia-test/providers/Microsoft.Network/networkSecurityGroups/nibhati-test-nsg";
-            string vnId = "/subscriptions/db1ab6f0-4769-4b27-930e-01e2ef9c123c/resourceGroups/nbhatia-test/providers/Microsoft.Network/virtualNetworks/nibhati_vnet";
-            string niId = "/subscriptions/db1ab6f0-4769-4b27-930e-01e2ef9c123c/resourceGroups/nbhatia-test/providers/Microsoft.Network/networkInterfaces/nibhati_nic";
-
-            // OPTION 1
             var vmOps = client.GetVirtualMachineOperations(vmId);
             Console.WriteLine("\nclient.GetVirtualMachineOperations(vmResourceId)");
             vmOps.PowerOff();            

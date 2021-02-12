@@ -17,8 +17,9 @@ namespace azure_proto_network
         /// <summary>
         /// Gets the NetworkInterfaceOperations.
         /// </summary>
+        /// <param name="client"> The <see cref="AzureResourceManagerClient" /> instance the method will execute against. </param>
         /// <param name="resourceId"> The ResourceIdentifier of the resource that is the target of operations. </param>
-        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="NetworkInterfaceOperations" /> </returns>
+        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="NetworkInterfaceOperations" />. </returns>
         /// <exception cref="ArgumentException"> ResourceIdentifier provided is not for a NetworkInterfaceOperations. </exception>
         public static NetworkInterfaceOperations GetNetworkInterfaceOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
@@ -34,8 +35,9 @@ namespace azure_proto_network
         /// <summary>
         /// Gets the NetworkSecurityGroupOperations.
         /// </summary>
+        /// <param name="client"> The <see cref="AzureResourceManagerClient" /> instance the method will execute against. </param>
         /// <param name="resourceId"> The ResourceIdentifier of the resource that is the target of operations. </param>
-        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="NetworkSecurityGroup" /> </returns>
+        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="NetworkSecurityGroup" />. </returns>
         /// <exception cref="ArgumentException"> ResourceIdentifier provided is not for a NetworkSecurityGroup. </exception>
         public static NetworkSecurityGroupOperations GetNetworkSecurityGroupOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
@@ -51,8 +53,9 @@ namespace azure_proto_network
         /// <summary>
         /// Gets the PublicIpAddressOperations.
         /// </summary>
+        /// 
         /// <param name="resourceId"> The ResourceIdentifier of the resource that is the target of operations. </param>
-        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="PublicIpAddress" /> </returns>
+        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="PublicIpAddress" />. </returns>
         /// <exception cref="ArgumentException"> ResourceIdentifier provided is not for a PublicIpAddress. </exception>
         public static PublicIpAddressOperations GetPublicIpAddressOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
@@ -69,7 +72,7 @@ namespace azure_proto_network
         /// Gets the SubnetOperations.
         /// </summary>
         /// <param name="resourceId"> The ResourceIdentifier of the resource that is the target of operations. </param>
-        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="Subnet" /> </returns>
+        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="Subnet" />. </returns>
         /// <exception cref="ArgumentException"> ResourceIdentifier provided is not for a Subnet. </exception>
         public static SubnetOperations GetSubnetOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
@@ -87,7 +90,7 @@ namespace azure_proto_network
         /// Gets the VirtualNetworkOperations.
         /// </summary>
         /// <param name="resourceId"> The ResourceIdentifier of the resource that is the target of operations. </param>
-        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="VirtualNetwork" /> </returns>
+        /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="VirtualNetwork" />. </returns>
         /// <exception cref="ArgumentException"> ResourceIdentifier provided is not for a VirtualNetwork. </exception>
         public static VirtualNetworkOperations GetVirtualNetworkOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
