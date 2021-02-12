@@ -48,7 +48,7 @@ namespace client
 
             Console.WriteLine("VM ID: " + vm.Id);
             Console.WriteLine("--------Done create VM--------");
-
+            
         }
     }
 }
