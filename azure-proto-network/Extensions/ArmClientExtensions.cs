@@ -53,7 +53,7 @@ namespace azure_proto_network
         /// <summary>
         /// Gets the PublicIpAddressOperations.
         /// </summary>
-        /// 
+        /// <param name="client"> The <see cref="AzureResourceManagerClient" /> instance the method will execute against. </param>
         /// <param name="resourceId"> The ResourceIdentifier of the resource that is the target of operations. </param>
         /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="PublicIpAddress" />. </returns>
         /// <exception cref="ArgumentException"> ResourceIdentifier provided is not for a PublicIpAddress. </exception>
@@ -71,6 +71,7 @@ namespace azure_proto_network
         /// <summary>
         /// Gets the SubnetOperations.
         /// </summary>
+        /// <param name="client"> The <see cref="AzureResourceManagerClient" /> instance the method will execute against. </param>
         /// <param name="resourceId"> The ResourceIdentifier of the resource that is the target of operations. </param>
         /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="Subnet" />. </returns>
         /// <exception cref="ArgumentException"> ResourceIdentifier provided is not for a Subnet. </exception>
@@ -89,6 +90,7 @@ namespace azure_proto_network
         /// <summary>
         /// Gets the VirtualNetworkOperations.
         /// </summary>
+        /// <param name="client"> The <see cref="AzureResourceManagerClient" /> instance the method will execute against. </param>
         /// <param name="resourceId"> The ResourceIdentifier of the resource that is the target of operations. </param>
         /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="VirtualNetwork" />. </returns>
         /// <exception cref="ArgumentException"> ResourceIdentifier provided is not for a VirtualNetwork. </exception>
