@@ -81,13 +81,6 @@ namespace azure_proto_network
             return new ArmVoidOperation(Operations.StartDelete(Id.ResourceGroup, Id.Parent.Name, Id.Name));
         }
 
-        public static SubnetOperations FromId(ResourceIdentifier resourceId, AzureResourceManagerClient client)
-        {
-            var subOps = client.GetSubscriptionOperations(resourceId.Subscription);
-            var rgOps = subOps.GetResourceGroupOperations(resourceId.ResourceGroup);
-            return ResourceGroupExtensions.GetVirtualNetworkOperations(rgOps, resourceId.Parent.Name).GetSubnetOperations(resourceId.Name);
-        }
-
         /// <summary>
         /// The operation to delete a subnet.
         /// </summary>

@@ -10,7 +10,7 @@ namespace client
             Scenario scenario = null;
             try
             {
-                scenario = ScenarioFactory.GetScenario(Scenarios.GetVMTaskExamples);
+                scenario = ScenarioFactory.GetScenario(Scenarios.CreateSingleVmExample);
                 scenario.Execute();
             }
             finally

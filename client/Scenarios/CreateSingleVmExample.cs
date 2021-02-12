@@ -19,7 +19,7 @@ namespace client
             // Create Resource Group
             Console.WriteLine($"--------Start create group {Context.RgName}--------");
             var resourceGroup = subscription.GetResourceGroupContainer().Construct(Context.Loc).Create(Context.RgName).Value;
-            //CleanUp.Add(resourceGroup.Id);
+            CleanUp.Add(resourceGroup.Id);
 
             // Create AvailabilitySet
             Console.WriteLine("--------Start create AvailabilitySet--------");
@@ -47,8 +47,7 @@ namespace client
             var vm = resourceGroup.GetVirtualMachineContainer().Construct(Context.Hostname, "admin-user", "!@#$%asdfA", nic.Id, aset.Id).Create(Context.VmName).Value;
 
             Console.WriteLine("VM ID: " + vm.Id);
-            Console.WriteLine("--------Done create VM--------");
-            
+            Console.WriteLine("--------Done create VM--------");            
         }
     }
 }
