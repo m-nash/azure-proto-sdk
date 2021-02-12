@@ -47,8 +47,8 @@ namespace client
             var vm = resourceGroup.GetVirtualMachineContainer().Construct(Context.Hostname, "admin-user", "!@#$%asdfA", nic.Id, aset.Id).Create(Context.VmName).Value;
 
             Console.WriteLine("VM ID: " + vm.Id);
-            Console.WriteLine("--------Done create VM--------");        
-            
+            Console.WriteLine("--------Done create VM--------");
+        
         }
     }
 }
