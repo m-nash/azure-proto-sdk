@@ -18,6 +18,41 @@ namespace Azure.ResourceManager.Core.Tests
         {
         }
 
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("asdfghj")]
+        [TestCase("123456")]
+        [TestCase("!@#$%^&*/")]
+        [TestCase("/subscriptions/")]
+        [TestCase("/0c2f6471-1bf0-4dda-aec3-cb9272f09575/myRg/")]
+        public void InvalidRPIds(string invalidID)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => { ResourceIdentifier subject = invalidID; });
+        }
+
+        [TestCase (null)]
+        [TestCase (TrackedResourceId)]
+        public void ImplicitConstructor(string resourceProviderID)
+        {
+            string x = resourceProviderID;
+            string y;
+            ResourceIdentifier z;
+
+            z = x;
+            y = z;
+
+            if (resourceProviderID is null)
+            {
+                Assert.IsNull(z);
+                Assert.IsNull(y);
+            }
+            else
+            {
+                Assert.AreEqual(resourceProviderID, y);
+            }
+            
+        }
+
         [TestCase("0c2f6471-1bf0-4dda-aec3-cb9272f09575", "myRg", "Microsoft.Compute", "virtualMachines", "myVM")]
         [TestCase("0c2f6471-1bf0-4dda-aec3-cb9272f09575", "!@#$%^&*()-_+=;:'\",<.>/?", "Microsoft.Network", "virtualNetworks", "MvVM_vnet")]
         [TestCase("0c2f6471-1bf0-4dda-aec3-cb9272f09575", "myRg", "Microsoft.Network", "publicIpAddresses", "!@#$%^&*()-_+=;:'\",<.>/?")]
@@ -118,6 +153,54 @@ namespace Azure.ResourceManager.Core.Tests
             ResourceIdentifier resourceIdentifier1 = new ResourceIdentifier(resourceId1);
             ResourceIdentifier resourceIdentifier2 = new ResourceIdentifier(resourceId2);
             Assert.AreEqual(expected, resourceIdentifier1.GetHashCode() == resourceIdentifier2.GetHashCode());
+        }
+
+        [TestCase(TrackedResourceId, TrackedResourceId, true)]
+        [TestCase(ChildResourceId, ChildResourceId, true)]
+        [TestCase(null, null, true)]
+        [TestCase(TrackedResourceId, ChildResourceId, false)]
+        [TestCase(ChildResourceId, TrackedResourceId, false)]
+        [TestCase(null, TrackedResourceId, false)]
+        public void equals(string resourceProviderID1, string resourceProviderID2, bool expected)
+        {
+            ResourceIdentifier a = resourceProviderID1;
+            ResourceIdentifier b = resourceProviderID2;
+            if(a != null)
+                Assert.AreEqual(expected, a.Equals(b));
+
+            Assert.AreEqual(expected, ResourceIdentifier.Equals(a,b));
+        }
+
+        [TestCase(TrackedResourceId, TrackedResourceId, 0)]
+        [TestCase(TrackedResourceId, ChildResourceId, -1)]
+        [TestCase(ChildResourceId, TrackedResourceId, 1)]
+        [TestCase(TrackedResourceId, null, 1)]
+        [TestCase(null, TrackedResourceId, -1)]
+        [TestCase(null, null, 0)]
+        public void compareToResourceProvider(string resourceProviderID1, string resourceProviderID2, int expected)
+        {
+            ResourceIdentifier a = resourceProviderID1;
+            ResourceIdentifier b = resourceProviderID2;
+            if (a != null)
+                Assert.AreEqual(expected, a.CompareTo(b));
+
+            Assert.AreEqual(expected, ResourceIdentifier.CompareTo(a, b));
+        }
+
+        [TestCase(TrackedResourceId, TrackedResourceId, 0)]
+        [TestCase(TrackedResourceId, ChildResourceId, -1)]
+        [TestCase(ChildResourceId, TrackedResourceId, 1)]
+        [TestCase(TrackedResourceId, null, 1)]
+        [TestCase(null, TrackedResourceId, -1)]
+        [TestCase(null, null, 0)]
+        public void compareToString(string resourceProviderID1, string resourceProviderID2, int expected)
+        {
+            ResourceIdentifier a = resourceProviderID1;
+            string b = resourceProviderID2;
+            if (a != null)
+                Assert.AreEqual(expected, a.CompareTo(b));
+
+            Assert.AreEqual(expected, ResourceIdentifier.CompareTo(a, b));
         }
     }
 }
