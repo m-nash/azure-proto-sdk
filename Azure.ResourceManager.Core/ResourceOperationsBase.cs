@@ -133,5 +133,32 @@ namespace Azure.ResourceManager.Core
                 existingTags.Add(key, value);
             }
         }
+
+        /// <summary>
+        /// Gets new dictionary of tags after remove the one key value pair
+        /// </summary>
+        /// <param name="key"> The key to remove. </param>
+        /// <param name="existingTags"> Existing tag dictionary to update. </param>
+        protected void DeleteTag(string key, IDictionary<string, string> existingTags)
+        {
+            if (existingTags.ContainsKey(key))
+            {
+                existingTags.Remove(key);
+            }
+        }
+
+        /// <summary>
+        /// Replace all the tags currently on the resource
+        /// </summary>
+        /// <param name="tags"> List of tags. </param>
+        /// <param name="existingTags"> Existing tag dictionary to update. </param>
+        protected void ReplaceTags(IDictionary<string, string> tags, IDictionary<string, string> existingTags)
+        {
+            existingTags.Clear();
+            foreach (var tag in tags)
+            {
+                existingTags.Add(tag);
+            }
+        }
     }
 }

@@ -125,7 +125,32 @@ namespace azure_proto_compute
         /// </summary>
         /// <param name="patchable"> The parameters to update. </param>
         /// <returns> The operation of the updated resource. </returns>
-        public ArmOperation<AvailabilitySet> Update(AvailabilitySetUpdate patchable)
+        public ArmResponse<AvailabilitySet> Update(AvailabilitySetUpdate patchable)
+        {
+            return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
+                Operations.Update(Id.ResourceGroup, Id.Name, patchable),
+                a => new AvailabilitySet(this, new AvailabilitySetData(a)));
+        }
+
+        /// <summary>
+        /// The operation to update an availability set.
+        /// </summary>
+        /// <param name="patchable">  The parameters to update. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns the operation of the updated resource. </returns>
+        public async Task<ArmResponse<AvailabilitySet>> UpdateAsync(AvailabilitySetUpdate patchable, CancellationToken cancellationToken = default)
+        {
+            return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
+                await Operations.UpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                a => new AvailabilitySet(this, new AvailabilitySetData(a)));
+        }
+
+        /// <summary>
+        /// The operation to update an availability set. 
+        /// </summary>
+        /// <param name="patchable"> The parameters to update. </param>
+        /// <returns> The operation of the updated resource. </returns>
+        public ArmOperation<AvailabilitySet> StartUpdate(AvailabilitySetUpdate patchable)
         {
             return new PhArmOperation<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 Operations.Update(Id.ResourceGroup, Id.Name, patchable),
@@ -138,7 +163,7 @@ namespace azure_proto_compute
         /// <param name="patchable">  The parameters to update. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns the operation of the updated resource. </returns>
-        public async Task<ArmOperation<AvailabilitySet>> UpdateAsync(AvailabilitySetUpdate patchable, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<AvailabilitySet>> StartUpdateAsync(AvailabilitySetUpdate patchable, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 await Operations.UpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
@@ -157,9 +182,10 @@ namespace azure_proto_compute
         /// <returns> An <see cref="ArmOperation{AvailabilitySet}"/> that allows polling for completion of the operation. </returns>
         public ArmOperation<AvailabilitySet> StartAddTag(string key, string value)
         {
-            var patchable = new AvailabilitySetUpdate();
+            var resource = GetResource();
+            var patchable = new AvailabilitySetUpdate() { Tags = resource.Data.Tags };
             patchable.Tags[key] = value;
-            return Update(patchable);
+            return StartUpdate(patchable);
         }
 
         /// <summary>
@@ -175,9 +201,82 @@ namespace azure_proto_compute
         /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{AvailabilitySet}"/> that allows polling for completion of the operation. </returns>
         public Task<ArmOperation<AvailabilitySet>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
-            var patchable = new AvailabilitySetUpdate();
+            var resource = GetResource();
+            var patchable = new AvailabilitySetUpdate() { Tags = resource.Data.Tags };
             patchable.Tags[key] = value;
-            return UpdateAsync(patchable);
+            return StartUpdateAsync(patchable);
+        }
+
+        /// <inheritdoc/>
+        public ArmResponse<AvailabilitySet> SetTags(IDictionary<string, string> tags)
+        {
+            var resource = GetResource();
+            var patchable = new AvailabilitySetUpdate() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, patchable.Tags);
+            return Update(patchable);
+        }
+
+        /// <inheritdoc/>
+        public async Task<ArmResponse<AvailabilitySet>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        {
+            var resource = GetResource();
+            var patchable = new AvailabilitySetUpdate() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, patchable.Tags);
+            return await UpdateAsync(patchable);
+        }
+
+        /// <inheritdoc/>
+        public ArmOperation<AvailabilitySet> StartSetTags(IDictionary<string, string> tags)
+        {
+            var resource = GetResource();
+            var patchable = new AvailabilitySetUpdate() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, patchable.Tags);
+            return StartUpdate(patchable);
+        }
+
+        /// <inheritdoc/>
+        public async Task<ArmOperation<AvailabilitySet>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        {
+            var resource = GetResource();
+            var patchable = new AvailabilitySetUpdate() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, patchable.Tags);
+            return await StartUpdateAsync(patchable);
+        }
+
+        /// <inheritdoc/>
+        public ArmResponse<AvailabilitySet> RemoveTag(string key)
+        {
+            var resource = GetResource();
+            var patchable = new AvailabilitySetUpdate() { Tags = resource.Data.Tags };
+            DeleteTag(key, patchable.Tags);
+            return Update(patchable);
+        }
+
+        /// <inheritdoc/>
+        public async Task<ArmResponse<AvailabilitySet>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        {
+            var resource = GetResource();
+            var patchable = new AvailabilitySetUpdate() { Tags = resource.Data.Tags };
+            DeleteTag(key, patchable.Tags);
+            return await UpdateAsync(patchable);
+        }
+
+        /// <inheritdoc/>
+        public ArmOperation<AvailabilitySet> StartRemoveTag(string key)
+        {
+            var resource = GetResource();
+            var patchable = new AvailabilitySetUpdate() { Tags = resource.Data.Tags };
+            DeleteTag(key, patchable.Tags);
+            return StartUpdate(patchable);
+        }
+
+        /// <inheritdoc/>
+        public async Task<ArmOperation<AvailabilitySet>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        {
+            var resource = GetResource();
+            var patchable = new AvailabilitySetUpdate() { Tags = resource.Data.Tags };
+            DeleteTag(key, patchable.Tags);
+            return await StartUpdateAsync(patchable);
         }
 
         /// <summary>

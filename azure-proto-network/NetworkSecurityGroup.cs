@@ -30,7 +30,7 @@ namespace azure_proto_network
         public NetworkSecurityGroupData Data { get; private set; }
 
         /// <inheritdoc />
-        protected override NetworkSecurityGroup GetResource()
+        private protected override NetworkSecurityGroup GetResource()
         {
             return this;
         }
