@@ -22,20 +22,36 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="AzureResourceManagerClientOptions"/> class.
         /// </summary>
         public AzureResourceManagerClientOptions()
-            : this(null)
+            : this(LocationData.Default, null)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureResourceManagerClientOptions"/> class.
         /// </summary>
+        /// <param name="defaultLocation"> The default location to use if can't be inherited from parent. </param>
+        public AzureResourceManagerClientOptions(LocationData defaultLocation)
+            : this(defaultLocation, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureResourceManagerClientOptions"/> class.
+        /// </summary>
+        /// <param name="defaultLocation"> The default location to use if can't be inherited from parent. </param>
         /// <param name="other"> The client parameters to use in these operations. </param>
-        internal AzureResourceManagerClientOptions(AzureResourceManagerClientOptions other = null)
+        internal AzureResourceManagerClientOptions(LocationData defaultLocation, AzureResourceManagerClientOptions other = null)
         {
             // Will go away when moved into core since we will have directy acces the policies and transport, so just need to set those
             if (!ReferenceEquals(other, null))
                 Copy(other);
+            DefaultLocation = defaultLocation;
         }
+
+        /// <summary>
+        /// Gets the default location to use if can't be inherited from parent.
+        /// </summary>
+        public LocationData DefaultLocation { get; }
 
         /// <summary>
         /// Gets each http call policies.

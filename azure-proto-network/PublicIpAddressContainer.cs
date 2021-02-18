@@ -1,4 +1,7 @@
-﻿using Azure;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using Azure;
 using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Network.Models;
 using Azure.ResourceManager.Core;
@@ -76,11 +79,12 @@ namespace azure_proto_network
         /// <returns> Object used to create a <see cref="PublicIpAddress"/>. </returns>
         public ArmBuilder<PublicIpAddress, PublicIPAddressData> Construct(LocationData location = null)
         {
+            var parent = GetParentResource<ResourceGroup, ResourceGroupOperations>();
             var ipAddress = new PublicIPAddress()
             {
                 PublicIPAddressVersion = IPVersion.IPv4.ToString(),
                 PublicIPAllocationMethod = IPAllocationMethod.Dynamic,
-                Location = location ?? DefaultLocation,
+                Location = location ?? parent.Data.Location,
             };
 
             return new ArmBuilder<PublicIpAddress, PublicIPAddressData>(this, new PublicIPAddressData(ipAddress));

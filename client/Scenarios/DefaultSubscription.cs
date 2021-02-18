@@ -12,8 +12,8 @@ namespace client
 
             var sub = client.DefaultSubscription;
 
-            if (sub.Data.SubscriptionId != Context.SubscriptionId)
-                throw new Exception($"Didn't get back expected subscription.  Got {sub.Data.SubscriptionId} expected {Context.SubscriptionId}");
+            if (sub.Data.Guid != Context.SubscriptionId)
+                throw new Exception($"Didn't get back expected subscription.  Got {sub.Data.Guid} expected {Context.SubscriptionId}");
 
             Console.WriteLine("Found correct subscription");
 
@@ -21,8 +21,8 @@ namespace client
 
             sub = client.DefaultSubscription;
 
-            if (sub.Data.SubscriptionId != Context.SubscriptionId)
-                throw new Exception($"Didn't get back expected subscription.  Got {sub.Data.SubscriptionId} expected {Context.SubscriptionId}");
+            if (sub.Data.Guid != Context.SubscriptionId)
+                throw new Exception($"Didn't get back expected subscription.  Got {sub.Data.Guid} expected {Context.SubscriptionId}");
 
             Console.WriteLine("Found correct subscription");
 

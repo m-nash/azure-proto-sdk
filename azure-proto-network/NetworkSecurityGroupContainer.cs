@@ -89,9 +89,10 @@ namespace azure_proto_network
         /// <returns> Object used to create a <see cref="NetworkSecurityGroup"/>. </returns>
         public ArmBuilder<NetworkSecurityGroup, NetworkSecurityGroupData> Construct(LocationData locationData = null, params int[] openPorts)
         {
+            var parent = GetParentResource<ResourceGroup, ResourceGroupOperations>();
             var nsg = new Azure.ResourceManager.Network.Models.NetworkSecurityGroup
             {
-                Location = locationData ?? DefaultLocation
+                Location = locationData ?? parent.Data.Location
             };
             var index = 0;
             nsg.SecurityRules = openPorts.Select(openPort => new SecurityRule
@@ -118,9 +119,10 @@ namespace azure_proto_network
         /// <returns> Object used to create a <see cref="NetworkSecurityGroup"/>. </returns>
         public ArmBuilder<NetworkSecurityGroup, NetworkSecurityGroupData> Construct(params int[] openPorts)
         {
+            var parent = GetParentResource<ResourceGroup, ResourceGroupOperations>();
             var nsg = new Azure.ResourceManager.Network.Models.NetworkSecurityGroup
             {
-                Location = DefaultLocation,
+                Location = parent.Data.Location,
             };
             var index = 0;
             nsg.SecurityRules = openPorts.Select(openPort => new SecurityRule
