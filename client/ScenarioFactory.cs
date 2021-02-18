@@ -1,4 +1,8 @@
-﻿namespace client
+﻿using System;
+using System.Linq;
+using System.Reflection;
+
+namespace client
 {
     enum Scenarios
     {
@@ -28,7 +32,8 @@
         CreateSingleVmExampleAsync,
         StartCreateSingleVmExampleAsync,
         StartCreateSingleVmExample,
-        DefaultSubscription
+        DefaultSubscription,
+        SubscriptionExists
     }
 
     class ScenarioFactory
@@ -37,62 +42,12 @@
         {
             switch(scenario)
             {
-                case Scenarios.CreateSingleVmExample:
-                    return new CreateSingleVmExample();
-                case Scenarios.ShutdownVmsByName:
-                    return new ShutdownVmsByName();
-                case Scenarios.StartStopVm:
-                    return new StartStopVm();
-                case Scenarios.StartFromVm:
-                    return new StartFromVm();
-                case Scenarios.SetTagsOnVm:
-                    return new SetTagsOnVm();
-                case Scenarios.ShutdownVmsByTag:
-                    return new ShutdownVmsByTag();
-                case Scenarios.CreateMultipleVms:
-                    return new CreateMultipleVms();
-                case Scenarios.GenericEntityLoop:
-                    return new GenericEntityLoop();
-                case Scenarios.ShutdownVmsByLINQ:
-                    return new ShutdownVmsByLINQ();
-                case Scenarios.All:
-                    return new All();
-                case Scenarios.ShutdownVmsByNameAcrossResourceGroups:
-                    return new ShutdownVmsByNameAcrossResourceGroups();
-                //case Scenarios.ShutdownVmsByNameAcrossSubscriptions:
-                //    return new ShutdownVmsByNameAcrossSubscriptions();
-                case Scenarios.ListByNameExpanded:
-                    return new ListByNameExpanded();
-                case Scenarios.ClientOptionsOverride:
-                    return new ClientOptionsOverride();
-                case Scenarios.GetSubscription:
-                    return new GetSubscription();
-                case Scenarios.NullDataValues:
-                    return new NullDataValues();
-                //case Scenarios.RoleAssignment:
-                //    return new RoleAssignment();
-                //case Scenarios.DeleteGeneric:
-                //    return new DeleteGeneric();
-                //case Scenarios.AddTagToGeneric:
-                //    return new AddTagToGeneric();
-                case Scenarios.CheckResourceExists:
-                    return new CheckResourceExists();
-                case Scenarios.GetFromOperations:
-                    return new GetFromOperations();
-                case Scenarios.CreateSingleVmExampleAsync:
-                    return new CreateSingleVmExampleAsync();
-                case Scenarios.StartCreateSingleVmExampleAsync:
-                    return new StartCreateSingleVmExampleAsync();
-                case Scenarios.StartCreateSingleVmExample:
-                    return new StartCreateSingleVmExample();
-                case Scenarios.DefaultSubscription:
-                    return new DefaultSubscription();
-                case Scenarios.CreateSingleVMCheckLocation:
-                    return new CreateSingleVMCheckLocation();
-                case Scenarios.GetVMTaskExamples:
-                    return new GetVMTaskExamples();
                 default:
-                    return null;
+                    var type = Assembly.GetExecutingAssembly()
+                        .GetTypes()
+                        .Where(t => t.Name == scenario.ToString())
+                        .First();
+                    return Activator.CreateInstance(type) as Scenario;
             }
         }
     }

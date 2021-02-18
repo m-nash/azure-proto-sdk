@@ -32,7 +32,7 @@ namespace azure_proto_network
             ClientOptions.Convert<NetworkManagementClientOptions>()).Subnets;
 
         /// <inheritdoc/>
-        public override ArmResponse<Subnet> Create(string name, SubnetData resourceDetails)
+        public override ArmResponse<Subnet> CreateOrUpdate(string name, SubnetData resourceDetails)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, name, resourceDetails.Model);
             return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(
@@ -41,7 +41,7 @@ namespace azure_proto_network
         }
 
         /// <inheritdoc/>
-        public override async Task<ArmResponse<Subnet>> CreateAsync(string name, SubnetData resourceDetails, CancellationToken cancellationToken = default)
+        public override async Task<ArmResponse<Subnet>> CreateOrUpdateAsync(string name, SubnetData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, Id.Name, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<Subnet, Azure.ResourceManager.Network.Models.Subnet>(
@@ -50,7 +50,7 @@ namespace azure_proto_network
         }
 
         /// <inheritdoc/>
-        public override ArmOperation<Subnet> StartCreate(string name, SubnetData resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmOperation<Subnet> StartCreateOrUpdate(string name, SubnetData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<Subnet, Azure.ResourceManager.Network.Models.Subnet>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, Id.Name, name, resourceDetails.Model, cancellationToken),
@@ -58,7 +58,7 @@ namespace azure_proto_network
         }
 
         /// <inheritdoc/>
-        public async override Task<ArmOperation<Subnet>> StartCreateAsync(string name, SubnetData resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<Subnet>> StartCreateOrUpdateAsync(string name, SubnetData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<Subnet, Azure.ResourceManager.Network.Models.Subnet>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, Id.Name, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),

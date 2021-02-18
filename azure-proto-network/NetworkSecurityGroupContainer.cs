@@ -48,7 +48,7 @@ namespace azure_proto_network
             ClientOptions.Convert<NetworkManagementClientOptions>()).NetworkSecurityGroups;
 
         /// <inheritdoc />
-        public override ArmResponse<NetworkSecurityGroup> Create(string name, NetworkSecurityGroupData resourceDetails)
+        public override ArmResponse<NetworkSecurityGroup> CreateOrUpdate(string name, NetworkSecurityGroupData resourceDetails)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model);
             return new PhArmResponse<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
@@ -57,7 +57,7 @@ namespace azure_proto_network
         }
 
         /// <inheritdoc />
-        public override async Task<ArmResponse<NetworkSecurityGroup>> CreateAsync(string name, NetworkSecurityGroupData resourceDetails, CancellationToken cancellationToken = default)
+        public override async Task<ArmResponse<NetworkSecurityGroup>> CreateOrUpdateAsync(string name, NetworkSecurityGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
@@ -66,7 +66,7 @@ namespace azure_proto_network
         }
 
         /// <inheritdoc />
-        public override ArmOperation<NetworkSecurityGroup> StartCreate(string name, NetworkSecurityGroupData resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmOperation<NetworkSecurityGroup> StartCreateOrUpdate(string name, NetworkSecurityGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
@@ -74,7 +74,7 @@ namespace azure_proto_network
         }
 
         /// <inheritdoc />
-        public override async Task<ArmOperation<NetworkSecurityGroup>> StartCreateAsync(string name, NetworkSecurityGroupData resourceDetails, CancellationToken cancellationToken = default)
+        public override async Task<ArmOperation<NetworkSecurityGroup>> StartCreateOrUpdateAsync(string name, NetworkSecurityGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),

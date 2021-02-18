@@ -35,7 +35,7 @@ namespace azure_proto_network
             ClientOptions.Convert<NetworkManagementClientOptions>()).VirtualNetworks;
 
         /// <inheritdoc/>
-        public override ArmResponse<VirtualNetwork> Create(string name, VirtualNetworkData resourceDetails)
+        public override ArmResponse<VirtualNetwork> CreateOrUpdate(string name, VirtualNetworkData resourceDetails)
         {
             var operation = Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails);
             return new PhArmResponse<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
@@ -44,7 +44,7 @@ namespace azure_proto_network
         }
 
         /// <inheritdoc/>
-        public async override Task<ArmResponse<VirtualNetwork>> CreateAsync(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<VirtualNetwork>> CreateOrUpdateAsync(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
         {
             var operation = await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
@@ -53,7 +53,7 @@ namespace azure_proto_network
         }
 
         /// <inheritdoc/>
-        public override ArmOperation<VirtualNetwork> StartCreate(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmOperation<VirtualNetwork> StartCreateOrUpdate(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
                 Operations.StartCreateOrUpdate(Id.ResourceGroup, name, resourceDetails, cancellationToken),
@@ -61,7 +61,7 @@ namespace azure_proto_network
         }
 
         /// <inheritdoc/>
-        public async override Task<ArmOperation<VirtualNetwork>> StartCreateAsync(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<VirtualNetwork>> StartCreateOrUpdateAsync(string name, VirtualNetworkData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<VirtualNetwork, Azure.ResourceManager.Network.Models.VirtualNetwork>(
                 await Operations.StartCreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails, cancellationToken).ConfigureAwait(false),

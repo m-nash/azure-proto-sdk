@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 using System;
-using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,7 +12,7 @@ namespace Azure.ResourceManager.Core
     /// </summary>
     /// <typeparam name="TOperations"> The type of the class containing operations for the underlying resource. </typeparam>
     /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
-    public abstract class ResourceContainerBase<TOperations, TResource> : OperationsBase
+    public abstract class ResourceContainerBase<TOperations, TResource> : ContainerBase<TOperations>
         where TOperations : ResourceOperationsBase<TOperations>
         where TResource : Resource
     {
@@ -22,15 +21,9 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="parent"> The resource representing the parent resource. </param>
         protected ResourceContainerBase(ResourceOperationsBase parent)
-            : base(parent.ClientOptions, parent.Id, parent.Credential, parent.BaseUri)
+            : base(parent)
         {
-            Parent = parent;
         }
-
-        /// <summary>
-        /// Gets the parent resource of this resource
-        /// </summary>
-        protected ResourceOperationsBase Parent { get; }
 
         /// <summary>
         /// Verify that the input resource Id is a valid container for this type.
@@ -44,29 +37,29 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Creates a new resource.
+        /// The operation to create or update a resource. Please note some properties can be set only during creation.
         /// </summary>
         /// <param name="name"> The name of the resource. </param>
         /// <param name="resourceDetails"> The desired resource configuration. </param>
         /// <returns> A response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
-        public abstract ArmResponse<TOperations> Create(
+        public abstract ArmResponse<TOperations> CreateOrUpdate(
             string name,
             TResource resourceDetails);
 
         /// <summary>
-        /// Creates a new resource.
+        /// The operation to create or update a resource. Please note some properties can be set only during creation.
         /// </summary>
         /// <param name="name"> The name of the resource. </param>
         /// <param name="resourceDetails"> The desired resource configuration. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
-        public abstract Task<ArmResponse<TOperations>> CreateAsync(
+        public abstract Task<ArmResponse<TOperations>> CreateOrUpdateAsync(
             string name,
             TResource resourceDetails,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Creates a new resource.
+        /// The operation to create or update a resource. Please note some properties can be set only during creation.
         /// </summary>
         /// <param name="name"> The name of the resource. </param>
         /// <param name="resourceDetails"> The desired resource configuration. </param>
@@ -75,13 +68,13 @@ namespace Azure.ResourceManager.Core
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
         /// </remarks>
-        public abstract ArmOperation<TOperations> StartCreate(
+        public abstract ArmOperation<TOperations> StartCreateOrUpdate(
             string name,
             TResource resourceDetails,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Creates a new resource.
+        /// The operation to create or update a resource. Please note some properties can be set only during creation.
         /// </summary>
         /// <param name="name"> The name of the resource. </param>
         /// <param name="resourceDetails"> The desired resource configuration. </param>
@@ -90,53 +83,9 @@ namespace Azure.ResourceManager.Core
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
         /// </remarks>
-        public abstract Task<ArmOperation<TOperations>> StartCreateAsync(
+        public abstract Task<ArmOperation<TOperations>> StartCreateOrUpdateAsync(
             string name,
             TResource resourceDetails,
             CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Returns the resource from Azure if it exists
-        /// </summary>
-        /// <param name="resourceName"> The name of the resource you want to get. </param>
-        /// <param name="resource"> The resource if it existed, null otherwise. </param>
-        /// <returns> Whether or not the resource existed. </returns>
-        public virtual bool TryGetValue(string resourceName, out ArmResponse<TOperations> resource)
-        {
-            var op = GetOperation(resourceName);
-
-            try
-            {
-                resource = op.Get();
-                return true;
-            }
-            catch
-            {
-                resource = null;
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Determines whether or not the azure resource exists in this container
-        /// </summary>
-        /// <param name="resourceName"> The name of the resource you want to check. </param>
-        /// <returns> Whether or not the resource existed. </returns>
-        public virtual bool DoesExist(string resourceName)
-        {
-            ArmResponse<TOperations> output;
-            return TryGetValue(resourceName, out output);
-        }
-
-        private ResourceOperationsBase<TOperations> GetOperation(string resourceName)
-        {
-            Type opType = typeof(TOperations).BaseType;
-            return Activator.CreateInstance(
-                typeof(TOperations).BaseType,
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
-                null,
-                new object[] { Parent, resourceName },
-                CultureInfo.InvariantCulture) as ResourceOperationsBase<TOperations>;
-        }
     }
 }

@@ -17,7 +17,7 @@ namespace client
                 throw new Exception($"The resource group {Context.RgName} should not have existed.");
 
             Console.WriteLine($"Creating {Context.RgName}");
-            _ = rgContainer.Construct(LocationData.Default).Create(Context.RgName).Value;
+            _ = rgContainer.Construct(LocationData.Default).CreateOrUpdate(Context.RgName).Value;
 
             Console.WriteLine($"Making sure {Context.RgName} exists now.");
             if (!rgContainer.DoesExist(Context.RgName))
@@ -38,7 +38,7 @@ namespace client
                 throw new Exception($"The availability set {asetName} should not have existed.");
 
             Console.WriteLine($"Creating {asetName}");
-            var aset = asetContainer.Construct("Aligned").Create(asetName).Value;
+            var aset = asetContainer.Construct("Aligned").CreateOrUpdate(asetName).Value;
 
             Console.WriteLine($"Making sure {asetName} exists now.");
             if (!asetContainer.DoesExist(asetName))

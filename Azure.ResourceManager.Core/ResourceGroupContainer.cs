@@ -48,7 +48,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <inheritdoc/>
-        public override ArmResponse<ResourceGroup> Create(string name, ResourceGroupData resourceDetails)
+        public override ArmResponse<ResourceGroup> CreateOrUpdate(string name, ResourceGroupData resourceDetails)
         {
             var response = Operations.CreateOrUpdate(name, resourceDetails);
             return new PhArmResponse<ResourceGroup, ResourceManager.Resources.Models.ResourceGroup>(
@@ -57,7 +57,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <inheritdoc/>
-        public override async Task<ArmResponse<ResourceGroup>> CreateAsync(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
+        public override async Task<ArmResponse<ResourceGroup>> CreateOrUpdateAsync(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
             var response = await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<ResourceGroup, ResourceManager.Resources.Models.ResourceGroup>(
@@ -66,7 +66,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <inheritdoc/>
-        public override ArmOperation<ResourceGroup> StartCreate(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmOperation<ResourceGroup> StartCreateOrUpdate(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<ResourceGroup, ResourceManager.Resources.Models.ResourceGroup>(
                 Operations.CreateOrUpdate(name, resourceDetails, cancellationToken),
@@ -74,7 +74,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <inheritdoc/>
-        public override async Task<ArmOperation<ResourceGroup>> StartCreateAsync(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
+        public override async Task<ArmOperation<ResourceGroup>> StartCreateOrUpdateAsync(string name, ResourceGroupData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<ResourceGroup, ResourceManager.Resources.Models.ResourceGroup>(
                 await Operations.CreateOrUpdateAsync(name, resourceDetails, cancellationToken).ConfigureAwait(false),

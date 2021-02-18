@@ -26,7 +26,7 @@ namespace azure_proto_compute
         protected override ResourceType ValidResourceType => ResourceGroupOperations.ResourceType;
 
         /// <inheritdoc/>
-        public override ArmResponse<AvailabilitySet> Create(string name, AvailabilitySetData resourceDetails)
+        public override ArmResponse<AvailabilitySet> CreateOrUpdate(string name, AvailabilitySetData resourceDetails)
         {
             var response = Operations.CreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model);
             return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
@@ -35,7 +35,7 @@ namespace azure_proto_compute
         }
 
         /// <inheritdoc/>
-        public async override Task<ArmResponse<AvailabilitySet>> CreateAsync(string name, AvailabilitySetData resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmResponse<AvailabilitySet>> CreateOrUpdateAsync(string name, AvailabilitySetData resourceDetails, CancellationToken cancellationToken = default)
         {
             var response = await Operations.CreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false);
             return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
@@ -44,7 +44,7 @@ namespace azure_proto_compute
         }
 
         /// <inheritdoc/>
-        public override ArmOperation<AvailabilitySet> StartCreate(string name, AvailabilitySetData resourceDetails, CancellationToken cancellationToken = default)
+        public override ArmOperation<AvailabilitySet> StartCreateOrUpdate(string name, AvailabilitySetData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 Operations.CreateOrUpdate(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken),
@@ -52,7 +52,7 @@ namespace azure_proto_compute
         }
 
         /// <inheritdoc/>
-        public async override Task<ArmOperation<AvailabilitySet>> StartCreateAsync(string name, AvailabilitySetData resourceDetails, CancellationToken cancellationToken = default)
+        public async override Task<ArmOperation<AvailabilitySet>> StartCreateOrUpdateAsync(string name, AvailabilitySetData resourceDetails, CancellationToken cancellationToken = default)
         {
             return new PhArmOperation<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(
                 await Operations.CreateOrUpdateAsync(Id.ResourceGroup, name, resourceDetails.Model, cancellationToken).ConfigureAwait(false),
