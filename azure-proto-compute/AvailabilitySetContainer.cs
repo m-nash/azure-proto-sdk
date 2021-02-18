@@ -67,7 +67,8 @@ namespace azure_proto_compute
         /// <returns> A builder with <see cref="AvailabilitySet"/> and <see cref="AvailabilitySetData"/>. </returns>
         public ArmBuilder<AvailabilitySet, AvailabilitySetData> Construct(string skuName, LocationData location = null)
         {
-            var availabilitySet = new Azure.ResourceManager.Compute.Models.AvailabilitySet(location ?? DefaultLocation)
+            var parent = GetParentResource<ResourceGroup, ResourceGroupOperations>();
+            var availabilitySet = new Azure.ResourceManager.Compute.Models.AvailabilitySet(location ?? parent.Data.Location)
             {
                 PlatformUpdateDomainCount = 5,
                 PlatformFaultDomainCount = 2,

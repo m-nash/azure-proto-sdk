@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Azure.ResourceManager.Core;
+using System;
 
 namespace client
 {
@@ -11,7 +12,7 @@ namespace client
         public string RgName { get; private set; }
         public string NsgName => $"{Environment.UserName}-test-nsg";
         public string SubscriptionId { get; private set; }
-        public string Loc => "westus2";
+        public string Loc => LocationData.WestUS2;
         public string SubnetName => $"{Environment.UserName}-subnet";
 
         public string PrincipalId => "4c5ce728-7350-4ae5-bcf1-42e8e33b00fe";

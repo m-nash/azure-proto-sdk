@@ -33,7 +33,8 @@ namespace client
         StartCreateSingleVmExampleAsync,
         StartCreateSingleVmExample,
         DefaultSubscription,
-        SubscriptionExists
+        SubscriptionExists,
+        UseParentLocation,
     }
 
     class ScenarioFactory

@@ -1,4 +1,7 @@
-﻿using Azure;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using Azure;
 using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Network.Models;
 using Azure.ResourceManager.Core;
@@ -73,9 +76,10 @@ namespace azure_proto_network
         /// <returns>An object used to create a <see cref="NetworkInterface"/>. </returns>
         public ArmBuilder<NetworkInterface, NetworkInterfaceData> Construct(string subnetId, PublicIPAddressData ip = default, LocationData location = null)
         {
+            var parent = GetParentResource<ResourceGroup, ResourceGroupOperations>();
             var nic = new Azure.ResourceManager.Network.Models.NetworkInterface()
             {
-                Location = location ?? DefaultLocation,
+                Location = location ?? parent.Data.Location,
                 IpConfigurations = new List<NetworkInterfaceIPConfiguration>()
                 {
                     new NetworkInterfaceIPConfiguration()

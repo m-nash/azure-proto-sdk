@@ -198,7 +198,7 @@ namespace Azure.ResourceManager.Core
         {
             if (location == null)
             {
-                location = LocationData.Default;
+                location = ClientOptions.DefaultLocation;
             }
 
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, new GenericResourceData($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", location)) as TContainer;
