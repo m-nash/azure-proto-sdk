@@ -12,7 +12,7 @@ namespace Azure.ResourceManager.Core
     /// <summary>
     /// A class representing collection of Subscription and their operations
     /// </summary>
-    public class SubscriptionContainer : OperationsBase
+    public class SubscriptionContainer : ContainerBase<Subscription>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SubscriptionContainer"/> class.
@@ -73,6 +73,16 @@ namespace Azure.ResourceManager.Core
         {
             if (identifier != null)
                 throw new ArgumentException("Invalid parent for subscription container");
+        }
+
+        /// <summary>
+        /// Get an instance of the operations this container holds.
+        /// </summary>
+        /// <param name="subscriptionGuid"> The guid of the subscription to be found. </param>
+        /// <returns> An instance of <see cref="ResourceOperationsBase{Subscription}"/>. </returns>
+        protected override ResourceOperationsBase<Subscription> GetOperation(string subscriptionGuid)
+        {
+            return new SubscriptionOperations(ClientOptions, subscriptionGuid, Credential, BaseUri);
         }
 
         private Func<ResourceManager.Resources.Models.Subscription, Subscription> Converter()

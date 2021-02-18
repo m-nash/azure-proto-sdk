@@ -166,10 +166,6 @@ namespace Azure.ResourceManager.Core
                 CultureInfo.InvariantCulture) as T;
         }
 
-        /// <summary>
-        /// Gets default subscription.
-        /// </summary>
-        /// <returns> The default subscription. </returns>
         private Subscription GetDefaultSubscription()
         {
             var sub = GetSubscriptionContainer().List().FirstOrDefault();
