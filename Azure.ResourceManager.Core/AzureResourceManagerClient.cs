@@ -3,12 +3,10 @@
 
 using Azure.Core;
 using Azure.Identity;
-using Azure.ResourceManager.Resources;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace Azure.ResourceManager.Core
 {
@@ -82,7 +80,7 @@ namespace Azure.ResourceManager.Core
 
             if (string.IsNullOrWhiteSpace(defaultSubscriptionId))
             {
-                DefaultSubscription = GetDefaultSubscriptionAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+                DefaultSubscription = GetDefaultSubscription();
             }
             else
             {
@@ -106,17 +104,6 @@ namespace Azure.ResourceManager.Core
         /// Gets the Azure resource manager client options.
         /// </summary>
         internal AzureResourceManagerClientOptions ClientOptions { get; }
-
-        /// <summary>
-        /// Gets the Azure subscription operations.
-        /// </summary>
-        /// <param name="subscriptionId"> The resource identifier of the subscription. </param>
-        /// <returns> Subscription operations. </returns>
-        public SubscriptionOperations GetSubscriptionOperations(ResourceIdentifier subscriptionId) => new SubscriptionOperations(
-            ClientOptions,
-            subscriptionId,
-            _credentials,
-            _baseUri);
 
         /// <summary>
         /// Gets the Azure subscription operations.
@@ -180,42 +167,15 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Gets resource operations base.
-        /// </summary>
-        /// <typeparam name="TContainer"> The type of the container class for a specific resource. </typeparam>
-        /// <typeparam name="TOperations"> The type of the operations class for a specific resource. </typeparam>
-        /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
-        /// <param name="subscription"> The id of the Azure subscription. </param>
-        /// <param name="resourceGroup"> The resource group name. </param>
-        /// <param name="name"> The resource type name. </param>
-        /// <param name="model"> The resource data model. </param>
-        /// <param name="location"> The resource geo-location. </param>
-        /// <returns> Resource operations of the resource. </returns>
-        public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string subscription, string resourceGroup, string name, TResource model, LocationData location = default)
-            where TResource : TrackedResource
-            where TOperations : ResourceOperationsBase<TOperations>
-            where TContainer : ResourceContainerBase<TOperations, TResource>
-        {
-            if (location == null)
-            {
-                location = LocationData.Default;
-            }
-
-            TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, new GenericResourceData($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", location)) as TContainer;
-
-            return container.Create(name, model);
-        }
-
-        /// <summary>
         /// Gets default subscription.
         /// </summary>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
-        /// <returns> A <see cref="Task"/> that on completion returns the subscription id. </returns>
-        internal async Task<Subscription> GetDefaultSubscriptionAsync(CancellationToken cancellationToken = default)
+        /// <returns> The default subscription. </returns>
+        private Subscription GetDefaultSubscription()
         {
-            return await GetSubscriptionContainer().GetDefaultSubscriptionAsync(cancellationToken);
+            var sub = GetSubscriptionContainer().List().FirstOrDefault();
+            if (sub is null)
+                throw new Exception("No subscriptions found for the given credentials");
+            return sub;
         }
-
-        private ResourcesManagementClient GetResourcesClient(string subscription) => new ResourcesManagementClient(_baseUri, subscription, _credentials);
     }
 }
