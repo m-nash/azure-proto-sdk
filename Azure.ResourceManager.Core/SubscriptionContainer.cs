@@ -1,9 +1,11 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 using Azure.Core;
 using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Resources;
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Azure.ResourceManager.Core
 {
@@ -71,27 +73,6 @@ namespace Azure.ResourceManager.Core
         {
             if (identifier != null)
                 throw new ArgumentException("Invalid parent for subscription container");
-        }
-
-        /// <summary>
-        /// Gets the default subscription associated with the current credential.
-        /// </summary>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
-        /// <returns> A <see cref="Task"/> that on completion returns the subscription id. </returns>
-        internal async Task<Subscription> GetDefaultSubscriptionAsync(CancellationToken cancellationToken = default)
-        {
-            var subs = ListAsync(cancellationToken).GetAsyncEnumerator();
-            Subscription result = null;
-            if (await subs.MoveNextAsync())
-            {
-                if (subs.Current != null)
-                {
-                    result = subs.Current;
-                }
-            }
-
-            return result;
         }
 
         /// <summary>
