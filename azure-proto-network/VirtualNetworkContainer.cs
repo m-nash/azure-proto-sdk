@@ -1,4 +1,7 @@
-﻿using Azure;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using Azure;
 using Azure.ResourceManager.Network;
 using Azure.ResourceManager.Network.Models;
 using Azure.ResourceManager.Core;
@@ -76,9 +79,10 @@ namespace azure_proto_network
         /// <returns> A builder with <see cref="VirtualNetwork"/> and <see cref="VirtualNetworkData"/>. </returns>
         public ArmBuilder<VirtualNetwork, VirtualNetworkData> Construct(string vnetCidr, LocationData location = null)
         {
+            var parent = GetParentResource<ResourceGroup, ResourceGroupOperations>();
             var vnet = new Azure.ResourceManager.Network.Models.VirtualNetwork()
             {
-                Location = location ?? DefaultLocation,
+                Location = location ?? parent.Data.Location,
                 AddressSpace = new AddressSpace() { AddressPrefixes = new List<string>() { vnetCidr } },
             };
 

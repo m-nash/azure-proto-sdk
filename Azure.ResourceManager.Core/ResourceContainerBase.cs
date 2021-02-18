@@ -16,6 +16,9 @@ namespace Azure.ResourceManager.Core
         where TOperations : ResourceOperationsBase<TOperations>
         where TResource : Resource
     {
+        private static readonly object _parentLock = new object();
+        private object _parentResource;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceContainerBase{TOperations, TData}"/> class.
         /// </summary>
@@ -87,5 +90,33 @@ namespace Azure.ResourceManager.Core
             string name,
             TResource resourceDetails,
             CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets the location of the parent object.
+        /// </summary>
+        /// <typeparam name="TParent"> The type of the parents full resource object. </typeparam>
+        /// <typeparam name="TParentOperations"> The type of the parents operations object. </typeparam>
+        /// <returns> The <see cref="LocationData"/> associated with the parent object. </returns>
+        protected TParent GetParentResource<TParent, TParentOperations>()
+            where TParent : TParentOperations
+            where TParentOperations : ResourceOperationsBase<TParent>
+        {
+            if (_parentResource is null)
+            {
+                lock (_parentLock)
+                {
+                    if (_parentResource is null)
+                    {
+                        _parentResource = Parent as TParent;
+                        if (_parentResource is null)
+                        {
+                            _parentResource = (Parent as TParentOperations).Get().Value;
+                        }
+                    }
+                }
+            }
+
+            return _parentResource as TParent;
+        }
     }
 }

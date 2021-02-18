@@ -1,29 +1,26 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
-using Azure.ResourceManager.Resources;
+﻿using Azure.ResourceManager.Resources;
+using Azure.ResourceManager.Resources.Models;
+using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Azure.ResourceManager.Core
+namespace Azure.ResourceManager.Core.Tests
 {
-    /// <summary>
-    /// A class representing the operations that can be performed over a specific ArmResource.
-    /// </summary>
-    public class GenericResourceOperations : ResourceOperationsBase<GenericResource>, ITaggableResource<GenericResource>, IDeletableResource
+    public class TaggableResource : ResourceOperationsBase<GenericResource>, ITaggableResource<GenericResource>
     {
         private readonly string _apiVersion;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericResourceOperations"/> class.
+        /// Initializes a new instance of the <see cref="TaggableResource"/> class.
         /// </summary>
         /// <param name="operations"> The resource operations to copy the options from. </param>
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
-        internal GenericResourceOperations(ResourceOperationsBase operations, ResourceIdentifier id)
+        internal TaggableResource(ResourceOperationsBase operations, ResourceIdentifier id)
             : base(operations, id)
         {
-            _apiVersion = "BAD VALUE";
+            _apiVersion = "2019-06-01";
         }
 
         /// <inheritdoc/>
@@ -35,56 +32,26 @@ namespace Azure.ResourceManager.Core
             Credential,
             ClientOptions.Convert<ResourcesManagementClientOptions>()).Resources;
 
-        /// <summary>
-        /// Delete the resource.
-        /// </summary>
-        /// <returns> The status of the delete operation. </returns>
-        public ArmResponse<Response> Delete()
+
+        /// <inheritdoc/>
+        public override ArmResponse<GenericResource> Get()
         {
-            return new ArmResponse(Operations.StartDeleteById(Id, _apiVersion).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+            return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
+                Operations.GetById(Id, _apiVersion),
+                v => new GenericResource(this, new GenericResourceData(v)));
         }
 
-        /// <summary>
-        /// Delete the resource.
-        /// </summary>
-        /// <param name="cancellationToken"> A token allowing immediate cancellation of any blocking call performed during the deletion. </param>
-        /// <returns> A <see cref="Task"/> that on completion returns the status of the delete operation. </returns>
-        public async Task<ArmResponse<Response>> DeleteAsync(CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public override async Task<ArmResponse<GenericResource>> GetAsync(CancellationToken cancellationToken = default)
         {
-            var operation = await Operations.StartDeleteByIdAsync(Id, _apiVersion, cancellationToken);
-            var result = await operation.WaitForCompletionAsync(cancellationToken);
-            return new ArmResponse(result);
+            return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
+                await Operations.GetByIdAsync(Id, _apiVersion, cancellationToken),
+                v => new GenericResource(this, new GenericResourceData(v)));
         }
 
-        /// <summary>
-        /// Delete the resource.
-        /// </summary>
-        /// <param name="cancellationToken"> A token allowing immediate cancellation of any blocking call performed during the deletion. </param>
-        /// <returns> A <see cref="ArmOperation{Response}"/> which allows the caller to control polling and waiting for resource deletion.
-        /// The operation yields the final http response to the delete request when complete. </returns>
-        /// <remarks>
-        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
-        /// </remarks>
-        public ArmOperation<Response> StartDelete(CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public override void Validate(ResourceIdentifier identifier)
         {
-            return new ArmVoidOperation(Operations.StartDeleteById(Id, _apiVersion, cancellationToken));
-        }
-
-        /// <summary>
-        /// Delete the resource.  This call returns a Task that blocks until the delete operation is accepted on the service.
-        /// </summary>
-        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
-        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
-        /// <returns> A <see cref="Task"/> that on completion returns a <see cref="ArmOperation{Response}"/> which
-        /// allows the caller to control polling and waiting for resource deletion.
-        /// The operation yields the final http response to the delete request when complete. </returns>
-        /// <remarks>
-        /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
-        /// </remarks>
-        public async Task<ArmOperation<Response>> StartDeleteAsync(CancellationToken cancellationToken = default)
-        {
-            var operation = await Operations.StartDeleteByIdAsync(Id, _apiVersion, cancellationToken);
-            return new ArmVoidOperation(operation);
         }
 
         /// <summary>
@@ -122,28 +89,6 @@ namespace Azure.ResourceManager.Core
                 v => new GenericResource(this, new GenericResourceData(v)));
         }
 
-        /// <inheritdoc/>
-        public override ArmResponse<GenericResource> Get()
-        {
-            return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
-                Operations.GetById(Id, _apiVersion),
-                v => new GenericResource(this, new GenericResourceData(v)));
-        }
-
-        /// <inheritdoc/>
-        public override async Task<ArmResponse<GenericResource>> GetAsync(CancellationToken cancellationToken = default)
-        {
-            return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
-                await Operations.GetByIdAsync(Id, _apiVersion, cancellationToken),
-                v => new GenericResource(this, new GenericResourceData(v)));
-        }
-
-        /// <inheritdoc/>
-        public override void Validate(ResourceIdentifier identifier)
-        {
-        }
-
-        /// <inheritdoc/>
         public ArmResponse<GenericResource> SetTags(IDictionary<string, string> tags)
         {
             GenericResource resource = GetResource();
@@ -153,7 +98,6 @@ namespace Azure.ResourceManager.Core
                 v => new GenericResource(this, new GenericResourceData(v)));
         }
 
-        /// <inheritdoc/>
         public async Task<ArmResponse<GenericResource>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
             GenericResource resource = GetResource();
@@ -164,7 +108,6 @@ namespace Azure.ResourceManager.Core
                 v => new GenericResource(this, new GenericResourceData(v)));
         }
 
-        /// <inheritdoc/>
         public ArmOperation<GenericResource> StartSetTags(IDictionary<string, string> tags)
         {
             GenericResource resource = GetResource();
@@ -174,7 +117,6 @@ namespace Azure.ResourceManager.Core
                 v => new GenericResource(this, new GenericResourceData(v)));
         }
 
-        /// <inheritdoc/>
         public async Task<ArmOperation<GenericResource>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
             GenericResource resource = GetResource();
@@ -185,7 +127,6 @@ namespace Azure.ResourceManager.Core
                 v => new GenericResource(this, new GenericResourceData(v)));
         }
 
-        /// <inheritdoc/>
         public ArmResponse<GenericResource> RemoveTag(string key)
         {
             GenericResource resource = GetResource();
@@ -195,7 +136,6 @@ namespace Azure.ResourceManager.Core
                 v => new GenericResource(this, new GenericResourceData(v)));
         }
 
-        /// <inheritdoc/>
         public async Task<ArmResponse<GenericResource>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
             GenericResource resource = GetResource();
@@ -206,7 +146,6 @@ namespace Azure.ResourceManager.Core
                 v => new GenericResource(this, new GenericResourceData(v)));
         }
 
-        /// <inheritdoc/>
         public ArmOperation<GenericResource> StartRemoveTag(string key)
         {
             GenericResource resource = GetResource();
@@ -216,7 +155,6 @@ namespace Azure.ResourceManager.Core
                 v => new GenericResource(this, new GenericResourceData(v)));
         }
 
-        /// <inheritdoc/>
         public async Task<ArmOperation<GenericResource>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
             GenericResource resource = GetResource();

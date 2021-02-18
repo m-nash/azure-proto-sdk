@@ -23,7 +23,6 @@ namespace Azure.ResourceManager.Core
         {
             ClientOptions = options;
             Id = id;
-            DefaultLocation = LocationData.Default;
             Credential = credential;
             BaseUri = baseUri;
 
@@ -34,11 +33,6 @@ namespace Azure.ResourceManager.Core
         /// Gets the resource identifier.
         /// </summary>
         public virtual ResourceIdentifier Id { get; }
-
-        /// <summary>
-        /// Gets the default location.
-        /// </summary>
-        public virtual LocationData DefaultLocation { get; }
 
         /// <summary>
         /// Gets the Azure Resource Manager client options.

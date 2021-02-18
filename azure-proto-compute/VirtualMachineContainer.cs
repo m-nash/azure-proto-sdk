@@ -1,14 +1,13 @@
 ﻿using Azure;
 using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Compute.Models;
-using azure_proto_compute.Convenience;
 using Azure.ResourceManager.Core;
 using Azure.ResourceManager.Core.Adapters;
 using Azure.ResourceManager.Core.Resources;
+using azure_proto_compute.Convenience;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System;
 
 namespace azure_proto_compute
 {
@@ -112,7 +111,8 @@ namespace azure_proto_compute
         /// <returns> Object used to create a <see cref="VirtualMachine"/>. </returns>
         public VirtualMachineModelBuilder Construct(string hostName, string adminUser, string adminPassword, ResourceIdentifier networkInterfaceId, ResourceIdentifier availabilitySetId, LocationData location = null)
         {
-            var vm = new Azure.ResourceManager.Compute.Models.VirtualMachine(location ?? DefaultLocation)
+            var parent = GetParentResource<ResourceGroup, ResourceGroupOperations>();
+            var vm = new Azure.ResourceManager.Compute.Models.VirtualMachine(location ?? parent.Data.Location)
             {
                 NetworkProfile = new NetworkProfile { NetworkInterfaces = new[] { new NetworkInterfaceReference() { Id = networkInterfaceId } } },
                 OsProfile = new OSProfile
