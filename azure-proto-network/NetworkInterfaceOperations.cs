@@ -127,7 +127,8 @@ namespace azure_proto_network
         /// </remarks>
         public ArmOperation<NetworkInterface> StartAddTag(string key, string value)
         {
-            var patchable = new TagsObject();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
             patchable.Tags[key] = value;
             return new PhArmOperation<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
                 n => new NetworkInterface(this, new NetworkInterfaceData(n)));
@@ -146,51 +147,96 @@ namespace azure_proto_network
         /// </remarks>
         public async Task<ArmOperation<NetworkInterface>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
-            var patchable = new TagsObject();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
             patchable.Tags[key] = value;
             return new PhArmOperation<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
                 await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
                 n => new NetworkInterface(this, new NetworkInterfaceData(n)));
         }
 
+        /// <inheritdoc/>
         public ArmResponse<NetworkInterface> SetTags(IDictionary<string, string> tags)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, resource.Data.Tags);
+            return new PhArmResponse<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => new NetworkInterface(this, new NetworkInterfaceData(n)));
         }
 
-        public Task<ArmResponse<NetworkInterface>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmResponse<NetworkInterface>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, resource.Data.Tags);
+            return new PhArmResponse<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
+                await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => new NetworkInterface(this, new NetworkInterfaceData(n)));
         }
 
+        /// <inheritdoc/>
         public ArmOperation<NetworkInterface> StartSetTags(IDictionary<string, string> tags)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, resource.Data.Tags);
+            return new PhArmOperation<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => new NetworkInterface(this, new NetworkInterfaceData(n)));
         }
 
-        public Task<ArmOperation<NetworkInterface>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmOperation<NetworkInterface>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, resource.Data.Tags);
+            return new PhArmOperation<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
+                await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => new NetworkInterface(this, new NetworkInterfaceData(n)));
         }
 
+        /// <inheritdoc/>
         public ArmResponse<NetworkInterface> RemoveTag(string key)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            DeleteTag(key, resource.Data.Tags);
+            return new PhArmResponse<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => new NetworkInterface(this, new NetworkInterfaceData(n)));
         }
 
-        public Task<ArmResponse<NetworkInterface>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmResponse<NetworkInterface>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            DeleteTag(key, resource.Data.Tags);
+            return new PhArmResponse<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
+                await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => new NetworkInterface(this, new NetworkInterfaceData(n)));
         }
 
+        /// <inheritdoc/>
         public ArmOperation<NetworkInterface> StartRemoveTag(string key)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            DeleteTag(key, resource.Data.Tags);
+            return new PhArmOperation<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => new NetworkInterface(this, new NetworkInterfaceData(n)));
         }
 
-        public Task<ArmOperation<NetworkInterface>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmOperation<NetworkInterface>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            DeleteTag(key, resource.Data.Tags);
+            return new PhArmOperation<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
+                await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => new NetworkInterface(this, new NetworkInterfaceData(n)));
         }
 
         /// <summary>

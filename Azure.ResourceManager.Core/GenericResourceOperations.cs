@@ -146,49 +146,85 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public ArmResponse<GenericResource> SetTags(IDictionary<string, string> tags)
         {
-            throw new System.NotImplementedException();
+            GenericResource resource = GetResource();
+            ReplaceTags(tags, resource.Data.Tags);
+            return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
+                Operations.StartUpdateById(Id, _apiVersion, resource.Data).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+                v => new GenericResource(this, new GenericResourceData(v)));
         }
 
         /// <inheritdoc/>
-        public Task<ArmResponse<GenericResource>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        public async Task<ArmResponse<GenericResource>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            GenericResource resource = GetResource();
+            ReplaceTags(tags, resource.Data.Tags);
+            var op = await Operations.StartUpdateByIdAsync(Id, _apiVersion, resource.Data, cancellationToken);
+            return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
+                await op.WaitForCompletionAsync(cancellationToken),
+                v => new GenericResource(this, new GenericResourceData(v)));
         }
 
         /// <inheritdoc/>
         public ArmOperation<GenericResource> StartSetTags(IDictionary<string, string> tags)
         {
-            throw new System.NotImplementedException();
+            GenericResource resource = GetResource();
+            ReplaceTags(tags, resource.Data.Tags);
+            return new PhArmOperation<GenericResource, ResourceManager.Resources.Models.GenericResource>(
+                Operations.StartUpdateById(Id, _apiVersion, resource.Data).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+                v => new GenericResource(this, new GenericResourceData(v)));
         }
 
         /// <inheritdoc/>
-        public Task<ArmOperation<GenericResource>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<GenericResource>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            GenericResource resource = GetResource();
+            ReplaceTags(tags, resource.Data.Tags);
+            var op = await Operations.StartUpdateByIdAsync(Id, _apiVersion, resource.Data, cancellationToken);
+            return new PhArmOperation<GenericResource, ResourceManager.Resources.Models.GenericResource>(
+                await op.WaitForCompletionAsync(cancellationToken),
+                v => new GenericResource(this, new GenericResourceData(v)));
         }
 
         /// <inheritdoc/>
         public ArmResponse<GenericResource> RemoveTag(string key)
         {
-            throw new System.NotImplementedException();
+            GenericResource resource = GetResource();
+            DeleteTag(key, resource.Data.Tags);
+            return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
+                Operations.StartUpdateById(Id, _apiVersion, resource.Data).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+                v => new GenericResource(this, new GenericResourceData(v)));
         }
 
         /// <inheritdoc/>
-        public Task<ArmResponse<GenericResource>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        public async Task<ArmResponse<GenericResource>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            GenericResource resource = GetResource();
+            DeleteTag(key, resource.Data.Tags);
+            var op = await Operations.StartUpdateByIdAsync(Id, _apiVersion, resource.Data, cancellationToken);
+            return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
+                await op.WaitForCompletionAsync(cancellationToken),
+                v => new GenericResource(this, new GenericResourceData(v)));
         }
 
         /// <inheritdoc/>
         public ArmOperation<GenericResource> StartRemoveTag(string key)
         {
-            throw new System.NotImplementedException();
+            GenericResource resource = GetResource();
+            DeleteTag(key, resource.Data.Tags);
+            return new PhArmOperation<GenericResource, ResourceManager.Resources.Models.GenericResource>(
+                Operations.StartUpdateById(Id, _apiVersion, resource.Data).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+                v => new GenericResource(this, new GenericResourceData(v)));
         }
 
         /// <inheritdoc/>
-        public Task<ArmOperation<GenericResource>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<GenericResource>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            GenericResource resource = GetResource();
+            DeleteTag(key, resource.Data.Tags);
+            var op = await Operations.StartUpdateByIdAsync(Id, _apiVersion, resource.Data, cancellationToken);
+            return new PhArmOperation<GenericResource, ResourceManager.Resources.Models.GenericResource>(
+                await op.WaitForCompletionAsync(cancellationToken),
+                v => new GenericResource(this, new GenericResourceData(v)));
         }
     }
 }

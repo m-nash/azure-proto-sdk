@@ -118,7 +118,8 @@ namespace azure_proto_network
         /// <inheritdoc/>
         public ArmOperation<NetworkSecurityGroup> StartAddTag(string key, string value)
         {
-            var patchable = new TagsObject();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
             patchable.Tags[key] = value;
             return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
                 Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
@@ -128,7 +129,8 @@ namespace azure_proto_network
         /// <inheritdoc/>
         public async Task<ArmOperation<NetworkSecurityGroup>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
-            var patchable = new TagsObject();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
             patchable.Tags[key] = value;
             return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
                 n => new NetworkSecurityGroup(this, new NetworkSecurityGroupData(n)));
@@ -163,44 +165,88 @@ namespace azure_proto_network
             return Get().Value;
         }
 
+        /// <inheritdoc/>
         public ArmResponse<NetworkSecurityGroup> SetTags(IDictionary<string, string> tags)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, resource.Data.Tags);
+            return new PhArmResponse<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
+                Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => new NetworkSecurityGroup(this, new NetworkSecurityGroupData(n)));
         }
 
-        public Task<ArmResponse<NetworkSecurityGroup>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmResponse<NetworkSecurityGroup>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, resource.Data.Tags);
+            return new PhArmResponse<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => new NetworkSecurityGroup(this, new NetworkSecurityGroupData(n)));
         }
 
+        /// <inheritdoc/>
         public ArmOperation<NetworkSecurityGroup> StartSetTags(IDictionary<string, string> tags)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, resource.Data.Tags);
+            return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
+                Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => new NetworkSecurityGroup(this, new NetworkSecurityGroupData(n)));
         }
 
-        public Task<ArmOperation<NetworkSecurityGroup>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmOperation<NetworkSecurityGroup>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, resource.Data.Tags);
+            return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => new NetworkSecurityGroup(this, new NetworkSecurityGroupData(n)));
         }
 
+        /// <inheritdoc/>
         public ArmResponse<NetworkSecurityGroup> RemoveTag(string key)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            DeleteTag(key, resource.Data.Tags);
+            return new PhArmResponse<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
+                Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => new NetworkSecurityGroup(this, new NetworkSecurityGroupData(n)));
         }
 
-        public Task<ArmResponse<NetworkSecurityGroup>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmResponse<NetworkSecurityGroup>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            DeleteTag(key, resource.Data.Tags);
+            return new PhArmResponse<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => new NetworkSecurityGroup(this, new NetworkSecurityGroupData(n)));
         }
 
+        /// <inheritdoc/>
         public ArmOperation<NetworkSecurityGroup> StartRemoveTag(string key)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            DeleteTag(key, resource.Data.Tags);
+            return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
+                Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => new NetworkSecurityGroup(this, new NetworkSecurityGroupData(n)));
         }
 
-        public Task<ArmOperation<NetworkSecurityGroup>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmOperation<NetworkSecurityGroup>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            DeleteTag(key, resource.Data.Tags);
+            return new PhArmOperation<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => new NetworkSecurityGroup(this, new NetworkSecurityGroupData(n)));
         }
 
         /// <summary>

@@ -287,45 +287,101 @@ namespace azure_proto_compute
                 v => new VirtualMachine(this, new VirtualMachineData(v)));
         }
 
+        /// <inheritdoc/>
         public ArmResponse<VirtualMachine> SetTags(IDictionary<string, string> tags)
         {
-            throw new System.NotImplementedException();
+            var vm = GetResource();
+            var patchable = new VirtualMachineUpdate { Tags = vm.Data.Tags };
+            ReplaceTags(tags, patchable.Tags);
+
+            return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
+                Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
         }
 
-        public Task<ArmResponse<VirtualMachine>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmResponse<VirtualMachine>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var vm = await GetResourceAsync();
+            var patchable = new VirtualMachineUpdate { Tags = vm.Data.Tags };
+            ReplaceTags(tags, patchable.Tags);
+
+            return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
+                await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken).Result.WaitForCompletionAsync(),
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
         }
 
+        /// <inheritdoc/>
         public ArmOperation<VirtualMachine> StartSetTags(IDictionary<string, string> tags)
         {
-            throw new System.NotImplementedException();
+            var vm = GetResource();
+            var patchable = new VirtualMachineUpdate { Tags = vm.Data.Tags };
+            ReplaceTags(tags, patchable.Tags);
+
+            return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
+                Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
         }
 
-        public Task<ArmOperation<VirtualMachine>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmOperation<VirtualMachine>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var vm = await GetResourceAsync();
+            var patchable = new VirtualMachineUpdate { Tags = vm.Data.Tags };
+            ReplaceTags(tags, patchable.Tags);
+
+            return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
+                await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken).Result.WaitForCompletionAsync(),
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
         }
 
+        /// <inheritdoc/>
         public ArmResponse<VirtualMachine> RemoveTag(string key)
         {
-            throw new System.NotImplementedException();
+            var vm = GetResource();
+            var patchable = new VirtualMachineUpdate { Tags = vm.Data.Tags };
+            DeleteTag(key, patchable.Tags);
+
+            return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
+                Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
         }
 
-        public Task<ArmResponse<VirtualMachine>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmResponse<VirtualMachine>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var vm = await GetResourceAsync();
+            var patchable = new VirtualMachineUpdate { Tags = vm.Data.Tags };
+            DeleteTag(key, patchable.Tags);
+
+            return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
+                await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken).Result.WaitForCompletionAsync(),
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
         }
 
+        /// <inheritdoc/>
         public ArmOperation<VirtualMachine> StartRemoveTag(string key)
         {
-            throw new System.NotImplementedException();
+            var vm = GetResource();
+            var patchable = new VirtualMachineUpdate { Tags = vm.Data.Tags };
+            DeleteTag(key, patchable.Tags);
+
+            return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
+                Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
         }
 
-        public Task<ArmOperation<VirtualMachine>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmOperation<VirtualMachine>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
-         }
+            var vm = await GetResourceAsync();
+            var patchable = new VirtualMachineUpdate { Tags = vm.Data.Tags };
+            DeleteTag(key, patchable.Tags);
+
+            return new PhArmOperation<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
+                await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken).Result.WaitForCompletionAsync(),
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
+        }
 
         /// <summary>
         /// Lists all available geo-locations.

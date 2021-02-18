@@ -129,7 +129,8 @@ namespace azure_proto_network
         /// <returns> An <see cref="ArmOperation{PublicIpAddress}"/> that allows polling for completion of the operation. </returns>
         public ArmOperation<PublicIpAddress> StartAddTag(string key, string value)
         {
-            var patchable = new TagsObject();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
             patchable.Tags[key] = value;
             return new PhArmOperation<PublicIpAddress, PublicIPAddress>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
                 n => new PublicIpAddress(this, new PublicIPAddressData(n)));
@@ -145,50 +146,91 @@ namespace azure_proto_network
         /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{PublicIpAddress}"/> that allows polling for completion of the operation. </returns>
         public async Task<ArmOperation<PublicIpAddress>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
-            var patchable = new TagsObject();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
             patchable.Tags[key] = value;
             return new PhArmOperation<PublicIpAddress, PublicIPAddress>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
                 n => new PublicIpAddress(this, new PublicIPAddressData(n)));
         }
 
+        /// <inheritdoc/>
         public ArmResponse<PublicIpAddress> SetTags(IDictionary<string, string> tags)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, resource.Data.Tags);
+            return new PhArmResponse<PublicIpAddress, PublicIPAddress>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => new PublicIpAddress(this, new PublicIPAddressData(n)));
         }
 
-        public Task<ArmResponse<PublicIpAddress>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmResponse<PublicIpAddress>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, resource.Data.Tags);
+            return new PhArmResponse<PublicIpAddress, PublicIPAddress>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => new PublicIpAddress(this, new PublicIPAddressData(n)));
         }
 
+        /// <inheritdoc/>
         public ArmOperation<PublicIpAddress> StartSetTags(IDictionary<string, string> tags)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, resource.Data.Tags);
+            return new PhArmOperation<PublicIpAddress, PublicIPAddress>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => new PublicIpAddress(this, new PublicIPAddressData(n)));
         }
 
-        public Task<ArmOperation<PublicIpAddress>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmOperation<PublicIpAddress>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            ReplaceTags(tags, resource.Data.Tags);
+            return new PhArmOperation<PublicIpAddress, PublicIPAddress>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => new PublicIpAddress(this, new PublicIPAddressData(n)));
         }
 
+        /// <inheritdoc/>
         public ArmResponse<PublicIpAddress> RemoveTag(string key)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            DeleteTag(key, resource.Data.Tags);
+            return new PhArmResponse<PublicIpAddress, PublicIPAddress>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => new PublicIpAddress(this, new PublicIPAddressData(n)));
         }
 
-        public Task<ArmResponse<PublicIpAddress>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmResponse<PublicIpAddress>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            DeleteTag(key, resource.Data.Tags);
+            return new PhArmResponse<PublicIpAddress, PublicIPAddress>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => new PublicIpAddress(this, new PublicIPAddressData(n)));
         }
 
+        /// <inheritdoc/>
         public ArmOperation<PublicIpAddress> StartRemoveTag(string key)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            DeleteTag(key, resource.Data.Tags);
+            return new PhArmOperation<PublicIpAddress, PublicIPAddress>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => new PublicIpAddress(this, new PublicIPAddressData(n)));
         }
 
-        public Task<ArmOperation<PublicIpAddress>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<ArmOperation<PublicIpAddress>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            DeleteTag(key, resource.Data.Tags);
+            return new PhArmOperation<PublicIpAddress, PublicIPAddress>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => new PublicIpAddress(this, new PublicIPAddressData(n)));
         }
         
         /// <summary>
