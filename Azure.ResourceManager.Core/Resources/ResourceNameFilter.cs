@@ -9,7 +9,7 @@ namespace Azure.ResourceManager.Core.Resources
     /// <summary>
     /// A class representing a substring filter used in Azure API calls.
     /// </summary>
-    public class ResourceNameFilter : GenericResourceFilter, IEquatable<ResourceNameFilter>
+    public class ResourceNameFilter : GenericResourceFilter, IEquatable<ResourceNameFilter>, IEquatable<string>
     {
         /// <summary>
         /// Gets or sets the name.
@@ -34,7 +34,7 @@ namespace Azure.ResourceManager.Core.Resources
         }
 
         /// <inheritdoc/>
-        public override bool Equals(string other)
+        public bool Equals(string other)
         {
             if (other is null)
                 return false;

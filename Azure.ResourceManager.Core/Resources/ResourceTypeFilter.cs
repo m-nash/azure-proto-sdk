@@ -8,7 +8,7 @@ namespace Azure.ResourceManager.Core.Resources
     /// <summary>
     /// A class representing a resource type filter used in Azure API calls.
     /// </summary>
-    public class ResourceTypeFilter : GenericResourceFilter, IEquatable<ResourceTypeFilter>
+    public class ResourceTypeFilter : GenericResourceFilter, IEquatable<ResourceTypeFilter>, IEquatable<string>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceTypeFilter"/> class.
@@ -25,7 +25,7 @@ namespace Azure.ResourceManager.Core.Resources
         public ResourceType ResourceType { get; }
 
         /// <inheritdoc/>
-        public override bool Equals(string other)
+        public bool Equals(string other)
         {
             throw new NotImplementedException();
         }
