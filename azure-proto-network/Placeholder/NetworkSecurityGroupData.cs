@@ -12,8 +12,7 @@ namespace azure_proto_network
     /// A class representing the NetworkSecurityGroup data model.
     /// </summary>
     public class NetworkSecurityGroupData :
-        TrackedResource<Azure.ResourceManager.Network.Models.NetworkSecurityGroup>,
-        IEntityResource
+        TrackedResource<Azure.ResourceManager.Network.Models.NetworkSecurityGroup>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkSecurityGroupData"/> class.

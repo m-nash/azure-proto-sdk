@@ -194,7 +194,7 @@ namespace Azure.ResourceManager.Core
 
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;
 
-            return container.Create(name, model);
+            return container.CreateOrUpdate(name, model);
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace Azure.ResourceManager.Core
 
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;
 
-            return container.CreateAsync(name, model, cancellationToken);
+            return container.CreateOrUpdateAsync(name, model, cancellationToken);
         }
 
         /// <summary>

@@ -57,36 +57,36 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Creates a new resource.
+        /// The operation to create or update a resource. Please note some properties can be set only during creation.
         /// </summary>
         /// <param name="name"> The name of the new resource to create. </param>
         /// <returns> A response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
-        public ArmResponse<TOperations> Create(string name)
+        public ArmResponse<TOperations> CreateOrUpdate(string name)
         {
             ResourceName = name;
             Resource = Build();
 
-            return UnTypedContainer.Create(name, Resource);
+            return UnTypedContainer.CreateOrUpdate(name, Resource);
         }
 
         /// <summary>
-        /// Creates a new resource.
+        /// The operation to create or update a resource. Please note some properties can be set only during creation.
         /// </summary>
         /// <param name="name"> The name of the new resource to create. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
-        public async Task<ArmResponse<TOperations>> CreateAsync(
+        public async Task<ArmResponse<TOperations>> CreateOrUpdateAsync(
             string name,
             CancellationToken cancellationToken = default)
         {
             ResourceName = name;
             Resource = Build();
 
-            return await UnTypedContainer.CreateAsync(name, Resource, cancellationToken);
+            return await UnTypedContainer.CreateOrUpdateAsync(name, Resource, cancellationToken);
         }
 
         /// <summary>
-        /// Creates a new resource.
+        /// The operation to create or update a resource. Please note some properties can be set only during creation.
         /// </summary>
         /// <param name="name"> The name of the new resource to create. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
@@ -94,16 +94,16 @@ namespace Azure.ResourceManager.Core
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
         /// </remarks>
-        public ArmOperation<TOperations> StartCreate(string name, CancellationToken cancellationToken = default)
+        public ArmOperation<TOperations> StartCreateOrUpdate(string name, CancellationToken cancellationToken = default)
         {
             ResourceName = name;
             Resource = Build();
 
-            return UnTypedContainer.StartCreate(name, Resource, cancellationToken);
+            return UnTypedContainer.StartCreateOrUpdate(name, Resource, cancellationToken);
         }
 
         /// <summary>
-        /// Creates a new resource.
+        /// The operation to create or update a resource. Please note some properties can be set only during creation.
         /// </summary>
         /// <param name="name"> The name of the new resource to create. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
@@ -111,14 +111,14 @@ namespace Azure.ResourceManager.Core
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
         /// </remarks>
-        public async Task<ArmOperation<TOperations>> StartCreateAsync(
+        public async Task<ArmOperation<TOperations>> StartCreateOrUpdateAsync(
             string name,
             CancellationToken cancellationToken = default)
         {
             ResourceName = name;
             Resource = Build();
 
-            return await UnTypedContainer.StartCreateAsync(name, Resource, cancellationToken);
+            return await UnTypedContainer.StartCreateOrUpdateAsync(name, Resource, cancellationToken);
         }
 
         /// <summary>

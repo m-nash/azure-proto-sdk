@@ -203,7 +203,7 @@ namespace Azure.ResourceManager.Core
 
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, new GenericResourceData($"/subscriptions/{subscription}/resourceGroups/{resourceGroup}", location)) as TContainer;
 
-            return container.Create(name, model);
+            return container.CreateOrUpdate(name, model);
         }
 
         /// <summary>
