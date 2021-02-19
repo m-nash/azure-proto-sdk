@@ -8,7 +8,7 @@ namespace Azure.ResourceManager.Core.Resources
     /// <summary>
     /// A class representing a tag filter used in Azure API calls.
     /// </summary>
-    public class ResourceTagFilter : GenericResourceFilter
+    public class ResourceTagFilter : GenericResourceFilter, IEquatable<ResourceTagFilter>
     {
         private readonly Tuple<string, string> _tag;
 
@@ -50,7 +50,7 @@ namespace Azure.ResourceManager.Core.Resources
         }
 
         /// <inheritdoc/>
-        public override bool Equals(GenericResourceFilter other)
+        public bool Equals(ResourceTagFilter other)
         {
             throw new NotImplementedException();
         }
