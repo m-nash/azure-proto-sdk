@@ -161,7 +161,7 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(TrackedResourceId, ChildResourceId, false)]
         [TestCase(ChildResourceId, TrackedResourceId, false)]
         [TestCase(null, TrackedResourceId, false)]
-        public void equals(string resourceProviderID1, string resourceProviderID2, bool expected)
+        public void Equals(string resourceProviderID1, string resourceProviderID2, bool expected)
         {
             ResourceIdentifier a = resourceProviderID1;
             ResourceIdentifier b = resourceProviderID2;
@@ -177,7 +177,7 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(TrackedResourceId, null, 1)]
         [TestCase(null, TrackedResourceId, -1)]
         [TestCase(null, null, 0)]
-        public void compareToResourceProvider(string resourceProviderID1, string resourceProviderID2, int expected)
+        public void CompareToResourceProvider(string resourceProviderID1, string resourceProviderID2, int expected)
         {
             ResourceIdentifier a = resourceProviderID1;
             ResourceIdentifier b = resourceProviderID2;
@@ -193,7 +193,7 @@ namespace Azure.ResourceManager.Core.Tests
         [TestCase(TrackedResourceId, null, 1)]
         [TestCase(null, TrackedResourceId, -1)]
         [TestCase(null, null, 0)]
-        public void compareToString(string resourceProviderID1, string resourceProviderID2, int expected)
+        public void CompareToString(string resourceProviderID1, string resourceProviderID2, int expected)
         {
             ResourceIdentifier a = resourceProviderID1;
             string b = resourceProviderID2;
