@@ -28,19 +28,17 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="options"> The client parameters to use in these operations. </param>
         /// <param name="rgName"> The name of the resource group to use. </param>
-        /// <exception cref="ArgumentException"> rgName cannot be longer than 90 characters. </exception>
-        /// <exception cref="ArgumentException"> rgName cannot have a special character. </exception>
         internal ResourceGroupOperations(SubscriptionOperations options, string rgName)
             : base(options, $"{options.Id}/resourceGroups/{rgName}")
         {
             if (rgName.Length > 90)
-                throw new ArgumentException("ResourceGroupName cannot be longer than 90 characters.");
+                throw new ArgumentOutOfRangeException("ResourceGroupName cannot be longer than 90 characters.");
 
             if (!ValidationPattern.IsMatch(rgName))
                 throw new ArgumentException("ResourceGroupName cannot have a special character.");
         }
 
-        private Regex ValidationPattern = new Regex(@"^[-\w\._\(\)]+$");
+        private static readonly Regex ValidationPattern = new Regex(@"^[-\w\._\(\)]+$");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceGroupOperations"/> class.

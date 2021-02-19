@@ -17,8 +17,7 @@ namespace Azure.ResourceManager.Core.Tests
             Assert.Throws<ArgumentOutOfRangeException>(delegate { subOps.GetResourceGroupOperations(resourceGroupName); });
         }
 
-        [TestCase("te%st")]
-        [TestCase("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")]
+        [TestCase("te%st")]        
         [TestCase("test ")]
         [TestCase("te$st")]
         [TestCase("te#st")]
@@ -28,6 +27,14 @@ namespace Azure.ResourceManager.Core.Tests
             var client = new AzureResourceManagerClient();
             var subOps = client.DefaultSubscription;
             Assert.Throws<ArgumentException>(delegate { subOps.GetResourceGroupOperations(resourceGroupName); });
+        }
+
+        [TestCase("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")]
+        public void TestGetResourceGroupOpsOutOfRangeArgException(string resourceGroupName)
+        {
+            var client = new AzureResourceManagerClient();
+            var subOps = client.DefaultSubscription;
+            Assert.Throws<ArgumentOutOfRangeException>(delegate { subOps.GetResourceGroupOperations(resourceGroupName); });
         }
 
         [TestCase("te.st")]

@@ -58,6 +58,8 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <returns> The resource group operations. </returns>
+        /// <exception cref="ArgumentOutOfRangeException"> resourceGroupName must be at least one character long and cannot be longer than 90 characters. </exception>
+        /// <exception cref="ArgumentException"> resourceGroupName cannot have a special character. </exception>
         public ResourceGroupOperations GetResourceGroupOperations(string resourceGroupName)
         {
             return new ResourceGroupOperations(this, resourceGroupName);
