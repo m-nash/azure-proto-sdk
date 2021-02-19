@@ -84,6 +84,17 @@ namespace Azure.ResourceManager.Core.Tests
             Assert.AreEqual(targetResourceId, subject.Parent);
         }
 
+        [TestCase ("0c2f6471-1bf0-4dda-aec3-cb9272f09575", "myRg", "Microsoft.Web","appServices/myApp/config", "appServices/config")]
+        public void CanParseProxyResource(string subscription, string rg, string resourceNamespace, string resource, string type)
+        {
+            string id = $"/subscriptions/{subscription}/resourceGroups/{rg}/providers/{resourceNamespace}/{resource}";
+            ResourceIdentifier subject = id;
+            Assert.AreEqual(subject.ToString(), id);
+            Assert.AreEqual(subject.Subscription, subscription);
+            Assert.AreEqual(subject.Type.Namespace, resourceNamespace);
+            Assert.AreEqual(subject.Type.Type, type);
+        }
+
         [Test]
         public void CanParseSubscriptions()
         {
