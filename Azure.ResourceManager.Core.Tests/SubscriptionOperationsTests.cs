@@ -4,7 +4,7 @@
 using NUnit.Framework;
 using System;
 
-namespace Azure.ResourceManager.Core
+namespace Azure.ResourceManager.Core.Tests
 {
     public class SubscriptionOperationsTests
     {
