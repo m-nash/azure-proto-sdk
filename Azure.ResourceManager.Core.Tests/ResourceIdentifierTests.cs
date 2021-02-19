@@ -28,10 +28,15 @@ namespace Azure.ResourceManager.Core.Tests
         public void InvalidRPIds(string invalidID)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => { ResourceIdentifier subject = invalidID; });
+            Assert.Throws<ArgumentOutOfRangeException>(() => { ResourceIdentifier subject = new ResourceIdentifier(invalidID); });
         }
 
         [TestCase (null)]
         [TestCase (TrackedResourceId)]
+        [TestCase(ChildResourceId)]
+        [TestCase(ResourceGroupResourceId)]
+        [TestCase(LocationResourceId)]
+        [TestCase(SubscriptionResourceId)]
         public void ImplicitConstructor(string resourceProviderID)
         {
             string x = resourceProviderID;
@@ -50,7 +55,25 @@ namespace Azure.ResourceManager.Core.Tests
             {
                 Assert.AreEqual(resourceProviderID, y);
             }
-            
+        }
+
+        [TestCase (TrackedResourceId)]
+        [TestCase (ChildResourceId)]
+        [TestCase (ResourceGroupResourceId)]
+        [TestCase (LocationResourceId)]
+        [TestCase (SubscriptionResourceId)]
+        [TestCase(null)]
+        public void PublicConstructor(string resourceProviderID)
+        {
+            if (resourceProviderID is null)
+            {
+                Assert.Throws<ArgumentOutOfRangeException>(() => { ResourceIdentifier myResource = new ResourceIdentifier(resourceProviderID); });
+            }
+            else
+            {
+                ResourceIdentifier myResource = new ResourceIdentifier(resourceProviderID);
+                Assert.AreEqual(myResource.ToString(), resourceProviderID);
+            }
         }
 
         [TestCase("0c2f6471-1bf0-4dda-aec3-cb9272f09575", "myRg", "Microsoft.Compute", "virtualMachines", "myVM")]
