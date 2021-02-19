@@ -24,6 +24,9 @@ namespace Azure.ResourceManager.Core
         /// <param name="resourceIdOrType"> Option to provide the Resource Type directly, or a Resource ID from which the type is going to be obtained. </param>
         public ResourceType(string resourceIdOrType)
         {
+            if (string.IsNullOrWhiteSpace(resourceIdOrType))
+                throw new ArgumentException(nameof(resourceIdOrType), $"{nameof(resourceIdOrType)} cannot be null or whitespace");
+
             Parse(resourceIdOrType);
         }
 
@@ -66,6 +69,9 @@ namespace Azure.ResourceManager.Core
         /// <param name="other"> String to be conferted into a <see cref="ResourceType"/> object. </param>
         public static implicit operator ResourceType(string other)
         {
+            if (other is null)
+                return null;
+
             return new ResourceType(other);
         }
 
@@ -77,6 +83,9 @@ namespace Azure.ResourceManager.Core
         /// <returns> True if they are equal, otherwise False. </returns>
         public static bool operator ==(ResourceType source, string target)
         {
+            if (source is null)
+                return target is null;
+
             return source.Equals(target);
         }
 
@@ -88,6 +97,9 @@ namespace Azure.ResourceManager.Core
         /// <returns> True if they are equal, otherwise False. </returns>
         public static bool operator ==(string source, ResourceType target)
         {
+            if (target is null)
+                return source is null;
+
             return target.Equals(source);
         }
 
@@ -99,6 +111,9 @@ namespace Azure.ResourceManager.Core
         /// <returns> True if they are equal, otherwise False. </returns>
         public static bool operator ==(ResourceType source, ResourceType target)
         {
+            if (source is null)
+                return target is null;
+
             return source.Equals(target);
         }
 
@@ -110,6 +125,9 @@ namespace Azure.ResourceManager.Core
         /// <returns> False if they are equal, otherwise True. </returns>
         public static bool operator !=(ResourceType source, string target)
         {
+            if (source is null)
+                return !(target is null);
+
             return !source.Equals(target);
         }
 
@@ -121,6 +139,9 @@ namespace Azure.ResourceManager.Core
         /// <returns> False if they are equal, otherwise True. </returns>
         public static bool operator !=(string source, ResourceType target)
         {
+            if (target is null)
+                return !(source is null);
+
             return !target.Equals(source);
         }
 
@@ -132,8 +153,9 @@ namespace Azure.ResourceManager.Core
         /// <returns> False if they are equal, otherwise True. </returns>
         public static bool operator !=(ResourceType source, ResourceType target)
         {
-            if (object.ReferenceEquals(source, null))
-                return false;
+            if (source is null)
+                return !(target is null);
+
             return !source.Equals(target);
         }
 
@@ -144,7 +166,7 @@ namespace Azure.ResourceManager.Core
         /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
         public int CompareTo(ResourceType other)
         {
-            if (ReferenceEquals(other, null))
+            if (other is null)
                 return 1;
 
             if (ReferenceEquals(this, other))
@@ -168,6 +190,9 @@ namespace Azure.ResourceManager.Core
         /// <returns> -1 for less than, 0 for equals, 1 for greater than. </returns>
         public int CompareTo(string other)
         {
+            if (other is null)
+                return 1;
+
             return CompareTo(new ResourceType(other));
         }
 
@@ -178,6 +203,9 @@ namespace Azure.ResourceManager.Core
         /// <returns> True if they are equals, otherwise false. </returns>
         public bool Equals(ResourceType other)
         {
+            if (other is null)
+                return false;
+
             return string.Equals(ToString(), other.ToString(), StringComparison.InvariantCultureIgnoreCase);
         }
 
@@ -188,6 +216,9 @@ namespace Azure.ResourceManager.Core
         /// <returns> True if they are equals, otherwise false. </returns>
         public bool Equals(string other)
         {
+            if (other is null)
+                return false;
+
             return string.Equals(ToString(), other, StringComparison.InvariantCultureIgnoreCase);
         }
 
@@ -200,7 +231,7 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (obj is null)
                 return false;
 
             var resourceObj = obj as ResourceType;
@@ -227,14 +258,10 @@ namespace Azure.ResourceManager.Core
         /// and then assign the proper values to the <see cref="ResourceType"/> class properties.
         /// </summary>
         /// <param name="resourceIdOrType"> String to be parsed. </param>
-        internal void Parse(string resourceIdOrType)
+        private void Parse(string resourceIdOrType)
         {
             // Note that this code will either parse a resource id to find the type, or a resource type
-            resourceIdOrType = resourceIdOrType?.Trim('/');
-
-            // exclude null or empty strings
-            if (string.IsNullOrWhiteSpace(resourceIdOrType))
-                throw new ArgumentOutOfRangeException(nameof(resourceIdOrType));
+            resourceIdOrType = resourceIdOrType.Trim('/');
 
             // split the path into segments
             var parts = resourceIdOrType.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries).ToList();
