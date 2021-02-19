@@ -126,6 +126,39 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
+        /// <returns> An <see cref="ArmResponse{PublicIpAddress}"/> that allows polling for completion of the operation. </returns>
+        public ArmResponse<PublicIpAddress> AddTag(string key, string value)
+        {
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            patchable.Tags[key] = value;
+            return new PhArmResponse<PublicIpAddress, PublicIPAddress>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => new PublicIpAddress(this, new PublicIPAddressData(n)));
+        }
+
+        /// <summary>
+        /// Add a tag to a public IP address.
+        /// If the tag already exists it will be modified.
+        /// </summary>
+        /// <param name="key"> The key for the tag. </param>
+        /// <param name="value"> The value for the tag. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmResponse{PublicIpAddress}"/> that allows polling for completion of the operation. </returns>
+        public async Task<ArmResponse<PublicIpAddress>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        {
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            patchable.Tags[key] = value;
+            return new PhArmResponse<PublicIpAddress, PublicIPAddress>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => new PublicIpAddress(this, new PublicIPAddressData(n)));
+        }
+
+        /// <summary>
+        /// Add a tag to a public IP address.
+        /// If the tag already exists it will be modified.
+        /// </summary>
+        /// <param name="key"> The key for the tag. </param>
+        /// <param name="value"> The value for the tag. </param>
         /// <returns> An <see cref="ArmOperation{PublicIpAddress}"/> that allows polling for completion of the operation. </returns>
         public ArmOperation<PublicIpAddress> StartAddTag(string key, string value)
         {

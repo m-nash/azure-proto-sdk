@@ -116,6 +116,27 @@ namespace azure_proto_network
         }
 
         /// <inheritdoc/>
+        public ArmResponse<NetworkSecurityGroup> AddTag(string key, string value)
+        {
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            patchable.Tags[key] = value;
+            return new PhArmResponse<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(
+                Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => new NetworkSecurityGroup(this, new NetworkSecurityGroupData(n)));
+        }
+
+        /// <inheritdoc/>
+        public async Task<ArmResponse<NetworkSecurityGroup>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        {
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            patchable.Tags[key] = value;
+            return new PhArmResponse<NetworkSecurityGroup, Azure.ResourceManager.Network.Models.NetworkSecurityGroup>(await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => new NetworkSecurityGroup(this, new NetworkSecurityGroupData(n)));
+        }
+
+        /// <inheritdoc/>
         public ArmOperation<NetworkSecurityGroup> StartAddTag(string key, string value)
         {
             var resource = GetResource();

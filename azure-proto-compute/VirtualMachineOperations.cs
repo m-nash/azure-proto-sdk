@@ -256,6 +256,43 @@ namespace azure_proto_compute
         /// </summary>
         /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
+        /// <returns> An <see cref="ArmResponse{VirtualMachine}"/> that allows polling for completion of the operation. </returns>
+        public ArmResponse<VirtualMachine> AddTag(string key, string value)
+        {
+            var vm = GetResource();
+            var patchable = new VirtualMachineUpdate { Tags = vm.Data.Tags };
+            UpdateTags(key, value, patchable.Tags);
+
+            return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
+                Operations.StartUpdate(Id.ResourceGroup, Id.Name, patchable).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
+        }
+
+        /// <summary>
+        /// Add a tag to a virtual machine.
+        /// If the tag already exists it will be modified.
+        /// </summary>
+        /// <param name="key"> The key for the tag. </param>
+        /// <param name="value"> The value for the tag. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmResponse{VirtualMachine}"/> that allows polling for completion of the operation. </returns>
+        public async Task<ArmResponse<VirtualMachine>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        {
+            var vm = await GetResourceAsync();
+            var patchable = new VirtualMachineUpdate { Tags = vm.Data.Tags };
+            UpdateTags(key, value, patchable.Tags);
+
+            return new PhArmResponse<VirtualMachine, Azure.ResourceManager.Compute.Models.VirtualMachine>(
+                await Operations.StartUpdateAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken).Result.WaitForCompletionAsync(),
+                v => new VirtualMachine(this, new VirtualMachineData(v)));
+        }
+
+        /// <summary>
+        /// Add a tag to a virtual machine.
+        /// If the tag already exists it will be modified.
+        /// </summary>
+        /// <param name="key"> The key for the tag. </param>
+        /// <param name="value"> The value for the tag. </param>
         /// <returns> An <see cref="ArmOperation{VirtualMachine}"/> that allows polling for completion of the operation. </returns>
         public ArmOperation<VirtualMachine> StartAddTag(string key, string value)
         {

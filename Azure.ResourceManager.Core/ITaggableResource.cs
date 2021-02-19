@@ -19,6 +19,29 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="key"> The tag key. </param>
         /// <param name="value"> The tag value. </param>
+        /// <returns>An <see cref="ArmResponse{TOperations}"/> that allows the user to control polling and waiting for Tag completion.</returns>
+        ArmResponse<TOperations> AddTag(string key, string value);
+
+        /// <summary>
+        /// Add a tag to the resource
+        /// </summary>
+        /// <param name="key"> The tag key. </param>
+        /// <param name="value"> The tag value. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
+        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that performs the Tag operation.  The Task yields an an
+        /// <see cref="ArmResponse{TOperations}"/> that allows the user to control polling and waiting for
+        /// Tag completion. </returns>
+        Task<ArmResponse<TOperations>> AddTagAsync(
+            string key,
+            string value,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Add a tag to the resource
+        /// </summary>
+        /// <param name="key"> The tag key. </param>
+        /// <param name="value"> The tag value. </param>
         /// <returns>An <see cref="ArmOperation{TOperations}"/> that allows the user to control polling and waiting for Tag completion.</returns>
         ArmOperation<TOperations> StartAddTag(string key, string value);
 
