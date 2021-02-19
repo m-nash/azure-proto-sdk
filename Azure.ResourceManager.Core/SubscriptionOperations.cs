@@ -58,27 +58,8 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <returns> The resource group operations. </returns>
-        /// <exception cref="ArgumentNullException"> ResourceGroupName cannot be null or empty. </exception>
-        /// <exception cref="ArgumentException"> ResourceGroupName cannot be longer than 90 characters. </exception>
-        /// <exception cref="ArgumentException"> ResourceGroupName cannot have a special character. </exception>
         public ResourceGroupOperations GetResourceGroupOperations(string resourceGroupName)
         {
-            if (string.IsNullOrWhiteSpace(resourceGroupName))
-            {
-                throw new ArgumentNullException("ResourceGroupName cannot be null or empty.");
-            }
-
-            if (resourceGroupName.Length > 90)
-            {
-                throw new ArgumentException("ResourceGroupName cannot be longer than 90 characters.");
-            }
-
-            Regex pattern = new Regex(@"^[-\w\._\(\)]+$");
-            if (!pattern.IsMatch(resourceGroupName))
-            {
-                throw new ArgumentException("ResourceGroupName cannot have a special character.");
-            }
-
             return new ResourceGroupOperations(this, resourceGroupName);
         }
 

@@ -39,7 +39,7 @@ namespace Azure.ResourceManager.Core
         /// Validate that the given resource Id represents a valid parent for this resource
         /// </summary>
         /// <param name="identifier"> The resource Id of the parent resource. </param>
-        public override void Validate(ResourceIdentifier identifier)
+        protected override void Validate(ResourceIdentifier identifier)
         {
         }
 

@@ -14,7 +14,7 @@ namespace Azure.ResourceManager.Core
         {
             var client = new AzureResourceManagerClient();
             var subOps = client.DefaultSubscription;
-            Assert.Throws<ArgumentNullException>(delegate { subOps.GetResourceGroupOperations(resourceGroupName); });
+            Assert.Throws<ArgumentOutOfRangeException>(delegate { subOps.GetResourceGroupOperations(resourceGroupName); });
         }
 
         [TestCase("te%st")]
