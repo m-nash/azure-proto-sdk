@@ -6,6 +6,7 @@ using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,7 +31,14 @@ namespace Azure.ResourceManager.Core
         internal ResourceGroupOperations(SubscriptionOperations options, string rgName)
             : base(options, $"{options.Id}/resourceGroups/{rgName}")
         {
+            if (rgName.Length > 90)
+                throw new ArgumentOutOfRangeException("ResourceGroupName cannot be longer than 90 characters.");
+
+            if (!ValidationPattern.IsMatch(rgName))
+                throw new ArgumentException("The name of the resource group can include alphanumeric, underscore, parentheses, hyphen, period (except at end), and Unicode characters that match the allowed characters.");
         }
+
+        private static readonly Regex ValidationPattern = new Regex(@"^[-\w\._\(\)]+$");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceGroupOperations"/> class.

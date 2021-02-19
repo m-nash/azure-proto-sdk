@@ -64,7 +64,7 @@ namespace Azure.ResourceManager.Core
         /// Validate the resource identifier against current operations.
         /// </summary>
         /// <param name="identifier"> The resource identifier. </param>
-        public virtual void Validate(ResourceIdentifier identifier)
+        protected virtual void Validate(ResourceIdentifier identifier)
         {
             if (identifier?.Type != ValidResourceType)
                 throw new InvalidOperationException($"Invalid resource type {identifier?.Type} expected {ValidResourceType}");

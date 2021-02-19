@@ -69,7 +69,7 @@ namespace Azure.ResourceManager.Core
         /// Validate the resource identifier is supported in the current container.
         /// </summary>
         /// <param name="identifier"> The identifier of the resource. </param>
-        public override void Validate(ResourceIdentifier identifier)
+        protected override void Validate(ResourceIdentifier identifier)
         {
             if (identifier != null)
                 throw new ArgumentException("Invalid parent for subscription container");
