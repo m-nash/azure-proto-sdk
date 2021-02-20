@@ -8,7 +8,7 @@ namespace Azure.ResourceManager.Core.Resources
     /// <summary>
     /// A class representing a tag filter used in Azure API calls.
     /// </summary>
-    public class ResourceTagFilter : GenericResourceFilter
+    public class ResourceTagFilter : GenericResourceFilter, IEquatable<ResourceTagFilter>
     {
         private readonly Tuple<string, string> _tag;
 
@@ -18,6 +18,9 @@ namespace Azure.ResourceManager.Core.Resources
         /// <param name="tag"> The tag to filter by. </param>
         public ResourceTagFilter(Tuple<string, string> tag)
         {
+            if (tag?.Item1 is null || tag?.Item2 is null)
+                throw new ArgumentNullException(nameof(tag), "The tag, its key, and its value must not be null");
+
             _tag = tag;
             Key = _tag.Item1;
             Value = _tag.Item2;
@@ -44,15 +47,13 @@ namespace Azure.ResourceManager.Core.Resources
         public string Value { get; }
 
         /// <inheritdoc/>
-        public override bool Equals(string other)
+        public bool Equals(ResourceTagFilter other)
         {
-            throw new NotImplementedException();
-        }
+            if (other is null)
+                return false;
 
-        /// <inheritdoc/>
-        public override bool Equals(GenericResourceFilter other)
-        {
-            throw new NotImplementedException();
+            return string.Equals(other.Key, Key) &&
+                string.Equals(other.Value, Value);
         }
 
         /// <inheritdoc/>

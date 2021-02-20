@@ -9,7 +9,7 @@ namespace Azure.ResourceManager.Core.Resources
     /// <summary>
     /// A class representing a substring filter used in Azure API calls.
     /// </summary>
-    public class ResourceNameFilter : GenericResourceFilter
+    public class ResourceNameFilter : GenericResourceFilter, IEquatable<ResourceNameFilter>, IEquatable<string>
     {
         /// <summary>
         /// Gets or sets the name.
@@ -27,19 +27,28 @@ namespace Azure.ResourceManager.Core.Resources
         /// <param name="nameString"> The string that can be match in any part of the resource name. </param>
         public static implicit operator ResourceNameFilter(string nameString)
         {
+            if (nameString is null)
+                return null;
+
             return new ResourceNameFilter { Name = nameString };
         }
 
         /// <inheritdoc/>
-        public override bool Equals(string other)
+        public bool Equals(string other)
         {
-            throw new NotImplementedException();
+            if (other is null)
+                return false;
+
+            return string.Equals(other, Name);
         }
 
         /// <inheritdoc/>
-        public override bool Equals(GenericResourceFilter other)
+        public bool Equals(ResourceNameFilter other)
         {
-            throw new NotImplementedException();
+            if (other is null)
+                return false;
+
+            return string.Equals(other.Name, Name);
         }
 
         /// <inheritdoc/>

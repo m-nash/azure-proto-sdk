@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.Core;
@@ -57,6 +58,8 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <returns> The resource group operations. </returns>
+        /// <exception cref="ArgumentOutOfRangeException"> resourceGroupName must be at least one character long and cannot be longer than 90 characters. </exception>
+        /// <exception cref="ArgumentException"> The name of the resource group can include alphanumeric, underscore, parentheses, hyphen, period (except at end), and Unicode characters that match the allowed characters. </exception>
         public ResourceGroupOperations GetResourceGroupOperations(string resourceGroupName)
         {
             return new ResourceGroupOperations(this, resourceGroupName);

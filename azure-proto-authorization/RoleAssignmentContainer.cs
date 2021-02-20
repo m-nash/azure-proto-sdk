@@ -119,7 +119,7 @@ namespace azure_proto_authorization
         }
 
         /// <inheritdoc/>
-        public override void Validate(ResourceIdentifier identifier)
+        protected override void Validate(ResourceIdentifier identifier)
         {
             return;
         }

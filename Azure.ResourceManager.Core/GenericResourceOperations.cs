@@ -174,7 +174,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <inheritdoc/>
-        public override void Validate(ResourceIdentifier identifier)
+        protected override void Validate(ResourceIdentifier identifier)
         {
         }
 

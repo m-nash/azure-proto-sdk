@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using NUnit.Framework;
+using System;
 
 namespace Azure.ResourceManager.Core.Tests
 {
@@ -112,6 +113,121 @@ namespace Azure.ResourceManager.Core.Tests
             ResourceType resourceType1 = new ResourceType(resource1);
             ResourceType resourceType2 = new ResourceType(resource2);
             Assert.AreEqual(expected, resourceType1.CompareTo(resourceType2));
+        }
+
+        [TestCase("")]
+        [TestCase("\n")]
+        [TestCase("\t")]
+        [TestCase(" ")]
+        [TestCase("\r")]
+        [TestCase(null)]
+        public void InvalidConstructorParam(string input)
+        {
+            Assert.Throws<ArgumentException>(() => new ResourceType(input));
+        }
+
+        [TestCase]
+        public void NullImplicitFromString()
+        {
+            string from = null;
+            ResourceType to = from;
+
+            Assert.IsNull(to);
+        }
+
+        [TestCase(false, null, "Microsoft.Network1/VirtualNetworks2/subnets1")]
+        [TestCase(false, "Microsoft.Network1/VirtualNetworks2/subnets1", null)]
+        [TestCase(true, null, null)]
+        [TestCase(true, "Microsoft.Network1/VirtualNetworks2/subnets1", "Microsoft.Network1/VirtualNetworks2/subnets1")]
+        public void EqualsOpResourceTypeToString(bool expected, string left, string right)
+        {
+            ResourceType leftResource = left;
+            Assert.AreEqual(expected, leftResource == right);
+        }
+
+        [TestCase(false, null, "Microsoft.Network1/VirtualNetworks2/subnets1")]
+        [TestCase(false, "Microsoft.Network1/VirtualNetworks2/subnets1", null)]
+        [TestCase(true, null, null)]
+        [TestCase(true, "Microsoft.Network1/VirtualNetworks2/subnets1", "Microsoft.Network1/VirtualNetworks2/subnets1")]
+        public void EqualsOpStringToResourceType(bool expected, string left, string right)
+        {
+            ResourceType rightResource = right;
+            Assert.AreEqual(expected, left == rightResource);
+        }
+
+        [TestCase(false, null, "Microsoft.Network1/VirtualNetworks2/subnets1")]
+        [TestCase(false, "Microsoft.Network1/VirtualNetworks2/subnets1", null)]
+        [TestCase(true, null, null)]
+        [TestCase(true, "Microsoft.Network1/VirtualNetworks2/subnets1", "Microsoft.Network1/VirtualNetworks2/subnets1")]
+        public void EqualsOpResourceTypeToResourceType(bool expected, string left, string right)
+        {
+            ResourceType leftResource = left;
+            ResourceType rightResource = right;
+            Assert.AreEqual(expected, leftResource == rightResource);
+        }
+
+        [TestCase(true, null, "Microsoft.Network1/VirtualNetworks2/subnets1")]
+        [TestCase(true, "Microsoft.Network1/VirtualNetworks2/subnets1", null)]
+        [TestCase(false, null, null)]
+        [TestCase(false, "Microsoft.Network1/VirtualNetworks2/subnets1", "Microsoft.Network1/VirtualNetworks2/subnets1")]
+        public void NotEqualsOpResourceTypeToString(bool expected, string left, string right)
+        {
+            ResourceType leftResource = left;
+            Assert.AreEqual(expected, leftResource != right);
+        }
+
+        [TestCase(true, null, "Microsoft.Network1/VirtualNetworks2/subnets1")]
+        [TestCase(true, "Microsoft.Network1/VirtualNetworks2/subnets1", null)]
+        [TestCase(false, null, null)]
+        [TestCase(false, "Microsoft.Network1/VirtualNetworks2/subnets1", "Microsoft.Network1/VirtualNetworks2/subnets1")]
+        public void NotEqualsOpStringToResourceType(bool expected, string left, string right)
+        {
+            ResourceType rightResource = right;
+            Assert.AreEqual(expected, left != rightResource);
+        }
+
+        [TestCase(true, null, "Microsoft.Network1/VirtualNetworks2/subnets1")]
+        [TestCase(true, "Microsoft.Network1/VirtualNetworks2/subnets1", null)]
+        [TestCase(false, null, null)]
+        [TestCase(false, "Microsoft.Network1/VirtualNetworks2/subnets1", "Microsoft.Network1/VirtualNetworks2/subnets1")]
+        public void NotEqualsOpResourceTypeToResourceType(bool expected, string left, string right)
+        {
+            ResourceType leftResource = left;
+            ResourceType rightResource = right;
+            Assert.AreEqual(expected, leftResource != rightResource);
+        }
+
+        [TestCase]
+        public void CompareToNulString()
+        {
+            string other = null;
+            ResourceType rt = "Microsoft.Network1/VirtualNetworks2/subnets1";
+            Assert.AreEqual(1, rt.CompareTo(other));
+        }
+
+        [TestCase]
+        public void ParseArgumentException()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => { ResourceType rt = "/"; });
+        }
+
+        [TestCase(false, "Microsoft.Network1/VirtualNetworks2/subnets1", null)]
+        [TestCase(true, "Microsoft.Network1/VirtualNetworks2/subnets1", "Microsoft.Network1/VirtualNetworks2/subnets1")]
+        public void EqualsWithObjectResourceType(bool expected, string left, string right)
+        {
+            ResourceType rt = left;
+            ResourceType rightRt = right;
+            object rightObject = rightRt;
+            Assert.AreEqual(expected, rt.Equals(rightObject));
+        }
+
+        [TestCase(false, "Microsoft.Network1/VirtualNetworks2/subnets1", null)]
+        [TestCase(true, "Microsoft.Network1/VirtualNetworks2/subnets1", "Microsoft.Network1/VirtualNetworks2/subnets1")]
+        public void EqualsWithObjectString(bool expected, string left, string right)
+        {
+            ResourceType rt = left;
+            object rightObject = right;
+            Assert.AreEqual(expected, rt.Equals(rightObject));
         }
     }
 }
