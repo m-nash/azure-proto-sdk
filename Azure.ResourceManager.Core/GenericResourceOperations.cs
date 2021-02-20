@@ -88,7 +88,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Add a tag to the resource
+        /// Add a tag to the resource.
         /// </summary>
         /// <param name="key"> The tag key. </param>
         /// <param name="value"> The tag value. </param>
@@ -103,7 +103,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Add a tag to the resource
+        /// Add a tag to the resource.
         /// </summary>
         /// <param name="key"> The tag key. </param>
         /// <param name="value"> The tag value. </param>
@@ -123,7 +123,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Add a tag to the resource
+        /// Add a tag to the resource.
         /// </summary>
         /// <param name="key"> The tag key. </param>
         /// <param name="value"> The tag value. </param>
@@ -138,7 +138,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Add a tag to the resource
+        /// Add a tag to the resource.
         /// </summary>
         /// <param name="key"> The tag key. </param>
         /// <param name="value"> The tag value. </param>

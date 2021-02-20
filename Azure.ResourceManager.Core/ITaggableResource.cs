@@ -15,7 +15,7 @@ namespace Azure.ResourceManager.Core
         where TOperations : ResourceOperationsBase<TOperations>
     {
         /// <summary>
-        /// Add a tag to the resource
+        /// Add a tag to the resource.
         /// </summary>
         /// <param name="key"> The tag key. </param>
         /// <param name="value"> The tag value. </param>
@@ -23,7 +23,7 @@ namespace Azure.ResourceManager.Core
         ArmResponse<TOperations> AddTag(string key, string value);
 
         /// <summary>
-        /// Add a tag to the resource
+        /// Add a tag to the resource.
         /// </summary>
         /// <param name="key"> The tag key. </param>
         /// <param name="value"> The tag value. </param>
@@ -38,7 +38,7 @@ namespace Azure.ResourceManager.Core
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Add a tag to the resource
+        /// Add a tag to the resource.
         /// </summary>
         /// <param name="key"> The tag key. </param>
         /// <param name="value"> The tag value. </param>
@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.Core
         ArmOperation<TOperations> StartAddTag(string key, string value);
 
         /// <summary>
-        /// Add a tag to the resource
+        /// Add a tag to the resource.
         /// </summary>
         /// <param name="key"> The tag key. </param>
         /// <param name="value"> The tag value. </param>
