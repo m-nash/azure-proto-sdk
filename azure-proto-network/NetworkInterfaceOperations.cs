@@ -121,6 +121,39 @@ namespace azure_proto_network
         /// </summary>
         /// <param name="key" > The tag key. </param>
         /// <param name="value"> The Tag Value. </param>
+        /// <returns> An <see cref="ArmResponse{NetworkInterface}"/> that allows polling for completion of the operation. </returns>
+        public ArmResponse<NetworkInterface> AddTag(string key, string value)
+        {
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            patchable.Tags[key] = value;
+            return new PhArmResponse<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(Operations.UpdateTags(Id.ResourceGroup, Id.Name, patchable),
+                n => new NetworkInterface(this, new NetworkInterfaceData(n)));
+        }
+
+        /// <summary>
+        /// Add the given tag key and tag value to the <see cref="NetworkInterface"/> resource.
+        /// </summary>
+        /// <param name="key" > The tag key. </param>
+        /// <param name="value"> The Tag Value. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. 
+        /// The default value is <see cref="System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns a <see cref="ArmOperation{NetworkInterface}"/> that allows polling for completion of the operation. </returns>
+        public async Task<ArmResponse<NetworkInterface>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        {
+            var resource = GetResource();
+            var patchable = new TagsObject() { Tags = resource.Data.Tags };
+            patchable.Tags[key] = value;
+            return new PhArmResponse<NetworkInterface, Azure.ResourceManager.Network.Models.NetworkInterface>(
+                await Operations.UpdateTagsAsync(Id.ResourceGroup, Id.Name, patchable, cancellationToken),
+                n => new NetworkInterface(this, new NetworkInterfaceData(n)));
+        }
+
+        /// <summary>
+        /// Add the given tag key and tag value to the <see cref="NetworkInterface"/> resource.
+        /// </summary>
+        /// <param name="key" > The tag key. </param>
+        /// <param name="value"> The Tag Value. </param>
         /// <returns> An <see cref="ArmOperation{NetworkInterface}"/> that allows polling for completion of the operation. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning"> Details on long running operation object. </see>

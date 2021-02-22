@@ -88,7 +88,42 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Add a tag to the resource
+        /// Add a tag to the resource.
+        /// </summary>
+        /// <param name="key"> The tag key. </param>
+        /// <param name="value"> The tag value. </param>
+        /// <returns>An <see cref="ArmResponse{TOperations}"/> that allows the user to control polling and waiting for Tag completion.</returns>
+        public ArmResponse<GenericResource> AddTag(string key, string value)
+        {
+            GenericResource resource = GetResource();
+            UpdateTags(key, value, resource.Data.Tags);
+            return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
+                Operations.StartUpdateById(Id, _apiVersion, resource.Data).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
+                v => new GenericResource(this, new GenericResourceData(v)));
+        }
+
+        /// <summary>
+        /// Add a tag to the resource.
+        /// </summary>
+        /// <param name="key"> The tag key. </param>
+        /// <param name="value"> The tag value. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service.
+        /// The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that performs the Tag operation.  The Task yields an an
+        /// <see cref="ArmResponse{TOperations}"/> that allows the user to control polling and waiting for
+        /// Tag completion. </returns>
+        public async Task<ArmResponse<GenericResource>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        {
+            GenericResource resource = GetResource();
+            UpdateTags(key, value, resource.Data.Tags);
+            var op = await Operations.StartUpdateByIdAsync(Id, _apiVersion, resource.Data, cancellationToken);
+            return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
+                await op.WaitForCompletionAsync(cancellationToken),
+                v => new GenericResource(this, new GenericResourceData(v)));
+        }
+
+        /// <summary>
+        /// Add a tag to the resource.
         /// </summary>
         /// <param name="key"> The tag key. </param>
         /// <param name="value"> The tag value. </param>
@@ -103,7 +138,7 @@ namespace Azure.ResourceManager.Core
         }
 
         /// <summary>
-        /// Add a tag to the resource
+        /// Add a tag to the resource.
         /// </summary>
         /// <param name="key"> The tag key. </param>
         /// <param name="value"> The tag value. </param>

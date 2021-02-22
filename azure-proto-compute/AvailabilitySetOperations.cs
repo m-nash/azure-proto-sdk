@@ -176,6 +176,37 @@ namespace azure_proto_compute
         /// </summary>
         /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
+        /// <returns> An <see cref="ArmResponse{AvailabilitySet}"/> that allows polling for completion of the operation. </returns>
+        public ArmResponse<AvailabilitySet> AddTag(string key, string value)
+        {
+            var resource = GetResource();
+            var patchable = new AvailabilitySetUpdate() { Tags = resource.Data.Tags };
+            patchable.Tags[key] = value;
+            return Update(patchable);
+        }
+
+        /// <summary>
+        /// Adds a tag to an availability set.
+        /// If the tag already exists it will be modified.
+        /// </summary>
+        /// <param name="key"> The key for the tag. </param>
+        /// <param name="value"> The value for the tag. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmResponse{AvailabilitySet}"/> that allows polling for completion of the operation. </returns>
+        public async Task<ArmResponse<AvailabilitySet>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        {
+            var resource = GetResource();
+            var patchable = new AvailabilitySetUpdate() { Tags = resource.Data.Tags };
+            patchable.Tags[key] = value;
+            return await UpdateAsync(patchable);
+        }
+
+        /// <summary>
+        /// Adds a tag to an availability set.
+        /// If the tag already exists it will be modified.
+        /// </summary>
+        /// <param name="key"> The key for the tag. </param>
+        /// <param name="value"> The value for the tag. </param>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning"> Details on long running operation object. </see>
         /// </remarks>
@@ -199,12 +230,12 @@ namespace azure_proto_compute
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning"> Details on long running operation object. </see>
         /// </remarks>
         /// <returns> A <see cref="Task"/> that on completion returns an <see cref="ArmOperation{AvailabilitySet}"/> that allows polling for completion of the operation. </returns>
-        public Task<ArmOperation<AvailabilitySet>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        public async Task<ArmOperation<AvailabilitySet>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             var resource = GetResource();
             var patchable = new AvailabilitySetUpdate() { Tags = resource.Data.Tags };
             patchable.Tags[key] = value;
-            return StartUpdateAsync(patchable);
+            return await StartUpdateAsync(patchable);
         }
 
         /// <inheritdoc/>

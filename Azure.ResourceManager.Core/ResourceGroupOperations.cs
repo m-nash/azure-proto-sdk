@@ -126,6 +126,53 @@ namespace Azure.ResourceManager.Core
         /// Add a tag to a ResourceGroup.
         /// If the tag already exists it will be modified.
         /// </summary>
+        /// <param name="key"> The key for the tag. </param>
+        /// <param name="value"> The value for the tag. </param>
+        /// <returns> A response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
+        public ArmResponse<ResourceGroup> AddTag(string key, string value)
+        {
+            var resource = GetResource();
+            var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
+            if (object.ReferenceEquals(patch.Tags, null))
+            {
+                patch.Tags = new Dictionary<string, string>();
+            }
+
+            patch.Tags[key] = value;
+            return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Update(Id.Name, patch), g =>
+            {
+                return new ResourceGroup(this, new ResourceGroupData(g));
+            });
+        }
+
+        /// <summary>
+        /// Add a tag to a ResourceGroup.
+        /// If the tag already exists it will be modified.
+        /// </summary>
+        /// <param name="key"> The key for the tag. </param>
+        /// <param name="value"> The value for the tag. </param>
+        /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
+        /// /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
+        public async Task<ArmResponse<ResourceGroup>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
+        {
+            var resource = GetResource();
+            var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
+            if (object.ReferenceEquals(patch.Tags, null))
+            {
+                patch.Tags = new Dictionary<string, string>();
+            }
+
+            patch.Tags[key] = value;
+            return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.UpdateAsync(Id.Name, patch, cancellationToken), g =>
+            {
+                return new ResourceGroup(this, new ResourceGroupData(g));
+            });
+        }
+
+        /// <summary>
+        /// Add a tag to a ResourceGroup.
+        /// If the tag already exists it will be modified.
+        /// </summary>
         /// <param name="name"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
         /// <returns> A response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
