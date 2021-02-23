@@ -18,12 +18,14 @@ namespace azure_proto_compute
         /// <param name="resourceId"> The ResourceIdentifier of the resource that is the target of operations. </param>
         /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="AvailabilitySet" />. </returns>
         /// <exception cref="ArgumentException"> ResourceIdentifier provided is not for an AvailabilitySet. </exception>
+        /// <exception cref="ArgumentNullException"> ResourceIdentifier cannot be null. </exception>
         public static AvailabilitySetOperations GetAvailabilitySetOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
+            if (resourceId == null)
+                throw new ArgumentNullException("resourceId cannot be null.");
             if (resourceId.Type != AvailabilitySetOperations.ResourceType)
-            {
                 throw new ArgumentException("ResourceIdentifier provided is not for an AvailabilitySet.");
-            }
+
             return client.GetSubscriptionOperations(resourceId.Subscription).GetResourceGroupOperations(resourceId.ResourceGroup).GetAvailabilitySetOperations(resourceId.Name);
         }
 
@@ -34,12 +36,14 @@ namespace azure_proto_compute
         /// <param name="resourceId"> The ResourceIdentifier of the resource that is the target of operations. </param>
         /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="VirtualMachine" />. </returns>
         /// <exception cref="ArgumentException"> ResourceIdentifier provided is not for a VirtualMachine. </exception>
+        /// <exception cref="ArgumentNullException"> ResourceIdentifier cannot be null. </exception>
         public static VirtualMachineOperations GetVirtualMachineOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
+            if (resourceId == null)
+                throw new ArgumentNullException("resourceId cannot be null.");
             if (resourceId.Type != VirtualMachineOperations.ResourceType)
-            {
                 throw new ArgumentException("ResourceIdentifier provided is not for a VirtualMachine.");
-            }
+
             return client.GetSubscriptionOperations(resourceId.Subscription).GetResourceGroupOperations(resourceId.ResourceGroup).GetVirtualMachineOperations(resourceId.Name);
         }
     }
