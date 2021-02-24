@@ -25,9 +25,9 @@ namespace azure_proto_network
         public static NetworkInterfaceOperations GetNetworkInterfaceOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
             if (resourceId is null)
-                throw new ArgumentNullException(nameof(resourceId), "${nameof(resourceId)} cannot be null.");
+                throw new ArgumentNullException(nameof(resourceId), $"{nameof(resourceId)} cannot be null.");
             if (resourceId.Type != NetworkInterfaceOperations.ResourceType)
-                throw new ArgumentException(nameof(resourceId.Type), "${nameof(resourceId.Type)} provided is not for a NetworkInterface.");
+                throw new ArgumentException(nameof(resourceId.Type), $"{nameof(resourceId.Type)} provided is not for a NetworkInterface.");
 
             var subOps = client.GetSubscriptionOperations(resourceId.Subscription);
             var rgOps = subOps.GetResourceGroupOperations(resourceId.ResourceGroup);
@@ -45,9 +45,9 @@ namespace azure_proto_network
         public static NetworkSecurityGroupOperations GetNetworkSecurityGroupOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
             if (resourceId is null)
-                throw new ArgumentNullException(nameof(resourceId), "${nameof(resourceId)} cannot be null.");
+                throw new ArgumentNullException(nameof(resourceId), $"{nameof(resourceId)} cannot be null.");
             if (resourceId.Type != NetworkSecurityGroupOperations.ResourceType)
-                throw new ArgumentException(nameof(resourceId.Type), "${nameof(resourceId.Type)} provided is not for a NetworkSecurityGroup.");
+                throw new ArgumentException(nameof(resourceId.Type), $"{nameof(resourceId.Type)} provided is not for a NetworkSecurityGroup.");
 
             var subOps = client.GetSubscriptionOperations(resourceId.Subscription);
             var rgOps = subOps.GetResourceGroupOperations(resourceId.ResourceGroup);
@@ -65,9 +65,9 @@ namespace azure_proto_network
         public static PublicIpAddressOperations GetPublicIpAddressOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
             if (resourceId is null)
-                throw new ArgumentNullException(nameof(resourceId), "${nameof(resourceId)} cannot be null.");
+                throw new ArgumentNullException(nameof(resourceId), $"{nameof(resourceId)} cannot be null.");
             if (resourceId.Type != PublicIpAddressOperations.ResourceType)
-                throw new ArgumentException(nameof(resourceId.Type), "${nameof(resourceId.Type)} provided is not for a PublicIpAddress.");
+                throw new ArgumentException(nameof(resourceId.Type), $"{nameof(resourceId.Type)} provided is not for a PublicIpAddress.");
 
             var subOps = client.GetSubscriptionOperations(resourceId.Subscription);
             var rgOps = subOps.GetResourceGroupOperations(resourceId.ResourceGroup);
@@ -85,9 +85,9 @@ namespace azure_proto_network
         public static SubnetOperations GetSubnetOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
             if (resourceId is null)
-                throw new ArgumentNullException(nameof(resourceId), "${nameof(resourceId)} cannot be null.");
+                throw new ArgumentNullException(nameof(resourceId), $"{nameof(resourceId)} cannot be null.");
             if (resourceId.Type != SubnetOperations.ResourceType)
-                throw new ArgumentException(nameof(resourceId.Type), "${nameof(resourceId.Type)} provided is not for a Subnet.");
+                throw new ArgumentException(nameof(resourceId.Type), $"{nameof(resourceId.Type)} provided is not for a Subnet.");
             var subOps = client.GetSubscriptionOperations(resourceId.Subscription);
             var rgOps = subOps.GetResourceGroupOperations(resourceId.ResourceGroup);
             var vnetOps = rgOps.GetVirtualNetworkOperations(resourceId.Parent.Name);
@@ -105,9 +105,9 @@ namespace azure_proto_network
         public static VirtualNetworkOperations GetVirtualNetworkOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
             if (resourceId is null)
-                throw new ArgumentNullException(nameof(resourceId), "${nameof(resourceId)} cannot be null.");
+                throw new ArgumentNullException(nameof(resourceId), $"{nameof(resourceId)} cannot be null.");
             if (resourceId.Type != VirtualNetworkOperations.ResourceType)
-                throw new ArgumentException(nameof(resourceId.Type), "${nameof(resourceId.Type)} provided is not for a VirtualNetwork.");
+                throw new ArgumentException(nameof(resourceId.Type), $"{nameof(resourceId.Type)} provided is not for a VirtualNetwork.");
 
             var subOps = client.GetSubscriptionOperations(resourceId.Subscription);
             var rgOps = subOps.GetResourceGroupOperations(resourceId.ResourceGroup);
