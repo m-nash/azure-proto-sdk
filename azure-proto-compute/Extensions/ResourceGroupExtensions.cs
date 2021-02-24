@@ -15,11 +15,11 @@ namespace azure_proto_compute
         /// <param name="resourceGroup"> The <see cref="ResourceGroupOperations" /> instance the method will execute against. </param>
         /// <param name="vmName"> The name of the VirtualMachine. </param>
         /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="VirtualMachine" />.</returns>
-        /// <exception cref="ArgumentNullException"> vmName cannot be null. </exception>
+        /// <exception cref="ArgumentException"> vmName cannot be null or a whitespace. </exception>
         public static VirtualMachineOperations GetVirtualMachineOperations(this ResourceGroupOperations resourceGroup, string vmName)
         {
             if (string.IsNullOrWhiteSpace(vmName))
-                throw new ArgumentNullException("vmName cannot be null.");
+                throw new ArgumentException(nameof(vmName) + " cannot be null or a whitespace.");
             return new VirtualMachineOperations(resourceGroup, vmName);
         }
 
@@ -41,11 +41,11 @@ namespace azure_proto_compute
         /// <param name="resourceGroup"> The <see cref="ResourceGroupOperations" /> instance the method will execute against. </param>
         /// <param name="availabilitySetName"> The name of the AvailibilitySet. </param>
         /// <returns> Returns an object representing the operations that can be performed over a specific <see cref="AvailabilitySet" />. </returns>
-        /// <exception cref="ArgumentNullException"> availabilitySetName cannot be null. </exception>
+        /// <exception cref="ArgumentException"> availabilitySetName cannot be null or a whitespace. </exception>
         public static AvailabilitySetOperations GetAvailabilitySetOperations(this ResourceGroupOperations resourceGroup, string availabilitySetName)
         {
             if (string.IsNullOrWhiteSpace(availabilitySetName))
-                throw new ArgumentNullException("availabilitySetName cannot be null.");
+                throw new ArgumentException(nameof(availabilitySetName) + " cannot be null or a whitespace.");
             return new AvailabilitySetOperations(resourceGroup, availabilitySetName);
         }
 

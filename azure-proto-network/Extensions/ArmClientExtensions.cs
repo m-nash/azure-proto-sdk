@@ -24,8 +24,8 @@ namespace azure_proto_network
         /// <exception cref="ArgumentNullException"> ResourceIdentifier cannot be null. </exception>
         public static NetworkInterfaceOperations GetNetworkInterfaceOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
-            if (resourceId == null)
-                throw new ArgumentNullException("resourceId cannot be null.");
+            if (resourceId is null)
+                throw new ArgumentNullException(nameof(resourceId) + "  cannot be null.");
             if (resourceId.Type != NetworkInterfaceOperations.ResourceType)
                 throw new ArgumentException("ResourceIdentifier provided is not for a Network Interface.");
 
@@ -44,8 +44,8 @@ namespace azure_proto_network
         /// <exception cref="ArgumentNullException"> ResourceIdentifier cannot be null. </exception>
         public static NetworkSecurityGroupOperations GetNetworkSecurityGroupOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
-            if (resourceId == null)
-                throw new ArgumentNullException("resourceId cannot be null.");
+            if (resourceId is null)
+                throw new ArgumentNullException(nameof(resourceId) + "  cannot be null.");
             if (resourceId.Type != NetworkSecurityGroupOperations.ResourceType)
                 throw new ArgumentException("ResourceIdentifier provided is not for a NetworkSecurityGroup.");
 
@@ -64,8 +64,8 @@ namespace azure_proto_network
         /// <exception cref="ArgumentNullException"> ResourceIdentifier cannot be null. </exception>
         public static PublicIpAddressOperations GetPublicIpAddressOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
-            if (resourceId == null)
-                throw new ArgumentNullException("resourceId cannot be null.");
+            if (resourceId is null)
+                throw new ArgumentNullException(nameof(resourceId) + "  cannot be null.");
             if (resourceId.Type != PublicIpAddressOperations.ResourceType)
                 throw new ArgumentException("ResourceIdentifier provided is not for a PublicIpAddress.");
             var subOps = client.GetSubscriptionOperations(resourceId.Subscription);
@@ -83,8 +83,8 @@ namespace azure_proto_network
         /// <exception cref="ArgumentNullException"> ResourceIdentifier cannot be null. </exception>
         public static SubnetOperations GetSubnetOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
-            if (resourceId == null)
-                throw new ArgumentNullException("resourceId cannot be null.");
+            if (resourceId is null)
+                throw new ArgumentNullException(nameof(resourceId) + "  cannot be null.");
             if (resourceId.Type != SubnetOperations.ResourceType)
                 throw new ArgumentException("ResourceIdentifier provided is not for a Subnet.");
             var subOps = client.GetSubscriptionOperations(resourceId.Subscription);
@@ -103,8 +103,8 @@ namespace azure_proto_network
         /// <exception cref="ArgumentNullException"> ResourceIdentifier cannot be null. </exception>
         public static VirtualNetworkOperations GetVirtualNetworkOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
-            if (resourceId == null)
-                throw new ArgumentNullException("resourceId cannot be null.");
+            if (resourceId is null)
+                throw new ArgumentNullException(nameof(resourceId) + "  cannot be null.");
             if (resourceId.Type != VirtualNetworkOperations.ResourceType)
                 throw new ArgumentException("ResourceIdentifier provided is not for a VirtualNetwork.");
 

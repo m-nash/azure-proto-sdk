@@ -21,8 +21,8 @@ namespace azure_proto_compute
         /// <exception cref="ArgumentNullException"> ResourceIdentifier cannot be null. </exception>
         public static AvailabilitySetOperations GetAvailabilitySetOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
-            if (resourceId == null)
-                throw new ArgumentNullException("resourceId cannot be null.");
+            if (resourceId is null)
+                throw new ArgumentNullException(nameof(resourceId) + " cannot be null.");
             if (resourceId.Type != AvailabilitySetOperations.ResourceType)
                 throw new ArgumentException("ResourceIdentifier provided is not for an AvailabilitySet.");
 
@@ -39,8 +39,8 @@ namespace azure_proto_compute
         /// <exception cref="ArgumentNullException"> ResourceIdentifier cannot be null. </exception>
         public static VirtualMachineOperations GetVirtualMachineOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
-            if (resourceId == null)
-                throw new ArgumentNullException("resourceId cannot be null.");
+            if (resourceId is null)
+                throw new ArgumentNullException(nameof(resourceId) + " cannot be null.");
             if (resourceId.Type != VirtualMachineOperations.ResourceType)
                 throw new ArgumentException("ResourceIdentifier provided is not for a VirtualMachine.");
 
