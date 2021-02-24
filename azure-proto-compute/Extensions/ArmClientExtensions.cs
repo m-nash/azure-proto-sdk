@@ -22,9 +22,9 @@ namespace azure_proto_compute
         public static AvailabilitySetOperations GetAvailabilitySetOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
             if (resourceId is null)
-                throw new ArgumentNullException(nameof(resourceId) + " cannot be null.");
+                throw new ArgumentNullException(nameof(resourceId), "${nameof(resourceId)} cannot be null.");
             if (resourceId.Type != AvailabilitySetOperations.ResourceType)
-                throw new ArgumentException("ResourceIdentifier provided is not for an AvailabilitySet.");
+                throw new ArgumentException(nameof(resourceId.Type), "${nameof(resourceId.Type)} provided is not for an AvailabilitySet.");
 
             return client.GetSubscriptionOperations(resourceId.Subscription).GetResourceGroupOperations(resourceId.ResourceGroup).GetAvailabilitySetOperations(resourceId.Name);
         }
@@ -40,9 +40,9 @@ namespace azure_proto_compute
         public static VirtualMachineOperations GetVirtualMachineOperations(this AzureResourceManagerClient client, ResourceIdentifier resourceId)
         {
             if (resourceId is null)
-                throw new ArgumentNullException(nameof(resourceId) + " cannot be null.");
+                throw new ArgumentNullException(nameof(resourceId), "${nameof(resourceId)} cannot be null.");
             if (resourceId.Type != VirtualMachineOperations.ResourceType)
-                throw new ArgumentException("ResourceIdentifier provided is not for a VirtualMachine.");
+                throw new ArgumentException(nameof(resourceId.Type), "${nameof(resourceId.Type)} provided is not for a VirtualMachine.");
 
             return client.GetSubscriptionOperations(resourceId.Subscription).GetResourceGroupOperations(resourceId.ResourceGroup).GetVirtualMachineOperations(resourceId.Name);
         }

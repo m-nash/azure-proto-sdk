@@ -22,7 +22,7 @@ namespace azure_proto_network
         public static VirtualNetworkOperations GetVirtualNetworkOperations(this ResourceGroupOperations resourceGroup, string virtualNetwork)
         {
             if (string.IsNullOrWhiteSpace(virtualNetwork))
-                throw new ArgumentException(nameof(virtualNetwork) + " cannot be null or a whitespace.");
+                throw new ArgumentException(nameof(virtualNetwork), "${nameof(virtualNetwork)} cannot be null or a whitespace.");
             return new VirtualNetworkOperations(resourceGroup, virtualNetwork);
         }
 
@@ -48,7 +48,7 @@ namespace azure_proto_network
         public static PublicIpAddressOperations GetPublicIpAddressOperations(this ResourceGroupOperations resourceGroup, string publicIpAddress)
         {
             if (string.IsNullOrWhiteSpace(publicIpAddress))
-                throw new ArgumentException(nameof(publicIpAddress) + " cannot be null or a whitespace.");
+                throw new ArgumentException(nameof(publicIpAddress), "${nameof(publicIpAddress)} cannot be null or a whitespace.");
             return new PublicIpAddressOperations(resourceGroup, publicIpAddress);
         }
 
@@ -74,7 +74,7 @@ namespace azure_proto_network
         public static NetworkInterfaceOperations GetNetworkInterfaceOperations(this ResourceGroupOperations resourceGroup, string networkInterface)
         {
             if (string.IsNullOrWhiteSpace(networkInterface))
-                throw new ArgumentException(nameof(networkInterface) + " cannot be null or a whitespace.");
+                throw new ArgumentException(nameof(networkInterface), "${nameof(networkInterface)} cannot be null or a whitespace.");
             return new NetworkInterfaceOperations(resourceGroup, networkInterface);
         }
 
@@ -98,7 +98,7 @@ namespace azure_proto_network
         public static NetworkSecurityGroupOperations GetNetworkSecurityGroupOperations(this ResourceGroupOperations resourceGroup, string networkSecurityGroup)
         {
             if (string.IsNullOrWhiteSpace(networkSecurityGroup))
-                throw new ArgumentException(nameof(networkSecurityGroup) + " cannot be null or a whitespace.");
+                throw new ArgumentException(nameof(networkSecurityGroup), "${nameof(networkSecurityGroup)} cannot be null or a whitespace.");
             return new NetworkSecurityGroupOperations(resourceGroup, networkSecurityGroup);
         }
 
