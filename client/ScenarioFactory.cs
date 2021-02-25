@@ -35,6 +35,7 @@ namespace client
         DefaultSubscription,
         SubscriptionExists,
         UseParentLocation,
+        CheckResourceGroupOpsAsync
     }
 
     class ScenarioFactory
