@@ -186,7 +186,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="resourceClient"> The <see cref="ResourcesManagementClient"/> instance to use for the list. </param>
         /// <param name="resourceType"> The <see cref="ResourceType"/> instance to use for the list. </param>
         /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
-        public async Task<IEnumerable<LocationData>> ListAvailableLocationsAsync(ResourceType resourceType)
+        protected async Task<IEnumerable<LocationData>> ListAvailableLocationsAsync(ResourceType resourceType)
         {
             var pageableProvider = ResourcesClient.Providers.ListAsync(expand: "metadata");
             var resourcePageableProvider = await pageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, resourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
