@@ -16,6 +16,9 @@ namespace Azure.ResourceManager.Core
         /// Initializes a new instance of the <see cref="GenericResourceData"/> class.
         /// </summary>
         /// <param name="genericResource"> The existing resource model to copy from. </param>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="genericResource"/> is null.
+        /// </exception>
         public GenericResourceData(ResourceManager.Resources.Models.GenericResource genericResource)
             : base(genericResource?.Id, genericResource?.Location, genericResource)
         {

@@ -19,6 +19,9 @@ namespace Azure.ResourceManager.Core
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
         /// <param name="baseUri"> The base URI of the service. </param>
+        /// <exception cref="ArgumentNullException">
+        ///     <paramref name="options"/> or <paramref name="credential"/> is null.
+        /// </exception>
         protected OperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id, TokenCredential credential, Uri baseUri)
         {
             if (options is null)
