@@ -9,9 +9,6 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace Azure.ResourceManager.Core
 {
@@ -41,43 +38,6 @@ namespace Azure.ResourceManager.Core
                 top,
                 cancellationToken);
         }
-
-        /// <summary>
-        /// Lists all available geo-locations.
-        /// </summary>
-        /// <param name="resourceClient"> The <see cref="ResourcesManagementClient"/> instance to use for the list. </param>
-        /// <param name="resourceType"> The <see cref="ResourceType"/> instance to use for the list. </param>
-        /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
-        public static IEnumerable<LocationData> ListAvailableLocations(ResourcesManagementClient resourceClient, ResourceType resourceType)
-        {
-            var pageableProvider = resourceClient.Providers.List(expand: "metadata");
-            var resourcePageableProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, resourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
-            if (resourcePageableProvider is null)
-                throw new InvalidOperationException($"{resourceType.Type} not found for {resourceType.Namespace}");
-            var theResource = resourcePageableProvider.ResourceTypes.FirstOrDefault(r => resourceType.Type.Equals(r.ResourceType));
-            if (theResource is null)
-                throw new InvalidOperationException($"{resourceType.Type} not found for {resourceType.Type}");
-            return theResource.Locations.Select(l => (LocationData)l);
-        }
-
-        /// <summary>
-        /// Lists all available geo-locations.
-        /// </summary>
-        /// <param name="resourceClient"> The <see cref="ResourcesManagementClient"/> instance to use for the list. </param>
-        /// <param name="resourceType"> The <see cref="ResourceType"/> instance to use for the list. </param>
-        /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
-        public static async Task<IEnumerable<LocationData>> ListAvailableLocationsAsync(ResourcesManagementClient resourceClient, ResourceType resourceType)
-        {
-            var pageableProvider = resourceClient.Providers.ListAsync(expand: "metadata");
-            var resourcePageableProvider = await pageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, resourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
-            if (resourcePageableProvider is null)
-                throw new InvalidOperationException($"{resourceType.Type} not found for {resourceType.Namespace}");
-            var theResource = resourcePageableProvider.ResourceTypes.FirstOrDefault(r => resourceType.Type.Equals(r.ResourceType));
-            if (theResource is null)
-                throw new InvalidOperationException($"{resourceType.Type} not found for {resourceType.Type}");
-            return theResource.Locations.Select(l => (LocationData)l);
-        }
-
 
         /// <summary>
         /// List resources under the a resource context

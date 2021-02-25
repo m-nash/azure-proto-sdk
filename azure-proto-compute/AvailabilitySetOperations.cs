@@ -316,7 +316,7 @@ namespace azure_proto_compute
         /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
         public IEnumerable<LocationData> ListAvailableLocations()
         {
-            return ResourceListOperations.ListAvailableLocations(ResourcesClient, ResourceType);
+            return ListAvailableLocations(ResourceType);
         }
 
         /// <summary>
@@ -327,7 +327,7 @@ namespace azure_proto_compute
         /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
         public async Task<IEnumerable<LocationData>> ListAvailableLocationsAsync(CancellationToken cancellationToken = default)
         {
-            return await ResourceListOperations.ListAvailableLocationsAsync(ResourcesClient, ResourceType);
+            return await ListAvailableLocationsAsync(ResourceType);
         }
     }
 }
