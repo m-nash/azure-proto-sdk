@@ -429,10 +429,7 @@ namespace Azure.ResourceManager.Core
         /// <returns> A collection of location that may take multiple service requests to iterate over. </returns>
         public IEnumerable<LocationData> ListAvailableLocations()
         {
-            var pageableProvider = ResourcesClient.Providers.List(expand: "metadata");
-            var rgProvider = pageableProvider.FirstOrDefault(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
-            var rgResource = rgProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
-            return rgResource.Locations.Select(l => (LocationData)l);
+            return ResourceListOperations.ListAvailableLocations(ResourcesClient, ResourceType);
         }
 
         /// <summary>
@@ -443,10 +440,7 @@ namespace Azure.ResourceManager.Core
         /// <exception cref="InvalidOperationException"> The default subscription id is null. </exception>
         public async Task<IEnumerable<LocationData>> ListAvailableLocationsAsync(CancellationToken cancellationToken = default)
         {
-            var asyncpageableProvider = ResourcesClient.Providers.ListAsync(expand: "metadata", cancellationToken: cancellationToken);
-            var rgProvider = await asyncpageableProvider.FirstOrDefaultAsync(p => string.Equals(p.Namespace, ResourceType?.Namespace, StringComparison.InvariantCultureIgnoreCase));
-            var rgResource = rgProvider.ResourceTypes.FirstOrDefault(r => ResourceType.Type.Equals(r.ResourceType));
-            return rgResource.Locations.Select(l => (LocationData)l);
+            return await ResourceListOperations.ListAvailableLocationsAsync(ResourcesClient, ResourceType);
         }
     }
 }
