@@ -17,10 +17,12 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="genericResource"> The existing resource model to copy from. </param>
         public GenericResourceData(ResourceManager.Resources.Models.GenericResource genericResource)
-            : base(genericResource.Id, genericResource.Location, genericResource)
+            : base(genericResource?.Id, genericResource?.Location, genericResource)
         {
+            if (genericResource is null)
+                throw new ArgumentNullException(nameof(genericResource));
+
             Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-            Tags.Clear();
             foreach (var tag in genericResource.Tags)
             {
                 Tags.Add(tag);
@@ -89,6 +91,10 @@ namespace Azure.ResourceManager.Core
         /// <param name="other"> The tracked resource convert from. </param>
         public static implicit operator ResourceManager.Resources.Models.GenericResource(GenericResourceData other)
         {
+            if (other == null)
+                return null;
+
+            // ?
             other.Model.Tags.Clear();
             foreach (var tag in other.Tags)
             {

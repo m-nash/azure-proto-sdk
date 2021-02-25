@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
 using Azure.ResourceManager.Resources.Models;
 
 namespace Azure.ResourceManager.Core
@@ -20,6 +21,13 @@ namespace Azure.ResourceManager.Core
         /// <param name="data"> The model to copy from. </param>
         protected TrackedResource(ResourceIdentifier id, LocationData location, TModel data)
         {
+            if (id is null)
+                throw new ArgumentNullException(nameof(id));
+            if (location is null)
+                throw new ArgumentNullException(nameof(location));
+            if (data is null)
+                throw new ArgumentNullException(nameof(data));
+
             Id = id;
             Location = location;
             Model = data;
@@ -33,6 +41,11 @@ namespace Azure.ResourceManager.Core
         /// <param name="data"> The model to copy from. </param>
         protected TrackedResource(string id, LocationData location, TModel data)
         {
+            if (location is null)
+                throw new ArgumentNullException(nameof(location));
+            if (data is null)
+                throw new ArgumentNullException(nameof(data));
+
             if (ReferenceEquals(id, null))
             {
                 Id = null;

@@ -21,6 +21,11 @@ namespace Azure.ResourceManager.Core
         /// <param name="baseUri"> The base URI of the service. </param>
         protected OperationsBase(AzureResourceManagerClientOptions options, ResourceIdentifier id, TokenCredential credential, Uri baseUri)
         {
+            if (options is null)
+                throw new ArgumentNullException(nameof(options));
+            if (credential is null)
+                throw new ArgumentNullException(nameof(credential));
+
             ClientOptions = options;
             Id = id;
             Credential = credential;
@@ -67,7 +72,7 @@ namespace Azure.ResourceManager.Core
         protected virtual void Validate(ResourceIdentifier identifier)
         {
             if (identifier?.Type != ValidResourceType)
-                throw new InvalidOperationException($"Invalid resource type {identifier?.Type} expected {ValidResourceType}");
+                throw new ArgumentException($"Invalid resource type {identifier?.Type} expected {ValidResourceType}");
         }
     }
 }

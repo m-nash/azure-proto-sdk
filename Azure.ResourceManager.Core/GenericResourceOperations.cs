@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
 using Azure.ResourceManager.Resources;
 using System.Collections.Generic;
 using System.Threading;
@@ -95,6 +96,9 @@ namespace Azure.ResourceManager.Core
         /// <returns>An <see cref="ArmResponse{TOperations}"/> that allows the user to control polling and waiting for Tag completion.</returns>
         public ArmResponse<GenericResource> AddTag(string key, string value)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentNullException(nameof(key));
+
             GenericResource resource = GetResource();
             UpdateTags(key, value, resource.Data.Tags);
             return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
@@ -114,6 +118,9 @@ namespace Azure.ResourceManager.Core
         /// Tag completion. </returns>
         public async Task<ArmResponse<GenericResource>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentNullException(nameof(key));
+
             GenericResource resource = GetResource();
             UpdateTags(key, value, resource.Data.Tags);
             var op = await Operations.StartUpdateByIdAsync(Id, _apiVersion, resource.Data, cancellationToken);
@@ -130,6 +137,9 @@ namespace Azure.ResourceManager.Core
         /// <returns>An <see cref="ArmOperation{TOperations}"/> that allows the user to control polling and waiting for Tag completion.</returns>
         public ArmOperation<GenericResource> StartAddTag(string key, string value)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentNullException(nameof(key));
+
             GenericResource resource = GetResource();
             UpdateTags(key, value, resource.Data.Tags);
             return new PhArmOperation<GenericResource, ResourceManager.Resources.Models.GenericResource>(
@@ -149,6 +159,9 @@ namespace Azure.ResourceManager.Core
         /// Tag completion. </returns>
         public async Task<ArmOperation<GenericResource>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentNullException(nameof(key));
+
             GenericResource resource = GetResource();
             UpdateTags(key, value, resource.Data.Tags);
             var op = await Operations.StartUpdateByIdAsync(Id, _apiVersion, resource.Data, cancellationToken);
@@ -176,11 +189,19 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         protected override void Validate(ResourceIdentifier identifier)
         {
+            // TODO: Reenable after Azure.ResourceManager.Resource model has been regenerated
+            // Currently test cases uses GenericResourceExpended that does not allow construction
+            // with id.
+            // if (identifier is null)
+            //    throw new ArgumentNullException(nameof(identifier));
         }
 
         /// <inheritdoc/>
         public ArmResponse<GenericResource> SetTags(IDictionary<string, string> tags)
         {
+            if (tags is null)
+                throw new ArgumentNullException(nameof(tags));
+
             GenericResource resource = GetResource();
             ReplaceTags(tags, resource.Data.Tags);
             return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
@@ -191,6 +212,9 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public async Task<ArmResponse<GenericResource>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
+            if (tags is null)
+                throw new ArgumentNullException(nameof(tags));
+
             GenericResource resource = GetResource();
             ReplaceTags(tags, resource.Data.Tags);
             var op = await Operations.StartUpdateByIdAsync(Id, _apiVersion, resource.Data, cancellationToken);
@@ -202,6 +226,9 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public ArmOperation<GenericResource> StartSetTags(IDictionary<string, string> tags)
         {
+            if (tags is null)
+                throw new ArgumentNullException(nameof(tags));
+
             GenericResource resource = GetResource();
             ReplaceTags(tags, resource.Data.Tags);
             return new PhArmOperation<GenericResource, ResourceManager.Resources.Models.GenericResource>(
@@ -212,6 +239,9 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public async Task<ArmOperation<GenericResource>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
+            if (tags is null)
+                throw new ArgumentNullException(nameof(tags));
+
             GenericResource resource = GetResource();
             ReplaceTags(tags, resource.Data.Tags);
             var op = await Operations.StartUpdateByIdAsync(Id, _apiVersion, resource.Data, cancellationToken);
@@ -223,6 +253,9 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public ArmResponse<GenericResource> RemoveTag(string key)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentNullException(nameof(key));
+
             GenericResource resource = GetResource();
             DeleteTag(key, resource.Data.Tags);
             return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
@@ -233,6 +266,9 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public async Task<ArmResponse<GenericResource>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentNullException(nameof(key));
+
             GenericResource resource = GetResource();
             DeleteTag(key, resource.Data.Tags);
             var op = await Operations.StartUpdateByIdAsync(Id, _apiVersion, resource.Data, cancellationToken);
@@ -244,6 +280,9 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public ArmOperation<GenericResource> StartRemoveTag(string key)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentNullException(nameof(key));
+
             GenericResource resource = GetResource();
             DeleteTag(key, resource.Data.Tags);
             return new PhArmOperation<GenericResource, ResourceManager.Resources.Models.GenericResource>(
@@ -254,6 +293,9 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public async Task<ArmOperation<GenericResource>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentNullException(nameof(key));
+
             GenericResource resource = GetResource();
             DeleteTag(key, resource.Data.Tags);
             var op = await Operations.StartUpdateByIdAsync(Id, _apiVersion, resource.Data, cancellationToken);
