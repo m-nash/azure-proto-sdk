@@ -97,7 +97,7 @@ namespace Azure.ResourceManager.Core
         public ArmResponse<GenericResource> AddTag(string key, string value)
         {
             if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
+                throw new ArgumentException(nameof(key));
 
             GenericResource resource = GetResource();
             UpdateTags(key, value, resource.Data.Tags);
@@ -119,7 +119,7 @@ namespace Azure.ResourceManager.Core
         public async Task<ArmResponse<GenericResource>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
+                throw new ArgumentException(nameof(key));
 
             GenericResource resource = GetResource();
             UpdateTags(key, value, resource.Data.Tags);
@@ -138,7 +138,7 @@ namespace Azure.ResourceManager.Core
         public ArmOperation<GenericResource> StartAddTag(string key, string value)
         {
             if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
+                throw new ArgumentException(nameof(key));
 
             GenericResource resource = GetResource();
             UpdateTags(key, value, resource.Data.Tags);
@@ -160,7 +160,7 @@ namespace Azure.ResourceManager.Core
         public async Task<ArmOperation<GenericResource>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
+                throw new ArgumentException(nameof(key));
 
             GenericResource resource = GetResource();
             UpdateTags(key, value, resource.Data.Tags);
@@ -254,7 +254,7 @@ namespace Azure.ResourceManager.Core
         public ArmResponse<GenericResource> RemoveTag(string key)
         {
             if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
+                throw new ArgumentException(nameof(key));
 
             GenericResource resource = GetResource();
             DeleteTag(key, resource.Data.Tags);
@@ -267,7 +267,7 @@ namespace Azure.ResourceManager.Core
         public async Task<ArmResponse<GenericResource>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
+                throw new ArgumentException(nameof(key));
 
             GenericResource resource = GetResource();
             DeleteTag(key, resource.Data.Tags);
@@ -281,7 +281,7 @@ namespace Azure.ResourceManager.Core
         public ArmOperation<GenericResource> StartRemoveTag(string key)
         {
             if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
+                throw new ArgumentException(nameof(key));
 
             GenericResource resource = GetResource();
             DeleteTag(key, resource.Data.Tags);
@@ -294,7 +294,7 @@ namespace Azure.ResourceManager.Core
         public async Task<ArmOperation<GenericResource>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException(nameof(key));
+                throw new ArgumentException(nameof(key));
 
             GenericResource resource = GetResource();
             DeleteTag(key, resource.Data.Tags);
