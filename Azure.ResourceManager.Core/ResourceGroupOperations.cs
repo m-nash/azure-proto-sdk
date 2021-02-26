@@ -6,6 +6,7 @@ using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -129,8 +130,12 @@ namespace Azure.ResourceManager.Core
         /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
         /// <returns> A response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
+        /// <exception cref="ArgumentException"> Key cannot be null or a whitespace. </exception>
         public ArmResponse<ResourceGroup> AddTag(string key, string value)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException(nameof(key), $"{nameof(key)} provided cannot be null or a whitespace.");
+
             var resource = GetResource();
             var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
             if (object.ReferenceEquals(patch.Tags, null))
@@ -152,9 +157,13 @@ namespace Azure.ResourceManager.Core
         /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
-        /// /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
+        /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
+        /// <exception cref="ArgumentException"> Key cannot be null or a whitespace. </exception>
         public async Task<ArmResponse<ResourceGroup>> AddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException(nameof(key), $"{nameof(key)} provided cannot be null or a whitespace.");
+
             var resource = GetResource();
             var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
             if (object.ReferenceEquals(patch.Tags, null))
@@ -173,14 +182,18 @@ namespace Azure.ResourceManager.Core
         /// Add a tag to a ResourceGroup.
         /// If the tag already exists it will be modified.
         /// </summary>
-        /// <param name="name"> The key for the tag. </param>
+        /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
         /// <returns> A response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
         /// </remarks>
-        public ArmOperation<ResourceGroup> StartAddTag(string name, string value)
+        /// <exception cref="ArgumentException"> Key cannot be null or a whitespace. </exception>
+        public ArmOperation<ResourceGroup> StartAddTag(string key, string value)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException(nameof(key), $"{nameof(key)} provided cannot be null or a whitespace.");
+
             var resource = GetResource();
             var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
             if (object.ReferenceEquals(patch.Tags, null))
@@ -188,7 +201,7 @@ namespace Azure.ResourceManager.Core
                 patch.Tags = new Dictionary<string, string>();
             }
 
-            patch.Tags[name] = value;
+            patch.Tags[key] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Update(Id.Name, patch), g =>
             {
                 return new ResourceGroup(this, new ResourceGroupData(g));
@@ -199,15 +212,19 @@ namespace Azure.ResourceManager.Core
         /// Add a tag to a ResourceGroup.
         /// If the tag already exists it will be modified.
         /// </summary>
-        /// <param name="name"> The key for the tag. </param>
+        /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
         /// </remarks>
-        public async Task<ArmOperation<ResourceGroup>> StartAddTagAsync(string name, string value, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentException"> Key cannot be null or a whitespace. </exception>
+        public async Task<ArmOperation<ResourceGroup>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException(nameof(key), $"{nameof(key)} provided cannot be null or a whitespace.");
+
             var resource = GetResource();
             var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
             if (object.ReferenceEquals(patch.Tags, null))
@@ -215,7 +232,7 @@ namespace Azure.ResourceManager.Core
                 patch.Tags = new Dictionary<string, string>();
             }
 
-            patch.Tags[name] = value;
+            patch.Tags[key] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.UpdateAsync(Id.Name, patch, cancellationToken), g =>
             {
                 return new ResourceGroup(this, new ResourceGroupData(g));
@@ -227,28 +244,23 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="name"> A string representing the name of the resource />. </param>
         /// <param name="model"> The model representing the object to create. />. </param>
-        /// <param name="location"> A Location of where to to host the resource. />. </param>
         /// <typeparam name="TContainer"> The type of the class containing the container for the specific resource. </typeparam>
         /// <typeparam name="TOperations"> The type of the operations class for a specific resource. </typeparam>
         /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
         /// <returns> Returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
-        public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model, LocationData location = default)
+        /// <exception cref="ArgumentException"> Name cannot be null or a whitespace. </exception>
+        /// <exception cref="ArgumentNullException"> Model cannot be null. </exception>
+        public ArmResponse<TOperations> CreateResource<TContainer, TOperations, TResource>(string name, TResource model)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations>
             where TContainer : ResourceContainerBase<TOperations, TResource>
         {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException(nameof(name), $"{nameof(name)} provided cannot be null or a whitespace.");
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
+
             var myResource = model as TrackedResource;
-
-            if (myResource == null)
-            {
-                myResource = new GenericResourceData(Id);
-            }
-
-            if (location != null)
-            {
-                myResource = new GenericResourceData(Id, location);
-            }
-
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;
 
             return container.CreateOrUpdate(name, model);
@@ -259,28 +271,24 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="name"> A string representing the name of the resource />. </param>
         /// <param name="model"> The model representing the object to create. />. </param>
-        /// <param name="location"> A Location of where to to host the resource. />. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// <typeparam name="TContainer"> The type of the class containing the container for the specific resource. </typeparam>
         /// <typeparam name="TOperations"> The type of the operations class for a specific resource. </typeparam>
         /// <typeparam name="TResource"> The type of the class containing properties for the underlying resource. </typeparam>
         /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmResponse{TOperations}"/> operation for this resource. </returns>
-        public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, LocationData location = default, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentException"> Name cannot be null or a whitespace. </exception>
+        /// <exception cref="ArgumentNullException"> Model cannot be null. </exception>
+        public Task<ArmResponse<TOperations>> CreateResourceAsync<TContainer, TOperations, TResource>(string name, TResource model, CancellationToken cancellationToken = default)
             where TResource : TrackedResource
             where TOperations : ResourceOperationsBase<TOperations>
             where TContainer : ResourceContainerBase<TOperations, TResource>
         {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException(nameof(name), $"{nameof(name)} provided cannot be null or a whitespace.");
+            if (model is null)
+                throw new ArgumentNullException(nameof(model));
+
             var myResource = model as TrackedResource;
-
-            if (myResource == null)
-            {
-                myResource = new GenericResourceData(Id);
-            }
-
-            if (location != null)
-            {
-                myResource = new GenericResourceData(Id, location);
-            }
 
             TContainer container = Activator.CreateInstance(typeof(TContainer), ClientOptions, myResource) as TContainer;
 
@@ -290,6 +298,9 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public ArmResponse<ResourceGroup> SetTags(IDictionary<string, string> tags)
         {
+            if (tags == null)
+                throw new ArgumentNullException(nameof(tags));
+
             var resource = GetResource();
             var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
             if (object.ReferenceEquals(patch.Tags, null))
@@ -307,6 +318,9 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public async Task<ArmResponse<ResourceGroup>> SetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
+            if (tags == null)
+                throw new ArgumentNullException(nameof(tags));
+
             var resource = GetResource();
             var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
             if (object.ReferenceEquals(patch.Tags, null))
@@ -324,6 +338,9 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public ArmOperation<ResourceGroup> StartSetTags(IDictionary<string, string> tags)
         {
+            if (tags == null)
+                throw new ArgumentNullException(nameof(tags));
+
             var resource = GetResource();
             var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
             if (object.ReferenceEquals(patch.Tags, null))
@@ -341,6 +358,9 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public async Task<ArmOperation<ResourceGroup>> StartSetTagsAsync(IDictionary<string, string> tags, CancellationToken cancellationToken = default)
         {
+            if (tags == null)
+                throw new ArgumentNullException(nameof(tags));
+
             var resource = GetResource();
             var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
             if (object.ReferenceEquals(patch.Tags, null))
@@ -358,6 +378,9 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public ArmResponse<ResourceGroup> RemoveTag(string key)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException($"{nameof(key)} provided cannot be null or a whitespace.", nameof(key));
+
             var resource = GetResource();
             var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
             if (object.ReferenceEquals(patch.Tags, null))
@@ -375,6 +398,9 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public async Task<ArmResponse<ResourceGroup>> RemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException(nameof(key), $"{nameof(key)} provided cannot be null or a whitespace.");
+
             var resource = GetResource();
             var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
             if (object.ReferenceEquals(patch.Tags, null))
@@ -392,6 +418,9 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public ArmOperation<ResourceGroup> StartRemoveTag(string key)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException(nameof(key), $"{nameof(key)} provided cannot be null or a whitespace.");
+
             var resource = GetResource();
             var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
             if (object.ReferenceEquals(patch.Tags, null))
@@ -409,6 +438,9 @@ namespace Azure.ResourceManager.Core
         /// <inheritdoc/>
         public async Task<ArmOperation<ResourceGroup>> StartRemoveTagAsync(string key, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException(nameof(key), $"{nameof(key)} provided cannot be null or a whitespace.");
+
             var resource = GetResource();
             var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
             if (object.ReferenceEquals(patch.Tags, null))

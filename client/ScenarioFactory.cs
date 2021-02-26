@@ -36,7 +36,9 @@ namespace client
         SubscriptionExists,
         UseParentLocation,
         GetByContainers,
-        GetByContainersAsync
+        GetByContainersAsync,
+        CheckResourceGroupOpsAsync
+
     }
 
     class ScenarioFactory
