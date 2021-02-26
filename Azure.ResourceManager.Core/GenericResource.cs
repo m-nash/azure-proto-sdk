@@ -19,7 +19,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="resource"> The data model representing the generic azure resource. </param>
         /// <exception cref="ArgumentNullException"> If <see cref="AzureResourceManagerClientOptions"/> or <see cref="TokenCredential"/> is null. </exception>
         internal GenericResource(ResourceOperationsBase operations, GenericResourceData resource)
-            : base(operations, resource?.Id)
+            : base(operations, resource.Id)
         {
             Data = resource;
         }

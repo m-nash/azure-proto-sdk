@@ -19,7 +19,7 @@ namespace Azure.ResourceManager.Core
         ///     <paramref name="genericResource"/> is null.
         /// </exception>
         public GenericResourceData(ResourceManager.Resources.Models.GenericResource genericResource)
-            : base(genericResource?.Id, genericResource?.Location, genericResource)
+            : base(genericResource.Id, genericResource.Location, genericResource)
         {
             if (genericResource is null)
                 throw new ArgumentNullException(nameof(genericResource));
