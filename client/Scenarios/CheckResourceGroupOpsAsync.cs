@@ -65,12 +65,12 @@ namespace client
             }
 
             // Create AvailabilitySet
-            Console.WriteLine("--------Start StartCreate AvailabilitySet async--------");
+            Console.WriteLine("--------Create AvailabilitySet async--------");
             var aset = (await (await resourceGroup.GetAvailabilitySetContainer().Construct("Aligned").StartCreateOrUpdateAsync(Context.VmName + "_aSet")).WaitForCompletionAsync()).Value;
             var data = aset.Get().Value.Data;
             try
             {                
-                rgOps.CreateResource<AvailabilitySetContainer, AvailabilitySetOperations, AvailabilitySetData>("tester", data, LocationData.Default);
+                rgOps.CreateResource<AvailabilitySetContainer, AvailabilitySet, AvailabilitySetData>("", data, LocationData.Default);
             }
             catch (ArgumentException e)
             {
@@ -79,7 +79,7 @@ namespace client
 
             try
             {
-                await rgOps.CreateResourceAsync(null, null);
+                await rgOps.CreateResourceAsync<AvailabilitySetContainer, AvailabilitySet, AvailabilitySetData>(" ", data, LocationData.Default);
             }
             catch (ArgumentException e)
             {
