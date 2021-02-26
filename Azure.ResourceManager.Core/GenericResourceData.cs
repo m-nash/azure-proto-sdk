@@ -4,6 +4,7 @@
 using Azure.ResourceManager.Resources.Models;
 using System;
 using System.Collections.Generic;
+using Azure.ResourceManager.Core.Utils;
 
 namespace Azure.ResourceManager.Core
 {
@@ -26,10 +27,7 @@ namespace Azure.ResourceManager.Core
                 throw new ArgumentNullException(nameof(genericResource));
 
             Tags = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-            foreach (var tag in genericResource.Tags)
-            {
-                Tags.Add(tag);
-            }
+            Tags.ReplaceWith(genericResource.Tags);
 
             if (Model.Sku != null)
                 Sku = new Sku(Model.Sku);
@@ -94,10 +92,10 @@ namespace Azure.ResourceManager.Core
         /// <param name="other"> The tracked resource convert from. </param>
         public static implicit operator ResourceManager.Resources.Models.GenericResource(GenericResourceData other)
         {
-            if (other == null)
+            if (other is null)
                 return null;
 
-            // ?
+            // Temp code. Following block will be removed
             other.Model.Tags.Clear();
             foreach (var tag in other.Tags)
             {
