@@ -10,7 +10,7 @@ namespace client
             Scenario scenario = null;
             try
             {
-                scenario = ScenarioFactory.GetScenario(Scenarios.CreateSingleVMCheckLocation);
+                scenario = ScenarioFactory.GetScenario(Scenarios.GetByContainersAsync);
                 scenario.Execute();
             }
             finally

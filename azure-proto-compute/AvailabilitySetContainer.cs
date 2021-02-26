@@ -137,7 +137,22 @@ namespace azure_proto_compute
         private AvailabilitySetsOperations Operations => new ComputeManagementClient(
             BaseUri,
             Id.Subscription,
-            Credential, 
+            Credential,
             ClientOptions.Convert<ComputeManagementClientOptions>()).AvailabilitySets;
+
+
+        /// <inheritdoc />
+        public override ArmResponse<AvailabilitySet> Get(string availabilitySetName)
+        {
+            return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(Operations.Get(Id.ResourceGroup, availabilitySetName),
+                g => new AvailabilitySet(Parent, new AvailabilitySetData(g)));
+        }
+
+        /// <inheritdoc/>
+        public override async Task<ArmResponse<AvailabilitySet>> GetAsync(string availabilitySetName, CancellationToken cancellationToken = default)
+        {
+            return new PhArmResponse<AvailabilitySet, Azure.ResourceManager.Compute.Models.AvailabilitySet>(await Operations.GetAsync(Id.ResourceGroup, availabilitySetName, cancellationToken),
+                g => new AvailabilitySet(Parent, new AvailabilitySetData(g)));
+        }
     }
 }
