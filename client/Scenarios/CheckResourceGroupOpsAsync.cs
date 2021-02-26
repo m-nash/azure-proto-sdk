@@ -70,7 +70,7 @@ namespace client
             var data = aset.Get().Value.Data;
             try
             {                
-                rgOps.CreateResource<AvailabilitySetContainer, AvailabilitySet, AvailabilitySetData>("", data, LocationData.Default);
+                rgOps.CreateResource<AvailabilitySetContainer, AvailabilitySet, AvailabilitySetData>("", data);
             }
             catch (ArgumentException e)
             {
@@ -156,6 +156,15 @@ namespace client
             catch (ArgumentException e)
             {
                 Console.WriteLine("StartRemoveTagAsync exception caught");
+            }
+
+            try
+            {
+                rgOps.CreateResource<AvailabilitySetContainer, AvailabilitySet, AvailabilitySetData>("tester", null);
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine("CreateResource model exception caught");
             }
 
             Console.WriteLine("--------Done--------");            
