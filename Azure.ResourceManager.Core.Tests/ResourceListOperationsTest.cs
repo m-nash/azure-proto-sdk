@@ -122,6 +122,9 @@ namespace Azure.ResourceManager.Core.Tests
             string location)
         {
             var resource = new GenericResourceExpanded();
+
+            // See TODO in GenericResourceOperations.Valide().
+            // resource.Id = "/subscriptions/{subscription-id}/resourceGroups/myResourceGroup";
             resource.Location = location;
             resource.Tags = tags ?? new Dictionary<string, string>();
             resource.Sku = sku;
