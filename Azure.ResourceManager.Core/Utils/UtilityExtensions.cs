@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Azure.ResourceManager.Core.Utils
+namespace Azure.ResourceManager.Core
 {
     /// <summary>
     /// A class containing utility extensions

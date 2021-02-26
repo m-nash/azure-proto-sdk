@@ -19,7 +19,7 @@ namespace Azure.ResourceManager.Core
         /// </summary>
         /// <param name="operations"> The operations representing the resource. </param>
         protected ResourceOperationsBase(ResourceOperationsBase operations)
-            : base(operations?.ClientOptions, operations?.Id, operations?.Credential, operations?.BaseUri)
+            : base(operations.ClientOptions, operations.Id, operations.Credential, operations.BaseUri)
         {
         }
 
@@ -29,7 +29,7 @@ namespace Azure.ResourceManager.Core
         /// <param name="options"> The operations to copy options from. </param>
         /// <param name="resourceId">The resource that is the target of operations.</param>
         protected ResourceOperationsBase(ResourceOperationsBase options, ResourceIdentifier resourceId)
-            : base(options?.ClientOptions, resourceId, options?.Credential, options?.BaseUri)
+            : base(options.ClientOptions, resourceId, options.Credential, options.BaseUri)
         {
         }
 

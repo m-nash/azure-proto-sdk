@@ -4,7 +4,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Azure.ResourceManager.Core.Utils;
 using Azure.ResourceManager.Resources;
 
 namespace Azure.ResourceManager.Core
@@ -92,6 +91,8 @@ namespace Azure.ResourceManager.Core
         public ArmResponse<GenericResource> AddTag(string key, string value)
         {
             GenericResource resource = GetResource();
+
+            // Potential optimization on tags set, remove NOOP to bypass the call.
             resource.Data.Tags[key] = value;
             return new PhArmResponse<GenericResource, ResourceManager.Resources.Models.GenericResource>(
                 Operations.StartUpdateById(Id, _apiVersion, resource.Data).WaitForCompletionAsync().ConfigureAwait(false).GetAwaiter().GetResult(),
