@@ -104,5 +104,23 @@ namespace Azure.ResourceManager.Core
                 Operations.ListAsync(null, null, cancellationToken),
                 s => new ResourceGroup(Parent, new ResourceGroupData(s)));
         }
+
+        /// <inheritdoc />
+        public override ArmResponse<ResourceGroup> Get(string resourceGroupName)
+        {
+            return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Get(resourceGroupName), g =>
+            {
+                return new ResourceGroup(Parent, new ResourceGroupData(g));
+            });
+        }
+
+        /// <inheritdoc/>
+        public override async Task<ArmResponse<ResourceGroup>> GetAsync(string resourceGroupName, CancellationToken cancellationToken = default)
+        {
+            return new PhArmResponse<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.GetAsync(resourceGroupName, cancellationToken), g =>
+            {
+                return new ResourceGroup(Parent, new ResourceGroupData(g));
+            });
+        }
     }
 }

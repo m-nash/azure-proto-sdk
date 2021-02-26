@@ -174,5 +174,16 @@ namespace azure_proto_network
         {
             return s => new PublicIpAddress(Parent, new PublicIPAddressData(s));
         }
+                /// <inheritdoc />
+        public override ArmResponse<PublicIpAddress> Get(string publicIpAddressesName)
+        {
+            return new PhArmResponse<PublicIpAddress, PublicIPAddress>(Operations.Get(Id.ResourceGroup, publicIpAddressesName), Convertor());
+        }
+
+        /// <inheritdoc/>
+        public override async Task<ArmResponse<PublicIpAddress>> GetAsync(string publicIpAddressesName, CancellationToken cancellationToken = default)
+        {
+            return new PhArmResponse<PublicIpAddress, PublicIPAddress>(await Operations.GetAsync(Id.ResourceGroup, publicIpAddressesName), Convertor());
+        }     
     }
 }
