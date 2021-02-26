@@ -19,7 +19,7 @@ namespace azure_proto_compute
         public static VirtualMachineOperations GetVirtualMachineOperations(this ResourceGroupOperations resourceGroup, string vmName)
         {
             if (string.IsNullOrWhiteSpace(vmName))
-                throw new ArgumentException(nameof(vmName), $"{nameof(vmName)} cannot be null or a whitespace.");
+                throw new ArgumentException($"{nameof(vmName)} cannot be null or a whitespace.", nameof(vmName));
             return new VirtualMachineOperations(resourceGroup, vmName);
         }
 
@@ -45,7 +45,7 @@ namespace azure_proto_compute
         public static AvailabilitySetOperations GetAvailabilitySetOperations(this ResourceGroupOperations resourceGroup, string availabilitySetName)
         {
             if (string.IsNullOrWhiteSpace(availabilitySetName))
-                throw new ArgumentException(nameof(availabilitySetName), $"{nameof(availabilitySetName)} cannot be null or a whitespace.");
+                throw new ArgumentException($"{nameof(availabilitySetName)} cannot be null or a whitespace.", nameof(availabilitySetName));
             return new AvailabilitySetOperations(resourceGroup, availabilitySetName);
         }
 
