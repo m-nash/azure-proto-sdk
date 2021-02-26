@@ -182,17 +182,17 @@ namespace Azure.ResourceManager.Core
         /// Add a tag to a ResourceGroup.
         /// If the tag already exists it will be modified.
         /// </summary>
-        /// <param name="name"> The key for the tag. </param>
+        /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
         /// <returns> A response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
         /// </remarks>
-        /// <exception cref="ArgumentException"> Name cannot be null or a whitespace. </exception>
-        public ArmOperation<ResourceGroup> StartAddTag(string name, string value)
+        /// <exception cref="ArgumentException"> Key cannot be null or a whitespace. </exception>
+        public ArmOperation<ResourceGroup> StartAddTag(string key, string value)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException(nameof(name), $"{nameof(name)} provided cannot be null or a whitespace.");
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException(nameof(key), $"{nameof(key)} provided cannot be null or a whitespace.");
 
             var resource = GetResource();
             var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
@@ -201,7 +201,7 @@ namespace Azure.ResourceManager.Core
                 patch.Tags = new Dictionary<string, string>();
             }
 
-            patch.Tags[name] = value;
+            patch.Tags[key] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(Operations.Update(Id.Name, patch), g =>
             {
                 return new ResourceGroup(this, new ResourceGroupData(g));
@@ -212,18 +212,18 @@ namespace Azure.ResourceManager.Core
         /// Add a tag to a ResourceGroup.
         /// If the tag already exists it will be modified.
         /// </summary>
-        /// <param name="name"> The key for the tag. </param>
+        /// <param name="key"> The key for the tag. </param>
         /// <param name="value"> The value for the tag. </param>
         /// <param name="cancellationToken"> A token to allow the caller to cancel the call to the service. The default value is <see cref="P:System.Threading.CancellationToken.None" />. </param>
         /// /// <returns> A <see cref="Task"/> that on completion returns a response with the <see cref="ArmOperation{ResourceGroup}"/> operation for this resource. </returns>
         /// <remarks>
         /// <see href="https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-longrunning">Details on long running operation object.</see>
         /// </remarks>
-        /// <exception cref="ArgumentException"> Name cannot be null or a whitespace. </exception>
-        public async Task<ArmOperation<ResourceGroup>> StartAddTagAsync(string name, string value, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentException"> Key cannot be null or a whitespace. </exception>
+        public async Task<ArmOperation<ResourceGroup>> StartAddTagAsync(string key, string value, CancellationToken cancellationToken = default)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException(nameof(name), $"{nameof(name)} provided cannot be null or a whitespace.");
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentException(nameof(key), $"{nameof(key)} provided cannot be null or a whitespace.");
 
             var resource = GetResource();
             var patch = new ResourceGroupPatchable() { Tags = resource.Data.Tags };
@@ -232,7 +232,7 @@ namespace Azure.ResourceManager.Core
                 patch.Tags = new Dictionary<string, string>();
             }
 
-            patch.Tags[name] = value;
+            patch.Tags[key] = value;
             return new PhArmOperation<ResourceGroup, Azure.ResourceManager.Resources.Models.ResourceGroup>(await Operations.UpdateAsync(Id.Name, patch, cancellationToken), g =>
             {
                 return new ResourceGroup(this, new ResourceGroupData(g));

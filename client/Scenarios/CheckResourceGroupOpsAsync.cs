@@ -28,146 +28,47 @@ namespace client
             CleanUp.Add(resourceGroup.Id);
             var rgOps = subscription.GetResourceGroupOperations(Context.RgName);
 
-            try 
-            {
-                rgOps.AddTag("", "");
-            }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine("AddTag exception caught");
-            }
-
-            try
-            {
-                await rgOps.AddTagAsync(null, null);
-            }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine("AddTagAsync exception caught");
-            }
-
-            try
-            {
-                rgOps.StartAddTag("", "");
-            }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine("StartAddTag exception caught");
-            }
-
-            try
-            {
-                await rgOps.StartAddTagAsync(null, null);
-            }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine("StartAddTagAsync exception caught");
-            }
+            ShouldThrow<ArgumentException>(() => rgOps.AddTag("", ""), "AddTag with empty string didn't throw");
+            //ShouldThrow<ArgumentException>(async () => await rgOps.AddTagAsync(null, null), "AddTagAsync with null string didn't throw");
+            ShouldThrow<ArgumentException>(() => rgOps.StartAddTag("", null), "AddTagAsync with empty string didn't throw");
+            //ShouldThrow<ArgumentException>(async () => await rgOps.StartAddTagAsync(" ", "test"), "StartAddTagAsync with whitespaces only string didn't throw");
 
             // Create AvailabilitySet
             Console.WriteLine("--------Create AvailabilitySet async--------");
             var aset = (await (await resourceGroup.GetAvailabilitySetContainer().Construct("Aligned").StartCreateOrUpdateAsync(Context.VmName + "_aSet")).WaitForCompletionAsync()).Value;
             var data = aset.Get().Value.Data;
-            try
-            {                
-                rgOps.CreateResource<AvailabilitySetContainer, AvailabilitySet, AvailabilitySetData>("", data);
-            }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine("CreateResource exception caught");
-            }
 
-            try
-            {
-                await rgOps.CreateResourceAsync<AvailabilitySetContainer, AvailabilitySet, AvailabilitySetData>(" ", data, LocationData.Default);
-            }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine("CreateResourceAsync exception caught");
-            }
+            ShouldThrow<ArgumentException>(() => rgOps.CreateResource<AvailabilitySetContainer, AvailabilitySet, AvailabilitySetData>("", data), "CreateResource with empty string didn't throw");
+            //ShouldThrow<ArgumentException>(async () => await rgOps.CreateResourceAsync<AvailabilitySetContainer, AvailabilitySet, AvailabilitySetData>(" ", data), "CreateResourceAsync with whitespaces string didn't throw");
 
-            try
-            {
-                rgOps.SetTags(null);
-            }
-            catch (ArgumentNullException e)
-            {
-                Console.WriteLine("SetTags exception caught");
-            }
+            ShouldThrow<ArgumentNullException>(() => rgOps.SetTags(null), "SetTags with null didn't throw");
+            //ShouldThrow<ArgumentNullException>(async () => await rgOps.SetTagsAsync(null), "SetTagsAsync with null didn't throw");
+            ShouldThrow<ArgumentNullException>(() => rgOps.StartSetTags(null), "StartSetTags with null didn't throw");
+            //ShouldThrow<ArgumentNullException>(async () => await rgOps.StartSetTagsAsync(null), "StartSetTagsAsync with null didn't throw");
 
-            try
-            {
-                await rgOps.SetTagsAsync(null);
-            }
-            catch (ArgumentNullException e)
-            {
-                Console.WriteLine("SetTagsAsync exception caught");
-            }
+            ShouldThrow<ArgumentException>(() => rgOps.RemoveTag(""), "RemoveTag with empty string didn't throw");
+            //ShouldThrow<ArgumentException>(async () => await rgOps.RemoveTagAsync(null), "RemoveTagAsync with null didn't throw");
+            ShouldThrow<ArgumentException>(() => rgOps.StartRemoveTag(" "), "StartRemoveTag with whitespace string didn't throw");
+            //ShouldThrow<ArgumentException>(async () => await rgOps.StartRemoveTagAsync(null), "StartRemoveTagAsync with null didn't throw");
 
-            try
-            {
-                rgOps.StartSetTags(null);
-            }
-            catch (ArgumentNullException e)
-            {
-                Console.WriteLine("SetTags exception caught");
-            }
+            ShouldThrow<ArgumentNullException>(() => rgOps.CreateResource<AvailabilitySetContainer, AvailabilitySet, AvailabilitySetData>("tester", null), "CreateResource model exception not thrown");
+            ShouldThrow<ArgumentNullException>(async () => await rgOps.CreateResourceAsync<AvailabilitySetContainer, AvailabilitySet, AvailabilitySetData>("tester", null), "CreateResourceAsync model exception not thrown");
 
-            try
-            {
-                await rgOps.StartSetTagsAsync(null);
-            }
-            catch (ArgumentNullException e)
-            {
-                Console.WriteLine("StartSetTagsAsync exception caught");
-            }
-
-            try
-            {
-                rgOps.RemoveTag("");
-            }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine("RemoveTag exception caught");
-            }
-
-            try
-            {
-                await rgOps.RemoveTagAsync(null);
-            }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine("RemoveTagAsync exception caught");
-            }
-
-            try
-            {
-                rgOps.StartRemoveTag(" ");
-            }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine("StartRemoveTag exception caught");
-            }
-
-            try
-            {
-                await rgOps.StartRemoveTagAsync(null);
-            }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine("StartRemoveTagAsync exception caught");
-            }
-
-            try
-            {
-                rgOps.CreateResource<AvailabilitySetContainer, AvailabilitySet, AvailabilitySetData>("tester", null);
-            }
-            catch (ArgumentNullException e)
-            {
-                Console.WriteLine("CreateResource model exception caught");
-            }
-
-            Console.WriteLine("--------Done--------");            
+            Console.WriteLine("--------Done--------");
         }
+
+        private static void ShouldThrow<T>(Action lambda, string failMessage)
+        {
+            try
+            {
+                lambda();
+                throw new Exception(failMessage);
+            }
+            catch (Exception e) when (e.GetType() == typeof(T))
+            {
+                Console.WriteLine("Exception was thrown as expected.");
+            }
+        }
+
     }
 }
