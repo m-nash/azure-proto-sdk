@@ -86,14 +86,7 @@ namespace Azure.ResourceManager.Core
             {
                 DefaultSubscription = GetSubscriptionOperations(defaultSubscriptionId).Get().Value;
             }
-
-            ApiVersionOverrides = new Dictionary<string, string>();
         }
-
-        /// <summary>
-        /// Gets the Api version overrides.
-        /// </summary>
-        public Dictionary<string, string> ApiVersionOverrides { get; private set; }
 
         /// <summary>
         /// Gets the default Azure subscription.
