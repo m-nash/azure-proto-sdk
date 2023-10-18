@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.2.0-preview.5" />
+    <PackageReference Include="Azure.Identity" Version="1.10.2" />
     <PackageReference Include="ReportGenerator" Version="4.7.1" />
     <PackageReference Include="coverlet.msbuild" Version="2.9.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
